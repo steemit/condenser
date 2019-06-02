@@ -18,21 +18,4 @@ describe('Memo', () => {
         );
         expect(wrapper.html()).toEqual('<span class="Memo">hi dude</span>');
     });
-
-    it('should deal with a memo from a user with bad reputation', () => {
-        const wrapper = shallow(
-            <Memo fromNegativeRepUser={true} text={'sorry charlie'} />
-        );
-
-        expect(wrapper.html()).toEqual(
-            '<span class="Memo Memo--fromNegativeRepUser"><div class="from-negative-rep-user-warning"><div class="from-negative-rep-user-caution">missing translation: en.transferhistoryrow_jsx.from_negative_rep_user_caution</div><div class="from-negative-rep-user-explained">missing translation: en.transferhistoryrow_jsx.from_negative_rep_user_explained</div><div class="ptc from-negative-rep-user-reveal-memo" role="button">missing translation: en.transferhistoryrow_jsx.from_negative_rep_user_reveal_memo</div></div></span>'
-        );
-
-        wrapper
-            .find('div.ptc')
-            .simulate('click', { preventDefault: () => true });
-        expect(wrapper.html()).toEqual(
-            '<span class="Memo Memo--fromNegativeRepUser">sorry charlie</span>'
-        );
-    });
 });

@@ -9,6 +9,7 @@ export const icons = [
     'chevron-left',
     'chatboxes',
     'chatbox',
+    'close',
     'facebook',
     'twitter',
     'reddit',

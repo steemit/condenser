@@ -179,8 +179,6 @@
             "Il nome account deve essere composto solo da lettere, cifre, punti o trattini.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Non è possibile aumentare le ricompense del post durante l'ultimo minuto prima del pagamento",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "Attualmente il voto esiste, l'utente deve indicare la volonta di rigettare il witness ",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "è possibile utilizzare un solo Steem account per indirizzo IP ogni 10 minuti",
         "resteem_this_post": "Fai il resteem di questo post",
@@ -353,65 +351,9 @@
         "you_are_viewing_a_single_comments_thread_from":
             "Stai visualizzando il commento singolo di un thread di "
     },
-    "market_jsx": {
-        "action": "Azione",
-        "date_created": "Data creazione",
-        "last_price": "Ultimo prezzo",
-        "24h_volume": "Volume nelle 24 ore",
-        "spread": "Spread",
-        "total": "Totale",
-        "available": "Disponibile",
-        "lowest_ask": "Prezzo di vendità più basso",
-        "highest_bid": "Prezzo di acquisto più alto",
-        "buy_orders": "Ordini d'acquisto",
-        "sell_orders": "Ordini di vendita",
-        "trade_history": "Cronologia delle Transazioni",
-        "open_orders": "Ordini Aperti",
-        "sell_amount_for_atleast":
-            "Vendi %(amount_to_sell)s per almeno %(min_to_receive)s (%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "Compra ad almeno %(min_to_receive)s per %(amount_to_sell)s (%(effectivePrice)s)",
-        "price_warning_above":
-            "Questo prezzo è ben al di sopra del prezzo di mercato corrente di %(marketPrice)s, sei sicuro?",
-        "price_warning_below":
-            "Questo prezzo è ben al di sotto del prezzo di mercato corrente di %(marketPrice)s, sei sicuro?",
-        "order_cancel_confirm": "Cancella l'ordine %(order_id)s per %(user)s?",
-        "order_cancelled": "Ordine %(order_id)s cancellato",
-        "higher": "Più alto",
-        "lower": "Più basso",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Totale %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-    },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Inizia il Ripristino",
-        "not_valid": "Non valido",
-        "account_name_is_not_found": "Nome account non trovato",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "Non possiamo recuperare questo account, non ha cambiato proprietario di recente. ",
-        "password_not_used_in_last_days":
-            "Questa password non viene usata per questo account da 30 giorni. ",
-        "request_already_submitted_contact_support":
-            "La tua richiesta è stata già inviata e la stiamo lavorando. Puoi contattare %(SUPPORT_EMAIL)sper verificare lo stato della tua richiesta.",
         "recover_account_intro":
-            "Può succedere che ogni tanto la chiave personale di un membro di Steemit possa essere compromessa. La funzione \"Recupera account rubato\" dà 30 giorni al legittimo proprietario dell'account per recuperarlo dal momento in cui il ladro cambia la chiave personale. \"Recupera account rubato\" può essere usato solo su %(APP_URL)s se il proprietario dell'account ha precedentemente inserito %(APP_NAME)s come account fidato e accettato i Termini di Servizio di %(APP_NAME)s.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Effettua il login con Facebook o Reddit per verificare la tua identità ",
-        "login_with_social_media_to_verify_identity":
-            "Effettua il login con   %(provider)s per verificare la tua identità",
-        "enter_email_toverify_identity":
-            "Abbiamo bisogno di verificare la tua identità. Inserisci di seguito il tuo indirizzo email per iniziare la verifica. ",
-        "continue_with_email": "Continua con l'email",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Grazie per aver immesso la tua richiesta per Ripristinare il tuo Account usando l'autenticazione multi fattoriale basata sulla blockchain di %(APP_NAME)s. Ti risponderemo il prima possibile, comunque  considera che potrebbero esserci ritardi nella risposta a causa del grade volume di email. Preparati a verificare la tua identità.",
-        "recovering_account": "Stiamo recuperando l'account",
-        "recover_account": "Recupero Account",
-        "checking_account_owner":
-            "Stiamo controllando il proprietario dell'account",
-        "sending_recovery_request": "Invia richiesta di recupero ",
-        "cant_confirm_account_ownership":
-            "Non siamo riusciti a confermare la proprietà dell'account. Controlla la password.",
-        "account_recovery_request_not_confirmed":
-            "La richiesta di recupero account non è ancora stata confermata. Per favore, ritorna tra un po'. Grazie per la pazienza! "
+            "Può succedere che ogni tanto la chiave personale di un membro di Steemit possa essere compromessa. La funzione \"Recupera account rubato\" dà 30 giorni al legittimo proprietario dell'account per recuperarlo dal momento in cui il ladro cambia la chiave personale. \"Recupera account rubato\" può essere usato solo su %(APP_URL)s se il proprietario dell'account ha precedentemente inserito %(APP_NAME)s come account fidato e accettato i Termini di Servizio di %(APP_NAME)s."
     },
     "user_profile": {
         "unknown_account": "Account sconosciuto",
@@ -449,16 +391,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Ricompense per l'autore stimate durante l'ultima settimana",
-        "author_rewards_history": "Cronologia di Ricompense dell'autore"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Ricompense da curatore stimate nell'ultima settimana",
-        "curation_rewards_history": "Cronologia ricompense da curatore"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Commenti con voti bassi rivelati",
@@ -493,29 +425,6 @@
             "one": "%(count)s voto",
             "other": "%(count)s voti"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "witness thread",
-        "top_witnesses": "Voto Witness ",
-        "you_have_votes_remaining": {
-            "zero": "Non hai voti residui",
-            "one": "Ti resta 1 voto",
-            "other": "Hai %(count)svoti residui"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "Puoi votare un massimo di 30 witness",
-        "witness": "Witness",
-        "information": "Informazioni",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Se desideri votare un witness al di fuori della top 100, inserisci di seguito il nome account per effettuare il voto. ",
-        "set_witness_proxy":
-            "Puoi anche scegliere un proxy che voterà i witnesses per te. Questo resetterà la tua attuale selezione di testimoni.",
-        "witness_set":
-            "Hai settato un proxy di voto. Se volessi riabilitare il voto manuale, cancella il tuo proxy.",
-        "witness_proxy_current": "Il tuo attuale proxy è:",
-        "witness_proxy_set": "Setta il proxy",
-        "witness_proxy_clear": "Cancella il proxy",
-        "proxy_update_error": "Il tuo proxy non è aggiornato"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -616,23 +525,6 @@
         "empty_feed_4": "Leggi la Guida di Avvio Rapido",
         "empty_feed_5": "Leggi le FAQ"
     },
-    "transferhistoryrow_jsx": {
-        "to_savings": "ai risparmi",
-        "from_savings": "dai risparmi",
-        "cancel_transfer_from_savings":
-            "Cancella il trasferimento dai risparmi",
-        "stop_power_down": "Interrompi il Power Down",
-        "start_power_down_of": "Avvia il Power Down di",
-        "receive_interest_of": "Ricevi l'interesse di"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request":
-            "Cancellare questa richiesta di prelevamento?",
-        "pending_savings_withdrawals": "PRELIEVI DEI RISPARMI IN SOSPESO",
-        "withdraw": "Ritira %(amount)s",
-        "to": "a %(to)s",
-        "from_to": "da %(from)s a %(to)s"
-    },
     "explorepost_jsx": {
         "copied": "Copiato!",
         "copy": "Copia",
@@ -696,7 +588,9 @@
         "signup_button": "Sign up now to earn ",
         "signup_button_emphasis": "FREE STEEM!",
         "returning_users": "Utenti di ritorno:",
-        "join_our": "Unisciti al nostro"
+        "join_our": "Unisciti al nostro",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "Il nome account",
@@ -780,18 +674,6 @@
         "history": "CRONOLOGIA",
         "redeem_rewards": "Riscuoti le ricompense (Trasferisci sul conto)",
         "buy_steem_or_steem_power": "Compra STEEM o STEEM POWER"
-    },
-    "powerdown_jsx": {
-        "power_down": "Power Down",
-        "amount": "Somma",
-        "already_power_down":
-            "Stai già effettuando il powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s pagati sin ora). Ricorda che se cambi l'ammontare del power down il pagamento programmato verrà resettato.",
-        "delegating":
-            "Stai delegando %(AMOUNT)s %(LIQUID_TICKER)s. Questa somma sarà bloccata e non disponibile per il power down sino a quando la delega non sarà rimossa e non sia passato un intero intervallo di ricompensa.",
-        "per_week": "È ~%(AMOUNT)s %(LIQUID_TICKER)s a settimana.",
-        "warning":
-            "Lasciare meno di %(AMOUNT)s %(VESTING_TOKEN)s sul tuo account è sconsigliato e potrebbe renderlo inutilizzabile.",
-        "error": "Impossibile effettuare il power down (ERROR: %(MESSAGE)s)"
     },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":

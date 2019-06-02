@@ -7,7 +7,7 @@ import { getAccount } from 'app/redux/SagaShared';
 import * as userActions from 'app/redux/UserReducer';
 
 // operations that require only posting authority
-const postingOps = Set(
+export const postingOps = Set(
     `vote, comment, delete_comment, custom_json, claim_reward_balance`
         .trim()
         .split(/,\s*/)
@@ -32,6 +32,7 @@ export function* accountAuthLookup({
     const toPub = k => (k ? k.toPublicKey().toString() : '-');
     const posting = keys.get('posting_private');
     const active = keys.get('active_private');
+    const owner = keys.get('active_private');
     const memo = keys.get('memo_private');
     const auth = {
         posting: posting
@@ -48,7 +49,13 @@ export function* accountAuthLookup({
                   authType: 'active',
               })
             : 'none',
-        owner: 'none',
+        owner: owner
+            ? yield authorityLookup({
+                  pubkeys: Set([toPub(active)]),
+                  authority: account.get('owner'),
+                  authType: 'owner',
+              })
+            : 'none',
         memo: account.get('memo_key') === toPub(memo) ? 'full' : 'none',
     };
     const accountName = account.get('name');

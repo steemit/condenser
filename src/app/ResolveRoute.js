@@ -50,20 +50,8 @@ export default function resolveRoute(path) {
     if (path === '/change_password') {
         return { page: 'ChangePassword' };
     }
-    if (path === '/create_account') {
-        return { page: 'CreateAccount' };
-    }
-    if (path === '/approval') {
-        return { page: 'Approval' };
-    }
     if (path === '/recover_account_step_1') {
         return { page: 'RecoverAccountStep1' };
-    }
-    if (path === '/recover_account_step_2') {
-        return { page: 'RecoverAccountStep2' };
-    }
-    if (path === '/waiting_list.html') {
-        return { page: 'WaitingList' };
     }
     if (path === '/market') {
         return { page: 'Market' };
@@ -106,8 +94,12 @@ export default function resolveRoute(path) {
         return { page: 'Post', params: match.slice(1) };
     }
     match =
-        path.match(/^\/(hot|trending|promoted|payout|payout_comments|created)\/?$/) ||
-        path.match(/^\/(hot|trending|promoted|payout|payout_comments|created)\/([\w\d-]+)\/?$/);
+        path.match(
+            /^\/(hot|trending|promoted|payout|payout_comments|created)\/?$/
+        ) ||
+        path.match(
+            /^\/(hot|trending|promoted|payout|payout_comments|created)\/([\w\d-]+)\/?$/
+        );
     if (match) {
         return { page: 'PostsIndex', params: match.slice(1) };
     }

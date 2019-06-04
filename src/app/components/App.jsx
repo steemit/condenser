@@ -24,15 +24,23 @@ class App extends React.Component {
         this.state = {
             showCallout: true,
             showBanner: true,
-            gptBannerHeight: 0,
         };
         this.listenerActive = null;
-        this.gptadshownListener = this.gptadshown.bind(this);
     }
 
-    gptadshown(e) {
-        const height = document.querySelector('header .gpt-ad').offsetHeight;
-        this.setState({ gptBannerHeight: height });
+    toggleBodyNightmode(nightmodeEnabled) {
+        if (nightmodeEnabled) {
+            document.body.classList.remove('theme-light');
+            document.body.classList.add('theme-dark');
+        } else {
+            document.body.classList.remove('theme-dark');
+            document.body.classList.add('theme-light');
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { nightmodeEnabled } = nextProps;
+        this.toggleBodyNightmode(nightmodeEnabled);
     }
 
     componentWillMount() {
@@ -41,11 +49,8 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        window.addEventListener('gptadshown', this.gptadshownListener);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('gptadshown', this.gptadshownListener);
+        const { nightmodeEnabled } = this.props;
+        this.toggleBodyNightmode(nightmodeEnabled);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -61,7 +66,6 @@ class App extends React.Component {
             new_visitor !== n.new_visitor ||
             this.state.showBanner !== nextState.showBanner ||
             this.state.showCallout !== nextState.showCallout ||
-            this.state.gptBannerHeight !== nextState.gptBannerHeight ||
             nightmodeEnabled !== n.nightmodeEnabled ||
             showAnnouncement !== n.showAnnouncement
         );

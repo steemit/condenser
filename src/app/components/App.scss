@@ -173,7 +173,7 @@
         }
     }
 }
-.downvoted {
+.downvoted .downvoted {
     opacity: 0.5;
     -webkit-filter: grayscale(1); // image
     filter: gray; // image grayscale

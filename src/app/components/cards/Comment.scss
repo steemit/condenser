@@ -43,7 +43,10 @@
   }
 }
 
-.Comment.collapsed {
+.Comment.collapsed:not(.downvoted),
+.Comment.collapsed.downvoted.revealed .Comment__body,
+.Comment.downvoted.revealed .Comment.collapsed:not(.downvoted),
+.Comment.downvoted .downvoted {
   > .Comment__Userpic {
     top: 0;
     left: 26px;
@@ -56,6 +59,7 @@
     .Voting {
       margin-left: 1rem;
       border-right: none;
+      display: none;
     }
     a {
       @include themify($themes) {
@@ -64,12 +68,16 @@
     }
   }
   .Comment__body {
-    padding: 0;
-    border: none;
+    @include themify($themes) {
+      padding: 0;
+      border: none;
+    }
   }
   .Comment__footer {
-    padding: 0;
-    border: none;
+    @include themify($themes) {
+      padding: 0;
+      border: none;
+    }
   }
 }
 
@@ -105,7 +113,8 @@
   }
 }
 
-.Comment__body {
+.Comment .Comment__body,
+.Comment.downvoted.revealed:not(.collapsed) .Comment__body {
   @include themify($themes) {
     margin-left: 62px;
     max-width: 50rem;
@@ -116,7 +125,8 @@
   }
 }
 
-.Comment__footer {
+.Comment .Comment__footer,
+.Comment.downvoted.revealed:not(.collapsed) .Comment__footer {
   @include themify($themes) {
     margin-left: 62px;
     border: themed('border');

@@ -185,41 +185,6 @@
     }
 }
 
-.depth {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  color: $dark-gray;
-}
-
-.Comment.collapsed > .depth {
-  top: 2px;
-}
-
-.depth.di-1 {
-  left: -38px;
-}
-
-.depth.di-2 {
-  left: -100px;
-}
-
-.depth.di-3 {
-  left: -162px;
-}
-
-.depth.di-4 {
-  left: -224px;
-}
-
-.depth.di-5 {
-  left: -286px;
-}
-
-.depth.di-6 {
-  left: -348px;
-}
-
 @media screen and (max-width: 39.9375em) {
   .root {
     .Comment__header, .Comment__footer, .Comment__body, .Comment__replies {
@@ -232,33 +197,6 @@
     }
   }
 
-  .depth {
-    top: 2px;
-  }
-
-  .depth.di-1 {
-    left: 0;
-  }
-
-  .depth.di-2 {
-    left: -20px;
-  }
-
-  .depth.di-3 {
-    left: -40px;
-  }
-
-  .depth.di-4 {
-    left: -60px;
-  }
-
-  .depth.di-5 {
-    left: -80px;
-  }
-
-  .depth.di-6 {
-    left: -100px;
-  }
   .Comment .highlighted { 
     padding-left: 0;
   }

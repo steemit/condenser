@@ -11,6 +11,8 @@ export default function ServerHTML({
     adClient,
     gptEnabled,
     gptBidding,
+    shouldSeeCookieConsent,
+    cookieConsentApiKey,
 }) {
     let page_title = title;
     return (
@@ -269,6 +271,14 @@ export default function ServerHTML({
                       });
                   `,
                         }}
+                    />
+                ) : null}
+                {shouldSeeCookieConsent ? (
+                    <script
+                            id="Cookiebot"
+                            src="https://consent.cookiebot.com/uc.js"
+                            data-cbid={cookieConsentApiKey}
+                            type="text/javascript" async
                     />
                 ) : null}
                 <title>{page_title}</title>

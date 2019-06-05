@@ -4,7 +4,7 @@
   "helmet": {
     "directives": {
       "childSrc": "'self' emb.d.tube player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "securepubads.g.doubleclick.net 'self' steemit.com https://api.steemit.com api.blocktrades.us",
+      "connectSrc": "https://steemitimages.com securepubads.g.doubleclick.net 'self' steemit.com https://api.steemit.com api.blocktrades.us",
       "defaultSrc": "tpc.googlesyndication.com 'self' emb.d.tube www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
@@ -229,6 +229,8 @@
       "granularityMultiplier": 1
     }
   },
+  "cookie_consent_enabled": null,
+  "cookie_consent_api_key": null,
   "steem_market_endpoint": null,
   "steem_market_token": null,
   "steem_market_cache": {

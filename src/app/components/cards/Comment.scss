@@ -59,7 +59,6 @@
     .Voting {
       margin-left: 1rem;
       border-right: none;
-      display: none;
     }
     a {
       @include themify($themes) {

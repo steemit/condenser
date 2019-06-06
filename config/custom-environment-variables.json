@@ -57,5 +57,7 @@
   "google_ad_client": "GOOGLE_AD_CLIENT",
   "gpt_enabled": "GPT_ENABLED",
   "steem_market_endpoint": "STEEM_MARKET_ENDPOINT",
-  "steem_market_token": "STEEM_MARKET_TOKEN"
+  "steem_market_token": "STEEM_MARKET_TOKEN",
+  "cookie_consent_enabled": "SDC_ENABLE_COOKIE_CONSENT",
+  "cookie_consent_api_key": "SDC_COOKIE_CONSENT_KEY"
 }

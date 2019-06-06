@@ -372,18 +372,15 @@ class CommentImpl extends React.Component {
         const commentClasses = ['hentry'];
         commentClasses.push('Comment');
         commentClasses.push(this.props.root ? 'root' : 'reply');
+        if (this.state.collapsed) commentClasses.push('collapsed');
 
+        let innerCommentClass = 'Comment__block';
         if (ignore || gray) {
-            commentClasses.push('downvoted');
+            innerCommentClass += ' downvoted clearfix';
             if (!hide_body) {
-                commentClasses.push('revealed');
+                innerCommentClass += ' revealed';
             }
         }
-        if (hide_body || this.state.collapsed) {
-            commentClasses.push('collapsed');
-        }
-
-        let innerCommentClass = ignore || gray ? 'downvoted clearfix' : '';
         if (this.state.highlight) innerCommentClass += ' highlighted';
 
         //console.log(comment);

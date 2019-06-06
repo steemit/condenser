@@ -43,10 +43,8 @@
   }
 }
 
-.Comment.collapsed:not(.downvoted),
-.Comment.collapsed.downvoted.revealed .Comment__body,
-.Comment.downvoted.revealed .Comment.collapsed:not(.downvoted),
-.Comment.downvoted .downvoted {
+.Comment.collapsed .Comment__block,
+.Comment .Comment__block.downvoted:not(.revealed) {
   > .Comment__Userpic {
     top: 0;
     left: 26px;
@@ -112,8 +110,7 @@
   }
 }
 
-.Comment .Comment__body,
-.Comment.downvoted.revealed:not(.collapsed) .Comment__body {
+.Comment .Comment__block .Comment__body {
   @include themify($themes) {
     margin-left: 62px;
     max-width: 50rem;
@@ -124,8 +121,7 @@
   }
 }
 
-.Comment .Comment__footer,
-.Comment.downvoted.revealed:not(.collapsed) .Comment__footer {
+.Comment .Comment__block .Comment__footer {
   @include themify($themes) {
     margin-left: 62px;
     border: themed('border');

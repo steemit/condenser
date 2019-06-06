@@ -8,13 +8,14 @@ import { PrivateKey, PublicKey } from '@steemit/steem-js/lib/auth/ecc';
 import { api, broadcast, auth, memo } from '@steemit/steem-js';
 
 import { getAccount, getContent } from 'app/redux/SagaShared';
-import { findSigningKey } from 'app/redux/AuthSaga';
+import { postingOps, findSigningKey } from 'app/redux/AuthSaga';
 import * as appActions from 'app/redux/AppReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { DEBT_TICKER } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
+import { isLoggedInWithKeychain } from 'app/utils/SteemKeychain';
 
 export const transactionWatches = [
     takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
@@ -60,6 +61,7 @@ export function* broadcastOperation({
         keys,
         username,
         password,
+        useKeychain,
         successCallback,
         errorCallback,
         allowPostUnsafe,
@@ -71,6 +73,7 @@ export function* broadcastOperation({
         keys,
         username,
         password,
+        useKeychain,
         successCallback,
         errorCallback,
         allowPostUnsafe,
@@ -113,30 +116,32 @@ export function* broadcastOperation({
         return;
     }
     try {
-        if (!keys || keys.length === 0) {
-            payload.keys = [];
-            // user may already be logged in, or just enterend a signing passowrd or wif
-            const signingKey = yield call(findSigningKey, {
-                opType: type,
-                username,
-                password,
-            });
-            if (signingKey) payload.keys.push(signingKey);
-            else {
-                if (!password) {
-                    yield put(
-                        userActions.showLogin({
-                            operation: {
-                                type,
-                                operation,
-                                username,
-                                successCallback,
-                                errorCallback,
-                                saveLogin: true,
-                            },
-                        })
-                    );
-                    return;
+        if (!isLoggedInWithKeychain()) {
+            if (!keys || keys.length === 0) {
+                payload.keys = [];
+                // user may already be logged in, or just enterend a signing passowrd or wif
+                const signingKey = yield call(findSigningKey, {
+                    opType: type,
+                    username,
+                    password,
+                });
+                if (signingKey) payload.keys.push(signingKey);
+                else {
+                    if (!password) {
+                        yield put(
+                            userActions.showLogin({
+                                operation: {
+                                    type,
+                                    operation,
+                                    username,
+                                    successCallback,
+                                    errorCallback,
+                                    saveLogin: true,
+                                },
+                            })
+                        );
+                        return;
+                    }
                 }
             }
         }
@@ -178,12 +183,19 @@ function hasPrivateKeys(payload) {
 function* broadcastPayload({
     payload: { operations, keys, username, successCallback, errorCallback },
 }) {
+    let needsActiveAuth = false;
+
     // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;
-    for (const [type] of operations) // see also transaction/ERROR
+    for (const [type] of operations) {
+        // see also transaction/ERROR
         yield put(
             transactionActions.remove({ key: ['TransactionError', type] })
         );
+        if (!postingOps.has(type)) {
+            needsActiveAuth = true;
+        }
+    }
 
     {
         const newOps = [];
@@ -215,6 +227,11 @@ function* broadcastPayload({
         }
     };
 
+    // get username
+    const currentUser = yield select(state => state.user.get('current'));
+    const currentUsername = currentUser && currentUser.get('username');
+    username = username || currentUsername;
+
     try {
         yield new Promise((resolve, reject) => {
             // Bump transaction (for live UI testing).. Put 0 in now (no effect),
@@ -243,15 +260,36 @@ function* broadcastPayload({
                     broadcastedEvent();
                 }, 2000);
             } else {
-                broadcast.send({ extensions: [], operations }, keys, err => {
-                    if (err) {
-                        console.error(err);
-                        reject(err);
-                    } else {
-                        broadcastedEvent();
-                        resolve();
-                    }
-                });
+                if (!isLoggedInWithKeychain()) {
+                    broadcast.send(
+                        { extensions: [], operations },
+                        keys,
+                        err => {
+                            if (err) {
+                                console.error(err);
+                                reject(err);
+                            } else {
+                                broadcastedEvent();
+                                resolve();
+                            }
+                        }
+                    );
+                } else {
+                    const authType = needsActiveAuth ? 'active' : 'posting';
+                    window.steem_keychain.requestBroadcast(
+                        username,
+                        operations,
+                        authType,
+                        response => {
+                            if (!response.success) {
+                                reject(response.message);
+                            } else {
+                                broadcastedEvent();
+                                resolve();
+                            }
+                        }
+                    );
+                }
             }
         });
         // status: accepted
@@ -403,8 +441,8 @@ export function* preBroadcast_comment({ operation, username }) {
         parent_author,
         parent_permlink,
         json_metadata,
-        title: new Buffer((operation.title || '').trim(), 'utf-8'),
-        body: new Buffer(body2, 'utf-8'),
+        title: (operation.title || '').trim(),
+        body: body2,
     };
 
     const comment_op = [['comment', op]];

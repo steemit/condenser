@@ -18,8 +18,7 @@ import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
-import { GptUtils } from 'app/utils/GptUtils';
-import BiddingAd from 'app/components/elements/BiddingAd';
+import GptAd from 'app/components/elements/GptAd';
 
 class Header extends React.Component {
     static propTypes = {
@@ -302,12 +301,9 @@ class Header extends React.Component {
                     )}
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
                     <div style={showAd ? {} : { display: 'none' }}>
-                        <BiddingAd
-                            type="Bidding"
-                            id="/21784675435/steemit_top-navi"
-                            slotName={GptUtils.MobilizeSlotName(
-                                'top-navigation'
-                            )}
+                        <GptAd
+                            type="Freestar"
+                            id="steemit_728x90_970x90_970x250_320x50_ATF"
                         />
                     </div>
 

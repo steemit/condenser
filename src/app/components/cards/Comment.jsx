@@ -305,7 +305,7 @@ class CommentImpl extends React.Component {
         const showEditOption = username === author;
         const showDeleteOption =
             username === author && allowDelete && !_isPaidout;
-        const showReplyOption = comment.depth < 255;
+        const showReplyOption = username !== undefined && comment.depth < 255;
 
         let body = null;
         let controls = null;

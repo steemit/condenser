@@ -422,7 +422,7 @@ class PostFull extends React.Component {
         const showReblog = !_isPaidout;
         const showPromote =
             username && !_isPaidout && post_content.get('depth') == 0;
-        const showReplyOption = post_content.get('depth') < 255;
+        const showReplyOption = username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;
         const showDeleteOption =
             username === author && content.stats.allowDelete && !_isPaidout;

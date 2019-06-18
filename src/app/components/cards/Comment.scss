@@ -21,6 +21,10 @@
   @include MQ(M) {
     top: 0.2rem;
   }
+
+  .Userpic {
+    margin-left: 5px;
+  }
 }
 
 .Comment__Userpic-small {
@@ -165,6 +169,7 @@
 .Comment__replies {
   margin-top: 1.4rem;
   margin-left: 62px;
+  border-left: 1px dotted #eee;
   .Comment {
     margin-bottom: 1.4rem;
   }
@@ -199,10 +204,10 @@
     .Comment__block .Comment__footer,
     .Comment__block .Comment__body,
     .Comment__replies {
-      margin-left: 20px;
+      margin-left: 10px;
 
       @include themify($themes) {
-        margin-left: 20px;
+        margin-left: 10px;
       }
     }
   }

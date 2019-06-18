@@ -92,6 +92,7 @@ class Header extends React.Component {
     }
 
     gptAdRendered() {
+        // console.log('HEADER::gptAdRendered', arguments)
         this.setState({ showAd: true, gptAdRendered: true });
     }
 
@@ -289,7 +290,7 @@ class Header extends React.Component {
                   }
                 : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
-
+        // console.log('HEADER::gpt-showAd', showAd)
         return (
             <Headroom
                 onUnpin={e => this.headroomOnUnpin(e)}

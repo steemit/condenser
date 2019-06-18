@@ -183,17 +183,35 @@
 
 @media screen and (max-width: 39.9375em) {
   .root {
-    .Comment__header, .Comment__footer, .Comment__body, .Comment__replies {
+    .Comment__block .Comment__header,
+    .Comment__block .Comment__footer,
+    .Comment__block .Comment__body,
+    .Comment__replies {
       margin-left: 0;
+
+      @include themify($themes) {
+        margin-left: 0;
+      }
     }
   }
   .reply {
-    .Comment__header, .Comment__footer, .Comment__body, .Comment__replies {
+    .Comment__block .Comment__header,
+    .Comment__block .Comment__footer,
+    .Comment__block .Comment__body,
+    .Comment__replies {
       margin-left: 20px;
+
+      @include themify($themes) {
+        margin-left: 20px;
+      }
     }
   }
 
-  .Comment .highlighted { 
+  .Comment .Comment__block .highlighted {
     padding-left: 0;
+
+    @include themify($themes) {
+      padding-left: 0;
+    }
   }
 }

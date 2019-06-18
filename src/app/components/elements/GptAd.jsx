@@ -14,15 +14,11 @@ class GptAd extends Component {
         ]);
 
         freestar.queue.push(e => {
-            // console.log('GptAd::componentDidMount::freestar.queue', arguments)
-
             googletag.pubads().addEventListener('impressionViewable', e => {
-                // console.log('GptAd::componentDidMount::impressionViewable', arguments)
                 window.dispatchEvent(new Event('gptadshown', e));
             });
 
             googletag.pubads().addEventListener('slotRenderEnded', e => {
-                // console.log('GptAd::componentDidMount::slotRenderEnded', arguments)
                 window.dispatchEvent(new Event('gptadshown', e));
             });
         });

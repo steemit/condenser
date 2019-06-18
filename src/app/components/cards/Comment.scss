@@ -195,8 +195,6 @@
     .Comment__block .Comment__footer,
     .Comment__block .Comment__body,
     .Comment__replies {
-      margin-left: 0;
-
       @include themify($themes) {
         margin-left: 0;
       }
@@ -207,8 +205,6 @@
     .Comment__block .Comment__footer,
     .Comment__block .Comment__body,
     .Comment__replies {
-      margin-left: 10px;
-
       @include themify($themes) {
         margin-left: 10px;
       }
@@ -216,8 +212,6 @@
   }
 
   .Comment .Comment__block .highlighted {
-    padding-left: 0;
-
     @include themify($themes) {
       padding-left: 0;
     }

@@ -40,8 +40,7 @@ class LoginForm extends Component {
             );
             cryptographyFailure = true;
         }
-        const useKeychain = hasCompatibleKeychain();
-        this.state = { useKeychain, cryptographyFailure };
+        this.state = { cryptographyFailure };
         this.usernameOnChange = e => {
             const value = e.target.value.toLowerCase();
             this.state.username.props.onChange(value);
@@ -62,7 +61,7 @@ class LoginForm extends Component {
                 password.props.onChange(data);
             });
         };
-        this.initForm(props, useKeychain);
+        this.initForm(props);
     }
 
     componentDidMount() {
@@ -74,17 +73,22 @@ class LoginForm extends Component {
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm');
 
-    initForm(props, useKeychain) {
+    initForm(props) {
         reactForm({
             name: 'login',
             instance: this,
-            fields: ['username', 'password', 'saveLogin:checked'],
+            fields: [
+                'username',
+                'password',
+                'saveLogin:checked',
+                'useKeychain:checked',
+            ],
             initialValues: props.initialValues,
             validation: values => ({
                 username: !values.username
                     ? tt('g.required')
                     : validate_account_name(values.username.split('/')[0]),
-                password: useKeychain
+                password: values.useKeychain
                     ? null
                     : !values.password
                       ? tt('g.required')
@@ -102,9 +106,9 @@ class LoginForm extends Component {
         window.location.href = SIGNUP_URL;
     }
 
-    onUseKeychainCheckbox = e => {
-        const useKeychain = e.target.checked;
-        this.setState({ useKeychain });
+    useKeychainToggle = () => {
+        const { useKeychain } = this.state;
+        useKeychain.props.onChange(!useKeychain.value);
     };
 
     saveLoginToggle = () => {
@@ -254,7 +258,8 @@ class LoginForm extends Component {
             }
         }
         const password_info =
-            !useKeychain && checkPasswordChecksum(password.value) === false
+            !useKeychain.value &&
+            checkPasswordChecksum(password.value) === false
                 ? tt('loginform_jsx.password_info')
                 : null;
         const titleText = (
@@ -289,7 +294,7 @@ class LoginForm extends Component {
                     console.log('Login\tdispatchSubmit');
                     return dispatchSubmit(
                         data,
-                        useKeychain,
+                        useKeychain.value,
                         loginBroadcastOperation,
                         afterLoginRedirectToWelcome
                     );
@@ -315,7 +320,7 @@ class LoginForm extends Component {
                     <div className="error">{username.error}&nbsp;</div>
                 ) : null}
 
-                {useKeychain ? (
+                {useKeychain.value ? (
                     <div>
                         {error && <div className="error">{error}&nbsp;</div>}
                     </div>
@@ -358,8 +363,9 @@ class LoginForm extends Component {
                             <input
                                 id="useKeychain"
                                 type="checkbox"
-                                checked={useKeychain}
-                                onChange={this.onUseKeychainCheckbox}
+                                ref="pw"
+                                {...useKeychain.props}
+                                onChange={this.useKeychainToggle}
                                 disabled={submitting}
                             />&nbsp;{tt('loginform_jsx.use_keychain')}
                         </label>
@@ -509,6 +515,7 @@ export default connect(
             'loginBroadcastOperation'
         );
         const initialValues = {
+            useKeychain: !!hasCompatibleKeychain(),
             saveLogin: saveLoginDefault,
         };
 

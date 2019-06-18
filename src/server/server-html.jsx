@@ -11,6 +11,8 @@ export default function ServerHTML({
     adClient,
     gptEnabled,
     gptBidding,
+    shouldSeeCookieConsent,
+    cookieConsentApiKey,
 }) {
     let page_title = title;
     return (
@@ -175,180 +177,36 @@ export default function ServerHTML({
                 ))}
                 {gptEnabled ? (
                     <script
-                        async
-                        src="https://www.googletagservices.com/tag/js/gpt.js"
-                    />
-                ) : null}
-                {gptEnabled ? (
-                    <script src="https://staticfiles.steemit.com/prebid2.12.0.js" />
-                ) : null}
-                {gptEnabled ? (
-                    <script
                         dangerouslySetInnerHTML={{
                             __html: `
-                                // TODO: Move the follow values into config
-                                //       a new config file for ads would be good
-                                var PREBID_TIMEOUT = 2000;
-                                var FAILSAFE_TIMEOUT = 3000;
-                                var adUnits = [
-                                  {
-                                    code: "div-gpt-ad-1551233873698-0",
-                                    mediaTypes: {
-                                      banner: {
-                                        sizes: [728, 90]
-                                      }
-                                    },
-                                    bids: [
-                                      {
-                                        bidder: "coinzilla",
-                                        params: {
-                                          placementId: "6425c7b9886e0045972"
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    code: "div-gpt-ad-1554687231046-0",
-                                    mediaTypes: {
-                                      banner: {
-                                        sizes: [160, 600]
-                                      }
-                                    },
-                                    bids: [
-                                      {
-                                        bidder: "coinzilla",
-                                        params: {
-                                          placementId: "3575c7b9886e2cb3619"
-                                        }
-                                      }
-                                    ]
-                                  }
-                                ];
-                                const customConfigObject = {
-                                  buckets: [
-                                    {
-                                      precision: 2,
-                                      min: 0,
-                                      max: 1,
-                                      increment: 0.05
-                                    },
-                                    {
-                                      precision: 2,
-                                      min: 1,
-                                      max: 8,
-                                      increment: 0.1
-                                    }
-                                  ]
-                                };
-                                const systemCurrency = {
-                                  adServerCurrency: "USD",
-                                  granularityMultiplier: 1
-                                };
+                            var freestar = freestar || {};
+                            freestar.hitTime = Date.now();
+                            freestar.queue = freestar.queue || [];
+                            freestar.config = freestar.config || {};
+                            freestar.debug =
+                            window.location.search.indexOf("fsdebug") === -1 ? false : true; // NICE.
+                            freestar.config.enabled_slots = [];
 
-                                // Begin GPT Ad Setup
-                                var googletag = googletag || {};
-                                googletag.cmd = googletag.cmd || [];
-
-                                googletag.cmd.push(function() {
-                                  googletag.pubads().disableInitialLoad();
-                                  googletag.pubads().setTargeting("edition", ["new-york"]);
-                                  googletag.pubads().collapseEmptyDivs(true, true);
-                                  googletag.pubads().enableSingleRequest();
-                                  googletag.enableServices();
-                                });
-
-
-                                // Begin Prebid Setup
-                                var pbjs = pbjs || {};
-                                pbjs.que = pbjs.que || [];
-
-                                pbjs.que.push(function() {
-                                  console.log('pbjs.que.push(function() {->IN THE SERVER CODE STUFFS');
-                                  pbjs.addAdUnits(adUnits);
-                                  pbjs.setConfig({
-                                    priceGranularity: customConfigObject,
-                                    currency: systemCurrency
-                                  });
-                                  console.log('pbjs.que.push(function() {->BEFOR requestBids');
-                                  pbjs.requestBids({
-                                    bidsBackHandler: initAdserver,
-                                    timeout: PREBID_TIMEOUT
-                                  });
-                                });
-                                var noBids = {}
-                                function initAdserver() {
-                                  console.log('function initAdserver() {', arguments)
-                                  if (arguments.length > 0) {
-                                    console.log('Received args @ initAdServer')
-                                    noBids = pbjs.getNoBids();
-                                    console.log('Result of noBids: ', noBids)
-                                  }
-                                  // Ensure this runs with our "failsafe" timeout
-                                  for (var slotId in noBids) {
-                                    var event = new Event('prebidNoBids');
-                                    event.slotId = slotId;
-                                    window.dispatchEvent(event);
-                                    console.log('Eventing a no bid event', event)
-                                  }
-
-                                  if (pbjs.initAdserverSet) return;
-                                  pbjs.initAdserverSet = true;
-                                  googletag.cmd.push(function() {
-                                    pbjs.que.push(function() {
-                                      console.log('pbjs.que.push(function() {')
-                                      pbjs.setTargetingForGPTAsync();
-                                      googletag.pubads().refresh();
-                                    });
-                                  });
-                                }
-
-                                // TODO: Do we need to do this twice?
-                                setTimeout(function() {
-                                  // TODO: Why would we call initAdserver a second time but with no params?
-                                  initAdserver();
-                                }, FAILSAFE_TIMEOUT);
-
-                                // Begin Globally defining possible bidding ad slots.
-                                // TODO: Slot defs need to be moved to config.
-                                googletag.cmd.push(function() {
-                                  console.log("BiddingAd::componentDidMount::googletag.cmd.push");
-                                  googletag
-                                    .defineSlot(
-                                      "/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid",
-                                      [[728, 90]],
-                                      "div-gpt-ad-1551233873698-0"
-                                    )
-                                    .addService(googletag.pubads());
-                                  googletag
-                                    .defineSlot(
-                                      "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
-                                      [[120, 600], [160, 600]],
-                                      "div-gpt-ad-1554687231046-0"
-                                    )
-                                    .addService(googletag.pubads());
-                                  googletag.pubads().enableSingleRequest();
-                                  googletag.enableServices();
-                                });
-                          `,
+                            !(function(a, b) {
+                            var c = b.getElementsByTagName("script")[0],
+                              d = b.createElement("script"),
+                              e = "https://a.pub.network/steemit-com";
+                            (e += freestar.debug ? "/qa/pubfig.min.js" : "/pubfig.min.js"),
+                              (d.async = !0),
+                              (d.src = e),
+                              c.parentNode.insertBefore(d, c);
+                            })(window, document);
+                        `,
                         }}
                     />
                 ) : null}
-                {shouldSeeAds ? (
+                {shouldSeeCookieConsent ? (
                     <script
+                        id="Cookiebot"
+                        src="https://consent.cookiebot.com/uc.js"
+                        data-cbid={cookieConsentApiKey}
+                        type="text/javascript"
                         async
-                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-                    />
-                ) : null}
-                {shouldSeeAds ? (
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-                      (adsbygoogle = window.adsbygoogle || []).push({
-                          google_ad_client: "${adClient}",
-                          enable_page_level_ads: true
-                      });
-                  `,
-                        }}
                     />
                 ) : null}
                 <title>{page_title}</title>

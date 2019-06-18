@@ -15,6 +15,7 @@ import tt from 'counterpart';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
+import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -304,7 +305,7 @@ class CommentImpl extends React.Component {
         const showEditOption = username === author;
         const showDeleteOption =
             username === author && allowDelete && !_isPaidout;
-        const showReplyOption = comment.depth < 255;
+        const showReplyOption = username !== undefined && comment.depth < 255;
 
         let body = null;
         let controls = null;
@@ -438,15 +439,18 @@ class CommentImpl extends React.Component {
                             <Author
                                 author={comment.author}
                                 authorRepLog10={authorRepLog10}
+                                showAffiliation
                             />
                         </span>
                         &nbsp; &middot; &nbsp;
                         <Link to={comment_link} className="PlainLink">
-                            <TimeAgoWrapper
-                                date={comment.created}
-                                className="updated"
-                            />
+                            <TimeAgoWrapper date={comment.created} />
                         </Link>
+                        &nbsp;
+                        <ContentEditedWrapper
+                            createDate={comment.created}
+                            updateDate={comment.last_update}
+                        />
                         {(this.state.collapsed || hide_body) && (
                             <Voting post={post} showList={false} />
                         )}

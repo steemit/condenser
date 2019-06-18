@@ -11,13 +11,12 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import Callout from 'app/components/elements/Callout';
-// import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
+import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
-import BiddingAd from 'app/components/elements/BiddingAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
@@ -267,7 +266,7 @@ class PostsIndex extends React.Component {
                     <SteemMarket />
                     {this.props.gptEnabled ? (
                         <div className="sidebar-ad">
-                            <GptAd type="Basic" slotName="right_nav" />
+                            <GptAd type="Freestar" id="steemit_160x600_Right" />
                         </div>
                     ) : null}
                 </aside>
@@ -294,16 +293,18 @@ class PostsIndex extends React.Component {
                     {this.props.gptEnabled ? (
                         <div>
                             <div className="sidebar-ad">
-                                <GptAd type="Basic" slotName="left_nav" />
+                                <GptAd
+                                    type="Freestar"
+                                    slotName="steemit_160x600_Left_1"
+                                />
                             </div>
                             <div
                                 className="sidebar-ad"
                                 style={{ marginTop: 20 }}
                             >
-                                <BiddingAd
-                                    type="Bidding"
-                                    slotName="left_nav_2"
-                                    id="div-gpt-ad-1554687231046-0"
+                                <GptAd
+                                    type="Freestar"
+                                    slotName="steemit_160x600_Left_2"
                                 />
                             </div>
                         </div>

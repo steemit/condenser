@@ -13,6 +13,7 @@ bridgenit
 bitchminer
 bisade
 boy666
+casually
 `
     .trim()
     .split('\n');

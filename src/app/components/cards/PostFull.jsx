@@ -27,14 +27,19 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { GoogleAd } from 'app/components/elements/GoogleAd';
+import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
-            <TimeAgoWrapper date={content.created} className="updated" />
+            <TimeAgoWrapper date={content.created} />
             {} {tt('g.by')}{' '}
-            <Author author={content.author} authorRepLog10={authorRepLog10} />
+            <Author
+                author={content.author}
+                authorRepLog10={authorRepLog10}
+                showAffiliation
+            />
             {showTags && (
                 <span>
                     {' '}
@@ -53,13 +58,18 @@ function TimeAuthorCategoryLarge({ content, authorRepLog10 }) {
                 <Author
                     author={content.author}
                     authorRepLog10={authorRepLog10}
+                    showAffiliation
                 />
                 <span>
                     {' '}
                     {tt('g.in')} <TagList post={content} single />
                 </span>{' '}
-                •&nbsp;{' '}
-                <TimeAgoWrapper date={content.created} className="updated" />
+                •&nbsp; <TimeAgoWrapper date={content.created} />
+                &nbsp;{' '}
+                <ContentEditedWrapper
+                    createDate={content.created}
+                    updateDate={content.last_update}
+                />
             </div>
         </span>
     );
@@ -412,7 +422,7 @@ class PostFull extends React.Component {
         const showReblog = !_isPaidout;
         const showPromote =
             username && !_isPaidout && post_content.get('depth') == 0;
-        const showReplyOption = post_content.get('depth') < 255;
+        const showReplyOption = username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;
         const showDeleteOption =
             username === author && content.stats.allowDelete && !_isPaidout;

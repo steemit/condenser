@@ -69,12 +69,7 @@ describe('TransactionSaga', () => {
     });
 
     describe('createPermlink', () => {
-        const gen = createPermlink(
-            operation.title,
-            operation.author,
-            operation.parent_author,
-            operation.parent_permlink
-        );
+        const gen = createPermlink(operation.title, operation.author);
         it('should call the api to get a permlink if the title is valid', () => {
             const actual = gen.next().value;
             const mockCall = call(
@@ -89,20 +84,9 @@ describe('TransactionSaga', () => {
             expect(permlink.indexOf('test') > -1).toEqual(true); // TODO: cannot deep equal due to date stamp at runtime.
         });
         it('should generate own permlink, independent of api if title is empty', () => {
-            const gen2 = createPermlink(
-                '',
-                operation.author,
-                operation.parent_author,
-                operation.parent_permlink
-            );
+            const gen2 = createPermlink('', operation.author);
             const actual = gen2.next().value;
-            expect(
-                actual.indexOf(
-                    `re-${operation.parent_author}-${
-                        operation.parent_permlink
-                    }-`
-                ) > -1
-            ).toEqual(true); // TODO: cannot deep equal due to random hash at runtime.
+            expect(actual.match(/^[a-z0-9]{6}$/) !== null).toEqual(true);
         });
     });
 
@@ -110,12 +94,7 @@ describe('TransactionSaga', () => {
         let gen = preBroadcast_comment({ operation, username });
 
         it('should call createPermlink', () => {
-            const permlink = gen.next(
-                operation.title,
-                operation.author,
-                operation.parent_author,
-                operation.parent_permlink
-            ).value;
+            const permlink = gen.next(operation.title, operation.author).value;
             const actual = permlink.next().value;
             const expected = call(
                 [api, api.getContentAsync],
@@ -141,11 +120,8 @@ describe('TransactionSaga', () => {
                         memo: operation.memo,
                         permlink: 'mock-permlink-123',
                         json_metadata: JSON.stringify(operation.json_metadata),
-                        title: new Buffer(
-                            (operation.title || '').trim(),
-                            'utf-8'
-                        ),
-                        body: new Buffer(operation.body, 'utf-8'), // TODO: new Buffer is deprecated, prefer Buffer.from()
+                        title: (operation.title || '').trim(),
+                        body: operation.body,
                     },
                 ],
             ];
@@ -162,10 +138,7 @@ describe('TransactionSaga', () => {
                 operation.parent_permlink
             );
             const actual = gen.next('mock-permlink-123').value;
-            const expected = Buffer.from(
-                createPatch(originalBod, operation.body),
-                'utf-8'
-            );
+            const expected = createPatch(originalBod, operation.body);
             expect(actual[0][1].body).toEqual(expected);
         });
         it('should return body as body value if patch is larger than body.', () => {
@@ -179,7 +152,7 @@ describe('TransactionSaga', () => {
                 operation.parent_permlink
             );
             const actual = gen.next('mock-permlink-123').value;
-            const expected = Buffer.from(operation.body, 'utf-8');
+            const expected = operation.body;
             expect(actual[0][1].body).toEqual(expected, 'utf-8');
         });
     });

@@ -7,7 +7,7 @@ import { getAccount } from 'app/redux/SagaShared';
 import * as userActions from 'app/redux/UserReducer';
 
 // operations that require only posting authority
-const postingOps = Set(
+export const postingOps = Set(
     `vote, comment, delete_comment, custom_json, claim_reward_balance`
         .trim()
         .split(/,\s*/)

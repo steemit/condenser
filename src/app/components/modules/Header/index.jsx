@@ -18,7 +18,6 @@ import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
-import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
 
 class Header extends React.Component {
@@ -30,15 +29,13 @@ class Header extends React.Component {
         pathname: PropTypes.string,
     };
 
-    constructor() {
-        super();
-        this.gptadshown = event => {
-            // This makes sure that the sticky header doesn't overlap the welcome splash.
-            this.forceUpdate();
-        };
-        this.hideAnnouncement = event => {
-            this.props.hideAnnouncement(event);
-            this.forceUpdate();
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            gptAdRendered: false,
+            showAd: false,
+            showAnnouncement: this.props.showAnnouncement,
         };
     }
 
@@ -52,7 +49,7 @@ class Header extends React.Component {
             return null;
         }
 
-        window.addEventListener('gptadshown', this.gptadshown);
+        window.addEventListener('gptadshown', e => this.gptAdRendered(e));
     }
 
     componentWillUnmount() {
@@ -64,8 +61,6 @@ class Header extends React.Component {
         ) {
             return null;
         }
-
-        window.removeEventListener('gptadshown', this.gptadshown);
     }
 
     // Consider refactor.
@@ -88,6 +83,23 @@ class Header extends React.Component {
         }
     }
 
+    headroomOnUnpin() {
+        this.setState({ showAd: false });
+    }
+
+    headroomOnUnfix() {
+        this.setState({ showAd: true });
+    }
+
+    gptAdRendered() {
+        this.setState({ showAd: true, gptAdRendered: true });
+    }
+
+    hideAnnouncement() {
+        this.setState({ showAnnouncement: false });
+        this.props.hideAnnouncement();
+    }
+
     render() {
         const {
             category,
@@ -107,6 +119,8 @@ class Header extends React.Component {
             account_meta,
             walletUrl,
         } = this.props;
+
+        const { showAd, showAnnouncement } = this.state;
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
@@ -277,21 +291,22 @@ class Header extends React.Component {
         ];
 
         return (
-            <Headroom>
+            <Headroom
+                onUnpin={e => this.headroomOnUnpin(e)}
+                onUnfix={e => this.headroomOnUnfix(e)}
+            >
                 <header className="Header">
-                    {this.props.showAnnouncement && (
-                        <Announcement onClose={this.hideAnnouncement} />
+                    {showAnnouncement && (
+                        <Announcement onClose={e => this.hideAnnouncement(e)} />
                     )}
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
-                    <div>
+                    <div style={showAd ? {} : { display: 'none' }}>
                         <GptAd
-                            type="Basic"
-                            id="/21784675435/steemit_top-navi"
-                            slotName={GptUtils.MobilizeSlotName(
-                                'top-navigation'
-                            )}
+                            type="Freestar"
+                            id="steemit_728x90_970x90_970x250_320x50_ATF"
                         />
                     </div>
+
                     <nav className="row Header__nav">
                         <div className="small-5 large-4 columns Header__logotype">
                             {/*LOGO*/}

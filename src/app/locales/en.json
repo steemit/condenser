@@ -410,7 +410,7 @@
         "hate_speech_or_internet_trolling": "Hate Speech or Internet Trolling",
         "intentional_miss_categorized_content_or_spam":
             "Intentional miss-categorized content or Spam",
-        "pending_payout": "Pending Payout $%(value)s",
+        "pending_payout": "Pending payout amount: $%(value)s",
         "payout_declined": "Payout Declined",
         "max_accepted_payout": "Max Accepted Payout $%(value)s",
         "promotion_cost": "Promotion Cost $%(value)s",
@@ -431,7 +431,10 @@
         "votes_plural": {
             "one": "%(count)s vote",
             "other": "%(count)s votes"
-        }
+        },
+        "must_reached_minimum_payout": "(amount must reach $0.02 for payout)",
+        "payout": "Payout",
+        "breakdown": "Breakdown"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

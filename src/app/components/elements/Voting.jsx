@@ -352,7 +352,7 @@ class Voting extends React.Component {
         const max_payout = parsePayoutAmount(
             post_obj.get('max_accepted_payout')
         );
-        let pending_payout = parsePayoutAmount(
+        const pending_payout = parsePayoutAmount(
             post_obj.get('pending_payout_value')
         );
         const percent_steem_dollars =

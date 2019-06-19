@@ -21,6 +21,10 @@
   @include MQ(M) {
     top: 0.2rem;
   }
+
+  .Userpic {
+    margin-left: 5px;
+  }
 }
 
 .Comment__Userpic-small {
@@ -166,6 +170,9 @@
 .Comment__replies {
   margin-top: 1.4rem;
   margin-left: 62px;
+  @include themify($themes) {
+    border-left: themed('borderDotted');
+  }
   .Comment {
     margin-bottom: 1.4rem;
   }
@@ -184,17 +191,29 @@
 
 @media screen and (max-width: 39.9375em) {
   .root {
-    .Comment__header, .Comment__footer, .Comment__body, .Comment__replies {
-      margin-left: 0;
+    .Comment__block .Comment__header,
+    .Comment__block .Comment__footer,
+    .Comment__block .Comment__body,
+    .Comment__replies {
+      @include themify($themes) {
+        margin-left: 0;
+      }
     }
   }
   .reply {
-    .Comment__header, .Comment__footer, .Comment__body, .Comment__replies {
-      margin-left: 20px;
+    .Comment__block .Comment__header,
+    .Comment__block .Comment__footer,
+    .Comment__block .Comment__body,
+    .Comment__replies {
+      @include themify($themes) {
+        margin-left: 10px;
+      }
     }
   }
 
-  .Comment .highlighted { 
-    padding-left: 0;
+  .Comment .Comment__block .highlighted {
+    @include themify($themes) {
+      padding-left: 0;
+    }
   }
 }

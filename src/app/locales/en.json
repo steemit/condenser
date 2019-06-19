@@ -414,7 +414,7 @@
             "Intentional miss-categorized content or Spam",
         "pending_payout": "Pending payout amount: $%(value)s",
         "payout_declined": "Payout Declined",
-        "max_accepted_payout": "Max Accepted Payout $%(value)s",
+        "max_accepted_payout": "Max accepted payout: $%(value)s",
         "promotion_cost": "Promotion Cost $%(value)s",
         "past_payouts": "Past Payouts $%(value)s",
         "past_payouts_author": " - Author $%(value)s",

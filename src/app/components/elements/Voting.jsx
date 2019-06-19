@@ -358,11 +358,11 @@ class Voting extends React.Component {
         const percent_steem_dollars =
             post_obj.get('percent_steem_dollars') / 20000;
         const pending_payout_sbd = pending_payout * percent_steem_dollars;
-        let pending_payout_sp =
+        const pending_payout_sp =
             (pending_payout - pending_payout_sbd) / price_per_steem;
-        let pending_payout_printed_sbd =
+        const pending_payout_printed_sbd =
             pending_payout_sbd * (sbd_print_rate / SBD_PRINT_RATE_MAX);
-        let pending_payout_printed_steem =
+        const pending_payout_printed_steem =
             (pending_payout_sbd - pending_payout_printed_sbd) / price_per_steem;
 
         const promoted = parsePayoutAmount(post_obj.get('promoted'));
@@ -399,14 +399,13 @@ class Voting extends React.Component {
         const payoutItems = [];
 
         const minimumAmountForPayout = 0.02;
-        if (pending_payout < minimumAmountForPayout) {
-            pending_payout = 0;
-            pending_payout_printed_sbd = 0;
-            pending_payout_printed_steem = 0;
-            pending_payout_sp = 0;
+        let warnZeroPayout = '';
+        if (pending_payout > 0 && pending_payout < minimumAmountForPayout) {
+            warnZeroPayout = tt('voting_jsx.must_reached_minimum_payout');
         }
 
         if (cashout_active) {
+            const payoutDate =  <span>{tt('voting_jsx.payout')} {' '} <TimeAgoWrapper date={cashout_time} /></span>;
             payoutItems.push({
                 value: tt('voting_jsx.pending_payout', {
                     value: formatDecimal(pending_payout).join(''),
@@ -415,11 +414,11 @@ class Voting extends React.Component {
             if (max_payout > 0) {
                 payoutItems.push({
                     value:
-                        '(' +
+                        tt('voting_jsx.breakdown') + ': ' +
                         formatDecimal(pending_payout_printed_sbd).join('') +
                         ' ' +
                         DEBT_TOKEN_SHORT +
-                        ', ' +
+                        ' + ' +
                         (sbd_print_rate != SBD_PRINT_RATE_MAX
                             ? formatDecimal(pending_payout_printed_steem).join(
                                   ''
@@ -430,11 +429,13 @@ class Voting extends React.Component {
                             : '') +
                         formatDecimal(pending_payout_sp).join('') +
                         ' ' +
-                        INVEST_TOKEN_SHORT +
-                        ')',
+                        INVEST_TOKEN_SHORT
                 });
             }
-            payoutItems.push({ value: <TimeAgoWrapper date={cashout_time} /> });
+            payoutItems.push({ value: payoutDate });
+            if (warnZeroPayout !== '') {
+                payoutItems.push({value: warnZeroPayout});
+            }
         }
 
         if (max_payout == 0) {

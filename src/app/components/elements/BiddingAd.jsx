@@ -20,6 +20,12 @@ class BiddingAd extends Component {
                 googletag.cmd.push(() => {
                     googletag.display(this.ad.path);
                     this.refreshBid(this.ad.path, slot);
+
+                    googletag
+                        .pubads()
+                        .addEventListener('slotRenderEnded', e => {
+                            window.dispatchEvent(new Event('gptadshown', e));
+                        });
                 });
             }
         });
@@ -99,7 +105,6 @@ export default connect(
         const slotName = props.slotName;
         let type = props.type;
         let slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
-        console.log('Found slot for type', type, slot);
 
         return {
             enabled,

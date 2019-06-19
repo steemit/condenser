@@ -3,54 +3,43 @@ import { connect } from 'react-redux';
 
 class GptAd extends Component {
     componentDidMount() {
-        if (!this.ad.slot_id || !this.enabled) {
-            return;
-        }
+        if (!this.ad_identifier || !this.enabled) return;
+        const ad_identifier = this.ad_identifier;
 
-        googletag.cmd.push(() => {
-            const slot = googletag.defineSlot(...this.ad.args);
-
-            if (slot) {
-                slot.addService(googletag.pubads());
-
-                googletag.cmd.push(() => {
-                    googletag.display(this.ad.slot_id);
-                    googletag.pubads().refresh([slot]);
-                    googletag
-                        .pubads()
-                        .addEventListener('slotRenderEnded', event => {
-                            console.info('Slot has been rendered:', event);
-                            window.dispatchEvent(new Event('gptadshown'));
-                        });
-                });
-            }
-        });
+        freestar.newAdSlots([
+            {
+                placementName: ad_identifier, // This has to match up with the backend and frontend and all the other ends.
+                slotId: ad_identifier, //TODO: This has to be unique.
+            },
+        ]);
     }
 
     constructor(props) {
         super(props);
-        const { ad, enabled } = props;
+        const { ad_identifier, enabled, type } = props;
 
-        if (ad) {
-            console.info(
-                `Slot named '${props.slotName}' will render with given data:`,
-                ad
-            );
+        this.ad_identifier = '';
+        this.type = type;
+        this.enabled = false;
+
+        if (ad_identifier != '') {
+            // console.info(
+            //     `ad_identifier of '${ad_identifier}' will render.`,
+            //     ad_identifier
+            // );
             this.enabled = enabled;
-            this.ad = ad.toJS();
+            this.ad_identifier = ad_identifier;
         } else {
-            console.info(
-                `Slot named '${
-                    props.slotName
-                }' will be disabled because we were unable to find the ad details.`
-            );
-            this.enabled = false;
-            this.ad = {};
+            // console.info(
+            //     `Slot named '${
+            //         props.slotName
+            //     }' will be disabled because we were unable to find the ad details.`
+            // );
         }
     }
 
     render() {
-        if (!this.ad || !this.enabled) {
+        if (!this.ad_identifier || !this.enabled) {
             return <div id="disabled_ad" style={{ display: 'none' }} />;
         }
 
@@ -58,15 +47,16 @@ class GptAd extends Component {
             <div
                 className="gpt-ad"
                 style={{ width: '100%' }}
-                id={this.ad.slot_id}
+                id={this.ad_identifier}
             />
         );
     }
 }
 
 GptAd.propTypes = {
-    ad: PropTypes.object.isRequired, //TODO: Define this shape
+    ad_identifier: PropTypes.string.isRequired,
     enabled: PropTypes.bool.isRequired,
+    type: PropTypes.oneOf(['Bidding', 'Category', 'Basic', 'Freestar']),
 };
 
 export default connect(
@@ -83,49 +73,20 @@ export default connect(
             `gptCategorySlots`,
         ]);
 
-        // Determine which type of ad to show
-        //
-        //   * Show a bidding ad if it's a bidding ad (e.g. Coinzilla)
-        //   * Show a category ad (an ad on just #cryptocurrency, for example)
-        //   * Fall back to a regular GPT ad
-        //
-        const slotName = props.slotName;
-
-        let type = 'basic';
-        let slot = basicSlots.getIn([slotName]);
-        if (categorySlots.getIn([postCategory, slotName])) {
-            console.info(
-                `GPT-[${slotName}]::Overriding type of '${
-                    type
-                }' to be 'category' due to category being set to '${
-                    postCategory
-                }' and the existence of a category named '${
-                    postCategory
-                }' which has a slot named '${slotName}'`
-            );
-            type = 'category';
-            slot = categorySlots.getIn([postCategory, slotName]);
-        } else if (biddingSlots.getIn([slotName])) {
-            console.info(
-                `GPT-[${slotName}]::Overriding type of '${
-                    type
-                }' to be 'bidding' because we have a bidding slot defined for slotName '${
-                    slotName
-                }'`
-            );
-            type = 'bidding';
-            slot = biddingSlots.getIn([slotName]);
-        } else {
-            console.info(
-                `GPT-[${slotName}]::No override for type. Sticking with '${
-                    type
-                }'`
-            );
+        let slotName = props.slotName;
+        if (!slotName) {
+            slotName = props.id;
+        }
+        let type = props.type;
+        let slot = slotName; // in case it's Freestar
+        if (type != 'Freestar') {
+            slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
         }
 
         return {
             enabled,
             ad: slot,
+            ad_identifier: slotName,
             ...props,
         };
     },

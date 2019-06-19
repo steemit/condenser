@@ -30,6 +30,8 @@
         "email": "Email",
         "external_link_message":
             "This link will take you away from steemit.com",
+        "affiliation_steemit": "Steemit Team",
+        "affiliation_sm": "Steem Monsters Team",
         "feed": "Feed",
         "follow": "Follow",
         "for": " for ",
@@ -606,7 +608,8 @@
         "continue_anyway": "Continue Anyway",
         "login_warning_link_text": "View my Posting Key at Steemit Wallet",
         "join_our": "Join our",
-        "sign_transfer": "Sign to complete transfer"
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",

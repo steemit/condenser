@@ -6,6 +6,7 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { validate_account_name } from 'app/utils/ChainValidation';
+import { hasCompatibleKeychain } from 'app/utils/SteemKeychain';
 import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import reactForm from 'app/utils/ReactForm';
@@ -76,17 +77,24 @@ class LoginForm extends Component {
         reactForm({
             name: 'login',
             instance: this,
-            fields: ['username', 'password', 'saveLogin:checked'],
+            fields: [
+                'username',
+                'password',
+                'saveLogin:checked',
+                'useKeychain:checked',
+            ],
             initialValues: props.initialValues,
             validation: values => ({
                 username: !values.username
                     ? tt('g.required')
                     : validate_account_name(values.username.split('/')[0]),
-                password: !values.password
-                    ? tt('g.required')
-                    : PublicKey.fromString(values.password)
-                      ? tt('loginform_jsx.you_need_a_private_password_or_key')
-                      : null,
+                password: values.useKeychain
+                    ? null
+                    : !values.password
+                      ? tt('g.required')
+                      : PublicKey.fromString(values.password)
+                        ? tt('loginform_jsx.you_need_a_private_password_or_key')
+                        : null,
             }),
         });
     }
@@ -97,6 +105,11 @@ class LoginForm extends Component {
         serverApiRecordEvent('FreeMoneySignUp', onType);
         window.location.href = SIGNUP_URL;
     }
+
+    useKeychainToggle = () => {
+        const { useKeychain } = this.state;
+        useKeychain.props.onChange(!useKeychain.value);
+    };
 
     saveLoginToggle = () => {
         const { saveLogin } = this.state;
@@ -168,7 +181,7 @@ class LoginForm extends Component {
             afterLoginRedirectToWelcome,
             msg,
         } = this.props;
-        const { username, password, saveLogin } = this.state;
+        const { username, password, useKeychain, saveLogin } = this.state;
         const { submitting, valid, handleSubmit } = this.state.login;
         const { usernameOnChange, onCancel /*qrReader*/ } = this;
         const disabled = submitting || !valid;
@@ -245,10 +258,10 @@ class LoginForm extends Component {
             }
         }
         const password_info =
+            !useKeychain.value &&
             checkPasswordChecksum(password.value) === false
                 ? tt('loginform_jsx.password_info')
                 : null;
-
         const titleText = (
             <h3>
                 {tt('loginform_jsx.returning_users')}
@@ -281,6 +294,7 @@ class LoginForm extends Component {
                     console.log('Login\tdispatchSubmit');
                     return dispatchSubmit(
                         data,
+                        useKeychain.value,
                         loginBroadcastOperation,
                         afterLoginRedirectToWelcome
                     );
@@ -306,22 +320,30 @@ class LoginForm extends Component {
                     <div className="error">{username.error}&nbsp;</div>
                 ) : null}
 
-                <div>
-                    <input
-                        type="password"
-                        required
-                        ref="pw"
-                        placeholder={tt('loginform_jsx.password_or_wif')}
-                        {...password.props}
-                        autoComplete="on"
-                        disabled={submitting}
-                    />
-                    {error && <div className="error">{error}&nbsp;</div>}
-                    {error &&
-                        password_info && (
-                            <div className="warning">{password_info}&nbsp;</div>
-                        )}
-                </div>
+                {useKeychain.value ? (
+                    <div>
+                        {error && <div className="error">{error}&nbsp;</div>}
+                    </div>
+                ) : (
+                    <div>
+                        <input
+                            type="password"
+                            required
+                            ref="pw"
+                            placeholder={tt('loginform_jsx.password_or_wif')}
+                            {...password.props}
+                            autoComplete="on"
+                            disabled={submitting}
+                        />
+                        {error && <div className="error">{error}&nbsp;</div>}
+                        {error &&
+                            password_info && (
+                                <div className="warning">
+                                    {password_info}&nbsp;
+                                </div>
+                            )}
+                    </div>
+                )}
                 {loginBroadcastOperation && (
                     <div>
                         <div className="info">
@@ -330,6 +352,23 @@ class LoginForm extends Component {
                                 { authType }
                             )}
                         </div>
+                    </div>
+                )}
+                {hasCompatibleKeychain() && (
+                    <div>
+                        <label
+                            className="LoginForm__save-login"
+                            htmlFor="useKeychain"
+                        >
+                            <input
+                                id="useKeychain"
+                                type="checkbox"
+                                ref="pw"
+                                {...useKeychain.props}
+                                onChange={this.useKeychainToggle}
+                                disabled={submitting}
+                            />&nbsp;{tt('loginform_jsx.use_keychain')}
+                        </label>
                     </div>
                 )}
                 <div>
@@ -476,6 +515,7 @@ export default connect(
             'loginBroadcastOperation'
         );
         const initialValues = {
+            useKeychain: !!hasCompatibleKeychain(),
             saveLogin: saveLoginDefault,
         };
 
@@ -516,6 +556,7 @@ export default connect(
     dispatch => ({
         dispatchSubmit: (
             data,
+            useKeychain,
             loginBroadcastOperation,
             afterLoginRedirectToWelcome
         ) => {
@@ -534,6 +575,7 @@ export default connect(
                         operation,
                         username,
                         password,
+                        useKeychain,
                         successCallback,
                         errorCallback,
                     })
@@ -542,6 +584,7 @@ export default connect(
                     userActions.usernamePasswordLogin({
                         username,
                         password,
+                        useKeychain,
                         saveLogin,
                         afterLoginRedirectToWelcome,
                         operationType: type,
@@ -556,6 +599,7 @@ export default connect(
                     userActions.checkKeyType({
                         username,
                         password,
+                        useKeychain,
                         saveLogin,
                         afterLoginRedirectToWelcome,
                     })

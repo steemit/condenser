@@ -5,8 +5,8 @@ ul.PostsList__summaries {
 ul.PostsList__summaries li {
   padding: 1.5em 1.5em 0.5em 1.5em;
   margin-bottom: 1.5em;
-  border: 1px solid #eee;
   @include themify($themes) {
+    border: themed('borderLight');
     background-color: themed('moduleBackgroundColor');
   }
 

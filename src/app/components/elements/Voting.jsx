@@ -405,7 +405,12 @@ class Voting extends React.Component {
         }
 
         if (cashout_active) {
-            const payoutDate =  <span>{tt('voting_jsx.payout')} {' '} <TimeAgoWrapper date={cashout_time} /></span>;
+            const payoutDate = (
+                <span>
+                    {tt('voting_jsx.payout')}{' '}
+                    <TimeAgoWrapper date={cashout_time} />
+                </span>
+            );
             payoutItems.push({
                 value: tt('voting_jsx.pending_payout', {
                     value: formatDecimal(pending_payout).join(''),
@@ -414,11 +419,12 @@ class Voting extends React.Component {
             if (max_payout > 0) {
                 payoutItems.push({
                     value:
-                        tt('voting_jsx.breakdown') + ': ' +
+                        tt('voting_jsx.breakdown') +
+                        ': ' +
                         formatDecimal(pending_payout_printed_sbd).join('') +
                         ' ' +
                         DEBT_TOKEN_SHORT +
-                        ' + ' +
+                        ', ' +
                         (sbd_print_rate != SBD_PRINT_RATE_MAX
                             ? formatDecimal(pending_payout_printed_steem).join(
                                   ''
@@ -429,12 +435,12 @@ class Voting extends React.Component {
                             : '') +
                         formatDecimal(pending_payout_sp).join('') +
                         ' ' +
-                        INVEST_TOKEN_SHORT
+                        INVEST_TOKEN_SHORT,
                 });
             }
             payoutItems.push({ value: payoutDate });
             if (warnZeroPayout !== '') {
-                payoutItems.push({value: warnZeroPayout});
+                payoutItems.push({ value: warnZeroPayout });
             }
         }
 

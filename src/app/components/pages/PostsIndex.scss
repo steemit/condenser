@@ -230,7 +230,7 @@
     max-width: 664px;
     padding: 0;
     @include themify($themes) {
-        border: themed('border');
+        border: themed('borderTransparent');
         background-color: themed('transparent');
     }
   }

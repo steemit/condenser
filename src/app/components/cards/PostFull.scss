@@ -1,16 +1,16 @@
 .Post {
   @include themify($themes) {
-    background-color: themed('moduleBackgroundColor');
+    background-color: themed('transparent');
   }
 }
 
 .PostFull {
-  padding-bottom: 1rem;
-  padding-top: 2rem;
+  padding: 2rem 1rem 1rem 1rem;
   margin: 0 auto;
   max-width: 54rem;
   @include themify($themes) {
-      border-bottom: themed('border');
+      border: themed('border');
+      background-color: themed('moduleBackgroundColor');
   }
   .button.hollow {
     @include themify($themes) {

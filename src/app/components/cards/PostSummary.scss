@@ -2,6 +2,23 @@ ul.PostsList__summaries {
   margin-left: 0;
 }
 
+ul.PostsList__summaries li {
+  padding: 1.5em 1.5em 0.5em 1.5em;
+  margin-bottom: 1.5em;
+  border: 1px solid #eee;
+  @include themify($themes) {
+    background-color: themed('moduleBackgroundColor');
+  }
+
+  &:hover {
+    @include MQ(L) {
+      @include themify($themes) {
+        box-shadow: 6px 6px 0 0 themed('contentBorderAccent');
+      }
+    }
+  }
+}
+
 .PostSummary {
   // padding: 0 0 0.5rem;
   margin: 0 0 1.25vw;

@@ -212,6 +212,7 @@
     width: 100%;
     margin: auto;
     background-color: transparent;
+    box-shadow: none;
 
   @include MQ(M) {
     margin: 0 1em;
@@ -227,19 +228,10 @@
   @include MQ(L) {
     min-width: 664px;
     max-width: 664px;
-    padding: 1.5em 4em;
+    padding: 0;
     @include themify($themes) {
         border: themed('border');
-        box-shadow: 5px 5px 0 0 themed('contentBorderAccent');
-        background-color: themed('moduleBackgroundColor');
-    }
-  }
-
-  &:hover {
-    @include MQ(L) {
-      @include themify($themes) {
-          box-shadow: 6px 6px 0 0 themed('contentBorderAccent');
-      }
+        background-color: themed('transparent');
     }
   }
 
@@ -721,8 +713,8 @@ a#changeLayout:focus {
         min-width: 1050px;
       }
       @include themify($themes) {
-         background-color: themed('moduleBackgroundColor');
-         border: themed('border');
+         background-color: transparent;
+         border: themed('borderTransparent');
       }
       &__hr {
         @include MQ(M) {
@@ -736,12 +728,12 @@ a#changeLayout:focus {
         border: transparent;
         box-shadow: none;
         padding-bottom: 0px;
-        margin: 0 0 1.4em;
+        margin: 0;
         @include themify($themes) {
-          border-bottom: themed('borderLight');
+          border-bottom: themed('borderTransparent');
         }
         @include MQ(M) {
-          padding-bottom: 6px;
+          padding-bottom: 0;
         }
       }
       &__h2 {
@@ -792,6 +784,12 @@ a#changeLayout:focus {
         display: flex;
         align-items: top;
       }
+      &__footer {
+        @include themify($themes) {
+          border-top: themed('borderLight');
+          margin-top: 0.5em;
+        }
+      }
       &__content-block {
         margin-bottom: 0;
         &--img {
@@ -841,7 +839,7 @@ a#changeLayout:focus {
   }
   @include MQ(XL) {
     .articles {
-      padding: 1.5em 4em;
+      padding: 0;
     }
   }
 }

@@ -30,6 +30,8 @@
         "email": "Email",
         "external_link_message":
             "This link will take you away from steemit.com",
+        "affiliation_steemit": "Steemit Team",
+        "affiliation_sm": "Steem Monsters Team",
         "feed": "Feed",
         "follow": "Follow",
         "for": " for ",
@@ -410,9 +412,9 @@
         "hate_speech_or_internet_trolling": "Hate Speech or Internet Trolling",
         "intentional_miss_categorized_content_or_spam":
             "Intentional miss-categorized content or Spam",
-        "pending_payout": "Pending Payout $%(value)s",
+        "pending_payout": "Pending payout amount: $%(value)s",
         "payout_declined": "Payout Declined",
-        "max_accepted_payout": "Max Accepted Payout $%(value)s",
+        "max_accepted_payout": "Max accepted payout: $%(value)s",
         "promotion_cost": "Promotion Cost $%(value)s",
         "past_payouts": "Past Payouts $%(value)s",
         "past_payouts_author": " - Author $%(value)s",
@@ -431,7 +433,10 @@
         "votes_plural": {
             "one": "%(count)s vote",
             "other": "%(count)s votes"
-        }
+        },
+        "must_reached_minimum_payout": "(amount must reach $0.02 for payout)",
+        "payout": "Payout",
+        "breakdown": "Breakdown"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -603,7 +608,8 @@
         "continue_anyway": "Continue Anyway",
         "login_warning_link_text": "View my Posting Key at Steemit Wallet",
         "join_our": "Join our",
-        "sign_transfer": "Sign to complete transfer"
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",

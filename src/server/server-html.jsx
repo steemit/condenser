@@ -11,6 +11,8 @@ export default function ServerHTML({
     adClient,
     gptEnabled,
     gptBidding,
+    shouldSeeCookieConsent,
+    cookieConsentApiKey,
 }) {
     let page_title = title;
     return (
@@ -175,86 +177,47 @@ export default function ServerHTML({
                 ))}
                 {gptEnabled ? (
                     <script
-                        async
-                        src="https://www.googletagservices.com/tag/js/gpt.js"
-                    />
-                ) : null}
-                {gptEnabled ? (
-                    <script src="https://staticfiles.steemit.com/prebid2.12.0.js" />
-                ) : null}
-                {gptEnabled ? (
-                    <script
                         dangerouslySetInnerHTML={{
                             __html: `
-                      window.googletag = window.googletag || {};
-                      googletag.cmd = googletag.cmd || [];
-                      console.info('Set up googletag');
-                      googletag.cmd.push(function() {
-                          googletag.pubads().setTargeting('edition',['new-york']);
-                          googletag.pubads().collapseEmptyDivs(true,true);
-                          googletag.pubads().disableInitialLoad();
-                          googletag.enableServices();
-                          console.info('Enabled googletag services');
-                      });
+                            var freestar = freestar || {};
+                            freestar.hitTime = Date.now();
+                            freestar.queue = freestar.queue || [];
+                            freestar.config = freestar.config || {};
+                            freestar.debug =
+                            window.location.search.indexOf("fsdebug") === -1 ? false : true; // NICE.
+                            freestar.config.enabled_slots = [];
 
-                      var pbjs = pbjs || {};
-                      pbjs.que = pbjs.que || [];
-                      pbjs.que.push(function() {
-                          pbjs.addAdUnits(${JSON.stringify(
-                              gptBidding.ad_units
-                          )});
-                          pbjs.setConfig({
-                              priceGranularity: ${JSON.stringify(
-                                  gptBidding.custom_config
-                              )},
-                              currency: ${JSON.stringify(
-                                  gptBidding.system_currency
-                              )}
-                          });
-                          pbjs.requestBids({
-                              bidsBackHandler: initAdserver,
-                              timeout: ${JSON.stringify(
-                                  gptBidding.prebid_timeout
-                              )}
-                          });
-                      });
-
-                      setTimeout(function() {
-                          if (pbjs.initAdserverSet) return;
-                          pbjs.initAdserverSet = true;
-                          googletag.cmd.push(function() {
-                              pbjs.que.push(function() {
-                                  pbjs.setTargetingForGPTAsync();
-                                  googletag.pubads().refresh();
-                              });
-                          });
-                      }, ${JSON.stringify(gptBidding.failsafe_timeout)});
-                  `,
+                            !(function(a, b) {
+                            var c = b.getElementsByTagName("script")[0],
+                              d = b.createElement("script"),
+                              e = "https://a.pub.network/steemit-com";
+                            (e += freestar.debug ? "/qa/pubfig.min.js" : "/pubfig.min.js"),
+                              (d.async = !0),
+                              (d.src = e),
+                              c.parentNode.insertBefore(d, c);
+                            })(window, document);
+                        `,
                         }}
                     />
                 ) : null}
-                {shouldSeeAds ? (
+                {shouldSeeCookieConsent ? (
                     <script
+                        id="Cookiebot"
+                        src="https://consent.cookiebot.com/uc.js"
+                        data-cbid={cookieConsentApiKey}
+                        type="text/javascript"
                         async
-                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-                    />
-                ) : null}
-                {shouldSeeAds ? (
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-                      (adsbygoogle = window.adsbygoogle || []).push({
-                          google_ad_client: "${adClient}",
-                          enable_page_level_ads: true
-                      });
-                  `,
-                        }}
                     />
                 ) : null}
                 <title>{page_title}</title>
             </head>
             <body>
-                <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
+                {
+                    <div
+                        id="content"
+                        dangerouslySetInnerHTML={{ __html: body }}
+                    />
+                }
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}

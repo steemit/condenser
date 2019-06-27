@@ -373,9 +373,15 @@ class CommentImpl extends React.Component {
         const commentClasses = ['hentry'];
         commentClasses.push('Comment');
         commentClasses.push(this.props.root ? 'root' : 'reply');
-        if (hide_body || this.state.collapsed) commentClasses.push('collapsed');
+        if (this.state.collapsed) commentClasses.push('collapsed');
 
-        let innerCommentClass = ignore || gray ? 'downvoted clearfix' : '';
+        let innerCommentClass = 'Comment__block';
+        if (ignore || gray) {
+            innerCommentClass += ' downvoted clearfix';
+            if (!hide_body) {
+                innerCommentClass += ' revealed';
+            }
+        }
         if (this.state.highlight) innerCommentClass += ' highlighted';
 
         //console.log(comment);
@@ -406,17 +412,6 @@ class CommentImpl extends React.Component {
             );
         }
 
-        const depth_indicator = [];
-        if (depth > 1) {
-            for (let i = 1; i < depth; ++i) {
-                depth_indicator.push(
-                    <div key={i} className={`depth di-${i}`}>
-                        &middot;
-                    </div>
-                );
-            }
-        }
-
         return (
             <div
                 className={commentClasses.join(' ')}
@@ -424,7 +419,6 @@ class CommentImpl extends React.Component {
                 itemScope
                 itemType="http://schema.org/comment"
             >
-                {depth_indicator}
                 <div className={innerCommentClass}>
                     <div className="Comment__Userpic show-for-medium">
                         <Userpic account={comment.author} />

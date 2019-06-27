@@ -146,18 +146,37 @@ class Post extends React.Component {
             );
             replies = replies.slice(0, commentLimit);
         }
+        let commentCount = 0;
+        const positiveComments = replies.map(reply => {
+            commentCount++;
+            let showAd =
+                commentCount % 5 == 0 &&
+                commentCount != replies.length &&
+                commentCount != commentLimit;
 
-        const positiveComments = replies.map(reply => (
-            <Comment
-                root
-                key={post + reply}
-                content={reply}
-                cont={content}
-                sort_order={sortOrder}
-                showNegativeComments={showNegativeComments}
-                onHide={this.onHideComment}
-            />
-        ));
+            return (
+                <div>
+                    <Comment
+                        root
+                        key={post + reply}
+                        content={reply}
+                        cont={content}
+                        sort_order={sortOrder}
+                        showNegativeComments={showNegativeComments}
+                        onHide={this.onHideComment}
+                    />
+
+                    {this.props.gptEnabled && showAd ? (
+                        <div className="Post_footer__ad">
+                            <GptAd
+                                type="Freestar"
+                                id="steemit_728x90_468x60_300x250_BetweenComments"
+                            />
+                        </div>
+                    ) : null}
+                </div>
+            );
+        });
 
         const negativeGroup = commentHidden && (
             <div className="hentry Comment root Comment__negative_group">

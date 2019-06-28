@@ -23,7 +23,7 @@
   }
 
   .Userpic {
-    margin-left: 5px;
+    margin-left: 7px;
   }
 }
 
@@ -87,7 +87,7 @@
     margin-left: 62px;
     border-radius: 3px 3px 0 0;
     border: themed('border');
-    background: themed('backgroundColorOpaque');
+    background: themed('moduleBackgroundColor');
     padding: 1px 5px;
   }
 }
@@ -123,6 +123,7 @@
     border-top: none;
     border-bottom: none;
     font-size: 90%;
+    background: themed('moduleBackgroundColor');
   }
 }
 
@@ -132,6 +133,7 @@
     border: themed('border');
     border-radius: 3px 0;
     padding: 3px 8px;
+    background: themed('moduleBackgroundColor');
   }
 
   @include themify($themes) {

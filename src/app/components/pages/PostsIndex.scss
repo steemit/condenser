@@ -98,7 +98,8 @@
   flex: 0 0 240px;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   &__module {
-      padding: 1.5em 2em;
+    border-radius: 3px;
+    padding: 1.5em 2em;
     @include themify($themes) {
         background-color: themed('moduleBackgroundColor');
         border: themed('border');

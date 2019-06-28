@@ -21,6 +21,10 @@
   @include MQ(M) {
     top: 0.2rem;
   }
+
+  .Userpic {
+    margin-left: 5px;
+  }
 }
 
 .Comment__Userpic-small {
@@ -43,7 +47,8 @@
   }
 }
 
-.Comment.collapsed {
+.Comment.collapsed .Comment__block,
+.Comment .Comment__block.downvoted:not(.revealed) {
   > .Comment__Userpic {
     top: 0;
     left: 26px;
@@ -63,10 +68,28 @@
       }
     }
   }
+  .Comment__body {
+    @include themify($themes) {
+      padding: 0;
+      border: none;
+    }
+  }
+  .Comment__footer {
+    @include themify($themes) {
+      padding: 0;
+      border: none;
+    }
+  }
 }
 
 .Comment__header {
-  margin-left: 62px;
+  @include themify($themes) {
+    margin-left: 62px;
+    border-radius: 3px 3px 0 0;
+    border: themed('border');
+    background: themed('backgroundColorOpaque');
+    padding: 1px 5px;
+  }
 }
 
 .Comment__header-user {
@@ -78,8 +101,6 @@
     @extend .link--primary;
   }
 }
-
-
 
 .Comment__header_collapse {
   float: right;
@@ -93,13 +114,26 @@
   }
 }
 
-.Comment__body {
-  margin-left: 62px;
-  max-width: 50rem;
+.Comment .Comment__block .Comment__body {
+  @include themify($themes) {
+    margin-left: 62px;
+    max-width: 50rem;
+    border: themed('border');
+    padding: 2px 7px;
+    border-top: none;
+    border-bottom: none;
+    font-size: 90%;
+  }
 }
 
-.Comment__footer {
-  margin-left: 62px;
+.Comment .Comment__block .Comment__footer {
+  @include themify($themes) {
+    margin-left: 62px;
+    border: themed('border');
+    border-radius: 3px 0;
+    padding: 3px 8px;
+  }
+
   @include themify($themes) {
     color: themed('textColorPrimary');
   }
@@ -136,6 +170,9 @@
 .Comment__replies {
   margin-top: 1.4rem;
   margin-left: 62px;
+  @include themify($themes) {
+    border-left: themed('borderDotted');
+  }
   .Comment {
     margin-bottom: 1.4rem;
   }
@@ -152,81 +189,31 @@
     }
 }
 
-.depth {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  color: $dark-gray;
-}
-
-.Comment.collapsed > .depth {
-  top: 2px;
-}
-
-.depth.di-1 {
-  left: -38px;
-}
-
-.depth.di-2 {
-  left: -100px;
-}
-
-.depth.di-3 {
-  left: -162px;
-}
-
-.depth.di-4 {
-  left: -224px;
-}
-
-.depth.di-5 {
-  left: -286px;
-}
-
-.depth.di-6 {
-  left: -348px;
-}
-
 @media screen and (max-width: 39.9375em) {
   .root {
-    .Comment__header, .Comment__footer, .Comment__body, .Comment__replies {
-      margin-left: 0;
+    .Comment__block .Comment__header,
+    .Comment__block .Comment__footer,
+    .Comment__block .Comment__body,
+    .Comment__replies {
+      @include themify($themes) {
+        margin-left: 0;
+      }
     }
   }
   .reply {
-    .Comment__header, .Comment__footer, .Comment__body, .Comment__replies {
-      margin-left: 20px;
+    .Comment__block .Comment__header,
+    .Comment__block .Comment__footer,
+    .Comment__block .Comment__body,
+    .Comment__replies {
+      @include themify($themes) {
+        margin-left: 10px;
+      }
     }
   }
 
-  .depth {
-    top: 2px;
-  }
-
-  .depth.di-1 {
-    left: 0;
-  }
-
-  .depth.di-2 {
-    left: -20px;
-  }
-
-  .depth.di-3 {
-    left: -40px;
-  }
-
-  .depth.di-4 {
-    left: -60px;
-  }
-
-  .depth.di-5 {
-    left: -80px;
-  }
-
-  .depth.di-6 {
-    left: -100px;
-  }
-  .Comment .highlighted { 
-    padding-left: 0;
+  .Comment .Comment__block .highlighted {
+    @include themify($themes) {
+      padding-left: 0;
+    }
   }
 }

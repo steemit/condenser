@@ -12,9 +12,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
-import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
-import BiddingAd from 'app/components/elements/BiddingAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
 
 import Icon from 'app/components/elements/Icon';
@@ -148,18 +146,37 @@ class Post extends React.Component {
             );
             replies = replies.slice(0, commentLimit);
         }
+        let commentCount = 0;
+        const positiveComments = replies.map(reply => {
+            commentCount++;
+            let showAd =
+                commentCount % 5 == 0 &&
+                commentCount != replies.length &&
+                commentCount != commentLimit;
 
-        const positiveComments = replies.map(reply => (
-            <Comment
-                root
-                key={post + reply}
-                content={reply}
-                cont={content}
-                sort_order={sortOrder}
-                showNegativeComments={showNegativeComments}
-                onHide={this.onHideComment}
-            />
-        ));
+            return (
+                <div>
+                    <Comment
+                        root
+                        key={post + reply}
+                        content={reply}
+                        cont={content}
+                        sort_order={sortOrder}
+                        showNegativeComments={showNegativeComments}
+                        onHide={this.onHideComment}
+                    />
+
+                    {this.props.gptEnabled && showAd ? (
+                        <div className="Post_footer__ad">
+                            <GptAd
+                                type="Freestar"
+                                id="steemit_728x90_468x60_300x250_BetweenComments"
+                            />
+                        </div>
+                    ) : null}
+                </div>
+            );
+        });
 
         const negativeGroup = commentHidden && (
             <div className="hentry Comment root Comment__negative_group">
@@ -230,21 +247,10 @@ class Post extends React.Component {
                 )}
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        {isLoggedIn() ? (
-                            <BiddingAd
-                                type="Bidding"
-                                slotName={GptUtils.MobilizeSlotName(
-                                    'post-page-above-comments-loggedin'
-                                )}
-                            />
-                        ) : (
-                            <BiddingAd
-                                type="Bidding"
-                                slotName={GptUtils.MobilizeSlotName(
-                                    'post-page-above-comments'
-                                )}
-                            />
-                        )}
+                        <GptAd
+                            type="Freestar"
+                            id="steemit_728x90_468x60_300x250_AboveComments"
+                        />
                     </div>
                 ) : null}
                 <div id="#comments" className="Post_comments row hfeed">
@@ -268,15 +274,10 @@ class Post extends React.Component {
                 </div>
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        {/* TODO: Switch to Mobile Ad when, well, mobile! */}
-                        {false ? (
-                            <GptAd
-                                type="Basic"
-                                slotName="bottom-of-post-mobile"
-                            />
-                        ) : (
-                            <GptAd type="Basic" slotName="bottom-of-post" />
-                        )}
+                        <GptAd
+                            type="Freestar"
+                            id="steemit_728x90_468x60_300x250_BelowComments"
+                        />
                     </div>
                 ) : null}
             </div>

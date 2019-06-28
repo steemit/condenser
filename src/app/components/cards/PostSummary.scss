@@ -110,7 +110,7 @@ ul.PostsList__summaries li {
 .PostSummary__body {
   width: auto;
   padding: 0.3rem 0.1rem 0.15rem;
-  font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   @include themify($themes) {
     color: themed('textColorPrimary');  
   }

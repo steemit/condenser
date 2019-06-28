@@ -96,7 +96,7 @@
 .c-sidebar {
   width: 100%;
   flex: 0 0 240px;
-  font-family: helvetica, sans-serif;
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   &__module {
       padding: 1.5em 2em;
     @include themify($themes) {
@@ -204,7 +204,7 @@
 }
 
 .articles {
-    font-family: helvetica, sans-serif;
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
     padding: 4px 1em 1em 1em;
     transition: all 0.2s ease-out;
     border: transparent;

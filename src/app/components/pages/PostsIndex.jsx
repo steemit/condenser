@@ -92,7 +92,7 @@ class PostsIndex extends React.Component {
             order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
 
-        const { categories, pinned } = this.props;
+        const { categories, featured, promoted } = this.props;
 
         let topics_order = order;
         let posts = [];
@@ -233,7 +233,8 @@ class PostsIndex extends React.Component {
                     <hr className="articles__hr" />
                     {!fetching &&
                     (posts && !posts.size) &&
-                    (pinned && !pinned.size) ? (
+                    (featured && !featured.size) &&
+                    (promoted && !promoted.size) ? (
                         <Callout>{emptyText}</Callout>
                     ) : (
                         <PostsList
@@ -243,7 +244,8 @@ class PostsIndex extends React.Component {
                             anyPosts={true}
                             category={category}
                             loadMore={this.loadMore}
-                            showPinned={true}
+                            showFeatured={true}
+                            showPromoted={true}
                             showSpam={showSpam}
                         />
                     )}
@@ -333,13 +335,18 @@ module.exports = {
                 categories: state.global
                     .getIn(['tag_idx', 'trending'])
                     .take(50),
-                pinned: state.offchain.get('pinned_posts'),
-                maybeLoggedIn: state.user.get('maybeLoggedIn'),
-                isBrowser: process.env.BROWSER,
+                featured: state.offchain
+                    .get('special_posts')
+                    .get('featured_posts'),
+                promoted: state.offchain
+                    .get('special_posts')
+                    .get('promoted_posts'),
                 notices: state.offchain
-                    .get('pinned_posts')
+                    .get('special_posts')
                     .get('notices')
                     .toJS(),
+                maybeLoggedIn: state.user.get('maybeLoggedIn'),
+                isBrowser: process.env.BROWSER,
                 gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
             };
         },

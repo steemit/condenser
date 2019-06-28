@@ -118,7 +118,7 @@ body.with-post-overlay {
         position: relative;
     }
 
-    .PinText {
+    .FeaturedTag {
         font-weight: 400;
         display: inline;
         padding: 0.1rem 0.2rem;
@@ -132,7 +132,21 @@ body.with-post-overlay {
         }
     }
 
-    A.PinDismiss {
+    .PromotedTag {
+        font-weight: 400;
+        display: inline;
+        padding: 0.1rem 0.2rem;
+        margin: 0 1rem 0 0.5rem;
+        border-radius: 0.3rem;
+        font-size: 0.75rem;
+        vertical-align: 15%;
+        @include themify($themes) {
+            background-color: themed('iconColorSecondary');
+            color: themed('buttonText');
+        }
+    }
+
+    A.PostDismiss {
         position: absolute;
         right: 0;
 

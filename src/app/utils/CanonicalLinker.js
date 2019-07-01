@@ -5,14 +5,12 @@ export function makeCanonicalLink(d) {
 
     if (d.json_metadata) {
         if (
-            d.json_metadata.canonical_link &&
-            typeof d.json_metadata.canonical_link === 'string'
+            d.json_metadata.canonical_url &&
+            typeof d.json_metadata.canonical_url === 'string'
         ) {
-            const urlTester = new RegExp(
-                /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm
-            );
-            if (urlTester.test(d.json_metadata.canonical_link)) {
-                return d.json_metadata.canonical_link;
+            const urlTester = new RegExp(/^https?:\/\//);
+            if (urlTester.test(d.json_metadata.canonical_url)) {
+                return d.json_metadata.canonical_url;
             }
         }
 

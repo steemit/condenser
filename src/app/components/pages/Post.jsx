@@ -103,10 +103,10 @@ class Post extends React.Component {
                 </div>
             );
 
-        // A post should be hidden if it is not pinned, is not told to "show
+        // A post should be hidden if it is not special, is not told to "show
         // anyway", and is designated "gray".
-        const pinned = dis.get('pinned');
-        if (!pinned && !showAnyway) {
+        const special = dis.get('special');
+        if (!special && !showAnyway) {
             const { gray } = dis.get('stats').toJS();
             if (gray) {
                 return (

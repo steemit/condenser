@@ -1,0 +1,23 @@
+.external-link-container .column {
+  @include themify($themes) {
+    border: themed('border');
+  }
+  padding: 10px;
+  border-radius: 3px;
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+.external-link-container .row:first-child .column {
+  border-bottom: none;
+}
+
+.external-link-container a.button {
+  @include themify($themes) {
+    color: themed('colorWhite');
+  }
+}
+
+.external-link-container .button-container {
+  text-align: center;
+}

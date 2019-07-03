@@ -62,6 +62,11 @@ export function* fetchState(location_change_action) {
     if (url.indexOf('/author-rewards') !== -1)
         url = url.replace('/author-rewards', '/transfers');
 
+    // /external_link is not known by the blockchain, so we are replacing it with /
+    // to resolve data correctly
+    if (url.indexOf('/external_link') !== -1)
+        url = url.replace('/external_link', '/');
+
     yield put(appActions.fetchDataBegin());
     try {
         const state = yield call(getStateAsync, url);

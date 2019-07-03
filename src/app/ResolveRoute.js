@@ -62,6 +62,9 @@ export default function resolveRoute(path) {
     if (path === '/submit.html') {
         return { page: 'SubmitPost' };
     }
+    if (path === '/external_link') {
+        return { page: 'ExternalLink' };
+    }
     let match = path.match(routeRegex.PostsIndex);
     if (match) {
         if (GDPRUserList.includes(match[1].substring(1))) {

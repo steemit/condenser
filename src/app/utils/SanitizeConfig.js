@@ -193,6 +193,8 @@ export default ({
                 // attys.target = '_blank' // pending iframe impl https://mathiasbynens.github.io/rel-noopener/
                 attys.rel = highQualityPost ? 'noopener' : 'nofollow noopener';
                 attys.title = getExternalLinkWarningMessage();
+                attys.href =
+                    '/external_link?url=' + encodeURIComponent(attys.href);
             }
             return {
                 tagName,

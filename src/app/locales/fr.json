@@ -699,7 +699,7 @@
             "Le lien que vous venez de cliquer va vous emmener vers le site suivant",
         "we_just_want_to_verify_to_continue":
             "Nous voulons juste vérifier que vous voulez bien continuer.",
-        "go_back": "Go back",
-        "open_link": "Open link"
+        "go_back": "Revenir en arrière",
+        "open_link": "Ouvrir le lien"
     }
 }

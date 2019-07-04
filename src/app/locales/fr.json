@@ -696,10 +696,9 @@
     "externallink_jsx": {
         "about_to_leave_steemit": "Vous allez quitter Steemit",
         "the_link_you_clicked_is_external":
-            "Le lien que vous venez de cliquer va vous emmener vers le site suivant",
+            "Le lien que vous venez de cliquer va vous emmener vers le site suivant:",
         "we_just_want_to_verify_to_continue":
             "Nous voulons juste vérifier que vous voulez bien continuer.",
-        "go_back": "Revenir en arrière",
         "open_link": "Ouvrir le lien"
     }
 }

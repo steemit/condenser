@@ -223,6 +223,13 @@ class PostFull extends React.Component {
         );
     }
 
+    postClickHandler = e => {
+        if (e.target.className === 'external_link') {
+            e.preventDefault();
+            this.props.showExternalLinkWarning(e.target.href);
+        }
+    };
+
     showPromotePost = () => {
         const post_content = this.props.cont.get(this.props.post);
         if (!post_content) return;
@@ -422,7 +429,8 @@ class PostFull extends React.Component {
         const showReblog = !_isPaidout;
         const showPromote =
             username && !_isPaidout && post_content.get('depth') == 0;
-        const showReplyOption = username !== undefined && post_content.get('depth') < 255;
+        const showReplyOption =
+            username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;
         const showDeleteOption =
             username === author && content.stats.allowDelete && !_isPaidout;
@@ -453,6 +461,7 @@ class PostFull extends React.Component {
                 className="PostFull hentry"
                 itemScope
                 itemType="http://schema.org/Blog"
+                onClick={this.postClickHandler}
             >
                 {showEdit ? (
                     renderedEditor
@@ -589,6 +598,14 @@ export default connect(
                 globalActions.showDialog({
                     name: 'explorePost',
                     params: { permlink, title },
+                })
+            );
+        },
+        showExternalLinkWarning: url => {
+            dispatch(
+                globalActions.showDialog({
+                    name: 'externalLinkWarning',
+                    params: { url },
                 })
             );
         },

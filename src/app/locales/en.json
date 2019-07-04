@@ -756,10 +756,9 @@
     "externallink_jsx": {
         "about_to_leave_steemit": "You are about to leave Steemit.",
         "the_link_you_clicked_is_external":
-            "The link you've clicked on will lead you to the following website",
+            "The link you've clicked on will lead you to the following website:",
         "we_just_want_to_verify_to_continue":
             "We are just verifying with you that you want to continue.",
-        "go_back": "Go back",
         "open_link": "Open link"
     }
 }

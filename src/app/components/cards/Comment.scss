@@ -117,7 +117,6 @@
 .Comment .Comment__block .Comment__body {
   @include themify($themes) {
     margin-left: 62px;
-    max-width: 50rem;
     border: themed('border');
     padding: 2px 7px;
     border-top: none;

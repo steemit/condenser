@@ -1,7 +1,7 @@
 .Comment {
   position: relative;
   clear: both;
-  margin-bottom: 2.4rem;
+  margin-bottom: 1.2rem;
   .Markdown {
     p {
       margin: 0.1rem 0 0.6rem 0;
@@ -88,7 +88,7 @@
     border-radius: themed('roundedCornersTop');
     border: themed('border');
     background: themed('moduleBackgroundColor');
-    padding: 1px 5px;
+    padding: 3px 10px;
   }
 }
 
@@ -118,7 +118,7 @@
   @include themify($themes) {
     margin-left: 62px;
     border: themed('border');
-    padding: 2px 7px;
+    padding: 10px 10px;
     border-top: none;
     border-bottom: none;
     font-size: 90%;
@@ -131,7 +131,7 @@
     margin-left: 62px;
     border: themed('border');
     border-radius: themed('roundedCornersBottom');
-    padding: 3px 8px;
+    padding: 3px 10px 5px 10px;
     background: themed('moduleBackgroundColor');
   }
 

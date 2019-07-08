@@ -3,7 +3,7 @@ ul.PostsList__summaries {
 }
 
 ul.PostsList__summaries li {
-  padding: 1.5em 1.5em 0.5em 1.5em;
+  padding: 0.5em 1.5em 0.5em 1.5em;
   margin-bottom: 1.5em;
   @include themify($themes) {
     border-radius: themed('roundedCorners');

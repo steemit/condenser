@@ -8,9 +8,9 @@
 }
 
 .PostsIndex {
-    .articles__h1--no-wrap {
-        white-space: nowrap;
-    }
+  .articles__h1--no-wrap {
+    white-space: nowrap;
+  }
 }
 
 .PostsIndex__topics {
@@ -98,11 +98,11 @@
   flex: 0 0 240px;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   &__module {
-    border-radius: 3px;
     padding: 1.5em 2em;
     @include themify($themes) {
-        background-color: themed('moduleBackgroundColor');
-        border: themed('border');
+      border-radius: themed('roundedCorners');
+      background-color: themed('moduleBackgroundColor');
+      border: themed('border');
     }
     margin-bottom: 1em;
     box-shadow: 0px 5px 10px 0 rgba(0,0,0,0);
@@ -205,15 +205,15 @@
 }
 
 .articles {
-    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    padding: 4px 1em 1em 1em;
-    transition: all 0.2s ease-out;
-    border: transparent;
-    min-width: 300px;
-    width: 100%;
-    margin: auto;
-    background-color: transparent;
-    box-shadow: none;
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 4px 1em 1em 1em;
+  transition: all 0.2s ease-out;
+  border: transparent;
+  min-width: 300px;
+  width: 100%;
+  margin: auto;
+  background-color: transparent;
+  box-shadow: none;
 
   @include MQ(M) {
     margin: 0 1em;
@@ -231,8 +231,8 @@
     max-width: 664px;
     padding: 0;
     @include themify($themes) {
-        border: themed('borderTransparent');
-        background-color: themed('transparent');
+      border: themed('borderTransparent');
+      background-color: themed('transparent');
     }
   }
 
@@ -240,10 +240,10 @@
     margin-bottom: 20px;
     margin-top: 0px;
     @include themify($themes) {
-        border-bottom: themed('border');
-      }
+      border-bottom: themed('border');
+    }
     @include MQ(M) {
-        display: none;
+      display: none;
     }
   }
 
@@ -255,8 +255,8 @@
       float: right;
     }
     @include MQ(FM) {
-        display: flex;
-        justify-content: flex-end;
+      display: flex;
+      justify-content: flex-end;
     }
   }
   &__icon--layout {
@@ -265,27 +265,27 @@
     position: relative;
   }
   &__summary {
-      margin: 0em 0 1em;
-      transition: 0.2s all ease-in-out;
-      border: transparent;
-      padding-bottom: 10px;
+    margin: 0em 0 1em;
+    transition: 0.2s all ease-in-out;
+    border: transparent;
+    padding-bottom: 10px;
+    @include themify($themes) {
+      background-color: themed('moduleBackgroundColor');
+      border-bottom: themed('border');
+    }
+    @include MQ(M) {
+      margin: 0 0 40px;
+      box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.0);
+      padding-bottom: 0;
       @include themify($themes) {
-          background-color: themed('moduleBackgroundColor');
-          border-bottom: themed('border');
-        }
+        border: themed('border');
+      }
+    }
+    &:hover {
       @include MQ(M) {
-        margin: 0 0 40px;
-        box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.0);
-        padding-bottom: 0;
-        @include themify($themes) {
-            border: themed('border');
-          }
+        box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
       }
-      &:hover {
-        @include MQ(M) {
-          box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
-        }
-      }
+    }
   }
   &__resteem-icon {
     position: relative;
@@ -300,18 +300,18 @@
     @include MQ(M) {
       padding: 10px 16px 5px;
       @include themify($themes) {
-          border-bottom: themed('border');
-        }
+        border-bottom: themed('border');
       }
+    }
     &--footer {
       @include themify($themes) {
-          border-top: themed('border');
-          border-bottom: themed('border');
-        }
+        border-top: themed('border');
+        border-bottom: themed('border');
+      }
       @include MQ(M) {
         @include themify($themes) {
-            border-bottom: transparent;
-          }
+          border-bottom: transparent;
+        }
       }
     }
   }
@@ -324,8 +324,8 @@
     @include MQ(M) {
       padding: 16px;
       @include themify($themes) {
-          border-top: themed('border');
-        }
+        border-top: themed('border');
+      }
     }
     a {
       @extend .link;
@@ -346,9 +346,9 @@
       padding-top: 0;
     }
     &-select {
-        select {
-            max-width: 300px;
-        }
+      select {
+        max-width: 300px;
+      }
     }
   }
   &__header-col {
@@ -363,21 +363,20 @@
   }
   &__resteem {
     padding-bottom: 0px;
-    margin-top: 24px;
+    margin-top: 6px;
 
     @include MQ(M) {
-      margin-top: 8px;
       padding-bottom: 5px;
       @include themify($themes) {
-          border-bottom: themed('border');
-        }
+        border-bottom: themed('border');
       }
+    }
   }
   &__resteem-text {
     @include font-size(13px);
     margin-bottom: 0px;
     @include themify($themes) {
-        color: themed('textColorSecondary');
+      color: themed('textColorSecondary');
     }
     @include MQ(M) {
       margin-bottom: 2px;
@@ -411,19 +410,19 @@
     // @extend .h2;
     margin: 0;
     @include font-size(16px);
-      overflow : hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     a {
-    font-weight: bold;
-    @include themify($themes) {
+      font-weight: bold;
+      @include themify($themes) {
         color: themed('textColorPrimary');
-    }
-     &:visited {
+      }
+      &:visited {
         @include themify($themes) {
-            color: themed('textColorSecondary');
+          color: themed('textColorSecondary');
         }
       }
     }
@@ -447,7 +446,7 @@
       top: -4px;
       margin-top: 12px;
       @include themify($themes) {
-          color: themed('textColorSecondary');
+        color: themed('textColorSecondary');
       }
       @media only screen and (min-width: 370px) {
         margin-top: 0;
@@ -470,8 +469,8 @@
   &__link {
     text-decoration: none;
     @include themify($themes) {
-        color: themed('textColorPrimary');
-      }
+      color: themed('textColorPrimary');
+    }
   }
   // &__profile-img {
   //   display: none;
@@ -485,16 +484,16 @@
   }
   &__tags {
     @include themify($themes) {
-        color: themed('textColorSecondary');
-      }
+      color: themed('textColorSecondary');
+    }
     @include font-size(14px);
     margin-bottom: 18px;
   }
   &__tag-link {
-     @include font-size(14px);
+    @include font-size(14px);
     @include themify($themes) {
-        color: themed('textColorSecondary');
-      }
+      color: themed('textColorSecondary');
+    }
     a {
       @extend .link;
       @extend .link--secondary;
@@ -514,16 +513,16 @@
 
     .icon-flag-svg {
       @include themify($themes) {
-          fill: themed('textColorSecondary');
-        }
+        fill: themed('textColorSecondary');
+      }
       transition: 0.2s all ease-in-out;
     }
     &:hover {
       cursor: pointer;
       .icon-flag-svg {
         @include themify($themes) {
-            fill: themed('textColorError');
-          }
+          fill: themed('textColorError');
+        }
       }
     }
   }
@@ -566,8 +565,8 @@
       .user__username {
         transition: 0.2s all ease-in-out;
         @include themify($themes) {
-            color: themed('textColorAccent');
-          }
+          color: themed('textColorAccent');
+        }
       }
     }
   }
@@ -624,12 +623,12 @@
 .icon-svg {
   transition: 0.2s all 0.05s ease-in-out;
   @include themify($themes) {
-      fill: themed('textColorSecondary');
-    }
+    fill: themed('textColorSecondary');
+  }
   &--accent {
     @include themify($themes) {
-        fill: themed('textColorAccent');
-      }
+      fill: themed('textColorAccent');
+    }
   }
   &--layout-line1, &--layout-line2, &--layout-line3 {
     height: 2px;
@@ -649,21 +648,21 @@
 
 
 .articles__layout-selector {
-    display: inline-block;
-        .icon-svg {
-            &--accent {
-                @include themify($themes) {
-                    fill: themed('textColorSecondary');
-                }
-            }
+  display: inline-block;
+  .icon-svg {
+    &--accent {
+      @include themify($themes) {
+        fill: themed('textColorSecondary');
+      }
     }
+  }
 }
 
 .articles__layout-selector:hover .icon-svg {
   &--accent {
     @include themify($themes) {
-        fill: themed('textColorPrimary');
-      }
+      fill: themed('textColorPrimary');
+    }
   }
 }
 
@@ -714,8 +713,8 @@ a#changeLayout:focus {
         min-width: 1050px;
       }
       @include themify($themes) {
-         background-color: transparent;
-         border: themed('borderTransparent');
+        background-color: transparent;
+        border: themed('borderTransparent');
       }
       &__hr {
         @include MQ(M) {
@@ -919,12 +918,12 @@ a#changeLayout:focus {
 .icon-svg {
   transition: 0.2s all ease-in-out;
   @include themify($themes) {
-      fill: themed('textColorSecondary');
-    }
+    fill: themed('textColorSecondary');
+  }
   &--accent {
     @include themify($themes) {
-        fill: themed('textColorAccent');
-      }
+      fill: themed('textColorAccent');
+    }
   }
   &--layout-line1, &--layout-line2, &--layout-line3 {
     height: 2px;
@@ -948,12 +947,12 @@ a#changeLayout:focus {
 
 
 .articles__resteem .username {
-    @extend .link;
-    @extend .link--secondary;
-    text-decoration: none;
+  @extend .link;
+  @extend .link--secondary;
+  text-decoration: none;
 }
 
 
 .articles__resteem-icon path {
-    fill: #cacaca;
+  fill: #cacaca;
 }

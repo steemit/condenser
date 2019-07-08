@@ -140,24 +140,24 @@ $themes: (
 }
 
 
-  .theme-original {
-    background-color: $white;
-    color: $color-text-dark;
-    @include MQ(M) {
-      background-color: $color-background-off-white;
-    }
+.theme-original {
+  background-color: $white;
+  color: $color-text-dark;
+  @include MQ(M) {
+    background-color: $color-background-off-white;
   }
-  .theme-light {
-    background-color: $white;
-    color: $color-text-dark;
-    @include MQ(M) {
-      background-color: $color-background-off-white;
-    }
+}
+.theme-light {
+  background-color: $color-background-off-white;
+  color: $color-text-dark;
+  @include MQ(M) {
+    background-color: $color-background-off-white;
   }
-  .theme-dark {
-    background-color: $color-background-dark;
-    color: $color-text-white;
-  }
+}
+.theme-dark {
+  background-color: $color-background-dark;
+  color: $color-text-white;
+}
 
 
 // Utility classes to be used with @extend
@@ -167,46 +167,46 @@ $themes: (
   transition: 0.2s all ease-in-out;
   &--primary {
     @include themify($themes) {
-        color: themed('textColorPrimary');
+      color: themed('textColorPrimary');
     }
     &:visited, &:active {
       @include themify($themes) {
-          color: themed('textColorPrimary');
+        color: themed('textColorPrimary');
       }
     }
     &:hover, &:focus {
       @include themify($themes) {
-          color: themed('textColorAccent');
+        color: themed('textColorAccent');
       }
     }
   }
   &--secondary {
     @include themify($themes) {
-        color: themed('textColorSecondary');
+      color: themed('textColorSecondary');
     }
     &:visited, &:active {
       @include themify($themes) {
-          color: themed('textColorSecondary');
+        color: themed('textColorSecondary');
       }
     }
     &:hover, &:focus {
       @include themify($themes) {
-          color: themed('textColorAccent');
+        color: themed('textColorAccent');
       }
     }
   }
   &--accent {
     @include themify($themes) {
-        color: themed('textColorAccent');
+      color: themed('textColorAccent');
     }
     &:visited, &:active {
       @include themify($themes) {
-          color: themed('textColorAccent');
+        color: themed('textColorAccent');
       }
     }
     &:hover, &:focus {
       @include themify($themes) {
-          color: themed('textColorAccentHover');
+        color: themed('textColorAccentHover');
       }
     }
   }
@@ -265,11 +265,11 @@ $themes: (
   opacity: 0.25;
   cursor: not-allowed;
   box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-    @include themify($themes) {
-      background-color: themed('buttonBackground');
-      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-      color: themed('buttonText');
-    }
+  @include themify($themes) {
+    background-color: themed('buttonBackground');
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+    color: themed('buttonText');
+  }
   &:hover {
     @include themify($themes) {
       background-color: themed('buttonBackground');

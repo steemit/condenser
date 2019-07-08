@@ -273,6 +273,8 @@ export default `
 /vengadores/@kurayukamu/vengadores-infinity-war-2018-pelicula-completa-online-espanol-en-latino
 /false-flag/@ronsheckelson/sandy-hook-alleged-victims-alive-and-well
 /free/@demigods/yes-free-v-bucks-generator-no-human-verification
+/azmin/@xbrain/toyol-of-selangor
+/pizzagate/@rebelskum/pizzagate-wiki-gets-even-more-on-the-ties-between-max-maccoby-laura-silsby-and-james-alefantis
 `
     .trim()
     .split('\n');

@@ -56,7 +56,7 @@
   "address_prefix": "STM",
   "conveyor_posting_wif": false,
   "conveyor_username": false,
-  "pinned_posts_url": false,
+  "special_posts_url": false,
   "wallet_url": "https://wallet.steemitdev.com",
   "google_ad_enabled": null,
   "google_ad_test": null,

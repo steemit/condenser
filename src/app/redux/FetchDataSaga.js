@@ -66,7 +66,7 @@ export function* fetchState(location_change_action) {
     try {
         const state = yield call(getStateAsync, url);
         yield put(globalActions.receiveState(state));
-        yield call(syncPinnedPosts);
+        yield call(syncSpecialPosts);
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put(appActions.steemApiError(error.message));
@@ -75,31 +75,51 @@ export function* fetchState(location_change_action) {
     yield put(appActions.fetchDataEnd());
 }
 
-function* syncPinnedPosts() {
+function* syncSpecialPosts() {
     // Bail if we're rendering serverside since there is no localStorage
     if (!process.env.BROWSER) return null;
 
-    // Get pinned posts from the store.
-    const pinnedPosts = yield select(state =>
-        state.offchain.get('pinned_posts')
+    // Get special posts from the store.
+    const specialPosts = yield select(state =>
+        state.offchain.get('special_posts')
     );
 
-    // Mark seen posts.
-    const seenPinnedPosts = pinnedPosts.get('pinned_posts').map(post => {
+    // Mark seen featured posts.
+    const seenFeaturedPosts = specialPosts.get('featured_posts').map(post => {
         const id = `${post.get('author')}/${post.get('permlink')}`;
         return post.set(
             'seen',
-            localStorage.getItem(`pinned-post-seen:${id}`) === 'true'
+            localStorage.getItem(`featured-post-seen:${id}`) === 'true'
+        );
+    });
+
+    // Mark seen promoted posts.
+    const seenPromotedPosts = specialPosts.get('promoted_posts').map(post => {
+        const id = `${post.get('author')}/${post.get('permlink')}`;
+        return post.set(
+            'seen',
+            localStorage.getItem(`promoted-post-seen:${id}`) === 'true'
         );
     });
 
     // Look up seen post URLs.
-    yield put(globalActions.syncPinnedPosts({ pinnedPosts: seenPinnedPosts }));
+    yield put(
+        globalActions.syncSpecialPosts({
+            featuredPosts: seenFeaturedPosts,
+            promotedPosts: seenPromotedPosts,
+        })
+    );
 
-    // Mark all pinned posts as seen.
-    pinnedPosts.get('pinned_posts').forEach(post => {
+    // Mark all featured posts as seen.
+    specialPosts.get('featured_posts').forEach(post => {
         const id = `${post.get('author')}/${post.get('permlink')}`;
-        localStorage.setItem(`pinned-post-seen:${id}`, 'true');
+        localStorage.setItem(`featured-post-seen:${id}`, 'true');
+    });
+
+    // Mark all promoted posts as seen.
+    specialPosts.get('promoted_posts').forEach(post => {
+        const id = `${post.get('author')}/${post.get('permlink')}`;
+        localStorage.setItem(`promoted-post-seen:${id}`, 'true');
     });
 }
 

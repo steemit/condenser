@@ -85,7 +85,7 @@
 .Comment__header {
   @include themify($themes) {
     margin-left: 62px;
-    border-radius: 3px 3px 0 0;
+    border-radius: themed('roundedCornersTop');
     border: themed('border');
     background: themed('moduleBackgroundColor');
     padding: 1px 5px;
@@ -131,7 +131,7 @@
   @include themify($themes) {
     margin-left: 62px;
     border: themed('border');
-    border-radius: 3px 0;
+    border-radius: themed('roundedCornersBottom');
     padding: 3px 8px;
     background: themed('moduleBackgroundColor');
   }

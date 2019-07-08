@@ -273,6 +273,7 @@ export default `
 /vengadores/@kurayukamu/vengadores-infinity-war-2018-pelicula-completa-online-espanol-en-latino
 /false-flag/@ronsheckelson/sandy-hook-alleged-victims-alive-and-well
 /free/@demigods/yes-free-v-bucks-generator-no-human-verification
+/azmin/@xbrain/toyol-of-selangor
 `
     .trim()
     .split('\n');

@@ -1,7 +1,7 @@
 .Comment {
   position: relative;
   clear: both;
-  margin-bottom: 2.4rem;
+  margin-bottom: 1.2rem;
   .Markdown {
     p {
       margin: 0.1rem 0 0.6rem 0;
@@ -23,7 +23,7 @@
   }
 
   .Userpic {
-    margin-left: 5px;
+    margin-left: 7px;
   }
 }
 
@@ -85,10 +85,10 @@
 .Comment__header {
   @include themify($themes) {
     margin-left: 62px;
-    border-radius: 3px 3px 0 0;
+    border-radius: themed('roundedCornersTop');
     border: themed('border');
-    background: themed('backgroundColorOpaque');
-    padding: 1px 5px;
+    background: themed('moduleBackgroundColor');
+    padding: 3px 10px;
   }
 }
 
@@ -117,12 +117,12 @@
 .Comment .Comment__block .Comment__body {
   @include themify($themes) {
     margin-left: 62px;
-    max-width: 50rem;
     border: themed('border');
-    padding: 2px 7px;
+    padding: 10px 10px;
     border-top: none;
     border-bottom: none;
     font-size: 90%;
+    background: themed('moduleBackgroundColor');
   }
 }
 
@@ -130,8 +130,9 @@
   @include themify($themes) {
     margin-left: 62px;
     border: themed('border');
-    border-radius: 3px 0;
-    padding: 3px 8px;
+    border-radius: themed('roundedCornersBottom');
+    padding: 3px 10px 5px 10px;
+    background: themed('moduleBackgroundColor');
   }
 
   @include themify($themes) {

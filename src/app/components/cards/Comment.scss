@@ -127,7 +127,9 @@
 }
 
 .Comment__body:hover {
-  background-color: #f0f0f0;
+  @include themify($themes) {
+    background-color: themed('commentBodyHighlightBackgroundColor');
+  }
 }
 
 .Comment .Comment__block .Comment__footer {

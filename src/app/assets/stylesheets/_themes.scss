@@ -33,6 +33,7 @@ $themes: (
     buttonTextShadow: 0 1px 0 rgba(0,0,0,0.20),
     buttonTextHover: $color-text-white,
     buttonBoxShadow: $color-transparent,
+    commentBodyHighlightBackgroundColor: $color-background-almost-white-darker,
   ),
   light: (
     colorAccent: $color-teal,
@@ -69,6 +70,7 @@ $themes: (
     buttonTextHover: $color-white,
     buttonBoxShadow: $color-teal,
     buttonBoxShadowHover: $color-blue-black,
+    commentBodyHighlightBackgroundColor: $color-background-almost-white-darker,
   ),
   dark: (
     colorAccent: $color-teal,
@@ -106,6 +108,7 @@ $themes: (
     buttonBoxShadow: $color-teal,
     buttonBoxShadowHover: $color-white,
     inputPriceWarning: rgba(255, 153, 0, 0.83),
+    commentBodyHighlightBackgroundColor: $color-background-dark-lighter,
   ),
 );
 

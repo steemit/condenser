@@ -28,6 +28,7 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { GoogleAd } from 'app/components/elements/GoogleAd';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
+import ThirdPartyAppName from '../elements/ThirdPartyAppName';
 
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (
@@ -64,12 +65,15 @@ function TimeAuthorCategoryLarge({ content, authorRepLog10 }) {
                     {' '}
                     {tt('g.in')} <TagList post={content} single />
                 </span>{' '}
-                •&nbsp; <TimeAgoWrapper date={content.created} />
-                &nbsp;{' '}
+                <span className="menu_item_dot_separator">•</span>
+                <TimeAgoWrapper date={content.created} />
+                <span className="menu_item_space_separator"> </span>
                 <ContentEditedWrapper
                     createDate={content.created}
                     updateDate={content.last_update}
                 />
+                <span className="menu_item_space_separator"> </span>
+                <ThirdPartyAppName jsonMetadata={content.json_metadata} />
             </div>
         </span>
     );
@@ -422,7 +426,8 @@ class PostFull extends React.Component {
         const showReblog = !_isPaidout;
         const showPromote =
             username && !_isPaidout && post_content.get('depth') == 0;
-        const showReplyOption = username !== undefined && post_content.get('depth') < 255;
+        const showReplyOption =
+            username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;
         const showDeleteOption =
             username === author && content.stats.allowDelete && !_isPaidout;

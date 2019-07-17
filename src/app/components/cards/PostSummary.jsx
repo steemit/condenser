@@ -19,6 +19,7 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
+import ThirdPartyAppName from '../elements/ThirdPartyAppName';
 
 class PostSummary extends React.Component {
     static propTypes = {
@@ -103,6 +104,7 @@ class PostSummary extends React.Component {
             .toJS();
         const special = content.get('special');
         const p = extractContent(immutableAccessor, content);
+
         const desc = p.desc;
 
         const archived = content.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF17. #1259
@@ -184,10 +186,10 @@ class PostSummary extends React.Component {
                                 mute={false}
                             />
                         </span>
-
                         <span className="articles__tag-link">
-                            {tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;
+                            {tt('g.in')}&nbsp;<TagList post={p} single />
                         </span>
+                        <span className="menu_item_dot_separator">•</span>
                         <Link className="timestamp__link" to={post_url}>
                             <span className="timestamp__time">
                                 <TimeAgoWrapper
@@ -205,6 +207,10 @@ class PostSummary extends React.Component {
                                 </span>
                             )}
                         </Link>
+                        <span className="menu_item_space_separator"> </span>
+                        <ThirdPartyAppName
+                            jsonMetadata={content.get('json_metadata')}
+                        />
                     </div>
 
                     {(featured || promoted) && (

@@ -1,0 +1,25 @@
+span.dapp_name {
+  padding: 0 6px;
+  background-color: #06D6A9;
+  font-weight: bold;
+  float: right;
+  margin-left: 20px;
+}
+
+.PostFull__header span.dapp_name,
+.articles__summary span.dapp_name {
+  @include themify($themes) {
+     a {
+      color: white;
+    }
+
+    a:hover {
+      color: darkred;
+    }
+  }
+}
+
+.articles__summary span.dapp_name {
+  font-size: 0.875rem;
+  padding: 1px 6px 2px 6px;
+}

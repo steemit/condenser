@@ -195,12 +195,17 @@ class CommentImpl extends React.Component {
         if (content) {
             const hide = hideSubtree(props.cont, props.content);
             const gray = content.getIn(['stats', 'gray']);
+
+            const author = content.get('author');
+            const { username } = this.props;
+            const notOwn = username !== author;
+
             if (hide) {
                 const { onHide } = this.props;
                 // console.log('Comment --> onHide')
                 if (onHide) onHide();
             }
-            this.setState({ hide, hide_body: hide || gray });
+            this.setState({ hide, hide_body: notOwn && (hide || gray) });
         }
     }
 
@@ -470,6 +475,14 @@ class CommentImpl extends React.Component {
                                 >
                                     {tt('g.reveal_comment')}
                                 </a>
+                            )}
+                        {!this.state.collapsed &&
+                            !hide_body &&
+                            (ignore || gray) && (
+                                <span>
+                                    &nbsp; &middot; &nbsp;{' '}
+                                    {tt('g.will_be_hidden_due_to_low_rating')}
+                                </span>
                             )}
                     </div>
                     <div className="Comment__body entry-content">

@@ -94,6 +94,7 @@
         },
         "reputation": "Reputation",
         "reveal_comment": "Reveal Comment",
+        "will_be_hidden_due_to_low_rating": "Will be hidden due to low rating",
         "request": "request",
         "required": "Required",
         "rewards": "Rewards",

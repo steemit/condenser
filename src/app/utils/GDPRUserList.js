@@ -14,6 +14,12 @@ bitchminer
 bisade
 boy666
 casually
+nayardu92
+djdarkstorm
+cristinaluchi
+dennis.spiedt
+sebtarnowski
+mihailm
 `
     .trim()
     .split('\n');

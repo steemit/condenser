@@ -5,12 +5,11 @@ class GptAd extends Component {
     componentDidMount() {
         if (!this.ad_identifier || !this.enabled) return;
         const ad_identifier = this.ad_identifier;
-        const unique_slot_id = this.unique_slot_id;
 
         freestar.newAdSlots([
             {
                 placementName: ad_identifier, // This has to match up with the backend and frontend and all the other ends.
-                slotId: unique_slot_id, // This has to be unique per page and must match the id of the ad element.
+                slotId: ad_identifier, //TODO: This has to be unique.
             },
         ]);
 
@@ -47,7 +46,6 @@ class GptAd extends Component {
             //     }' will be disabled because we were unable to find the ad details.`
             // );
         }
-        this.unique_slot_id = `${this.ad_identifier}-${Date.now()}`;
     }
 
     render() {
@@ -59,7 +57,7 @@ class GptAd extends Component {
             <div
                 className="gpt-ad"
                 style={{ width: '100%' }}
-                id={this.unique_slot_id}
+                id={this.ad_identifier}
             />
         );
     }

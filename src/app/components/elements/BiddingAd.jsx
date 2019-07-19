@@ -23,6 +23,12 @@ class BiddingAd extends Component {
 
                     googletag
                         .pubads()
+                        .addEventListener('impressionViewable', e => {
+                            window.dispatchEvent(new Event('gptadshown', e));
+                        });
+
+                    googletag
+                        .pubads()
                         .addEventListener('slotRenderEnded', e => {
                             window.dispatchEvent(new Event('gptadshown', e));
                         });

@@ -440,7 +440,10 @@ class Voting extends React.Component {
                     });
                 });
             }
-            payoutItems.push({ value: <TimeAgoWrapper date={cashout_time} /> });
+            payoutItems.push({ value: payoutDate });
+            if (warnZeroPayout !== '') {
+                payoutItems.push({ value: warnZeroPayout });
+            }
         }
 
         if (max_payout == 0) {

@@ -315,12 +315,18 @@ export async function serverRender(
             }
         }
 
-        // Insert the pinned posts into the list of posts, so there is no
+        // Insert the special posts into the list of posts, so there is no
         // jumping of content.
-        offchain.pinned_posts.pinned_posts.forEach(pinnedPost => {
+        offchain.special_posts.featured_posts.forEach(featuredPost => {
             onchain.content[
-                `${pinnedPost.author}/${pinnedPost.permlink}`
-            ] = pinnedPost;
+                `${featuredPost.author}/${featuredPost.permlink}`
+            ] = featuredPost;
+        });
+
+        offchain.special_posts.promoted_posts.forEach(promotedPost => {
+            onchain.content[
+                `${promotedPost.author}/${promotedPost.permlink}`
+            ] = promotedPost;
         });
 
         server_store = createStore(rootReducer, {

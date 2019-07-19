@@ -398,7 +398,19 @@ class Voting extends React.Component {
                 !(is_comment && total_votes == 0));
         const payoutItems = [];
 
+        const minimumAmountForPayout = 0.02;
+        let warnZeroPayout = '';
+        if (pending_payout > 0 && pending_payout < minimumAmountForPayout) {
+            warnZeroPayout = tt('voting_jsx.must_reached_minimum_payout');
+        }
+
         if (cashout_active) {
+            const payoutDate = (
+                <span>
+                    {tt('voting_jsx.payout')}{' '}
+                    <TimeAgoWrapper date={cashout_time} />
+                </span>
+            );
             payoutItems.push({
                 value: tt('voting_jsx.pending_payout', {
                     value: formatDecimal(pending_payout).join(''),
@@ -407,7 +419,8 @@ class Voting extends React.Component {
             if (max_payout > 0) {
                 payoutItems.push({
                     value:
-                        '(' +
+                        tt('voting_jsx.breakdown') +
+                        ': ' +
                         formatDecimal(pending_payout_printed_sbd).join('') +
                         ' ' +
                         DEBT_TOKEN_SHORT +
@@ -422,8 +435,7 @@ class Voting extends React.Component {
                             : '') +
                         formatDecimal(pending_payout_sp).join('') +
                         ' ' +
-                        INVEST_TOKEN_SHORT +
-                        ')',
+                        INVEST_TOKEN_SHORT,
                 });
             }
             // add beneficiary info. use toFixed due to a bug of formatDecimal (5.00 is shown as 5,.00)

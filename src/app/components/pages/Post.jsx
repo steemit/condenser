@@ -290,6 +290,7 @@ class Post extends React.Component {
                             type="Freestar"
                             id="steemit_1x1_gumgum-inimage"
                         />
+                        <div id="sidewallselect" />
                     </div>
                 ) : null}
             </div>

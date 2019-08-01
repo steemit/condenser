@@ -12,7 +12,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import tt from 'counterpart';
-import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
+import { repLog10, parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
@@ -260,7 +260,8 @@ class CommentImpl extends React.Component {
             console.error('Comment -- missing stats object');
             comment.stats = {};
         }
-        const { authorRepLog10, gray } = comment.stats;
+        const { gray } = comment.stats;
+        const authorRepLog10 = repLog10(comment.author_reputation);
         const { author, json_metadata } = comment;
         const {
             username,

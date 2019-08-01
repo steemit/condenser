@@ -7,7 +7,6 @@ const expectedStats = Map({
     hide: false,
     gray: false,
     total_votes: 0,
-    authorRepLog10: undefined,
 });
 
 describe('Global reducer', () => {
@@ -595,7 +594,6 @@ describe('Global reducer', () => {
                 hide: false,
                 gray: false,
                 total_votes: 2,
-                authorRepLog10: undefined,
             })
         );
 

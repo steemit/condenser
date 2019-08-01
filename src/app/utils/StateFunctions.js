@@ -91,7 +91,6 @@ export function contentStats(content) {
         hide,
         gray,
         total_votes,
-        authorRepLog10,
     };
 }
 

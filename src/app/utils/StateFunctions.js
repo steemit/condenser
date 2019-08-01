@@ -107,60 +107,14 @@ export function isFetchingOrRecentlyUpdated(global_status, order, category) {
     return false;
 }
 
-export function contentStats(content) {
-    if (!content) return {};
-    if (!(content instanceof Map)) content = fromJS(content);
+export function allowDelete(comment) {
+    const rshares = String(comment.get('net_rshares'));
+    const hasPayout = !(rshares[0] == '0' || rshares[0] == '-');
+    const hasChildren = comment.get('children') !== 0;
+    return !(hasPayout || hasChildren);
+}
 
-    let net_rshares_adj = Long.ZERO;
-    let neg_rshares = Long.ZERO;
-    let total_votes = 0;
-    let up_votes = 0;
-
-    // TODO: breaks if content has no active_votes attribute.
-
-    content.get('active_votes').forEach(v => {
-        const sign = Math.sign(v.get('percent'));
-        if (sign === 0) return;
-        total_votes += 1;
-        if (sign > 0) up_votes += 1;
-
-        const rshares = String(v.get('rshares'));
-
-        // For flag weight: count total neg rshares
-        if (sign < 0) {
-            neg_rshares = neg_rshares.add(rshares);
-        }
-
-        // For graying: sum up total rshares from voters with non-neg reputation.
-        if (String(v.get('reputation')).substring(0, 1) !== '-') {
-            // And also ignore tiny downvotes (9 digits or less)
-            if (!(rshares.substring(0, 1) === '-' && rshares.length < 11)) {
-                net_rshares_adj = net_rshares_adj.add(rshares);
-            }
-        }
-    });
-
-    // take negative rshares, divide by 2, truncate 10 digits (plus neg sign), count digits.
-    // creates a cheap log10, stake-based flag weight. 1 = approx $400 of downvoting stake; 2 = $4,000; etc
-    const flagWeight = Math.max(String(neg_rshares.div(2)).length - 11, 0);
-
-    // post must have non-trivial negative rshares to be grayed out. (more than 10 digits)
-    const grayThreshold = -9999999999;
-    const meetsGrayThreshold = net_rshares_adj.compare(grayThreshold) < 0;
-
-    // to be eligible for deletion, a comment must have non-positive rshares and no replies
-    const hasPositiveRshares = Long.fromString(
-        String(content.get('net_rshares'))
-    ).gt(Long.ZERO);
-    const allowDelete = !hasPositiveRshares && content.get('children') === 0;
-    const hasPendingPayout =
-        parsePayoutAmount(content.get('pending_payout_value')) >= 0.02;
-    const authorRepLog10 = repLog10(content.get('author_reputation'));
-
-    const gray =
-        !hasPendingPayout && (authorRepLog10 < 1 || meetsGrayThreshold);
-    const hide = !hasPendingPayout && authorRepLog10 < 0; // rephide
-
+export function hasNsfwTag(content) {
     // Combine tags+category to check nsfw status
     const json = content.get('json_metadata');
     let tags = [];
@@ -178,17 +132,50 @@ export function contentStats(content) {
     tags.push(content.get('category'));
     tags = filterTags(tags);
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
+    return isNsfw;
+}
+
+export function contentStats(content) {
+    if (!content) return {};
+    if (!(content instanceof Map)) content = fromJS(content);
+
+    let net_rshares_adj = Long.ZERO;
+    let total_votes = 0;
+
+    // TODO: breaks if content has no active_votes attribute.
+    content.get('active_votes').forEach(v => {
+        const sign = Math.sign(v.get('percent'));
+        if (sign === 0) return;
+        total_votes += 1;
+
+        const rshares = String(v.get('rshares'));
+
+        // For graying: sum up total rshares from voters with non-neg reputation.
+        if (String(v.get('reputation')).substring(0, 1) !== '-') {
+            // And also ignore tiny downvotes (9 digits or less)
+            if (!(rshares.substring(0, 1) === '-' && rshares.length < 11)) {
+                net_rshares_adj = net_rshares_adj.add(rshares);
+            }
+        }
+    });
+
+    // post must have non-trivial negative rshares to be grayed out. (more than 10 digits)
+    const grayThreshold = -9999999999;
+    const meetsGrayThreshold = net_rshares_adj.compare(grayThreshold) < 0;
+
+    const hasPendingPayout =
+        parsePayoutAmount(content.get('pending_payout_value')) >= 0.02;
+    const authorRepLog10 = repLog10(content.get('author_reputation'));
+
+    const gray =
+        !hasPendingPayout && (authorRepLog10 < 1 || meetsGrayThreshold);
+    const hide = !hasPendingPayout && authorRepLog10 < 0; // rephide
 
     return {
         hide,
         gray,
-        authorRepLog10,
-        allowDelete,
-        isNsfw,
-        flagWeight,
         total_votes,
-        up_votes,
-        hasPendingPayout,
+        authorRepLog10,
     };
 }
 

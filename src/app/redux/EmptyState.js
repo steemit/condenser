@@ -31,8 +31,6 @@ export const emptyContent = {
     stats: {
         authorRepLog10: 86,
         gray: false,
-        hasPendingPayout: false,
-        allowDelete: true,
         hide: false,
     },
 };

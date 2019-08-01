@@ -16,6 +16,7 @@ import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
+import { allowDelete } from 'app/utils/StateFunctions';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -24,7 +25,7 @@ function hideSubtree(cont, c) {
 
 function hasPositivePayout(cont, c) {
     const post = cont.get(c);
-    if (post.getIn(['stats', 'hasPendingPayout'])) {
+    if (Long.fromString(String(content.get('net_rshares'))).gt(Long.ZERO)) {
         return true;
     }
     if (post.get('replies').find(reply => hasPositivePayout(cont, reply))) {
@@ -259,7 +260,7 @@ class CommentImpl extends React.Component {
             console.error('Comment -- missing stats object');
             comment.stats = {};
         }
-        const { allowDelete, authorRepLog10, gray } = comment.stats;
+        const { authorRepLog10, gray } = comment.stats;
         const { author, json_metadata } = comment;
         const {
             username,
@@ -309,7 +310,7 @@ class CommentImpl extends React.Component {
         const _isPaidout = comment.cashout_time === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
         const showEditOption = username === author;
         const showDeleteOption =
-            username === author && allowDelete && !_isPaidout;
+            username === author && allowDelete(comment) && !_isPaidout;
         const showReplyOption = username !== undefined && comment.depth < 255;
 
         let body = null;

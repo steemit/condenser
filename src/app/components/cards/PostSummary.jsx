@@ -19,6 +19,7 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
+import { hasNsfwTag } from 'app/utils/StateFunctions';
 
 class PostSummary extends React.Component {
     static propTypes = {
@@ -98,9 +99,8 @@ class PostSummary extends React.Component {
             );
         }
 
-        const { gray, authorRepLog10, flagWeight, isNsfw } = content
-            .get('stats', Map())
-            .toJS();
+        const { gray, authorRepLog10 } = content.get('stats', Map()).toJS();
+        const isNsfw = hasNsfwTag(content);
         const special = content.get('special');
         const p = extractContent(immutableAccessor, content);
         const desc = p.desc;

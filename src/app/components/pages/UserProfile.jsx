@@ -226,7 +226,6 @@ export default class UserProfile extends React.Component {
                     <div>
                         <UserList
                             title={tt('user_profile.followers')}
-                            account={account}
                             users={followers.get('blog_result')}
                         />
                     </div>
@@ -237,7 +236,6 @@ export default class UserProfile extends React.Component {
                 tab_content = (
                     <UserList
                         title="Followed"
-                        account={account}
                         users={following.get('blog_result')}
                     />
                 );

@@ -181,7 +181,6 @@ class Settings extends React.Component {
                                 <br />
                                 <UserList
                                     title={tt('settings_jsx.muted_users')}
-                                    account={account}
                                     users={ignores}
                                 />
                             </div>

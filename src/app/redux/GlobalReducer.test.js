@@ -4,15 +4,10 @@ import * as globalActions from './GlobalReducer';
 import reducer, { defaultState } from './GlobalReducer';
 
 const expectedStats = Map({
-    isNsfw: false,
     hide: false,
-    hasPendingPayout: false,
     gray: false,
-    flagWeight: 0,
-    up_votes: 0,
     total_votes: 0,
     authorRepLog10: undefined,
-    allowDelete: true,
 });
 
 describe('Global reducer', () => {
@@ -401,9 +396,6 @@ describe('Global reducer', () => {
         expect(actual1.getIn(['content', postKey, 'active_votes'])).toEqual(
             fromJS(postData.active_votes)
         );
-        expect(
-            actual1.getIn(['content', postKey, 'stats', 'allowDelete'])
-        ).toEqual(false);
 
         // Push new key to posts list, If order meets the condition.
         expect(
@@ -600,15 +592,10 @@ describe('Global reducer', () => {
             ])
         ).toEqual(
             Map({
-                isNsfw: false,
                 hide: false,
-                hasPendingPayout: false,
                 gray: false,
-                flagWeight: 0,
-                up_votes: 2,
                 total_votes: 2,
                 authorRepLog10: undefined,
-                allowDelete: false,
             })
         );
 

@@ -24,6 +24,7 @@ export function isFetchingOrRecentlyUpdated(global_status, order, category) {
 }
 
 export function allowDelete(comment) {
+    if (!(comment instanceof Map)) comment = fromJS(comment);
     const rshares = String(comment.get('net_rshares'));
     const hasPayout = !(rshares[0] == '0' || rshares[0] == '-');
     const hasChildren = comment.get('children') !== 0;

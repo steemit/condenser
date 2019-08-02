@@ -91,9 +91,6 @@ export default class UserProfile extends React.Component {
 
         let order;
         switch (category) {
-            case 'feed':
-                order = 'by_feed';
-                break;
             case 'blog':
                 order = 'by_author';
                 break;

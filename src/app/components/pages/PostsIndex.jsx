@@ -324,7 +324,7 @@ module.exports = {
             // special case if user feed (vs. trending, etc)
             let feed_posts;
             if (ownProps.routeParams.category === 'feed') {
-                account_name = ownProps.routeParams.order.slice(1);
+                const account_name = ownProps.routeParams.order.slice(1);
                 feed_posts = state.global.getIn([
                     'accounts',
                     account_name,

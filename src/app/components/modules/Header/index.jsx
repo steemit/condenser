@@ -178,16 +178,6 @@ class Header extends React.Component {
                     username: user_title,
                 });
             }
-            if (route.params[1] === 'curation-rewards') {
-                page_title = tt('header_jsx.curation_rewards_by', {
-                    username: user_title,
-                });
-            }
-            if (route.params[1] === 'author-rewards') {
-                page_title = tt('header_jsx.author_rewards_by', {
-                    username: user_title,
-                });
-            }
             if (route.params[1] === 'recent-replies') {
                 page_title = tt('header_jsx.replies_to', {
                     username: user_title,

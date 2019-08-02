@@ -209,14 +209,6 @@ export default class UserProfile extends React.Component {
                     />
                 </div>
             );
-        } else if (
-            section === 'curation-rewards' ||
-            section === 'author-rewards' ||
-            section === 'permissions' ||
-            section === 'password'
-        ) {
-            walletClass = 'active';
-            tab_content = <div>Moved to wallet</div>;
         } else if (section === 'followers') {
             if (followers && followers.has('blog_result')) {
                 tab_content = (

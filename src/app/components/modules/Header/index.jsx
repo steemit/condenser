@@ -163,7 +163,7 @@ class Header extends React.Component {
         } else if (route.page == 'RecoverAccountStep1') {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
-            let user_name = route.params[0].slice(1);
+            const user_name = route.params[0].slice(1);
             const name = account_meta
                 ? normalizeProfile(account_meta.toJS()).name
                 : null;
@@ -319,7 +319,7 @@ class Header extends React.Component {
                             <SortOrder
                                 sortOrder={order}
                                 topic={category === 'feed' ? '' : category}
-                                horizontal={true}
+                                horizontal
                                 pathname={pathname}
                             />
                         </div>
@@ -415,6 +415,7 @@ const mapStateToProps = (state, ownProps) => {
         : state.offchain.get('account');
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
+    const gptBannedTags = state.app.getIn(['googleAds', 'gptBannedTags']);
     const walletUrl = state.app.get('walletUrl');
 
     return {
@@ -426,6 +427,7 @@ const mapStateToProps = (state, ownProps) => {
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         gptEnabled,
+        gptBannedTags,
         walletUrl,
         ...ownProps,
     };

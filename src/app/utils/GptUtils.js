@@ -21,6 +21,22 @@ class GptUtils {
         if (this.ShowGptMobileSize()) mobileSlotAddendum = '-mobile';
         return `${slotName}${mobileSlotAddendum}`;
     }
+
+    /**
+     * Takes an array of tags and determines whether one or more tags are banned from showing ads.
+     *
+     * @param {array[strings]} tags
+     * @param {array[strings]} bannedTags
+     * @returns {boolean}
+     */
+    static HasBannedTags(tags, bannedTags) {
+        for (const tag of tags) {
+            if (bannedTags.indexOf(tag) != -1) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 export { GptUtils };

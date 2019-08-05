@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
+import { immutableAccessor } from 'app/utils/Accessors';
+import extractContent from 'app/utils/ExtractContent';
 import { connect } from 'react-redux';
 
 import { sortComments } from 'app/components/cards/Comment';
@@ -13,6 +15,7 @@ import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
 import GptAd from 'app/components/elements/GptAd';
+import { GptUtils } from 'app/utils/GptUtils';
 import { isLoggedIn } from 'app/utils/UserUtil';
 
 import Icon from 'app/components/elements/Icon';
@@ -103,6 +106,19 @@ class Post extends React.Component {
                 </div>
             );
 
+        // TODO: This data model needs some help.
+        const post_content = content.get(post);
+        const p = extractContent(immutableAccessor, post_content);
+        const tags = p.json_metadata.tags;
+        const allowAdsOnContent =
+            this.props.gptEnabled &&
+            !GptUtils.HasBannedTags(tags, this.props.gptBannedTags);
+        console.log(
+            '=============tags',
+            p.json_metadata.tags,
+            this.props.gptEnabled
+        );
+
         // A post should be hidden if it is not special, is not told to "show
         // anyway", and is designated "gray".
         const special = dis.get('special');
@@ -149,7 +165,7 @@ class Post extends React.Component {
         let commentCount = 0;
         const positiveComments = replies.map(reply => {
             commentCount++;
-            let showAd =
+            const showAd =
                 commentCount % 5 == 0 &&
                 commentCount != replies.length &&
                 commentCount != commentLimit;
@@ -166,7 +182,7 @@ class Post extends React.Component {
                         onHide={this.onHideComment}
                     />
 
-                    {this.props.gptEnabled && showAd ? (
+                    {this.props.gptEnabled && showAd && allowAdsOnContent ? (
                         <div className="Post_footer__ad">
                             <GptAd
                                 type="Freestar"
@@ -214,6 +230,19 @@ class Post extends React.Component {
                 link: selflink + '?sort=' + sort_orders[o] + '#comments',
             });
         }
+        // console.log("===========post", post, dis.get('category'))
+        // console.log("=============post.json_metadata", post.json_metadata)
+        // const post_content = content.get(post);
+        // console.log("=============post_content", post_content.get('json_metadata'))
+        // console.log("=============post_content", post_content.toJS().json_metadata)
+        // // const post_content = this.props.cont.get(this.props.post);
+        // // if (!post_content) return null;
+        // // const p = extractContent(immutableAccessor, post_content);
+        // // const content = post_content.toJS();
+
+        // const content = post_content.toJS();
+        // const { author, permlink, parent_author, parent_permlink } = content;
+        // const jsonMetadata = this.state.showReply ? null : p.json_metadata;
 
         return (
             <div className="Post">
@@ -245,7 +274,7 @@ class Post extends React.Component {
                         </div>
                     </div>
                 )}
-                {this.props.gptEnabled ? (
+                {this.props.gptEnabled && allowAdsOnContent ? (
                     <div className="Post_footer__ad">
                         <GptAd
                             type="Freestar"
@@ -272,7 +301,7 @@ class Post extends React.Component {
                         </div>
                     </div>
                 </div>
-                {this.props.gptEnabled ? (
+                {this.props.gptEnabled && allowAdsOnContent ? (
                     <div className="Post_footer__ad">
                         <GptAd
                             type="Freestar"
@@ -305,5 +334,6 @@ export default connect((state, ownProps) => {
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',
         gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
+        gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
     };
 })(Post);

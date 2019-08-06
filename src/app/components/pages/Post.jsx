@@ -62,7 +62,6 @@ class Post extends React.Component {
             const route_params = this.props.routeParams;
             post = route_params.username + '/' + route_params.slug;
         }
-        console.log('==========content.get(post);', post);
         const dis = content.get(post);
 
         // check if the post doesn't exist
@@ -114,12 +113,6 @@ class Post extends React.Component {
         const allowAdsOnContent =
             this.props.gptEnabled &&
             !GptUtils.HasBannedTags(tags, this.props.gptBannedTags);
-        console.log(
-            post,
-            '=============tags',
-            p.json_metadata.tags,
-            this.props.gptEnabled
-        );
 
         // A post should be hidden if it is not special, is not told to "show
         // anyway", and is designated "gray".
@@ -159,9 +152,6 @@ class Post extends React.Component {
         // Don't render too many comments on server-side
         const commentLimit = 100;
         if (global.process !== undefined && replies.length > commentLimit) {
-            console.log(
-                `Too many comments, ${replies.length - commentLimit} omitted.`
-            );
             replies = replies.slice(0, commentLimit);
         }
         let commentCount = 0;
@@ -232,19 +222,6 @@ class Post extends React.Component {
                 link: selflink + '?sort=' + sort_orders[o] + '#comments',
             });
         }
-        // console.log("===========post", post, dis.get('category'))
-        // console.log("=============post.json_metadata", post.json_metadata)
-        // const post_content = content.get(post);
-        // console.log("=============post_content", post_content.get('json_metadata'))
-        // console.log("=============post_content", post_content.toJS().json_metadata)
-        // // const post_content = this.props.cont.get(this.props.post);
-        // // if (!post_content) return null;
-        // // const p = extractContent(immutableAccessor, post_content);
-        // // const content = post_content.toJS();
-
-        // const content = post_content.toJS();
-        // const { author, permlink, parent_author, parent_permlink } = content;
-        // const jsonMetadata = this.state.showReply ? null : p.json_metadata;
 
         return (
             <div className="Post">
@@ -317,7 +294,6 @@ class Post extends React.Component {
 }
 
 const emptySet = Set();
-
 export default connect((state, ownProps) => {
     const current_user = state.user.get('current');
     let ignoring;

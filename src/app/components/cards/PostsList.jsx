@@ -161,6 +161,7 @@ class PostsList extends React.Component {
             account,
             username,
             nsfwPref,
+            allowAdsOnContent,
         } = this.props;
         const { thumbSize } = this.state;
         const postsInfo = [];
@@ -218,7 +219,7 @@ class PostsList extends React.Component {
                             thumbSize={thumbSize}
                             ignore={false}
                             nsfwPref={nsfwPref}
-                            featured={true}
+                            featured
                             onClose={close}
                         />
                     </li>
@@ -256,7 +257,7 @@ class PostsList extends React.Component {
                             thumbSize={thumbSize}
                             ignore={false}
                             nsfwPref={nsfwPref}
-                            promoted={true}
+                            promoted
                             onClose={close}
                         />
                     </li>
@@ -267,7 +268,12 @@ class PostsList extends React.Component {
         const renderSummary = items =>
             items.map((item, i) => {
                 const every = this.props.adSlots.in_feed_1.every;
-                if (this.props.shouldSeeAds && i >= every && i % every === 0) {
+                if (
+                    this.props.shouldSeeAds &&
+                    allowAdsOnContent &&
+                    i >= every &&
+                    i % every === 0
+                ) {
                     return (
                         <div key={item.item}>
                             <li>

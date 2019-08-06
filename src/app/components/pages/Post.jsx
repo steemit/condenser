@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
+import { immutableAccessor } from 'app/utils/Accessors';
+import extractContent from 'app/utils/ExtractContent';
 import { connect } from 'react-redux';
 
 import { sortComments } from 'app/components/cards/Comment';
@@ -13,6 +15,7 @@ import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
 import GptAd from 'app/components/elements/GptAd';
+import { GptUtils } from 'app/utils/GptUtils';
 import { isLoggedIn } from 'app/utils/UserUtil';
 
 import Icon from 'app/components/elements/Icon';
@@ -103,6 +106,14 @@ class Post extends React.Component {
                 </div>
             );
 
+        // TODO: This data model needs some help.
+        const post_content = content.get(post);
+        const p = extractContent(immutableAccessor, post_content);
+        const tags = p.json_metadata.tags;
+        const allowAdsOnContent =
+            this.props.gptEnabled &&
+            !GptUtils.HasBannedTags(tags, this.props.gptBannedTags);
+
         // A post should be hidden if it is not special, is not told to "show
         // anyway", and is designated "gray".
         const special = dis.get('special');
@@ -141,15 +152,12 @@ class Post extends React.Component {
         // Don't render too many comments on server-side
         const commentLimit = 100;
         if (global.process !== undefined && replies.length > commentLimit) {
-            console.log(
-                `Too many comments, ${replies.length - commentLimit} omitted.`
-            );
             replies = replies.slice(0, commentLimit);
         }
         let commentCount = 0;
         const positiveComments = replies.map(reply => {
             commentCount++;
-            let showAd =
+            const showAd =
                 commentCount % 5 == 0 &&
                 commentCount != replies.length &&
                 commentCount != commentLimit;
@@ -166,7 +174,7 @@ class Post extends React.Component {
                         onHide={this.onHideComment}
                     />
 
-                    {this.props.gptEnabled && showAd ? (
+                    {this.props.gptEnabled && showAd && allowAdsOnContent ? (
                         <div className="Post_footer__ad">
                             <GptAd
                                 type="Freestar"
@@ -245,7 +253,7 @@ class Post extends React.Component {
                         </div>
                     </div>
                 )}
-                {this.props.gptEnabled ? (
+                {this.props.gptEnabled && allowAdsOnContent ? (
                     <div className="Post_footer__ad">
                         <GptAd
                             type="Freestar"
@@ -272,7 +280,7 @@ class Post extends React.Component {
                         </div>
                     </div>
                 </div>
-                {this.props.gptEnabled ? (
+                {this.props.gptEnabled && allowAdsOnContent ? (
                     <div className="Post_footer__ad">
                         <GptAd
                             type="Freestar"
@@ -286,7 +294,6 @@ class Post extends React.Component {
 }
 
 const emptySet = Set();
-
 export default connect((state, ownProps) => {
     const current_user = state.user.get('current');
     let ignoring;
@@ -305,5 +312,6 @@ export default connect((state, ownProps) => {
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',
         gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
+        gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
     };
 })(Post);

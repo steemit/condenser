@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { immutableAccessor } from 'app/utils/Accessors';
+import extractContent from 'app/utils/ExtractContent';
 import Headroom from 'react-headroom';
 import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
@@ -19,6 +21,7 @@ import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
 import GptAd from 'app/components/elements/GptAd';
+import { GptUtils } from 'app/utils/GptUtils';
 
 class Header extends React.Component {
     static propTypes = {
@@ -118,15 +121,17 @@ class Header extends React.Component {
             navigate,
             display_name,
             walletUrl,
+            content,
+            gptBannedTags,
         } = this.props;
 
         const { showAd, showAnnouncement } = this.state;
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
+        let allowAdsOnContent = true;
         let home_account = false;
         let page_title = route.page;
-
         let sort_order = '';
         let topic = '';
         let page_name = null;
@@ -142,6 +147,9 @@ class Header extends React.Component {
                     home_account = true;
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
+                allowAdsOnContent =
+                    this.props.gptEnabled &&
+                    !GptUtils.HasBannedTags([topic], gptBannedTags);
                 const type =
                     route.params[0] == 'payout_comments' ? 'comments' : 'posts';
                 let prefix = route.params[0];
@@ -152,6 +160,18 @@ class Header extends React.Component {
                 page_title = `${prefix} ${type}`;
             }
         } else if (route.page === 'Post') {
+            const user = `${route.params[1]}`.replace('@', '');
+            const slug = `${route.params[2]}`;
+            if (content) {
+                const post_content = content.get(`${user}/${slug}`);
+                if (post_content) {
+                    const p = extractContent(immutableAccessor, post_content);
+                    const tags = p.json_metadata.tags || [];
+                    allowAdsOnContent =
+                        this.props.gptEnabled &&
+                        !GptUtils.HasBannedTags(tags, gptBannedTags);
+                }
+            }
             sort_order = '';
             topic = route.params[0];
         } else if (route.page == 'SubmitPost') {
@@ -163,7 +183,7 @@ class Header extends React.Component {
         } else if (route.page == 'RecoverAccountStep1') {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
-            let user_name = route.params[0].slice(1);
+            const user_name = route.params[0].slice(1);
             const user_title = display_name
                 ? `${display_name} (@${user_name})`
                 : user_name;
@@ -288,11 +308,19 @@ class Header extends React.Component {
                         <Announcement onClose={e => this.hideAnnouncement(e)} />
                     )}
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
-                    <div style={showAd ? {} : { display: 'none' }}>
-                        <GptAd
-                            type="Freestar"
-                            id="steemit_728x90_970x90_970x250_320x50_ATF"
-                        />
+                    <div
+                        style={
+                            showAd && allowAdsOnContent
+                                ? {}
+                                : { display: 'none' }
+                        }
+                    >
+                        {allowAdsOnContent && (
+                            <GptAd
+                                type="Freestar"
+                                id="steemit_728x90_970x90_970x250_320x50_ATF"
+                            />
+                        )}
                     </div>
 
                     <nav className="row Header__nav">
@@ -308,7 +336,7 @@ class Header extends React.Component {
                             <SortOrder
                                 sortOrder={order}
                                 topic={category === 'feed' ? '' : category}
-                                horizontal={true}
+                                horizontal
                                 pathname={pathname}
                             />
                         </div>
@@ -405,7 +433,9 @@ const mapStateToProps = (state, ownProps) => {
         : state.offchain.get('account');
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
+    const gptBannedTags = state.app.getIn(['googleAds', 'gptBannedTags']);
     const walletUrl = state.app.get('walletUrl');
+    const content = state.global.get('content');
 
     return {
         username,
@@ -416,7 +446,9 @@ const mapStateToProps = (state, ownProps) => {
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         gptEnabled,
+        gptBannedTags,
         walletUrl,
+        content,
         ...ownProps,
     };
 };

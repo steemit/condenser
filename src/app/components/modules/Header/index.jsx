@@ -122,6 +122,8 @@ class Header extends React.Component {
             account_meta,
             walletUrl,
             content,
+            gptBannedTags,
+            // allowAdsOnContent
         } = this.props;
 
         const { showAd, showAnnouncement } = this.state;
@@ -133,6 +135,7 @@ class Header extends React.Component {
         // const route_params = this.props.routeParams;
         // post = route_params.username + '/' + route_params.slug;
 
+        let allowAdsOnContent = true;
         let home_account = false;
         let page_title = route.page;
 
@@ -151,6 +154,11 @@ class Header extends React.Component {
                     home_account = true;
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
+                allowAdsOnContent = !GptUtils.HasBannedTags(
+                    [topic],
+                    gptBannedTags
+                );
+                console.log('==========allowAdsOnContent', allowAdsOnContent);
                 const type =
                     route.params[0] == 'payout_comments' ? 'comments' : 'posts';
                 let prefix = route.params[0];
@@ -161,6 +169,24 @@ class Header extends React.Component {
                 page_title = `${prefix} ${type}`;
             }
         } else if (route.page === 'Post') {
+            console.log('state.global.get(content)', content);
+            const user = `${route.params[1]}`.replace('@', '');
+            const slug = `${route.params[2]}`;
+            const post_content = content.get(`${user}/${slug}`);
+
+            if (post_content) {
+                console.log('post_content', post_content);
+                const p = extractContent(immutableAccessor, post_content);
+                const tags = p.json_metadata.tags || [];
+                allowAdsOnContent = !GptUtils.HasBannedTags(
+                    tags,
+                    gptBannedTags
+                );
+                console.log('==========allowAdsOnContent', allowAdsOnContent);
+                console.log('tags', tags);
+                // const route_params = this.props.routeParams;
+                // post = route_params.username + '/' + route_params.slug;
+            }
             sort_order = '';
             topic = route.params[0];
         } else if (route.page == 'SubmitPost') {
@@ -315,10 +341,12 @@ class Header extends React.Component {
                                 : { display: 'none' }
                         }
                     >
-                        <GptAd
-                            type="Freestar"
-                            id="steemit_728x90_970x90_970x250_320x50_ATF"
-                        />
+                        {allowAdsOnContent && (
+                            <GptAd
+                                type="Freestar"
+                                id="steemit_728x90_970x90_970x250_320x50_ATF"
+                            />
+                        )}
                     </div>
 
                     <nav className="row Header__nav">
@@ -434,19 +462,21 @@ const mapStateToProps = (state, ownProps) => {
     const walletUrl = state.app.get('walletUrl');
 
     const content = state.global.get('content');
-    console.log('state.global.get(content)', content);
-    const post_content = content.get(
-        `${route.params[1].replace('@', '')}/${route.params[2]}`
-    );
-
-    // const post_content = content.get(post);
-    const p = extractContent(immutableAccessor, post_content);
-    const tags = p.json_metadata.tags;
-    const allowAdsOnContent =
-        gptEnabled && !GptUtils.HasBannedTags(tags, gptBannedTags);
-    console.log('tags', tags);
-    // const route_params = this.props.routeParams;
-    // post = route_params.username + '/' + route_params.slug;
+    // console.log('state.global.get(content)', content);
+    // const user = `${route.params[1]}`.replace('@', '')
+    // const slug = `${route.params[2]}`
+    // const post_content = content.get(`${user}/${slug}`);
+    //
+    // if(post_content) {
+    //
+    //   console.log("post_content", post_content)
+    //   const p = extractContent(immutableAccessor, post_content);
+    //   const tags = p.json_metadata.tags || [];
+    //   const allowAdsOnContent = !GptUtils.HasBannedTags(tags, gptBannedTags);
+    //   console.log('tags', tags);
+    //   // const route_params = this.props.routeParams;
+    //   // post = route_params.username + '/' + route_params.slug;
+    // }
 
     return {
         username,
@@ -459,8 +489,8 @@ const mapStateToProps = (state, ownProps) => {
         gptEnabled,
         gptBannedTags,
         walletUrl,
-        // content,
-        allowAdsOnContent,
+        content,
+        // allowAdsOnContent,
         ...ownProps,
     };
 };

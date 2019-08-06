@@ -65,14 +65,10 @@ export function contentStats(content) {
         if (sign === 0) return;
         total_votes += 1;
 
+        // For graying: ignore tiny downvotes (9 digits or less)
         const rshares = String(v.get('rshares'));
-
-        // For graying: sum up total rshares from voters with non-neg reputation.
-        if (String(v.get('reputation')).substring(0, 1) !== '-') {
-            // And also ignore tiny downvotes (9 digits or less)
-            if (!(rshares.substring(0, 1) === '-' && rshares.length < 11)) {
-                net_rshares_adj = net_rshares_adj.add(rshares);
-            }
+        if (!(rshares.substring(0, 1) === '-' && rshares.length < 11)) {
+            net_rshares_adj = net_rshares_adj.add(rshares);
         }
     });
 

@@ -154,10 +154,9 @@ class Header extends React.Component {
                     home_account = true;
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
-                allowAdsOnContent = !GptUtils.HasBannedTags(
-                    [topic],
-                    gptBannedTags
-                );
+                allowAdsOnContent =
+                    this.props.gptEnabled &&
+                    !GptUtils.HasBannedTags([topic], gptBannedTags);
                 console.log('==========allowAdsOnContent', allowAdsOnContent);
                 const type =
                     route.params[0] == 'payout_comments' ? 'comments' : 'posts';
@@ -172,20 +171,23 @@ class Header extends React.Component {
             console.log('state.global.get(content)', content);
             const user = `${route.params[1]}`.replace('@', '');
             const slug = `${route.params[2]}`;
-            const post_content = content.get(`${user}/${slug}`);
-
-            if (post_content) {
-                console.log('post_content', post_content);
-                const p = extractContent(immutableAccessor, post_content);
-                const tags = p.json_metadata.tags || [];
-                allowAdsOnContent = !GptUtils.HasBannedTags(
-                    tags,
-                    gptBannedTags
-                );
-                console.log('==========allowAdsOnContent', allowAdsOnContent);
-                console.log('tags', tags);
-                // const route_params = this.props.routeParams;
-                // post = route_params.username + '/' + route_params.slug;
+            if (content) {
+                const post_content = content.get(`${user}/${slug}`);
+                if (post_content) {
+                    console.log('post_content', post_content);
+                    const p = extractContent(immutableAccessor, post_content);
+                    const tags = p.json_metadata.tags || [];
+                    allowAdsOnContent =
+                        this.props.gptEnabled &&
+                        !GptUtils.HasBannedTags(tags, gptBannedTags);
+                    console.log(
+                        '==========allowAdsOnContent',
+                        allowAdsOnContent
+                    );
+                    console.log('tags', tags);
+                    // const route_params = this.props.routeParams;
+                    // post = route_params.username + '/' + route_params.slug;
+                }
             }
             sort_order = '';
             topic = route.params[0];

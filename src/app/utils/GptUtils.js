@@ -29,7 +29,7 @@ class GptUtils {
      * @param {array[strings]} bannedTags
      * @returns {boolean}
      */
-    static HasBannedTags(tags, bannedTags) {
+    static HasBannedTags(tags = [], bannedTags) {
         for (const tag of tags) {
             if (bannedTags.indexOf(tag) != -1) {
                 return true;

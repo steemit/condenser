@@ -10,6 +10,7 @@ export default function ServerHTML({
     shouldSeeAds,
     adClient,
     gptEnabled,
+    gptBannedTags,
     gptBidding,
     shouldSeeCookieConsent,
     cookieConsentApiKey,

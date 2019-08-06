@@ -62,6 +62,7 @@ class Post extends React.Component {
             const route_params = this.props.routeParams;
             post = route_params.username + '/' + route_params.slug;
         }
+        console.log('==========content.get(post);', post);
         const dis = content.get(post);
 
         // check if the post doesn't exist
@@ -114,6 +115,7 @@ class Post extends React.Component {
             this.props.gptEnabled &&
             !GptUtils.HasBannedTags(tags, this.props.gptBannedTags);
         console.log(
+            post,
             '=============tags',
             p.json_metadata.tags,
             this.props.gptEnabled

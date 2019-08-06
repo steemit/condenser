@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { immutableAccessor } from 'app/utils/Accessors';
+import extractContent from 'app/utils/ExtractContent';
 import Headroom from 'react-headroom';
 import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
@@ -19,6 +21,7 @@ import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
 import GptAd from 'app/components/elements/GptAd';
+import { GptUtils } from 'app/utils/GptUtils';
 
 class Header extends React.Component {
     static propTypes = {
@@ -118,12 +121,18 @@ class Header extends React.Component {
             navigate,
             account_meta,
             walletUrl,
+            content,
         } = this.props;
 
         const { showAd, showAnnouncement } = this.state;
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
+        console.log(route, pathname, content);
+
+        // const route_params = this.props.routeParams;
+        // post = route_params.username + '/' + route_params.slug;
+
         let home_account = false;
         let page_title = route.page;
 
@@ -299,7 +308,13 @@ class Header extends React.Component {
                         <Announcement onClose={e => this.hideAnnouncement(e)} />
                     )}
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
-                    <div style={showAd ? {} : { display: 'none' }}>
+                    <div
+                        style={
+                            showAd && allowAdsOnContent
+                                ? {}
+                                : { display: 'none' }
+                        }
+                    >
                         <GptAd
                             type="Freestar"
                             id="steemit_728x90_970x90_970x250_320x50_ATF"
@@ -418,6 +433,21 @@ const mapStateToProps = (state, ownProps) => {
     const gptBannedTags = state.app.getIn(['googleAds', 'gptBannedTags']);
     const walletUrl = state.app.get('walletUrl');
 
+    const content = state.global.get('content');
+    console.log('state.global.get(content)', content);
+    const post_content = content.get(
+        `${route.params[1].replace('@', '')}/${route.params[2]}`
+    );
+
+    // const post_content = content.get(post);
+    const p = extractContent(immutableAccessor, post_content);
+    const tags = p.json_metadata.tags;
+    const allowAdsOnContent =
+        gptEnabled && !GptUtils.HasBannedTags(tags, gptBannedTags);
+    console.log('tags', tags);
+    // const route_params = this.props.routeParams;
+    // post = route_params.username + '/' + route_params.slug;
+
     return {
         username,
         loggedIn,
@@ -429,6 +459,8 @@ const mapStateToProps = (state, ownProps) => {
         gptEnabled,
         gptBannedTags,
         walletUrl,
+        // content,
+        allowAdsOnContent,
         ...ownProps,
     };
 };

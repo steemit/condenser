@@ -99,16 +99,11 @@ class PostsIndex extends React.Component {
             gptBannedTags,
             topic,
         } = this.props;
-        console.log(
-            'const { categories, featured, promoted, gptBannedTags, topic } = this.props;',
-            topic
-        );
 
         let allowAdsOnContent = true;
         allowAdsOnContent =
             this.props.gptEnabled &&
             !GptUtils.HasBannedTags([topic], gptBannedTags);
-        console.log('==========allowAdsOnContent', allowAdsOnContent);
 
         let topics_order = order;
         let posts = [];

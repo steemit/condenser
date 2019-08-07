@@ -534,40 +534,6 @@ describe('Global reducer', () => {
                 .last_fetch
         ).toBeTruthy();
     });
-    it('should return correct state for a REQUEST_META action', () => {
-        // Arrange
-        const payload = {
-            id: 'Hello',
-            link: 'World',
-        };
-        // Act
-        const actual = reducer(reducer(), globalActions.requestMeta(payload));
-        // Assert
-        expect(actual.getIn(['metaLinkData', `${payload.id}`])).toEqual(
-            Map({ link: 'World' })
-        );
-    });
-    it('should return correct state for a RECEIVE_META action', () => {
-        // Arrange
-        const payload = {
-            id: 'Hello',
-            meta: { link: 'spalunking' },
-        };
-        const initial = reducer();
-        const initialWithData = initial.setIn(
-            ['metaLinkData', payload.id],
-            Map({})
-        );
-        // Act
-        const actual = reducer(
-            initialWithData,
-            globalActions.receiveMeta(payload)
-        );
-        // Assert
-        expect(actual.getIn(['metaLinkData', payload.id])).toEqual(
-            Map({ link: 'spalunking' })
-        );
-    });
 
     it('should return correct state for a SET action', () => {
         // Arrange
@@ -615,57 +581,6 @@ describe('Global reducer', () => {
         const actual = reducer(initial, globalActions.update(payload));
         // Assert
         expect(actual.getIn(payload.key)).toEqual(payload.updater());
-    });
-
-    it('should return correct state for a SET_META_DATA action', () => {
-        // Arrange
-        const payload = {
-            id: 'pear',
-            meta: { flip: 'flop' },
-        };
-        const initial = reducer();
-        // Act
-        const actual = reducer(initial, globalActions.setMetaData(payload));
-        // Assert
-        expect(actual.getIn(['metaLinkData', payload.id])).toEqual(
-            fromJS(payload.meta)
-        );
-    });
-
-    it('should return correct state for a CLEAR_META action', () => {
-        // Arrange
-        const initial = reducer().set(
-            'metaLinkData',
-            Map({ deleteMe: { erase: 'me' } })
-        );
-        // Act
-        const actual = reducer(
-            initial,
-            globalActions.clearMeta({ id: 'deleteMe' })
-        );
-        // Assert
-        expect(actual.get('metaLinkData')).toEqual(Map({}));
-    });
-
-    it('should return correct state for a CLEAR_META_ELEMENT action', () => {
-        // Arrange
-        const payload = {
-            id: 'pear',
-            meta: { flip: 'flop' },
-        };
-
-        const clearPayload = {
-            formId: 'pear',
-            element: 'flip',
-        };
-        const initial = reducer(initial, globalActions.setMetaData(payload));
-        // Act
-        const actual = reducer(
-            initial,
-            globalActions.clearMetaElement(clearPayload)
-        );
-        // Assert
-        expect(actual.get('metaLinkData')).toEqual(Map({ pear: Map({}) }));
     });
 
     it('should return correct state for a FETCH_JSON action', () => {

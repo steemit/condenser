@@ -16,7 +16,6 @@ const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
-const RECEIVE_COMMENT = 'global/RECEIVE_COMMENT';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
 const DELETE_CONTENT = 'global/DELETE_CONTENT';
@@ -122,49 +121,6 @@ export default function reducer(state = defaultState, action = {}) {
                         p => p.mergeDeep(specialPost)
                     );
                 }, state);
-        }
-
-        case RECEIVE_COMMENT: {
-            const {
-                author,
-                permlink,
-                parent_author = '',
-                parent_permlink = '',
-                title = '',
-                body,
-            } = payload.op;
-            const key = author + '/' + permlink;
-            let updatedState = state.updateIn(
-                ['content', key],
-                Map(emptyContent),
-                r =>
-                    r.merge({
-                        author,
-                        permlink,
-                        parent_author,
-                        parent_permlink,
-                        title: title.toString('utf-8'),
-                        body: body.toString('utf-8'),
-                    })
-            );
-            if (parent_author !== '' && parent_permlink !== '') {
-                const parent_key = parent_author + '/' + parent_permlink;
-                updatedState = updatedState.updateIn(
-                    ['content', parent_key, 'replies'],
-                    List(),
-                    r => r.insert(0, key)
-                );
-                const children = updatedState.getIn(
-                    ['content', parent_key, 'replies'],
-                    List()
-                ).size;
-                updatedState = updatedState.updateIn(
-                    ['content', parent_key, 'children'],
-                    0,
-                    () => children
-                );
-            }
-            return updatedState;
         }
 
         case RECEIVE_CONTENT: {
@@ -391,11 +347,6 @@ export const receiveAccounts = payload => ({
 
 export const syncSpecialPosts = payload => ({
     type: SYNC_SPECIAL_POSTS,
-    payload,
-});
-
-export const receiveComment = payload => ({
-    type: RECEIVE_COMMENT,
     payload,
 });
 

@@ -23,14 +23,9 @@ const DELETE_CONTENT = 'global/DELETE_CONTENT';
 const VOTED = 'global/VOTED';
 const FETCHING_DATA = 'global/FETCHING_DATA';
 const RECEIVE_DATA = 'global/RECEIVE_DATA';
-const REQUEST_META = 'global/REQUEST_META';
-const RECEIVE_META = 'global/RECEIVE_META';
 const SET = 'global/SET';
 const REMOVE = 'global/REMOVE';
 const UPDATE = 'global/UPDATE';
-const SET_META_DATA = 'global/SET_META_DATA';
-const CLEAR_META = 'global/CLEAR_META';
-const CLEAR_META_ELEMENT = 'global/CLEAR_META_ELEMENT';
 const FETCH_JSON = 'global/FETCH_JSON';
 const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT';
 const SHOW_DIALOG = 'global/SHOW_DIALOG';
@@ -326,18 +321,6 @@ export default function reducer(state = defaultState, action = {}) {
             return new_state;
         }
 
-        case REQUEST_META: {
-            const { id, link } = payload;
-            return state.setIn(['metaLinkData', id], Map({ link }));
-        }
-
-        case RECEIVE_META: {
-            const { id, meta } = payload;
-            return state.updateIn(['metaLinkData', id], data =>
-                data.merge(meta)
-            );
-        }
-
         case SET: {
             const { key, value } = payload;
             const key_array = Array.isArray(key) ? key : [key];
@@ -354,22 +337,6 @@ export default function reducer(state = defaultState, action = {}) {
         case UPDATE: {
             const { key, notSet = Map(), updater } = payload;
             return state.updateIn(key, notSet, updater);
-        }
-
-        case SET_META_DATA: {
-            const { id, meta } = payload;
-            return state.setIn(['metaLinkData', id], fromJS(meta));
-        }
-
-        case CLEAR_META: {
-            return state.deleteIn(['metaLinkData', payload.id]);
-        }
-
-        case CLEAR_META_ELEMENT: {
-            const { formId, element } = payload;
-            return state.updateIn(['metaLinkData', formId], data =>
-                data.remove(element)
-            );
         }
 
         case FETCH_JSON: {
@@ -459,16 +426,6 @@ export const receiveData = payload => ({
     payload,
 });
 
-export const requestMeta = payload => ({
-    type: REQUEST_META,
-    payload,
-});
-
-export const receiveMeta = payload => ({
-    type: RECEIVE_META,
-    payload,
-});
-
 // TODO: Find a better name for this
 export const set = payload => ({
     type: SET,
@@ -482,21 +439,6 @@ export const remove = payload => ({
 
 export const update = payload => ({
     type: UPDATE,
-    payload,
-});
-
-export const setMetaData = payload => ({
-    type: SET_META_DATA,
-    payload,
-});
-
-export const clearMeta = payload => ({
-    type: CLEAR_META,
-    payload,
-});
-
-export const clearMetaElement = payload => ({
-    type: CLEAR_META_ELEMENT,
     payload,
 });
 

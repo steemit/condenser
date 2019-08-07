@@ -288,53 +288,6 @@ export function* fetchData(action) {
     yield put(appActions.fetchDataEnd());
 }
 
-// export function* watchMetaRequests() {
-//     yield* takeLatest('global/REQUEST_META', fetchMeta);
-// }
-export function* fetchMeta({ payload: { id, link } }) {
-    try {
-        const metaArray = yield call(
-            () =>
-                new Promise((resolve, reject) => {
-                    function reqListener() {
-                        const resp = JSON.parse(this.responseText);
-                        if (resp.error) {
-                            reject(resp.error);
-                            return;
-                        }
-                        resolve(resp);
-                    }
-                    const oReq = new XMLHttpRequest();
-                    oReq.addEventListener('load', reqListener);
-                    oReq.open('GET', '/http_metadata/' + link);
-                    oReq.send();
-                })
-        );
-        const { title, metaTags } = metaArray;
-        let meta = { title };
-        for (let i = 0; i < metaTags.length; i++) {
-            const [name, content] = metaTags[i];
-            meta[name] = content;
-        }
-        // http://postimg.org/image/kbefrpbe9/
-        meta = {
-            link,
-            card: meta['twitter:card'],
-            site: meta['twitter:site'], // @username tribbute
-            title: meta['twitter:title'],
-            description: meta['twitter:description'],
-            image: meta['twitter:image'],
-            alt: meta['twitter:alt'],
-        };
-        if (!meta.image) {
-            meta.image = meta['twitter:image:src'];
-        }
-        yield put(globalActions.receiveMeta({ id, meta }));
-    } catch (error) {
-        yield put(globalActions.receiveMeta({ id, meta: { error } }));
-    }
-}
-
 /**
     @arg {string} id unique key for result global['fetchJson_' + id]
     @arg {string} url

@@ -268,6 +268,8 @@ export default function reducer(state = defaultState, action = {}) {
                 endOfData,
             } = payload;
             let new_state;
+
+            // append incoming post keys to proper content list
             if (
                 order === 'by_author' ||
                 order === 'by_feed' ||
@@ -279,8 +281,8 @@ export default function reducer(state = defaultState, action = {}) {
                 new_state = state.updateIn(key, List(), list => {
                     return list.withMutations(posts => {
                         data.forEach(value => {
-                            const key2 = `${value.author}/${value.permlink}`;
-                            if (!posts.includes(key2)) posts.push(key2);
+                            const key = `${value.author}/${value.permlink}`;
+                            if (!posts.includes(key)) posts.push(key);
                         });
                     });
                 });
@@ -290,15 +292,15 @@ export default function reducer(state = defaultState, action = {}) {
                     list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {
-                                const entry = `${value.author}/${
-                                    value.permlink
-                                }`;
-                                if (!posts.includes(entry)) posts.push(entry);
+                                const key = `${value.author}/${value.permlink}`;
+                                if (!posts.includes(key)) posts.push(key);
                             });
                         });
                     }
                 );
             }
+
+            // append content stats data to each post
             new_state = new_state.updateIn(['content'], content => {
                 return content.withMutations(map => {
                     data.forEach(value => {
@@ -309,6 +311,7 @@ export default function reducer(state = defaultState, action = {}) {
                     });
                 });
             });
+
             new_state = new_state.updateIn(
                 ['status', category || '', order],
                 () => {

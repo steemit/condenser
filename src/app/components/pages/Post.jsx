@@ -286,10 +286,6 @@ class Post extends React.Component {
                             type="Freestar"
                             id="steemit_728x90_468x60_300x250_BelowComments"
                         />
-                        <GptAd
-                            type="Freestar"
-                            id="steemit_1x1_gumgum-inimage"
-                        />
                         <div id="sidewallselect" />
                     </div>
                 ) : null}

@@ -21,7 +21,6 @@ import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
 import GptAd from 'app/components/elements/GptAd';
-import { GptUtils } from 'app/utils/GptUtils';
 
 class Header extends React.Component {
     static propTypes = {
@@ -122,14 +121,13 @@ class Header extends React.Component {
             display_name,
             walletUrl,
             content,
-            gptBannedTags,
         } = this.props;
 
         const { showAd, showAnnouncement } = this.state;
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
-        let allowAdsOnContent = true;
+        let tags = [];
         let home_account = false;
         let page_title = route.page;
         let sort_order = '';
@@ -147,9 +145,7 @@ class Header extends React.Component {
                     home_account = true;
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
-                allowAdsOnContent =
-                    this.props.gptEnabled &&
-                    !GptUtils.HasBannedTags([topic], gptBannedTags);
+                tags = [topic];
                 const type =
                     route.params[0] == 'payout_comments' ? 'comments' : 'posts';
                 let prefix = route.params[0];
@@ -167,9 +163,6 @@ class Header extends React.Component {
                 if (post_content) {
                     const p = extractContent(immutableAccessor, post_content);
                     const tags = p.json_metadata.tags || [];
-                    allowAdsOnContent =
-                        this.props.gptEnabled &&
-                        !GptUtils.HasBannedTags(tags, gptBannedTags);
                 }
             }
             sort_order = '';
@@ -308,19 +301,12 @@ class Header extends React.Component {
                         <Announcement onClose={e => this.hideAnnouncement(e)} />
                     )}
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
-                    <div
-                        style={
-                            showAd && allowAdsOnContent
-                                ? {}
-                                : { display: 'none' }
-                        }
-                    >
-                        {allowAdsOnContent && (
-                            <GptAd
-                                type="Freestar"
-                                id="steemit_728x90_970x90_970x250_320x50_ATF"
-                            />
-                        )}
+                    <div style={showAd ? {} : { display: 'none' }}>
+                        <GptAd
+                            tags={tags}
+                            type="Freestar"
+                            id="steemit_728x90_970x90_970x250_320x50_ATF"
+                        />
                     </div>
 
                     <nav className="row Header__nav">
@@ -433,7 +419,6 @@ const mapStateToProps = (state, ownProps) => {
         : state.offchain.get('account');
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
-    const gptBannedTags = state.app.getIn(['googleAds', 'gptBannedTags']);
     const walletUrl = state.app.get('walletUrl');
     const content = state.global.get('content');
 
@@ -446,7 +431,6 @@ const mapStateToProps = (state, ownProps) => {
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         gptEnabled,
-        gptBannedTags,
         walletUrl,
         content,
         ...ownProps,

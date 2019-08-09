@@ -161,7 +161,6 @@ class PostsList extends React.Component {
             account,
             username,
             nsfwPref,
-            allowAdsOnContent,
         } = this.props;
         const { thumbSize } = this.state;
         const postsInfo = [];
@@ -268,12 +267,7 @@ class PostsList extends React.Component {
         const renderSummary = items =>
             items.map((item, i) => {
                 const every = this.props.adSlots.in_feed_1.every;
-                if (
-                    this.props.shouldSeeAds &&
-                    allowAdsOnContent &&
-                    i >= every &&
-                    i % every === 0
-                ) {
+                if (this.props.shouldSeeAds && i >= every && i % every === 0) {
                     return (
                         <div key={item.item}>
                             <li>
@@ -288,6 +282,7 @@ class PostsList extends React.Component {
 
                             <div className="articles__content-block--ad">
                                 <GptAd
+                                    tags={[category]}
                                     type="Freestar"
                                     id="steemit_728x90_468x60_300x250_InFeed"
                                 />
@@ -366,7 +361,6 @@ export default connect(
             username,
             content,
             ignore_result,
-            pathname,
             nsfwPref,
             featured,
             promoted,

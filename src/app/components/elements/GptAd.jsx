@@ -1,11 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import { GptUtils } from 'app/utils/GptUtils';
+
 class GptAd extends Component {
     componentDidMount() {
         if (!this.ad_identifier || !this.enabled) return;
         const ad_identifier = this.ad_identifier;
         const unique_slot_id = this.unique_slot_id;
+        const isNsfw = GptUtils.HasBannedTags(this.tags, this.bannedTags);
 
         freestar.newAdSlots([
             {
@@ -15,6 +18,8 @@ class GptAd extends Component {
         ]);
 
         freestar.queue.push(e => {
+            googletag.pubads().setTargeting('NSFW', isNsfw);
+
             googletag.pubads().addEventListener('impressionViewable', e => {
                 window.dispatchEvent(new Event('gptadshown', e));
             });
@@ -27,11 +32,13 @@ class GptAd extends Component {
 
     constructor(props) {
         super(props);
-        const { ad_identifier, enabled, type } = props;
+        const { ad_identifier, enabled, type, tags, bannedTags } = props;
 
         this.ad_identifier = '';
         this.type = type;
         this.enabled = false;
+        this.tags = tags;
+        this.bannedTags = bannedTags;
 
         if (ad_identifier != '') {
             // console.info(
@@ -69,6 +76,13 @@ GptAd.propTypes = {
     ad_identifier: PropTypes.string.isRequired,
     enabled: PropTypes.bool.isRequired,
     type: PropTypes.oneOf(['Bidding', 'Category', 'Basic', 'Freestar']),
+    tags: PropTypes.arrayOf(PropTypes.string),
+    bannedTags: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+GptAd.defaultProps = {
+    type: 'Freestar',
+    tags: [],
 };
 
 export default connect(
@@ -84,12 +98,14 @@ export default connect(
             'googleAds',
             `gptCategorySlots`,
         ]);
+        const bannedTags =
+            state.app.getIn(['googleAds', 'gptBannedTags']).toJS() || [];
 
         let slotName = props.slotName;
         if (!slotName) {
             slotName = props.id;
         }
-        let type = props.type;
+        const type = props.type;
         let slot = slotName; // in case it's Freestar
         if (type != 'Freestar') {
             slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
@@ -99,6 +115,7 @@ export default connect(
             enabled,
             ad: slot,
             ad_identifier: slotName,
+            bannedTags,
             ...props,
         };
     },

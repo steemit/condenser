@@ -9,7 +9,6 @@ class GptAd extends Component {
         const ad_identifier = this.ad_identifier;
         const unique_slot_id = this.unique_slot_id;
         const isNsfw = GptUtils.HasBannedTags(this.tags, this.bannedTags);
-        console.log('GptAd->componentDidMount->isNsfw', isNsfw);
 
         freestar.newAdSlots([
             {

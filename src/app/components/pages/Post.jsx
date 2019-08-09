@@ -15,7 +15,6 @@ import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
 import GptAd from 'app/components/elements/GptAd';
-import { GptUtils } from 'app/utils/GptUtils';
 import { isLoggedIn } from 'app/utils/UserUtil';
 
 import Icon from 'app/components/elements/Icon';
@@ -110,9 +109,6 @@ class Post extends React.Component {
         const post_content = content.get(post);
         const p = extractContent(immutableAccessor, post_content);
         const tags = p.json_metadata.tags;
-        const allowAdsOnContent =
-            this.props.gptEnabled &&
-            !GptUtils.HasBannedTags(tags, this.props.gptBannedTags);
 
         // A post should be hidden if it is not special, is not told to "show
         // anyway", and is designated "gray".
@@ -163,10 +159,9 @@ class Post extends React.Component {
                 commentCount != commentLimit;
 
             return (
-                <div>
+                <div key={post + reply}>
                     <Comment
                         root
-                        key={post + reply}
                         content={reply}
                         cont={content}
                         sort_order={sortOrder}
@@ -174,9 +169,10 @@ class Post extends React.Component {
                         onHide={this.onHideComment}
                     />
 
-                    {this.props.gptEnabled && showAd && allowAdsOnContent ? (
+                    {this.props.gptEnabled && showAd ? (
                         <div className="Post_footer__ad">
                             <GptAd
+                                tags={tags}
                                 type="Freestar"
                                 id="steemit_728x90_468x60_300x250_BetweenComments"
                             />
@@ -253,9 +249,10 @@ class Post extends React.Component {
                         </div>
                     </div>
                 )}
-                {this.props.gptEnabled && allowAdsOnContent ? (
+                {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
                         <GptAd
+                            tags={tags}
                             type="Freestar"
                             id="steemit_728x90_468x60_300x250_AboveComments"
                         />
@@ -280,13 +277,15 @@ class Post extends React.Component {
                         </div>
                     </div>
                 </div>
-                {this.props.gptEnabled && allowAdsOnContent ? (
+                {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
                         <GptAd
+                            tags={tags}
                             type="Freestar"
                             id="steemit_728x90_468x60_300x250_BelowComments"
                         />
                         <GptAd
+                            tags={tags}
                             type="Freestar"
                             id="steemit_1x1_gumgum-inimage"
                         />
@@ -316,6 +315,5 @@ export default connect((state, ownProps) => {
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',
         gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
-        gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
     };
 })(Post);

@@ -20,15 +20,6 @@ class GptAd extends Component {
 
         freestar.queue.push(e => {
             googletag.pubads().setTargeting('NSFW', isNsfw);
-            // console.log('=========================queue', e, ad_identifier, unique_slot_id, tags)
-            // const slots = googletag.pubads().getSlots() || []
-            // for(const slot of slots) {
-            //
-            //   if(slot.getSlotId().getDomId() == unique_slot_id) {
-            //     console.log('SLOT', slot, unique_slot_id)
-            //     slot.setTargeting('tags', tags);
-            //   }
-            // }
 
             googletag.pubads().addEventListener('impressionViewable', e => {
                 window.dispatchEvent(new Event('gptadshown', e));

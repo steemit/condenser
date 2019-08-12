@@ -13,7 +13,7 @@ import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import constants from './constants';
 import { fromJS, Map, Set } from 'immutable';
-import { getStateAsync } from 'app/utils/steemApi';
+import { getStateAsync, callBridge } from 'app/utils/steemApi';
 
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
@@ -136,104 +136,43 @@ export function* fetchData(action) {
 
     yield put(globalActions.fetchingData({ order, category }));
     let call_name, args;
-    if (order === 'trending') {
-        call_name = 'getDiscussionsByTrendingAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'hot') {
-        call_name = 'getDiscussionsByHotAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'promoted') {
-        call_name = 'getDiscussionsByPromotedAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'payout') {
-        call_name = 'getPostDiscussionsByPayoutAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'payout_comments') {
-        call_name = 'getCommentDiscussionsByPayoutAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'created') {
-        call_name = 'getDiscussionsByCreatedAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'by_replies') {
-        call_name = 'getRepliesByLastUpdateAsync';
-        args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE];
-    } else if (order === 'by_feed') {
-        // https://github.com/steemit/steem/issues/249
-        call_name = 'getDiscussionsByFeedAsync';
-        args = [
-            {
-                tag: accountname,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'by_author') {
-        call_name = 'getDiscussionsByBlogAsync';
-        args = [
-            {
-                tag: accountname,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'by_comments') {
-        call_name = 'getDiscussionsByCommentsAsync';
-        args = [
-            {
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else {
-        // this should never happen. undefined behavior
-        call_name = 'getDiscussionsByTrendingAsync';
-        args = [{ limit: constants.FETCH_DATA_BATCH_SIZE }];
+    if (
+        order === 'trending' ||
+        order == 'hot' ||
+        order == 'promoted' ||
+        order == 'payout' ||
+        order == 'created'
+    ) {
+        call_name = 'get_ranked_posts';
+        args = {
+            sort: order,
+            tag: category,
+            limit: constants.FETCH_DATA_BATCH_SIZE,
+            start_author: author,
+            start_permlink: permlink,
+        };
+    } else if (
+        order === 'by_replies' ||
+        order == 'by_feed' ||
+        order == 'by_author' ||
+        order == 'by_comments'
+    ) {
+        const sort = {
+            by_replies: 'replies',
+            by_feed: 'feed',
+            by_author: 'blog',
+            by_comments: 'comments',
+        }[order];
+        call_name = 'get_account_posts';
+        args = {
+            sort,
+            account: accountname,
+            limit: constants.FETCH_DATA_BATCH_SIZE,
+            start_author: author,
+            start_permlink: permlink,
+        };
     }
+
     yield put(appActions.fetchDataBegin());
     try {
         const firstPermlink = permlink;
@@ -243,18 +182,17 @@ export function* fetchData(action) {
         let fetchDone = false;
         let batch = 0;
         while (!fetchDone) {
-            const data = yield call([api, api[call_name]], ...args);
+            const data = yield call(callBridge, call_name, args);
 
             endOfData = data.length < constants.FETCH_DATA_BATCH_SIZE;
 
             batch++;
             fetchLimitReached = batch >= constants.MAX_BATCHES;
 
-            // next arg. Note 'by_replies' does not use same structure.
-            const lastValue = data.length > 0 ? data[data.length - 1] : null;
-            if (lastValue && order !== 'by_replies') {
-                args[0].start_author = lastValue.author;
-                args[0].start_permlink = lastValue.permlink;
+            if (data.length > 0) {
+                const lastValue = data[data.length - 1];
+                args.start_author = lastValue.author;
+                args.start_permlink = lastValue.permlink;
             }
 
             // Still return all data but only count ones matching the filter.

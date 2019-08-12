@@ -1,3 +1,4 @@
+import Promise from 'bluebird';
 import { api } from '@steemit/steem-js';
 
 import stateCleaner from 'app/redux/stateCleaner';
@@ -20,7 +21,14 @@ export async function getStateAsync(url) {
     if (url.indexOf('/author-rewards') !== -1)
         url = url.replace('/author-rewards', '/transfers');
 
-    const raw = await api.getStateAsync(url);
+    const raw = await callBridge('get_state', { path: url });
     const cleansed = stateCleaner(raw);
     return cleansed;
+}
+
+export async function callBridge(method, params) {
+    const call = (method, params, callback) => {
+        return api.call('bridge.' + method, params, callback);
+    };
+    return Promise.promisify(call)(method, params);
 }

@@ -25,7 +25,7 @@ import GptAd from 'app/components/elements/GptAd';
 class Header extends React.Component {
     static propTypes = {
         current_account_name: PropTypes.string,
-        display_name: PropTypes.object,
+        display_name: PropTypes.string,
         category: PropTypes.string,
         order: PropTypes.string,
         pathname: PropTypes.string,

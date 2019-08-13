@@ -25,7 +25,7 @@ import GptAd from 'app/components/elements/GptAd';
 class Header extends React.Component {
     static propTypes = {
         current_account_name: PropTypes.string,
-        account_meta: PropTypes.object,
+        display_name: PropTypes.string,
         category: PropTypes.string,
         order: PropTypes.string,
         pathname: PropTypes.string,
@@ -118,7 +118,7 @@ class Header extends React.Component {
             userPath,
             showSidePanel,
             navigate,
-            account_meta,
+            display_name,
             walletUrl,
             content,
         } = this.props;
@@ -177,10 +177,9 @@ class Header extends React.Component {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
             const user_name = route.params[0].slice(1);
-            const name = account_meta
-                ? normalizeProfile(account_meta.toJS()).name
-                : null;
-            const user_title = name ? `${name} (@${user_name})` : user_name;
+            const user_title = display_name
+                ? `${display_name} (@${user_name})`
+                : user_name;
             page_title = user_title;
             if (route.params[1] === 'followers') {
                 page_title = tt('header_jsx.people_following', {
@@ -189,16 +188,6 @@ class Header extends React.Component {
             }
             if (route.params[1] === 'followed') {
                 page_title = tt('header_jsx.people_followed_by', {
-                    username: user_title,
-                });
-            }
-            if (route.params[1] === 'curation-rewards') {
-                page_title = tt('header_jsx.curation_rewards_by', {
-                    username: user_title,
-                });
-            }
-            if (route.params[1] === 'author-rewards') {
-                page_title = tt('header_jsx.author_rewards_by', {
                     username: user_title,
                 });
             }
@@ -412,13 +401,14 @@ const mapStateToProps = (state, ownProps) => {
         };
     }
 
-    let user_profile;
+    let display_name;
     const route = resolveRoute(ownProps.pathname);
     if (route.page === 'UserProfile') {
-        user_profile = state.global.getIn([
+        const profile = state.global.getIn([
             'accounts',
             route.params[0].slice(1),
         ]);
+        display_name = profile ? normalizeProfile(profile.toJS()).name : null;
     }
 
     const userPath = state.routing.locationBeforeTransitions.pathname;
@@ -437,7 +427,7 @@ const mapStateToProps = (state, ownProps) => {
         loggedIn,
         userPath,
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
-        account_meta: user_profile,
+        display_name,
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         gptEnabled,

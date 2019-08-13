@@ -293,20 +293,8 @@ class Post extends React.Component {
 
 const emptySet = Set();
 export default connect((state, ownProps) => {
-    const current_user = state.user.get('current');
-    let ignoring;
-    if (current_user) {
-        const key = [
-            'follow',
-            'getFollowingAsync',
-            current_user.get('username'),
-            'ignore_result',
-        ];
-        ignoring = state.global.getIn(key, emptySet);
-    }
     return {
         content: state.global.get('content'),
-        ignoring,
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',
         gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),

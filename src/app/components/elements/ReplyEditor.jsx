@@ -58,8 +58,7 @@ class ReplyEditor extends React.Component {
     }
 
     componentWillMount() {
-        const { setMetaData, formId, jsonMetadata } = this.props;
-        setMetaData(formId, jsonMetadata);
+        const { formId } = this.props;
 
         if (process.env.BROWSER) {
             // Check for rte editor preference
@@ -150,11 +149,6 @@ class ReplyEditor extends React.Component {
                 }, 500);
             }
         }
-    }
-
-    componentWillUnmount() {
-        const { clearMetaData, formId } = this.props;
-        clearMetaData(formId);
     }
 
     initForm(props) {
@@ -815,17 +809,6 @@ export default formId =>
 
         // mapDispatchToProps
         dispatch => ({
-            clearMetaData: id => {
-                dispatch(globalActions.clearMeta({ id }));
-            },
-            setMetaData: (id, jsonMetadata) => {
-                dispatch(
-                    globalActions.setMetaData({
-                        id,
-                        meta: jsonMetadata ? jsonMetadata.steem : null,
-                    })
-                );
-            },
             uploadImage: (file, progress) =>
                 dispatch(userActions.uploadImage({ file, progress })),
             showAdvancedSettings: formId =>

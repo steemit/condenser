@@ -255,7 +255,7 @@ export async function serverRender(
 
     let server_store, onchain;
     try {
-        const url = getUrlFromLocation(location);
+        const url = location;
 
         requestTimer.startTimer('apiGetState_ms');
         onchain = await apiGetState(url);
@@ -279,7 +279,6 @@ export async function serverRender(
         // If we are not loading a post, truncate state data to bring response size down.
         if (!url.match(routeRegex.Post)) {
             for (var key in onchain.content) {
-                //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
                 // Count some stats then remove voting data. But keep current user's votes. (#1040)
                 onchain.content[key]['stats'] = contentStats(
                     onchain.content[key]
@@ -460,24 +459,6 @@ export function clientRender(initialState) {
         </Provider>,
         document.getElementById('content')
     );
-}
-
-/**
- * Do some pre-state-fetch url rewriting.
- *
- * @param {string} location
- * @returns {string}
- */
-function getUrlFromLocation(location) {
-    let url = location === '/' ? 'trending' : location;
-    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
-    // to resolve data correctly
-    if (url.indexOf('/curation-rewards') !== -1)
-        url = url.replace(/\/curation-rewards$/, '/transfers');
-    if (url.indexOf('/author-rewards') !== -1)
-        url = url.replace(/\/author-rewards$/, '/transfers');
-
-    return url;
 }
 
 async function apiGetState(url) {

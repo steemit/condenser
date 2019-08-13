@@ -24,7 +24,7 @@ import SortOrder from 'app/components/elements/SortOrder';
 class PostsIndex extends React.Component {
     static propTypes = {
         discussions: PropTypes.object,
-        accounts: PropTypes.object,
+        feed_posts: PropTypes.object,
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
@@ -113,7 +113,7 @@ class PostsIndex extends React.Component {
             account_name = order.slice(1);
             order = 'by_feed';
             topics_order = 'trending';
-            posts = this.props.accounts.getIn([account_name, 'feed']);
+            posts = this.props.feed_posts;
             const isMyAccount = this.props.username === account_name;
             if (isMyAccount) {
                 emptyText = (
@@ -333,11 +333,22 @@ module.exports = {
     path: ':order(/:category)',
     component: connect(
         (state, ownProps) => {
+            // special case if user feed (vs. trending, etc)
+            let feed_posts;
+            if (ownProps.routeParams.category === 'feed') {
+                const account_name = ownProps.routeParams.order.slice(1);
+                feed_posts = state.global.getIn([
+                    'accounts',
+                    account_name,
+                    'feed',
+                ]);
+            }
+
             return {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                accounts: state.global.get('accounts'),
+                feed_posts,
                 username:
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),

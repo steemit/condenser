@@ -302,8 +302,6 @@ class CommentImpl extends React.Component {
         } catch (error) {
             // console.error('Invalid json metadata string', json_metadata, 'in post', this.props.content);
         }
-        // const get_asset_value = ( asset_str ) => { return parseFloat( asset_str.split(' ')[0] ); }
-        // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
         // hide images if author is in blacklist
         const hideImages = ImageUserBlockList.includes(author);

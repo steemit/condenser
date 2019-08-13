@@ -336,7 +336,6 @@ class Voting extends React.Component {
                 </Dropdown>
             );
 
-            const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
             //const flag =
             //    myVote === null || myVote === 0 ? dropdown : revokeFlag;
             downVote = (

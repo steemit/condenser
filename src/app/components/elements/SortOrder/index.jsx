@@ -42,14 +42,14 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
                 link: `/trending/${tag}`,
             },
             {
-                value: 'created',
-                label: tt('g.new'),
-                link: `/created/${tag}`,
-            },
-            {
                 value: 'hot',
                 label: tt('main_menu.hot'),
                 link: `/hot/${tag}`,
+            },
+            {
+                value: 'created',
+                label: tt('g.new'),
+                link: `/created/${tag}`,
             },
             {
                 value: 'promoted',

@@ -48,7 +48,13 @@ export function* fetchState(location_change_action) {
     const server_location = yield select(state =>
         state.offchain.get('server_location')
     );
-    const ignore_fetch = pathname === server_location && is_initial_state;
+    let ignore_fetch = false;
+    if (pathname === server_location && is_initial_state) {
+        ignore_fetch = true;
+    }
+    if (pathname.includes('.html')) {
+        ignore_fetch = true;
+    }
     is_initial_state = false;
     if (ignore_fetch) {
         return;

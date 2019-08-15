@@ -102,6 +102,7 @@ class PostsIndex extends React.Component {
             promoted,
             gptBannedTags,
             topic,
+            community,
         } = this.props;
 
         let allowAdsOnContent = true;
@@ -163,6 +164,20 @@ class PostsIndex extends React.Component {
             }
         }
 
+        function teamMembers(members) {
+            return members.map((row, idx) => (
+                <div key={idx} style={{ fontSize: '80%' }}>
+                    <Link to={'/@' + row.get(0)}>{'@' + row.get(0)}</Link>
+                    {' ['}
+                    {row.get(1)}
+                    {'] '}
+                    {row.get(2) && (
+                        <span className="affiliation">{row.get(2)}</span>
+                    )}
+                </div>
+            ));
+        }
+
         const status = this.props.status
             ? this.props.status.getIn([category || '', order])
             : null;
@@ -187,24 +202,12 @@ class PostsIndex extends React.Component {
                     account_name,
                 });
         } else {
-            switch (topics_order) {
-                case 'trending': // cribbed from Header.jsx where it's repeated 2x already :P
-                    page_title = tt('main_menu.trending');
-                    break;
-                case 'created':
-                    page_title = tt('g.new');
-                    break;
-                case 'hot':
-                    page_title = tt('main_menu.hot');
-                    break;
-                case 'promoted':
-                    page_title = tt('g.promoted');
-                    break;
-            }
-            if (typeof category !== 'undefined') {
-                page_title = `${page_title}: ${category}`; // maybe todo: localize the colon?
+            if (community) {
+                page_title = community.get('title');
+            } else if (typeof category !== 'undefined') {
+                page_title = '#' + category;
             } else {
-                page_title = `${page_title}: ${tt('g.all_tags')}`;
+                page_title = tt('g.all_tags');
             }
         }
         const layoutClass = this.props.blogmode
@@ -221,26 +224,42 @@ class PostsIndex extends React.Component {
                 <article className="articles">
                     <div className="articles__header row">
                         <div className="small-6 medium-6 large-6 column">
-                            <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
-                                {page_title}
+                            <h1 className="articles__h1 articles__h1--no-wrap">
+                                {page_title}{' '}
+                                {typeof category !== 'undefined' &&
+                                    category !== 'feed' && (
+                                        <small>
+                                            <Link to={'/' + order}>[x]</Link>
+                                        </small>
+                                    )}
                             </h1>
-                            <span className="hide-for-mq-large articles__header-select">
-                                <Topics
-                                    username={this.props.username}
-                                    order={topics_order}
-                                    current={category}
-                                    categories={categories}
-                                    compact
+                            {community && (
+                                <div style={{ fontSize: '80%', color: 'gray' }}>
+                                    #{category}
+                                </div>
+                            )}
+                            {!community &&
+                                typeof category !== 'undefined' &&
+                                category !== 'feed' && (
+                                    <div
+                                        style={{
+                                            fontSize: '80%',
+                                            color: 'gray',
+                                        }}
+                                    >
+                                        unmoderated tag
+                                    </div>
+                                )}
+                        </div>
+                        {category != 'feed' && (
+                            <div className="small-6 medium-5 large-5 column articles__header-select">
+                                <SortOrder
+                                    sortOrder={this.props.sortOrder}
+                                    topic={this.props.topic}
+                                    horizontal={false}
                                 />
-                            </span>
-                        </div>
-                        <div className="small-6 medium-5 large-5 column hide-for-large articles__header-select">
-                            <SortOrder
-                                sortOrder={this.props.sortOrder}
-                                topic={this.props.topic}
-                                horizontal={false}
-                            />
-                        </div>
+                            </div>
+                        )}
                         <div className="medium-1 show-for-mq-medium column">
                             <ArticleLayoutSelector />
                         </div>
@@ -268,6 +287,21 @@ class PostsIndex extends React.Component {
                 </article>
 
                 <aside className="c-sidebar c-sidebar--right">
+                    {community && (
+                        <div className="c-sidebar__module">
+                            <div className="c-sidebar__header">
+                                <h3 className="c-sidebar__h3">
+                                    {community.get('title')}
+                                </h3>
+                            </div>
+                            <strong>Moderators</strong>
+                            {teamMembers(community.get('team'))}
+                            <strong>Properties</strong>
+                            <pre style={{ fontSize: '75%' }}>
+                                {JSON.stringify(community, null, 2)}
+                            </pre>
+                        </div>
+                    )}
                     {this.props.isBrowser &&
                     !this.props.maybeLoggedIn &&
                     !this.props.username ? (
@@ -353,6 +387,10 @@ module.exports = {
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 feed_posts,
+                community: state.global.getIn(
+                    ['community', ownProps.params.category],
+                    null
+                ),
                 username:
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),

@@ -59,7 +59,7 @@ class PostSummary extends React.Component {
     }
 
     render() {
-        const { thumbSize, ignore } = this.props;
+        const { thumbSize, ignore, hideCategory } = this.props;
         const { post, content, featured, promoted, onClose } = this.props;
         const { account } = this.props;
         if (!content) return null;
@@ -149,23 +149,6 @@ class PostSummary extends React.Component {
             </h2>
         );
 
-        // author and category
-        const author_category = (
-            <span className="vcard">
-                <Userpic account={p.author} />
-                <Author
-                    author={p.author}
-                    authorRepLog10={authorRepLog10}
-                    follow={false}
-                    mute={false}
-                />
-                {} {tt('g.in')} <TagList post={p} single />&nbsp;•&nbsp;
-                <Link to={post_url}>
-                    <TimeAgoWrapper date={p.created} className="updated" />
-                </Link>
-            </span>
-        );
-
         // New Post Summary heading
         const summary_header = (
             <div className="articles__summary-header">
@@ -190,9 +173,11 @@ class PostSummary extends React.Component {
                             />
                         </span>
 
-                        <span className="articles__tag-link">
-                            {tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;
-                        </span>
+                        {hideCategory || (
+                            <span className="articles__tag-link">
+                                {tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;
+                            </span>
+                        )}
                         <Link className="timestamp__link" to={post_url}>
                             <span className="timestamp__time">
                                 <TimeAgoWrapper
@@ -222,23 +207,6 @@ class PostSummary extends React.Component {
                         </a>
                     )}
                 </div>
-            </div>
-        );
-
-        const content_footer = (
-            <div className="PostSummary__footer">
-                <Voting post={post} showList={false} />
-                <VotesAndComments post={post} commentsLink={comments_url} />
-                <span className="PostSummary__time_author_category">
-                    {!archived && (
-                        <Reblog
-                            author={p.author}
-                            permlink={p.permlink}
-                            parent_author={p.parent_author}
-                        />
-                    )}
-                    <span className="show-for-medium">{author_category}</span>
-                </span>
             </div>
         );
 
@@ -393,7 +361,7 @@ class PostSummary extends React.Component {
 
 export default connect(
     (state, props) => {
-        const { post } = props;
+        const { post, hideCategory } = props;
         const content = state.global.get('content').get(post);
         let pending_payout = 0;
         let total_payout = 0;
@@ -403,6 +371,7 @@ export default connect(
         }
         return {
             post,
+            hideCategory,
             content,
             pending_payout: pending_payout
                 ? pending_payout.toString()

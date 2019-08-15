@@ -273,6 +273,7 @@ class PostsIndex extends React.Component {
                             loading={fetching}
                             anyPosts
                             category={category}
+                            hideCategory={!!community}
                             loadMore={this.loadMore}
                             showFeatured
                             showPromoted

@@ -218,7 +218,7 @@ class PostsIndex extends React.Component {
                 <article className="articles">
                     <div className="articles__header row">
                         <div className="small-6 medium-6 large-6 column">
-                            <h1 className="articles__h1 articles__h1--no-wrap">
+                            <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
                                 {page_title}{' '}
                                 {typeof category !== 'undefined' &&
                                     category !== 'feed' && (
@@ -227,26 +227,44 @@ class PostsIndex extends React.Component {
                                         </small>
                                     )}
                             </h1>
-                            {community && (
-                                <div style={{ fontSize: '80%', color: 'gray' }}>
-                                    #{category}
-                                </div>
-                            )}
-                            {!community &&
-                                typeof category !== 'undefined' &&
-                                category !== 'feed' && (
+                            <div className="show-for-mq-large">
+                                {community && (
                                     <div
                                         style={{
                                             fontSize: '80%',
                                             color: 'gray',
                                         }}
                                     >
-                                        unmoderated tag
+                                        #{category}
                                     </div>
                                 )}
+                                {!community &&
+                                    typeof category !== 'undefined' &&
+                                    category !== 'feed' && (
+                                        <div
+                                            style={{
+                                                fontSize: '80%',
+                                                color: 'gray',
+                                            }}
+                                        >
+                                            unmoderated tag
+                                        </div>
+                                    )}
+                            </div>
+                            <span className="hide-for-mq-large articles__header-select">
+                                <Topics
+                                    username={this.props.username}
+                                    order={
+                                        category === 'feed' ? 'trending' : order
+                                    }
+                                    current={category}
+                                    categories={categories}
+                                    compact
+                                />
+                            </span>
                         </div>
                         {category != 'feed' && (
-                            <div className="small-6 medium-5 large-5 column articles__header-select">
+                            <div className="small-6 medium-5 large-5 column hide-for-large articles__header-select">
                                 <SortOrder
                                     sortOrder={this.props.sortOrder}
                                     topic={this.props.topic}

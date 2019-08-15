@@ -18,10 +18,6 @@ class Topics extends Component {
         current: '',
     };
 
-    handleChange = selectedOption => {
-        browserHistory.push(selectedOption.value);
-    };
-
     render() {
         const {
             order,
@@ -50,6 +46,10 @@ class Topics extends Component {
                 if (!currentTag && currentOrder) return opts['orderOnly'];
                 if (currentTag && !currentOrder) return opts['tagOnly'];
                 return opts['default'];
+            };
+
+            const onChange = selected => {
+                browserHistory.push(selected.value);
             };
 
             const extras = username => {
@@ -85,7 +85,7 @@ class Topics extends Component {
                         order
                     )}
                     options={opts}
-                    onChange={handleChange}
+                    onChange={onChange}
                 />
             );
         } else {
@@ -117,6 +117,39 @@ class Topics extends Component {
                                     >
                                         {tt('g.all_tags')}
                                     </Link>
+                                </div>
+                            </li>
+                            {username && (
+                                <li className="c-sidebar__list-item">
+                                    <div className="c-sidebar__header">
+                                        <Link
+                                            to={`/@${username}/feed`}
+                                            className="c-sidebar__link"
+                                            activeClassName="active"
+                                        >
+                                            {tt('g.my_feed')}
+                                        </Link>
+                                    </div>
+                                </li>
+                            )}
+                            {username && (
+                                <li className="c-sidebar__list-item">
+                                    <div className="c-sidebar__header">
+                                        <Link
+                                            to={`/@${username}/feed`}
+                                            className="c-sidebar__link"
+                                            activeClassName="active"
+                                        >
+                                            My subscriptions
+                                        </Link>
+                                    </div>
+                                </li>
+                            )}
+                            <li className="c-sidebar__list-item">
+                                <div
+                                    style={{ color: '#aaa', paddingTop: '1em' }}
+                                >
+                                    Communities
                                 </div>
                             </li>
                             {categoriesLinks}

@@ -4,8 +4,8 @@ import * as globalActions from './GlobalReducer';
 import reducer, { defaultState } from './GlobalReducer';
 
 const expectedStats = Map({
-    hide: false,
     gray: false,
+    hide: false,
     total_votes: 0,
 });
 
@@ -36,7 +36,7 @@ describe('Global reducer', () => {
     it('should return correct state for a RECEIVE_STATE action', () => {
         // Arrange
         const payload = {
-            content: Map({ barman: Map({ foo: 'choo', stats: '' }) }),
+            content: Map({ barman: Map({ foo: 'choo', stats: {} }) }),
         };
         const initial = reducer();
         // Act

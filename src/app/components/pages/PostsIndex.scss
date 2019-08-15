@@ -409,7 +409,6 @@
     font-weight: bold;
     @include font-size(18px);
     margin: 0;
-    text-transform: capitalize;
     @include MQ(M) {
       @include font-size(18px);
     }

@@ -68,10 +68,14 @@ class PostsIndex extends React.Component {
             category,
             order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
+
         if (category === 'feed') {
             accountname = order.slice(1);
             order = 'by_feed';
         }
+        if (!category) category = '';
+        category = category.toLowerCase();
+
         if (isFetchingOrRecentlyUpdated(this.props.status, order, category))
             return;
         const [author, permlink] = last_post.split('/');

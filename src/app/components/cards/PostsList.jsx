@@ -161,6 +161,7 @@ class PostsList extends React.Component {
             account,
             username,
             nsfwPref,
+            hideCategory,
         } = this.props;
         const { thumbSize } = this.state;
         const postsInfo = [];
@@ -277,6 +278,7 @@ class PostsList extends React.Component {
                                     thumbSize={thumbSize}
                                     ignore={item.ignore}
                                     nsfwPref={nsfwPref}
+                                    hideCategory={hideCategory}
                                 />
                             </li>
 
@@ -298,6 +300,7 @@ class PostsList extends React.Component {
                             thumbSize={thumbSize}
                             ignore={item.ignore}
                             nsfwPref={nsfwPref}
+                            hideCategory={hideCategory}
                         />
                     </li>
                 );

@@ -51,9 +51,7 @@ export function* fetchState(location_change_action) {
     if (pathname === server_location && is_initial_state) {
         ignore_fetch = true;
     }
-    if (pathname.includes('.html')) {
-        ignore_fetch = true;
-    }
+
     is_initial_state = false;
     if (ignore_fetch) {
         return;

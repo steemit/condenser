@@ -20,6 +20,12 @@ export async function getStateAsync(url) {
     if (url.indexOf('/author-rewards') !== -1)
         url = url.replace('/author-rewards', '/transfers');
 
+    // static .html pages do not need dynamic state.
+    if (url.includes('.html')) {
+        // return dummy state
+        return {};
+    }
+
     const raw = await api.getStateAsync(url);
     const cleansed = stateCleaner(raw);
     return cleansed;

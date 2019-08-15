@@ -56,6 +56,8 @@ export function contentStats(content) {
     if (!content) return {};
     if (!(content instanceof Map)) content = fromJS(content);
 
+    let stats = content.get('stats', {});
+
     let net_rshares_adj = Long.ZERO;
     let total_votes = 0;
 
@@ -80,15 +82,12 @@ export function contentStats(content) {
         parsePayoutAmount(content.get('pending_payout_value')) >= 0.02;
     const authorRepLog10 = repLog10(content.get('author_reputation'));
 
-    const gray =
+    stats['gray'] =
         !hasPendingPayout && (authorRepLog10 < 1 || meetsGrayThreshold);
-    const hide = !hasPendingPayout && authorRepLog10 < 0; // rephide
+    stats['hide'] = !hasPendingPayout && authorRepLog10 < 0; // rephide
+    stats['total_votes'] = total_votes;
 
-    return {
-        hide,
-        gray,
-        total_votes,
-    };
+    return stats;
 }
 
 export function filterTags(tags) {

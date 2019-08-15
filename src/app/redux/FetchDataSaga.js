@@ -134,15 +134,25 @@ export function* fetchData(action) {
     if (!category) category = '';
     category = category.toLowerCase();
 
+    const account_sorts = {
+        by_replies: 'replies',
+        by_feed: 'feed',
+        by_author: 'blog',
+        by_comments: 'comments',
+    };
+
     yield put(globalActions.fetchingData({ order, category }));
     let call_name, args;
-    if (
-        order === 'trending' ||
-        order == 'hot' ||
-        order == 'promoted' ||
-        order == 'payout' ||
-        order == 'created'
-    ) {
+    if (order in account_sorts) {
+        call_name = 'get_account_posts';
+        args = {
+            sort: account_sorts[order],
+            account: accountname,
+            limit: constants.FETCH_DATA_BATCH_SIZE,
+            start_author: author,
+            start_permlink: permlink,
+        };
+    } else {
         call_name = 'get_ranked_posts';
         args = {
             sort: order,
@@ -151,31 +161,10 @@ export function* fetchData(action) {
             start_author: author,
             start_permlink: permlink,
         };
-    } else if (
-        order === 'by_replies' ||
-        order == 'by_feed' ||
-        order == 'by_author' ||
-        order == 'by_comments'
-    ) {
-        const sort = {
-            by_replies: 'replies',
-            by_feed: 'feed',
-            by_author: 'blog',
-            by_comments: 'comments',
-        }[order];
-        call_name = 'get_account_posts';
-        args = {
-            sort,
-            account: accountname,
-            limit: constants.FETCH_DATA_BATCH_SIZE,
-            start_author: author,
-            start_permlink: permlink,
-        };
     }
 
     yield put(appActions.fetchDataBegin());
     try {
-        const firstPermlink = permlink;
         let fetched = 0;
         let endOfData = false;
         let fetchLimitReached = false;
@@ -212,7 +201,6 @@ export function* fetchData(action) {
                     order,
                     category,
                     author,
-                    firstPermlink,
                     accountname,
                     fetching: !fetchDone,
                     endOfData,

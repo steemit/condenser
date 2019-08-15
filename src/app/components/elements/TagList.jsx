@@ -1,18 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { filterTags } from 'app/utils/StateFunctions';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 
-export default ({ post, horizontal, single }) => {
-    let sort_order = 'trending';
-    if (process.env.BROWSER && window.last_sort_order)
-        sort_order = window.last_sort_order;
-
-    if (single)
-        return (
-            <Link to={`/${sort_order}/${post.category}`}>{post.category}</Link>
-        );
-
+function normalizeTags(post) {
     const json = post.json_metadata;
     let tags = [];
 
@@ -33,30 +26,37 @@ export default ({ post, horizontal, single }) => {
     // Category should always be first.
     tags.unshift(post.category);
 
-    tags = filterTags(tags);
+    return filterTags(tags);
+}
 
-    if (horizontal) {
-        // show it as a dropdown in Preview
-        const list = tags.map((tag, idx) => (
-            <Link to={`/${sort_order}/${tag}`} key={idx}>
-                {' '}
-                {tag}{' '}
-            </Link>
-        ));
-        return <div className="TagList__horizontal">{list}</div>;
+class TagList extends Component {
+    render() {
+        const { post, single, communities } = this.props;
+
+        const link = tag => {
+            const name = communities.getIn([tag, 'title'], '#' + tag);
+            return (
+                <Link to={`/trending/${tag}`} key={tag}>
+                    {' '}
+                    {name}{' '}
+                </Link>
+            );
+        };
+
+        if (single) return link(post.category);
+
+        return (
+            <div className="TagList__horizontal">
+                {normalizeTags(post).map(link)}
+            </div>
+        );
     }
-    if (tags.length == 1) {
-        return <Link to={`/${sort_order}/${tags[0]}`}>{tags[0]}</Link>;
-    }
-    const list = tags.map(tag => {
-        return { value: tag, link: `/${sort_order}/${tag}` };
-    });
-    return (
-        <DropdownMenu
-            selected={' ' + tags[0]}
-            className="TagList"
-            items={list}
-            el="div"
-        />
-    );
-};
+}
+
+export default connect(
+    // mapStateToProps
+    (state, ownProps) => ({
+        ...ownProps,
+        communities: state.global.get('community'),
+    })
+)(TagList);

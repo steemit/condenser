@@ -21,6 +21,7 @@ import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
 import GptAd from 'app/components/elements/GptAd';
+import { Map } from 'immutable';
 
 class Header extends React.Component {
     static propTypes = {
@@ -115,7 +116,6 @@ class Header extends React.Component {
             vertical,
             nightmodeEnabled,
             toggleNightmode,
-            userPath,
             showSidePanel,
             navigate,
             display_name,
@@ -261,7 +261,6 @@ class Header extends React.Component {
         const comments_link = `/@${username}/comments`;
         const wallet_link = `${walletUrl}/@${username}`;
         const settings_link = `/@${username}/settings`;
-        const pathCheck = userPath === '/submit.html' ? true : null;
 
         const user_menu = [
             {
@@ -405,9 +404,11 @@ const mapStateToProps = (state, ownProps) => {
         return {
             username: null,
             loggedIn: false,
+            community: state.global.get('community', Map({})),
         };
     }
 
+    // display name used in page title
     let display_name;
     const route = resolveRoute(ownProps.pathname);
     if (route.page === 'UserProfile') {
@@ -418,7 +419,6 @@ const mapStateToProps = (state, ownProps) => {
         display_name = profile ? normalizeProfile(profile.toJS()).name : null;
     }
 
-    const userPath = state.routing.locationBeforeTransitions.pathname;
     const username = state.user.getIn(['current', 'username']);
     const loggedIn = !!username;
     const current_account_name = username
@@ -427,13 +427,12 @@ const mapStateToProps = (state, ownProps) => {
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
     const walletUrl = state.app.get('walletUrl');
-    const content = state.global.get('content');
+    const content = state.global.get('content'); // TODO: needed for SSR?
 
     return {
         username,
         loggedIn,
-        userPath,
-        community: state.global.get('community'),
+        community: state.global.get('community', Map({})),
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         display_name,
         current_account_name,

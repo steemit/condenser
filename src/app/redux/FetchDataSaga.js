@@ -129,10 +129,14 @@ function* getAccounts(usernames) {
 }
 
 export function* fetchData(action) {
-    const { order, author, permlink, accountname, postFilter } = action.payload;
-    let { category } = action.payload;
-    if (!category) category = '';
-    category = category.toLowerCase();
+    const {
+        order,
+        category,
+        author,
+        permlink,
+        accountname,
+        postFilter,
+    } = action.payload;
 
     const account_sorts = {
         by_replies: 'replies',

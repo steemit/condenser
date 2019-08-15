@@ -1,5 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import { api } from '@steemit/steem-js';
+import { callBridge } from 'app/utils/steemApi';
 import * as appActions from './AppReducer';
 import * as globalActions from './GlobalReducer';
 import constants from './constants';
@@ -38,8 +39,9 @@ describe('FetchDataSaga', () => {
 
             actual = gen.next().value;
             expect(actual).toEqual(
-                call([api, api.getDiscussionsByBlogAsync], {
-                    tag: payload.accountname,
+                call(callBridge, 'get_account_posts', {
+                    sort: 'blog',
+                    account: payload.accountname,
                     limit: constants.FETCH_DATA_BATCH_SIZE,
                     start_author: payload.author,
                     start_permlink: payload.permlink,
@@ -76,8 +78,9 @@ describe('FetchDataSaga', () => {
         it('should finish fetching data filtering 1 out', () => {
             let actual = gen.next().value;
             expect(actual).toEqual(
-                call([api, api.getDiscussionsByBlogAsync], {
-                    tag: payload.accountname,
+                call(callBridge, 'get_account_posts', {
+                    sort: 'blog',
+                    account: payload.accountname,
                     limit: constants.FETCH_DATA_BATCH_SIZE,
                     start_author: 'bob',
                     start_permlink: 'post1',
@@ -139,8 +142,9 @@ describe('FetchDataSaga', () => {
 
         actual = gen.next().value;
         expect(actual).toEqual(
-            call([api, api.getDiscussionsByBlogAsync], {
-                tag: payload.accountname,
+            call(callBridge, 'get_account_posts', {
+                sort: 'blog',
+                account: payload.accountname,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: payload.author,
                 start_permlink: payload.permlink,
@@ -172,8 +176,9 @@ describe('FetchDataSaga', () => {
 
         actual = gen.next().value;
         expect(actual).toEqual(
-            call([api, api.getDiscussionsByBlogAsync], {
-                tag: payload.accountname,
+            call(callBridge, 'get_account_posts', {
+                sort: 'blog',
+                account: payload.accountname,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: 'alice',
             })

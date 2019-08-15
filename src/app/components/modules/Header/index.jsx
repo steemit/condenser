@@ -146,14 +146,21 @@ class Header extends React.Component {
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
                 tags = [topic];
-                const type =
-                    route.params[0] == 'payout_comments' ? 'comments' : 'posts';
+
                 let prefix = route.params[0];
                 if (prefix == 'created') prefix = 'New';
-                if (prefix == 'payout') prefix = 'Pending payout';
-                if (prefix == 'payout_comments') prefix = 'Pending payout';
-                if (topic !== '') prefix += ` ${topic}`;
-                page_title = `${prefix} ${type}`;
+                if (prefix == 'payout') prefix = 'Pending';
+                if (prefix == 'payout_comments') prefix = 'Pending';
+                page_title = prefix;
+                if (topic !== '') {
+                    let name = this.props.community.getIn(
+                        [topic, 'title'],
+                        '#' + topic
+                    );
+                    page_title = `${name} / ${page_title}`;
+                } else {
+                    page_title += ' posts';
+                }
             }
         } else if (route.page === 'Post') {
             const user = `${route.params[1]}`.replace('@', '');
@@ -426,6 +433,7 @@ const mapStateToProps = (state, ownProps) => {
         username,
         loggedIn,
         userPath,
+        community: state.global.get('community'),
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         display_name,
         current_account_name,

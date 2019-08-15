@@ -106,14 +106,12 @@ class PostsIndex extends React.Component {
             this.props.gptEnabled &&
             !GptUtils.HasBannedTags([topic], gptBannedTags);
 
-        let topics_order = order;
         let posts = [];
         let account_name = '';
         let emptyText = '';
         if (category === 'feed') {
             account_name = order.slice(1);
             order = 'by_feed';
-            topics_order = 'trending';
             posts = this.props.feed_posts;
             const isMyAccount = this.props.username === account_name;
             if (isMyAccount) {
@@ -152,7 +150,7 @@ class PostsIndex extends React.Component {
                 emptyText = (
                     <div>
                         {'No ' +
-                            topics_order +
+                            order +
                             (category ? ' #' + category : '') +
                             ' posts found'}
                     </div>
@@ -322,7 +320,7 @@ class PostsIndex extends React.Component {
 
                 <aside className="c-sidebar c-sidebar--left">
                     <Topics
-                        order={topics_order}
+                        order={category === 'feed' ? 'trending' : order}
                         current={category}
                         compact={false}
                         username={this.props.username}

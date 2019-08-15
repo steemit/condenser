@@ -115,8 +115,8 @@
         "to": " to ",
         "topics": "Topics",
         "toggle_nightmode": "Toggle Night Mode",
-        "all_tags": "All tags",
-        "all_tags_mobile": "All content",
+        "all_tags": "All posts",
+        "all_tags_mobile": "All posts",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",
         "try_again": "Try Again",
@@ -230,7 +230,7 @@
         "read_only_mode":
             "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
         "tags_and_topics": "Tags",
-        "show_more_topics": "View all tags",
+        "show_more_topics": "Explore communities",
         "basic": "Basic",
         "advanced": "Advanced",
         "views": {

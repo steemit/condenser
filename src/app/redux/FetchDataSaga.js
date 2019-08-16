@@ -57,7 +57,7 @@ export function* fetchState(location_change_action) {
 
     yield put(appActions.fetchDataBegin());
     try {
-        const state = yield call(getStateAsync, url);
+        const state = yield call(getStateAsync, url, 'maitland');
         yield put(globalActions.receiveState(state));
         yield call(syncSpecialPosts);
     } catch (error) {

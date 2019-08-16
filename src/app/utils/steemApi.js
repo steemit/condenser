@@ -20,10 +20,9 @@ export async function getStateAsync(url, observer) {
         url = url.replace('/curation-rewards', '/transfers');
     if (url.indexOf('/author-rewards') !== -1)
         url = url.replace('/author-rewards', '/transfers');
-
     const raw = await callBridge('get_state', {
         path: url,
-        observer: observer,
+        observer: observer === undefined ? null : observer,
     });
     const cleansed = stateCleaner(raw);
     return cleansed;

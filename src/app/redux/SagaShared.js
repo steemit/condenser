@@ -56,7 +56,13 @@ export function* getAccount(username, force = false) {
 /** Manual refreshes.  The router is in FetchDataSaga. */
 export function* getState({ payload: { url } }) {
     try {
-        const state = yield call(getStateAsync, url, 'maitland');
+        let username = null;
+        if (process.env.BROWSER) {
+            [username] = yield select(state => [
+                state.user.getIn(['current', 'username']),
+            ]);
+        }
+        const state = yield call(getStateAsync, url, username);
         yield put(globalActions.receiveState(state));
     } catch (error) {
         console.error('~~ Saga getState error ~~>', url, error);

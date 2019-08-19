@@ -25,7 +25,7 @@ function hideSubtree(cont, c) {
 
 function hasPositivePayout(cont, c) {
     const post = cont.get(c);
-    if (Long.fromString(String(content.get('net_rshares'))).gt(Long.ZERO)) {
+    if (Long.fromString(String(cont.get('net_rshares'))).gt(Long.ZERO)) {
         return true;
     }
     if (post.get('replies').find(reply => hasPositivePayout(cont, reply))) {

@@ -162,7 +162,7 @@ class Header extends React.Component {
                 const post_content = content.get(`${user}/${slug}`);
                 if (post_content) {
                     const p = extractContent(immutableAccessor, post_content);
-                    const tags = p.json_metadata.tags || [];
+                    tags = p.json_metadata.tags || [];
                 }
             }
             sort_order = '';

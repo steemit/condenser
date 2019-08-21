@@ -4,32 +4,6 @@ import { connect } from 'react-redux';
 import { GptUtils } from 'app/utils/GptUtils';
 
 class GptAd extends Component {
-    componentDidMount() {
-        if (!this.ad_identifier || !this.enabled) return;
-        const ad_identifier = this.ad_identifier;
-        const unique_slot_id = this.unique_slot_id;
-        const isNsfw = GptUtils.HasBannedTags(this.tags, this.bannedTags);
-
-        freestar.newAdSlots([
-            {
-                placementName: ad_identifier, // This has to match up with the backend and frontend and all the other ends.
-                slotId: unique_slot_id, // This has to be unique per page and must match the id of the ad element.
-            },
-        ]);
-
-        freestar.queue.push(e => {
-            googletag.pubads().setTargeting('NSFW', isNsfw);
-
-            googletag.pubads().addEventListener('impressionViewable', e => {
-                window.dispatchEvent(new Event('gptadshown', e));
-            });
-
-            googletag.pubads().addEventListener('slotRenderEnded', e => {
-                window.dispatchEvent(new Event('gptadshown', e));
-            });
-        });
-    }
-
     constructor(props) {
         super(props);
         const { ad_identifier, enabled, type, tags, bannedTags } = props;
@@ -55,6 +29,36 @@ class GptAd extends Component {
             // );
         }
         this.unique_slot_id = `${this.ad_identifier}-${Date.now()}`;
+    }
+
+    componentDidMount() {
+        if (!this.ad_identifier || !this.enabled) return;
+        const ad_identifier = this.ad_identifier;
+        const unique_slot_id = this.unique_slot_id;
+        const isNsfw = GptUtils.HasBannedTags(this.tags, this.bannedTags);
+
+        if (!isNsfw) {
+            freestar.newAdSlots([
+                {
+                    placementName: ad_identifier, // This has to match up with the backend and frontend and all the other ends.
+                    slotId: unique_slot_id, // This has to be unique per page and must match the id of the ad element.
+                },
+            ]);
+        } else {
+            freestar.queue.push(e => {
+                googletag.pubads().setTargeting('NSFW', isNsfw);
+            });
+        }
+
+        freestar.queue.push(e => {
+            googletag.pubads().addEventListener('impressionViewable', e => {
+                window.dispatchEvent(new Event('gptadshown', e));
+            });
+
+            googletag.pubads().addEventListener('slotRenderEnded', e => {
+                window.dispatchEvent(new Event('gptadshown', e));
+            });
+        });
     }
 
     render() {

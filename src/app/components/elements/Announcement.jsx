@@ -7,7 +7,7 @@ export const Announcement = ({ onClose }) => (
             Important Upgrade to Steem Blockchain Coming August 27, click{' '}
             <a
                 className="announcement-banner__link"
-                href="https://steemit.com/@steemitblog/hf-21-survival-guide"
+                href="https://steemit.com/hf21/@steemitblog/hardfork-21-survival-guide"
             >
                 here.
             </a>

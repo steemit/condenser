@@ -174,7 +174,7 @@ class Post extends React.Component {
                             <GptAd
                                 tags={tags}
                                 type="Freestar"
-                                id="steemit_728x90_468x60_300x250_BetweenComments"
+                                id="bsa-zone_1566494240874-7_123456"
                             />
                         </div>
                     ) : null}
@@ -254,7 +254,7 @@ class Post extends React.Component {
                         <GptAd
                             tags={tags}
                             type="Freestar"
-                            id="steemit_728x90_468x60_300x250_AboveComments"
+                            id="bsa-zone_1566494147292-7_123456"
                         />
                     </div>
                 ) : null}
@@ -282,7 +282,7 @@ class Post extends React.Component {
                         <GptAd
                             tags={tags}
                             type="Freestar"
-                            id="steemit_728x90_468x60_300x250_BelowComments"
+                            id="bsa-zone_1566494371533-0_123456"
                         />
                     </div>
                 ) : null}

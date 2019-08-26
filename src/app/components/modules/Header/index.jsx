@@ -123,7 +123,7 @@ class Header extends React.Component {
             content,
         } = this.props;
 
-        const { showAd, showAnnouncement } = this.state;
+        let { showAd, showAnnouncement } = this.state;
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
@@ -291,6 +291,7 @@ class Header extends React.Component {
                   }
                 : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
+        showAd = true;
         return (
             <Headroom
                 onUnpin={e => this.headroomOnUnpin(e)}

@@ -4,10 +4,11 @@ import React from 'react';
 export const Announcement = ({ onClose }) => (
     <div className="annoucement-banner">
         <p className="announcement-banner__text">
-            Important Upgrade to Steem Blockchain Coming August 27, click{' '}
+            The Steem Blockchain is currently experiencing issues. Funds are
+            safe. Updates{' '}
             <a
                 className="announcement-banner__link"
-                href="https://steemit.com/hf21/@steemitblog/hardfork-21-survival-guide"
+                href="https://twitter.com/SteemNetwork/status/1166384414781313024"
             >
                 here.
             </a>

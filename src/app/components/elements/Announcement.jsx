@@ -7,7 +7,7 @@ export const Announcement = ({ onClose }) => (
             #NewSteem is live. More{' '}
             <a
                 className="announcement-banner__link"
-                href="https://steemit.com/@steemitblog/newsteam-is-live"
+                href="https://steemit.com/@steemitblog/newsteem-is-live"
             >
                 here.
             </a>

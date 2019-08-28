@@ -102,8 +102,8 @@ export default connect(
             'googleAds',
             `gptCategorySlots`,
         ]);
-        const bannedTags =
-            state.app.getIn(['googleAds', 'gptBannedTags']).toJS() || [];
+        const bannedTags = state.app.getIn(['googleAds', 'gptBannedTags']);
+        const bannedTagsJS = bannedTags ? bannedTags.toJS() : [];
 
         let slotName = props.slotName;
         if (!slotName) {
@@ -119,7 +119,7 @@ export default connect(
             enabled,
             ad: slot,
             ad_identifier: slotName,
-            bannedTags,
+            bannedTagsJS,
             ...props,
         };
     },

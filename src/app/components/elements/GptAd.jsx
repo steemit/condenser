@@ -36,11 +36,12 @@ class GptAd extends Component {
         if (!this.ad_identifier || !this.enabled) return;
         const ad_identifier = this.ad_identifier;
         const unique_slot_id = this.unique_slot_id;
-        const isNsfw = GptUtils.HasBannedTags(this.tags, this.bannedTags);
+        // const isNsfw = GptUtils.HasBannedTags(this.tags, this.bannedTags);
 
-        if (!isNsfw) {
-            window.bsas2s.refresh(unique_slot_id);
-        }
+        window.optimize.queue.push(() => {
+            window.optimize.push(unique_slot_id);
+            window.optimize.refresh(unique_slot_id);
+        });
         //TODO: I am pretty sure we will need to do something like this because of the crazy header issues. But skipping until we get BSA working.
         // freestar.queue.push(e => {
         //     googletag.pubads().addEventListener('impressionViewable', e => {

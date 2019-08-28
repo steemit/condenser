@@ -28,8 +28,8 @@ class GptAd extends Component {
             //     }' will be disabled because we were unable to find the ad details.`
             // );
         }
-        // this.unique_slot_id = `${this.ad_identifier}-${Date.now()}`;
-        this.unique_slot_id = `${this.ad_identifier}`; //TODO: I am pretty sure we will need to do something like this but skipping until we get the other BSA ads up and working.
+        this.unique_slot_id = `${this.ad_identifier}_${Date.now()}`;
+        // this.unique_slot_id = `${this.ad_identifier}`; //TODO: I am pretty sure we will need to do something like this but skipping until we get the other BSA ads up and working.
     }
 
     componentDidMount() {

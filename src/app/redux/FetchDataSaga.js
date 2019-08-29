@@ -48,11 +48,15 @@ export function* fetchState(location_change_action) {
         state.offchain.get('server_location')
     );
     const ignore_fetch = pathname === server_location && is_initial_state;
-    is_initial_state = false;
+
     if (ignore_fetch) {
         return;
     }
-
+    is_initial_state = false;
+    if (process.env.BROWSER && window && window.optimize) {
+        console.log('REFRESH ADS');
+        window.optimize.refreshAll({ refresh: false });
+    }
     const url = pathname;
 
     yield put(appActions.fetchDataBegin());

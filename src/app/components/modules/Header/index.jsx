@@ -123,7 +123,7 @@ class Header extends React.Component {
             content,
         } = this.props;
 
-        const { showAd, showAnnouncement } = this.state;
+        let { showAd, showAnnouncement } = this.state;
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
@@ -291,6 +291,7 @@ class Header extends React.Component {
                   }
                 : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
+        showAd = true;
         return (
             <Headroom
                 onUnpin={e => this.headroomOnUnpin(e)}
@@ -305,7 +306,7 @@ class Header extends React.Component {
                         <GptAd
                             tags={tags}
                             type="Freestar"
-                            id="steemit_728x90_970x90_970x250_320x50_ATF"
+                            id="bsa-zone_1566493796250-1_123456"
                         />
                     </div>
 

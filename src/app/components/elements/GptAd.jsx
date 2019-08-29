@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { GptUtils } from 'app/utils/GptUtils';
-
 class GptAd extends Component {
     constructor(props) {
         super(props);
@@ -29,29 +27,24 @@ class GptAd extends Component {
             // );
         }
         this.unique_slot_id = `${this.ad_identifier}_${Date.now()}`;
-        // this.unique_slot_id = `${this.ad_identifier}`; //TODO: I am pretty sure we will need to do something like this but skipping until we get the other BSA ads up and working.
     }
 
     componentDidMount() {
         if (!this.ad_identifier || !this.enabled) return;
         const ad_identifier = this.ad_identifier;
         const unique_slot_id = this.unique_slot_id;
-        // const isNsfw = GptUtils.HasBannedTags(this.tags, this.bannedTags);
 
         window.optimize.queue.push(() => {
             window.optimize.push(unique_slot_id);
-            window.optimize.refresh(unique_slot_id);
+
+            googletag.pubads().addEventListener('impressionViewable', e => {
+                window.dispatchEvent(new Event('gptadshown', e));
+            });
+
+            googletag.pubads().addEventListener('slotRenderEnded', e => {
+                window.dispatchEvent(new Event('gptadshown', e));
+            });
         });
-        //TODO: I am pretty sure we will need to do something like this because of the crazy header issues. But skipping until we get BSA working.
-        // freestar.queue.push(e => {
-        //     googletag.pubads().addEventListener('impressionViewable', e => {
-        //         window.dispatchEvent(new Event('gptadshown', e));
-        //     });
-        //
-        //     googletag.pubads().addEventListener('slotRenderEnded', e => {
-        //         window.dispatchEvent(new Event('gptadshown', e));
-        //     });
-        // });
     }
 
     render() {

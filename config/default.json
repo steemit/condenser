@@ -58,6 +58,7 @@
   "conveyor_username": false,
   "special_posts_url": false,
   "wallet_url": "https://wallet.steemitdev.com",
+  "gpt_banned_tags": ["nsfw", "tante"],
   "google_ad_enabled": null,
   "google_ad_test": null,
   "google_ad_client": null,

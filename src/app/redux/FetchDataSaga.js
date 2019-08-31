@@ -48,19 +48,16 @@ export function* fetchState(location_change_action) {
         state.offchain.get('server_location')
     );
     const ignore_fetch = pathname === server_location && is_initial_state;
-    is_initial_state = false;
+
     if (ignore_fetch) {
         return;
     }
-
-    let url = `${pathname}`;
-    if (url === '/') url = 'trending';
-    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
-    // to resolve data correctly
-    if (url.indexOf('/curation-rewards') !== -1)
-        url = url.replace('/curation-rewards', '/transfers');
-    if (url.indexOf('/author-rewards') !== -1)
-        url = url.replace('/author-rewards', '/transfers');
+    is_initial_state = false;
+    if (process.env.BROWSER && window && window.optimize) {
+        console.log('REFRESH ADS');
+        window.optimize.refreshAll({ refresh: false });
+    }
+    const url = pathname;
 
     yield put(appActions.fetchDataBegin());
     try {
@@ -293,53 +290,6 @@ export function* fetchData(action) {
         yield put(appActions.steemApiError(error.message));
     }
     yield put(appActions.fetchDataEnd());
-}
-
-// export function* watchMetaRequests() {
-//     yield* takeLatest('global/REQUEST_META', fetchMeta);
-// }
-export function* fetchMeta({ payload: { id, link } }) {
-    try {
-        const metaArray = yield call(
-            () =>
-                new Promise((resolve, reject) => {
-                    function reqListener() {
-                        const resp = JSON.parse(this.responseText);
-                        if (resp.error) {
-                            reject(resp.error);
-                            return;
-                        }
-                        resolve(resp);
-                    }
-                    const oReq = new XMLHttpRequest();
-                    oReq.addEventListener('load', reqListener);
-                    oReq.open('GET', '/http_metadata/' + link);
-                    oReq.send();
-                })
-        );
-        const { title, metaTags } = metaArray;
-        let meta = { title };
-        for (let i = 0; i < metaTags.length; i++) {
-            const [name, content] = metaTags[i];
-            meta[name] = content;
-        }
-        // http://postimg.org/image/kbefrpbe9/
-        meta = {
-            link,
-            card: meta['twitter:card'],
-            site: meta['twitter:site'], // @username tribbute
-            title: meta['twitter:title'],
-            description: meta['twitter:description'],
-            image: meta['twitter:image'],
-            alt: meta['twitter:alt'],
-        };
-        if (!meta.image) {
-            meta.image = meta['twitter:image:src'];
-        }
-        yield put(globalActions.receiveMeta({ id, meta }));
-    } catch (error) {
-        yield put(globalActions.receiveMeta({ id, meta: { error } }));
-    }
 }
 
 /**

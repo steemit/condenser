@@ -10,6 +10,7 @@ export default function ServerHTML({
     shouldSeeAds,
     adClient,
     gptEnabled,
+    gptBannedTags,
     gptBidding,
     shouldSeeCookieConsent,
     cookieConsentApiKey,
@@ -179,23 +180,13 @@ export default function ServerHTML({
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `
-                            var freestar = freestar || {};
-                            freestar.hitTime = Date.now();
-                            freestar.queue = freestar.queue || [];
-                            freestar.config = freestar.config || {};
-                            freestar.debug =
-                            window.location.search.indexOf("fsdebug") === -1 ? false : true; // NICE.
-                            freestar.config.enabled_slots = [];
-
-                            !(function(a, b) {
-                            var c = b.getElementsByTagName("script")[0],
-                              d = b.createElement("script"),
-                              e = "https://a.pub.network/steemit-com";
-                            (e += freestar.debug ? "/qa/pubfig.min.js" : "/pubfig.min.js"),
-                              (d.async = !0),
-                              (d.src = e),
-                              c.parentNode.insertBefore(d, c);
-                            })(window, document);
+                            (function() {
+                              var bsa_optimize = document.createElement('script');
+                              bsa_optimize.type = 'text/javascript';
+                              bsa_optimize.async = true;
+                              bsa_optimize.src = 'https://cdn-s2s.buysellads.net/pub/steemit.js?' + (new Date() - new Date() % 3600000);
+                              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(bsa_optimize);
+                            })();
                         `,
                         }}
                     />

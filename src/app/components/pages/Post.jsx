@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
+import { immutableAccessor } from 'app/utils/Accessors';
+import extractContent from 'app/utils/ExtractContent';
 import { connect } from 'react-redux';
 
 import { sortComments } from 'app/components/cards/Comment';
@@ -103,6 +105,11 @@ class Post extends React.Component {
                 </div>
             );
 
+        // TODO: This data model needs some help.
+        const post_content = content.get(post);
+        const p = extractContent(immutableAccessor, post_content);
+        const tags = p.json_metadata.tags;
+
         // A post should be hidden if it is not special, is not told to "show
         // anyway", and is designated "gray".
         const special = dis.get('special');
@@ -141,24 +148,20 @@ class Post extends React.Component {
         // Don't render too many comments on server-side
         const commentLimit = 100;
         if (global.process !== undefined && replies.length > commentLimit) {
-            console.log(
-                `Too many comments, ${replies.length - commentLimit} omitted.`
-            );
             replies = replies.slice(0, commentLimit);
         }
         let commentCount = 0;
         const positiveComments = replies.map(reply => {
             commentCount++;
-            let showAd =
+            const showAd =
                 commentCount % 5 == 0 &&
                 commentCount != replies.length &&
                 commentCount != commentLimit;
 
             return (
-                <div>
+                <div key={post + reply}>
                     <Comment
                         root
-                        key={post + reply}
                         content={reply}
                         cont={content}
                         sort_order={sortOrder}
@@ -169,8 +172,9 @@ class Post extends React.Component {
                     {this.props.gptEnabled && showAd ? (
                         <div className="Post_footer__ad">
                             <GptAd
+                                tags={tags}
                                 type="Freestar"
-                                id="steemit_728x90_468x60_300x250_BetweenComments"
+                                id="bsa-zone_1566494240874-7_123456"
                             />
                         </div>
                     ) : null}
@@ -248,8 +252,9 @@ class Post extends React.Component {
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
                         <GptAd
+                            tags={tags}
                             type="Freestar"
-                            id="steemit_728x90_468x60_300x250_AboveComments"
+                            id="bsa-zone_1566494147292-7_123456"
                         />
                     </div>
                 ) : null}
@@ -275,8 +280,9 @@ class Post extends React.Component {
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
                         <GptAd
+                            tags={tags}
                             type="Freestar"
-                            id="steemit_728x90_468x60_300x250_BelowComments"
+                            id="bsa-zone_1566494371533-0_123456"
                         />
                     </div>
                 ) : null}
@@ -286,22 +292,9 @@ class Post extends React.Component {
 }
 
 const emptySet = Set();
-
 export default connect((state, ownProps) => {
-    const current_user = state.user.get('current');
-    let ignoring;
-    if (current_user) {
-        const key = [
-            'follow',
-            'getFollowingAsync',
-            current_user.get('username'),
-            'ignore_result',
-        ];
-        ignoring = state.global.getIn(key, emptySet);
-    }
     return {
         content: state.global.get('content'),
-        ignoring,
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',
         gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),

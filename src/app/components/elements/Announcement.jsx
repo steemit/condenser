@@ -4,13 +4,8 @@ import React from 'react';
 export const Announcement = ({ onClose }) => (
     <div className="annoucement-banner">
         <p className="announcement-banner__text">
-            #NewSteem is live. More{' '}
-            <a
-                className="announcement-banner__link"
-                href="https://steemit.com/hf22/@steemitblog/hardfork-22-live"
-            >
-                here.
-            </a>
+            Steemit.com is now fully operational as are all Steem applications
+            leveraging our API. Steem on.
         </p>
         <button className="close-button" type="button" onClick={onClose}>
             &times;

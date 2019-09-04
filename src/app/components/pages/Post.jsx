@@ -249,7 +249,7 @@ class Post extends React.Component {
                         </div>
                     </div>
                 )}
-                {this.props.gptEnabled ? (
+                {this.props.gptEnabled && commentCount >= 5 ? (
                     <div className="Post_footer__ad">
                         <GptAd
                             tags={tags}
@@ -277,7 +277,7 @@ class Post extends React.Component {
                         </div>
                     </div>
                 </div>
-                {this.props.gptEnabled && commentCount >= 5 ? (
+                {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
                         <GptAd
                             tags={tags}

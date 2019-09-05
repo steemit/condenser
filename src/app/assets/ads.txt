@@ -43,7 +43,7 @@ freewheel.tv, 19133, RESELLER
 adform.com, 2078, RESELLER
 improvedigital.com, 1065, RESELLER
 #TripleLift
-triplelift.com, 7186, DIRECT, 6c33edb13117fd86
+triplelift.com, 7328, DIRECT, 6c33edb13117fd86
 appnexus.com, 1314, RESELLER
 spotxchange.com, 228454, RESELLER, 7842df1d2fe2db34
 spotx.tv, 228454, RESELLER, 7842df1d2fe2db34

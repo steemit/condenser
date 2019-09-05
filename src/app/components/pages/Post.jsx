@@ -154,9 +154,9 @@ class Post extends React.Component {
         const positiveComments = replies.map(reply => {
             commentCount++;
             const showAd =
-                commentCount % 5 == 0 &&
-                commentCount != replies.length &&
-                commentCount != commentLimit;
+                commentCount % 5 === 0 &&
+                commentCount !== replies.length &&
+                commentCount !== commentLimit;
 
             return (
                 <div key={post + reply}>
@@ -249,7 +249,7 @@ class Post extends React.Component {
                         </div>
                     </div>
                 )}
-                {this.props.gptEnabled ? (
+                {this.props.gptEnabled && commentCount >= 5 ? (
                     <div className="Post_footer__ad">
                         <GptAd
                             tags={tags}

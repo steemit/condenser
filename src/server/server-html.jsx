@@ -191,6 +191,12 @@ export default function ServerHTML({
                         }}
                     />
                 ) : null}
+                {gptEnabled ? (
+                    <script
+                        src="//m.servedby-buysellads.com/monetization.js"
+                        type="text/javascript"
+                    />
+                ) : null}
                 {shouldSeeCookieConsent ? (
                     <script
                         id="Cookiebot"
@@ -212,6 +218,19 @@ export default function ServerHTML({
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}
+                {gptEnabled ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                            (function(){
+                              if(typeof _bsa !== 'undefined' && _bsa) {
+                                _bsa.init('fancybar', 'CE7D653L', 'placement:steemitcom');
+                              }
+                            })();
+                        `,
+                        }}
+                    />
+                ) : null}
             </body>
         </html>
     );

@@ -3,7 +3,7 @@ import { api } from '@steemit/steem-js';
 
 import stateCleaner from 'app/redux/stateCleaner';
 
-export async function getStateAsync(url) {
+export async function getStateAsync(url, observer) {
     // strip off query string
     url = url.split('?')[0];
 
@@ -20,8 +20,10 @@ export async function getStateAsync(url) {
         url = url.replace('/curation-rewards', '/transfers');
     if (url.indexOf('/author-rewards') !== -1)
         url = url.replace('/author-rewards', '/transfers');
-
-    const raw = await callBridge('get_state', { path: url });
+    const raw = await callBridge('get_state', {
+        path: url,
+        observer: observer === undefined ? null : observer,
+    });
     const cleansed = stateCleaner(raw);
     return cleansed;
 }

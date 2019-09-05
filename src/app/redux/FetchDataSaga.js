@@ -57,7 +57,13 @@ export function* fetchState(location_change_action) {
 
     yield put(appActions.fetchDataBegin());
     try {
-        const state = yield call(getStateAsync, url);
+        let username = null;
+        if (process.env.BROWSER) {
+            [username] = yield select(state => [
+                state.user.getIn(['current', 'username']),
+            ]);
+        }
+        const state = yield call(getStateAsync, url, username);
         yield put(globalActions.receiveState(state));
         yield call(syncSpecialPosts);
     } catch (error) {

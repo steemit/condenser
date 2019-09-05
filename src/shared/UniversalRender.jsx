@@ -468,7 +468,7 @@ async function apiGetState(url) {
         offchain = get_state_perf;
     }
 
-    offchain = await getStateAsync(url);
+    offchain = await getStateAsync(url, null);
 
     return offchain;
 }

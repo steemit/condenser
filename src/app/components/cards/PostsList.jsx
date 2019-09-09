@@ -286,7 +286,7 @@ class PostsList extends React.Component {
                                 <GptAd
                                     tags={[category]}
                                     type="Freestar"
-                                    id="steemit_728x90_468x60_300x250_InFeed"
+                                    id="bsa-zone_1566495089502-1_123456"
                                 />
                             </div>
                         </div>

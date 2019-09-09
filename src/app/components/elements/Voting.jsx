@@ -459,7 +459,9 @@ class Voting extends React.Component {
                 }),
             });
         }
-        if (total_author_payout > 0) {
+        // - payout instead of total_author_payout: total_author_payout can be zero with 100% beneficiary
+        // - !cashout_active is needed to avoid the info is also shown for pending posts.
+        if (!cashout_active && payout > 0) {
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts', {
                     value: formatDecimal(

@@ -1,35 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { GptUtils } from 'app/utils/GptUtils';
-
 class GptAd extends Component {
-    componentDidMount() {
-        if (!this.ad_identifier || !this.enabled) return;
-        const ad_identifier = this.ad_identifier;
-        const unique_slot_id = this.unique_slot_id;
-        const isNsfw = GptUtils.HasBannedTags(this.tags, this.bannedTags);
-
-        freestar.newAdSlots([
-            {
-                placementName: ad_identifier, // This has to match up with the backend and frontend and all the other ends.
-                slotId: unique_slot_id, // This has to be unique per page and must match the id of the ad element.
-            },
-        ]);
-
-        freestar.queue.push(e => {
-            googletag.pubads().setTargeting('NSFW', isNsfw);
-
-            googletag.pubads().addEventListener('impressionViewable', e => {
-                window.dispatchEvent(new Event('gptadshown', e));
-            });
-
-            googletag.pubads().addEventListener('slotRenderEnded', e => {
-                window.dispatchEvent(new Event('gptadshown', e));
-            });
-        });
-    }
-
     constructor(props) {
         super(props);
         const { ad_identifier, enabled, type, tags, bannedTags } = props;
@@ -54,7 +26,25 @@ class GptAd extends Component {
             //     }' will be disabled because we were unable to find the ad details.`
             // );
         }
-        this.unique_slot_id = `${this.ad_identifier}-${Date.now()}`;
+        this.unique_slot_id = `${this.ad_identifier}_${Date.now()}`;
+    }
+
+    componentDidMount() {
+        if (!this.ad_identifier || !this.enabled) return;
+        const ad_identifier = this.ad_identifier;
+        const unique_slot_id = this.unique_slot_id;
+
+        window.optimize.queue.push(() => {
+            window.optimize.push(unique_slot_id);
+
+            googletag.pubads().addEventListener('impressionViewable', e => {
+                window.dispatchEvent(new Event('gptadshown', e));
+            });
+
+            googletag.pubads().addEventListener('slotRenderEnded', e => {
+                window.dispatchEvent(new Event('gptadshown', e));
+            });
+        });
     }
 
     render() {
@@ -98,8 +88,8 @@ export default connect(
             'googleAds',
             `gptCategorySlots`,
         ]);
-        const bannedTags =
-            state.app.getIn(['googleAds', 'gptBannedTags']).toJS() || [];
+        const bannedTags = state.app.getIn(['googleAds', 'gptBannedTags']);
+        const bannedTagsJS = bannedTags ? bannedTags.toJS() : [];
 
         let slotName = props.slotName;
         if (!slotName) {
@@ -113,9 +103,9 @@ export default connect(
 
         return {
             enabled,
-            ad: slot,
+            ad: slot, //TODO: Clean this up. This is from old GPT/Coinzilla stuffs
             ad_identifier: slotName,
-            bannedTags,
+            bannedTagsJS,
             ...props,
         };
     },

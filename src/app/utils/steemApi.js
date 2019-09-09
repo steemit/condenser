@@ -16,14 +16,18 @@ export async function getStateAsync(url, observer) {
     if (url === '') url = 'trending';
 
     // curation and author rewards pages are alias of `transfers`
-    if (url.indexOf('/curation-rewards') !== -1)
+    // @TODO: maybe remove these all together as Condenser should redirect them to Wallet?
+    if (url.match(/^@.*?\/curation-rewards$/) !== null) {
         url = url.replace('/curation-rewards', '/transfers');
-    if (url.indexOf('/author-rewards') !== -1)
+    } else if (url.match(/^@.*?\/author-rewards$/) !== null) {
         url = url.replace('/author-rewards', '/transfers');
+    }
+
     const raw = await callBridge('get_state', {
         path: url,
         observer: observer === undefined ? null : observer,
     });
+
     const cleansed = stateCleaner(raw);
     return cleansed;
 }

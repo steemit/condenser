@@ -331,7 +331,10 @@ class PostsIndex extends React.Component {
                     <SteemMarket />
                     {this.props.gptEnabled && allowAdsOnContent ? (
                         <div className="sidebar-ad">
-                            <GptAd type="Freestar" id="steemit_160x600_Right" />
+                            <GptAd
+                                type="Freestar"
+                                id="bsa-zone_1566495004689-0_123456"
+                            />
                         </div>
                     ) : null}
                 </aside>
@@ -360,7 +363,7 @@ class PostsIndex extends React.Component {
                             <div className="sidebar-ad">
                                 <GptAd
                                     type="Freestar"
-                                    slotName="steemit_160x600_Left_1"
+                                    slotName="bsa-zone_1566494461953-7_123456"
                                 />
                             </div>
                             <div
@@ -369,7 +372,7 @@ class PostsIndex extends React.Component {
                             >
                                 <GptAd
                                     type="Freestar"
-                                    slotName="steemit_160x600_Left_2"
+                                    slotName="bsa-zone_1566494856923-9_123456"
                                 />
                             </div>
                         </div>

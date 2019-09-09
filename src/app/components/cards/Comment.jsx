@@ -23,12 +23,12 @@ function hideSubtree(cont, c) {
     return cont.getIn([c, 'stats', 'hide']) && !hasPositivePayout(cont, c);
 }
 
-function hasPositivePayout(cont, c) {
-    const post = cont.get(c);
-    if (Long.fromString(String(content.get('net_rshares'))).gt(Long.ZERO)) {
+function hasPositivePayout(postmap, post_url) {
+    const post = postmap.get(post_url);
+    if (parseFloat(post.get('net_rshares')) > 0) {
         return true;
     }
-    if (post.get('replies').find(reply => hasPositivePayout(cont, reply))) {
+    if (post.get('replies').find(url => hasPositivePayout(postmap, url))) {
         return true;
     }
     return false;

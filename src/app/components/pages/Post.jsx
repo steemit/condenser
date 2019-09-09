@@ -154,9 +154,9 @@ class Post extends React.Component {
         const positiveComments = replies.map(reply => {
             commentCount++;
             const showAd =
-                commentCount % 5 == 0 &&
-                commentCount != replies.length &&
-                commentCount != commentLimit;
+                commentCount % 5 === 0 &&
+                commentCount !== replies.length &&
+                commentCount !== commentLimit;
 
             return (
                 <div key={post + reply}>
@@ -174,7 +174,7 @@ class Post extends React.Component {
                             <GptAd
                                 tags={tags}
                                 type="Freestar"
-                                id="steemit_728x90_468x60_300x250_BetweenComments"
+                                id="bsa-zone_1566494240874-7_123456"
                             />
                         </div>
                     ) : null}
@@ -249,12 +249,12 @@ class Post extends React.Component {
                         </div>
                     </div>
                 )}
-                {this.props.gptEnabled ? (
+                {this.props.gptEnabled && commentCount >= 5 ? (
                     <div className="Post_footer__ad">
                         <GptAd
                             tags={tags}
                             type="Freestar"
-                            id="steemit_728x90_468x60_300x250_AboveComments"
+                            id="bsa-zone_1566494147292-7_123456"
                         />
                     </div>
                 ) : null}
@@ -282,7 +282,7 @@ class Post extends React.Component {
                         <GptAd
                             tags={tags}
                             type="Freestar"
-                            id="steemit_728x90_468x60_300x250_BelowComments"
+                            id="bsa-zone_1566494371533-0_123456"
                         />
                     </div>
                 ) : null}

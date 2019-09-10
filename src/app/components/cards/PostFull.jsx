@@ -652,7 +652,7 @@ export default connect(
             successCallback,
             errorCallback
         ) => {
-            let action = 'unPinPost';
+            let action = 'unpinPost';
             if (pinPost) action = 'pinPost';
 
             const payload = [

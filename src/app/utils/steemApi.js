@@ -15,12 +15,40 @@ export async function getStateAsync(url, observer) {
     // blank URL defaults to `trending`
     if (url === '') url = 'trending';
 
-    // curation and author rewards pages are alias of `transfers`
-    // @TODO: maybe remove these all together as Condenser should redirect them to Wallet?
-    if (url.match(/^@.*?\/curation-rewards$/) !== null) {
-        url = url.replace('/curation-rewards', '/transfers');
-    } else if (url.match(/^@.*?\/author-rewards$/) !== null) {
-        url = url.replace('/author-rewards', '/transfers');
+    const part = url.split('/');
+    const parts = part.length;
+    const sorts = [
+        'trending',
+        'promoted',
+        'hot',
+        'created',
+        'payout',
+        'payout_comments',
+    ];
+    const tabs = ['blog', 'feed', 'comments', 'recent-replies'];
+
+    if (parts == 1 && part[0] == 'tags') {
+        //console.log("getState URL -- tag", url)
+    } else if (parts == 1 && sorts.includes(part[0])) {
+        //console.log("getState URL -- all ranked posts", url)
+    } else if (parts == 2 && sorts.includes(part[0])) {
+        //console.log("getState URL -- tag ranked posts", url)
+    } else if (parts == 3 && part[1][0] == '@') {
+        //console.log("getState URL -- discussion", url)
+    } else if (parts == 1 && part[0][0] == '@') {
+        //console.log("getState URL -- override account home", url)
+        url = part[0] + '/blog';
+    } else if (parts == 2 && part[0][0] == '@') {
+        // special case: `followers`, `settings`, etc
+        if (!tabs.includes(part[1])) {
+            //console.log("getState URL -- override account tab", url)
+            url = part[0] + '/null';
+        } else {
+            //console.log("getState URL -- account tab", url)
+        }
+    } else {
+        console.log('no-op getState URL -- ', url);
+        return { content: {}, accounts: {} };
     }
 
     const raw = await callBridge('get_state', {

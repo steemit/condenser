@@ -93,7 +93,9 @@ export default function reducer(state = defaultState, action = {}) {
                 });
                 new_state = new_state.set('content', content);
             }
-            return state.mergeDeep(new_state);
+            const merged = state.mergeDeep(new_state);
+            console.log('Merged state', merged.toJS());
+            return merged;
         }
 
         case RECEIVE_ACCOUNT: {

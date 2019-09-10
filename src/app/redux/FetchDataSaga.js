@@ -53,8 +53,12 @@ export function* fetchState(location_change_action) {
         return;
     }
     is_initial_state = false;
-    if (process.env.BROWSER && window && window.optimize) {
-        console.log('REFRESH ADS');
+    if (
+        process.env.BROWSER &&
+        window &&
+        window.optimize &&
+        window.optimize.isInitialized
+    ) {
         window.optimize.refreshAll({ refresh: false });
     }
     const url = pathname;

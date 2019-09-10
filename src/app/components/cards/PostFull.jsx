@@ -270,7 +270,7 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, community, post, globalState },
+            props: { username, community, post, role },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
@@ -456,10 +456,7 @@ class PostFull extends React.Component {
         // TODO: Workout why the global user context has a blank role until a large amount of time has passed since the page loaded.
         const showPinToggle = CommunityAuthorization.CanPinPosts(
             username,
-            globalState.getIn(
-                ['community', community, 'context', 'role'],
-                'guest'
-            )
+            role
         );
         const { isPinned } = this.state;
         const showReplyOption =
@@ -618,7 +615,10 @@ export default connect(
             ...ownProps,
             community,
             username: state.user.getIn(['current', 'username']),
-            globalState: state.global,
+            role: state.global.getIn(
+                ['community', community, 'context', 'role'],
+                'guest'
+            ),
         };
     },
     dispatch => ({

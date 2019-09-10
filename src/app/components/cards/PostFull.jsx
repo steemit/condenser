@@ -96,9 +96,8 @@ class PostFull extends React.Component {
         super(props);
         const post = this.props.cont.get(this.props.post);
         const isPinned = post.get('stats').get('is_pinned');
-        const { username, community } = this.props;
 
-        this.state = { username, community, isPinned };
+        this.state = { isPinned };
 
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
@@ -130,8 +129,6 @@ class PostFull extends React.Component {
             formId,
             PostFullReplyEditor: ReplyEditor(formId + '-reply'),
             PostFullEditEditor: ReplyEditor(formId + '-edit'),
-            username: this.props.username,
-            community: this.props.community,
         });
         if (process.env.BROWSER) {
             let showEditor = localStorage.getItem('showEditor-' + formId);
@@ -249,12 +246,10 @@ class PostFull extends React.Component {
 
     onTogglePin = isPinned => {
         const post_content = this.props.cont.get(this.props.post);
-        const accountName = this.props.username;
-        if (!accountName) {
+        const { community, username } = this.props;
+        if (!username) {
             return this.props.unlock();
         }
-
-        const { username, community } = this.state; // TODO: Determine where this value comes from and make it more clear.
         const permlink = post_content.get('permlink');
 
         this.props.togglePinnedPost(
@@ -275,14 +270,13 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, post, globalState },
+            props: { username, community, post, globalState },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
                 formId,
                 showReply,
                 showEdit,
-                community,
             },
             onShowReply,
             onShowEdit,

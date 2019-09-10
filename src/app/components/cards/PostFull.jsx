@@ -453,12 +453,13 @@ class PostFull extends React.Component {
         const showReblog = !isPaidout;
         const showPromote =
             username && !isPaidout && post_content.get('depth') == 0;
-        // TODO: Workout why the global user context has a blank role until a large amount of time has passed since the page loaded.
+
         const showPinToggle = CommunityAuthorization.CanPinPosts(
             username,
             role
         );
         const { isPinned } = this.state;
+
         const showReplyOption =
             username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;

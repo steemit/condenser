@@ -96,7 +96,10 @@ class PostFull extends React.Component {
         super(props);
         const post = this.props.cont.get(this.props.post);
         const isPinned = post.get('stats').get('is_pinned');
-        this.state = { isPinned };
+        const { username, community } = this.props;
+
+        this.state = { username, community, isPinned };
+
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
         this.redditShare = this.redditShare.bind(this);
@@ -127,6 +130,8 @@ class PostFull extends React.Component {
             formId,
             PostFullReplyEditor: ReplyEditor(formId + '-reply'),
             PostFullEditEditor: ReplyEditor(formId + '-edit'),
+            username: this.props.username,
+            community: this.props.community,
         });
         if (process.env.BROWSER) {
             let showEditor = localStorage.getItem('showEditor-' + formId);
@@ -243,21 +248,19 @@ class PostFull extends React.Component {
     };
 
     onTogglePin = isPinned => {
-        console.log('PINNDYAGIN!');
         const post_content = this.props.cont.get(this.props.post);
         const accountName = this.props.username;
-        if (!post_content) return;
         if (!accountName) {
             return this.props.unlock();
         }
 
-        const community = post_content.get('category'); // TODO: Determine where this value comes from and make it more clear.
+        const { username, community } = this.state; // TODO: Determine where this value comes from and make it more clear.
         const permlink = post_content.get('permlink');
 
         this.props.togglePinnedPost(
             !isPinned,
             community,
-            accountName,
+            username,
             permlink,
             () => {
                 console.log('PostFull::onTogglePin()::success');
@@ -272,13 +275,14 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, post },
+            props: { username, post, globalState },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
                 formId,
                 showReply,
                 showEdit,
+                community,
             },
             onShowReply,
             onShowEdit,
@@ -290,7 +294,7 @@ class PostFull extends React.Component {
         const content = post_content.toJS();
         const { author, permlink, parent_author, parent_permlink } = content;
         const jsonMetadata = this.state.showReply ? null : p.json_metadata;
-        // let author_link = '/@' + content.author;
+
         let link = `/@${content.author}/${content.permlink}`;
         if (content.category) link = `/${content.category}${link}`;
 
@@ -450,18 +454,25 @@ class PostFull extends React.Component {
             );
         }
 
-        const _isPaidout =
+        const isPaidout =
             post_content.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
-        const showReblog = !_isPaidout;
+        const showReblog = !isPaidout;
         const showPromote =
-            username && !_isPaidout && post_content.get('depth') == 0;
-        const showPinToggle = true; // TODO: Introduce logic that switched on a user's role in this community
+            username && !isPaidout && post_content.get('depth') == 0;
+        // TODO: Workout why the global user context has a blank role until a large amount of time has passed since the page loaded.
+        const showPinToggle = CommunityAuthorization.CanPinPosts(
+            username,
+            globalState.getIn(
+                ['community', community, 'context', 'role'],
+                'guest'
+            )
+        );
         const { isPinned } = this.state;
         const showReplyOption =
             username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;
         const showDeleteOption =
-            username === author && allowDelete(post_content) && !_isPaidout;
+            username === author && allowDelete(post_content) && !isPaidout;
 
         const authorRepLog10 = repLog10(content.author_reputation);
         const isPreViewCount =
@@ -606,13 +617,16 @@ class PostFull extends React.Component {
 }
 
 export default connect(
-    // mapStateToProps
-    (state, ownProps) => ({
-        ...ownProps,
-        username: state.user.getIn(['current', 'username']),
-    }),
-
-    // mapDispatchToProps
+    (state, ownProps) => {
+        const post = ownProps.cont.get(ownProps.post);
+        const community = post.get('category');
+        return {
+            ...ownProps,
+            community,
+            username: state.user.getIn(['current', 'username']),
+            globalState: state.global,
+        };
+    },
     dispatch => ({
         dispatchSubmit: data => {
             dispatch(userActions.usernamePasswordLogin({ ...data }));
@@ -692,10 +706,16 @@ const saveOnShow = (formId, type) => {
                 JSON.stringify({ type }, null, 0)
             );
         else {
-            // console.log('del formId', formId)
             localStorage.removeItem('showEditor-' + formId);
             localStorage.removeItem('replyEditorData-' + formId + '-reply');
             localStorage.removeItem('replyEditorData-' + formId + '-edit');
         }
     }
 };
+
+class CommunityAuthorization {
+    static CanPinPosts = (username, role) => {
+        const allowableRoles = ['owner', 'admin', 'mod'];
+        return allowableRoles.includes(role);
+    };
+}

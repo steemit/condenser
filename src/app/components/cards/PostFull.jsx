@@ -94,7 +94,9 @@ class PostFull extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        const post = this.props.cont.get(this.props.post);
+        const isPinned = post.get('stats').get('is_pinned');
+        this.state = { isPinned };
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
         this.redditShare = this.redditShare.bind(this);
@@ -259,9 +261,11 @@ class PostFull extends React.Component {
             permlink,
             () => {
                 console.log('PostFull::onTogglePin()::success');
+                this.setState({ isPinned: !isPinned });
             },
             () => {
                 console.log('PostFull::onTogglePin()::failure');
+                this.setState({ isPinned });
             }
         );
     };
@@ -452,7 +456,7 @@ class PostFull extends React.Component {
         const showPromote =
             username && !_isPaidout && post_content.get('depth') == 0;
         const showPinToggle = true; // TODO: Introduce logic that switched on a user's role in this community
-        const isPinned = content.stats.is_pinned || false;
+        const { isPinned } = this.state;
         const showReplyOption =
             username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;
@@ -652,7 +656,7 @@ export default connect(
             successCallback,
             errorCallback
         ) => {
-            let action = 'unPinPost';
+            let action = 'unpinPost';
             if (pinPost) action = 'pinPost';
 
             const payload = [

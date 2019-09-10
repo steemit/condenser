@@ -422,7 +422,7 @@ class PostFull extends React.Component {
             post_content.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
         const showReblog = !_isPaidout;
         const showPromote =
-            username && !_isPaidout && post_content.get('depth') == 0;
+            false && username && !_isPaidout && post_content.get('depth') == 0;
         const showReplyOption =
             username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;

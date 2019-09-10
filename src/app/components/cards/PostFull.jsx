@@ -89,16 +89,18 @@ class PostFull extends React.Component {
         deletePost: PropTypes.func.isRequired,
         showPromotePost: PropTypes.func.isRequired,
         showExplorePost: PropTypes.func.isRequired,
+        togglePinnedPost: PropTypes.func.isRequired,
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {};
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
         this.redditShare = this.redditShare.bind(this);
         this.linkedInShare = this.linkedInShare.bind(this);
         this.showExplorePost = this.showExplorePost.bind(this);
+
         this.onShowReply = () => {
             const { state: { showReply, formId } } = this;
             this.setState({ showReply: !showReply, showEdit: false });
@@ -236,6 +238,32 @@ class PostFull extends React.Component {
         const permlink = this.share_params.link;
         const title = this.share_params.rawtitle;
         this.props.showExplorePost(permlink, title);
+    };
+
+    onTogglePin = isPinned => {
+        console.log('PINNDYAGIN!');
+        const post_content = this.props.cont.get(this.props.post);
+        const accountName = this.props.username;
+        if (!post_content) return;
+        if (!accountName) {
+            return this.props.unlock();
+        }
+
+        const community = post_content.get('category'); // TODO: Determine where this value comes from and make it more clear.
+        const permlink = post_content.get('permlink');
+
+        this.props.togglePinnedPost(
+            !isPinned,
+            community,
+            accountName,
+            permlink,
+            () => {
+                console.log('PostFull::onTogglePin()::success');
+            },
+            () => {
+                console.log('PostFull::onTogglePin()::failure');
+            }
+        );
     };
 
     render() {
@@ -423,6 +451,8 @@ class PostFull extends React.Component {
         const showReblog = !_isPaidout;
         const showPromote =
             username && !_isPaidout && post_content.get('depth') == 0;
+        const showPinToggle = true; // TODO: Introduce logic that switched on a user's role in this community
+        const isPinned = content.stats.is_pinned || false;
         const showReplyOption =
             username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;
@@ -500,6 +530,26 @@ class PostFull extends React.Component {
                             {showReplyOption && (
                                 <a onClick={onShowReply}>{tt('g.reply')}</a>
                             )}{' '}
+                            {showPinToggle &&
+                                isPinned && (
+                                    <a
+                                        onClick={() =>
+                                            this.onTogglePin(isPinned)
+                                        }
+                                    >
+                                        {tt('g.unpin')}
+                                    </a>
+                                )}{' '}
+                            {showPinToggle &&
+                                !isPinned && (
+                                    <a
+                                        onClick={() =>
+                                            this.onTogglePin(isPinned)
+                                        }
+                                    >
+                                        {tt('g.pin')}
+                                    </a>
+                                )}{' '}
                             {showEditOption &&
                                 !showEdit && (
                                     <a onClick={onShowEdit}>{tt('g.edit')}</a>
@@ -591,6 +641,39 @@ export default connect(
                 globalActions.showDialog({
                     name: 'explorePost',
                     params: { permlink, title },
+                })
+            );
+        },
+        togglePinnedPost: (
+            pinPost,
+            community,
+            account,
+            permlink,
+            successCallback,
+            errorCallback
+        ) => {
+            let action = 'unPinPost';
+            if (pinPost) action = 'pinPost';
+
+            const payload = [
+                action,
+                {
+                    community,
+                    account,
+                    permlink,
+                },
+            ];
+
+            return dispatch(
+                transactionActions.broadcastOperation({
+                    type: 'custom_json',
+                    operation: {
+                        id: 'community',
+                        required_posting_auths: [account],
+                        json: JSON.stringify(payload),
+                    },
+                    successCallback,
+                    errorCallback,
                 })
             );
         },

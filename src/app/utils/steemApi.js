@@ -27,9 +27,7 @@ export async function getStateAsync(url, observer) {
     ];
     const tabs = ['blog', 'feed', 'comments', 'recent-replies'];
 
-    if (parts == 1 && part[0] == 'tags') {
-        //console.log("getState URL -- tag", url)
-    } else if (parts == 1 && sorts.includes(part[0])) {
+    if (parts == 1 && sorts.includes(part[0])) {
         //console.log("getState URL -- all ranked posts", url)
     } else if (parts == 2 && sorts.includes(part[0])) {
         //console.log("getState URL -- tag ranked posts", url)

@@ -136,7 +136,7 @@ class Topics extends Component {
                                 <li className="c-sidebar__list-item">
                                     <div className="c-sidebar__header">
                                         <Link
-                                            to={`/@${username}/feed`}
+                                            to={`/trending/my`}
                                             className="c-sidebar__link"
                                             activeClassName="active"
                                         >

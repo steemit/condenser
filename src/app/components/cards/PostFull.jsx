@@ -28,6 +28,7 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { GoogleAd } from 'app/components/elements/GoogleAd';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
+import { allowDelete } from 'app/utils/StateFunctions';
 
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (
@@ -422,10 +423,11 @@ class PostFull extends React.Component {
         const showReblog = !_isPaidout;
         const showPromote =
             username && !_isPaidout && post_content.get('depth') == 0;
-        const showReplyOption = post_content.get('depth') < 255;
+        const showReplyOption =
+            username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;
         const showDeleteOption =
-            username === author && content.stats.allowDelete && !_isPaidout;
+            username === author && allowDelete(post_content) && !_isPaidout;
 
         const authorRepLog10 = repLog10(content.author_reputation);
         const isPreViewCount =

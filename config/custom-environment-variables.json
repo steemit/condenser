@@ -50,7 +50,7 @@
   "address_prefix": "SDC_ADDRESS_PREFIX",
   "conveyor_posting_wif": "CONVEYOR_POSTING_WIF",
   "conveyor_username": "CONVEYOR_USERNAME",
-  "pinned_posts_url": "PINNED_POSTS_URL",
+  "special_posts_url": "SPECIAL_POSTS_URL",
   "wallet_url": "WALLET_URL",
   "google_ad_enabled": "GOOGLE_AD_ENABLED",
   "google_ad_test": "GOOGLE_AD_TEST",

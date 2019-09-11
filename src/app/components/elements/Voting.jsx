@@ -336,7 +336,6 @@ class Voting extends React.Component {
                 </Dropdown>
             );
 
-            const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
             //const flag =
             //    myVote === null || myVote === 0 ? dropdown : revokeFlag;
             downVote = (
@@ -398,7 +397,19 @@ class Voting extends React.Component {
                 !(is_comment && total_votes == 0));
         const payoutItems = [];
 
+        const minimumAmountForPayout = 0.02;
+        let warnZeroPayout = '';
+        if (pending_payout > 0 && pending_payout < minimumAmountForPayout) {
+            warnZeroPayout = tt('voting_jsx.must_reached_minimum_payout');
+        }
+
         if (cashout_active) {
+            const payoutDate = (
+                <span>
+                    {tt('voting_jsx.payout')}{' '}
+                    <TimeAgoWrapper date={cashout_time} />
+                </span>
+            );
             payoutItems.push({
                 value: tt('voting_jsx.pending_payout', {
                     value: formatDecimal(pending_payout).join(''),
@@ -407,7 +418,8 @@ class Voting extends React.Component {
             if (max_payout > 0) {
                 payoutItems.push({
                     value:
-                        '(' +
+                        tt('voting_jsx.breakdown') +
+                        ': ' +
                         formatDecimal(pending_payout_printed_sbd).join('') +
                         ' ' +
                         DEBT_TOKEN_SHORT +
@@ -422,11 +434,13 @@ class Voting extends React.Component {
                             : '') +
                         formatDecimal(pending_payout_sp).join('') +
                         ' ' +
-                        INVEST_TOKEN_SHORT +
-                        ')',
+                        INVEST_TOKEN_SHORT,
                 });
             }
-            payoutItems.push({ value: <TimeAgoWrapper date={cashout_time} /> });
+            payoutItems.push({ value: payoutDate });
+            if (warnZeroPayout !== '') {
+                payoutItems.push({ value: warnZeroPayout });
+            }
         }
 
         if (max_payout == 0) {
@@ -445,7 +459,9 @@ class Voting extends React.Component {
                 }),
             });
         }
-        if (total_author_payout > 0) {
+        // - payout instead of total_author_payout: total_author_payout can be zero with 100% beneficiary
+        // - !cashout_active is needed to avoid the info is also shown for pending posts.
+        if (!cashout_active && payout > 0) {
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts', {
                     value: formatDecimal(

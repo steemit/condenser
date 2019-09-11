@@ -11,11 +11,11 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import Callout from 'app/components/elements/Callout';
-// import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
+import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
@@ -24,7 +24,7 @@ import SortOrder from 'app/components/elements/SortOrder';
 class PostsIndex extends React.Component {
     static propTypes = {
         discussions: PropTypes.object,
-        accounts: PropTypes.object,
+        feed_posts: PropTypes.object,
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
@@ -92,7 +92,18 @@ class PostsIndex extends React.Component {
             order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
 
-        const { categories, pinned } = this.props;
+        const {
+            categories,
+            featured,
+            promoted,
+            gptBannedTags,
+            topic,
+        } = this.props;
+
+        let allowAdsOnContent = true;
+        allowAdsOnContent =
+            this.props.gptEnabled &&
+            !GptUtils.HasBannedTags([topic], gptBannedTags);
 
         let topics_order = order;
         let posts = [];
@@ -102,7 +113,7 @@ class PostsIndex extends React.Component {
             account_name = order.slice(1);
             order = 'by_feed';
             topics_order = 'trending';
-            posts = this.props.accounts.getIn([account_name, 'feed']);
+            posts = this.props.feed_posts;
             const isMyAccount = this.props.username === account_name;
             if (isMyAccount) {
                 emptyText = (
@@ -215,7 +226,7 @@ class PostsIndex extends React.Component {
                                     order={topics_order}
                                     current={category}
                                     categories={categories}
-                                    compact={true}
+                                    compact
                                 />
                             </span>
                         </div>
@@ -233,18 +244,21 @@ class PostsIndex extends React.Component {
                     <hr className="articles__hr" />
                     {!fetching &&
                     (posts && !posts.size) &&
-                    (pinned && !pinned.size) ? (
+                    (featured && !featured.size) &&
+                    (promoted && !promoted.size) ? (
                         <Callout>{emptyText}</Callout>
                     ) : (
                         <PostsList
                             ref="list"
                             posts={posts ? posts : List()}
                             loading={fetching}
-                            anyPosts={true}
+                            anyPosts
                             category={category}
                             loadMore={this.loadMore}
-                            showPinned={true}
+                            showFeatured
+                            showPromoted
                             showSpam={showSpam}
+                            allowAdsOnContent={allowAdsOnContent}
                         />
                     )}
                 </article>
@@ -264,9 +278,12 @@ class PostsIndex extends React.Component {
                     )}
                     <Notices notices={this.props.notices} />
                     <SteemMarket />
-                    {this.props.gptSlots ? (
+                    {this.props.gptEnabled && allowAdsOnContent ? (
                         <div className="sidebar-ad">
-                            <GptAd slotName="right_nav" />
+                            <GptAd
+                                type="Freestar"
+                                id="bsa-zone_1566495004689-0_123456"
+                            />
                         </div>
                     ) : null}
                 </aside>
@@ -290,9 +307,23 @@ class PostsIndex extends React.Component {
                         </a>
                         {' ' + tt('g.next_3_strings_together.value_posts')}
                     </small>
-                    {this.props.gptSlots ? (
-                        <div className="sidebar-ad">
-                            <GptAd slotName="left_nav" />
+                    {this.props.gptEnabled && allowAdsOnContent ? (
+                        <div>
+                            <div className="sidebar-ad">
+                                <GptAd
+                                    type="Freestar"
+                                    slotName="bsa-zone_1566494461953-7_123456"
+                                />
+                            </div>
+                            <div
+                                className="sidebar-ad"
+                                style={{ marginTop: 20 }}
+                            >
+                                <GptAd
+                                    type="Freestar"
+                                    slotName="bsa-zone_1566494856923-9_123456"
+                                />
+                            </div>
                         </div>
                     ) : null}
                 </aside>
@@ -305,11 +336,22 @@ module.exports = {
     path: ':order(/:category)',
     component: connect(
         (state, ownProps) => {
+            // special case if user feed (vs. trending, etc)
+            let feed_posts;
+            if (ownProps.routeParams.category === 'feed') {
+                const account_name = ownProps.routeParams.order.slice(1);
+                feed_posts = state.global.getIn([
+                    'accounts',
+                    account_name,
+                    'feed',
+                ]);
+            }
+
             return {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                accounts: state.global.get('accounts'),
+                feed_posts,
                 username:
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),
@@ -319,14 +361,20 @@ module.exports = {
                 categories: state.global
                     .getIn(['tag_idx', 'trending'])
                     .take(50),
-                pinned: state.offchain.get('pinned_posts'),
-                maybeLoggedIn: state.user.get('maybeLoggedIn'),
-                isBrowser: process.env.BROWSER,
+                featured: state.offchain
+                    .get('special_posts')
+                    .get('featured_posts'),
+                promoted: state.offchain
+                    .get('special_posts')
+                    .get('promoted_posts'),
                 notices: state.offchain
-                    .get('pinned_posts')
+                    .get('special_posts')
                     .get('notices')
                     .toJS(),
-                gptSlots: state.app.getIn(['googleAds', 'gptSlots']).toJS(),
+                maybeLoggedIn: state.user.get('maybeLoggedIn'),
+                isBrowser: process.env.BROWSER,
+                gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
+                gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
             };
         },
         dispatch => {

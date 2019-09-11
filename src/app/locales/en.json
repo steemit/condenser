@@ -31,6 +31,8 @@
         "email": "Email",
         "external_link_message":
             "This link will take you away from steemit.com",
+        "affiliation_steemit": "Steemit Team",
+        "affiliation_sm": "Steem Monsters Team",
         "feed": "Feed",
         "follow": "Follow",
         "for": " for ",
@@ -78,6 +80,7 @@
         "promoted": "Promoted",
         "re": "RE",
         "re_to": "RE: %(topic)s",
+        "read_offical_blog": "Steemit Blog",
         "recent_password": "Recent Password",
         "receive": "Receive ",
         "remove": "Remove",
@@ -92,6 +95,7 @@
         },
         "reputation": "Reputation",
         "reveal_comment": "Reveal Comment",
+        "will_be_hidden_due_to_low_rating": "Will be hidden due to low rating",
         "request": "request",
         "required": "Required",
         "rewards": "Rewards",
@@ -422,9 +426,9 @@
         "hate_speech_or_internet_trolling": "Hate Speech or Internet Trolling",
         "intentional_miss_categorized_content_or_spam":
             "Intentional miss-categorized content or Spam",
-        "pending_payout": "Pending Payout $%(value)s",
+        "pending_payout": "Pending payout amount: $%(value)s",
         "payout_declined": "Payout Declined",
-        "max_accepted_payout": "Max Accepted Payout $%(value)s",
+        "max_accepted_payout": "Max accepted payout: $%(value)s",
         "promotion_cost": "Promotion Cost $%(value)s",
         "past_payouts": "Past Payouts $%(value)s",
         "past_payouts_author": " - Author $%(value)s",
@@ -443,7 +447,10 @@
         "votes_plural": {
             "one": "%(count)s vote",
             "other": "%(count)s votes"
-        }
+        },
+        "must_reached_minimum_payout": "(amount must reach $0.02 for payout)",
+        "payout": "Payout",
+        "breakdown": "Breakdown"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -613,9 +620,11 @@
         "login_warning_body":
             "You are attempting to use a key with more permissions than required for everyday Steemit.com use. Since keys and passwords are more likely to get compromised the more they are used, it is strongly recommended to only use your Posting Key to log in.",
         "continue_anyway": "Continue Anyway",
-        "login_warning_link_text": "View my Posting Key at Steemit Wallet",
+        "login_warning_link_text":
+            "Open my Steemit Wallet to access and view my posting key",
         "join_our": "Join our",
-        "sign_transfer": "Sign to complete transfer"
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",

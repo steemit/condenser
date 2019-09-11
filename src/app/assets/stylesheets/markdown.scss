@@ -83,6 +83,10 @@
     word-break: normal; // issue #146
   }
 
+  table thead th {
+    word-break: normal;
+  }
+
   p {
     font-size: 100%;
     line-height: 150%;

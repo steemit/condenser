@@ -587,7 +587,9 @@
         "signup_button_emphasis": "STEEMを手に入れよう！",
         "sign_up_get_steem": "登録してSTEEMを手に入れよう！",
         "returning_users": "再",
-        "join_our": ""
+        "join_our": "",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "アカウント名",

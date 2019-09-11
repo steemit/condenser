@@ -26,7 +26,8 @@ import secureRandom from 'secure-random';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
 import { getSupportedLocales } from './utils/misc';
-import { pinnedPosts } from './utils/PinnedPosts';
+import { specialPosts } from './utils/SpecialPosts';
+import fs from 'fs';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -38,10 +39,17 @@ const env = process.env.NODE_ENV || 'development';
 // cache of a thousand days
 const cacheOpts = { maxAge: 86400000, gzip: true, buffer: true };
 
+// import ads.txt to be served statically
+const adstxt = fs.readFileSync(
+    path.join(__dirname, '../app/assets/ads.txt'),
+    'utf8'
+);
+
 // Serve static assets without fanfare
 app.use(
     favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico'))
 );
+
 app.use(
     mount(
         '/favicons',
@@ -51,12 +59,14 @@ app.use(
         )
     )
 );
+
 app.use(
     mount(
         '/images',
         staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
     )
 );
+
 app.use(
     mount(
         '/javascripts',
@@ -66,6 +76,14 @@ app.use(
         )
     )
 );
+
+app.use(
+    mount('/ads.txt', function*() {
+        this.type = 'text/plain';
+        this.body = adstxt;
+    })
+);
+
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {
     const webpack_dev_port = process.env.PORT
@@ -220,11 +238,11 @@ if (env === 'production') {
     app.use(koa_logger());
 }
 
-app.use(
-    helmet({
-        hsts: false,
-    })
-);
+// app.use(
+//     helmet({
+//         hsts: false,
+//     })
+// );
 
 app.use(
     mount(
@@ -284,10 +302,18 @@ if (env === 'production') {
 if (env !== 'test') {
     const appRender = require('./app_render');
 
-    // Load the pinned posts and store them on the ctx for later use. Since
+    // Load special posts and store them on the ctx for later use. Since
     // we're inside a generator, we can't `await` here, so we pass a promise
     // so `src/server/app_render.jsx` can `await` on it.
-    app.pinnedPostsPromise = pinnedPosts();
+    app.specialPostsPromise = specialPosts();
+    // refresh special posts every five minutes
+    setInterval(function() {
+        return new Promise(function(resolve, reject) {
+            app.specialPostsPromise = specialPosts();
+            resolve();
+        });
+    }, 300000);
+
     app.use(function*() {
         yield appRender(this, supportedLocales, resolvedAssets);
         const bot = this.state.isBot;

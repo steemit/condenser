@@ -44,6 +44,13 @@ const iframeWhitelist = [
             return src;
         },
     },
+    {
+        re: /^https:\/\/emb.d.tube\/\#\!\/([a-zA-Z0-9\-\.\/]+)$/,
+        fn: src => {
+            // <iframe width="560" height="315" src="https://emb.d.tube/#!/justineh/u6qoydvy" frameborder="0" allowfullscreen></iframe>
+            return src;
+        },
+    },
 ];
 export const noImageText = '(Image not shown due to low ratings)';
 export const allowedTags = `
@@ -89,7 +96,7 @@ export default ({
         // title is only set in the case of an external link warning
         a: ['href', 'rel', 'title'],
     },
-    allowedSchemes: ['http', 'https', 'steem'],
+    allowedSchemes: ['http', 'https', 'steem', 'esteem'],
     transformTags: {
         iframe: (tagName, attribs) => {
             const srcAtty = attribs.src;

@@ -10,7 +10,10 @@ export default function ServerHTML({
     shouldSeeAds,
     adClient,
     gptEnabled,
-    gptSlots,
+    gptBannedTags,
+    gptBidding,
+    shouldSeeCookieConsent,
+    cookieConsentApiKey,
 }) {
     let page_title = title;
     return (
@@ -175,55 +178,59 @@ export default function ServerHTML({
                 ))}
                 {gptEnabled ? (
                     <script
-                        async
-                        src="https://www.googletagservices.com/tag/js/gpt.js"
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                            (function() {
+                              var bsa_optimize = document.createElement('script');
+                              bsa_optimize.type = 'text/javascript';
+                              bsa_optimize.async = true;
+                              bsa_optimize.src = 'https://cdn-s2s.buysellads.net/pub/steemit.js?' + (new Date() - new Date() % 3600000);
+                              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(bsa_optimize);
+                            })();
+                        `,
+                        }}
                     />
                 ) : null}
                 {gptEnabled ? (
                     <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-                      window.googletag = window.googletag || {};
-                      googletag.cmd = googletag.cmd || [];
-                      console.info('Set up googletag');
-                      googletag.cmd.push(function() {
-                          googletag.pubads().enableSingleRequest();
-                          googletag.pubads().setTargeting('edition',['new-york']);
-                          googletag.pubads().collapseEmptyDivs(true,true);
-                          googletag.pubads().disableInitialLoad();
-                          googletag.pubads().enableAsyncRendering();
-                          googletag.enableServices();
-                          console.info('Enabled googletag services');
-                      });
-                  `,
-                        }}
+                        src="//m.servedby-buysellads.com/monetization.js"
+                        type="text/javascript"
                     />
                 ) : null}
-                {shouldSeeAds ? (
+                {shouldSeeCookieConsent ? (
                     <script
+                        id="Cookiebot"
+                        src="https://consent.cookiebot.com/uc.js"
+                        data-cbid={cookieConsentApiKey}
+                        type="text/javascript"
                         async
-                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-                    />
-                ) : null}
-                {shouldSeeAds ? (
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-                      (adsbygoogle = window.adsbygoogle || []).push({
-                          google_ad_client: "${adClient}",
-                          enable_page_level_ads: true
-                      });
-                  `,
-                        }}
                     />
                 ) : null}
                 <title>{page_title}</title>
             </head>
             <body>
-                <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
+                {
+                    <div
+                        id="content"
+                        dangerouslySetInnerHTML={{ __html: body }}
+                    />
+                }
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}
+                {gptEnabled ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                            (function(){
+                              if(typeof _bsa !== 'undefined' && _bsa) {
+                                _bsa.init('fancybar', 'CE7D653L', 'placement:steemitcom');
+                              }
+                            })();
+                        `,
+                        }}
+                    />
+                ) : null}
             </body>
         </html>
     );

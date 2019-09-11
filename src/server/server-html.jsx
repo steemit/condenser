@@ -10,6 +10,7 @@ export default function ServerHTML({
     shouldSeeAds,
     adClient,
     gptEnabled,
+    gptBannedTags,
     gptBidding,
     shouldSeeCookieConsent,
     cookieConsentApiKey,
@@ -177,108 +178,32 @@ export default function ServerHTML({
                 ))}
                 {gptEnabled ? (
                     <script
-                        async
-                        src="https://www.googletagservices.com/tag/js/gpt.js"
-                    />
-                ) : null}
-                {gptEnabled ? (
-                    <script src="https://staticfiles.steemit.com/prebid2.12.0.js" />
-                ) : null}
-                {gptEnabled ? (
-                    <script
                         dangerouslySetInnerHTML={{
                             __html: `
-                                // TODO: Move the follow values into config
-                                //       a new config file for ads would be good
-                                var PREBID_TIMEOUT = 2000;
-                                var FAILSAFE_TIMEOUT = 3000;
-                                var MAX_RETRIES = 20;
-
-                                // Begin GPT Ad Setup
-                                var googletag = googletag || {};
-                                googletag.cmd = googletag.cmd || [];
-
-                                googletag.cmd.push(function() {
-                                  googletag.pubads().disableInitialLoad();
-                                  googletag.pubads().setTargeting("edition", ["new-york"]);
-                                  googletag.pubads().collapseEmptyDivs(true);
-                                });
-
-
-                                // Begin Prebid Setup
-                                var pbjs = pbjs || {};
-                                pbjs.que = pbjs.que || [];
-
-                                pbjs.que.push(function() {
-                                  pbjs.addAdUnits(${JSON.stringify(
-                                      gptBidding.ad_units
-                                  )});
-
-                                  pbjs.setConfig({
-                                    priceGranularity: ${JSON.stringify(
-                                        gptBidding.custom_config
-                                    )},
-                                    currency: ${JSON.stringify(
-                                        gptBidding.system_currency
-                                    )}
-                                  });
-
-                                  pbjs.requestBids({
-                                    bidsBackHandler: initAdserver,
-                                    timeout: PREBID_TIMEOUT
-                                  });
-                                });
-                                // var noBids = {}
-                                function initAdserver() {
-                                  if (pbjs.initAdserverSet) return;
-
-                                  if(!googletag.pubadsReady && pbjs.retries <= MAX_RETRIES) {
-                                    setTimeout(initAdserver, 50); //poll ms can be adjusted as desired.
-                                    pbjs.retries++;
-                                    return;
-                                  }
-
-                                  pbjs.initAdserverSet = true;
-                                  googletag.cmd.push(function() {
-                                    pbjs.cmd.push(function() {
-                                      pbjs.setTargetingForGPTAsync();
-                                      googletag.pubads().refresh();
-                                    });
-                                  });
-                                }
-
-                                // TODO: Do we need to do this twice?
-                                setTimeout(function() {
-                                  initAdserver();
-                                }, FAILSAFE_TIMEOUT);
-                          `,
+                            (function() {
+                              var bsa_optimize = document.createElement('script');
+                              bsa_optimize.type = 'text/javascript';
+                              bsa_optimize.async = true;
+                              bsa_optimize.src = 'https://cdn-s2s.buysellads.net/pub/steemit.js?' + (new Date() - new Date() % 3600000);
+                              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(bsa_optimize);
+                            })();
+                        `,
                         }}
                     />
                 ) : null}
-                {shouldSeeAds ? (
+                {gptEnabled ? (
                     <script
-                        async
-                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-                    />
-                ) : null}
-                {shouldSeeAds ? (
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-                      (adsbygoogle = window.adsbygoogle || []).push({
-                          google_ad_client: "${adClient}",
-                          enable_page_level_ads: true
-                      });
-                  `,
-                        }}
+                        src="//m.servedby-buysellads.com/monetization.js"
+                        type="text/javascript"
                     />
                 ) : null}
                 {shouldSeeCookieConsent ? (
                     <script
-                            id="Cookiebot"
-                            src="https://consent.cookiebot.com/uc.js"
-                            data-cbid={cookieConsentApiKey}
-                            type="text/javascript" async
+                        id="Cookiebot"
+                        src="https://consent.cookiebot.com/uc.js"
+                        data-cbid={cookieConsentApiKey}
+                        type="text/javascript"
+                        async
                     />
                 ) : null}
                 <title>{page_title}</title>
@@ -293,6 +218,19 @@ export default function ServerHTML({
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}
+                {gptEnabled ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                            (function(){
+                              if(typeof _bsa !== 'undefined' && _bsa) {
+                                _bsa.init('fancybar', 'CE7D653L', 'placement:steemitcom');
+                              }
+                            })();
+                        `,
+                        }}
+                    />
+                ) : null}
             </body>
         </html>
     );

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
+import { immutableAccessor } from 'app/utils/Accessors';
+import extractContent from 'app/utils/ExtractContent';
 import { connect } from 'react-redux';
 
 import { sortComments } from 'app/components/cards/Comment';
@@ -12,9 +14,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
-import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
-import BiddingAd from 'app/components/elements/BiddingAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
 
 import Icon from 'app/components/elements/Icon';
@@ -105,10 +105,15 @@ class Post extends React.Component {
                 </div>
             );
 
-        // A post should be hidden if it is not pinned, is not told to "show
+        // TODO: This data model needs some help.
+        const post_content = content.get(post);
+        const p = extractContent(immutableAccessor, post_content);
+        const tags = p.json_metadata.tags;
+
+        // A post should be hidden if it is not special, is not told to "show
         // anyway", and is designated "gray".
-        const pinned = dis.get('pinned');
-        if (!pinned && !showAnyway) {
+        const special = dis.get('special');
+        if (!special && !showAnyway) {
             const { gray } = dis.get('stats').toJS();
             if (gray) {
                 return (
@@ -143,23 +148,39 @@ class Post extends React.Component {
         // Don't render too many comments on server-side
         const commentLimit = 100;
         if (global.process !== undefined && replies.length > commentLimit) {
-            console.log(
-                `Too many comments, ${replies.length - commentLimit} omitted.`
-            );
             replies = replies.slice(0, commentLimit);
         }
+        let commentCount = 0;
+        const positiveComments = replies.map(reply => {
+            commentCount++;
+            const showAd =
+                commentCount % 5 === 0 &&
+                commentCount !== replies.length &&
+                commentCount !== commentLimit;
 
-        const positiveComments = replies.map(reply => (
-            <Comment
-                root
-                key={post + reply}
-                content={reply}
-                cont={content}
-                sort_order={sortOrder}
-                showNegativeComments={showNegativeComments}
-                onHide={this.onHideComment}
-            />
-        ));
+            return (
+                <div key={post + reply}>
+                    <Comment
+                        root
+                        content={reply}
+                        cont={content}
+                        sort_order={sortOrder}
+                        showNegativeComments={showNegativeComments}
+                        onHide={this.onHideComment}
+                    />
+
+                    {this.props.gptEnabled && showAd ? (
+                        <div className="Post_footer__ad">
+                            <GptAd
+                                tags={tags}
+                                type="Freestar"
+                                id="bsa-zone_1566494240874-7_123456"
+                            />
+                        </div>
+                    ) : null}
+                </div>
+            );
+        });
 
         const negativeGroup = commentHidden && (
             <div className="hentry Comment root Comment__negative_group">
@@ -228,23 +249,13 @@ class Post extends React.Component {
                         </div>
                     </div>
                 )}
-                {this.props.gptEnabled ? (
+                {this.props.gptEnabled && commentCount >= 5 ? (
                     <div className="Post_footer__ad">
-                        {isLoggedIn() ? (
-                            <BiddingAd
-                                type="Bidding"
-                                slotName={GptUtils.MobilizeSlotName(
-                                    'post-page-above-comments-loggedin'
-                                )}
-                            />
-                        ) : (
-                            <BiddingAd
-                                type="Bidding"
-                                slotName={GptUtils.MobilizeSlotName(
-                                    'post-page-above-comments'
-                                )}
-                            />
-                        )}
+                        <GptAd
+                            tags={tags}
+                            type="Freestar"
+                            id="bsa-zone_1566494147292-7_123456"
+                        />
                     </div>
                 ) : null}
                 <div id="#comments" className="Post_comments row hfeed">
@@ -268,15 +279,11 @@ class Post extends React.Component {
                 </div>
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        {/* TODO: Switch to Mobile Ad when, well, mobile! */}
-                        {false ? (
-                            <GptAd
-                                type="Basic"
-                                slotName="bottom-of-post-mobile"
-                            />
-                        ) : (
-                            <GptAd type="Basic" slotName="bottom-of-post" />
-                        )}
+                        <GptAd
+                            tags={tags}
+                            type="Freestar"
+                            id="bsa-zone_1566494371533-0_123456"
+                        />
                     </div>
                 ) : null}
             </div>
@@ -285,22 +292,9 @@ class Post extends React.Component {
 }
 
 const emptySet = Set();
-
 export default connect((state, ownProps) => {
-    const current_user = state.user.get('current');
-    let ignoring;
-    if (current_user) {
-        const key = [
-            'follow',
-            'getFollowingAsync',
-            current_user.get('username'),
-            'ignore_result',
-        ];
-        ignoring = state.global.getIn(key, emptySet);
-    }
     return {
         content: state.global.get('content'),
-        ignoring,
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',
         gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),

@@ -35,26 +35,27 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
     };
 
     const sorts = tag => {
+        if (tag != '') tag = `/${tag}`;
         return [
             {
                 value: 'trending',
                 label: tt('main_menu.trending'),
-                link: `/trending/${tag}`,
+                link: `/trending${tag}`,
             },
             {
                 value: 'hot',
                 label: tt('main_menu.hot'),
-                link: `/hot/${tag}`,
+                link: `/hot${tag}`,
             },
             {
                 value: 'created',
                 label: tt('g.new'),
-                link: `/created/${tag}`,
+                link: `/created${tag}`,
             },
             {
                 value: 'promoted',
                 label: tt('g.promoted'),
-                link: `/promoted/${tag}`,
+                link: `/promoted${tag}`,
             },
         ];
     };

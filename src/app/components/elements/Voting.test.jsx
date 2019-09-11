@@ -52,30 +52,6 @@ const voteTestObj = fromJS({
 });
 
 describe('Voting', () => {
-    it('should render nothing if flag prop is true and user is not logged in.', () => {
-        const mockStore = configureMockStore()({
-            global: Map({}),
-            offchain: {},
-            user: {},
-            transaction: {},
-            discussion: {},
-            routing: {},
-            app: {},
-        });
-        let wrapped = shallow(
-            <Voting
-                post="test"
-                flag={true}
-                vote={(w, p) => {}}
-                post_obj={voteTestObj}
-                price_per_steem={1}
-                sbd_print_rate={10000}
-                store={mockStore}
-            />
-        ).dive();
-        expect(wrapped.isEmptyRender()).toEqual(true);
-    });
-
     it('should render flag if user is logged in and flag prop is true.', () => {
         const mockStore = configureMockStore()({
             global: mockGlobal,
@@ -99,7 +75,7 @@ describe('Voting', () => {
         ).dive();
         expect(wrapped.find('.Voting').length).toEqual(1);
         expect(wrapped.find('Dropdown').html()).toContain(
-            '<span href="#" title="Flag" id="downvote_button" class="flag">'
+            '<span href="#" title="Downvote" id="downvote_button" class="flag">'
         );
     });
 
@@ -285,7 +261,7 @@ describe('Voting', () => {
             </Provider>
         );
         expect(JSON.stringify(component.toJSON())).toContain(
-            '(0.00 SBD, 10.00 SP)'
+            '0.00 SBD, 10.00 SP'
         );
     });
 
@@ -314,7 +290,7 @@ describe('Voting', () => {
             </Provider>
         );
         expect(JSON.stringify(component.toJSON())).toContain(
-            '(5.00 SBD, 5.00 SP)'
+            '5.00 SBD, 5.00 SP'
         );
     });
 
@@ -343,7 +319,7 @@ describe('Voting', () => {
             </Provider>
         );
         expect(JSON.stringify(component.toJSON())).toContain(
-            '(2.50 SBD, 2.50 STEEM, 5.00 SP)'
+            '2.50 SBD, 2.50 STEEM, 5.00 SP'
         );
     });
 });

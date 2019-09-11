@@ -606,7 +606,9 @@
         "signup_button": "Зарегистрируйтесь",
         "signup_button_emphasis": " сейчас!",
         "returning_users": "Вернувшиеся пользователи: ",
-        "join_our": "Присоединяйтесь к нашему"
+        "join_our": "Присоединяйтесь к нашему",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "Имя аккаунта должно быть ",

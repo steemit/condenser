@@ -585,7 +585,9 @@
         "sign_up_get_steem":
             "계정을 만들고 가상화폐 STEEM 을 보상으로 받으세요.",
         "returning_users": "Returning Users: ",
-        "join_our": "Join our"
+        "join_our": "Join our",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "Account name should ",

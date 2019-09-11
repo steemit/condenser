@@ -19,6 +19,8 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
+import { hasNsfwTag } from 'app/utils/StateFunctions';
+import { repLog10 } from 'app/utils/ParsersAndFormatters';
 
 class PostSummary extends React.Component {
     static propTypes = {
@@ -26,6 +28,9 @@ class PostSummary extends React.Component {
         pending_payout: PropTypes.string.isRequired,
         total_payout: PropTypes.string.isRequired,
         content: PropTypes.object.isRequired,
+        featured: PropTypes.bool,
+        promoted: PropTypes.bool,
+        onClose: PropTypes.func,
         thumbSize: PropTypes.string,
         nsfwPref: PropTypes.string,
     };
@@ -55,7 +60,7 @@ class PostSummary extends React.Component {
 
     render() {
         const { thumbSize, ignore } = this.props;
-        const { post, content } = this.props;
+        const { post, content, featured, promoted, onClose } = this.props;
         const { account } = this.props;
         if (!content) return null;
 
@@ -95,10 +100,10 @@ class PostSummary extends React.Component {
             );
         }
 
-        const { gray, authorRepLog10, flagWeight, isNsfw } = content
-            .get('stats', Map())
-            .toJS();
-        const pinned = content.get('pinned');
+        const { gray } = content.get('stats', Map()).toJS();
+        const authorRepLog10 = repLog10(content.get('author_reputation'));
+        const isNsfw = hasNsfwTag(content);
+        const special = content.get('special');
         const p = extractContent(immutableAccessor, content);
         const desc = p.desc;
 
@@ -136,6 +141,8 @@ class PostSummary extends React.Component {
                     {isNsfw && <span className="nsfw-flag">nsfw</span>}
                     {title_text}
                 </Link>
+                {featured && <span className="FeaturedTag">Featured</span>}
+                {promoted && <span className="PromotedTag">Sponsored</span>}
             </h2>
         );
 
@@ -201,9 +208,16 @@ class PostSummary extends React.Component {
                             )}
                         </Link>
                     </div>
-                </div>
-                <div className="articles__flag clearfix">
-                    <Voting post={post} flag />
+
+                    {(featured || promoted) && (
+                        <a
+                            onClick={onClose}
+                            className="PostDismiss"
+                            title="Dismiss Post"
+                        >
+                            <Icon name="close" />
+                        </a>
+                    )}
                 </div>
             </div>
         );
@@ -338,9 +352,9 @@ class PostSummary extends React.Component {
         }
 
         // A post is hidden if it's marked "gray" or "ignore" and it's not
-        // pinned.
+        // special.
         const commentClasses = [];
-        if (!pinned && (gray || ignore)) commentClasses.push('downvoted'); // rephide
+        if (!special && (gray || ignore)) commentClasses.push('downvoted'); // rephide
 
         return (
             <div className="articles__summary">

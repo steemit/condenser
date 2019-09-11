@@ -582,7 +582,9 @@
         "signup_button": "Crea una cuenta, comienza a ganar ",
         "signup_button_emphasis": "FREE STEEM!",
         "returning_users": "Inicia sesion",
-        "join_our": "Únete a nuestro"
+        "join_our": "Únete a nuestro",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "El nombre de la cuenta debería",

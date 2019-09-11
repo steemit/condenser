@@ -1,0 +1,53 @@
+#AppNexus
+appnexus.com, 8394, DIRECT
+#Rubicon:
+rubiconproject.com,18812, DIRECT, 0bfd66d529a55807
+#A9
+aps.amazon.com,747b8b51-ec47-4dee-9823-b2b73124b71f,DIRECT
+pubmatic.com,157150,RESELLER,5d62403b186f2ace
+openx.com,540191398,RESELLER,6a698e2ec38604c6
+rubiconproject.com,18020,RESELLER,0bfd66d529a55807
+appnexus.com,1908,RESELLER,f5ab79cb980f11d1
+adtech.com,12068,RESELLER,e1a5b5b6e3255540
+districtm.io,100962,RESELLER,3fd707be9c4527c3
+rhythmone.com,1654642120,RESELLER,a670c89d4a324e47
+#Pubmatic
+pubmatic.com, 156691, DIRECT, 5d62403b186f2ace
+#bRealTime
+EMXDGT.com, 375, RESELLER, 1e1d41537f7cad7f
+Appnexus.com, 1356, RESELLER, f5ab79cb980f11d1
+#DistrictM
+districtm.io, 100983, DIRECT
+appnexus.com, 7944, RESELLER
+appnexus.com, 1908, RESELLER
+#Sekindo
+sekindo.com, 23938, DIRECT
+spotxchange.com, 84294, RESELLER, 7842df1d2fe2db34
+spotx.tv, 84294, RESELLER, 7842df1d2fe2db34
+advertising.com, 7372, RESELLER
+advertising.com, 24410, RESELLER
+inner-active.com, 206396, RESELLER
+lkqd.net, 244, RESELLER, 59c49fa9598a0117
+lkqd.com, 244, RESELLER, 59c49fa9598a0117
+smartadserver.com, 2137, RESELLER
+tidaltv.com, 32071, RESELLER
+pubmatic.com, 156380, RESELLER, 5d62403b186f2ace
+appnexus.com, 1940, RESELLER
+appnexus.com, 2764, RESELLER
+fyber.com, f14d40df2568b6df4eed292a5ad93716, RESELLER
+fyber.com, 3238c1661ce2914845a986d98baf7d59, RESELLER
+tremorhub.com, mb9eo-oqsbf, RESELLER, 1a4e959a1b50034a
+vi.ai, 474289066697842, RESELLER
+freewheel.tv, 19129, RESELLER
+freewheel.tv, 19133, RESELLER
+adform.com, 2078, RESELLER
+improvedigital.com, 1065, RESELLER
+#TripleLift
+triplelift.com, 7328, DIRECT, 6c33edb13117fd86
+appnexus.com, 1314, RESELLER
+spotxchange.com, 228454, RESELLER, 7842df1d2fe2db34
+spotx.tv, 228454, RESELLER, 7842df1d2fe2db34
+#Google
+google.com, pub-2049948180079264, DIRECT, f08c47fec0942fa0
+google.com, pub-9454946816537646, DIRECT, f08c47fec0942fa0
+google.com, pub-8400268452481648, DIRECT, f08c47fec0942fa0

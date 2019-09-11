@@ -603,7 +603,9 @@
         "signup_button": "Sign up now to earn ",
         "signup_button_emphasis": "FREE STEEM!",
         "returning_users": "Utilisateurs de retour: ",
-        "join_our": "Rejoignez notre"
+        "join_our": "Rejoignez notre",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "Le nom du compte doit ",

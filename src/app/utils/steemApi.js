@@ -24,6 +24,7 @@ export async function getStateAsync(url, observer) {
         'created',
         'payout',
         'payout_comments',
+        'muted',
     ];
     const tabs = ['blog', 'feed', 'comments', 'recent-replies', 'payout'];
 

@@ -151,6 +151,7 @@ class Header extends React.Component {
                 if (prefix == 'created') prefix = 'New';
                 if (prefix == 'payout') prefix = 'Pending';
                 if (prefix == 'payout_comments') prefix = 'Pending';
+                if (prefix == 'muted') prefix = 'Muted';
                 page_title = prefix;
                 if (topic !== '') {
                     let name = this.props.community.getIn(

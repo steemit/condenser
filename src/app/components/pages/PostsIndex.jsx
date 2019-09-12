@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import tt from 'counterpart';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -397,7 +397,7 @@ module.exports = {
             }
 
             return {
-                discussions: state.global.get('discussion_idx'),
+                discussions: state.global.get('discussion_idx', Map()),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 feed_posts,
@@ -412,7 +412,7 @@ module.exports = {
                 sortOrder: ownProps.params.order,
                 topic: ownProps.params.category,
                 categories: state.global
-                    .getIn(['tag_idx', 'trending'])
+                    .getIn(['tag_idx', 'trending'], List())
                     .take(50),
                 featured: state.offchain
                     .get('special_posts')

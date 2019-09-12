@@ -98,18 +98,15 @@ export class BeneficiarySelector extends React.Component {
                                 pattern="[0-9]*"
                                 value={remainingPercent}
                                 disabled
-                                style={{
-                                    maxWidth: '2.6rem',
-                                }}
+                                className="BeneficiarySelector__percentbox"
                             />
-                            <span style={{ paddingTop: '5px' }}>%</span>
+                            <span className="BeneficiarySelector__percentrow">
+                                %
+                            </span>
                         </div>
                     </div>
                     <div className="column small-5">
-                        <div
-                            className="input-group"
-                            style={{ marginBottom: '1.25rem' }}
-                        >
+                        <div className="input-group">
                             <span className="input-group-label">@</span>
                             <input
                                 className="input-group-field bold"
@@ -132,18 +129,15 @@ export class BeneficiarySelector extends React.Component {
                                     onChange={this.handleBeneficiaryPercentChange(
                                         idx
                                     )}
-                                    style={{
-                                        maxWidth: '2.6rem',
-                                    }}
+                                    className="BeneficiarySelector__percentbox"
                                 />
-                                <span style={{ paddingTop: '5px' }}>%</span>
+                                <span className="BeneficiarySelector__percentrow">
+                                    %
+                                </span>
                             </div>
                         </div>
                         <div className="column small-5">
-                            <div
-                                className="input-group"
-                                style={{ marginBottom: '1.25rem' }}
-                            >
+                            <div className="input-group">
                                 <span className="input-group-label">@</span>
                                 <Autocomplete
                                     wrapperStyle={{
@@ -189,10 +183,7 @@ export class BeneficiarySelector extends React.Component {
                                 />
                             </div>
                         </div>
-                        <div
-                            className="column small-5"
-                            style={{ paddingTop: '5px' }}
-                        >
+                        <div className="BeneficiarySelector__percentrow column small-5">
                             <a
                                 id="remove"
                                 href="#"
@@ -263,7 +254,7 @@ export function validateBeneficiaries(
 import { connect } from 'react-redux';
 
 export default connect((state, ownProps) => {
-    var following = List();
+    let following = List();
     const username = state.user.getIn(['current', 'username']);
     const follow = state.global.get('follow');
     if (follow) {
@@ -277,6 +268,6 @@ export default connect((state, ownProps) => {
     return {
         ...ownProps,
         username,
-        following,
+        following: following.toJS(),
     };
 })(BeneficiarySelector);

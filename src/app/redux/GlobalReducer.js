@@ -232,7 +232,8 @@ export default function reducer(state = defaultState, action = {}) {
                 order === 'by_author' ||
                 order === 'by_feed' ||
                 order === 'by_comments' ||
-                order === 'by_replies'
+                order === 'by_replies' ||
+                order === 'by_payout'
             ) {
                 // category is either "blog", "feed", "comments", or "recent_replies" (respectively) -- and all posts are keyed under current profile
                 const key = ['accounts', accountname, category];

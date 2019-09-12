@@ -153,6 +153,7 @@ export function* fetchData(action) {
         by_feed: 'feed',
         by_author: 'blog',
         by_comments: 'comments',
+        by_payout: 'payout',
     };
 
     yield put(globalActions.fetchingData({ order, category }));

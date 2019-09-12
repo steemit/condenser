@@ -100,6 +100,9 @@ export default class UserProfile extends React.Component {
             case 'recent_replies':
                 order = 'by_replies';
                 break;
+            case 'payout':
+                order = 'by_payout';
+                break;
             default:
                 console.log('unhandled category:', category);
         }
@@ -356,6 +359,37 @@ export default class UserProfile extends React.Component {
                     </center>
                 );
             }
+
+        } else if (section === 'payout') {
+            if (account.payout) {
+                let posts = accountImm.get('payout');
+                if (!fetching && (posts && !posts.size)) {
+                    tab_content = (
+                        <Callout>
+                            'No pending payouts.'
+                        </Callout>
+                    );
+                } else {
+                    tab_content = (
+                        <div>
+                            <PostsList
+                                posts={posts}
+                                loading={fetching}
+                                category="payout"
+                                loadMore={this.loadMore}
+                                showPinned={false}
+                                showSpam={false}
+                            />
+                        </div>
+                    );
+                }
+            } else {
+                tab_content = (
+                    <center>
+                        <LoadingIndicator type="circle" />
+                    </center>
+                );
+            }
         } else {
             //    console.log( "no matches" );
         }
@@ -368,26 +402,16 @@ export default class UserProfile extends React.Component {
         var page_title = '';
         // Page title
 
-        if (isMyAccount) {
-            if (section === 'blog') {
-                page_title = tt('g.my_blog');
-            } else if (section === 'comments') {
-                page_title = tt('g.my_comments');
-            } else if (section === 'recent-replies') {
-                page_title = tt('g.my_replies');
-            } else if (section === 'settings') {
-                page_title = tt('g.settings');
-            }
-        } else {
-            if (section === 'blog') {
-                page_title = tt('g.blog');
-            } else if (section === 'comments') {
-                page_title = tt('g.comments');
-            } else if (section === 'recent-replies') {
-                page_title = tt('g.replies');
-            } else if (section === 'settings') {
-                page_title = tt('g.settings');
-            }
+        if (section === 'blog') {
+            page_title = isMyAccount ? tt('g.my_blog') : tt('g.blog');
+        } else if (section === 'comments') {
+            page_title = isMyAccount ? tt('g.my_comments') : tt('g.comments');
+        } else if (section === 'recent-replies') {
+            page_title = isMyAccount ? tt('g.my_replies') : tt('g.replies');
+        } else if (section === 'settings') {
+            page_title = tt('g.settings');
+        } else if (section === 'payout') {
+            page_title = tt('voting_jsx.payout');
         }
 
         const layoutClass = this.props.blogmode

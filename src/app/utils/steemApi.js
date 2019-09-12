@@ -25,7 +25,7 @@ export async function getStateAsync(url, observer) {
         'payout',
         'payout_comments',
     ];
-    const tabs = ['blog', 'feed', 'comments', 'recent-replies'];
+    const tabs = ['blog', 'feed', 'comments', 'recent-replies', 'payout'];
 
     if (parts == 1 && sorts.includes(part[0])) {
         //console.log("getState URL -- all ranked posts", url)

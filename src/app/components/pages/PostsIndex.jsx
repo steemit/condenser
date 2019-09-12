@@ -262,7 +262,7 @@ class PostsIndex extends React.Component {
                             </span>
                         </div>
                         {category != 'feed' && (
-                            <div className="small-6 medium-5 large-5 column hide-for-large articles__header-select">
+                            <div className="small-6 medium-5 large-5 column hide-for-largeX articles__header-select">
                                 <SortOrder
                                     sortOrder={this.props.sortOrder}
                                     topic={this.props.topic}

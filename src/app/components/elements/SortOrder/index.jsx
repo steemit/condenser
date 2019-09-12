@@ -27,14 +27,7 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
         sort = 'trending';
     }
 
-    const makeRoute = (tag, sort) =>
-        tag ? `/${sort.value}/${tag}` : `/${sort.value}`;
-
-    const handleChange = tag => sort => {
-        browserHistory.replace(makeRoute(tag, sort));
-    };
-
-    const sorts = (tag, showPromoted = true) => {
+    const sorts = (tag, topMenu = false, isCommunity = false) => {
         if (tag != '') tag = `/${tag}`;
 
         let out = [
@@ -55,20 +48,49 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
             },
         ];
 
-        if (showPromoted) {
+        if (!topMenu) {
             out.push({
                 value: 'promoted',
                 label: tt('g.promoted'),
                 link: `/promoted${tag}`,
             });
+
+            out.push({
+                value: 'payout',
+                label: tt('g.payouts'),
+                link: `/payout${tag}`,
+            });
+
+            if (isCommunity) {
+                out.push({
+                    value: 'muted',
+                    label: 'Muted',
+                    link: `/muted${tag}`,
+                });
+            }
         }
 
         return out;
     };
 
-    return horizontal ? (
+    // vertical dropdown
+    if (!horizontal) {
+        const handleChange = tag => sort => {
+            const url = tag ? `/${sort.value}/${tag}` : `/${sort.value}`;
+            browserHistory.replace(url);
+        };
+
+        return (<NativeSelect
+            currentlySelected={sort}
+            options={sorts(tag, false, tag.substr(0, 5) == 'hive-')}
+            onChange={handleChange(tag)}
+        />);
+    }
+
+    // site header
+    return (
         <ul className="nav__block-list">
-            {sorts('', false).map(i => {
+            {sorts('', true, false).map(i => {
                 return (
                     <li
                         key={i.value}
@@ -83,12 +105,6 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
                 );
             })}
         </ul>
-    ) : (
-        <NativeSelect
-            currentlySelected={sort}
-            options={sorts(tag)}
-            onChange={handleChange(tag)}
-        />
     );
 };
 

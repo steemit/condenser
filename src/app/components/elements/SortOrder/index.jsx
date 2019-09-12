@@ -34,9 +34,10 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
         browserHistory.replace(makeRoute(tag, sort));
     };
 
-    const sorts = tag => {
+    const sorts = (tag, showPromoted = true) => {
         if (tag != '') tag = `/${tag}`;
-        return [
+
+        let out = [
             {
                 value: 'trending',
                 label: tt('main_menu.trending'),
@@ -52,22 +53,27 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
                 label: tt('g.new'),
                 link: `/created${tag}`,
             },
-            {
+        ];
+
+        if (showPromoted) {
+            out.push({
                 value: 'promoted',
                 label: tt('g.promoted'),
                 link: `/promoted${tag}`,
-            },
-        ];
+            });
+        }
+
+        return out;
     };
 
     return horizontal ? (
         <ul className="nav__block-list">
-            {sorts(tag).map(i => {
+            {sorts('', false).map(i => {
                 return (
                     <li
                         key={i.value}
                         className={`nav__block-list-item ${
-                            i.value === sort
+                            i.value === sort && !tag
                                 ? 'nav__block-list-item--active'
                                 : ''
                         }`}

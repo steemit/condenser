@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { cleanReduxInput } from 'app/utils/ReduxForms';
 import tt from 'counterpart';
+import { List } from 'immutable';
 
 class CategorySelector extends React.Component {
     static propTypes = {
@@ -125,7 +126,7 @@ export function validateCategory(category, required = true) {
     );
 }
 export default connect((state, ownProps) => {
-    const trending = state.global.getIn(['tag_idx', 'trending']);
+    const trending = state.global.getIn(['tag_idx', 'trending'], List());
     // apply translations
     // they are used here because default prop can't acces intl property
     const placeholder = tt('category_selector_jsx.tag_your_story');

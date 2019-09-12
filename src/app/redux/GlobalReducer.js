@@ -83,6 +83,7 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_STATE: {
             let new_state = fromJS(payload);
+            console.log('Receive state', payload);
             if (new_state.has('content')) {
                 const content = new_state.get('content').withMutations(c => {
                     c.forEach((cc, key) => {

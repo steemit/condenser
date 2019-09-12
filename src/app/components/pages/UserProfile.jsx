@@ -97,7 +97,7 @@ export default class UserProfile extends React.Component {
             case 'comments':
                 order = 'by_comments';
                 break;
-            case 'recent_replies':
+            case 'replies':
                 order = 'by_replies';
                 break;
             case 'payout':
@@ -128,7 +128,7 @@ export default class UserProfile extends React.Component {
             category,
             accountname,
             postFilter,
-            observer: current_user,
+            observer: current_user ? current_user.get('username') : null,
         });
     }
 
@@ -329,8 +329,8 @@ export default class UserProfile extends React.Component {
                 );
             }
         } else if (section === 'recent-replies') {
-            if (account.recent_replies) {
-                let posts = accountImm.get('recent_replies');
+            if (account.replies) {
+                let posts = accountImm.get('replies');
                 if (!fetching && (posts && !posts.size)) {
                     tab_content = (
                         <Callout>
@@ -345,7 +345,7 @@ export default class UserProfile extends React.Component {
                             <PostsList
                                 posts={posts}
                                 loading={fetching}
-                                category="recent_replies"
+                                category="replies"
                                 loadMore={this.loadMore}
                                 showPinned={false}
                                 showSpam={false}
@@ -360,16 +360,11 @@ export default class UserProfile extends React.Component {
                     </center>
                 );
             }
-
         } else if (section === 'payout') {
             if (account.payout) {
                 let posts = accountImm.get('payout');
                 if (!fetching && (posts && !posts.size)) {
-                    tab_content = (
-                        <Callout>
-                            'No pending payouts.'
-                        </Callout>
-                    );
+                    tab_content = <Callout>No pending payouts.</Callout>;
                 } else {
                     tab_content = (
                         <div>
@@ -500,6 +495,14 @@ export default class UserProfile extends React.Component {
                                 activeClassName="active"
                             >
                                 {tt('g.replies')}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to={`/@${accountname}/payout`}
+                                activeClassName="active"
+                            >
+                                {tt('voting_jsx.payout')}
                             </Link>
                         </li>
                         <DropdownMenu

@@ -151,7 +151,7 @@ export function* fetchData(action) {
     const account_sorts = {
         by_replies: 'replies',
         by_feed: 'feed',
-        by_author: 'blog',
+        by_blog: 'blog',
         by_comments: 'comments',
         by_payout: 'payout',
     };

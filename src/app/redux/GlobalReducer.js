@@ -227,37 +227,31 @@ export default function reducer(state = defaultState, action = {}) {
             } = payload;
             let new_state;
 
+            let key;
+
+            const account_orders = [
+                'by_blog',
+                'by_feed',
+                'by_comments',
+                'by_replies',
+                'by_payout',
+            ];
+
             // append incoming post keys to proper content list
-            if (
-                order === 'by_author' ||
-                order === 'by_feed' ||
-                order === 'by_comments' ||
-                order === 'by_replies' ||
-                order === 'by_payout'
-            ) {
-                // category is either "blog", "feed", "comments", or "recent_replies" (respectively) -- and all posts are keyed under current profile
-                const key = ['accounts', accountname, category];
-                new_state = state.updateIn(key, List(), list => {
-                    return list.withMutations(posts => {
-                        data.forEach(value => {
-                            const key = `${value.author}/${value.permlink}`;
-                            if (!posts.includes(key)) posts.push(key);
-                        });
+            if (account_orders.includes(order)) {
+                // category is either "blog", "feed", "comments", or "replies" (respectively)
+                key = ['accounts', accountname, category];
+            } else {
+                key = ['discussion_idx', category || '', order];
+            }
+            new_state = state.updateIn(key, List(), list => {
+                return list.withMutations(posts => {
+                    data.forEach(value => {
+                        const key = `${value.author}/${value.permlink}`;
+                        if (!posts.includes(key)) posts.push(key);
                     });
                 });
-            } else {
-                new_state = state.updateIn(
-                    ['discussion_idx', category || '', order],
-                    list => {
-                        return list.withMutations(posts => {
-                            data.forEach(value => {
-                                const key = `${value.author}/${value.permlink}`;
-                                if (!posts.includes(key)) posts.push(key);
-                            });
-                        });
-                    }
-                );
-            }
+            });
 
             // append content stats data to each post
             new_state = new_state.updateIn(['content'], content => {

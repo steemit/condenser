@@ -23,69 +23,49 @@ class Topics extends Component {
             order,
             current,
             compact,
-            className,
             username,
             categories,
+            communities,
         } = this.props;
 
         if (compact) {
-            const currentlySelected = (
-                currentTag,
-                username,
-                currentOrder = false
-            ) => {
-                const opts = {
-                    feed: `/@${username}/feed`,
-                    tagOnly: `/trending/${currentTag}`,
-                    orderOnly: `/${currentOrder}`,
-                    tagWithOrder: `/${currentOrder}/${currentTag}`,
-                    default: `/trending`,
-                };
-                if (currentTag === 'feed') return opts['feed'];
-                if (currentTag && currentOrder) return opts['tagWithOrder'];
-                if (!currentTag && currentOrder) return opts['orderOnly'];
-                if (currentTag && !currentOrder) return opts['tagOnly'];
-                return opts['default'];
+            const label = tag => communities.getIn([tag, 'title'], '#' + tag);
+            const opt = tag => {
+                if (tag === 'feed')
+                    return {
+                        value: `/@${username}/feed`,
+                        label: tt('g.my_feed'),
+                    };
+                if (tag === 'my')
+                    return { value: `/trending/my`, label: 'My subscriptions' };
+                if (tag)
+                    return { value: `/trending/${tag}`, label: label(tag) };
+                return { value: `/trending`, label: tt('g.all_tags') };
             };
 
-            const onChange = selected => {
-                browserHistory.push(selected.value);
-            };
+            let options = [];
+            options.push(opt(null));
 
-            const extras = username => {
-                const ex = {
-                    allTags: order => ({
-                        value: `/${order}`,
-                        label: `${tt('g.all_tags_mobile')}`,
-                    }),
-                    myFeed: name => ({
-                        value: `/@${name}/feed`,
-                        label: `${tt('g.my_feed')}`,
-                    }),
-                };
-                return username
-                    ? [ex.allTags(order), ex.myFeed(username)]
-                    : [ex.allTags(order)];
-            };
+            if (username) {
+                options.push(opt('feed'));
+                options.push(opt('my'));
+            }
 
-            const opts = extras(username).concat(
-                categories
-                    .map(cat => {
-                        const link = order ? `/${order}/${cat}` : `/${cat}`;
-                        return { value: link, label: cat };
-                    })
-                    .toJS()
-            );
+            options = options.concat(categories.map(cat => opt(cat)).toJS());
+            options = options.filter(opt => opt.label); // #TODO: filter on backend
+
+            const currOpt = opt(current);
+            if (!options.find(opt => opt.value == currOpt.value)) {
+                options.push(opt(current));
+            }
 
             return (
                 <NativeSelect
-                    currentlySelected={currentlySelected(
-                        current,
-                        username,
-                        order
-                    )}
-                    options={opts}
-                    onChange={onChange}
+                    options={options}
+                    currentlySelected={currOpt.value}
+                    onChange={opt => {
+                        browserHistory.push(opt.value);
+                    }}
                 />
             );
         } else {

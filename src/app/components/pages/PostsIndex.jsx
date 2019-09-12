@@ -196,6 +196,8 @@ class PostsIndex extends React.Component {
                 page_title = tt('posts_index.accountnames_feed', {
                     account_name,
                 });
+        } else if (category === 'my') {
+            page_title = 'My subscriptions';
         } else {
             if (community) {
                 page_title = community.get('title');
@@ -220,13 +222,7 @@ class PostsIndex extends React.Component {
                     <div className="articles__header row">
                         <div className="small-6 medium-6 large-6 column">
                             <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
-                                {page_title}{' '}
-                                {typeof category !== 'undefined' &&
-                                    category !== 'feed' && (
-                                        <small>
-                                            <Link to={'/' + order}>[x]</Link>
-                                        </small>
-                                    )}
+                                {page_title}
                             </h1>
                             <div className="show-for-mq-large">
                                 {community && (
@@ -241,7 +237,8 @@ class PostsIndex extends React.Component {
                                 )}
                                 {!community &&
                                     typeof category !== 'undefined' &&
-                                    category !== 'feed' && (
+                                    category !== 'feed' &&
+                                    category !== 'my' && (
                                         <div
                                             style={{
                                                 fontSize: '80%',

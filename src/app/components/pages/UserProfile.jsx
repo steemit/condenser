@@ -85,7 +85,7 @@ export default class UserProfile extends React.Component {
     }
 
     loadMore(last_post, category, showResteem) {
-        const { accountname } = this.props;
+        const { accountname, current_user } = this.props;
 
         if (!last_post) return;
 
@@ -128,6 +128,7 @@ export default class UserProfile extends React.Component {
             category,
             accountname,
             postFilter,
+            observer: current_user,
         });
     }
 

@@ -81,6 +81,7 @@ class PostsIndex extends React.Component {
             order,
             category,
             accountname,
+            observer: this.props.username,
         });
     }
     onShowSpam = () => {

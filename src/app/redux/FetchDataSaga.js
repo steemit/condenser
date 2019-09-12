@@ -143,7 +143,7 @@ function* getAccounts(usernames) {
 }
 
 export function* fetchData(action) {
-    const { order, author, permlink, accountname, postFilter } = action.payload;
+    const { order, author, permlink, accountname, postFilter, observer } = action.payload;
     let { category } = action.payload;
     if (!category) category = '';
     category = category.toLowerCase();
@@ -166,6 +166,7 @@ export function* fetchData(action) {
             limit: constants.FETCH_DATA_BATCH_SIZE,
             start_author: author,
             start_permlink: permlink,
+            observer: observer,
         };
     } else {
         call_name = 'get_ranked_posts';
@@ -175,6 +176,7 @@ export function* fetchData(action) {
             limit: constants.FETCH_DATA_BATCH_SIZE,
             start_author: author,
             start_permlink: permlink,
+            observer: observer,
         };
     }
 

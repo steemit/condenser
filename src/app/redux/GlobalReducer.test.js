@@ -298,7 +298,7 @@ describe('Global reducer', () => {
         };
         let payload = {
             data: [postData],
-            order: 'by_author',
+            order: 'by_blog',
             category: 'blog',
             accountname: 'alice',
         };
@@ -393,7 +393,7 @@ describe('Global reducer', () => {
         //Arrange
         let payload = {
             data: [],
-            order: 'by_author',
+            order: 'by_blog',
             category: 'blog',
             accountname: 'alice',
         };

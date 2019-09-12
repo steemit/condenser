@@ -10,7 +10,7 @@ import { fetchData } from './FetchDataSaga';
 describe('FetchDataSaga', () => {
     describe('should fetch multiple and filter', () => {
         let payload = {
-            order: 'by_author',
+            order: 'by_blog',
             author: 'alice',
             permlink: 'hair',
             accountname: 'bob',
@@ -27,7 +27,7 @@ describe('FetchDataSaga', () => {
             expect(actual).toEqual(
                 put(
                     globalActions.fetchingData({
-                        order: 'by_author',
+                        order: 'by_blog',
                         category: '',
                     })
                 )
@@ -65,7 +65,7 @@ describe('FetchDataSaga', () => {
                             { author: 'alice' },
                             { author: 'bob', permlink: 'post1' },
                         ],
-                        order: 'by_author',
+                        order: 'by_blog',
                         category: '',
                         author: 'alice',
                         accountname: 'bob',
@@ -97,7 +97,7 @@ describe('FetchDataSaga', () => {
                 put(
                     globalActions.receiveData({
                         data: [{ author: 'bob', permlink: 'post2' }],
-                        order: 'by_author',
+                        order: 'by_blog',
                         category: '',
                         author: 'alice',
                         accountname: 'bob',
@@ -113,7 +113,7 @@ describe('FetchDataSaga', () => {
     });
     describe('should not fetch more batches than max batch size', () => {
         let payload = {
-            order: 'by_author',
+            order: 'by_blog',
             author: 'alice',
             permlink: 'hair',
             accountname: 'bob',
@@ -131,7 +131,7 @@ describe('FetchDataSaga', () => {
         expect(actual).toEqual(
             put(
                 globalActions.fetchingData({
-                    order: 'by_author',
+                    order: 'by_blog',
                     category: '',
                 })
             )
@@ -164,7 +164,7 @@ describe('FetchDataSaga', () => {
             put(
                 globalActions.receiveData({
                     data: [{ author: 'alice' }, { author: 'alice' }],
-                    order: 'by_author',
+                    order: 'by_blog',
                     category: '',
                     author: 'alice',
                     accountname: 'bob',
@@ -196,7 +196,7 @@ describe('FetchDataSaga', () => {
             put(
                 globalActions.receiveData({
                     data: [{ author: 'alice' }, { author: 'alice' }],
-                    order: 'by_author',
+                    order: 'by_blog',
                     category: '',
                     author: 'alice',
                     accountname: 'bob',

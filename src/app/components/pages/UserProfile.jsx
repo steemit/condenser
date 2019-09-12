@@ -92,7 +92,7 @@ export default class UserProfile extends React.Component {
         let order;
         switch (category) {
             case 'blog':
-                order = 'by_author';
+                order = 'by_blog';
                 break;
             case 'comments':
                 order = 'by_comments';
@@ -157,7 +157,7 @@ export default class UserProfile extends React.Component {
 
         // Loading status
         const status = global_status
-            ? global_status.getIn([section, 'by_author'])
+            ? global_status.getIn([section, 'by_blog'])
             : null;
         const fetching = (status && status.fetching) || this.props.loading;
 

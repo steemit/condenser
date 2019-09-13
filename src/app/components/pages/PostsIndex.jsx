@@ -220,7 +220,7 @@ class PostsIndex extends React.Component {
             >
                 <article className="articles">
                     <div className="articles__header row">
-                        <div className="small-6 medium-6 large-6 column">
+                        <div className="small-8 medium-7 large-8 column">
                             <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
                                 {page_title}
                             </h1>
@@ -228,7 +228,7 @@ class PostsIndex extends React.Component {
                                 {community && (
                                     <div
                                         style={{
-                                            fontSize: '80%',
+                                            fontSize: '100%',
                                             color: 'gray',
                                         }}
                                     >
@@ -262,7 +262,7 @@ class PostsIndex extends React.Component {
                             </span>
                         </div>
                         {category != 'feed' && (
-                            <div className="small-6 medium-5 large-5 column hide-for-largeX articles__header-select">
+                            <div className="small-4 medium-4 large-3 column hide-for-largeX articles__header-select">
                                 <SortOrder
                                     sortOrder={this.props.sortOrder}
                                     topic={this.props.topic}
@@ -306,7 +306,7 @@ class PostsIndex extends React.Component {
                                 </h3>
                             </div>
                             <strong>Moderators</strong>
-                            {teamMembers(community.get('team'))}
+                            {teamMembers(community.get('team', List()))}
                             <strong>Properties</strong>
                             <pre style={{ fontSize: '75%' }}>
                                 {JSON.stringify(community, null, 2)}

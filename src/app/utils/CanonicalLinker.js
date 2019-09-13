@@ -14,6 +14,12 @@ export function makeCanonicalLink(d) {
             }
         }
 
+        /*
+         * TODO: A number of apps listed in
+         * https://github.com/bonustrack/steemscript/blob/master/apps.json
+         * do not follow this standard. Audit reciprocating domains..
+         */
+        /*
         if (d.json_metadata.app && typeof d.json_metadata.app === 'string') {
             const hasAppTemplateData =
                 d.json_metadata &&
@@ -34,6 +40,7 @@ export function makeCanonicalLink(d) {
                 }
             }
         }
+        */
     }
     return canonicalUrl;
 }

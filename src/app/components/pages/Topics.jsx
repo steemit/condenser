@@ -107,7 +107,7 @@ class Topics extends Component {
                                             className="c-sidebar__link"
                                             activeClassName="active"
                                         >
-                                            {tt('g.my_feed')}
+                                            {'My friends' || tt('g.my_feed')}
                                         </Link>
                                     </div>
                                 </li>
@@ -120,7 +120,7 @@ class Topics extends Component {
                                             className="c-sidebar__link"
                                             activeClassName="active"
                                         >
-                                            My subscriptions
+                                            My communities
                                         </Link>
                                     </div>
                                 </li>

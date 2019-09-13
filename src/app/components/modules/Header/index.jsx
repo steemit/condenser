@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { immutableAccessor } from 'app/utils/Accessors';
+import extractContent from 'app/utils/ExtractContent';
 import Headroom from 'react-headroom';
 import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
@@ -23,7 +25,7 @@ import GptAd from 'app/components/elements/GptAd';
 class Header extends React.Component {
     static propTypes = {
         current_account_name: PropTypes.string,
-        account_meta: PropTypes.object,
+        display_name: PropTypes.string,
         category: PropTypes.string,
         order: PropTypes.string,
         pathname: PropTypes.string,
@@ -116,17 +118,18 @@ class Header extends React.Component {
             userPath,
             showSidePanel,
             navigate,
-            account_meta,
+            display_name,
             walletUrl,
+            content,
         } = this.props;
 
-        const { showAd, showAnnouncement } = this.state;
+        let { showAd, showAnnouncement } = this.state;
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
+        let tags = [];
         let home_account = false;
         let page_title = route.page;
-
         let sort_order = '';
         let topic = '';
         let page_name = null;
@@ -142,6 +145,7 @@ class Header extends React.Component {
                     home_account = true;
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
+                tags = [topic];
                 const type =
                     route.params[0] == 'payout_comments' ? 'comments' : 'posts';
                 let prefix = route.params[0];
@@ -152,6 +156,15 @@ class Header extends React.Component {
                 page_title = `${prefix} ${type}`;
             }
         } else if (route.page === 'Post') {
+            const user = `${route.params[1]}`.replace('@', '');
+            const slug = `${route.params[2]}`;
+            if (content) {
+                const post_content = content.get(`${user}/${slug}`);
+                if (post_content) {
+                    const p = extractContent(immutableAccessor, post_content);
+                    tags = p.json_metadata.tags || [];
+                }
+            }
             sort_order = '';
             topic = route.params[0];
         } else if (route.page == 'SubmitPost') {
@@ -163,11 +176,10 @@ class Header extends React.Component {
         } else if (route.page == 'RecoverAccountStep1') {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
-            let user_name = route.params[0].slice(1);
-            const name = account_meta
-                ? normalizeProfile(account_meta.toJS()).name
-                : null;
-            const user_title = name ? `${name} (@${user_name})` : user_name;
+            const user_name = route.params[0].slice(1);
+            const user_title = display_name
+                ? `${display_name} (@${user_name})`
+                : user_name;
             page_title = user_title;
             if (route.params[1] === 'followers') {
                 page_title = tt('header_jsx.people_following', {
@@ -176,16 +188,6 @@ class Header extends React.Component {
             }
             if (route.params[1] === 'followed') {
                 page_title = tt('header_jsx.people_followed_by', {
-                    username: user_title,
-                });
-            }
-            if (route.params[1] === 'curation-rewards') {
-                page_title = tt('header_jsx.curation_rewards_by', {
-                    username: user_title,
-                });
-            }
-            if (route.params[1] === 'author-rewards') {
-                page_title = tt('header_jsx.author_rewards_by', {
                     username: user_title,
                 });
             }
@@ -289,6 +291,7 @@ class Header extends React.Component {
                   }
                 : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
+        showAd = true;
         return (
             <Headroom
                 onUnpin={e => this.headroomOnUnpin(e)}
@@ -301,8 +304,9 @@ class Header extends React.Component {
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
                     <div style={showAd ? {} : { display: 'none' }}>
                         <GptAd
+                            tags={tags}
                             type="Freestar"
-                            id="steemit_728x90_970x90_970x250_320x50_ATF"
+                            id="bsa-zone_1566493796250-1_123456"
                         />
                     </div>
 
@@ -319,7 +323,7 @@ class Header extends React.Component {
                             <SortOrder
                                 sortOrder={order}
                                 topic={category === 'feed' ? '' : category}
-                                horizontal={true}
+                                horizontal
                                 pathname={pathname}
                             />
                         </div>
@@ -398,13 +402,14 @@ const mapStateToProps = (state, ownProps) => {
         };
     }
 
-    let user_profile;
+    let display_name;
     const route = resolveRoute(ownProps.pathname);
     if (route.page === 'UserProfile') {
-        user_profile = state.global.getIn([
+        const profile = state.global.getIn([
             'accounts',
             route.params[0].slice(1),
         ]);
+        display_name = profile ? normalizeProfile(profile.toJS()).name : null;
     }
 
     const userPath = state.routing.locationBeforeTransitions.pathname;
@@ -416,17 +421,19 @@ const mapStateToProps = (state, ownProps) => {
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
     const walletUrl = state.app.get('walletUrl');
+    const content = state.global.get('content');
 
     return {
         username,
         loggedIn,
         userPath,
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
-        account_meta: user_profile,
+        display_name,
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         gptEnabled,
         walletUrl,
+        content,
         ...ownProps,
     };
 };

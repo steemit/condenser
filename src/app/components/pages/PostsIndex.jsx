@@ -24,7 +24,7 @@ import SortOrder from 'app/components/elements/SortOrder';
 class PostsIndex extends React.Component {
     static propTypes = {
         discussions: PropTypes.object,
-        accounts: PropTypes.object,
+        feed_posts: PropTypes.object,
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
@@ -92,7 +92,18 @@ class PostsIndex extends React.Component {
             order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
 
-        const { categories, featured, promoted } = this.props;
+        const {
+            categories,
+            featured,
+            promoted,
+            gptBannedTags,
+            topic,
+        } = this.props;
+
+        let allowAdsOnContent = true;
+        allowAdsOnContent =
+            this.props.gptEnabled &&
+            !GptUtils.HasBannedTags([topic], gptBannedTags);
 
         let topics_order = order;
         let posts = [];
@@ -102,7 +113,7 @@ class PostsIndex extends React.Component {
             account_name = order.slice(1);
             order = 'by_feed';
             topics_order = 'trending';
-            posts = this.props.accounts.getIn([account_name, 'feed']);
+            posts = this.props.feed_posts;
             const isMyAccount = this.props.username === account_name;
             if (isMyAccount) {
                 emptyText = (
@@ -215,7 +226,7 @@ class PostsIndex extends React.Component {
                                     order={topics_order}
                                     current={category}
                                     categories={categories}
-                                    compact={true}
+                                    compact
                                 />
                             </span>
                         </div>
@@ -241,12 +252,13 @@ class PostsIndex extends React.Component {
                             ref="list"
                             posts={posts ? posts : List()}
                             loading={fetching}
-                            anyPosts={true}
+                            anyPosts
                             category={category}
                             loadMore={this.loadMore}
-                            showFeatured={true}
-                            showPromoted={true}
+                            showFeatured
+                            showPromoted
                             showSpam={showSpam}
+                            allowAdsOnContent={allowAdsOnContent}
                         />
                     )}
                 </article>
@@ -266,9 +278,12 @@ class PostsIndex extends React.Component {
                     )}
                     <Notices notices={this.props.notices} />
                     <SteemMarket />
-                    {this.props.gptEnabled ? (
+                    {this.props.gptEnabled && allowAdsOnContent ? (
                         <div className="sidebar-ad">
-                            <GptAd type="Freestar" id="steemit_160x600_Right" />
+                            <GptAd
+                                type="Freestar"
+                                id="bsa-zone_1566495004689-0_123456"
+                            />
                         </div>
                     ) : null}
                 </aside>
@@ -292,12 +307,12 @@ class PostsIndex extends React.Component {
                         </a>
                         {' ' + tt('g.next_3_strings_together.value_posts')}
                     </small>
-                    {this.props.gptEnabled ? (
+                    {this.props.gptEnabled && allowAdsOnContent ? (
                         <div>
                             <div className="sidebar-ad">
                                 <GptAd
                                     type="Freestar"
-                                    slotName="steemit_160x600_Left_1"
+                                    slotName="bsa-zone_1566494461953-7_123456"
                                 />
                             </div>
                             <div
@@ -306,7 +321,7 @@ class PostsIndex extends React.Component {
                             >
                                 <GptAd
                                     type="Freestar"
-                                    slotName="steemit_160x600_Left_2"
+                                    slotName="bsa-zone_1566494856923-9_123456"
                                 />
                             </div>
                         </div>
@@ -321,11 +336,22 @@ module.exports = {
     path: ':order(/:category)',
     component: connect(
         (state, ownProps) => {
+            // special case if user feed (vs. trending, etc)
+            let feed_posts;
+            if (ownProps.routeParams.category === 'feed') {
+                const account_name = ownProps.routeParams.order.slice(1);
+                feed_posts = state.global.getIn([
+                    'accounts',
+                    account_name,
+                    'feed',
+                ]);
+            }
+
             return {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                accounts: state.global.get('accounts'),
+                feed_posts,
                 username:
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),
@@ -348,6 +374,7 @@ module.exports = {
                 maybeLoggedIn: state.user.get('maybeLoggedIn'),
                 isBrowser: process.env.BROWSER,
                 gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
+                gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
             };
         },
         dispatch => {

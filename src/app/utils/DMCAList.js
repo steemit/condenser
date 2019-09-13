@@ -314,6 +314,7 @@ export default `
 /anime/@kissanime/one-piece-episode-869-english-subbed
 /movie/@w4mbo/p5sqaxxd
 /bird/@steemity-gift/worlds-most-beautiful-birds
+/apple/@xpl0itu/these-are-the-programs-that-apple-uses-at-the-factories
 `
     .trim()
     .split('\n');

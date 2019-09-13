@@ -32,11 +32,15 @@ class Author extends React.Component {
         mute: bool,
         authorRepLog10: number,
         showAffiliation: bool,
+        role: string,
+        title: string,
     };
     static defaultProps = {
         follow: true,
         mute: true,
         showAffiliation: false,
+        role: '',
+        title: '',
     };
 
     constructor(...args) {
@@ -97,6 +101,8 @@ class Author extends React.Component {
             mute,
             authorRepLog10,
             showAffiliation,
+            role,
+            title,
         } = this.props; // html
         const { username } = this.props; // redux
         const { name, about } = this.props.account
@@ -115,6 +121,10 @@ class Author extends React.Component {
                         <Link to={'/@' + author}>{author}</Link>
                     </strong>{' '}
                     <Reputation value={authorRepLog10} />
+                    {role && role != 'guest' && <span>[{role}]</span>}
+                    {title != '' && (
+                        <span className="affiliation">{title}</span>
+                    )}
                     {showAffiliation && AffiliationMap[author] ? (
                         <span className="affiliation">
                             {tt('g.affiliation_' + AffiliationMap[author])}
@@ -140,6 +150,10 @@ class Author extends React.Component {
                             to={'/@' + author}
                         >
                             {author} <Reputation value={authorRepLog10} />
+                            {role && role != 'guest' && <span>[{role}]</span>}
+                            {title != '' && (
+                                <span className="affiliation">{title}</span>
+                            )}
                             {showAffiliation && AffiliationMap[author] ? (
                                 <span className="affiliation">
                                     {tt(

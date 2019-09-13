@@ -40,6 +40,8 @@ function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
                 author={content.author}
                 authorRepLog10={authorRepLog10}
                 showAffiliation
+                role={content.author_role}
+                title={content.author_title}
             />
             {showTags && (
                 <span>
@@ -60,6 +62,8 @@ function TimeAuthorCategoryLarge({ content, authorRepLog10 }) {
                     author={content.author}
                     authorRepLog10={authorRepLog10}
                     showAffiliation
+                    role={content.author_role}
+                    title={content.author_title}
                 />
                 <span>
                     {' '}

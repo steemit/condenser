@@ -26,32 +26,48 @@ class MutePost extends Component {
 
     render() {
         const { notes, disableSubmit } = this.state;
+        const { isMuted } = this.props;
+
+        let submitButtonLabel = tt('g.mute');
+        if (isMuted) submitButtonLabel = tt('g.unmute');
+
         return (
-            <span className="ExplorePost">
-                <h4>{tt('g.mute_this_post')}</h4>
-                <p>
-                    Please provide a note regarding your decision to mute this
-                    post.
-                </p>
-                <hr />
-                <form onSubmit={() => this.onSubmit()}>
-                    <div className="input-group">
-                        <span className="input-group-label">Notes</span>
-                        <input
-                            className="input-group-field"
-                            type="text"
-                            onChange={e => this.onInput(e)}
-                        />
-                        <button
-                            className="button slim hollow secondary"
-                            type="submit"
-                            title={tt('g.mute')}
-                            disabled={disableSubmit}
-                        >
-                            {tt('g.mute')}
-                        </button>
+            <span>
+                {isMuted ? (
+                    <div>
+                        <h4>{tt('g.unmute_this_post')}</h4>{' '}
+                        <p> {tt('g.unmute_this_post_description')}</p>
                     </div>
-                </form>
+                ) : (
+                    <div>
+                        <h4>{tt('g.mute_this_post')}</h4>
+                        <p>{tt('g.mute_this_post_description')}</p>
+                    </div>
+                )}
+                <hr />
+                <div className="input-group">
+                    <span className="input-group-label">Notes</span>
+                    <input
+                        className="input-group-field"
+                        type="text"
+                        maxLength={120}
+                        onKeyUp={e => {
+                            if (e.key === 'Enter') {
+                                this.onSubmit();
+                            }
+                            this.onInput(e);
+                        }}
+                    />
+                    <button
+                        className="button slim hollow secondary"
+                        type="submit"
+                        title={submitButtonLabel}
+                        disabled={disableSubmit}
+                        onClick={() => this.onSubmit()}
+                    >
+                        {submitButtonLabel}
+                    </button>
+                </div>
             </span>
         );
     }
@@ -59,6 +75,11 @@ class MutePost extends Component {
 
 MutePost.propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    isMuted: PropTypes.bool,
+};
+
+MutePost.defaultProps = {
+    isMuted: false,
 };
 
 export default connect()(MutePost);

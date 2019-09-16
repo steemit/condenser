@@ -608,7 +608,7 @@ class PostFull extends React.Component {
                                 isMuted && (
                                     <a
                                         onClick={() =>
-                                            this.onToggleMute(true, 'Unmuted')
+                                            this.onTogglePromptForMuteNotes()
                                         }
                                     >
                                         {tt('g.unmute')}
@@ -635,9 +635,10 @@ class PostFull extends React.Component {
                                         }
                                     />
                                     <MutePost
+                                        isMuted={isMuted}
                                         onSubmit={notes => {
                                             this.onTogglePromptForMuteNotes();
-                                            this.onToggleMute(false, notes);
+                                            this.onToggleMute(isMuted, notes);
                                         }}
                                     />
                                 </Reveal>

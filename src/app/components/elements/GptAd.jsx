@@ -67,12 +67,13 @@ GptAd.propTypes = {
     enabled: PropTypes.bool.isRequired,
     type: PropTypes.oneOf(['Bidding', 'Category', 'Basic', 'Freestar']),
     tags: PropTypes.arrayOf(PropTypes.string),
-    bannedTags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    bannedTags: PropTypes.arrayOf(PropTypes.string),
 };
 
 GptAd.defaultProps = {
     type: 'Freestar',
     tags: [],
+    bannedTags: [],
 };
 
 export default connect(

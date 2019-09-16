@@ -19,6 +19,9 @@ import { repLog10, parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
+import Reveal from 'app/components/elements/Reveal';
+import CloseButton from 'app/components/elements/CloseButton';
+import MutePost from 'app/components/modules/MutePost';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
@@ -94,14 +97,16 @@ class PostFull extends React.Component {
         showPromotePost: PropTypes.func.isRequired,
         showExplorePost: PropTypes.func.isRequired,
         togglePinnedPost: PropTypes.func.isRequired,
+        toggleMutedPost: PropTypes.func.isRequired,
     };
 
     constructor(props) {
         super(props);
         const post = this.props.cont.get(this.props.post);
         const isPinned = post.get('stats').get('is_pinned');
+        const isMuted = post.get('stats').get('gray');
 
-        this.state = { isPinned };
+        this.state = { isPinned, isMuted, showMuteNotesDialog: false };
 
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
@@ -249,11 +254,12 @@ class PostFull extends React.Component {
     };
 
     onTogglePin = isPinned => {
-        const post_content = this.props.cont.get(this.props.post);
         const { community, username } = this.props;
+        if (!community) return false; // Fail Fast
         if (!username) {
             return this.props.unlock();
         }
+        const post_content = this.props.cont.get(this.props.post);
         const permlink = post_content.get('permlink');
 
         this.props.togglePinnedPost(
@@ -272,6 +278,36 @@ class PostFull extends React.Component {
         );
     };
 
+    onTogglePromptForMuteNotes = () => {
+        this.setState({ showMuteNotesDialog: !this.state.showMuteNotesDialog });
+    };
+
+    onToggleMute = (isMuted, notes) => {
+        const { community, username } = this.props;
+        if (!notes || !community) return false; // Fail Fast
+        if (!username) {
+            return this.props.unlock();
+        }
+        const post_content = this.props.cont.get(this.props.post);
+        const permlink = post_content.get('permlink');
+
+        this.props.toggleMutedPost(
+            !isMuted,
+            community,
+            username,
+            notes,
+            permlink,
+            () => {
+                console.log('PostFull::onToggleMute()::success');
+                this.setState({ isMuted: !isMuted });
+            },
+            () => {
+                console.log('PostFull::onToggleMute()::failure');
+                this.setState({ isMuted });
+            }
+        );
+    };
+
     render() {
         const {
             props: { username, community, post, role },
@@ -281,6 +317,7 @@ class PostFull extends React.Component {
                 formId,
                 showReply,
                 showEdit,
+                showMuteNotesDialog,
             },
             onShowReply,
             onShowEdit,
@@ -464,6 +501,12 @@ class PostFull extends React.Component {
         );
         const { isPinned } = this.state;
 
+        const showMuteToggle = CommunityAuthorization.CanMutePosts(
+            username,
+            role
+        );
+        const { isMuted } = this.state;
+
         const showReplyOption =
             username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;
@@ -561,6 +604,44 @@ class PostFull extends React.Component {
                                         {tt('g.pin')}
                                     </a>
                                 )}{' '}
+                            {showMuteToggle &&
+                                isMuted && (
+                                    <a
+                                        onClick={() =>
+                                            this.onToggleMute(true, 'Unmuted')
+                                        }
+                                    >
+                                        {tt('g.unmute')}
+                                    </a>
+                                )}{' '}
+                            {showMuteToggle &&
+                                !isMuted && (
+                                    <a
+                                        onClick={() =>
+                                            this.onTogglePromptForMuteNotes()
+                                        }
+                                    >
+                                        {tt('g.mute')}
+                                    </a>
+                                )}{' '}
+                            {showMuteNotesDialog && (
+                                <Reveal
+                                    onHide={() => console.log('Reveal::onHide')}
+                                    show
+                                >
+                                    <CloseButton
+                                        onClick={() =>
+                                            this.onTogglePromptForMuteNotes()
+                                        }
+                                    />
+                                    <MutePost
+                                        onSubmit={notes => {
+                                            this.onTogglePromptForMuteNotes();
+                                            this.onToggleMute(false, notes);
+                                        }}
+                                    />
+                                </Reveal>
+                            )}{' '}
                             {showEditOption &&
                                 !showEdit && (
                                     <a onClick={onShowEdit}>{tt('g.edit')}</a>
@@ -694,6 +775,41 @@ export default connect(
                 })
             );
         },
+        toggleMutedPost: (
+            mutePost,
+            community,
+            account,
+            notes,
+            permlink,
+            successCallback,
+            errorCallback
+        ) => {
+            let action = 'unmutePost';
+            if (mutePost) action = 'mutePost';
+
+            const payload = [
+                action,
+                {
+                    community,
+                    account,
+                    notes,
+                    permlink,
+                },
+            ];
+
+            return dispatch(
+                transactionActions.broadcastOperation({
+                    type: 'custom_json',
+                    operation: {
+                        id: 'community',
+                        required_posting_auths: [account],
+                        json: JSON.stringify(payload),
+                    },
+                    successCallback,
+                    errorCallback,
+                })
+            );
+        },
     })
 )(PostFull);
 
@@ -714,6 +830,11 @@ const saveOnShow = (formId, type) => {
 
 class CommunityAuthorization {
     static CanPinPosts = (username, role) => {
+        const allowableRoles = ['owner', 'admin', 'mod'];
+        return allowableRoles.includes(role);
+    };
+
+    static CanMutePosts = (username, role) => {
         const allowableRoles = ['owner', 'admin', 'mod'];
         return allowableRoles.includes(role);
     };

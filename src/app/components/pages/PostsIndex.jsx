@@ -15,6 +15,7 @@ import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
+import SubscribeButtonContainer from 'app/components/elements/SubscribeButtonContainer';
 import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
@@ -198,14 +199,12 @@ class PostsIndex extends React.Component {
                 });
         } else if (category === 'my') {
             page_title = 'My subscriptions';
+        } else if (community) {
+            page_title = community.get('title');
+        } else if (typeof category !== 'undefined') {
+            page_title = '#' + category;
         } else {
-            if (community) {
-                page_title = community.get('title');
-            } else if (typeof category !== 'undefined') {
-                page_title = '#' + category;
-            } else {
-                page_title = tt('g.all_tags');
-            }
+            page_title = tt('g.all_tags');
         }
         const layoutClass = this.props.blogmode
             ? ' layout-block'
@@ -305,6 +304,9 @@ class PostsIndex extends React.Component {
                                     {community.get('title')}
                                 </h3>
                             </div>
+                            <SubscribeButtonContainer
+                                community={community.get('name')}
+                            />
                             <strong>Moderators</strong>
                             {teamMembers(community.get('team', List()))}
                             <strong>Properties</strong>
@@ -430,7 +432,7 @@ module.exports = {
                 gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
             };
         },
-        dispatch => {
+        (dispatch) => {
             return {
                 requestData: args =>
                     dispatch(fetchDataSagaActions.requestData(args)),

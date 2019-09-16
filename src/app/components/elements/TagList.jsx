@@ -31,10 +31,10 @@ function normalizeTags(post) {
 
 class TagList extends Component {
     render() {
-        const { post, single, communities } = this.props;
+        const { post, single } = this.props;
 
         const link = tag => {
-            const name = communities.getIn([tag, 'title'], '#' + tag);
+            const name = post.community_title || '#' + tag;
             return (
                 <Link to={`/trending/${tag}`} key={tag}>
                     {' '}
@@ -57,6 +57,5 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => ({
         ...ownProps,
-        communities: state.global.get('community'),
     })
 )(TagList);

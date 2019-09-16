@@ -265,7 +265,7 @@ export default class UserProfile extends React.Component {
                     </center>
                 );
             }
-        } else if (!section || section === 'blog') {
+        } else if (section === 'blog') {
             if (account.blog) {
                 let posts = accountImm.get('blog');
                 const emptyText = isMyAccount ? (

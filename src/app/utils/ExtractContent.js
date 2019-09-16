@@ -122,6 +122,7 @@ export default function extractContent(get, content) {
         desc_complete = body2 === desc; // is the entire body in desc?
     }
     const pending_payout = get(content, 'pending_payout_value');
+    const community_title = get(content, 'community_title');
     return {
         author,
         author_link,
@@ -140,5 +141,6 @@ export default function extractContent(get, content) {
         desc_complete,
         body,
         pending_payout,
+        community_title,
     };
 }

@@ -81,11 +81,14 @@ export function contentStats(content) {
     const hasPendingPayout =
         parsePayoutAmount(content.get('pending_payout_value')) >= 0.02;
     const authorRepLog10 = repLog10(content.get('author_reputation'));
-    /*
+
     // TODO: remove 'gray' and 'hide' entirely when served by API
-    stats['gray'] =
-        !hasPendingPayout && (authorRepLog10 < 1 || meetsGrayThreshold);
-*/
+    if (!('gray' in stats)) {
+        stats['gray'] =
+            !hasPendingPayout && (authorRepLog10 < 1 || meetsGrayThreshold);
+        console.log('append internal gray value');
+    }
+
     stats['hide'] = !hasPendingPayout && authorRepLog10 < 0; // rephide
     stats['total_votes'] = total_votes;
 

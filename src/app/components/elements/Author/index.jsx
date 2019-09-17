@@ -175,13 +175,11 @@ import { connect } from 'react-redux';
 export default connect((state, ownProps) => {
     const { author, follow, mute, authorRepLog10 } = ownProps;
     const username = state.user.getIn(['current', 'username']);
-    const account = state.global.getIn(['accounts', author]);
     return {
         author,
         follow,
         mute,
         authorRepLog10,
         username,
-        account,
     };
 })(Author);

@@ -23,7 +23,7 @@ export default function MuteButton(props) {
         <span>
             <a onClick={() => onToggleDialog()}> {label} </a>
             {showDialog && (
-                <Reveal onHide={() => console.log('Reveal::onHide')} show>
+                <Reveal onHide={() => null} show>
                     <CloseButton onClick={() => onToggleDialog()} />
                     <MutePost
                         isMuted={isMuted}
@@ -37,27 +37,6 @@ export default function MuteButton(props) {
         </span>
     );
 }
-
-// { showMuteToggle &&
-//     isMuted && (
-//         <a
-//             onClick={() =>
-//                 this.onTogglePromptForMuteNotes()
-//             }
-//         >
-//             {tt('g.unmute')}
-//         </a>
-//     ) } { ' ' }
-// { showMuteToggle &&
-//     !isMuted && (
-//         <a
-//             onClick={() =>
-//                 this.onTogglePromptForMuteNotes()
-//             }
-//         >
-//             {tt('g.mute')}
-//         </a>
-//     ) } { ' ' }
 
 MuteButton.propTypes = {
     label: PropTypes.string.isRequired,

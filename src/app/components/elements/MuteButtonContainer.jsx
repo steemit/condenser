@@ -74,10 +74,6 @@ export default connect(
         return {
             ...ownProps,
             username: state.user.getIn(['current', 'username']),
-            // community: state.global.getIn(
-            //     ['community', ownProps.community],
-            //     {}
-            // ),
         };
     },
     dispatch => ({

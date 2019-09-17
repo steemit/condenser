@@ -19,6 +19,7 @@ import { repLog10, parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
+import MuteButtonContainer from 'app/components/elements/MuteButtonContainer';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
@@ -26,7 +27,6 @@ import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import { GoogleAd } from 'app/components/elements/GoogleAd';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
 
@@ -100,8 +100,9 @@ class PostFull extends React.Component {
         super(props);
         const post = this.props.cont.get(this.props.post);
         const isPinned = post.get('stats').get('is_pinned');
+        const isMuted = post.get('stats').get('gray');
 
-        this.state = { isPinned };
+        this.state = { isPinned, isMuted, showMuteNotesDialog: false };
 
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
@@ -249,11 +250,12 @@ class PostFull extends React.Component {
     };
 
     onTogglePin = isPinned => {
-        const post_content = this.props.cont.get(this.props.post);
         const { community, username } = this.props;
+        if (!community) return false; // Fail Fast
         if (!username) {
             return this.props.unlock();
         }
+        const post_content = this.props.cont.get(this.props.post);
         const permlink = post_content.get('permlink');
 
         this.props.togglePinnedPost(
@@ -464,6 +466,12 @@ class PostFull extends React.Component {
         );
         const { isPinned } = this.state;
 
+        const showMuteToggle = CommunityAuthorization.CanMutePosts(
+            username,
+            role
+        );
+        const { isMuted } = this.state;
+
         const showReplyOption =
             username !== undefined && post_content.get('depth') < 255;
         const showEditOption = username === author;
@@ -561,6 +569,13 @@ class PostFull extends React.Component {
                                         {tt('g.pin')}
                                     </a>
                                 )}{' '}
+                            {showMuteToggle && (
+                                <MuteButtonContainer
+                                    community={community}
+                                    isMuted={isMuted}
+                                    permlink={permlink}
+                                />
+                            )}{' '}
                             {showEditOption &&
                                 !showEdit && (
                                     <a onClick={onShowEdit}>{tt('g.edit')}</a>
@@ -714,6 +729,11 @@ const saveOnShow = (formId, type) => {
 
 class CommunityAuthorization {
     static CanPinPosts = (username, role) => {
+        const allowableRoles = ['owner', 'admin', 'mod'];
+        return allowableRoles.includes(role);
+    };
+
+    static CanMutePosts = (username, role) => {
         const allowableRoles = ['owner', 'admin', 'mod'];
         return allowableRoles.includes(role);
     };

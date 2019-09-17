@@ -99,9 +99,6 @@ class Author extends React.Component {
             showAffiliation,
         } = this.props; // html
         const { username } = this.props; // redux
-        const { name, about } = this.props.account
-            ? normalizeProfile(this.props.account.toJS())
-            : {};
 
         if (!(follow || mute) || username === author) {
             return (
@@ -165,8 +162,6 @@ class Author extends React.Component {
                         follow={follow}
                         mute={mute}
                         authorRepLog10={authorRepLog10}
-                        name={name}
-                        about={about}
                         username={username}
                     />
                 </Overlay>

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Author from 'app/components/elements/Author';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
+import MuteButtonContainer from 'app/components/elements/MuteButtonContainer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Voting from 'app/components/elements/Voting';
@@ -203,7 +204,6 @@ class CommentImpl extends React.Component {
 
             if (hide) {
                 const { onHide } = this.props;
-                // console.log('Comment --> onHide')
                 if (onHide) onHide();
             }
             this.setState({ hide, hide_body: notOwn && (hide || gray) });
@@ -249,7 +249,7 @@ class CommentImpl extends React.Component {
 
         // Don't server-side render the comment if it has a certain number of newlines
         if (
-            global['process'] !== undefined &&
+            global.process !== undefined &&
             (dis.get('body').match(/\r?\n/g) || '').length > 25
         ) {
             return <div>{tt('g.loading')}...</div>;
@@ -261,6 +261,7 @@ class CommentImpl extends React.Component {
             comment.stats = {};
         }
         const { gray } = comment.stats;
+        const isMuted = gray;
         const authorRepLog10 = repLog10(comment.author_reputation);
         const { author, json_metadata } = comment;
         const {
@@ -308,6 +309,7 @@ class CommentImpl extends React.Component {
 
         const _isPaidout = comment.cashout_time === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
         const showEditOption = username === author;
+        const showMuteToggle = true;
         const showDeleteOption =
             username === author && allowDelete(comment) && !_isPaidout;
         const showReplyOption = username !== undefined && comment.depth < 255;
@@ -331,6 +333,13 @@ class CommentImpl extends React.Component {
                     <span className="Comment__footer__controls">
                         {showReplyOption && (
                             <a onClick={onShowReply}>{tt('g.reply')}</a>
+                        )}{' '}
+                        {showMuteToggle && (
+                            <MuteButtonContainer
+                                community={comment.category}
+                                isMuted={isMuted}
+                                permlink={comment.permlink}
+                            />
                         )}{' '}
                         {showEditOption && (
                             <a onClick={onShowEdit}>{tt('g.edit')}</a>
@@ -389,7 +398,6 @@ class CommentImpl extends React.Component {
         }
         if (this.state.highlight) innerCommentClass += ' highlighted';
 
-        //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {
             renderedEditor = (
@@ -505,7 +513,6 @@ const Comment = connect(
     // mapStateToProps
     (state, ownProps) => {
         const { content } = ownProps;
-
         const username = state.user.getIn(['current', 'username']);
         const ignore_list = username
             ? state.global.getIn([

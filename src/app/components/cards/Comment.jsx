@@ -204,7 +204,6 @@ class CommentImpl extends React.Component {
 
             if (hide) {
                 const { onHide } = this.props;
-                // console.log('Comment --> onHide')
                 if (onHide) onHide();
             }
             this.setState({ hide, hide_body: notOwn && (hide || gray) });
@@ -263,7 +262,6 @@ class CommentImpl extends React.Component {
         }
         const { gray } = comment.stats;
         const isMuted = gray;
-        console.log('comment->render()', comment);
         const authorRepLog10 = repLog10(comment.author_reputation);
         const { author, json_metadata } = comment;
         const {
@@ -400,7 +398,6 @@ class CommentImpl extends React.Component {
         }
         if (this.state.highlight) innerCommentClass += ' highlighted';
 
-        //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {
             renderedEditor = (
@@ -516,7 +513,6 @@ const Comment = connect(
     // mapStateToProps
     (state, ownProps) => {
         const { content } = ownProps;
-        console.log('Comment', content);
         const username = state.user.getIn(['current', 'username']);
         const ignore_list = username
             ? state.global.getIn([

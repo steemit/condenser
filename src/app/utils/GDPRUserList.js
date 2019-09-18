@@ -20,6 +20,9 @@ cristinaluchi
 dennis.spiedt
 sebtarnowski
 mihailm
+ardaia
+jemand
+chiefadu
 `
     .trim()
     .split('\n');

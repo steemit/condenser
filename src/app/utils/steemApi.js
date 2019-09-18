@@ -26,7 +26,14 @@ export async function getStateAsync(url, observer) {
         'payout_comments',
         'muted',
     ];
-    const tabs = ['blog', 'feed', 'comments', 'recent-replies', 'payout'];
+    const tabs = [
+        'blog',
+        'feed',
+        'comments',
+        'recent-replies',
+        'notifications',
+        'payout',
+    ];
 
     if (parts == 1 && sorts.includes(part[0])) {
         //console.log("getState URL -- all ranked posts", url)
@@ -61,6 +68,35 @@ export async function getStateAsync(url, observer) {
 
 export async function callBridge(method, params) {
     const call = (method, params, callback) => {
+        /*        return {
+    "id": "1",
+    "jsonrpc": "2.0",
+    "result": [
+        {
+            "date": "2019-09-12 21:49:54",
+            "msg": "@test-safari error: post does not belong to community",
+            "score": 35,
+            "type": "error"
+        },
+        {
+            "date": "2019-09-11 15:44:00",
+            "msg": "@hive-171485 set @test-safari admin",
+            "score": 15,
+            "type": "set_role"
+        },
+        {
+            "date": "2019-09-10 21:04:18",
+            "msg": "@hive-19816 set @test-safari admin",
+            "score": 15,
+            "type": "set_role"
+        },
+        {
+            "date": "2019-09-10 16:50:15",
+            "msg": "@test-safari error: post is already not pinned",
+            "score": 35,
+            "type": "error"
+        },
+};*/
         return api.call('bridge.' + method, params, callback);
     };
     return Promise.promisify(call)(method, params);

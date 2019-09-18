@@ -13,6 +13,7 @@ export const defaultState = Map({
 // Action constants
 const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
+const RECEIVE_NOTIFICATIONS = 'global/RECEIVE_NOTIFICATIONS';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
@@ -97,6 +98,14 @@ export default function reducer(state = defaultState, action = {}) {
             const merged = state.mergeDeep(new_state);
             console.log('Merged state', merged.toJS());
             return merged;
+        }
+
+        case RECEIVE_NOTIFICATIONS: {
+            const payload = fromJS(payload);
+            console.log('Receive notifications', payload);
+            return state.updateIn(['accounts', payload.name], Map(), a =>
+                a.set('notifications', payload.notifications)
+            );
         }
 
         case RECEIVE_ACCOUNT: {
@@ -330,6 +339,11 @@ export const setCollapsed = payload => ({
 
 export const receiveState = payload => ({
     type: RECEIVE_STATE,
+    payload,
+});
+
+export const receiveNotifications = payload => ({
+    type: RECEIVE_NOTIFICATIONS,
     payload,
 });
 

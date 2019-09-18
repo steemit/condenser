@@ -141,6 +141,7 @@ bittrext
 bittrexx
 bittrexxx
 bittrez
+bittriex
 bittrix
 bittrrex
 bittrrx

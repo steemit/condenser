@@ -34,12 +34,39 @@ export function* getContentCaller(action) {
 let is_initial_state = true;
 export function* fetchState(location_change_action) {
     const { pathname } = location_change_action.payload;
-    const m = pathname.match(/^\/@([a-z0-9\.-]+)/);
-    if (m && m.length === 2) {
+    const m = pathname.match(/^\/@([a-z0-9\.-]+)(\/notifications)?/);
+    if (m && m.length >= 2) {
         const username = m[1];
         yield fork(fetchFollowCount, username);
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
+
+        if (m.length > 2 && m[2]) {
+            yield put(appActions.fetchDataBegin());
+            try {
+                const notifications = yield call(
+                    callBridge,
+                    'account_notifications',
+                    {
+                        account: username,
+                    }
+                );
+                console.log(notifications);
+                yield put(
+                    globalActions.receiveNotifications({
+                        name: username,
+                        notifications,
+                    })
+                );
+            } catch (error) {
+                console.error(
+                    '~~ Saga fetchState notifications error ~~>',
+                    error
+                );
+                yield put(appActions.steemApiError(error.message));
+            }
+            yield put(appActions.fetchDataEnd());
+        }
     }
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call
@@ -143,7 +170,14 @@ function* getAccounts(usernames) {
 }
 
 export function* fetchData(action) {
-    const { order, author, permlink, accountname, postFilter, observer } = action.payload;
+    const {
+        order,
+        author,
+        permlink,
+        accountname,
+        postFilter,
+        observer,
+    } = action.payload;
     let { category } = action.payload;
     if (!category) category = '';
     category = category.toLowerCase();

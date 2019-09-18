@@ -14,6 +14,7 @@ import Settings from 'app/components/modules/Settings';
 import UserList from 'app/components/elements/UserList';
 import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import NotificationsList from 'app/components/cards/NotificationsList';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import { repLog10 } from 'app/utils/ParsersAndFormatters.js';
@@ -360,6 +361,29 @@ export default class UserProfile extends React.Component {
                     </center>
                 );
             }
+        } else if (section === 'notifications') {
+            const notifications = accountImm.get('notifications');
+            if (!fetching && (notifications && !notifications.size)) {
+                tab_content = (
+                    <Callout>
+                        {tt(
+                            'user_profile.user_hasnt_had_any_notifications_yet',
+                            {
+                                name: accountname,
+                            }
+                        ) + '.'}
+                    </Callout>
+                );
+            } else {
+                tab_content = (
+                    <div>
+                        <NotificationsList
+                            notifications={notifications}
+                            loading={fetching}
+                        />
+                    </div>
+                );
+            }
         } else if (section === 'payout') {
             if (account.payout) {
                 let posts = accountImm.get('payout');
@@ -495,6 +519,14 @@ export default class UserProfile extends React.Component {
                                 activeClassName="active"
                             >
                                 {tt('g.replies')}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to={`/@${accountname}/notifications`}
+                                activeClassName="active"
+                            >
+                                {tt('g.notifications')}
                             </Link>
                         </li>
                         <li>

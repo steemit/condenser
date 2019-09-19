@@ -7,6 +7,7 @@
         "ask": "卖价",
         "balance": "余额",
         "balances": "余额",
+        "beneficiaries": "Beneficiaries",
         "bid": "买价",
         "blog": "博客",
         "browse": "浏览",
@@ -271,7 +272,20 @@
         "or_by": "或通过",
         "title": "标题",
         "update_post": "更新帖子",
-        "markdown_not_supported": "这里不支持Markdown标记语言"
+        "markdown_not_supported": "这里不支持Markdown标记语言",
+        "advanced_settings": "Advanced settings",
+        "beneficiaries_set": "%(count)s set"
+    },
+    "beneficiary_selector_jsx": {
+        "header": "Who should receive any rewards?",
+        "add": "Add account",
+        "exceeds_max_beneficiaries": "Can have at most 8 beneficiaries",
+        "beneficiary_cannot_be_self": "Cannot specify self as beneficiary",
+        "beneficiary_cannot_be_duplicate": "Beneficiary cannot be duplicate",
+        "beneficiary_percent_invalid":
+            "Beneficiary percentage must be from 1-100",
+        "beneficiary_percent_total_invalid":
+            "Beneficiary total percentage must be less than 100"
     },
     "category_selector_jsx": {
         "tag_your_story": "标签(最多5个标签)，第一个标签是您文章的主要类别。",

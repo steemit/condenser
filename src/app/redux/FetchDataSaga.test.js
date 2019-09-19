@@ -10,10 +10,10 @@ import { fetchData } from './FetchDataSaga';
 describe('FetchDataSaga', () => {
     describe('should fetch multiple and filter', () => {
         let payload = {
-            order: 'by_blog',
+            order: 'blog',
+            category: '@bob',
             author: 'alice',
             permlink: 'hair',
-            accountname: 'bob',
             postFilter: value => value.author === 'bob',
         };
         let action = {
@@ -27,8 +27,8 @@ describe('FetchDataSaga', () => {
             expect(actual).toEqual(
                 put(
                     globalActions.fetchingData({
-                        order: 'by_blog',
-                        category: '',
+                        order: 'blog',
+                        category: '@bob',
                     })
                 )
             );
@@ -41,7 +41,7 @@ describe('FetchDataSaga', () => {
             expect(actual).toEqual(
                 call(callBridge, 'get_account_posts', {
                     sort: 'blog',
-                    account: payload.accountname,
+                    account: payload.category.slice(1),
                     limit: constants.FETCH_DATA_BATCH_SIZE,
                     start_author: payload.author,
                     start_permlink: payload.permlink,
@@ -65,10 +65,9 @@ describe('FetchDataSaga', () => {
                             { author: 'alice' },
                             { author: 'bob', permlink: 'post1' },
                         ],
-                        order: 'by_blog',
-                        category: '',
+                        order: 'blog',
+                        category: '@bob',
                         author: 'alice',
-                        accountname: 'bob',
                         fetching: true,
                         endOfData: false,
                     })
@@ -80,7 +79,7 @@ describe('FetchDataSaga', () => {
             expect(actual).toEqual(
                 call(callBridge, 'get_account_posts', {
                     sort: 'blog',
-                    account: payload.accountname,
+                    account: payload.category.slice(1),
                     limit: constants.FETCH_DATA_BATCH_SIZE,
                     start_author: 'bob',
                     start_permlink: 'post1',
@@ -97,10 +96,9 @@ describe('FetchDataSaga', () => {
                 put(
                     globalActions.receiveData({
                         data: [{ author: 'bob', permlink: 'post2' }],
-                        order: 'by_blog',
-                        category: '',
+                        order: 'blog',
+                        category: '@bob',
                         author: 'alice',
-                        accountname: 'bob',
                         fetching: false,
                         endOfData: true,
                     })
@@ -113,10 +111,10 @@ describe('FetchDataSaga', () => {
     });
     describe('should not fetch more batches than max batch size', () => {
         let payload = {
-            order: 'by_blog',
+            order: 'blog',
             author: 'alice',
             permlink: 'hair',
-            accountname: 'bob',
+            category: '@bob',
             postFilter: value => value.author === 'bob',
         };
         let action = {
@@ -131,8 +129,8 @@ describe('FetchDataSaga', () => {
         expect(actual).toEqual(
             put(
                 globalActions.fetchingData({
-                    order: 'by_blog',
-                    category: '',
+                    order: 'blog',
+                    category: '@bob',
                 })
             )
         );
@@ -144,7 +142,7 @@ describe('FetchDataSaga', () => {
         expect(actual).toEqual(
             call(callBridge, 'get_account_posts', {
                 sort: 'blog',
-                account: payload.accountname,
+                account: payload.category.slice(1),
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: payload.author,
                 start_permlink: payload.permlink,
@@ -164,10 +162,9 @@ describe('FetchDataSaga', () => {
             put(
                 globalActions.receiveData({
                     data: [{ author: 'alice' }, { author: 'alice' }],
-                    order: 'by_blog',
-                    category: '',
+                    order: 'blog',
+                    category: '@bob',
                     author: 'alice',
-                    accountname: 'bob',
                     fetching: true,
                     endOfData: false,
                 })
@@ -178,7 +175,7 @@ describe('FetchDataSaga', () => {
         expect(actual).toEqual(
             call(callBridge, 'get_account_posts', {
                 sort: 'blog',
-                account: payload.accountname,
+                account: payload.category.slice(1),
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: 'alice',
             })
@@ -196,10 +193,9 @@ describe('FetchDataSaga', () => {
             put(
                 globalActions.receiveData({
                     data: [{ author: 'alice' }, { author: 'alice' }],
-                    order: 'by_blog',
-                    category: '',
+                    order: 'blog',
+                    category: '@bob',
                     author: 'alice',
-                    accountname: 'bob',
                     fetching: false,
                     endOfData: false,
                 })

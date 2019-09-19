@@ -8,6 +8,7 @@ import globalReducer from './GlobalReducer';
 import userReducer from './UserReducer';
 import transactionReducer from './TransactionReducer';
 import offchainReducer from './OffchainReducer';
+import userProfilesReducer from './UserProfilesReducer';
 
 function initReducer(reducer, type) {
     return (state, action) => {
@@ -52,4 +53,5 @@ export default combineReducers({
     routing: initReducer(routerReducer),
     app: initReducer(appReducer),
     form: formReducer,
+    userProfiles: initReducer(userProfilesReducer),
 });

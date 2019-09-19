@@ -105,9 +105,6 @@ class Author extends React.Component {
             title,
         } = this.props; // html
         const { username } = this.props; // redux
-        const { name, about } = this.props.account
-            ? normalizeProfile(this.props.account.toJS())
-            : {};
 
         if (!(follow || mute) || username === author) {
             return (
@@ -179,8 +176,6 @@ class Author extends React.Component {
                         follow={follow}
                         mute={mute}
                         authorRepLog10={authorRepLog10}
-                        name={name}
-                        about={about}
                         username={username}
                     />
                 </Overlay>
@@ -194,13 +189,11 @@ import { connect } from 'react-redux';
 export default connect((state, ownProps) => {
     const { author, follow, mute, authorRepLog10 } = ownProps;
     const username = state.user.getIn(['current', 'username']);
-    const account = state.global.getIn(['accounts', author]);
     return {
         author,
         follow,
         mute,
         authorRepLog10,
         username,
-        account,
     };
 })(Author);

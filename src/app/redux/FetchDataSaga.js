@@ -51,7 +51,6 @@ export function* fetchState(location_change_action) {
                         account: username,
                     }
                 );
-                console.log(notifications);
                 yield put(
                     globalActions.receiveNotifications({
                         name: username,

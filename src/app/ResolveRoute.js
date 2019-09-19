@@ -3,7 +3,7 @@ import GDPRUserList from './utils/GDPRUserList';
 export const routeRegex = {
     PostsIndex: /^\/(@[\w\.\d-]+)\/feed\/?$/,
     UserProfile1: /^\/(@[\w\.\d-]+)\/?$/,
-    UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|payout|feed|password|followed|followers|settings)\/?$/,
+    UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|payout|feed|password|followed|followers|settings|notifications)\/?$/,
     UserProfile3: /^\/(@[\w\.\d-]+)\/[\w\.\d-]+/,
     CategoryFilters: /^\/(hot|trending|promoted|payout|payout_comments|muted|created)\/?$/gi,
     PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
 
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+
 class NotificationsList extends React.Component {
     static propTypes = {
         notifications: PropTypes.object.isRequired,
@@ -26,13 +29,17 @@ class NotificationsList extends React.Component {
 
         const renderNotifications = items =>
             items.map((item, i) => {
-                return <li key={item.item}>{item.item}</li>;
+                return (
+                    <li key={`notification_${i}`}>
+                        {JSON.stringify(item.toJS())}
+                    </li>
+                );
             });
 
         return (
             <div id="posts_list" className="PostsList">
                 <ul className="PostsList__summaries hfeed" itemScope>
-                    {renderSummary(postsInfo)}
+                    {renderNotifications(notifications)}
                 </ul>
                 {loading && (
                     <center>

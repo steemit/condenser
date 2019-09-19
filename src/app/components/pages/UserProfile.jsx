@@ -9,7 +9,6 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Icon from 'app/components/elements/Icon';
-import UserWallet from 'app/components/modules/UserWallet';
 import Settings from 'app/components/modules/Settings';
 import UserList from 'app/components/elements/UserList';
 import Follow from 'app/components/elements/Follow';
@@ -202,18 +201,7 @@ export default class UserProfile extends React.Component {
         const isMyAccount = username === account.name;
         let tab_content = null;
 
-        let walletClass = '';
-        if (section === 'transfers') {
-            walletClass = 'active';
-            tab_content = (
-                <div>
-                    <UserWallet
-                        account={accountImm}
-                        current_user={current_user}
-                    />
-                </div>
-            );
-        } else if (section === 'followers') {
+        if (section === 'followers') {
             if (followers && followers.has('blog_result')) {
                 tab_content = (
                     <div>
@@ -500,7 +488,6 @@ export default class UserProfile extends React.Component {
                             <a
                                 href={`${walletUrl}/@${accountname}`}
                                 target="_blank"
-                                className={walletClass}
                             >
                                 {tt('g.wallet')}
                             </a>

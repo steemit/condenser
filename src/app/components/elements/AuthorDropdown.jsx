@@ -4,7 +4,8 @@ import { Link } from 'react-router';
 import Userpic from 'app/components/elements/Userpic';
 import Follow from 'app/components/elements/Follow';
 import Reputation from 'app/components/elements/Reputation';
-import { api } from '@steemit/steem-js';
+import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
+import { connect } from 'react-redux';
 
 class AuthorDropdown extends Component {
     static propTypes = {};
@@ -13,34 +14,37 @@ class AuthorDropdown extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            authorAccount: {},
-        };
-    }
-
-    componentDidMount() {
-        api.getAccountsAsync([this.props.author]).then(chainAccount => {
-            const authorAccount = chainAccount[0];
-            authorAccount.json_metadata = JSON.parse(
-                authorAccount.json_metadata
-            );
-            this.setState({ authorAccount });
-        });
+        if (
+            !Object.prototype.hasOwnProperty.call(
+                this.props.userProfiles,
+                this.props.author
+            )
+        ) {
+            props.fetchUserProfile(this.props.author);
+        }
     }
 
     render() {
-        const authorName = Object.prototype.hasOwnProperty.call(
-            this.state.authorAccount,
-            'json_metadata'
-        )
-            ? this.state.authorAccount.json_metadata.profile.name
-            : '';
-        const authorAbout = Object.prototype.hasOwnProperty.call(
-            this.state.authorAccount,
-            'json_metadata'
-        )
-            ? this.state.authorAccount.json_metadata.profile.about
-            : '';
+        let authorName;
+        let authorAbout;
+
+        const authorAccount = this.props.userProfiles[this.props.author];
+        if (authorAccount) {
+            authorName = Object.prototype.hasOwnProperty.call(
+                authorAccount,
+                'json_metadata'
+            )
+                ? authorAccount.json_metadata.profile.name
+                : '';
+
+            authorAbout = Object.prototype.hasOwnProperty.call(
+                authorAccount,
+                'json_metadata'
+            )
+                ? authorAccount.json_metadata.profile.about
+                : '';
+        }
+
         const author_link = (
             <span
                 className="author"
@@ -96,4 +100,16 @@ class AuthorDropdown extends Component {
     }
 }
 
-export default AuthorDropdown;
+export default connect(
+    (state, props) => {
+        return {
+            ...props,
+            userProfiles: state.userProfiles.get('profiles'),
+        };
+    },
+    dispatch => ({
+        fetchUserProfile: author => {
+            dispatch(UserProfilesSagaActions.fetchProfile(author));
+        },
+    })
+)(AuthorDropdown);

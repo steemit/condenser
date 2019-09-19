@@ -304,16 +304,38 @@ class PostsIndex extends React.Component {
                                 <h3 className="c-sidebar__h3">
                                     {community.get('title')}
                                 </h3>
+                                {community.get('is_nsfw') && (
+                                    <span className="affiliation">nsfw</span>
+                                )}
                             </div>
-                            <SubscribeButtonContainer
-                                community={community.get('name')}
-                            />
+                            <div
+                                style={{
+                                    border: '1px solid #ccc',
+                                    marginBottom: '16px',
+                                    padding: '0.5em',
+                                }}
+                            >
+                                {community.get('about')}
+                            </div>
+                            <div style={{ float: 'right', marginTop: '-5px' }}>
+                                <SubscribeButtonContainer
+                                    community={community.get('name')}
+                                />
+                            </div>
+                            {community.get('subscribers')} subscribers
+                            <br />
+                            <br />
                             <strong>Moderators</strong>
                             {teamMembers(community.get('team', List()))}
-                            <strong>Properties</strong>
-                            <pre style={{ fontSize: '75%' }}>
-                                {JSON.stringify(community, null, 2)}
-                            </pre>
+                            <br />
+                            <strong>Description</strong>
+                            <br />
+                            {community.get('description', 'empty')}
+                            <br />
+                            <br />
+                            <strong>Language</strong>
+                            <br />
+                            {community.get('lang')}
                         </div>
                     )}
                     {this.props.isBrowser &&

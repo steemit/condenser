@@ -7,6 +7,7 @@
         "ask": "Ask",
         "balance": "Saldo",
         "balances": "Saldi",
+        "beneficiaries": "Beneficiaries",
         "bid": "Bid",
         "blog": "Blog",
         "browse": "Naviga",
@@ -297,7 +298,20 @@
         "or_by": "o da",
         "title": "Titolo",
         "update_post": "Aggiorna il Post",
-        "markdown_not_supported": "Il Markdown non è supportato qui"
+        "markdown_not_supported": "Il Markdown non è supportato qui",
+        "advanced_settings": "Advanced settings",
+        "beneficiaries_set": "%(count)s set"
+    },
+    "beneficiary_selector_jsx": {
+        "header": "Who should receive any rewards?",
+        "add": "Add account",
+        "exceeds_max_beneficiaries": "Can have at most 8 beneficiaries",
+        "beneficiary_cannot_be_self": "Cannot specify self as beneficiary",
+        "beneficiary_cannot_be_duplicate": "Beneficiary cannot be duplicate",
+        "beneficiary_percent_invalid":
+            "Beneficiary percentage must be from 1-100",
+        "beneficiary_percent_total_invalid":
+            "Beneficiary total percentage must be less than 100"
     },
     "category_selector_jsx": {
         "tag_your_story":

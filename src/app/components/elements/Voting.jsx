@@ -437,6 +437,20 @@ class Voting extends React.Component {
                         INVEST_TOKEN_SHORT,
                 });
             }
+            // add beneficiary info. use toFixed due to a bug of formatDecimal (5.00 is shown as 5,.00)
+            const beneficiaries = post_obj.get('beneficiaries');
+            if (beneficiaries) {
+                beneficiaries.forEach(function(key) {
+                    payoutItems.push({
+                        value:
+                            key.get('account') +
+                            ': ' +
+                            (parseFloat(key.get('weight')) / 100).toFixed(2) +
+                            '%',
+                        link: '/@' + key.get('account'),
+                    });
+                });
+            }
             payoutItems.push({ value: payoutDate });
             if (warnZeroPayout !== '') {
                 payoutItems.push({ value: warnZeroPayout });

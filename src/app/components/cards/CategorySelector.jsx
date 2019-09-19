@@ -29,7 +29,7 @@ class CategorySelector extends React.Component {
     };
     constructor() {
         super();
-        this.state = { createCategory: true };
+        this.state = { createCategory: false };
         this.shouldComponentUpdate = shouldComponentUpdate(
             this,
             'CategorySelector'

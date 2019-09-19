@@ -34,7 +34,7 @@ class Topics extends Component {
                 if (tag === 'feed')
                     return {
                         value: `/@${username}/feed`,
-                        label: tt('g.my_feed'),
+                        label: 'My friends' || `tt('g.my_feed')`,
                     };
                 if (tag === 'my')
                     return { value: `/trending/my`, label: 'My subscriptions' };

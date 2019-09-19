@@ -192,7 +192,7 @@ class PostsIndex extends React.Component {
         let page_title = 'Posts'; // sensible default here?
         if (category === 'feed') {
             if (account_name === this.props.username)
-                page_title = tt('posts_index.my_feed');
+                page_title = 'My friends' || tt('posts_index.my_feed');
             else
                 page_title = tt('posts_index.accountnames_feed', {
                     account_name,
@@ -206,6 +206,7 @@ class PostsIndex extends React.Component {
         } else {
             page_title = tt('g.all_tags');
         }
+
         const layoutClass = this.props.blogmode
             ? ' layout-block'
             : ' layout-list';
@@ -432,7 +433,7 @@ module.exports = {
                 gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
             };
         },
-        (dispatch) => {
+        dispatch => {
             return {
                 requestData: args =>
                     dispatch(fetchDataSagaActions.requestData(args)),

@@ -264,24 +264,10 @@ class Header extends React.Component {
         const settings_link = `/@${username}/settings`;
 
         const user_menu = [
-            {
-                link: feed_link,
-                icon: 'home',
-                value: tt('g.feed'),
-            },
             { link: account_link, icon: 'profile', value: tt('g.blog') },
             { link: comments_link, icon: 'replies', value: tt('g.comments') },
-            {
-                link: replies_link,
-                icon: 'reply',
-                value: tt('g.replies'),
-            },
-            {
-                link: wallet_link,
-                icon: 'wallet',
-                value: tt('g.wallet'),
-            },
-
+            { link: replies_link, icon: 'reply', value: tt('g.replies') },
+            { link: wallet_link, icon: 'wallet', value: tt('g.wallet') },
             {
                 link: '#',
                 icon: 'eye',

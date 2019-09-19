@@ -95,7 +95,7 @@
 
 .c-sidebar {
   width: 100%;
-  flex: 0 0 240px;
+  flex: 0 0 320px;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   &__module {
       padding: 1.5em 2em;
@@ -225,7 +225,7 @@
     font-family: sans-serif;
   }
   @include MQ(L) {
-    min-width: 664px;
+    min-width: 550px;
     max-width: 664px;
     padding: 1.5em 4em;
     @include themify($themes) {
@@ -705,6 +705,7 @@ a#changeLayout:focus {
     .c-sidebar {
       &--right {
         display: none;
+        max-width: 320px;
         order: 3;
         @include MQ(L) {
           display: block;
@@ -717,7 +718,7 @@ a#changeLayout:focus {
       max-width: none;
       max-width: 1056px;
       @include MQ(XL) {
-        min-width: 1050px;
+        min-width: 850px;
       }
       @include themify($themes) {
          background-color: themed('moduleBackgroundColor');

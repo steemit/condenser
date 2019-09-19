@@ -6,6 +6,7 @@ import Follow from 'app/components/elements/Follow';
 import Reputation from 'app/components/elements/Reputation';
 import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
 import { connect } from 'react-redux';
+import normalizeProfile from 'app/utils/NormalizeProfile';
 
 class AuthorDropdown extends Component {
     static propTypes = {};
@@ -25,85 +26,68 @@ class AuthorDropdown extends Component {
     }
 
     render() {
-        let authorName;
-        let authorAbout;
-
-        const authorAccount = this.props.userProfiles[this.props.author];
-        if (authorAccount) {
-            authorName = Object.prototype.hasOwnProperty.call(
-                authorAccount,
-                'json_metadata'
-            )
-                ? authorAccount.json_metadata.profile.name
-                : '';
-
-            authorAbout = Object.prototype.hasOwnProperty.call(
-                authorAccount,
-                'json_metadata'
-            )
-                ? authorAccount.json_metadata.profile.about
-                : '';
-        }
-
-        const author_link = (
-            <span
-                className="author"
-                itemProp="author"
-                itemScope
-                itemType="http://schema.org/Person"
-            >
-                <Link to={'/@' + this.props.author}>
-                    <strong>{this.props.author}</strong>
-                </Link>{' '}
-                <Reputation value={this.props.authorRepLog10} />
-            </span>
-        );
-        if (
-            !(this.props.follow || this.props.mute) ||
-            this.props.username === this.props.author
-        ) {
-            return author_link;
-        } else {
+        if (this.props.simple) {
             return (
-                <div className="Author__container">
-                    <div className="Author__dropdown">
-                        <Link to={'/@' + this.props.author}>
-                            <Userpic account={this.props.author} />
-                        </Link>
-                        <Link
-                            to={'/@' + this.props.author}
-                            className="Author__name"
-                        >
-                            {authorName}
-                        </Link>
-                        <Link
-                            to={'/@' + this.props.author}
-                            className="Author__username"
-                        >
-                            @{this.props.author}
-                        </Link>
-                        <div>
-                            <Follow
-                                className="float-right"
-                                follower={this.props.username}
-                                following={this.props.author}
-                                what="blog"
-                                showFollow={this.props.follow}
-                                showMute={this.props.mute}
-                            />
-                        </div>
-                        <div className="Author__bio">{authorAbout}</div>
-                    </div>
-                </div>
+                <span
+                    className="author"
+                    itemProp="author"
+                    itemScope
+                    itemType="http://schema.org/Person"
+                >
+                    <Link to={'/@' + this.props.author}>
+                        <strong>{this.props.author}</strong>
+                    </Link>{' '}
+                    <Reputation value={this.props.authorRepLog10} />
+                </span>
             );
         }
+
+        const obj = this.props.userProfiles[this.props.author];
+        const { name, about } = obj ? normalizeProfile(obj) : {};
+
+        return (
+            <div className="Author__container">
+                <div className="Author__dropdown">
+                    <Link to={'/@' + this.props.author}>
+                        <Userpic account={this.props.author} />
+                    </Link>
+                    <Link
+                        to={'/@' + this.props.author}
+                        className="Author__name"
+                    >
+                        {name}
+                    </Link>
+                    <Link
+                        to={'/@' + this.props.author}
+                        className="Author__username"
+                    >
+                        @{this.props.author}
+                    </Link>
+                    <div>
+                        <Follow
+                            className="float-right"
+                            follower={this.props.username}
+                            following={this.props.author}
+                            what="blog"
+                            showFollow={this.props.follow}
+                            showMute={this.props.mute}
+                        />
+                    </div>
+                    <div className="Author__bio">{about}</div>
+                </div>
+            </div>
+        );
     }
 }
 
 export default connect(
     (state, props) => {
+        const simple =
+            !(props.follow || props.mute) || props.username === props.author;
+
         return {
             ...props,
+            simple,
             userProfiles: state.userProfiles.get('profiles'),
         };
     },

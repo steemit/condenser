@@ -12,7 +12,8 @@ export function* fetchUserProfile(action) {
     const username = action.payload;
     const chainAccount = yield call([api, api.getAccountsAsync], [username]);
     const authorAccount = chainAccount[0];
-    authorAccount.json_metadata = JSON.parse(authorAccount.json_metadata);
+    //TODO: use new profiles endpoint
+    //authorAccount.json_metadata = JSON.parse(authorAccount.json_metadata);
 
     if (!chainAccount) throw new Error('Account not found');
 

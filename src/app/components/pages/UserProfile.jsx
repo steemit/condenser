@@ -362,7 +362,7 @@ export default class UserProfile extends React.Component {
                 );
             }
         } else if (section === 'notifications') {
-            const notifications = accountImm.get('notifications');
+            const notifications = accountImm.get('notifications', List());
             if (!fetching && (notifications && !notifications.size)) {
                 tab_content = (
                     <Callout>

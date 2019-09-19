@@ -59,6 +59,7 @@
         "newer": "Newer",
         "next": "Next",
         "no": "No",
+        "notifications": "Notifications",
         "ok": "Ok",
         "older": "Older",
         "or": "or",
@@ -386,6 +387,7 @@
         "user_hasnt_followed_anything_yet":
             "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
         "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+        "user_hasnt_had_any_notifications_yet": "%(name)s hasn't had any notifications yet",
         "looks_like_you_havent_posted_anything_yet":
             "Looks like you haven't posted anything yet.",
         "create_a_post": "Create a Post",

@@ -456,19 +456,6 @@ export default class UserProfile extends React.Component {
             );
         }
 
-        let rewardsMenu = [
-            {
-                link: `${walletUrl}/@${accountname}/curation-rewards`,
-                label: tt('g.curation_rewards'),
-                value: tt('g.curation_rewards'),
-            },
-            {
-                link: `${walletUrl}/@${accountname}/author-rewards`,
-                label: tt('g.author_rewards'),
-                value: tt('g.author_rewards'),
-            },
-        ];
-
         const top_menu = (
             <div className="row UserProfile__top-menu">
                 <div className="columns small-10 medium-12 medium-expand">
@@ -505,12 +492,6 @@ export default class UserProfile extends React.Component {
                                 {tt('voting_jsx.payout')}
                             </Link>
                         </li>
-                        <DropdownMenu
-                            items={rewardsMenu}
-                            el="li"
-                            selected={tt('g.rewards')}
-                            position="right"
-                        />
                     </ul>
                 </div>
                 <div className="columns shrink">

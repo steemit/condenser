@@ -143,26 +143,17 @@ function* getAccounts(usernames) {
 }
 
 export function* fetchData(action) {
-    const { order, author, permlink, accountname, postFilter, observer } = action.payload;
+    const { order, author, permlink, postFilter, observer } = action.payload;
     let { category } = action.payload;
     if (!category) category = '';
-    category = category.toLowerCase();
-
-    const account_sorts = {
-        by_replies: 'replies',
-        by_feed: 'feed',
-        by_blog: 'blog',
-        by_comments: 'comments',
-        by_payout: 'payout',
-    };
 
     yield put(globalActions.fetchingData({ order, category }));
     let call_name, args;
-    if (order in account_sorts) {
+    if (category[0] == '@') {
         call_name = 'get_account_posts';
         args = {
-            sort: account_sorts[order],
-            account: accountname,
+            sort: order,
+            account: category.slice(1),
             limit: constants.FETCH_DATA_BATCH_SIZE,
             start_author: author,
             start_permlink: permlink,
@@ -218,7 +209,6 @@ export function* fetchData(action) {
                     order,
                     category,
                     author,
-                    accountname,
                     fetching: !fetchDone,
                     endOfData,
                 })

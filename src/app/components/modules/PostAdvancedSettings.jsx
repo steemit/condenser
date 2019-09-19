@@ -4,6 +4,8 @@ import reactForm from 'app/utils/ReactForm';
 import { SUBMIT_FORM_ID } from 'shared/constants';
 import tt from 'counterpart';
 import { fromJS } from 'immutable';
+import BeneficiarySelector from 'app/components/cards/BeneficiarySelector';
+import { validateBeneficiaries } from 'app/components/cards/BeneficiarySelector';
 
 import * as userActions from 'app/redux/UserReducer';
 
@@ -25,7 +27,15 @@ class PostAdvancedSettings extends Component {
             instance: this,
             name: 'advancedSettings',
             initialValues: props.initialValues,
-            validation: values => {},
+            validation: values => {
+                return {
+                    beneficiaries: validateBeneficiaries(
+                        props.username,
+                        values.beneficiaries,
+                        false
+                    ),
+                };
+            },
         });
     }
 
@@ -40,7 +50,7 @@ class PostAdvancedSettings extends Component {
             defaultPayoutType,
             initialPayoutType,
         } = this.props;
-        const { payoutType } = this.state;
+        const { beneficiaries, payoutType } = this.state;
         const { submitting, valid, handleSubmit } = this.state.advancedSettings;
         const disabled =
             submitting || !(valid || payoutType !== initialPayoutType);
@@ -48,8 +58,18 @@ class PostAdvancedSettings extends Component {
         const form = (
             <form
                 onSubmit={handleSubmit(({ data }) => {
-                    this.props.setPayoutType(formId, payoutType);
-                    this.props.hideAdvancedSettings();
+                    const err = validateBeneficiaries(
+                        this.props.username,
+                        data.beneficiaries,
+                        true
+                    );
+                    if (!err) {
+                        this.props.setPayoutType(formId, payoutType);
+                        this.props.setBeneficiaries(formId, data.beneficiaries);
+                        this.props.hideAdvancedSettings();
+                    } else {
+                        this.setState({ beneficiaries: newBeneficiaries });
+                    }
                 })}
             >
                 <div className="row">
@@ -106,6 +126,16 @@ class PostAdvancedSettings extends Component {
                 </div>
                 <br />
                 <div className="row">
+                    <h4 className="column">
+                        {tt('beneficiary_selector_jsx.header')}
+                    </h4>
+                </div>
+                <BeneficiarySelector {...beneficiaries.props} tabIndex={1} />
+                <div className="error">
+                    {(beneficiaries.touched || beneficiaries.value) &&
+                        beneficiaries.error}&nbsp;
+                </div>
+                <div className="row">
                     <div className="column">
                         <span>
                             <button
@@ -156,13 +186,20 @@ export default connect(
             formId,
             'payoutType',
         ]);
+        let beneficiaries = state.user.getIn([
+            'current',
+            'post',
+            formId,
+            'beneficiaries',
+        ]);
+        beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
         return {
             ...ownProps,
-            fields: [],
+            fields: ['beneficiaries'],
             defaultPayoutType,
             initialPayoutType,
             username,
-            initialValues: {},
+            initialValues: { beneficiaries },
         };
     },
 
@@ -175,6 +212,13 @@ export default connect(
                 userActions.set({
                     key: ['current', 'post', formId, 'payoutType'],
                     value: payoutType,
+                })
+            ),
+        setBeneficiaries: (formId, beneficiaries) =>
+            dispatch(
+                userActions.set({
+                    key: ['current', 'post', formId, 'beneficiaries'],
+                    value: fromJS(beneficiaries),
                 })
             ),
     })

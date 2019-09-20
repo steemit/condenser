@@ -306,7 +306,7 @@ class PostsIndex extends React.Component {
                                     href={`/submit.html?community=${category}`}
                                     title={`Create a post in ${category}`}
                                 >
-                                    Write a Post Here
+                                    Create Post
                                 </a>
                             </div>
                             {community.get('subscribers')} subscribers

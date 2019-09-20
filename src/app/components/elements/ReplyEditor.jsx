@@ -813,13 +813,8 @@ export default formId =>
             if (isStory) fields.push('category');
 
             let { category, title, body } = ownProps;
-            console.log('CONNECT', state, ownProps);
-            console.log('CONNECT::category', category);
-            if (/submit_/.test(type)) title = body = '';
-            if (isStory && jsonMetadata && jsonMetadata.tags) {
-                category = Set([category, ...jsonMetadata.tags]).join(' ');
-            }
-            let community = '';
+
+            // let community = '';
             let isCommunity = false;
             if (state.routing.locationBeforeTransitions.query) {
                 console.log(
@@ -827,11 +822,19 @@ export default formId =>
                     state.routing.locationBeforeTransitions.query
                 );
                 if (state.routing.locationBeforeTransitions.query.community) {
-                    community =
+                    category =
                         state.routing.locationBeforeTransitions.query.community;
                     isCommunity = true;
-                    console.log('we have a community!', community);
+                    console.log('we have a community!', category);
                 }
+            }
+
+            // if(!category) category = community
+            console.log('CONNECT', state, ownProps);
+            console.log('CONNECT::category', category);
+            if (/submit_/.test(type)) title = body = '';
+            if (isStory && jsonMetadata && jsonMetadata.tags) {
+                category = Set([category, ...jsonMetadata.tags]).join(' ');
             }
 
             const defaultPayoutType = state.app.getIn(
@@ -871,7 +874,7 @@ export default formId =>
                 formId,
                 richTextEditor,
                 isCommunity,
-                community,
+                community: category,
             };
             console.log('connect:ret', ret);
             return ret;

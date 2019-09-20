@@ -13,7 +13,7 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
      * If a user lands on the 'feed' page and the sort order is displayed (e.g. a mobile user) 
      * display the active sort as 'new'.
      */
-    let tag = topic;
+    let tag = topic || '';
     let sort = sortOrder;
 
     if (sort === 'feed') {

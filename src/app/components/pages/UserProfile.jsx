@@ -34,9 +34,6 @@ export default class UserProfile extends React.Component {
     constructor() {
         super();
         this.state = { showResteem: true };
-        this.onPrint = () => {
-            window.print();
-        };
         this.loadMore = this.loadMore.bind(this);
     }
 
@@ -79,53 +76,36 @@ export default class UserProfile extends React.Component {
             np.location.pathname !== this.props.location.pathname ||
             np.follow_count !== this.props.follow_count ||
             np.blogmode !== this.props.blogmode ||
-            ns.showResteem !== this.state.showResteem
+            ns.showResteem !== this.state.showResteem ||
+            np.posts !== this.props.posts
         );
     }
 
-    loadMore(last_post, category, showResteem) {
-        const { accountname, current_user } = this.props;
-
+    loadMore(last_post) {
         if (!last_post) return;
+        const {
+            accountname,
+            current_user,
+            global_status,
+            order,
+            category,
+        } = this.props;
 
-        let order;
-        switch (category) {
-            case 'blog':
-                order = 'by_blog';
-                break;
-            case 'comments':
-                order = 'by_comments';
-                break;
-            case 'replies':
-                order = 'by_replies';
-                break;
-            case 'payout':
-                order = 'by_payout';
-                break;
-            default:
-                console.log('unhandled category:', category);
-        }
-
-        if (
-            isFetchingOrRecentlyUpdated(
-                this.props.global_status,
-                order,
-                category
-            )
-        ) {
+        if (isFetchingOrRecentlyUpdated(global_status, order, category)) {
             return;
         }
 
-        const postFilter = showResteem
-            ? null
-            : value => value.author === accountname;
+        const postFilter =
+            order != 'blog' || this.state.showResteem
+                ? null
+                : value => value.author === accountname;
+
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
             author,
             permlink,
             order,
             category,
-            accountname,
             postFilter,
             observer: current_user ? current_user.get('username') : null,
         });
@@ -146,17 +126,17 @@ export default class UserProfile extends React.Component {
                 follow,
                 accountname,
                 walletUrl,
+                category,
+                section,
+                order,
+                posts,
             },
-            onPrint,
         } = this;
         const username = current_user ? current_user.get('username') : null;
 
-        let { section } = this.props.routeParams;
-        if (!section) section = 'blog';
-
         // Loading status
         const status = global_status
-            ? global_status.getIn([section, 'by_blog'])
+            ? global_status.getIn([category, order])
             : null;
         const fetching = (status && status.fetching) || this.props.loading;
 
@@ -224,9 +204,8 @@ export default class UserProfile extends React.Component {
         } else if (section === 'settings') {
             tab_content = <Settings routeParams={this.props.routeParams} />;
         } else if (section === 'comments') {
-            if (account.comments) {
-                let posts = accountImm.get('comments');
-                if (!fetching && (posts && !posts.size)) {
+            if (posts) {
+                if (!fetching && !posts.size) {
                     tab_content = (
                         <Callout>
                             {tt('user_profile.user_hasnt_made_any_posts_yet', {
@@ -239,7 +218,6 @@ export default class UserProfile extends React.Component {
                         <PostsList
                             posts={posts}
                             loading={fetching}
-                            category="comments"
                             loadMore={this.loadMore}
                             showPinned={false}
                             showSpam
@@ -254,8 +232,7 @@ export default class UserProfile extends React.Component {
                 );
             }
         } else if (section === 'blog') {
-            if (account.blog) {
-                let posts = accountImm.get('blog');
+            if (posts) {
                 const emptyText = isMyAccount ? (
                     <div>
                         {tt(
@@ -286,7 +263,7 @@ export default class UserProfile extends React.Component {
                     })
                 );
 
-                if (!fetching && (posts && !posts.size)) {
+                if (!fetching && !posts.size) {
                     tab_content = <Callout>{emptyText}</Callout>;
                 } else {
                     tab_content = (
@@ -300,7 +277,6 @@ export default class UserProfile extends React.Component {
                                 account={account.name}
                                 posts={posts}
                                 loading={fetching}
-                                category="blog"
                                 loadMore={this.loadMore}
                                 showPinned={false}
                                 showResteem={showResteem}
@@ -316,10 +292,9 @@ export default class UserProfile extends React.Component {
                     </center>
                 );
             }
-        } else if (section === 'recent-replies') {
-            if (account.replies) {
-                let posts = accountImm.get('replies');
-                if (!fetching && (posts && !posts.size)) {
+        } else if (section === 'replies') {
+            if (posts) {
+                if (!fetching && !posts.size) {
                     tab_content = (
                         <Callout>
                             {tt('user_profile.user_hasnt_had_any_replies_yet', {
@@ -333,7 +308,6 @@ export default class UserProfile extends React.Component {
                             <PostsList
                                 posts={posts}
                                 loading={fetching}
-                                category="replies"
                                 loadMore={this.loadMore}
                                 showPinned={false}
                                 showSpam={false}
@@ -349,9 +323,8 @@ export default class UserProfile extends React.Component {
                 );
             }
         } else if (section === 'payout') {
-            if (account.payout) {
-                let posts = accountImm.get('payout');
-                if (!fetching && (posts && !posts.size)) {
+            if (posts) {
+                if (!fetching && !posts.size) {
                     tab_content = <Callout>No pending payouts.</Callout>;
                 } else {
                     tab_content = (
@@ -359,7 +332,6 @@ export default class UserProfile extends React.Component {
                             <PostsList
                                 posts={posts}
                                 loading={fetching}
-                                category="payout"
                                 loadMore={this.loadMore}
                                 showPinned={false}
                                 showSpam={false}
@@ -374,8 +346,6 @@ export default class UserProfile extends React.Component {
                     </center>
                 );
             }
-        } else {
-            //    console.log( "no matches" );
         }
 
         // detect illegal users
@@ -632,8 +602,21 @@ module.exports = {
             const accountname = ownProps.routeParams.accountname.toLowerCase();
             const walletUrl = state.app.get('walletUrl');
 
+            let { section } = ownProps.routeParams;
+            if (!section) section = 'blog';
+            if (section == 'recent-replies') section = 'replies';
+            const order = ['blog', 'comments', 'replies', 'payout'].includes(
+                section
+            )
+                ? section
+                : null;
+
             return {
-                discussions: state.global.get('discussion_idx'),
+                posts: state.global.getIn([
+                    'discussion_idx',
+                    '@' + accountname,
+                    order,
+                ]),
                 current_user,
                 loading: state.app.get('loading'),
                 global_status: state.global.get('status'),
@@ -643,6 +626,9 @@ module.exports = {
                 follow_count: state.global.get('follow_count'),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 walletUrl,
+                section,
+                order,
+                category: '@' + accountname,
             };
         },
         dispatch => ({

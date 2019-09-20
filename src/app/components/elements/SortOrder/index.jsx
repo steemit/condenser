@@ -16,7 +16,7 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
     let tag = topic;
     let sort = sortOrder;
 
-    if (topic === 'feed') {
+    if (sort === 'feed') {
         tag = '';
         sort = 'created';
     }
@@ -80,11 +80,13 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
             browserHistory.replace(url);
         };
 
-        return (<NativeSelect
-            currentlySelected={sort}
-            options={sorts(tag, false, tag.substr(0, 5) == 'hive-')}
-            onChange={handleChange(tag)}
-        />);
+        return (
+            <NativeSelect
+                currentlySelected={sort}
+                options={sorts(tag, false, tag.substr(0, 5) == 'hive-')}
+                onChange={handleChange(tag)}
+            />
+        );
     }
 
     // site header

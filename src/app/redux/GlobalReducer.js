@@ -218,33 +218,11 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_DATA: {
-            const {
-                data,
-                order,
-                category,
-                accountname,
-                fetching,
-                endOfData,
-            } = payload;
+            const { data, order, category, fetching, endOfData } = payload;
             let new_state;
 
-            let key;
-
-            const account_orders = [
-                'by_blog',
-                'by_feed',
-                'by_comments',
-                'by_replies',
-                'by_payout',
-            ];
-
-            // append incoming post keys to proper content list
-            if (account_orders.includes(order)) {
-                // category is either "blog", "feed", "comments", or "replies" (respectively)
-                key = ['accounts', accountname, category];
-            } else {
-                key = ['discussion_idx', category || '', order];
-            }
+            // append content keys to `discussion_idx` list
+            const key = ['discussion_idx', category || '', order];
             new_state = state.updateIn(key, List(), list => {
                 return list.withMutations(posts => {
                     data.forEach(value => {

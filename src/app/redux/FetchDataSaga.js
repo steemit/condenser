@@ -18,6 +18,7 @@ import { getStateAsync, callBridge } from 'app/utils/steemApi';
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
+const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
@@ -25,6 +26,7 @@ export const fetchDataWatches = [
     takeLatest('@@router/LOCATION_CHANGE', fetchState),
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
+    takeLatest(GET_COMMUNITY, getCommunity),
 ];
 
 export function* getContentCaller(action) {
@@ -142,8 +144,36 @@ function* getAccounts(usernames) {
     yield put(globalActions.receiveAccounts({ accounts }));
 }
 
+/**
+ * Request data for given community
+ * @param {string} name of community
+ */
+export function* getCommunity(action) {
+    const community = yield call(callBridge, 'get_community', {
+        name: action.payload,
+    });
+    // TODO: Handle error state
+    if (community.name)
+        yield put(
+            globalActions.receiveCommunity({
+                [community.name]: { ...community },
+            })
+        );
+}
+
 export function* fetchData(action) {
+<<<<<<< HEAD
     const { order, author, permlink, postFilter, observer } = action.payload;
+=======
+    const {
+        order,
+        author,
+        permlink,
+        accountname,
+        postFilter,
+        observer,
+    } = action.payload;
+>>>>>>> b9cdf21c... [WIP] Select community when posting
     let { category } = action.payload;
     if (!category) category = '';
 
@@ -157,7 +187,7 @@ export function* fetchData(action) {
             limit: constants.FETCH_DATA_BATCH_SIZE,
             start_author: author,
             start_permlink: permlink,
-            observer: observer,
+            observer,
         };
     } else {
         call_name = 'get_ranked_posts';
@@ -167,7 +197,7 @@ export function* fetchData(action) {
             limit: constants.FETCH_DATA_BATCH_SIZE,
             start_author: author,
             start_permlink: permlink,
-            observer: observer,
+            observer,
         };
     }
 
@@ -252,6 +282,11 @@ function* fetchJson({
 
 // Action creators
 export const actions = {
+    getCommunity: payload => ({
+        type: GET_COMMUNITY,
+        payload,
+    }),
+
     requestData: payload => ({
         type: REQUEST_DATA,
         payload,

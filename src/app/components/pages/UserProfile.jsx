@@ -29,12 +29,18 @@ import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import SanitizedLink from 'app/components/elements/SanitizedLink';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
+import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
 
 export default class UserProfile extends React.Component {
     constructor() {
         super();
         this.state = { showResteem: true };
         this.loadMore = this.loadMore.bind(this);
+    }
+
+    componentWillMount() {
+        const { profile, accountname, fetchProfile } = this.props;
+        if (!profile) fetchProfile(accountname);
     }
 
     shouldComponentUpdate(np, ns) {
@@ -76,8 +82,9 @@ export default class UserProfile extends React.Component {
             np.location.pathname !== this.props.location.pathname ||
             np.follow_count !== this.props.follow_count ||
             np.blogmode !== this.props.blogmode ||
-            ns.showResteem !== this.state.showResteem ||
-            np.posts !== this.props.posts
+            np.posts !== this.props.posts ||
+            np.profile !== this.props.profile ||
+            ns.showResteem !== this.state.showResteem
         );
     }
 
@@ -130,6 +137,7 @@ export default class UserProfile extends React.Component {
                 section,
                 order,
                 posts,
+                profile,
             },
         } = this;
         const username = current_user ? current_user.get('username') : null;
@@ -140,10 +148,7 @@ export default class UserProfile extends React.Component {
             : null;
         const fetching = (status && status.fetching) || this.props.loading;
 
-        let account;
-        let accountImm = this.props.account;
-        if (accountImm) {
-            account = accountImm.toJS();
+        if (profile) {
         } else if (fetching) {
             return (
                 <center>
@@ -176,9 +181,9 @@ export default class UserProfile extends React.Component {
             }
         }
 
-        const rep = repLog10(account.reputation);
+        const rep = repLog10(profile.get('reputation', 0));
 
-        const isMyAccount = username === account.name;
+        const isMyAccount = username === accountname;
         let tab_content = null;
 
         if (section === 'followers') {
@@ -274,7 +279,7 @@ export default class UserProfile extends React.Component {
                                     : tt('user_profile.show_all')}
                             </a>
                             <PostsList
-                                account={account.name}
+                                account={accountname}
                                 posts={posts}
                                 loading={fetching}
                                 loadMore={this.loadMore}
@@ -354,13 +359,11 @@ export default class UserProfile extends React.Component {
         }
 
         var page_title = '';
-        // Page title
-
         if (section === 'blog') {
             page_title = isMyAccount ? tt('g.my_blog') : tt('g.blog');
         } else if (section === 'comments') {
             page_title = isMyAccount ? tt('g.my_comments') : tt('g.comments');
-        } else if (section === 'recent-replies') {
+        } else if (section === 'replies') {
             page_title = isMyAccount ? tt('g.my_replies') : tt('g.replies');
         } else if (section === 'settings') {
             page_title = tt('g.settings');
@@ -483,7 +486,7 @@ export default class UserProfile extends React.Component {
             about,
             website,
             cover_image,
-        } = normalizeProfile(account);
+        } = normalizeProfile(profile.toJS());
         const website_label = website
             ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
             : null;
@@ -509,8 +512,8 @@ export default class UserProfile extends React.Component {
                             </div>
                         </div>
                         <h1>
-                            <Userpic account={account.name} hideIfDefault />
-                            {name || account.name}{' '}
+                            <Userpic account={accountname} hideIfDefault />
+                            {name || accountname}{' '}
                             <Tooltip
                                 t={tt(
                                     'user_profile.this_is_users_reputations_score_it_is_based_on_history_of_votes',
@@ -545,7 +548,7 @@ export default class UserProfile extends React.Component {
                                 <span>
                                     <Link to={`/@${accountname}`}>
                                         {tt('user_profile.post_count', {
-                                            count: account.post_count || 0,
+                                            count: profile.get('post_count', 0),
                                         })}
                                     </Link>
                                 </span>
@@ -573,7 +576,9 @@ export default class UserProfile extends React.Component {
                                     </span>
                                 )}
                                 <Icon name="calendar" />{' '}
-                                <DateJoinWrapper date={account.created} />
+                                <DateJoinWrapper
+                                    date={profile.get('created')}
+                                />
                             </p>
                         </div>
                         <div className="UserProfile__buttons_mobile show-for-small-only">
@@ -625,6 +630,7 @@ module.exports = {
                 follow: state.global.get('follow'),
                 follow_count: state.global.get('follow_count'),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+                profile: state.userProfiles.getIn(['profiles', accountname]),
                 walletUrl,
                 section,
                 order,
@@ -637,6 +643,8 @@ module.exports = {
             },
             requestData: args =>
                 dispatch(fetchDataSagaActions.requestData(args)),
+            fetchProfile: author =>
+                dispatch(UserProfilesSagaActions.fetchProfile(author)),
         })
     )(UserProfile),
 };

@@ -15,6 +15,7 @@ const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
+const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -74,7 +75,7 @@ export default function reducer(state = defaultState, action = {}) {
 
     switch (action.type) {
         case SET_COLLAPSED: {
-            return state.withMutations(map => {
+            return state.withMutations((map) => {
                 map.updateIn(['content', payload.post], value =>
                     value.merge(Map({ collapsed: payload.collapsed }))
                 );
@@ -83,9 +84,9 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_STATE: {
             let new_state = fromJS(payload);
-            console.log('Receive state', payload);
+            // console.log('Receive state', payload);
             if (new_state.has('content')) {
-                const content = new_state.get('content').withMutations(c => {
+                const content = new_state.get('content').withMutations((c) => {
                     c.forEach((cc, key) => {
                         cc = emptyContentMap.mergeDeep(cc);
                         const stats = fromJS(contentStats(cc));
@@ -95,7 +96,7 @@ export default function reducer(state = defaultState, action = {}) {
                 new_state = new_state.set('content', content);
             }
             const merged = state.mergeDeep(new_state);
-            console.log('Merged state', merged.toJS());
+            // console.log('Merged state', merged.toJS());
             return merged;
         }
 
@@ -111,6 +112,14 @@ export default function reducer(state = defaultState, action = {}) {
             }, state);
         }
 
+        case RECEIVE_COMMUNITY: {
+            const communities = state.get('community', Map()).toJS();
+            return fromJS({
+                ...state.toJS(),
+                ...{ community: { ...communities, ...payload } },
+            });
+        }
+
         // Interleave special posts into the map of posts.
         case SYNC_SPECIAL_POSTS: {
             return payload.featuredPosts
@@ -124,12 +133,13 @@ export default function reducer(state = defaultState, action = {}) {
                         p => p.mergeDeep(specialPost)
                     );
                 }, state);
+            fromJS;
         }
 
         case RECEIVE_CONTENT: {
             const content = fromJS(payload.content);
             const key = content.get('author') + '/' + content.get('permlink');
-            return state.updateIn(['content', key], Map(), c => {
+            return state.updateIn(['content', key], Map(), (c) => {
                 c = emptyContentMap.mergeDeep(c);
                 c = c.delete('active_votes');
                 c = c.mergeDeep(content);
@@ -223,9 +233,9 @@ export default function reducer(state = defaultState, action = {}) {
 
             // append content keys to `discussion_idx` list
             const key = ['discussion_idx', category || '', order];
-            new_state = state.updateIn(key, List(), list => {
-                return list.withMutations(posts => {
-                    data.forEach(value => {
+            new_state = state.updateIn(key, List(), (list) => {
+                return list.withMutations((posts) => {
+                    data.forEach((value) => {
                         const key = `${value.author}/${value.permlink}`;
                         if (!posts.includes(key)) posts.push(key);
                     });
@@ -233,9 +243,9 @@ export default function reducer(state = defaultState, action = {}) {
             });
 
             // append content stats data to each post
-            new_state = new_state.updateIn(['content'], content => {
-                return content.withMutations(map => {
-                    data.forEach(value => {
+            new_state = new_state.updateIn(['content'], (content) => {
+                return content.withMutations((map) => {
+                    data.forEach((value) => {
                         const key = `${value.author}/${value.permlink}`;
                         value = fromJS(value);
                         value = value.set('stats', fromJS(contentStats(value)));
@@ -318,6 +328,11 @@ export const receiveAccount = payload => ({
 
 export const receiveAccounts = payload => ({
     type: RECEIVE_ACCOUNTS,
+    payload,
+});
+
+export const receiveCommunity = payload => ({
+    type: RECEIVE_COMMUNITY,
     payload,
 });
 

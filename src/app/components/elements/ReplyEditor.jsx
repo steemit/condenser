@@ -7,6 +7,7 @@ import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import CategorySelector from 'app/components/cards/CategorySelector';
 import { validateCategory } from 'app/components/cards/CategorySelector';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import PostCategoryBannerContainer from 'app/components/elements/PostCategoryBannerContainer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
 import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
@@ -41,6 +42,8 @@ class ReplyEditor extends React.Component {
         richTextEditor: PropTypes.func,
         defaultPayoutType: PropTypes.string,
         payoutType: PropTypes.string,
+        isCommunity: PropTypes.bool,
+        community: PropTypes.string,
     };
 
     static defaultProps = {
@@ -49,6 +52,8 @@ class ReplyEditor extends React.Component {
         parent_author: '',
         parent_permlink: '',
         type: 'submit_comment',
+        isCommunity: false,
+        community: '',
     };
 
     constructor(props) {
@@ -159,6 +164,7 @@ class ReplyEditor extends React.Component {
         const { isStory, type, fields } = props;
         const isEdit = type === 'edit';
         const maxKb = isStory ? 65 : 16;
+        console.log('initForm::props', props);
         reactForm({
             fields,
             instance: this,
@@ -317,8 +323,10 @@ class ReplyEditor extends React.Component {
             category: this.props.category,
             body: this.props.body,
         };
+        console.log('render::originalPost', originalPost);
         const { onCancel, onTitleChange } = this;
         const { title, category, body } = this.state;
+        console.log('render::category', category);
         const {
             reply,
             username,
@@ -336,6 +344,8 @@ class ReplyEditor extends React.Component {
             defaultPayoutType,
             payoutType,
             beneficiaries,
+            isCommunity,
+            community,
         } = this.props;
         const { submitting, valid, handleSubmit } = this.state.replyForm;
         const { postError, titleWarn, rte } = this.state;
@@ -402,6 +412,11 @@ class ReplyEditor extends React.Component {
 
         return (
             <div className="ReplyEditor row">
+                <PostCategoryBannerContainer
+                    communityName={community}
+                    username={username}
+                    isCommunity={isCommunity}
+                />
                 <div className="column small-12">
                     <div
                         ref="draft"
@@ -779,6 +794,7 @@ function stateFromMarkdown(RichTextEditor, markdown) {
 }
 
 import { connect } from 'react-redux';
+
 const richTextEditor = process.env.BROWSER
     ? require('react-rte-image').default
     : null;
@@ -797,9 +813,25 @@ export default formId =>
             if (isStory) fields.push('category');
 
             let { category, title, body } = ownProps;
+            console.log('CONNECT', state, ownProps);
+            console.log('CONNECT::category', category);
             if (/submit_/.test(type)) title = body = '';
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 category = Set([category, ...jsonMetadata.tags]).join(' ');
+            }
+            let community = '';
+            let isCommunity = false;
+            if (state.routing.locationBeforeTransitions.query) {
+                console.log(
+                    'We have a query param!',
+                    state.routing.locationBeforeTransitions.query
+                );
+                if (state.routing.locationBeforeTransitions.query.community) {
+                    community =
+                        state.routing.locationBeforeTransitions.query.community;
+                    isCommunity = true;
+                    console.log('we have a community!', community);
+                }
             }
 
             const defaultPayoutType = state.app.getIn(
@@ -838,7 +870,10 @@ export default formId =>
                 state,
                 formId,
                 richTextEditor,
+                isCommunity,
+                community,
             };
+            console.log('connect:ret', ret);
             return ret;
         },
 
@@ -945,11 +980,12 @@ export default formId =>
                     originalPost && originalPost.category
                         ? originalPost.category
                         : formCategories.first();
+                console.log('reply::rootCategory', rootCategory);
                 let allCategories = Set([...formCategories.toJS()]);
                 if (/^[-a-z\d]+$/.test(rootCategory))
                     allCategories = allCategories.add(rootCategory);
 
-                let postHashtags = [...rtags.hashtags];
+                const postHashtags = [...rtags.hashtags];
                 while (allCategories.size < 5 && postHashtags.length > 0) {
                     allCategories = allCategories.add(postHashtags.shift());
                 }

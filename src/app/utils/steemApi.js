@@ -26,7 +26,7 @@ export async function getStateAsync(url, observer) {
         'payout_comments',
         'muted',
     ];
-    const tabs = ['blog', 'feed', 'comments', 'recent-replies', 'payout'];
+    const acct_tabs = ['blog', 'feed', 'comments', 'recent-replies', 'payout'];
 
     if (parts == 1 && sorts.includes(part[0])) {
         //console.log("getState URL -- all ranked posts", url)
@@ -39,7 +39,7 @@ export async function getStateAsync(url, observer) {
         url = part[0] + '/blog';
     } else if (parts == 2 && part[0][0] == '@') {
         // special case: `followers`, `settings`, etc
-        if (!tabs.includes(part[1])) {
+        if (!acct_tabs.includes(part[1])) {
             //console.log("getState URL -- override account tab", url)
             url = part[0] + '/null';
         } else {
@@ -54,6 +54,8 @@ export async function getStateAsync(url, observer) {
         path: url,
         observer: observer === undefined ? null : observer,
     });
+
+    if (!('accounts' in raw)) raw['accounts'] = {};
 
     const cleansed = stateCleaner(raw);
     return cleansed;

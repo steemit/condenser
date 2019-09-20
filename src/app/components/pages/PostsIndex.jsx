@@ -64,7 +64,7 @@ class PostsIndex extends React.Component {
     loadMore(last_post) {
         if (!last_post) return;
         const { category, order, status } = this.props;
-        if (isFetchingOrRecentlyUpdated(status, order, category)) return;
+        if (isFetchingOrRecentlyUpdated(status, order, category || '')) return;
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
             author,
@@ -183,7 +183,7 @@ class PostsIndex extends React.Component {
             page_title = 'My subscriptions';
         } else if (community) {
             page_title = community.get('title');
-        } else if (typeof category !== 'undefined') {
+        } else if (category) {
             page_title = '#' + category;
         } else {
             page_title = tt('g.all_tags');
@@ -218,7 +218,7 @@ class PostsIndex extends React.Component {
                                     </div>
                                 )}
                                 {!community &&
-                                    typeof category !== 'undefined' &&
+                                    category &&
                                     order !== 'feed' &&
                                     category !== 'my' && (
                                         <div
@@ -297,7 +297,7 @@ class PostsIndex extends React.Component {
                             >
                                 {community.get('about')}
                             </div>
-                            <div style={{ float: 'right', marginTop: '-5px' }}>
+                            <div style={{ float: 'none', marginTop: '-5px' }}>
                                 <SubscribeButtonContainer
                                     community={community.get('name')}
                                 />
@@ -399,7 +399,7 @@ module.exports = {
                     : null;
             const category = account_name
                 ? route.order
-                : route.category.toLowerCase();
+                : route.category ? route.category.toLowerCase() : null;
             const order = account_name
                 ? route.category
                 : route.order || constants.DEFAULT_SORT_ORDER;

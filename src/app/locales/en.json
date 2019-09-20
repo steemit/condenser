@@ -21,6 +21,9 @@
         "clear": "Clear",
         "close": "Close",
         "collapse_or_expand": "Collapse/Expand",
+        "community_settings_header": "Community Settings",
+        "community_settings_description":
+            "Here you can customize this community as you see fit.",
         "comments": "Comments",
         "confirm": "Confirm",
         "convert": "Convert",

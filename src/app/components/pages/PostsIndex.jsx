@@ -16,6 +16,7 @@ import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
 import SubscribeButtonContainer from 'app/components/elements/SubscribeButtonContainer';
+import SettingsEditButtonContainer from 'app/components/elements/SettingsEditButtonContainer';
 import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
@@ -122,8 +123,7 @@ class PostsIndex extends React.Component {
                     </div>
                 );
             }
-        } else {
-            if (posts && posts.size === 0) {
+        } else if (posts && posts.size === 0) {
                 emptyText = (
                     <div>
                         {'No ' +
@@ -133,7 +133,6 @@ class PostsIndex extends React.Component {
                     </div>
                 );
             }
-        }
 
         function teamMembers(members) {
             return members.map((row, idx) => (
@@ -300,6 +299,9 @@ class PostsIndex extends React.Component {
                                 >
                                     Create Post
                                 </Link>
+                                <SettingsEditButtonContainer
+                                    community={community.get('name')}
+                                />
                             </div>
                             {community.get('subscribers')} subscribers
                             <br />
@@ -438,7 +440,7 @@ module.exports = {
                 gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
             };
         },
-        dispatch => {
+        (dispatch) => {
             return {
                 requestData: args =>
                     dispatch(fetchDataSagaActions.requestData(args)),

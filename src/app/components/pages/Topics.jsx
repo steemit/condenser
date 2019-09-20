@@ -31,7 +31,7 @@ class Topics extends Component {
         if (compact) {
             const label = tag => communities.getIn([tag, 'title'], '#' + tag);
             const opt = tag => {
-                if (tag === 'feed')
+                if (tag && tag[0] === '@')
                     return {
                         value: `/@${username}/feed`,
                         label: 'My friends' || `tt('g.my_feed')`,
@@ -47,7 +47,7 @@ class Topics extends Component {
             options.push(opt(null));
 
             if (username) {
-                options.push(opt('feed'));
+                options.push(opt('@' + username));
                 options.push(opt('my'));
             }
 

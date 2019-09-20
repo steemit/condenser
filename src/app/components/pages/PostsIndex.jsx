@@ -25,7 +25,6 @@ import SortOrder from 'app/components/elements/SortOrder';
 class PostsIndex extends React.Component {
     static propTypes = {
         discussions: PropTypes.object,
-        feed_posts: PropTypes.object,
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
@@ -64,24 +63,14 @@ class PostsIndex extends React.Component {
 
     loadMore(last_post) {
         if (!last_post) return;
-        let {
-            accountname,
-            category,
-            order = constants.DEFAULT_SORT_ORDER,
-        } = this.props.routeParams;
-        if (category === 'feed') {
-            accountname = order.slice(1);
-            order = 'by_feed';
-        }
-        if (isFetchingOrRecentlyUpdated(this.props.status, order, category))
-            return;
+        const { category, order, status } = this.props;
+        if (isFetchingOrRecentlyUpdated(status, order, category)) return;
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
             author,
             permlink,
             order,
             category,
-            accountname,
             observer: this.props.username,
         });
     }
@@ -89,32 +78,26 @@ class PostsIndex extends React.Component {
         this.setState({ showSpam: !this.state.showSpam });
     };
     render() {
-        let {
-            category,
-            order = constants.DEFAULT_SORT_ORDER,
-        } = this.props.routeParams;
-
         const {
             categories,
             featured,
             promoted,
             gptBannedTags,
-            topic,
             community,
+            category,
+            account_name, // TODO: for feed
+            order,
         } = this.props;
 
         let allowAdsOnContent = true;
         allowAdsOnContent =
             this.props.gptEnabled &&
-            !GptUtils.HasBannedTags([topic], gptBannedTags);
+            !GptUtils.HasBannedTags([category], gptBannedTags);
 
-        let posts = [];
-        let account_name = '';
+        const posts = this.getPosts(order, category);
+
         let emptyText = '';
-        if (category === 'feed') {
-            account_name = order.slice(1);
-            order = 'by_feed';
-            posts = this.props.feed_posts;
+        if (order === 'feed') {
             const isMyAccount = this.props.username === account_name;
             if (isMyAccount) {
                 emptyText = (
@@ -147,7 +130,6 @@ class PostsIndex extends React.Component {
                 );
             }
         } else {
-            posts = this.getPosts(order, category);
             if (posts && posts.size === 0) {
                 emptyText = (
                     <div>
@@ -190,7 +172,7 @@ class PostsIndex extends React.Component {
         // Logged-in:
         // At homepage (@user/feed) say "My feed"
         let page_title = 'Posts'; // sensible default here?
-        if (category === 'feed') {
+        if (order === 'feed') {
             if (account_name === this.props.username)
                 page_title = 'My friends' || tt('posts_index.my_feed');
             else
@@ -237,7 +219,7 @@ class PostsIndex extends React.Component {
                                 )}
                                 {!community &&
                                     typeof category !== 'undefined' &&
-                                    category !== 'feed' &&
+                                    order !== 'feed' &&
                                     category !== 'my' && (
                                         <div
                                             style={{
@@ -252,20 +234,18 @@ class PostsIndex extends React.Component {
                             <span className="hide-for-mq-large articles__header-select">
                                 <Topics
                                     username={this.props.username}
-                                    order={
-                                        category === 'feed' ? 'trending' : order
-                                    }
+                                    order={order}
                                     current={category}
                                     categories={categories}
                                     compact
                                 />
                             </span>
                         </div>
-                        {category != 'feed' && (
+                        {order != 'feed' && (
                             <div className="small-4 medium-4 large-3 column hide-for-largeX articles__header-select">
                                 <SortOrder
-                                    sortOrder={this.props.sortOrder}
-                                    topic={this.props.topic}
+                                    sortOrder={order}
+                                    topic={category}
                                     horizontal={false}
                                 />
                             </div>
@@ -364,7 +344,7 @@ class PostsIndex extends React.Component {
 
                 <aside className="c-sidebar c-sidebar--left">
                     <Topics
-                        order={category === 'feed' ? 'trending' : order}
+                        order={order}
                         current={category}
                         compact={false}
                         username={this.props.username}
@@ -410,35 +390,36 @@ module.exports = {
     path: ':order(/:category)',
     component: connect(
         (state, ownProps) => {
-            // special case if user feed (vs. trending, etc)
-            let feed_posts;
-            if (ownProps.routeParams.category === 'feed') {
-                const account_name = ownProps.routeParams.order.slice(1);
-                feed_posts = state.global.getIn([
-                    'accounts',
-                    account_name,
-                    'feed',
-                ]);
-            }
+            // route can be e.g. trending/food (order/category);
+            //   or, @username/feed (category/order). Branch on presence of `@`.
+            const route = ownProps.routeParams;
+            const account_name =
+                route.order[0] == '@'
+                    ? route.order.slice(1).toLowerCase()
+                    : null;
+            const category = account_name
+                ? route.order
+                : route.category.toLowerCase();
+            const order = account_name
+                ? route.category
+                : route.order || constants.DEFAULT_SORT_ORDER;
 
             return {
                 discussions: state.global.get('discussion_idx', Map()),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                feed_posts,
                 community: state.global.getIn(
                     ['community', ownProps.params.category],
                     null
                 ),
+                account_name,
+                category,
+                order,
                 username:
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
-                sortOrder: ownProps.params.order,
-                topic: ownProps.params.category,
-                categories: state.global
-                    .getIn(['tag_idx', 'trending'], List())
-                    .take(50),
+                categories: state.global.getIn(['tag_idx', 'trending'], List()),
                 featured: state.offchain
                     .get('special_posts')
                     .get('featured_posts'),

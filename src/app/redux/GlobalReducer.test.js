@@ -298,18 +298,11 @@ describe('Global reducer', () => {
         };
         let payload = {
             data: [postData],
-            order: 'by_blog',
-            category: 'blog',
-            accountname: 'alice',
+            order: 'blog',
+            category: '@smudge',
         };
         const initWithData = reducer().merge({
-            accounts: Map({
-                [payload.accountname]: Map({
-                    [payload.category]: List([
-                        { data: { author: 'farm', permlink: 'barn' } },
-                    ]),
-                }),
-            }),
+            accounts: Map({}),
             content: Map({}),
             status: Map({
                 [payload.category]: Map({
@@ -320,6 +313,11 @@ describe('Global reducer', () => {
                 [payload.category]: Map({
                     UnusualOrder: List([
                         { data: { author: 'ship', permlink: 'bridge' } },
+                    ]),
+                }),
+                [payload.accountname]: Map({
+                    [payload.order]: List([
+                        { data: { author: 'farm', permlink: 'barn' } },
                     ]),
                 }),
                 '': Map({
@@ -349,13 +347,8 @@ describe('Global reducer', () => {
 
         // Push new key to posts list, If order meets the condition.
         expect(
-            actual1.getIn(['accounts', payload.accountname, payload.category])
-        ).toEqual(
-            List([
-                { data: { author: 'farm', permlink: 'barn' } },
-                'smudge/klop',
-            ])
-        );
+            actual1.getIn(['discussion_idx', payload.category, payload.order])
+        ).toEqual(List(['smudge/klop']));
 
         // Arrange
         payload.order = 'UnusualOrder';

@@ -263,6 +263,8 @@ export async function serverRender(
 
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
+        /*
+         // TODO: check acct valid server side
         if (
             (url.match(routeRegex.UserProfile1) ||
                 url.match(routeRegex.UserProfile3)) &&
@@ -275,6 +277,7 @@ export async function serverRender(
                 body: renderToString(<NotFound />),
             };
         }
+        */
 
         // If we are not loading a post, truncate state data to bring response size down.
         if (!url.match(routeRegex.Post)) {

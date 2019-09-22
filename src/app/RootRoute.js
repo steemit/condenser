@@ -11,7 +11,9 @@ export default {
     component: App,
     getChildRoutes(nextState, cb) {
         const route = resolveRoute(nextState.location.pathname);
-        if (route.page === 'About') {
+        if (route.page === 'CommunityRoles') {
+            cb(null, [require('app/components/pages/CommunityRolesPage')]);
+        } else if (route.page === 'About') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/About')]);
             //});
@@ -95,8 +97,6 @@ export default {
             //cb(null, [require('app/components/pages/PostsIndex')]);
             cb(null, [PostsIndex]);
             //});
-        } else if (route.page === 'CommunityRoles') {
-            cb(null, [require('app/components/pages/CommunityRoles')]);
         } else {
             //require.ensure([], (require) => {
             cb(process.env.BROWSER ? null : Error(404), [

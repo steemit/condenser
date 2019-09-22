@@ -62,7 +62,7 @@ describe('resolveRoute', () => {
         ],
         [
             '/roles/hive-105677',
-            { page: 'CommunityRoles', params: ['hive-105677'] },
+            { page: 'CommunityRolesPage', params: ['hive-105677'] },
         ],
         ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
     ];

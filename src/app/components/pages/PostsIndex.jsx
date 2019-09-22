@@ -346,7 +346,6 @@ module.exports = {
                     'feed',
                 ]);
             }
-
             return {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),

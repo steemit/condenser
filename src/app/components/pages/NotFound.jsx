@@ -3,6 +3,7 @@ import Icon from 'app/components/elements/Icon';
 import SteemLogo from 'app/components/elements/SteemLogo';
 
 class NotFound extends React.Component {
+    debugger;
     render() {
         return (
             <div>

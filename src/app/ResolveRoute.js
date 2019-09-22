@@ -63,6 +63,7 @@ export default function resolveRoute(path) {
     if (path === '/submit.html') {
         return { page: 'SubmitPost' };
     }
+
     let match = path.match(routeRegex.PostsIndex);
     if (match) {
         if (GDPRUserList.includes(match[1].substring(1))) {
@@ -83,10 +84,7 @@ export default function resolveRoute(path) {
     }
     match = path.match(routeRegex.CommunityRoles);
     if (match) {
-        if (GDPRUserList.includes(match[0].substring(1))) {
-            return { page: 'NotFound' };
-        }
-        return { page: 'CommunityRoles', params: [match[0].split('/')[2]] };
+        return { page: 'CommunityRolesPage', params: [match[0].split('/')[2]] };
     }
     match = path.match(routeRegex.PostNoCategory);
     if (match) {

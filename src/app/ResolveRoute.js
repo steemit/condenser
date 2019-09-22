@@ -1,6 +1,7 @@
 import GDPRUserList from './utils/GDPRUserList';
 
 export const routeRegex = {
+    CommunityRoles: /^\/(roles)+\/([\w\.\d-]+)/gi,
     PostsIndex: /^\/(@[\w\.\d-]+)\/feed\/?$/,
     UserProfile1: /^\/(@[\w\.\d-]+)\/?$/,
     UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
@@ -69,6 +70,7 @@ export default function resolveRoute(path) {
         }
         return { page: 'PostsIndex', params: ['home', match[1]] };
     }
+
     match =
         path.match(routeRegex.UserProfile1) ||
         // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
@@ -78,6 +80,13 @@ export default function resolveRoute(path) {
             return { page: 'NotFound' };
         }
         return { page: 'UserProfile', params: match.slice(1) };
+    }
+    match = path.match(routeRegex.CommunityRoles);
+    if (match) {
+        if (GDPRUserList.includes(match[0].substring(1))) {
+            return { page: 'NotFound' };
+        }
+        return { page: 'CommunityRoles', params: [match[0].split('/')[2]] };
     }
     match = path.match(routeRegex.PostNoCategory);
     if (match) {

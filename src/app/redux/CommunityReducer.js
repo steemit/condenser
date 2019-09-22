@@ -82,3 +82,37 @@ export default function reducer(state = defaultCommunityState, action) {
             return state;
     }
 }
+
+/**
+    @arg string community name.
+*/
+export const setCurrentCommunity = payload => ({
+    type: SET_CURRENT_COMMUNITY,
+    payload,
+});
+
+/**
+    @arg {community: string} payload action payload.
+*/
+export const listCommunityRoles = payload => ({
+    type: LIST_COMMUNITY_ROLES,
+    payload,
+});
+
+/**
+    @arg boolean payload action payload.
+*/
+export const listCommunityRolesPending = payload => ({
+    type: LIST_COMMUNITY_ROLES_PENDING,
+    payload,
+});
+
+export const listCommunityRolesError = payload => ({
+    type: LIST_COMMUNITY_ROLES_ERROR,
+    payload,
+});
+
+export const listCommunityRolesSuccess = payload => ({
+    type: LIST_COMMUNITY_ROLES_SUCCESS,
+    payload,
+});

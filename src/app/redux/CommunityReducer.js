@@ -11,6 +11,7 @@ const LIST_COMMUNITY_ROLES_SUCCESS = 'community/LIST_COMMUNITY_ROLES_SUCCESS';
 const UPDATE_USER_ROLE = 'community/UPDATE_USER_ROLE';
 const UPDATE_USER_ROLE_PENDING = 'community/UPDATE_USER_ROLE_PENDING';
 const UPDATE_USER_ROLE_ERROR = 'community/UPDATE_USER_ROLE_ERROR';
+const UPDATE_USER_ROLE_SUCCESS = 'community/UPDATE_USER_ROLE_SUCCESS';
 
 const ADD_USER_WITH_ROLE_TO_COMMUNITY =
     'community/ADD_USER_WITH_ROLE_TO_COMMUNITY';
@@ -18,6 +19,8 @@ const ADD_USER_WITH_ROLE_TO_COMMUNITY_PENDING =
     'community/ADD_USER_WITH_ROLE_TO_COMMUNITY_PENDING';
 const ADD_USER_WITH_ROLE_TO_COMMUNITY_ERROR =
     'community/ADD_USER_WITH_ROLE_TO_COMMUNITY_ERROR';
+const ADD_USER_WITH_ROLE_TO_COMMUNITY_SUCCESS =
+    'community/ADD_USER_WITH_ROLE_TO_COMMUNITY_SUCCESS';
 
 const defaultCommunityState = fromJS({
     community: '',
@@ -66,6 +69,9 @@ export default function reducer(state = defaultCommunityState, action) {
         case UPDATE_USER_ROLE_ERROR: {
             return state.merge({ communityUpdateUserRoleError: payload });
         }
+        case UPDATE_USER_ROLE_SUCCESS: {
+            return state;
+        }
         // Has a saga watcher
         case ADD_USER_WITH_ROLE_TO_COMMUNITY: {
             return state;
@@ -77,6 +83,9 @@ export default function reducer(state = defaultCommunityState, action) {
             return state.merge({
                 communityAddUserWithRoleError: payload,
             });
+        }
+        case ADD_USER_WITH_ROLE_TO_COMMUNITY_SUCCESS: {
+            return state;
         }
         default:
             return state;
@@ -103,16 +112,55 @@ export const listCommunityRoles = payload => ({
     @arg boolean payload action payload.
 */
 export const listCommunityRolesPending = payload => ({
-    type: LIST_COMMUNITY_ROLES_PENDING,
+    type: UPDATE_USER_ROLE_PENDING,
     payload,
 });
 
 export const listCommunityRolesError = payload => ({
-    type: LIST_COMMUNITY_ROLES_ERROR,
+    type: UPDATE_USER_ROLE_ERROR,
     payload,
 });
 
 export const listCommunityRolesSuccess = payload => ({
     type: LIST_COMMUNITY_ROLES_SUCCESS,
+    payload,
+});
+export const updateCommunityUser = payload => ({
+    type: UPDATE_USER_ROLE,
+    payload,
+});
+
+export const addCommunityUser = payload => ({
+    type: ADD_USER_WITH_ROLE_TO_COMMUNITY,
+    payload,
+});
+
+export const addCommunityUserPending = payload => ({
+    type: ADD_USER_WITH_ROLE_TO_COMMUNITY_PENDING,
+    payload,
+});
+
+export const addCommunityUserError = payload => ({
+    type: ADD_USER_WITH_ROLE_TO_COMMUNITY_ERROR,
+    payload,
+});
+
+export const addCommunityUserSuccess = payload => ({
+    type: ADD_USER_WITH_ROLE_TO_COMMUNITY_SUCCESS,
+    payload,
+});
+
+export const updateCommunityUserPending = payload => ({
+    type: UPDATE_USER_ROLE_PENDING,
+    payload,
+});
+
+export const updateCommunityUserError = payload => ({
+    type: UPDATE_USER_ROLE_ERROR,
+    payload,
+});
+
+export const updateCommunityUserSuccess = payload => ({
+    type: UPDATE_USER_ROLE_SUCCESS,
     payload,
 });

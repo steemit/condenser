@@ -8,6 +8,7 @@ import globalReducer from './GlobalReducer';
 import userReducer from './UserReducer';
 import transactionReducer from './TransactionReducer';
 import offchainReducer from './OffchainReducer';
+import communityReducer from './CommunityReducer';
 
 function initReducer(reducer, type) {
     return (state, action) => {
@@ -44,6 +45,7 @@ function initReducer(reducer, type) {
 }
 
 export default combineReducers({
+    community: initReducer(communityReducer),
     global: initReducer(globalReducer, 'global'),
     offchain: initReducer(offchainReducer),
     user: initReducer(userReducer),

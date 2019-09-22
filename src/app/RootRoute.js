@@ -95,6 +95,8 @@ export default {
             //cb(null, [require('app/components/pages/PostsIndex')]);
             cb(null, [PostsIndex]);
             //});
+        } else if (route.page === 'CommunityRoles') {
+            cb(null, [require('app/components/pages/CommunityRoles')]);
         } else {
             //require.ensure([], (require) => {
             cb(process.env.BROWSER ? null : Error(404), [

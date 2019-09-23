@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
-import { authorNameAndRep } from 'app/utils/ComponentFormatters';
 import AuthorDropdown from '../AuthorDropdown';
 import Reputation from 'app/components/elements/Reputation';
 import AffiliationMap from 'app/utils/AffiliationMap';
@@ -29,7 +28,7 @@ class Author extends React.Component {
         author: string.isRequired,
         follow: bool,
         mute: bool,
-        authorRepLog10: number,
+        authorRep: number,
         showAffiliation: bool,
         role: string,
         title: string,
@@ -98,7 +97,7 @@ class Author extends React.Component {
             author,
             follow,
             mute,
-            authorRepLog10,
+            authorRep,
             showAffiliation,
             role,
             title,
@@ -116,7 +115,7 @@ class Author extends React.Component {
                     <strong>
                         <Link to={'/@' + author}>{author}</Link>
                     </strong>{' '}
-                    <Reputation value={authorRepLog10} />
+                    <Reputation value={authorRep} />
                     {role && role != 'guest' && <span>[{role}]</span>}
                     {title != '' && (
                         <span className="affiliation">{title}</span>
@@ -145,7 +144,7 @@ class Author extends React.Component {
                             }}
                             to={'/@' + author}
                         >
-                            {author} <Reputation value={authorRepLog10} />
+                            {author} <Reputation value={authorRep} />
                             {role && role != 'guest' && <span>[{role}]</span>}
                             {title != '' && (
                                 <span className="affiliation">{title}</span>
@@ -174,7 +173,7 @@ class Author extends React.Component {
                         author={author}
                         follow={follow}
                         mute={mute}
-                        authorRepLog10={authorRepLog10}
+                        authorRep={authorRep}
                         username={username}
                     />
                 </Overlay>
@@ -186,13 +185,13 @@ class Author extends React.Component {
 import { connect } from 'react-redux';
 
 export default connect((state, ownProps) => {
-    const { author, follow, mute, authorRepLog10 } = ownProps;
+    const { author, follow, mute, authorRep } = ownProps;
     const username = state.user.getIn(['current', 'username']);
     return {
         author,
         follow,
         mute,
-        authorRepLog10,
+        authorRep,
         username,
     };
 })(Author);

@@ -15,7 +15,6 @@ import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
-import { repLog10 } from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import tt from 'counterpart';
@@ -42,43 +41,21 @@ export default class UserProfile extends React.Component {
         if (!profile) fetchProfile(accountname);
     }
 
+    componentDidUpdate(prevProps) {
+        const { profile, accountname, fetchProfile } = this.props;
+        if (prevProps.accountname != accountname) {
+            if (!profile) fetchProfile(accountname);
+        }
+    }
+
     shouldComponentUpdate(np, ns) {
-        const { follow, follow_count, accountname } = this.props;
-
-        let followersLoading = false,
-            npFollowersLoading = false;
-        let followingLoading = false,
-            npFollowingLoading = false;
-
-        if (follow) {
-            followersLoading = follow.getIn(
-                ['getFollowersAsync', accountname, 'blog_loading'],
-                false
-            );
-            followingLoading = follow.getIn(
-                ['getFollowingAsync', accountname, 'blog_loading'],
-                false
-            );
-        }
-        if (np.follow) {
-            npFollowersLoading = np.follow.getIn(
-                ['getFollowersAsync', accountname, 'blog_loading'],
-                false
-            );
-            npFollowingLoading = np.follow.getIn(
-                ['getFollowingAsync', accountname, 'blog_loading'],
-                false
-            );
-        }
-
         return (
             np.current_user !== this.props.current_user ||
             np.global_status !== this.props.global_status ||
-            (npFollowersLoading !== followersLoading && !npFollowersLoading) ||
-            (npFollowingLoading !== followingLoading && !npFollowingLoading) ||
+            np.followers !== this.props.followers ||
+            np.following !== this.props.following ||
             np.loading !== this.props.loading ||
             np.location.pathname !== this.props.location.pathname ||
-            np.follow_count !== this.props.follow_count ||
             np.blogmode !== this.props.blogmode ||
             np.posts !== this.props.posts ||
             np.profile !== this.props.profile ||
@@ -128,7 +105,8 @@ export default class UserProfile extends React.Component {
             props: {
                 current_user,
                 global_status,
-                follow,
+                following,
+                followers,
                 accountname,
                 walletUrl,
                 category,
@@ -160,26 +138,6 @@ export default class UserProfile extends React.Component {
                 </div>
             );
         }
-        const followers =
-            follow && follow.getIn(['getFollowersAsync', accountname]);
-        const following =
-            follow && follow.getIn(['getFollowingAsync', accountname]);
-
-        // instantiate following items
-        let totalCounts = this.props.follow_count;
-        let followerCount = 0;
-        let followingCount = 0;
-
-        if (totalCounts && accountname) {
-            totalCounts = totalCounts.get(accountname);
-            if (totalCounts) {
-                totalCounts = totalCounts.toJS();
-                followerCount = totalCounts.follower_count;
-                followingCount = totalCounts.following_count;
-            }
-        }
-
-        const rep = repLog10(profile.get('reputation', 0));
 
         const isMyAccount = username === accountname;
         let tab_content = null;
@@ -422,7 +380,7 @@ export default class UserProfile extends React.Component {
                                 )}
                             >
                                 <span className="UserProfile__rep">
-                                    ({rep})
+                                    ({profile.get('reputation')})
                                 </span>
                             </Tooltip>
                             {AffiliationMap[accountname] ? (
@@ -443,7 +401,10 @@ export default class UserProfile extends React.Component {
                                 <span>
                                     <Link to={`/@${accountname}/followers`}>
                                         {tt('user_profile.follower_count', {
-                                            count: followerCount,
+                                            count: profile.getIn(
+                                                ['stats', 'followers'],
+                                                0
+                                            ),
                                         })}
                                     </Link>
                                 </span>
@@ -457,10 +418,17 @@ export default class UserProfile extends React.Component {
                                 <span>
                                     <Link to={`/@${accountname}/followed`}>
                                         {tt('user_profile.followed_count', {
-                                            count: followingCount,
+                                            count: profile.getIn(
+                                                ['stats', 'following'],
+                                                0
+                                            ),
                                         })}
                                     </Link>
                                 </span>
+                                <span>
+                                    {profile.getIn(['stats', 'sp'], 0)} SP
+                                </span>
+                                <span>#{profile.getIn(['stats', 'rank'])}</span>
                             </div>
 
                             <p className="UserProfile__info">
@@ -529,8 +497,16 @@ module.exports = {
                 loading: state.app.get('loading'),
                 global_status: state.global.get('status'),
                 accountname: accountname,
-                follow: state.global.get('follow'),
-                follow_count: state.global.get('follow_count'),
+                followers: state.global.getIn([
+                    'follow',
+                    'getFollowersAsync',
+                    accountname,
+                ]),
+                following: state.global.getIn([
+                    'follow',
+                    'getFollowingAsync',
+                    accountname,
+                ]),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 profile: state.userProfiles.getIn(['profiles', accountname]),
                 walletUrl,

@@ -13,7 +13,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import tt from 'counterpart';
-import { repLog10, parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
+import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
@@ -262,7 +262,6 @@ class CommentImpl extends React.Component {
         }
         const { gray } = comment.stats;
         const isMuted = gray;
-        const authorRepLog10 = repLog10(comment.author_reputation);
         const { author, json_metadata } = comment;
         const {
             username,
@@ -451,7 +450,7 @@ class CommentImpl extends React.Component {
                             </div>
                             <Author
                                 author={comment.author}
-                                authorRepLog10={authorRepLog10}
+                                authorRep={comment.author_reputation}
                                 showAffiliation
                                 role={comment.author_role}
                                 title={comment.author_title}

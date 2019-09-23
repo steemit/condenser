@@ -15,7 +15,7 @@ import { immutableAccessor } from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
-import { repLog10, parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
+import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
@@ -30,7 +30,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
 
-function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
+function TimeAuthorCategory({ content, authorRep, showTags }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
@@ -38,7 +38,7 @@ function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
             {} {tt('g.by')}{' '}
             <Author
                 author={content.author}
-                authorRepLog10={authorRepLog10}
+                authorRep={authorRep}
                 showAffiliation
                 role={content.author_role}
                 title={content.author_title}
@@ -53,14 +53,14 @@ function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     );
 }
 
-function TimeAuthorCategoryLarge({ content, authorRepLog10 }) {
+function TimeAuthorCategoryLarge({ content, authorRep }) {
     return (
         <span className="PostFull__time_author_category_large vcard">
             <Userpic account={content.author} />
             <div className="right-side">
                 <Author
                     author={content.author}
-                    authorRepLog10={authorRepLog10}
+                    authorRep={authorRep}
                     showAffiliation
                     role={content.author_role}
                     title={content.author_title}
@@ -478,7 +478,6 @@ class PostFull extends React.Component {
         const showDeleteOption =
             username === author && allowDelete(post_content) && !isPaidout;
 
-        const authorRepLog10 = repLog10(content.author_reputation);
         const isPreViewCount =
             Date.parse(post_content.get('created')) < 1480723200000; // check if post was created before view-count tracking began (2016-12-03)
         let contentBody;
@@ -513,7 +512,7 @@ class PostFull extends React.Component {
                             {post_header}
                             <TimeAuthorCategoryLarge
                                 content={content}
-                                authorRepLog10={authorRepLog10}
+                                authorRep={content.author_reputation}
                             />
                         </div>
                         <div className="PostFull__body entry-content">
@@ -535,7 +534,7 @@ class PostFull extends React.Component {
                     <div className="columns medium-12 large-5">
                         <TimeAuthorCategory
                             content={content}
-                            authorRepLog10={authorRepLog10}
+                            authorRep={content.author_reputation}
                         />
                     </div>
                     <div className="columns medium-12 large-2 ">

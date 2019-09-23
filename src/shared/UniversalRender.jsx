@@ -473,5 +473,21 @@ async function apiGetState(url) {
 
     offchain = await getStateAsync(url, null);
 
+    try {
+        const history = await api.getFeedHistoryAsync();
+        const feed = history.price_history;
+        const last = feed[feed.length - 1];
+        offchain['feed_price'] = last;
+    } catch (error) {
+        console.log('Error fetching feed price:', error);
+    }
+
+    try {
+        const dgpo = await api.getDynamicGlobalPropertiesAsync();
+        offchain['props'] = { sbd_print_rate: dgpo['sbd_print_rate'] };
+    } catch (error) {
+        console.log('Error fetching dgpo:', error);
+    }
+
     return offchain;
 }

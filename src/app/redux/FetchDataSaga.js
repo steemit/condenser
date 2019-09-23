@@ -26,7 +26,7 @@ export const fetchDataWatches = [
     takeLatest('@@router/LOCATION_CHANGE', fetchState),
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
-    takeLatest(GET_COMMUNITY, getCommunity),
+    takeEvery(GET_COMMUNITY, getCommunity),
 ];
 
 export function* getContentCaller(action) {
@@ -148,6 +148,7 @@ function* getAccounts(usernames) {
  * @param {string} name of community
  */
 export function* getCommunity(action) {
+    if (!action.payload) throw 'no community specified';
     const community = yield call(callBridge, 'get_community', {
         name: action.payload,
     });

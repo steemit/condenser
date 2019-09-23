@@ -2,33 +2,21 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import classnames from 'classnames';
-import * as globalActions from 'app/redux/GlobalReducer';
-import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
-import Icon from 'app/components/elements/Icon';
 import Settings from 'app/components/modules/Settings';
 import UserList from 'app/components/elements/UserList';
-import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
-import { repLog10 } from 'app/utils/ParsersAndFormatters.js';
-import Tooltip from 'app/components/elements/Tooltip';
-import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import tt from 'counterpart';
 import { List } from 'immutable';
-import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
-import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
-import AffiliationMap from 'app/utils/AffiliationMap';
-import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
-import SanitizedLink from 'app/components/elements/SanitizedLink';
 import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
+import UserProfileHeader from 'app/components/cards/UserProfileHeader';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -42,43 +30,21 @@ export default class UserProfile extends React.Component {
         if (!profile) fetchProfile(accountname);
     }
 
+    componentDidUpdate(prevProps) {
+        const { profile, accountname, fetchProfile } = this.props;
+        if (prevProps.accountname != accountname) {
+            if (!profile) fetchProfile(accountname);
+        }
+    }
+
     shouldComponentUpdate(np, ns) {
-        const { follow, follow_count, accountname } = this.props;
-
-        let followersLoading = false,
-            npFollowersLoading = false;
-        let followingLoading = false,
-            npFollowingLoading = false;
-
-        if (follow) {
-            followersLoading = follow.getIn(
-                ['getFollowersAsync', accountname, 'blog_loading'],
-                false
-            );
-            followingLoading = follow.getIn(
-                ['getFollowingAsync', accountname, 'blog_loading'],
-                false
-            );
-        }
-        if (np.follow) {
-            npFollowersLoading = np.follow.getIn(
-                ['getFollowersAsync', accountname, 'blog_loading'],
-                false
-            );
-            npFollowingLoading = np.follow.getIn(
-                ['getFollowingAsync', accountname, 'blog_loading'],
-                false
-            );
-        }
-
         return (
             np.current_user !== this.props.current_user ||
             np.global_status !== this.props.global_status ||
-            (npFollowersLoading !== followersLoading && !npFollowersLoading) ||
-            (npFollowingLoading !== followingLoading && !npFollowingLoading) ||
+            np.followers !== this.props.followers ||
+            np.following !== this.props.following ||
             np.loading !== this.props.loading ||
             np.location.pathname !== this.props.location.pathname ||
-            np.follow_count !== this.props.follow_count ||
             np.blogmode !== this.props.blogmode ||
             np.posts !== this.props.posts ||
             np.profile !== this.props.profile ||
@@ -128,7 +94,8 @@ export default class UserProfile extends React.Component {
             props: {
                 current_user,
                 global_status,
-                follow,
+                following,
+                followers,
                 accountname,
                 walletUrl,
                 category,
@@ -160,26 +127,6 @@ export default class UserProfile extends React.Component {
                 </div>
             );
         }
-        const followers =
-            follow && follow.getIn(['getFollowersAsync', accountname]);
-        const following =
-            follow && follow.getIn(['getFollowingAsync', accountname]);
-
-        // instantiate following items
-        let totalCounts = this.props.follow_count;
-        let followerCount = 0;
-        let followingCount = 0;
-
-        if (totalCounts && accountname) {
-            totalCounts = totalCounts.get(accountname);
-            if (totalCounts) {
-                totalCounts = totalCounts.toJS();
-                followerCount = totalCounts.follower_count;
-                followingCount = totalCounts.following_count;
-            }
-        }
-
-        const rep = repLog10(profile.get('reputation', 0));
 
         const isMyAccount = username === accountname;
         let tab_content = null;
@@ -381,118 +328,13 @@ export default class UserProfile extends React.Component {
             </div>
         );
 
-        const {
-            name,
-            location,
-            about,
-            website,
-            cover_image,
-        } = normalizeProfile(profile.toJS());
-        const website_label = website
-            ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
-            : null;
-
-        let cover_image_style = {};
-        if (cover_image) {
-            cover_image_style = {
-                backgroundImage:
-                    'url(' + proxifyImageUrl(cover_image, '2048x512') + ')',
-            };
-        }
-
         return (
             <div className="UserProfile">
-                <div className="UserProfile__banner row expanded">
-                    <div className="column" style={cover_image_style}>
-                        <div style={{ position: 'relative' }}>
-                            <div className="UserProfile__buttons hide-for-small-only">
-                                <Follow
-                                    follower={username}
-                                    following={accountname}
-                                />
-                            </div>
-                        </div>
-                        <h1>
-                            <Userpic account={accountname} hideIfDefault />
-                            {name || accountname}{' '}
-                            <Tooltip
-                                t={tt(
-                                    'user_profile.this_is_users_reputations_score_it_is_based_on_history_of_votes',
-                                    { name: accountname }
-                                )}
-                            >
-                                <span className="UserProfile__rep">
-                                    ({rep})
-                                </span>
-                            </Tooltip>
-                            {AffiliationMap[accountname] ? (
-                                <span className="affiliation">
-                                    {tt(
-                                        'g.affiliation_' +
-                                            AffiliationMap[accountname]
-                                    )}
-                                </span>
-                            ) : null}
-                        </h1>
-
-                        <div>
-                            {about && (
-                                <p className="UserProfile__bio">{about}</p>
-                            )}
-                            <div className="UserProfile__stats">
-                                <span>
-                                    <Link to={`/@${accountname}/followers`}>
-                                        {tt('user_profile.follower_count', {
-                                            count: followerCount,
-                                        })}
-                                    </Link>
-                                </span>
-                                <span>
-                                    <Link to={`/@${accountname}`}>
-                                        {tt('user_profile.post_count', {
-                                            count: profile.get('post_count', 0),
-                                        })}
-                                    </Link>
-                                </span>
-                                <span>
-                                    <Link to={`/@${accountname}/followed`}>
-                                        {tt('user_profile.followed_count', {
-                                            count: followingCount,
-                                        })}
-                                    </Link>
-                                </span>
-                            </div>
-
-                            <p className="UserProfile__info">
-                                {location && (
-                                    <span>
-                                        <Icon name="location" /> {location}
-                                    </span>
-                                )}
-                                {website && (
-                                    <span>
-                                        <Icon name="link" />{' '}
-                                        <SanitizedLink
-                                            url={website}
-                                            text={website_label}
-                                        />
-                                    </span>
-                                )}
-                                <Icon name="calendar" />{' '}
-                                <DateJoinWrapper
-                                    date={profile.get('created')}
-                                />
-                            </p>
-                        </div>
-                        <div className="UserProfile__buttons_mobile show-for-small-only">
-                            <Follow
-                                follower={username}
-                                following={accountname}
-                                what="blog"
-                            />
-                        </div>
-                    </div>
-                </div>
+                <UserProfileHeader
+                    current_user={username}
+                    accountname={accountname}
+                    profile={profile}
+                />
                 <div className="UserProfile__top-nav row expanded">
                     {top_menu}
                 </div>
@@ -529,8 +371,16 @@ module.exports = {
                 loading: state.app.get('loading'),
                 global_status: state.global.get('status'),
                 accountname: accountname,
-                follow: state.global.get('follow'),
-                follow_count: state.global.get('follow_count'),
+                followers: state.global.getIn([
+                    'follow',
+                    'getFollowersAsync',
+                    accountname,
+                ]),
+                following: state.global.getIn([
+                    'follow',
+                    'getFollowingAsync',
+                    accountname,
+                ]),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 profile: state.userProfiles.getIn(['profiles', accountname]),
                 walletUrl,

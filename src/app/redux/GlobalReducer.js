@@ -111,11 +111,7 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_COMMUNITY: {
-            const communities = state.get('community', Map()).toJS();
-            return fromJS({
-                ...state.toJS(),
-                ...{ community: { ...communities, ...payload } },
-            });
+            return state.update('community', Map(), a => a.mergeDeep(payload));
         }
 
         // Interleave special posts into the map of posts.

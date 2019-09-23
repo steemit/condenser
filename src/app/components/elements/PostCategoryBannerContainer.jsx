@@ -13,8 +13,18 @@ class PostCategoryBannerContainer extends React.Component {
         this.state = {
             loading: false,
         };
+    }
 
-        this.props.getCommunity(this.props.communityName);
+    componentWillMount() {
+        const { communityName, getCommunity, community } = this.props;
+        if (communityName && !community) getCommunity(communityName);
+    }
+
+    componentDidUpdate(prevProps) {
+        const { communityName, getCommunity, community } = this.props;
+        if (prevProps.communityName != communityName) {
+            if (communityName && !community) getCommunity(communityName);
+        }
     }
 
     render() {

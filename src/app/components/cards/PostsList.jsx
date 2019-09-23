@@ -29,7 +29,6 @@ class PostsList extends React.Component {
         loadMore: PropTypes.func,
         showSpam: PropTypes.bool,
         showResteem: PropTypes.bool,
-        fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
         nsfwPref: PropTypes.string.isRequired,
     };
@@ -374,9 +373,6 @@ export default connect(
     dispatch => ({
         fetchState: pathname => {
             dispatch(fetchDataSagaActions.fetchState({ pathname }));
-        },
-        removeHighSecurityKeys: () => {
-            dispatch(userActions.removeHighSecurityKeys());
         },
     })
 )(PostsList);

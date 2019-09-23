@@ -487,6 +487,8 @@ function* promptTosAcceptance(username) {
 }
 
 function* getFeatureFlags(username, posting_private) {
+    // not yet in use
+    return;
     try {
         let flags;
         if (!posting_private && hasCompatibleKeychain()) {

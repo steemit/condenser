@@ -29,18 +29,18 @@ export async function getStateAsync(url, observer) {
     const acct_tabs = ['blog', 'feed', 'comments', 'recent-replies', 'payout'];
 
     if (parts == 1 && sorts.includes(part[0])) {
-        // console.log("getState URL -- all ranked posts", url)
+        //console.log("getState URL -- all ranked posts", url)
     } else if (parts == 2 && sorts.includes(part[0])) {
-        // console.log("getState URL -- tag ranked posts", url)
+        //console.log("getState URL -- tag ranked posts", url)
     } else if (parts == 3 && part[1][0] == '@') {
-        // console.log("getState URL -- discussion", url)
+        //console.log("getState URL -- discussion", url)
     } else if (parts == 1 && part[0][0] == '@') {
-        // console.log("getState URL -- override account home", url)
+        //console.log("getState URL -- override account home", url)
         url = part[0] + '/blog';
     } else if (parts == 2 && part[0][0] == '@' && acct_tabs.includes(part[1])) {
         //console.log("getState URL -- account tab", url)
     } else {
-        // console.log('no-op getState URL -- ', url);
+        console.log('no-op getState URL -- ', url);
         return { content: {}, accounts: {} };
     }
 

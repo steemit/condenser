@@ -3,7 +3,6 @@ import GDPRUserList from '../utils/GDPRUserList';
 const accountsToRemove = GDPRUserList;
 
 const gdprFilterAccounts = stateAccounts => {
-    console.log('GDPR INVOKE', stateAccounts);
     if (stateAccounts === undefined) {
         return [];
     }
@@ -19,7 +18,6 @@ const gdprFilterAccounts = stateAccounts => {
 };
 
 const gdprFilterContent = stateContent => {
-    console.log('GDPR Content INVOKE', stateContent);
     if (stateContent === undefined) {
         return [];
     }

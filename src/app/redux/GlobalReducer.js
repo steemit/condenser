@@ -3,6 +3,7 @@ import resolveRoute from 'app/ResolveRoute';
 import { emptyContent } from 'app/redux/EmptyState';
 import { contentStats } from 'app/utils/StateFunctions';
 import constants from './constants';
+import { repLog10 } from 'app/utils/ParsersAndFormatters';
 
 export const emptyContentMap = Map(emptyContent);
 
@@ -130,7 +131,12 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_CONTENT: {
-            const content = fromJS(payload.content);
+            let content = fromJS(payload.content);
+            content = content.set(
+                'author_reputation',
+                repLog10(content.get('author_reputation'))
+            );
+
             const key = content.get('author') + '/' + content.get('permlink');
             return state.updateIn(['content', key], Map(), c => {
                 c = emptyContentMap.mergeDeep(c);

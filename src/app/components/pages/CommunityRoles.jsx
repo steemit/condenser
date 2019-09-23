@@ -19,7 +19,6 @@ class CommunityRoles extends React.Component {
             isOwnAccount,
             user_preferences,
         } = this.props;
-
         return <h1>Community Roles</h1>;
     }
 }
@@ -31,7 +30,6 @@ export default connect(
         return {
             pathname,
             community: state.community.toJS(),
-            account: state.global.getIn(['accounts', accountname]).toJS(),
             user_preferences: state.app.get('user_preferences').toJS(),
             ...ownProps,
         };

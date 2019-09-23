@@ -836,8 +836,8 @@ export default formId =>
             let { category, title, body } = ownProps;
 
             const query = state.routing.locationBeforeTransitions.query;
-            if (query && query.community) {
-                category = query.community;
+            if (query && query.category) {
+                category = query.category;
             }
 
             let tags = category;

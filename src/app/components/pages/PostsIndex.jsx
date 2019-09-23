@@ -301,13 +301,12 @@ class PostsIndex extends React.Component {
                                 <SubscribeButtonContainer
                                     community={community.get('name')}
                                 />
-                                <a
+                                <Link
                                     className="button slim hollow"
-                                    href={`/submit.html?community=${category}`}
-                                    title={`Create a post in ${category}`}
+                                    to={`/submit.html?category=${category}`}
                                 >
                                     Create Post
-                                </a>
+                                </Link>
                             </div>
                             {community.get('subscribers')} subscribers
                             <br />

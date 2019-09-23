@@ -2,32 +2,21 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import classnames from 'classnames';
-import * as globalActions from 'app/redux/GlobalReducer';
-import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
-import Icon from 'app/components/elements/Icon';
 import Settings from 'app/components/modules/Settings';
 import UserList from 'app/components/elements/UserList';
-import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
-import Tooltip from 'app/components/elements/Tooltip';
-import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import tt from 'counterpart';
 import { List } from 'immutable';
-import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
-import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
-import AffiliationMap from 'app/utils/AffiliationMap';
-import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
-import SanitizedLink from 'app/components/elements/SanitizedLink';
 import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
+import UserProfileHeader from 'app/components/cards/UserProfileHeader';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -339,128 +328,13 @@ export default class UserProfile extends React.Component {
             </div>
         );
 
-        const {
-            name,
-            location,
-            about,
-            website,
-            cover_image,
-        } = normalizeProfile(profile.toJS());
-        const website_label = website
-            ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
-            : null;
-
-        let cover_image_style = {};
-        if (cover_image) {
-            cover_image_style = {
-                backgroundImage:
-                    'url(' + proxifyImageUrl(cover_image, '2048x512') + ')',
-            };
-        }
-
         return (
             <div className="UserProfile">
-                <div className="UserProfile__banner row expanded">
-                    <div className="column" style={cover_image_style}>
-                        <div style={{ position: 'relative' }}>
-                            <div className="UserProfile__buttons hide-for-small-only">
-                                <Follow
-                                    follower={username}
-                                    following={accountname}
-                                />
-                            </div>
-                        </div>
-                        <h1>
-                            <Userpic account={accountname} hideIfDefault />
-                            {name || accountname}{' '}
-                            <Tooltip
-                                t={tt(
-                                    'user_profile.this_is_users_reputations_score_it_is_based_on_history_of_votes',
-                                    { name: accountname }
-                                )}
-                            >
-                                <span className="UserProfile__rep">
-                                    ({profile.get('reputation')})
-                                </span>
-                            </Tooltip>
-                            {AffiliationMap[accountname] ? (
-                                <span className="affiliation">
-                                    {tt(
-                                        'g.affiliation_' +
-                                            AffiliationMap[accountname]
-                                    )}
-                                </span>
-                            ) : null}
-                        </h1>
-
-                        <div>
-                            {about && (
-                                <p className="UserProfile__bio">{about}</p>
-                            )}
-                            <div className="UserProfile__stats">
-                                <span>
-                                    <Link to={`/@${accountname}/followers`}>
-                                        {tt('user_profile.follower_count', {
-                                            count: profile.getIn(
-                                                ['stats', 'followers'],
-                                                0
-                                            ),
-                                        })}
-                                    </Link>
-                                </span>
-                                <span>
-                                    <Link to={`/@${accountname}`}>
-                                        {tt('user_profile.post_count', {
-                                            count: profile.get('post_count', 0),
-                                        })}
-                                    </Link>
-                                </span>
-                                <span>
-                                    <Link to={`/@${accountname}/followed`}>
-                                        {tt('user_profile.followed_count', {
-                                            count: profile.getIn(
-                                                ['stats', 'following'],
-                                                0
-                                            ),
-                                        })}
-                                    </Link>
-                                </span>
-                                <span>
-                                    {profile.getIn(['stats', 'sp'], 0)} SP
-                                </span>
-                                <span>#{profile.getIn(['stats', 'rank'])}</span>
-                            </div>
-
-                            <p className="UserProfile__info">
-                                {location && (
-                                    <span>
-                                        <Icon name="location" /> {location}
-                                    </span>
-                                )}
-                                {website && (
-                                    <span>
-                                        <Icon name="link" />{' '}
-                                        <SanitizedLink
-                                            url={website}
-                                            text={website_label}
-                                        />
-                                    </span>
-                                )}
-                                <Icon name="calendar" />{' '}
-                                <DateJoinWrapper
-                                    date={profile.get('created')}
-                                />
-                            </p>
-                        </div>
-                        <div className="UserProfile__buttons_mobile show-for-small-only">
-                            <Follow
-                                follower={username}
-                                following={accountname}
-                                what="blog"
-                            />
-                        </div>
-                    </div>
-                </div>
+                <UserProfileHeader
+                    current_user={username}
+                    accountname={accountname}
+                    profile={profile}
+                />
                 <div className="UserProfile__top-nav row expanded">
                     {top_menu}
                 </div>

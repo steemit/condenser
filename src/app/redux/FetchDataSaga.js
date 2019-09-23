@@ -161,18 +161,7 @@ export function* getCommunity(action) {
 }
 
 export function* fetchData(action) {
-<<<<<<< HEAD
     const { order, author, permlink, postFilter, observer } = action.payload;
-=======
-    const {
-        order,
-        author,
-        permlink,
-        accountname,
-        postFilter,
-        observer,
-    } = action.payload;
->>>>>>> b9cdf21c... [WIP] Select community when posting
     let { category } = action.payload;
     if (!category) category = '';
 
@@ -186,7 +175,7 @@ export function* fetchData(action) {
             limit: constants.FETCH_DATA_BATCH_SIZE,
             start_author: author,
             start_permlink: permlink,
-            observer,
+            observer: observer,
         };
     } else {
         call_name = 'get_ranked_posts';
@@ -196,7 +185,7 @@ export function* fetchData(action) {
             limit: constants.FETCH_DATA_BATCH_SIZE,
             start_author: author,
             start_permlink: permlink,
-            observer,
+            observer: observer,
         };
     }
 

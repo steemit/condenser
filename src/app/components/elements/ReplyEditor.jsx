@@ -807,7 +807,6 @@ export default formId =>
 
             let { category, title, body } = ownProps;
 
-            // let community = '';
             let isCommunity = false;
             if (state.routing.locationBeforeTransitions.query) {
                 if (state.routing.locationBeforeTransitions.query.community) {

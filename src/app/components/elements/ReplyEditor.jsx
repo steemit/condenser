@@ -99,7 +99,6 @@ class ReplyEditor extends React.Component {
                 rte = isHtmlTest(raw);
             }
 
-            // console.log("initial reply body:", raw || '(empty)')
             body.props.onChange(raw);
             this.setState({
                 rte,
@@ -149,7 +148,6 @@ class ReplyEditor extends React.Component {
 
                 clearTimeout(saveEditorTimeout);
                 saveEditorTimeout = setTimeout(() => {
-                    // console.log('save formId', formId, body.value)
                     localStorage.setItem(
                         'replyEditorData-' + formId,
                         JSON.stringify(data, null, 0)
@@ -164,7 +162,6 @@ class ReplyEditor extends React.Component {
         const { isStory, type, fields } = props;
         const isEdit = type === 'edit';
         const maxKb = isStory ? 65 : 16;
-        console.log('initForm::props', props);
         reactForm({
             fields,
             instance: this,
@@ -261,7 +258,6 @@ class ReplyEditor extends React.Component {
                 this.setState({
                     progress: { error: 'Please insert only image files.' },
                 });
-                console.log('onDrop Rejected files: ', rejectedFiles);
             }
             return;
         }
@@ -323,10 +319,8 @@ class ReplyEditor extends React.Component {
             category: this.props.category,
             body: this.props.body,
         };
-        console.log('render::originalPost', originalPost);
         const { onCancel, onTitleChange } = this;
         const { title, category, body } = this.state;
-        console.log('render::category', category);
         const {
             reply,
             username,
@@ -788,7 +782,6 @@ function stateFromMarkdown(RichTextEditor, markdown) {
         html = remarkable.render(markdown);
         html = HtmlReady(html).html; // TODO: option to disable youtube conversion, @-links, img proxy
         //html = htmlclean(html) // normalize whitespace
-        console.log('markdown converted to:', html);
     }
     return stateFromHtml(RichTextEditor, html);
 }
@@ -817,21 +810,13 @@ export default formId =>
             // let community = '';
             let isCommunity = false;
             if (state.routing.locationBeforeTransitions.query) {
-                console.log(
-                    'We have a query param!',
-                    state.routing.locationBeforeTransitions.query
-                );
                 if (state.routing.locationBeforeTransitions.query.community) {
                     category =
                         state.routing.locationBeforeTransitions.query.community;
                     isCommunity = true;
-                    console.log('we have a community!', category);
                 }
             }
 
-            // if(!category) category = community
-            console.log('CONNECT', state, ownProps);
-            console.log('CONNECT::category', category);
             if (/submit_/.test(type)) title = body = '';
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 category = Set([category, ...jsonMetadata.tags]).join(' ');
@@ -876,7 +861,7 @@ export default formId =>
                 isCommunity,
                 community: category,
             };
-            console.log('connect:ret', ret);
+
             return ret;
         },
 
@@ -983,7 +968,6 @@ export default formId =>
                     originalPost && originalPost.category
                         ? originalPost.category
                         : formCategories.first();
-                console.log('reply::rootCategory', rootCategory);
                 let allCategories = Set([...formCategories.toJS()]);
                 if (/^[-a-z\d]+$/.test(rootCategory))
                     allCategories = allCategories.add(rootCategory);

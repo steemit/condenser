@@ -15,6 +15,7 @@ const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
+const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -107,6 +108,10 @@ export default function reducer(state = defaultState, action = {}) {
                 const transformed = transformAccount(curr);
                 return mergeAccounts(acc, transformed);
             }, state);
+        }
+
+        case RECEIVE_COMMUNITY: {
+            return state.update('community', Map(), a => a.mergeDeep(payload));
         }
 
         // Interleave special posts into the map of posts.
@@ -316,6 +321,11 @@ export const receiveAccount = payload => ({
 
 export const receiveAccounts = payload => ({
     type: RECEIVE_ACCOUNTS,
+    payload,
+});
+
+export const receiveCommunity = payload => ({
+    type: RECEIVE_COMMUNITY,
     payload,
 });
 

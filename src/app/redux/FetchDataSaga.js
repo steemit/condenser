@@ -18,6 +18,7 @@ import { getStateAsync, callBridge } from 'app/utils/steemApi';
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
+const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
@@ -25,6 +26,7 @@ export const fetchDataWatches = [
     takeLatest('@@router/LOCATION_CHANGE', fetchState),
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
+    takeEvery(GET_COMMUNITY, getCommunity),
 ];
 
 export function* getContentCaller(action) {
@@ -141,6 +143,24 @@ function* getAccounts(usernames) {
     yield put(globalActions.receiveAccounts({ accounts }));
 }
 
+/**
+ * Request data for given community
+ * @param {string} name of community
+ */
+export function* getCommunity(action) {
+    if (!action.payload) throw 'no community specified';
+    const community = yield call(callBridge, 'get_community', {
+        name: action.payload,
+    });
+    // TODO: Handle error state
+    if (community.name)
+        yield put(
+            globalActions.receiveCommunity({
+                [community.name]: { ...community },
+            })
+        );
+}
+
 export function* fetchData(action) {
     const { order, author, permlink, postFilter, observer } = action.payload;
     let { category } = action.payload;
@@ -251,6 +271,11 @@ function* fetchJson({
 
 // Action creators
 export const actions = {
+    getCommunity: payload => ({
+        type: GET_COMMUNITY,
+        payload,
+    }),
+
     requestData: payload => ({
         type: REQUEST_DATA,
         payload,

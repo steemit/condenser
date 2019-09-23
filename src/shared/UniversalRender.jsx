@@ -257,9 +257,9 @@ export async function serverRender(
     try {
         const url = location;
 
-        requestTimer.startTimer('apiGetState_ms');
-        onchain = await apiGetState(url);
-        requestTimer.stopTimer('apiGetState_ms');
+        requestTimer.startTimer('apiFetchState_ms');
+        onchain = await apiFetchState(url);
+        requestTimer.stopTimer('apiFetchState_ms');
 
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
@@ -464,7 +464,7 @@ export function clientRender(initialState) {
     );
 }
 
-async function apiGetState(url) {
+async function apiFetchState(url) {
     let offchain;
 
     if (process.env.OFFLINE_SSR_TEST) {

@@ -8,6 +8,10 @@ import { formatter } from '@steemit/steem-js';
 
 export const numberWithCommas = x => x.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
+export function ifHive(category) {
+    return category && category.substring(0, 5) == 'hive-' ? category : null;
+}
+
 export function isFetchingOrRecentlyUpdated(global_status, order, category) {
     const status = global_status
         ? global_status.getIn([category || '', order])

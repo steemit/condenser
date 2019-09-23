@@ -409,11 +409,14 @@ class ReplyEditor extends React.Component {
 
         return (
             <div className="ReplyEditor row">
-                <PostCategoryBannerContainer
-                    communityName={community}
-                    username={username}
-                    isCommunity={isCommunity}
-                />
+                {isStory &&
+                    !isEdit && (
+                        <PostCategoryBannerContainer
+                            communityName={community}
+                            username={username}
+                            isCommunity={isCommunity}
+                        />
+                    )}
                 <div className="column small-12">
                     <div
                         ref="draft"

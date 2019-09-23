@@ -25,14 +25,7 @@ class PostCategoryBannerContainer extends React.Component {
             currentUser,
             userProfile,
         } = this.props;
-        console.log(
-            'PostCategoryBannerContainer::render()',
-            username,
-            community,
-            isCommunity,
-            currentUser,
-            userProfile
-        );
+
         let image = null;
         if (userProfile) {
             image = userProfile.profile_image;
@@ -64,7 +57,6 @@ PostCategoryBannerContainer.propTypes = {
 
 export default connect(
     (state, ownProps) => {
-        console.log('PostCategoryBanner::connect()', arguments);
         const currentUser = state.user.get('current', null);
         const userMetadata = state.global.getIn(
             ['accounts', currentUser.get('username', ''), 'json_metadata'],

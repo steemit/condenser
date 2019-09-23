@@ -50,8 +50,8 @@ class PostCategoryBannerContainer extends React.Component {
 
 PostCategoryBannerContainer.propTypes = {
     username: PropTypes.string.isRequired,
-    communityName: PropTypes.string.isRequired,
-    community: PropTypes.object.isRequired, // TODO: define shape
+    communityName: PropTypes.string,
+    community: PropTypes.object, // TODO: define shape
     isCommunity: PropTypes.bool.isRequired,
 };
 

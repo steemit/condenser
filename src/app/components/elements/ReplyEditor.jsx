@@ -42,8 +42,6 @@ class ReplyEditor extends React.Component {
         richTextEditor: PropTypes.func,
         defaultPayoutType: PropTypes.string,
         payoutType: PropTypes.string,
-        isCommunity: PropTypes.bool,
-        community: PropTypes.string,
     };
 
     static defaultProps = {
@@ -52,8 +50,6 @@ class ReplyEditor extends React.Component {
         parent_author: '',
         parent_permlink: '',
         type: 'submit_comment',
-        isCommunity: false,
-        community: '',
     };
 
     constructor(props) {
@@ -85,7 +81,12 @@ class ReplyEditor extends React.Component {
             if (draft) {
                 draft = JSON.parse(draft);
                 const { category, title } = this.state;
-                if (category) category.props.onChange(draft.category);
+
+                if (category) {
+                    this.checkCategoryCommunity(draft.category);
+                    category.props.onChange(draft.category);
+                }
+
                 if (title) title.props.onChange(draft.title);
                 if (draft.payoutType)
                     this.props.setPayoutType(formId, draft.payoutType);
@@ -108,6 +109,25 @@ class ReplyEditor extends React.Component {
                     : null,
             });
         }
+
+        // Overwrite category (even if draft loaded) if authoritative category was provided
+        if (this.props.category) {
+            this.state.category.props.onChange(
+                this.props.initialValues.category
+            );
+            this.checkCategoryCommunity(this.props.category);
+        }
+    }
+
+    checkCategoryCommunity(category) {
+        let community = null;
+        if (category) {
+            const primary = category.split(' ')[0];
+            if (primary.substring(0, 5) == 'hive-') {
+                community = primary;
+            }
+        }
+        this.setState({ community });
     }
 
     componentDidMount() {
@@ -156,6 +176,10 @@ class ReplyEditor extends React.Component {
                     );
                     this.showDraftSaved();
                 }, 500);
+            }
+
+            if (ts.category.value !== ns.category.value) {
+                this.checkCategoryCommunity(ns.category.value);
             }
         }
     }
@@ -323,7 +347,7 @@ class ReplyEditor extends React.Component {
             body: this.props.body,
         };
         const { onCancel, onTitleChange } = this;
-        const { title, category, body } = this.state;
+        const { title, category, body, community } = this.state;
         const {
             reply,
             username,
@@ -341,8 +365,6 @@ class ReplyEditor extends React.Component {
             defaultPayoutType,
             payoutType,
             beneficiaries,
-            isCommunity,
-            community,
         } = this.props;
         const { submitting, valid, handleSubmit } = this.state.replyForm;
         const { postError, titleWarn, rte } = this.state;
@@ -414,7 +436,7 @@ class ReplyEditor extends React.Component {
                         <PostCategoryBannerContainer
                             communityName={community}
                             username={username}
-                            isCommunity={isCommunity}
+                            isCommunity={!!community}
                         />
                     )}
                 <div className="column small-12">
@@ -813,18 +835,15 @@ export default formId =>
 
             let { category, title, body } = ownProps;
 
-            let isCommunity = false;
-            if (state.routing.locationBeforeTransitions.query) {
-                if (state.routing.locationBeforeTransitions.query.community) {
-                    category =
-                        state.routing.locationBeforeTransitions.query.community;
-                    isCommunity = true;
-                }
+            const query = state.routing.locationBeforeTransitions.query;
+            if (query && query.community) {
+                category = query.community;
             }
 
+            let tags = category;
             if (/submit_/.test(type)) title = body = '';
             if (isStory && jsonMetadata && jsonMetadata.tags) {
-                category = Set([category, ...jsonMetadata.tags]).join(' ');
+                tags = Set([category, ...jsonMetadata.tags]).join(' ');
             }
 
             const defaultPayoutType = state.app.getIn(
@@ -853,18 +872,17 @@ export default formId =>
 
             const ret = {
                 ...ownProps,
+                category,
                 fields,
                 isStory,
                 username,
                 defaultPayoutType,
                 payoutType,
                 beneficiaries,
-                initialValues: { title, body, category },
+                initialValues: { title, body, category: tags },
                 state,
                 formId,
                 richTextEditor,
-                isCommunity,
-                community: category,
             };
 
             return ret;

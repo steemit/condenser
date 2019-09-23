@@ -29,8 +29,6 @@ const FETCH_JSON = 'global/FETCH_JSON';
 const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT';
 const SHOW_DIALOG = 'global/SHOW_DIALOG';
 const HIDE_DIALOG = 'global/HIDE_DIALOG';
-// Saga-related:
-export const GET_STATE = 'global/GET_STATE';
 
 /**
  * Transfrom nested JS object to appropriate immutable collection.
@@ -389,10 +387,5 @@ export const showDialog = payload => ({
 
 export const hideDialog = payload => ({
     type: HIDE_DIALOG,
-    payload,
-});
-
-export const getState = payload => ({
-    type: GET_STATE,
     payload,
 });

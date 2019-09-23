@@ -245,7 +245,6 @@ export async function serverRender(
     }
 
     if (error || !renderProps) {
-        // debug('error')('Router error', error);
         return {
             title: 'Page Not Found - Steemit',
             statusCode: 404,

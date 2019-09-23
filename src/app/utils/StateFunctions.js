@@ -1,6 +1,6 @@
 import assert from 'assert';
 import constants from 'app/redux/constants';
-import { parsePayoutAmount, repLog10 } from 'app/utils/ParsersAndFormatters';
+import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import { VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
 import { fromJS } from 'immutable';
@@ -80,16 +80,16 @@ export function contentStats(content) {
 
     const hasPendingPayout =
         parsePayoutAmount(content.get('pending_payout_value')) >= 0.02;
-    const authorRepLog10 = repLog10(content.get('author_reputation'));
+    const authorRep = content.get('author_reputation');
 
     // TODO: remove 'gray' and 'hide' entirely when served by API
     if (!('gray' in stats)) {
         stats['gray'] =
-            !hasPendingPayout && (authorRepLog10 < 1 || meetsGrayThreshold);
+            !hasPendingPayout && (authorRep < 1 || meetsGrayThreshold);
         console.log('append internal gray value');
     }
 
-    stats['hide'] = !hasPendingPayout && authorRepLog10 < 0; // rephide
+    stats['hide'] = !hasPendingPayout && authorRep < 0; // rephide
     stats['total_votes'] = total_votes;
 
     return stats;

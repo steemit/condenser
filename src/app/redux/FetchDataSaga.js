@@ -7,7 +7,7 @@ import {
     takeEvery,
 } from 'redux-saga/effects';
 import { api } from '@steemit/steem-js';
-import { loadFollows, fetchFollowCount } from 'app/redux/FollowSaga';
+import { loadFollows } from 'app/redux/FollowSaga';
 import { getContent } from 'app/redux/SagaShared';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
@@ -39,7 +39,6 @@ export function* fetchState(location_change_action) {
     const m = pathname.match(/^\/@([a-z0-9\.-]+)/);
     if (m && m.length === 2) {
         const username = m[1];
-        yield fork(fetchFollowCount, username);
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
     }

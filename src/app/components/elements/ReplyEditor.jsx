@@ -99,6 +99,7 @@ class ReplyEditor extends React.Component {
                 rte = isHtmlTest(raw);
             }
 
+            // console.log("initial reply body:", raw || '(empty)')
             body.props.onChange(raw);
             this.setState({
                 rte,
@@ -148,6 +149,7 @@ class ReplyEditor extends React.Component {
 
                 clearTimeout(saveEditorTimeout);
                 saveEditorTimeout = setTimeout(() => {
+                    // console.log('save formId', formId, body.value)
                     localStorage.setItem(
                         'replyEditorData-' + formId,
                         JSON.stringify(data, null, 0)
@@ -258,6 +260,7 @@ class ReplyEditor extends React.Component {
                 this.setState({
                     progress: { error: 'Please insert only image files.' },
                 });
+                console.log('onDrop Rejected files: ', rejectedFiles);
             }
             return;
         }
@@ -782,12 +785,12 @@ function stateFromMarkdown(RichTextEditor, markdown) {
         html = remarkable.render(markdown);
         html = HtmlReady(html).html; // TODO: option to disable youtube conversion, @-links, img proxy
         //html = htmlclean(html) // normalize whitespace
+        console.log('markdown converted to:', html);
     }
     return stateFromHtml(RichTextEditor, html);
 }
 
 import { connect } from 'react-redux';
-
 const richTextEditor = process.env.BROWSER
     ? require('react-rte-image').default
     : null;

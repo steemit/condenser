@@ -18,31 +18,21 @@ class PostCategoryBannerContainer extends React.Component {
     }
 
     render() {
-        const {
-            username,
-            community,
-            isCommunity,
-            currentUser,
-            userProfile,
-        } = this.props;
+        const { username, community, isCommunity, currentUser } = this.props;
 
-        let image = null;
-        if (userProfile) {
-            image = userProfile.profile_image;
-        }
-        let label = `${currentUser.get('username', '')}'s Blog`;
+        let label = `${currentUser}'s blog`;
         let labelSmall = '';
         if (isCommunity && community) {
             label = `${community.get('title')}`;
-            labelSmall = `# ${community.get('name')}`;
+            labelSmall = `#${community.get('name')}`;
         }
 
         return (
             <PostCategoryBanner
                 {...this.state}
+                author={currentUser}
                 label={label}
                 labelSmall={labelSmall}
-                image={image}
             />
         );
     }
@@ -57,13 +47,7 @@ PostCategoryBannerContainer.propTypes = {
 
 export default connect(
     (state, ownProps) => {
-        const currentUser = state.user.get('current', null);
-        const userMetadata = state.global.getIn(
-            ['accounts', currentUser.get('username', ''), 'json_metadata'],
-            ''
-        );
-        let userProfile = null;
-        if (userMetadata) userProfile = JSON.parse(userMetadata).profile;
+        const currentUser = state.user.getIn(['current', 'username'], null);
         return {
             ...ownProps,
             community: state.global.getIn(
@@ -71,7 +55,6 @@ export default connect(
                 null
             ),
             currentUser,
-            userProfile,
         };
     },
     dispatch => ({

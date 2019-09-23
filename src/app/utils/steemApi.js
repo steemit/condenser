@@ -37,19 +37,8 @@ export async function getStateAsync(url, observer) {
     } else if (parts == 1 && part[0][0] == '@') {
         // console.log("getState URL -- override account home", url)
         url = part[0] + '/blog';
-<<<<<<< HEAD
     } else if (parts == 2 && part[0][0] == '@' && acct_tabs.includes(part[1])) {
         //console.log("getState URL -- account tab", url)
-=======
-    } else if (parts == 2 && part[0][0] == '@') {
-        // special case: `followers`, `settings`, etc
-        if (!tabs.includes(part[1])) {
-            // console.log("getState URL -- override account tab", url)
-            url = part[0] + '/null';
-        } else {
-            // console.log("getState URL -- account tab", url)
-        }
->>>>>>> b9cdf21c... [WIP] Select community when posting
     } else {
         // console.log('no-op getState URL -- ', url);
         return { content: {}, accounts: {} };

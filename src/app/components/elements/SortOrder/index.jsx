@@ -27,7 +27,7 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
         sort = 'trending';
     }
 
-    const sorts = (tag, topMenu = false, isCommunity = false) => {
+    const sorts = (tag, topMenu = false, isComm = false) => {
         if (tag != '') tag = `/${tag}`;
 
         let out = [
@@ -61,7 +61,7 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
                 link: `/payout${tag}`,
             });
 
-            if (isCommunity) {
+            if (isComm) {
                 out.push({
                     value: 'muted',
                     label: 'Muted',

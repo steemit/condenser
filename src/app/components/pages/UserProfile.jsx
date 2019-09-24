@@ -104,6 +104,7 @@ export default class UserProfile extends React.Component {
                 order,
                 posts,
                 profile,
+                notifications,
             },
         } = this;
         const username = current_user ? current_user.get('username') : null;
@@ -158,7 +159,6 @@ export default class UserProfile extends React.Component {
 
             // notifications
         } else if (section === 'notifications') {
-            const notifications = accountImm.get('notifications', List());
             if (!fetching && (notifications && !notifications.size)) {
                 tab_content = (
                     <Callout>
@@ -415,6 +415,10 @@ module.exports = {
                     'getFollowingAsync',
                     accountname,
                 ]),
+                notifications: state.global.getIn(
+                    ['notifications', accountname],
+                    List()
+                ),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 profile: state.userProfiles.getIn(['profiles', accountname]),
                 walletUrl,

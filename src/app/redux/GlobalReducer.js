@@ -102,8 +102,8 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_NOTIFICATIONS: {
             console.log('Receive notifications', payload);
-            return state.updateIn(['accounts', payload.name], Map(), a =>
-                a.set('notifications', fromJS(payload.notifications))
+            return state.updateIn(['notifications', payload.name], List(), a =>
+                a.concat(fromJS(payload.notifications))
             );
         }
 

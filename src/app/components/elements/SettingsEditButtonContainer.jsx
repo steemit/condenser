@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import * as transactionActions from 'app/redux/TransactionReducer';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 
 import SettingsEditButton from './SettingsEditButton';
 
@@ -34,10 +35,12 @@ class SettingsEditButtonContainer extends React.Component {
             () => {
                 console.log('onSave::Success()');
                 this.setState({ loading: false, settings: newSettings });
+                this.props.getCommunity(community);
             },
             () => {
                 console.log('onSave::failure()');
                 this.setState({ loading: false });
+                this.props.getCommunity(community);
             }
         );
     };
@@ -119,6 +122,9 @@ export default connect(
                     errorCallback,
                 })
             );
+        },
+        getCommunity: communityName => {
+            return dispatch(fetchDataSagaActions.getCommunity(communityName));
         },
     })
 )(SettingsEditButtonContainer);

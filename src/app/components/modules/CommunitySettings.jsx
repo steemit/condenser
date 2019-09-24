@@ -28,11 +28,12 @@ class CommunitySettings extends Component {
 
     onSubmit = () => {
         // Trim leading and trailing whitespace before submission.
-        const settings = Object.keys(this.state).filter((k, v) => {
-            if (typeof v === 'string') {
-                return v.trim();
+        const settings = {};
+        Object.keys(this.state).filter(k => {
+            if (typeof this.state[k] === 'string') {
+                return (settings[k] = this.state[k].trim());
             }
-            return v;
+            return (settings[k] = this.state[k]);
         });
 
         console.log('CommunitySettings::onSubmit()::settings', settings);

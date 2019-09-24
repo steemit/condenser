@@ -22,10 +22,6 @@ class SettingsEditButtonContainer extends React.Component {
     };
 
     onSave = newSettings => {
-        console.log(
-            'SettingsEditButtonContainer::onSave::newSettings',
-            newSettings
-        );
         const community = this.props.community.get('name');
         this.setState({ loading: true });
         this.props.saveSettings(
@@ -33,12 +29,10 @@ class SettingsEditButtonContainer extends React.Component {
             community,
             newSettings,
             () => {
-                console.log('onSave::Success()');
                 this.setState({ loading: false, settings: newSettings });
                 this.props.getCommunity(community);
             },
             () => {
-                console.log('onSave::failure()');
                 this.setState({ loading: false });
                 this.props.getCommunity(community);
             }
@@ -46,12 +40,6 @@ class SettingsEditButtonContainer extends React.Component {
     };
 
     render() {
-        // const { subscribed } = this.state;
-        console.log(
-            'SettingsEditButtonContainer->render()',
-            this.state.settings
-        );
-
         const label = `Settings`;
 
         return (

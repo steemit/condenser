@@ -215,6 +215,33 @@ export default function ServerHTML({
                         dangerouslySetInnerHTML={{ __html: body }}
                     />
                 }
+                
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                        (function() {
+                            window.srAsyncInit = function() {
+                            SR("player-5b3e40c6efca8c0001f3fd78", {
+                                "playerId": "5b3e40c6efca8c0001f3fd78",
+                                "apiKey": "59b928b6839a4d0002000001",
+                                "version": "1.0",
+                                "macros": {
+                                "rand": Math.random().toString()
+                                }
+                            });
+                            };
+                        
+                            (function(d, s, id){
+                                var js, srjs = d.getElementsByTagName(s)[0];
+                                if (d.getElementById(id)) {return;}
+                                js = d.createElement(s); js.id = id;
+                                js.src = "https://sdk.streamrail.com/blade/sr.bladex.js";
+                                srjs.parentNode.insertBefore(js, srjs);
+                            }(document, "script", "streamrail-jssdk"));
+                        })();`
+                    }}
+                    />
+
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}

@@ -203,6 +203,9 @@ class PostsIndex extends React.Component {
                 page_title = `${page_title}: ${tt('g.all_tags')}`;
             }
         }
+        const videoPlayer = {
+            maxHeight: '200px',
+        }
         const layoutClass = this.props.blogmode
             ? ' layout-block'
             : ' layout-list';
@@ -248,6 +251,8 @@ class PostsIndex extends React.Component {
                     (promoted && !promoted.size) ? (
                         <Callout>{emptyText}</Callout>
                     ) : (
+                        <div>
+                        <div id="player-5b3e40c6efca8c0001f3fd78" style={videoPlayer}></div>
                         <PostsList
                             ref="list"
                             posts={posts ? posts : List()}
@@ -260,6 +265,7 @@ class PostsIndex extends React.Component {
                             showSpam={showSpam}
                             allowAdsOnContent={allowAdsOnContent}
                         />
+                        </div>
                     )}
                 </article>
 

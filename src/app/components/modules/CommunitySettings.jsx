@@ -158,8 +158,4 @@ CommunitySettings.propTypes = {
     flag_text: PropTypes.string.isRequired,
 };
 
-CommunitySettings.defaultProps = {
-    isMuted: false,
-};
-
 export default connect()(CommunitySettings);

@@ -55,21 +55,21 @@ export async function getStateAsync(url, observer, ssr = false) {
 
 async function loadThread(account, permlink) {
     const author = account.slice(1);
-    posts = await callBridge('get_discussion', { author, permlink });
-    return { content: posts };
+    const content = await callBridge('get_discussion', { author, permlink });
+    return { content };
 }
 
 async function loadPosts(sort, tag, observer) {
     const account = tag && tag[0] == '@' ? tag.slice(1) : null;
 
     let posts;
-    if (account)
-        posts = await callBridge('get_account_posts', {
-            sort,
-            account,
-            observer,
-        });
-    else posts = await callBridge('get_ranked_posts', { sort, tag, observer });
+    if (account) {
+        const params = { sort, account, observer };
+        posts = await callBridge('get_account_posts', params);
+    } else {
+        const params = { sort, tag, observer };
+        posts = await callBridge('get_ranked_posts', params);
+    }
 
     let content = {};
     let keys = [];

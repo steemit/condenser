@@ -174,6 +174,7 @@ export default class UserProfile extends React.Component {
                 tab_content = (
                     <div>
                         <NotificationsList
+                            username={accountname}
                             notifications={notifications}
                             loading={fetching}
                         />
@@ -417,7 +418,7 @@ module.exports = {
                 ]),
                 notifications: state.global.getIn(
                     ['notifications', accountname],
-                    List()
+                    null
                 ),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 profile: state.userProfiles.getIn(['profiles', accountname]),

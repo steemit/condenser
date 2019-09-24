@@ -317,7 +317,8 @@ class PostFull extends React.Component {
         }
 
         // TODO: get global loading state
-        const bShowLoading = !bIllegalContentUser && !bDMCAStop;
+        //loading = !bIllegalContentUser && !bDMCAStop && partial data loaded;
+        const bShowLoading = false;
 
         // hide images if user is on blacklist
         const hideImages = ImageUserBlockList.includes(content.author);

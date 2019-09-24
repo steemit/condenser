@@ -29,7 +29,6 @@ class PostsList extends React.Component {
         loadMore: PropTypes.func,
         showSpam: PropTypes.bool,
         showResteem: PropTypes.bool,
-        fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
         nsfwPref: PropTypes.string.isRequired,
     };
@@ -59,9 +58,6 @@ class PostsList extends React.Component {
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
-        const post_overlay = document.getElementById('post_overlay');
-        if (post_overlay)
-            post_overlay.removeEventListener('click', this.closeOnOutsideClick);
         document.getElementsByTagName('body')[0].className = '';
     }
 
@@ -79,12 +75,6 @@ class PostsList extends React.Component {
                 'PostsList__post_top_bar'
             );
             if (!inside_top_bar) {
-                const post_overlay = document.getElementById('post_overlay');
-                if (post_overlay)
-                    post_overlay.removeEventListener(
-                        'click',
-                        this.closeOnOutsideClick
-                    );
                 this.closePostModal();
             }
         }
@@ -93,12 +83,6 @@ class PostsList extends React.Component {
     fetchIfNeeded() {
         this.scrollListener();
     }
-
-    toggleNegativeReplies = () => {
-        this.setState({
-            showNegativeComments: !this.state.showNegativeComments,
-        });
-    };
 
     scrollListener = debounce(() => {
         const el = window.document.getElementById('posts_list');
@@ -115,10 +99,10 @@ class PostsList extends React.Component {
             topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight <
             10
         ) {
-            const { loadMore, posts, category, showResteem } = this.props;
-            if (loadMore && posts && posts.size)
-                loadMore(posts.last(), category, showResteem);
+            const { loadMore, posts } = this.props;
+            if (loadMore && posts && posts.size) loadMore(posts.last());
         }
+
         // Detect if we're in mobile mode (renders larger preview imgs)
         const mq = window.matchMedia('screen and (max-width: 39.9375em)');
         if (mq.matches) {
@@ -374,9 +358,6 @@ export default connect(
     dispatch => ({
         fetchState: pathname => {
             dispatch(fetchDataSagaActions.fetchState({ pathname }));
-        },
-        removeHighSecurityKeys: () => {
-            dispatch(userActions.removeHighSecurityKeys());
         },
     })
 )(PostsList);

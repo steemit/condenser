@@ -12,17 +12,9 @@ class AuthorDropdown extends Component {
     static propTypes = {};
     static defaultProps = {};
 
-    constructor(props) {
-        super(props);
-
-        if (
-            !Object.prototype.hasOwnProperty.call(
-                this.props.userProfiles,
-                this.props.author
-            )
-        ) {
-            props.fetchUserProfile(this.props.author);
-        }
+    componentWillMount() {
+        const { profile, author, fetchProfile } = this.props;
+        if (!profile) fetchProfile(author);
     }
 
     render() {
@@ -37,13 +29,13 @@ class AuthorDropdown extends Component {
                     <Link to={'/@' + this.props.author}>
                         <strong>{this.props.author}</strong>
                     </Link>{' '}
-                    <Reputation value={this.props.authorRepLog10} />
+                    <Reputation value={this.props.authorRep} />
                 </span>
             );
         }
 
-        const obj = this.props.userProfiles[this.props.author];
-        const { name, about } = obj ? normalizeProfile(obj) : {};
+        const obj = this.props.profile;
+        const { name, about } = obj ? normalizeProfile(obj.toJS()) : {};
 
         return (
             <div className="Author__container">
@@ -88,11 +80,11 @@ export default connect(
         return {
             ...props,
             simple,
-            userProfiles: state.userProfiles.get('profiles'),
+            profile: state.userProfiles.getIn(['profiles', props.author]),
         };
     },
     dispatch => ({
-        fetchUserProfile: author => {
+        fetchProfile: author => {
             dispatch(UserProfilesSagaActions.fetchProfile(author));
         },
     })

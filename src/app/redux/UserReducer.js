@@ -20,7 +20,6 @@ export const SET_USER = 'user/SET_USER';
 const CLOSE_LOGIN = 'user/CLOSE_LOGIN';
 export const LOGIN_ERROR = 'user/LOGIN_ERROR';
 export const LOGOUT = 'user/LOGOUT';
-const SET_LATEST_FEED_PRICE = 'user/SET_LATEST_FEED_PRICE';
 const SHOW_SIGN_UP = 'user/SHOW_SIGN_UP';
 const HIDE_SIGN_UP = 'user/HIDE_SIGN_UP';
 const KEYS_ERROR = 'user/KEYS_ERROR';
@@ -71,9 +70,6 @@ export default function reducer(state = defaultState, action) {
 
         case SHOW_LOGIN_WARNING:
             return state.set('show_login_warning', true);
-
-        case SET_LATEST_FEED_PRICE:
-            return state.set('latest_feed_price', payload);
 
         case HIDE_LOGIN:
             return state.merge({
@@ -340,11 +336,6 @@ export const accountAuthLookup = payload => ({
 
 export const setAuthority = payload => ({
     type: SET_AUTHORITY,
-    payload,
-});
-
-export const setLatestFeedPrice = payload => ({
-    type: SET_LATEST_FEED_PRICE,
     payload,
 });
 

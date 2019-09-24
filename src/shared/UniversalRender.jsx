@@ -257,12 +257,14 @@ export async function serverRender(
     try {
         const url = location;
 
-        requestTimer.startTimer('apiGetState_ms');
-        onchain = await apiGetState(url);
-        requestTimer.stopTimer('apiGetState_ms');
+        requestTimer.startTimer('apiFetchState_ms');
+        onchain = await apiFetchState(url);
+        requestTimer.stopTimer('apiFetchState_ms');
 
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
+        /*
+         // TODO: check acct valid server side
         if (
             (url.match(routeRegex.UserProfile1) ||
                 url.match(routeRegex.UserProfile3)) &&
@@ -275,6 +277,7 @@ export async function serverRender(
                 body: renderToString(<NotFound />),
             };
         }
+        */
 
         // If we are not loading a post, truncate state data to bring response size down.
         if (!url.match(routeRegex.Post)) {
@@ -461,14 +464,30 @@ export function clientRender(initialState) {
     );
 }
 
-async function apiGetState(url) {
+async function apiFetchState(url) {
     let offchain;
 
     if (process.env.OFFLINE_SSR_TEST) {
         offchain = get_state_perf;
     }
 
-    offchain = await getStateAsync(url, null);
+    offchain = await getStateAsync(url, null, true);
+
+    try {
+        const history = await api.getFeedHistoryAsync();
+        const feed = history.price_history;
+        const last = feed[feed.length - 1];
+        offchain['feed_price'] = last;
+    } catch (error) {
+        console.log('Error fetching feed price:', error);
+    }
+
+    try {
+        const dgpo = await api.getDynamicGlobalPropertiesAsync();
+        offchain['props'] = { sbd_print_rate: dgpo['sbd_print_rate'] };
+    } catch (error) {
+        console.log('Error fetching dgpo:', error);
+    }
 
     return offchain;
 }

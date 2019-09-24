@@ -3,6 +3,7 @@ import resolveRoute from 'app/ResolveRoute';
 import { emptyContent } from 'app/redux/EmptyState';
 import { contentStats } from 'app/utils/StateFunctions';
 import constants from './constants';
+import { repLog10 } from 'app/utils/ParsersAndFormatters';
 
 export const emptyContentMap = Map(emptyContent);
 
@@ -16,6 +17,7 @@ const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_NOTIFICATIONS = 'global/RECEIVE_NOTIFICATIONS';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
+const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -30,8 +32,6 @@ const FETCH_JSON = 'global/FETCH_JSON';
 const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT';
 const SHOW_DIALOG = 'global/SHOW_DIALOG';
 const HIDE_DIALOG = 'global/HIDE_DIALOG';
-// Saga-related:
-export const GET_STATE = 'global/GET_STATE';
 
 /**
  * Transfrom nested JS object to appropriate immutable collection.
@@ -119,6 +119,10 @@ export default function reducer(state = defaultState, action = {}) {
             }, state);
         }
 
+        case RECEIVE_COMMUNITY: {
+            return state.update('community', Map(), a => a.mergeDeep(payload));
+        }
+
         // Interleave special posts into the map of posts.
         case SYNC_SPECIAL_POSTS: {
             return payload.featuredPosts
@@ -135,7 +139,12 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_CONTENT: {
-            const content = fromJS(payload.content);
+            let content = fromJS(payload.content);
+            content = content.set(
+                'author_reputation',
+                repLog10(content.get('author_reputation'))
+            );
+
             const key = content.get('author') + '/' + content.get('permlink');
             return state.updateIn(['content', key], Map(), c => {
                 c = emptyContentMap.mergeDeep(c);
@@ -226,33 +235,11 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_DATA: {
-            const {
-                data,
-                order,
-                category,
-                accountname,
-                fetching,
-                endOfData,
-            } = payload;
+            const { data, order, category, fetching, endOfData } = payload;
             let new_state;
 
-            let key;
-
-            const account_orders = [
-                'by_blog',
-                'by_feed',
-                'by_comments',
-                'by_replies',
-                'by_payout',
-            ];
-
-            // append incoming post keys to proper content list
-            if (account_orders.includes(order)) {
-                // category is either "blog", "feed", "comments", or "replies" (respectively)
-                key = ['accounts', accountname, category];
-            } else {
-                key = ['discussion_idx', category || '', order];
-            }
+            // append content keys to `discussion_idx` list
+            const key = ['discussion_idx', category || '', order];
             new_state = state.updateIn(key, List(), list => {
                 return list.withMutations(posts => {
                     data.forEach(value => {
@@ -356,6 +343,11 @@ export const receiveAccounts = payload => ({
     payload,
 });
 
+export const receiveCommunity = payload => ({
+    type: RECEIVE_COMMUNITY,
+    payload,
+});
+
 export const syncSpecialPosts = payload => ({
     type: SYNC_SPECIAL_POSTS,
     payload,
@@ -424,10 +416,5 @@ export const showDialog = payload => ({
 
 export const hideDialog = payload => ({
     type: HIDE_DIALOG,
-    payload,
-});
-
-export const getState = payload => ({
-    type: GET_STATE,
     payload,
 });

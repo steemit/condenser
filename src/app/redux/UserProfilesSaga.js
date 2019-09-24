@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import * as userProfileActions from './UserProfilesReducer';
-import { api } from '@steemit/steem-js';
+import { callBridge } from 'app/utils/steemApi';
 
 const FETCH_PROFILE = 'userProfilesSaga/FETCH_PROFILE';
 
@@ -10,16 +10,16 @@ export const userProfilesWatches = [
 
 export function* fetchUserProfile(action) {
     const username = action.payload;
-    const chainAccount = yield call([api, api.getAccountsAsync], [username]);
-    const authorAccount = chainAccount[0];
+    const account = yield call(callBridge, 'get_profile', {
+        account: username,
+    });
+
     //TODO: use new profiles endpoint
     //authorAccount.json_metadata = JSON.parse(authorAccount.json_metadata);
 
-    if (!chainAccount) throw new Error('Account not found');
+    if (!account) throw new Error('Account not found');
 
-    yield put(
-        userProfileActions.addProfile({ username, account: authorAccount })
-    );
+    yield put(userProfileActions.addProfile({ username, account: account }));
 }
 
 // Action creators

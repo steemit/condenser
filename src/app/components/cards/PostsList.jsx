@@ -58,9 +58,6 @@ class PostsList extends React.Component {
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
-        const post_overlay = document.getElementById('post_overlay');
-        if (post_overlay)
-            post_overlay.removeEventListener('click', this.closeOnOutsideClick);
         document.getElementsByTagName('body')[0].className = '';
     }
 
@@ -78,12 +75,6 @@ class PostsList extends React.Component {
                 'PostsList__post_top_bar'
             );
             if (!inside_top_bar) {
-                const post_overlay = document.getElementById('post_overlay');
-                if (post_overlay)
-                    post_overlay.removeEventListener(
-                        'click',
-                        this.closeOnOutsideClick
-                    );
                 this.closePostModal();
             }
         }
@@ -92,12 +83,6 @@ class PostsList extends React.Component {
     fetchIfNeeded() {
         this.scrollListener();
     }
-
-    toggleNegativeReplies = () => {
-        this.setState({
-            showNegativeComments: !this.state.showNegativeComments,
-        });
-    };
 
     scrollListener = debounce(() => {
         const el = window.document.getElementById('posts_list');

@@ -13,10 +13,10 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
      * If a user lands on the 'feed' page and the sort order is displayed (e.g. a mobile user) 
      * display the active sort as 'new'.
      */
-    let tag = topic;
+    let tag = topic || '';
     let sort = sortOrder;
 
-    if (topic === 'feed') {
+    if (sort === 'feed') {
         tag = '';
         sort = 'created';
     }
@@ -27,7 +27,7 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
         sort = 'trending';
     }
 
-    const sorts = (tag, topMenu = false, isCommunity = false) => {
+    const sorts = (tag, topMenu = false, isComm = false) => {
         if (tag != '') tag = `/${tag}`;
 
         let out = [
@@ -61,7 +61,7 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
                 link: `/payout${tag}`,
             });
 
-            if (isCommunity) {
+            if (isComm) {
                 out.push({
                     value: 'muted',
                     label: 'Muted',
@@ -80,11 +80,13 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
             browserHistory.replace(url);
         };
 
-        return (<NativeSelect
-            currentlySelected={sort}
-            options={sorts(tag, false, tag.substr(0, 5) == 'hive-')}
-            onChange={handleChange(tag)}
-        />);
+        return (
+            <NativeSelect
+                currentlySelected={sort}
+                options={sorts(tag, false, tag.substr(0, 5) == 'hive-')}
+                onChange={handleChange(tag)}
+            />
+        );
     }
 
     // site header

@@ -77,6 +77,10 @@ export function setUserPreferences(payload) {
 }
 
 export function isTosAccepted() {
+    if (process.env.NODE_ENV !== 'production') {
+        // TODO: remove this. endpoint in dev currently down.
+        return true;
+    }
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ csrf: window.$STM_csrf }),
     });

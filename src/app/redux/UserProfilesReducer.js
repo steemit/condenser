@@ -13,9 +13,10 @@ export default function reducer(state = defaultState, action) {
     switch (action.type) {
         case ADD_USER_PROFILE: {
             if (payload) {
-                const currentProfiles = { ...state };
-                currentProfiles[payload.username] = payload.account;
-                return state.set('profiles', currentProfiles);
+                return state.setIn(
+                    ['profiles', payload.username],
+                    fromJS(payload.account)
+                );
             }
             return state;
         }

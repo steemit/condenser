@@ -112,16 +112,8 @@
         box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
       }
     }
-    &--tags {
-      display: none;
-      @include MQ(FL) {
-        display: block;
-      }
-      @include MQ(L) {
-        display: none;
-      }
-    }
   }
+
   &--left {
     display: none;
     order: 1;
@@ -143,9 +135,8 @@
     margin: 0;
     padding: 0;
   }
-  &__list-item {
-    margin-bottom: 10px;
-    line-height: 1.2;
+
+  .li {
     &:last-child {
       margin-bottom: 0;
     }

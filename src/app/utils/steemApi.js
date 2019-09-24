@@ -1,9 +1,93 @@
 import Promise from 'bluebird';
 import { api } from '@steemit/steem-js';
+import { ifHive } from 'app/utils/StateFunctions';
 
 import stateCleaner from 'app/redux/stateCleaner';
 
-export async function getStateAsync(url, observer) {
+export async function callBridge(method, params) {
+    console.log('call bridge', method, params);
+    const call = (method, params, callback) => {
+        return api.call('bridge.' + method, params, callback);
+    };
+    return Promise.promisify(call)(method, params);
+}
+
+export async function getStateAsync(url, observer, ssr = false) {
+    if (observer === undefined) observer = null;
+
+    const { page, tag, sort, key } = parsePath(url);
+
+    let state = {
+        accounts: {},
+        community: {},
+        content: {},
+        discussion_idx: {},
+    };
+
+    // load `content` and `discussion_idx`
+    if (page == 'posts' || page == 'account') {
+        const posts = await loadPosts(sort, tag, observer);
+        state['content'] = posts['content'];
+        state['discussion_idx'] = posts['discussion_idx'];
+    } else if (page == 'thread') {
+        const posts = await loadThread(key[0], key[1]);
+        state['content'] = posts['content'];
+    } else {
+        // no-op
+    }
+
+    // append `community` key
+    if (tag && ifHive(tag)) {
+        state['community'][tag] = await callBridge('get_community', {
+            name: tag,
+            observer: observer,
+        });
+    }
+
+    if (ssr) {
+        // append `topics` key
+        state['topics'] = await callBridge('get_trending_topics', { observer });
+    }
+
+    const cleansed = stateCleaner(state);
+    return cleansed;
+}
+
+async function loadThread(account, permlink) {
+    const author = account.slice(1);
+    const content = await callBridge('get_discussion', { author, permlink });
+    return { content };
+}
+
+async function loadPosts(sort, tag, observer) {
+    const account = tag && tag[0] == '@' ? tag.slice(1) : null;
+
+    let posts;
+    if (account) {
+        const params = { sort, account, observer };
+        posts = await callBridge('get_account_posts', params);
+    } else {
+        const params = { sort, tag, observer };
+        posts = await callBridge('get_ranked_posts', params);
+    }
+
+    let content = {};
+    let keys = [];
+    for (var idx in posts) {
+        const post = posts[idx];
+        const key = post['author'] + '/' + post['permlink'];
+        content[key] = post;
+        keys.push(key);
+    }
+
+    let discussion_idx = {};
+    discussion_idx[tag] = {};
+    discussion_idx[tag][sort] = keys;
+
+    return { content, discussion_idx };
+}
+
+function parsePath(url) {
     // strip off query string
     url = url.split('?')[0];
 
@@ -26,42 +110,36 @@ export async function getStateAsync(url, observer) {
         'payout_comments',
         'muted',
     ];
-    const tabs = ['blog', 'feed', 'comments', 'recent-replies', 'payout'];
+    const acct_tabs = ['blog', 'feed', 'comments', 'recent-replies', 'payout'];
+
+    let page = null;
+    let tag = null;
+    let sort = null;
+    let key = null;
 
     if (parts == 1 && sorts.includes(part[0])) {
-        //console.log("getState URL -- all ranked posts", url)
+        page = 'posts';
+        sort = part[0];
+        tag = '';
     } else if (parts == 2 && sorts.includes(part[0])) {
-        //console.log("getState URL -- tag ranked posts", url)
+        page = 'posts';
+        sort = part[0];
+        tag = part[1];
     } else if (parts == 3 && part[1][0] == '@') {
-        //console.log("getState URL -- discussion", url)
+        page = 'thread';
+        tag = part[0];
+        key = [part[1], part[2]];
     } else if (parts == 1 && part[0][0] == '@') {
-        //console.log("getState URL -- override account home", url)
-        url = part[0] + '/blog';
-    } else if (parts == 2 && part[0][0] == '@') {
-        // special case: `followers`, `settings`, etc
-        if (!tabs.includes(part[1])) {
-            //console.log("getState URL -- override account tab", url)
-            url = part[0] + '/null';
-        } else {
-            //console.log("getState URL -- account tab", url)
-        }
+        page = 'account';
+        sort = 'blog';
+        tag = part[0];
+    } else if (parts == 2 && part[0][0] == '@' && acct_tabs.includes(part[1])) {
+        page = 'account';
+        sort = part[1] == 'recent-replies' ? 'replies' : part[1];
+        tag = part[0];
     } else {
-        console.log('no-op getState URL -- ', url);
-        return { content: {}, accounts: {} };
+        // no-op URL
     }
 
-    const raw = await callBridge('get_state', {
-        path: url,
-        observer: observer === undefined ? null : observer,
-    });
-
-    const cleansed = stateCleaner(raw);
-    return cleansed;
-}
-
-export async function callBridge(method, params) {
-    const call = (method, params, callback) => {
-        return api.call('bridge.' + method, params, callback);
-    };
-    return Promise.promisify(call)(method, params);
+    return { page, tag, sort, key };
 }

@@ -7,7 +7,7 @@ import {
     takeEvery,
 } from 'redux-saga/effects';
 import { api } from '@steemit/steem-js';
-import { loadFollows, fetchFollowCount } from 'app/redux/FollowSaga';
+import { loadFollows } from 'app/redux/FollowSaga';
 import { getContent } from 'app/redux/SagaShared';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
@@ -18,6 +18,7 @@ import { getStateAsync, callBridge } from 'app/utils/steemApi';
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
+const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
@@ -25,6 +26,7 @@ export const fetchDataWatches = [
     takeLatest('@@router/LOCATION_CHANGE', fetchState),
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
+    takeEvery(GET_COMMUNITY, getCommunity),
 ];
 
 export function* getContentCaller(action) {
@@ -37,7 +39,6 @@ export function* fetchState(location_change_action) {
     const m = pathname.match(/^\/@([a-z0-9\.-]+)(\/notifications)?/);
     if (m && m.length >= 2) {
         const username = m[1];
-        yield fork(fetchFollowCount, username);
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
 
@@ -97,7 +98,7 @@ export function* fetchState(location_change_action) {
                 state.user.getIn(['current', 'username']),
             ]);
         }
-        const state = yield call(getStateAsync, url, username);
+        const state = yield call(getStateAsync, url, username, false);
         yield put(globalActions.receiveState(state));
         yield call(syncSpecialPosts);
     } catch (error) {
@@ -168,34 +169,36 @@ function* getAccounts(usernames) {
     yield put(globalActions.receiveAccounts({ accounts }));
 }
 
+/**
+ * Request data for given community
+ * @param {string} name of community
+ */
+export function* getCommunity(action) {
+    if (!action.payload) throw 'no community specified';
+    const community = yield call(callBridge, 'get_community', {
+        name: action.payload,
+    });
+    // TODO: Handle error state
+    if (community.name)
+        yield put(
+            globalActions.receiveCommunity({
+                [community.name]: { ...community },
+            })
+        );
+}
+
 export function* fetchData(action) {
-    const {
-        order,
-        author,
-        permlink,
-        accountname,
-        postFilter,
-        observer,
-    } = action.payload;
+    const { order, author, permlink, postFilter, observer } = action.payload;
     let { category } = action.payload;
     if (!category) category = '';
-    category = category.toLowerCase();
-
-    const account_sorts = {
-        by_replies: 'replies',
-        by_feed: 'feed',
-        by_blog: 'blog',
-        by_comments: 'comments',
-        by_payout: 'payout',
-    };
 
     yield put(globalActions.fetchingData({ order, category }));
     let call_name, args;
-    if (order in account_sorts) {
+    if (category[0] == '@') {
         call_name = 'get_account_posts';
         args = {
-            sort: account_sorts[order],
-            account: accountname,
+            sort: order,
+            account: category.slice(1),
             limit: constants.FETCH_DATA_BATCH_SIZE,
             start_author: author,
             start_permlink: permlink,
@@ -251,7 +254,6 @@ export function* fetchData(action) {
                     order,
                     category,
                     author,
-                    accountname,
                     fetching: !fetchDone,
                     endOfData,
                 })
@@ -295,6 +297,11 @@ function* fetchJson({
 
 // Action creators
 export const actions = {
+    getCommunity: payload => ({
+        type: GET_COMMUNITY,
+        payload,
+    }),
+
     requestData: payload => ({
         type: REQUEST_DATA,
         payload,

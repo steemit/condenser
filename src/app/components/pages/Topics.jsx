@@ -73,42 +73,39 @@ class Topics extends Component {
             );
         }
 
-        const link = (url, label) => (
-            <Link to={url} className="c-sidebar__link" activeClassName="active">
-                {label}
-            </Link>
-        );
-
-        const listItem = (body, className = 'c-sidebar__header') => (
-            <li className="c-sidebar__list-item">
-                <div className={className}>{body}</div>
-            </li>
+        const link = (url, label, className = 'c-sidebar__header') => (
+            <div className={className}>
+                <Link
+                    to={url}
+                    className="c-sidebar__link"
+                    activeClassName="active"
+                >
+                    {label}
+                </Link>
+            </div>
         );
 
         const moreLabel = <span>{tt('g.show_more_topics')}&hellip;</span>;
+        const commsHead = (
+            <div style={{ color: '#aaa', paddingTop: '1em' }}>Communities</div>
+        );
 
         const list = (
             <ul className="c-sidebar__list">
-                {listItem(link('/trending', tt('g.all_tags')))}
-                {username && listItem(link(`/@${username}/feed`, 'My friends'))}
-                {username && listItem(link(`/trending/my`, 'My communities'))}
-                <li className="c-sidebar__list-item">
-                    <div style={{ color: '#aaa', paddingTop: '1em' }}>
-                        Communities
-                    </div>
-                </li>
+                <li>{link('/trending', tt('g.all_tags'))}</li>
+                {username && (
+                    <li>{link(`/@${username}/feed`, 'My friends')}</li>
+                )}
+                {username && <li>{link(`/trending/my`, 'My communities')}</li>}
+                <li>{commsHead}</li>
                 {topics
                     .toJS()
-                    .map(cat =>
-                        listItem(
-                            link(`/trending/${cat[0]}`, cat[1] || '#' + cat[0]),
-                            ''
-                        )
-                    )}
-                {listItem(
-                    link(`/tags`, moreLabel),
-                    'c-sidebar__link--emphasis'
-                )}
+                    .map(cat => (
+                        <li key={cat[0]}>
+                            {link(`/trending/${cat[0]}`, cat[1], '')}
+                        </li>
+                    ))}
+                <li>{link(`/tags`, moreLabel, 'c-sidebar__link--emphasis')}</li>
             </ul>
         );
 

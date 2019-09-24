@@ -67,9 +67,9 @@ export default class UserProfile extends React.Component {
         }
 
         const postFilter =
-            order != 'blog' || this.state.showResteem
-                ? null
-                : value => value.author === accountname;
+            order == 'blog' && !this.state.showResteem
+                ? value => value.author === accountname
+                : null;
 
         const [author, permlink] = last_post.split('/');
         this.props.requestData({

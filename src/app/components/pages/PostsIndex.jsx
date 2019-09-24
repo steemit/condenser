@@ -31,7 +31,7 @@ class PostsIndex extends React.Component {
         loading: PropTypes.bool,
         username: PropTypes.string,
         blogmode: PropTypes.bool,
-        categories: PropTypes.object,
+        topics: PropTypes.object,
     };
 
     static defaultProps = {
@@ -79,7 +79,7 @@ class PostsIndex extends React.Component {
     };
     render() {
         const {
-            categories,
+            topics,
             featured,
             promoted,
             gptBannedTags,
@@ -236,7 +236,7 @@ class PostsIndex extends React.Component {
                                     username={this.props.username}
                                     order={order}
                                     current={category}
-                                    categories={categories}
+                                    topics={topics}
                                     compact
                                 />
                             </span>
@@ -354,7 +354,7 @@ class PostsIndex extends React.Component {
                         current={category}
                         compact={false}
                         username={this.props.username}
-                        categories={categories}
+                        topics={topics}
                     />
                     <small>
                         <a
@@ -425,7 +425,7 @@ module.exports = {
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
-                categories: state.global.getIn(['tag_idx', 'trending'], List()),
+                topics: state.global.getIn(['topics'], List()),
                 featured: state.offchain
                     .get('special_posts')
                     .get('featured_posts'),

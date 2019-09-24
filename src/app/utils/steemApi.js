@@ -33,18 +33,18 @@ export async function getStateAsync(url, observer) {
     let hive;
 
     if (parts == 1 && sorts.includes(part[0])) {
-        //console.log("get state URL -- all ranked posts", url)
+        // all ranked posts
     } else if (parts == 2 && sorts.includes(part[0])) {
-        //console.log("get state URL -- tag ranked posts", url)
+        // tag ranked posts
         hive = ifHive(part[1]);
     } else if (parts == 3 && part[1][0] == '@') {
-        //console.log("get state URL -- discussion", url)
+        // discussion
         hive = ifHive(part[0]);
     } else if (parts == 1 && part[0][0] == '@') {
-        //console.log("get state URL -- override account home", url)
+        // account home
         url = part[0] + '/blog';
     } else if (parts == 2 && part[0][0] == '@' && acct_tabs.includes(part[1])) {
-        //console.log("get state URL -- account tab", url)
+        // account tab
     } else {
         //console.log('no-op getState URL -- ', url);
         return { content: {}, accounts: {} };
@@ -65,7 +65,7 @@ export async function getStateAsync(url, observer) {
         });
     }
 
-    raw['topics'] = await callBridge('get_trending_topics');
+    raw['topics'] = await callBridge('get_trending_topics', { observer });
 
     const cleansed = stateCleaner(raw);
     return cleansed;

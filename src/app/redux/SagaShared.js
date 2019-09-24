@@ -65,6 +65,7 @@ function* showTransactionErrorNotification() {
 export function* getContent({ author, permlink, resolve, reject }) {
     let content;
     while (!content) {
+        console.log('getContent', author, permlink);
         content = yield call([api, api.getContentAsync], author, permlink);
         if (content['author'] == '') {
             // retry if content not found. #1870

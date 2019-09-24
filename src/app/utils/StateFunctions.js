@@ -1,3 +1,4 @@
+import { Map } from 'immutable';
 import assert from 'assert';
 import constants from 'app/redux/constants';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
@@ -60,7 +61,7 @@ export function contentStats(content) {
     if (!content) return {};
     if (!(content instanceof Map)) content = fromJS(content);
 
-    let stats = content.get('stats', {});
+    let stats = content.get('stats', Map());
 
     let net_rshares_adj = Long.ZERO;
     let total_votes = 0;
@@ -87,13 +88,13 @@ export function contentStats(content) {
     const authorRep = content.get('author_reputation');
 
     // TODO: remove 'gray' and 'hide' entirely when served by API
-    if (!('gray' in stats)) {
+    if (!stats.has('gray')) {
+        console.log('append internal stats values', stats, content.toJS());
         stats['gray'] =
             !hasPendingPayout && (authorRep < 1 || meetsGrayThreshold);
-        console.log('append internal gray value');
+        stats['hide'] = !hasPendingPayout && authorRep < 0; // rephide
     }
 
-    stats['hide'] = !hasPendingPayout && authorRep < 0; // rephide
     stats['total_votes'] = total_votes;
 
     return stats;

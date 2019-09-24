@@ -79,7 +79,7 @@ export default connect(
             about: community.get('about'),
             is_nsfw: community.get('is_nsfw'),
             description: community.get('description'),
-            flag_text: '', //TODO: Where is flag_text supposed to be?
+            flag_text: community.get('flag_text', ''),
         };
 
         return {

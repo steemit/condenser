@@ -19,6 +19,7 @@ const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
+const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
@@ -27,6 +28,7 @@ export const fetchDataWatches = [
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
     takeEvery(GET_COMMUNITY, getCommunity),
+    takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
 ];
 
 export function* getContentCaller(action) {
@@ -41,32 +43,6 @@ export function* fetchState(location_change_action) {
         const username = m[1];
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
-
-        if (m.length > 2 && m[2]) {
-            yield put(appActions.fetchDataBegin());
-            try {
-                const notifications = yield call(
-                    callBridge,
-                    'account_notifications',
-                    {
-                        account: username,
-                    }
-                );
-                yield put(
-                    globalActions.receiveNotifications({
-                        name: username,
-                        notifications,
-                    })
-                );
-            } catch (error) {
-                console.error(
-                    '~~ Saga fetchState notifications error ~~>',
-                    error
-                );
-                yield put(appActions.steemApiError(error.message));
-            }
-            yield put(appActions.fetchDataEnd());
-        }
     }
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call
@@ -187,6 +163,38 @@ export function* getCommunity(action) {
         );
 }
 
+/**
+ * Request notifications for given account
+ * @param {string} name of account
+ */
+export function* getAccountNotifications(action) {
+    if (!action.payload) throw 'no account specified';
+    yield put(appActions.fetchDataBegin());
+    try {
+        const notifications = yield call(callBridge, 'account_notifications', {
+            account: action.payload,
+        });
+        if (notifications && notifications.error) {
+            console.error(
+                '~~ Saga getAccountNotifications error ~~>',
+                notifications.error
+            );
+            yield put(appActions.steemApiError(notifications.error.message));
+        } else {
+            yield put(
+                globalActions.receiveNotifications({
+                    name: action.payload,
+                    notifications,
+                })
+            );
+        }
+    } catch (error) {
+        console.error('~~ Saga getAccountNotifications error ~~>', error);
+        yield put(appActions.steemApiError(error.message));
+    }
+    yield put(appActions.fetchDataEnd());
+}
+
 export function* fetchData(action) {
     const { order, author, permlink, postFilter, observer } = action.payload;
     let { category } = action.payload;
@@ -299,6 +307,11 @@ function* fetchJson({
 export const actions = {
     getCommunity: payload => ({
         type: GET_COMMUNITY,
+        payload,
+    }),
+
+    getAccountNotifications: payload => ({
+        type: GET_ACCOUNT_NOTIFICATIONS,
         payload,
     }),
 

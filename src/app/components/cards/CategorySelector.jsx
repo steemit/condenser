@@ -14,58 +14,23 @@ class CategorySelector extends React.Component {
         placeholder: PropTypes.string,
         onChange: PropTypes.func.isRequired,
         onBlur: PropTypes.func.isRequired,
-        isEdit: PropTypes.bool,
         disabled: PropTypes.bool,
         value: PropTypes.string,
         tabIndex: PropTypes.number,
-
-        // redux connect (overwrite in HTML)
-        trending: PropTypes.object.isRequired, // Immutable.List
     };
     static defaultProps = {
         autoComplete: 'on',
         id: 'CategorySelectorId',
-        isEdit: false,
     };
     constructor() {
         super();
-        this.state = { createCategory: true };
         this.shouldComponentUpdate = shouldComponentUpdate(
             this,
             'CategorySelector'
         );
-        this.categoryCreateToggle = e => {
-            e.preventDefault();
-            this.props.onChange();
-            this.setState({ createCategory: !this.state.createCategory });
-            setTimeout(() => this.refs.categoryRef.focus(), 300);
-        };
-        this.categorySelectOnChange = e => {
-            e.preventDefault();
-            const { value } = e.target;
-            const { onBlur } = this.props; // call onBlur to trigger validation immediately
-            if (value === 'new') {
-                this.setState({ createCategory: true });
-                setTimeout(() => {
-                    if (onBlur) onBlur();
-                    this.refs.categoryRef.focus();
-                }, 300);
-            } else this.props.onChange(e);
-        };
     }
     render() {
-        const { trending, tabIndex, disabled } = this.props;
-        const categories = trending
-            .slice(0, 11)
-            .filterNot(c => validateCategory(c));
-        const { createCategory } = this.state;
-
-        const categoryOptions = categories.map((c, idx) => (
-            <option value={c} key={idx}>
-                {c}
-            </option>
-        ));
-
+        const { tabIndex, disabled } = this.props;
         const impProps = { ...this.props };
         const categoryInput = (
             <input
@@ -78,22 +43,7 @@ class CategorySelector extends React.Component {
             />
         );
 
-        const categorySelect = (
-            <select
-                {...cleanReduxInput(this.props)}
-                onChange={this.categorySelectOnChange}
-                ref="categoryRef"
-                tabIndex={tabIndex}
-                disabled={disabled}
-            >
-                <option value="">
-                    {tt('category_selector_jsx.select_a_tag')}...
-                </option>
-                {categoryOptions}
-                <option value="new">{this.props.placeholder}</option>
-            </select>
-        );
-        return <span>{createCategory ? categoryInput : categorySelect}</span>;
+        return <span>{categoryInput}</span>;
     }
 }
 export function validateCategory(category, required = true) {
@@ -126,9 +76,8 @@ export function validateCategory(category, required = true) {
     );
 }
 export default connect((state, ownProps) => {
-    const trending = state.global.getIn(['tag_idx', 'trending'], List());
     // apply translations
     // they are used here because default prop can't acces intl property
     const placeholder = tt('category_selector_jsx.tag_your_story');
-    return { trending, placeholder, ...ownProps };
+    return { placeholder, ...ownProps };
 })(CategorySelector);

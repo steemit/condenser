@@ -8,9 +8,7 @@ const Notice = ({ notice }) => {
         return null;
     }
 
-    const url = notice.permalink
-        ? `/@${notice.author}/${notice.permlink}`
-        : notice.url;
+    const url = `/${notice.category}/@${notice.author}/${notice.permlink}`;
     const tag = notice.tag ? (
         <p className="Notices__featured">{notice.tag}</p>
     ) : null;

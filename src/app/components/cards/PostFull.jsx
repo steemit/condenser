@@ -316,10 +316,8 @@ class PostFull extends React.Component {
             content_body = 'Not available for legal reasons.';
         }
 
-        const bShowLoading =
-            !bIllegalContentUser &&
-            !bDMCAStop &&
-            content.body.length < content.body_length;
+        // TODO: get global loading state
+        const bShowLoading = !bIllegalContentUser && !bDMCAStop;
 
         // hide images if user is on blacklist
         const hideImages = ImageUserBlockList.includes(content.author);
@@ -444,7 +442,11 @@ class PostFull extends React.Component {
                     <p>{content.root_title}</p>
                     <ul>
                         <li>
-                            <Link to={content.url}>
+                            <Link
+                                to={`${content.category}/@${content.author}/${
+                                    content.permlink
+                                }`}
+                            >
                                 {tt('postfull_jsx.view_the_full_context')}
                             </Link>
                         </li>

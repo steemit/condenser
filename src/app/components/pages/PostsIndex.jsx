@@ -24,7 +24,7 @@ import SortOrder from 'app/components/elements/SortOrder';
 
 class PostsIndex extends React.Component {
     static propTypes = {
-        discussions: PropTypes.object,
+        posts: PropTypes.object,
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
@@ -49,16 +49,10 @@ class PostsIndex extends React.Component {
         if (
             window.innerHeight &&
             window.innerHeight > 3000 &&
-            prevProps.discussions !== this.props.discussions
+            prevProps.posts !== this.props.posts
         ) {
             this.refs.list.fetchIfNeeded();
         }
-    }
-
-    getPosts(order, category) {
-        const topic_discussions = this.props.discussions.get(category || '');
-        if (!topic_discussions) return null;
-        return topic_discussions.get(order);
     }
 
     loadMore(last_post) {
@@ -87,14 +81,13 @@ class PostsIndex extends React.Component {
             category,
             account_name, // TODO: for feed
             order,
+            posts,
         } = this.props;
 
         let allowAdsOnContent = true;
         allowAdsOnContent =
             this.props.gptEnabled &&
             !GptUtils.HasBannedTags([category], gptBannedTags);
-
-        const posts = this.getPosts(order, category);
 
         let emptyText = '';
         if (order === 'feed') {
@@ -411,7 +404,10 @@ module.exports = {
                 : route.order || constants.DEFAULT_SORT_ORDER;
 
             return {
-                discussions: state.global.get('discussion_idx', Map()),
+                posts: state.global.getIn(
+                    ['discussion_idx', category || '', order],
+                    Map()
+                ),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 community: state.global.getIn(

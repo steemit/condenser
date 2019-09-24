@@ -17,7 +17,6 @@ class CommunitySettings extends Component {
     }
 
     onInput = event => {
-        console.log('CommunitySettings::onInput(event)', event);
         const newState = {};
         let newValue = event.target.value || '';
         if (event.target.hasOwnProperty('checked'))
@@ -35,14 +34,14 @@ class CommunitySettings extends Component {
             }
             return (settings[k] = this.state[k]);
         });
+        // If there is no value for flag text, don't send it.
+        if (settings.flag_text == '') delete settings.flag_text;
 
-        console.log('CommunitySettings::onSubmit()::settings', settings);
         this.props.onSubmit(settings);
     };
 
     render() {
         const { title, about, is_nsfw, description, flag_text } = this.state;
-
         const submitButtonLabel = 'Save';
 
         return (

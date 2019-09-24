@@ -42,10 +42,6 @@ export default function SettingsButton(props) {
                     <CommunitySettings
                         {...settings}
                         onSubmit={newSettings => {
-                            console.log(
-                                'SettingsEditButton::onSubmit()::newSettings',
-                                newSettings
-                            );
                             onToggleDialog();
                             onSave(newSettings);
                         }}

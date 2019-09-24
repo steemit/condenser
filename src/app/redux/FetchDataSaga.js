@@ -72,7 +72,7 @@ export function* fetchState(location_change_action) {
                 state.user.getIn(['current', 'username']),
             ]);
         }
-        const state = yield call(getStateAsync, url, username);
+        const state = yield call(getStateAsync, url, username, false);
         yield put(globalActions.receiveState(state));
         yield call(syncSpecialPosts);
     } catch (error) {

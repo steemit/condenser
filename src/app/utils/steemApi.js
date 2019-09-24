@@ -4,9 +4,90 @@ import { ifHive } from 'app/utils/StateFunctions';
 
 import stateCleaner from 'app/redux/stateCleaner';
 
-export async function getStateAsync(url, observer) {
+export async function callBridge(method, params) {
+    console.log('call bridge', method, params);
+    const call = (method, params, callback) => {
+        return api.call('bridge.' + method, params, callback);
+    };
+    return Promise.promisify(call)(method, params);
+}
+
+export async function getStateAsync(url, observer, ssr = false) {
     if (observer === undefined) observer = null;
 
+    const { page, tag, sort, key } = parsePath(url);
+
+    let state = {
+        accounts: {},
+        community: {},
+        content: {},
+        discussion_idx: {},
+    };
+
+    // load `content` and `discussion_idx`
+    if (page == 'posts' || page == 'account') {
+        const posts = await loadPosts(sort, tag, observer);
+        state['content'] = posts['content'];
+        state['discussion_idx'] = posts['discussion_idx'];
+    } else if (page == 'thread') {
+        const posts = await loadThread(key[0], key[1]);
+        state['content'] = posts['content'];
+    } else {
+        // no-op
+    }
+
+    // append `community` key
+    if (tag && ifHive(tag)) {
+        state['community'][tag] = await callBridge('get_community', {
+            name: tag,
+            observer: observer,
+        });
+    }
+
+    if (ssr) {
+        // append `topics` key
+        state['topics'] = await callBridge('get_trending_topics', { observer });
+    }
+
+    const cleansed = stateCleaner(state);
+    return cleansed;
+}
+
+async function loadThread(account, permlink) {
+    const author = account.slice(1);
+    posts = await callBridge('get_discussion', { author, permlink });
+    return { content: posts };
+}
+
+async function loadPosts(sort, tag, observer) {
+    const account = tag && tag[0] == '@' ? tag.slice(1) : null;
+
+    let posts;
+    if (account)
+        posts = await callBridge('get_account_posts', {
+            sort,
+            account,
+            observer,
+        });
+    else posts = await callBridge('get_ranked_posts', { sort, tag, observer });
+
+    let content = {};
+    let keys = [];
+    for (var idx in posts) {
+        const post = posts[idx];
+        const key = post['author'] + '/' + post['permlink'];
+        content[key] = post;
+        keys.push(key);
+    }
+
+    let discussion_idx = {};
+    discussion_idx[tag] = {};
+    discussion_idx[tag][sort] = keys;
+
+    return { content, discussion_idx };
+}
+
+function parsePath(url) {
     // strip off query string
     url = url.split('?')[0];
 
@@ -30,50 +111,35 @@ export async function getStateAsync(url, observer) {
         'muted',
     ];
     const acct_tabs = ['blog', 'feed', 'comments', 'recent-replies', 'payout'];
-    let hive;
+
+    let page = null;
+    let tag = null;
+    let sort = null;
+    let key = null;
 
     if (parts == 1 && sorts.includes(part[0])) {
-        // all ranked posts
+        page = 'posts';
+        sort = part[0];
+        tag = '';
     } else if (parts == 2 && sorts.includes(part[0])) {
-        // tag ranked posts
-        hive = ifHive(part[1]);
+        page = 'posts';
+        sort = part[0];
+        tag = part[1];
     } else if (parts == 3 && part[1][0] == '@') {
-        // discussion
-        hive = ifHive(part[0]);
+        page = 'thread';
+        tag = part[0];
+        key = [part[1], part[2]];
     } else if (parts == 1 && part[0][0] == '@') {
-        // account home
-        url = part[0] + '/blog';
+        page = 'account';
+        sort = 'blog';
+        tag = part[0];
     } else if (parts == 2 && part[0][0] == '@' && acct_tabs.includes(part[1])) {
-        // account tab
+        page = 'account';
+        sort = part[1] == 'recent-replies' ? 'replies' : part[1];
+        tag = part[0];
     } else {
-        //console.log('no-op getState URL -- ', url);
-        return { content: {}, accounts: {} };
+        // no-op URL
     }
 
-    const raw = await callBridge('get_state', {
-        path: url,
-        observer: observer,
-    });
-
-    if (!('accounts' in raw)) raw['accounts'] = {};
-    if (!('community' in raw)) raw['community'] = {};
-
-    if (hive && !(hive in raw['community'])) {
-        raw['community'][hive] = await callBridge('get_community', {
-            name: hive,
-            observer: observer,
-        });
-    }
-
-    raw['topics'] = await callBridge('get_trending_topics', { observer });
-
-    const cleansed = stateCleaner(raw);
-    return cleansed;
-}
-
-export async function callBridge(method, params) {
-    const call = (method, params, callback) => {
-        return api.call('bridge.' + method, params, callback);
-    };
-    return Promise.promisify(call)(method, params);
+    return { page, tag, sort, key };
 }

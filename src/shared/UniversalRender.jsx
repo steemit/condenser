@@ -471,7 +471,7 @@ async function apiFetchState(url) {
         offchain = get_state_perf;
     }
 
-    offchain = await getStateAsync(url, null);
+    offchain = await getStateAsync(url, null, true);
 
     try {
         const history = await api.getFeedHistoryAsync();

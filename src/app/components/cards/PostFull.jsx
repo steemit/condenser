@@ -27,10 +27,10 @@ import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
+import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 
-function TimeAuthorCategory({ content, authorRep, showTags }) {
+function TimeAuthorCategory({ content, authorRep, showTags, community }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
@@ -42,6 +42,7 @@ function TimeAuthorCategory({ content, authorRep, showTags }) {
                 showAffiliation
                 role={content.author_role}
                 title={content.author_title}
+                community={community}
             />
             {showTags && (
                 <span>
@@ -53,7 +54,7 @@ function TimeAuthorCategory({ content, authorRep, showTags }) {
     );
 }
 
-function TimeAuthorCategoryLarge({ content, authorRep }) {
+function TimeAuthorCategoryLarge({ content, authorRep, community }) {
     return (
         <span className="PostFull__time_author_category_large vcard">
             <Userpic account={content.author} />
@@ -64,6 +65,7 @@ function TimeAuthorCategoryLarge({ content, authorRep }) {
                     showAffiliation
                     role={content.author_role}
                     title={content.author_title}
+                    community={community}
                 />
                 <span>
                     {' '}
@@ -516,6 +518,7 @@ class PostFull extends React.Component {
                             <TimeAuthorCategoryLarge
                                 content={content}
                                 authorRep={content.author_reputation}
+                                community={community}
                             />
                         </div>
                         <div className="PostFull__body entry-content">
@@ -538,6 +541,7 @@ class PostFull extends React.Component {
                         <TimeAuthorCategory
                             content={content}
                             authorRep={content.author_reputation}
+                            community={community}
                         />
                     </div>
                     <div className="columns medium-12 large-2 ">

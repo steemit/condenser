@@ -44,13 +44,16 @@ class CommunityRoles extends React.Component {
     }
 
     render() {
-        const {
-            pathname,
-            community,
-            account,
-            isOwnAccount,
-            user_preferences,
-        } = this.props;
+        const { community } = this.props;
+
+        const communityNewUserPending = community.communityAddUserWithRolePending ? (
+            <div>Adding User...</div>
+        ) : null;
+
+        const communityListUsersPending = community.communityListUsersWithRolesPending ? (
+            <div>Finding Community Users...</div>
+        ) : null;
+
         const communityTableCells = community.communityUsersWithRoles.map(
             (communityUserAndRole, index) => {
                 return (
@@ -76,6 +79,8 @@ class CommunityRoles extends React.Component {
                 <div className="row">
                     <div className="column large-4">
                         <div>Community Name: {community.community}</div>
+                        {communityListUsersPending}
+                        {communityNewUserPending}
                         <div>Community Members:</div>
                         <div>{communityTable}</div>
                         <div>Add new user to community:</div>

@@ -21,6 +21,7 @@ import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
 import GptAd from 'app/components/elements/GptAd';
+import { Map } from 'immutable';
 
 class Header extends React.Component {
     static propTypes = {
@@ -115,7 +116,6 @@ class Header extends React.Component {
             vertical,
             nightmodeEnabled,
             toggleNightmode,
-            userPath,
             showSidePanel,
             navigate,
             display_name,
@@ -146,14 +146,22 @@ class Header extends React.Component {
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
                 tags = [topic];
-                const type =
-                    route.params[0] == 'payout_comments' ? 'comments' : 'posts';
+
                 let prefix = route.params[0];
                 if (prefix == 'created') prefix = 'New';
-                if (prefix == 'payout') prefix = 'Pending payout';
-                if (prefix == 'payout_comments') prefix = 'Pending payout';
-                if (topic !== '') prefix += ` ${topic}`;
-                page_title = `${prefix} ${type}`;
+                if (prefix == 'payout') prefix = 'Pending';
+                if (prefix == 'payout_comments') prefix = 'Pending';
+                if (prefix == 'muted') prefix = 'Muted';
+                page_title = prefix;
+                if (topic !== '') {
+                    let name = this.props.community.getIn(
+                        [topic, 'title'],
+                        '#' + topic
+                    );
+                    page_title = `${name} / ${page_title}`;
+                } else {
+                    page_title += ' posts';
+                }
             }
         } else if (route.page === 'Post') {
             const user = `${route.params[1]}`.replace('@', '');
@@ -256,27 +264,12 @@ class Header extends React.Component {
         const comments_link = `/@${username}/comments`;
         const wallet_link = `${walletUrl}/@${username}`;
         const settings_link = `/@${username}/settings`;
-        const pathCheck = userPath === '/submit.html' ? true : null;
 
         const user_menu = [
-            {
-                link: feed_link,
-                icon: 'home',
-                value: tt('g.feed'),
-            },
             { link: account_link, icon: 'profile', value: tt('g.blog') },
             { link: comments_link, icon: 'replies', value: tt('g.comments') },
-            {
-                link: replies_link,
-                icon: 'reply',
-                value: tt('g.replies'),
-            },
-            {
-                link: wallet_link,
-                icon: 'wallet',
-                value: tt('g.wallet'),
-            },
-
+            { link: replies_link, icon: 'reply', value: tt('g.replies') },
+            { link: wallet_link, icon: 'wallet', value: tt('g.wallet') },
             {
                 link: '#',
                 icon: 'eye',
@@ -401,9 +394,11 @@ const mapStateToProps = (state, ownProps) => {
         return {
             username: null,
             loggedIn: false,
+            community: state.global.get('community', Map({})),
         };
     }
 
+    // display name used in page title
     let display_name;
     const route = resolveRoute(ownProps.pathname);
     if (route.page === 'UserProfile') {
@@ -414,7 +409,6 @@ const mapStateToProps = (state, ownProps) => {
         display_name = profile ? normalizeProfile(profile.toJS()).name : null;
     }
 
-    const userPath = state.routing.locationBeforeTransitions.pathname;
     const username = state.user.getIn(['current', 'username']);
     const loggedIn = !!username;
     const current_account_name = username
@@ -423,12 +417,12 @@ const mapStateToProps = (state, ownProps) => {
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
     const walletUrl = state.app.get('walletUrl');
-    const content = state.global.get('content');
+    const content = state.global.get('content'); // TODO: needed for SSR?
 
     return {
         username,
         loggedIn,
-        userPath,
+        community: state.global.get('community', Map({})),
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         display_name,
         current_account_name,

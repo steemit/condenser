@@ -8,12 +8,12 @@ describe('routeRegex', () => {
             ['UserProfile1', /^\/(@[\w\.\d-]+)\/?$/],
             [
                 'UserProfile2',
-                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
+                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|payout|feed|password|followed|followers|settings)\/?$/,
             ],
             ['UserProfile3', /^\/(@[\w\.\d-]+)\/[\w\.\d-]+/],
             [
                 'CategoryFilters',
-                /^\/(hot|trending|promoted|payout|payout_comments|created)\/?$/gi,
+                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)\/?$/gi,
             ],
             ['PostNoCategory', /^\/(@[\w\.\d-]+)\/([\w\d-]+)/],
             ['Post', /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/],

@@ -7,13 +7,14 @@ import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import CategorySelector from 'app/components/cards/CategorySelector';
 import { validateCategory } from 'app/components/cards/CategorySelector';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import PostCategoryBannerContainer from 'app/components/elements/PostCategoryBannerContainer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
 import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
 import * as globalActions from 'app/redux/GlobalReducer';
-import { fromJS, Set } from 'immutable';
+import { fromJS, Set, OrderedSet } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
@@ -21,6 +22,30 @@ import tt from 'counterpart';
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
 const RTE_DEFAULT = false;
+
+function allTags(userInput, originalCategory, hashtags) {
+    // take space-delimited user input
+    let tags = OrderedSet(
+        userInput
+            ? userInput
+                  .trim()
+                  .replace(/#/g, '')
+                  .split(/ +/)
+            : []
+    );
+
+    // remove original category, if present
+    if (originalCategory && /^[-a-z\d]+$/.test(originalCategory))
+        tags = tags.delete(originalCategory);
+
+    // append hashtags from post until limit is reached
+    const tagged = [...hashtags];
+    while (tags.size < 5 && tagged.length > 0) {
+        tags = tags.add(tagged.shift());
+    }
+
+    return tags;
+}
 
 class ReplyEditor extends React.Component {
     static propTypes = {
@@ -80,7 +105,12 @@ class ReplyEditor extends React.Component {
             if (draft) {
                 draft = JSON.parse(draft);
                 const { category, title } = this.state;
-                if (category) category.props.onChange(draft.category);
+
+                if (category) {
+                    this.checkCategoryCommunity(draft.category);
+                    category.props.onChange(draft.category);
+                }
+
                 if (title) title.props.onChange(draft.title);
                 if (draft.payoutType)
                     this.props.setPayoutType(formId, draft.payoutType);
@@ -103,6 +133,25 @@ class ReplyEditor extends React.Component {
                     : null,
             });
         }
+
+        // Overwrite category (even if draft loaded) if authoritative category was provided
+        if (this.props.category) {
+            this.state.category.props.onChange(
+                this.props.initialValues.category
+            );
+            this.checkCategoryCommunity(this.props.category);
+        }
+    }
+
+    checkCategoryCommunity(category) {
+        let community = null;
+        if (category) {
+            const primary = category.split(' ')[0];
+            if (primary.substring(0, 5) == 'hive-') {
+                community = primary;
+            }
+        }
+        this.setState({ community });
     }
 
     componentDidMount() {
@@ -151,6 +200,10 @@ class ReplyEditor extends React.Component {
                     );
                     this.showDraftSaved();
                 }, 500);
+            }
+
+            if (ts.category.value !== ns.category.value) {
+                this.checkCategoryCommunity(ns.category.value);
             }
         }
     }
@@ -238,9 +291,11 @@ class ReplyEditor extends React.Component {
     };
     showDraftSaved() {
         const { draft } = this.refs;
-        draft.className = 'ReplyEditor__draft';
-        void draft.offsetWidth; // reset animation
-        draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved';
+        if (draft) {
+            draft.className = 'ReplyEditor__draft';
+            void draft.offsetWidth; // reset animation
+            draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved';
+        }
     }
 
     showAdvancedSettings = e => {
@@ -318,7 +373,7 @@ class ReplyEditor extends React.Component {
             body: this.props.body,
         };
         const { onCancel, onTitleChange } = this;
-        const { title, category, body } = this.state;
+        const { title, category, body, community } = this.state;
         const {
             reply,
             username,
@@ -402,6 +457,14 @@ class ReplyEditor extends React.Component {
 
         return (
             <div className="ReplyEditor row">
+                {isStory &&
+                    !isEdit && (
+                        <PostCategoryBannerContainer
+                            communityName={community}
+                            username={username}
+                            isCommunity={!!community}
+                        />
+                    )}
                 <div className="column small-12">
                     <div
                         ref="draft"
@@ -797,9 +860,16 @@ export default formId =>
             if (isStory) fields.push('category');
 
             let { category, title, body } = ownProps;
+
+            const query = state.routing.locationBeforeTransitions.query;
+            if (query && query.category) {
+                category = query.category;
+            }
+
+            let tags = category;
             if (/submit_/.test(type)) title = body = '';
             if (isStory && jsonMetadata && jsonMetadata.tags) {
-                category = Set([category, ...jsonMetadata.tags]).join(' ');
+                tags = Set([category, ...jsonMetadata.tags]).join(' ');
             }
 
             const defaultPayoutType = state.app.getIn(
@@ -828,17 +898,19 @@ export default formId =>
 
             const ret = {
                 ...ownProps,
+                category,
                 fields,
                 isStory,
                 username,
                 defaultPayoutType,
                 payoutType,
                 beneficiaries,
-                initialValues: { title, body, category },
+                initialValues: { title, body, category: tags },
                 state,
                 formId,
                 richTextEditor,
             };
+
             return ret;
         },
 
@@ -933,30 +1005,15 @@ export default formId =>
                     return;
                 }
 
-                const formCategories = Set(
-                    category
-                        ? category
-                              .trim()
-                              .replace(/#/g, '')
-                              .split(/ +/)
-                        : []
+                const metaTags = allTags(
+                    category,
+                    originalPost.category,
+                    rtags.hashtags
                 );
-                const rootCategory =
-                    originalPost && originalPost.category
-                        ? originalPost.category
-                        : formCategories.first();
-                let allCategories = Set([...formCategories.toJS()]);
-                if (/^[-a-z\d]+$/.test(rootCategory))
-                    allCategories = allCategories.add(rootCategory);
-
-                let postHashtags = [...rtags.hashtags];
-                while (allCategories.size < 5 && postHashtags.length > 0) {
-                    allCategories = allCategories.add(postHashtags.shift());
-                }
 
                 // merge
                 const meta = isEdit ? jsonMetadata : {};
-                if (allCategories.size) meta.tags = allCategories.toJS();
+                if (metaTags.size) meta.tags = metaTags.toJS();
                 else delete meta.tags;
                 if (rtags.usertags.size) meta.users = rtags.usertags;
                 else delete meta.users;
@@ -978,10 +1035,10 @@ export default formId =>
                     return;
                 }
 
-                if (meta.tags.length > 5) {
+                if (meta.tags && meta.tags.length > 5) {
                     const includingCategory = isEdit
                         ? tt('reply_editor.including_the_category', {
-                              rootCategory,
+                              rootCategory: originalPost.category,
                           })
                         : '';
                     errorCallback(
@@ -1041,7 +1098,7 @@ export default formId =>
 
                 const operation = {
                     ...linkProps,
-                    category: rootCategory,
+                    category: originalPost.category || metaTags.first(),
                     title,
                     body,
                     json_metadata: meta,

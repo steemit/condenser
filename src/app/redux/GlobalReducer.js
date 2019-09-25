@@ -3,6 +3,7 @@ import resolveRoute from 'app/ResolveRoute';
 import { emptyContent } from 'app/redux/EmptyState';
 import { contentStats } from 'app/utils/StateFunctions';
 import constants from './constants';
+import { repLog10 } from 'app/utils/ParsersAndFormatters';
 
 export const emptyContentMap = Map(emptyContent);
 
@@ -13,8 +14,10 @@ export const defaultState = Map({
 // Action constants
 const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
+const RECEIVE_NOTIFICATIONS = 'global/RECEIVE_NOTIFICATIONS';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
+const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -29,8 +32,6 @@ const FETCH_JSON = 'global/FETCH_JSON';
 const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT';
 const SHOW_DIALOG = 'global/SHOW_DIALOG';
 const HIDE_DIALOG = 'global/HIDE_DIALOG';
-// Saga-related:
-export const GET_STATE = 'global/GET_STATE';
 
 /**
  * Transfrom nested JS object to appropriate immutable collection.
@@ -83,6 +84,7 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_STATE: {
             let new_state = fromJS(payload);
+            console.log('Receive state', payload);
             if (new_state.has('content')) {
                 const content = new_state.get('content').withMutations(c => {
                     c.forEach((cc, key) => {
@@ -93,7 +95,22 @@ export default function reducer(state = defaultState, action = {}) {
                 });
                 new_state = new_state.set('content', content);
             }
-            return state.mergeDeep(new_state);
+            const merged = state.mergeDeep(new_state);
+            console.log('Merged state', merged.toJS());
+            return merged;
+        }
+
+        case RECEIVE_NOTIFICATIONS: {
+            console.log('Receive notifications', payload);
+            return state.updateIn(['notifications', payload.name], Map(), n =>
+                n.withMutations(nmut =>
+                    nmut
+                        .update('notifications', List(), a =>
+                            a.concat(fromJS(payload.notifications))
+                        )
+                        .set('isLastPage', payload.isLastPage)
+                )
+            );
         }
 
         case RECEIVE_ACCOUNT: {
@@ -106,6 +123,10 @@ export default function reducer(state = defaultState, action = {}) {
                 const transformed = transformAccount(curr);
                 return mergeAccounts(acc, transformed);
             }, state);
+        }
+
+        case RECEIVE_COMMUNITY: {
+            return state.update('community', Map(), a => a.mergeDeep(payload));
         }
 
         // Interleave special posts into the map of posts.
@@ -124,7 +145,12 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_CONTENT: {
-            const content = fromJS(payload.content);
+            let content = fromJS(payload.content);
+            content = content.set(
+                'author_reputation',
+                repLog10(content.get('author_reputation'))
+            );
+
             const key = content.get('author') + '/' + content.get('permlink');
             return state.updateIn(['content', key], Map(), c => {
                 c = emptyContentMap.mergeDeep(c);
@@ -215,46 +241,19 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_DATA: {
-            const {
-                data,
-                order,
-                category,
-                accountname,
-                fetching,
-                endOfData,
-            } = payload;
+            const { data, order, category, fetching, endOfData } = payload;
             let new_state;
 
-            // append incoming post keys to proper content list
-            if (
-                order === 'by_author' ||
-                order === 'by_feed' ||
-                order === 'by_comments' ||
-                order === 'by_replies'
-            ) {
-                // category is either "blog", "feed", "comments", or "recent_replies" (respectively) -- and all posts are keyed under current profile
-                const key = ['accounts', accountname, category];
-                new_state = state.updateIn(key, List(), list => {
-                    return list.withMutations(posts => {
-                        data.forEach(value => {
-                            const key = `${value.author}/${value.permlink}`;
-                            if (!posts.includes(key)) posts.push(key);
-                        });
+            // append content keys to `discussion_idx` list
+            const key = ['discussion_idx', category || '', order];
+            new_state = state.updateIn(key, List(), list => {
+                return list.withMutations(posts => {
+                    data.forEach(value => {
+                        const key = `${value.author}/${value.permlink}`;
+                        if (!posts.includes(key)) posts.push(key);
                     });
                 });
-            } else {
-                new_state = state.updateIn(
-                    ['discussion_idx', category || '', order],
-                    list => {
-                        return list.withMutations(posts => {
-                            data.forEach(value => {
-                                const key = `${value.author}/${value.permlink}`;
-                                if (!posts.includes(key)) posts.push(key);
-                            });
-                        });
-                    }
-                );
-            }
+            });
 
             // append content stats data to each post
             new_state = new_state.updateIn(['content'], content => {
@@ -335,6 +334,11 @@ export const receiveState = payload => ({
     payload,
 });
 
+export const receiveNotifications = payload => ({
+    type: RECEIVE_NOTIFICATIONS,
+    payload,
+});
+
 export const receiveAccount = payload => ({
     type: RECEIVE_ACCOUNT,
     payload,
@@ -342,6 +346,11 @@ export const receiveAccount = payload => ({
 
 export const receiveAccounts = payload => ({
     type: RECEIVE_ACCOUNTS,
+    payload,
+});
+
+export const receiveCommunity = payload => ({
+    type: RECEIVE_COMMUNITY,
     payload,
 });
 
@@ -413,10 +422,5 @@ export const showDialog = payload => ({
 
 export const hideDialog = payload => ({
     type: HIDE_DIALOG,
-    payload,
-});
-
-export const getState = payload => ({
-    type: GET_STATE,
     payload,
 });

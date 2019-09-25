@@ -103,10 +103,13 @@ export const setCurrentCommunity = payload => ({
 /**
     @arg {community: string} payload action payload.
 */
-export const listCommunityRoles = payload => ({
-    type: LIST_COMMUNITY_ROLES,
-    payload,
-});
+export const listCommunityRoles = payload => {
+    debugger;
+    return {
+        type: LIST_COMMUNITY_ROLES,
+        payload,
+    };
+};
 
 /**
     @arg boolean payload action payload.

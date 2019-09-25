@@ -7,7 +7,7 @@ class CommunityRoles extends React.Component {
         super(props);
         this.state = {
             newCommunityUserName: '',
-            newCommunityUserRole: '',
+            newCommunityUserRole: 'member',
         };
         this.handleNewCommunityUserNameChange = this.handleNewCommunityUserNameChange.bind(
             this
@@ -35,8 +35,8 @@ class CommunityRoles extends React.Component {
 
     handleNewCommunityUserSubmit(event) {
         event.preventDefault();
-        debugger;
         const newCommunityUser = {
+            community: this.props.communityName,
             username: this.state.newCommunityUserName,
             role: this.state.newCommunityUserRole,
         };
@@ -52,9 +52,9 @@ class CommunityRoles extends React.Component {
             user_preferences,
         } = this.props;
         const communityTableCells = community.communityUsersWithRoles.map(
-            communityUserAndRole => {
+            (communityUserAndRole, index) => {
                 return (
-                    <tr>
+                    <tr key={`communityUser-${communityUserAndRole[0]}`}>
                         <td>{communityUserAndRole[0]}</td>
                         <td>{communityUserAndRole[1]}</td>
                     </tr>
@@ -97,12 +97,12 @@ class CommunityRoles extends React.Component {
                                     onChange={
                                         this.handleNewCommunityUserRoleChange
                                     }
+                                    required
                                 >
+                                    <option value="" />
                                     <option value="admin">admin</option>
                                     <option value="mod">mod</option>
-                                    <option selected value="member">
-                                        member
-                                    </option>
+                                    <option value="member">member</option>
                                     <option value="guest">guest</option>
                                     <option value="muted">muted</option>
                                 </select>

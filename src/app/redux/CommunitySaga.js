@@ -3,19 +3,12 @@ import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { api, broadcast, auth } from '@steemit/steem-js';
 import * as communityActions from 'app/redux/CommunityReducer';
 import { postingOps, findSigningKey } from 'app/redux/AuthSaga';
+import { callBridge } from 'app/utils/steemApi';
 
 const wait = ms =>
     new Promise(resolve => {
         setTimeout(() => resolve(), ms);
     });
-
-export async function callBridge(method, params) {
-    api.setOptions({ url: 'https://api.steemitdev.com' });
-    const call = (method, params, callback) => {
-        return api.call('bridge.' + method, params, callback);
-    };
-    return Promise.promisify(call)(method, params);
-}
 
 const generateHivemindOperation = (action, params, actor_name) => {
     return [

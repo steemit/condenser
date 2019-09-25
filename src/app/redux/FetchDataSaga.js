@@ -165,15 +165,20 @@ export function* getCommunity(action) {
 
 /**
  * Request notifications for given account
- * @param {string} name of account
+ * @param {object} payload containing:
+ *   - account (string)
+ *   - last_id (string), optional, for pagination
+ *   - limit (int), optional, defualt is 100
  */
 export function* getAccountNotifications(action) {
     if (!action.payload) throw 'no account specified';
     yield put(appActions.fetchDataBegin());
     try {
-        const notifications = yield call(callBridge, 'account_notifications', {
-            account: action.payload,
-        });
+        const notifications = yield call(
+            callBridge,
+            'account_notifications',
+            action.payload
+        );
         if (notifications && notifications.error) {
             console.error(
                 '~~ Saga getAccountNotifications error ~~>',
@@ -181,10 +186,13 @@ export function* getAccountNotifications(action) {
             );
             yield put(appActions.steemApiError(notifications.error.message));
         } else {
+            const limit = action.payload.limit ? action.payload.limit : 100;
+            const isLastPage = notifications.length < action.payload.limit;
             yield put(
                 globalActions.receiveNotifications({
-                    name: action.payload,
+                    name: action.payload.account,
                     notifications,
+                    isLastPage,
                 })
             );
         }

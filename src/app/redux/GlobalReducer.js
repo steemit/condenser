@@ -102,8 +102,14 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_NOTIFICATIONS: {
             console.log('Receive notifications', payload);
-            return state.updateIn(['notifications', payload.name], List(), a =>
-                a.concat(fromJS(payload.notifications))
+            return state.updateIn(['notifications', payload.name], Map(), n =>
+                n.withMutations(nmut =>
+                    nmut
+                        .update('notifications', List(), a =>
+                            a.concat(fromJS(payload.notifications))
+                        )
+                        .set('isLastPage', payload.isLastPage)
+                )
             );
         }
 

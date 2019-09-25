@@ -124,15 +124,15 @@ class PostsIndex extends React.Component {
                 );
             }
         } else if (posts && posts.size === 0) {
-                emptyText = (
-                    <div>
-                        {'No ' +
-                            order +
-                            (category ? ' #' + category : '') +
-                            ' posts found'}
-                    </div>
-                );
-            }
+            emptyText = (
+                <div>
+                    {'No ' +
+                        order +
+                        (category ? ' #' + category : '') +
+                        ' posts found'}
+                </div>
+            );
+        }
 
         function teamMembers(members) {
             return members.map((row, idx) => (
@@ -440,7 +440,7 @@ module.exports = {
                 gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
             };
         },
-        (dispatch) => {
+        dispatch => {
             return {
                 requestData: args =>
                     dispatch(fetchDataSagaActions.requestData(args)),

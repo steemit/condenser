@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
+import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
@@ -50,22 +51,37 @@ class NotificationsList extends React.Component {
     render() {
         const { notifications, loading } = this.props;
 
-        const renderNotifications = items =>
-            items.map((item, i) => {
-                return (
-                    <li key={`notification_${i}`}>
-                        {JSON.stringify(item.toJS())}
-                    </li>
-                );
-            });
+        const renderItem = item => (
+            <div>
+                <div
+                    style={{
+                        padding: '0.5em 1em',
+                        background: 'rgba(225,255,225,' + item.score + '%)',
+                    }}
+                >
+                    <span style={{ float: 'right', color: '#999' }}>
+                        {item.type}{' '}
+                    </span>
+                    <a href={`/${item.url}`}>{item.msg}</a>
+                    <br />
+                    <small>
+                        <TimeAgoWrapper date={item.date + 'Z'} />
+                    </small>
+                </div>
+            </div>
+        );
 
         return (
             <div id="posts_list" className="PostsList">
                 {notifications && (
                     <ul className="PostsList__summaries hfeed" itemScope>
-                        {renderNotifications(
-                            notifications.get('notifications')
-                        )}
+                        {notifications
+                            .get('notifications')
+                            .map(item => (
+                                <li key={item.get('id')}>
+                                    {renderItem(item.toJS())}
+                                </li>
+                            ))}
                     </ul>
                 )}
                 {loading && (
@@ -100,7 +116,7 @@ export default connect(
         getAccountNotifications: (username, last_id) => {
             const query = {
                 account: username,
-                limit: 5,
+                limit: 50,
             };
             if (last_id) {
                 query.last_id = last_id;

@@ -4,6 +4,11 @@ import { api, broadcast, auth } from '@steemit/steem-js';
 import * as communityActions from 'app/redux/CommunityReducer';
 import { postingOps, findSigningKey } from 'app/redux/AuthSaga';
 
+const wait = ms =>
+    new Promise(resolve => {
+        setTimeout(() => resolve(), ms);
+    });
+
 export async function callBridge(method, params) {
     api.setOptions({ url: 'https://api.steemitdev.com' });
     const call = (method, params, callback) => {
@@ -82,7 +87,7 @@ export function* addCommunityUser(action) {
             [signingKey]
         );
         yield call(wait, 4000);
-        yield call(listCommunityRoles);
+        yield put(communityActions.listCommunityRoles(community));
         yield put(communityActions.addCommunityUserSuccess());
     } catch (error) {
         yield put(communityActions.addCommunityUserError(error));

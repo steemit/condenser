@@ -40,6 +40,12 @@ class NotificationsList extends React.Component {
         }
     }
 
+    onClickLoadMore = e => {
+        e.preventDefault();
+        const { username, notifications } = this.props;
+        getAccountNotifications(username, notifications.last().get('id'));
+    };
+
     render() {
         const { notifications, loading } = this.props;
 
@@ -56,7 +62,9 @@ class NotificationsList extends React.Component {
             <div id="posts_list" className="PostsList">
                 {notifications && (
                     <ul className="PostsList__summaries hfeed" itemScope>
-                        {renderNotifications(notifications)}
+                        {renderNotifications(
+                            notifications.get('notifications')
+                        )}
                     </ul>
                 )}
                 {loading && (
@@ -67,6 +75,14 @@ class NotificationsList extends React.Component {
                         />
                     </center>
                 )}
+                {!loading &&
+                    notifications.get('isLastPage', false) && (
+                        <center>
+                            <a href="#" onClick={this.onClickLoadMore}>
+                                Load more...
+                            </a>
+                        </center>
+                    )}
             </div>
         );
     }
@@ -79,9 +95,16 @@ export default connect(
         };
     },
     dispatch => ({
-        getAccountNotifications: username => {
+        getAccountNotifications: (username, last_id) => {
+            const query = {
+                account: username,
+                limit: 5,
+            };
+            if (last_id) {
+                query.last_id = last_id;
+            }
             return dispatch(
-                fetchDataSagaActions.getAccountNotifications(username)
+                fetchDataSagaActions.getAccountNotifications(query)
             );
         },
     })

@@ -319,9 +319,7 @@ class PostsIndex extends React.Component {
                             {community.get('lang')}
                         </div>
                     )}
-                    {this.props.isBrowser &&
-                    !this.props.maybeLoggedIn &&
-                    !this.props.username ? (
+                    {this.props.isBrowser && !this.props.username ? (
                         <SidebarNewUsers />
                     ) : (
                         this.props.isBrowser && (
@@ -434,7 +432,6 @@ module.exports = {
                     .get('special_posts')
                     .get('notices')
                     .toJS(),
-                maybeLoggedIn: state.user.get('maybeLoggedIn'),
                 isBrowser: process.env.BROWSER,
                 gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
                 gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),

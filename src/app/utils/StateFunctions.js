@@ -1,12 +1,17 @@
+import { Map } from 'immutable';
 import assert from 'assert';
 import constants from 'app/redux/constants';
-import { parsePayoutAmount, repLog10 } from 'app/utils/ParsersAndFormatters';
+import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import { VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
 import { fromJS } from 'immutable';
 import { formatter } from '@steemit/steem-js';
 
 export const numberWithCommas = x => x.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+export function ifHive(category) {
+    return category && category.substring(0, 5) == 'hive-' ? category : null;
+}
 
 export function isFetchingOrRecentlyUpdated(global_status, order, category) {
     const status = global_status
@@ -56,6 +61,8 @@ export function contentStats(content) {
     if (!content) return {};
     if (!(content instanceof Map)) content = fromJS(content);
 
+    let stats = content.get('stats', Map());
+
     let net_rshares_adj = Long.ZERO;
     let total_votes = 0;
 
@@ -78,17 +85,19 @@ export function contentStats(content) {
 
     const hasPendingPayout =
         parsePayoutAmount(content.get('pending_payout_value')) >= 0.02;
-    const authorRepLog10 = repLog10(content.get('author_reputation'));
+    const authorRep = content.get('author_reputation');
 
-    const gray =
-        !hasPendingPayout && (authorRepLog10 < 1 || meetsGrayThreshold);
-    const hide = !hasPendingPayout && authorRepLog10 < 0; // rephide
+    // TODO: remove 'gray' and 'hide' entirely when served by API
+    if (!stats.has('gray')) {
+        console.log('append internal stats values', stats, content.toJS());
+        stats['gray'] =
+            !hasPendingPayout && (authorRep < 1 || meetsGrayThreshold);
+        stats['hide'] = !hasPendingPayout && authorRep < 0; // rephide
+    }
 
-    return {
-        hide,
-        gray,
-        total_votes,
-    };
+    stats['total_votes'] = total_votes;
+
+    return stats;
 }
 
 export function filterTags(tags) {
@@ -98,10 +107,7 @@ export function filterTags(tags) {
 }
 
 export function pricePerSteem(state) {
-    const feed_price = state.user.get(
-        'latest_feed_price',
-        state.global.get('feed_price')
-    );
+    const feed_price = state.global.get('feed_price');
     if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
         return formatter.pricePerSteem(feed_price.toJS());
     }

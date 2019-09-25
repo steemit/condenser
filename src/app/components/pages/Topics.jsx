@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
@@ -6,121 +6,121 @@ import tt from 'counterpart';
 import PropTypes from 'prop-types';
 import NativeSelect from 'app/components/elements/NativeSelect';
 
-const Topics = ({
-    order,
-    current,
-    compact,
-    className,
-    username,
-    categories,
-}) => {
-    const handleChange = selectedOption => {
-        browserHistory.push(selectedOption.value);
+class Topics extends Component {
+    static propTypes = {
+        topics: PropTypes.object.isRequired,
+        order: PropTypes.string.isRequired,
+        current: PropTypes.string,
+        compact: PropTypes.bool.isRequired,
     };
 
-    const currentlySelected = (currentTag, username, currentOrder = false) => {
-        const opts = {
-            feed: `/@${username}/feed`,
-            tagOnly: `/trending/${currentTag}`,
-            orderOnly: `/${currentOrder}`,
-            tagWithOrder: `/${currentOrder}/${currentTag}`,
-            default: `/trending`,
-        };
-        if (currentTag === 'feed') return opts['feed'];
-        if (currentTag && currentOrder) return opts['tagWithOrder'];
-        if (!currentTag && currentOrder) return opts['orderOnly'];
-        if (currentTag && !currentOrder) return opts['tagOnly'];
-        return opts['default'];
+    static defaultProps = {
+        current: '',
     };
 
-    if (compact) {
-        const extras = username => {
-            const ex = {
-                allTags: order => ({
-                    value: `/${order}`,
-                    label: `${tt('g.all_tags_mobile')}`,
-                }),
-                myFeed: name => ({
-                    value: `/@${name}/feed`,
-                    label: `${tt('g.my_feed')}`,
-                }),
+    render() {
+        const {
+            order,
+            current,
+            compact,
+            username,
+            topics,
+            communities,
+        } = this.props;
+
+        if (compact) {
+            const opt = (tag, label = null) => {
+                if (tag && tag[0] === '@')
+                    return {
+                        value: `/@${username}/feed`,
+                        label: 'My friends' || `tt('g.my_feed')`,
+                    };
+                if (tag === 'my')
+                    return { value: `/trending/my`, label: 'My subscriptions' };
+                if (tag)
+                    return {
+                        value: `/trending/${tag}`,
+                        label: label || '#' + tag,
+                    };
+                return { value: `/trending`, label: tt('g.all_tags') };
             };
-            return username
-                ? [ex.allTags(order), ex.myFeed(username)]
-                : [ex.allTags(order)];
-        };
 
-        const opts = extras(username).concat(
-            categories
-                .map(cat => {
-                    const link = order ? `/${order}/${cat}` : `/${cat}`;
-                    return { value: link, label: cat };
-                })
-                .toJS()
-        );
+            let options = [];
+            options.push(opt(null));
 
-        return (
-            <NativeSelect
-                currentlySelected={currentlySelected(current, username, order)}
-                options={opts}
-                onChange={handleChange}
-            />
-        );
-    } else {
-        const categoriesLinks = categories.map(cat => {
-            const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
-            return (
-                <li className="c-sidebar__list-item" key={cat}>
-                    <Link
-                        to={link}
-                        className="c-sidebar__link"
-                        activeClassName="active"
-                    >
-                        {cat}
-                    </Link>
-                </li>
+            if (username) {
+                options.push(opt('@' + username));
+                options.push(opt('my'));
+            }
+
+            options = options.concat(
+                topics.toJS().map(cat => opt(cat[0], cat[1]))
             );
-        });
+
+            const currOpt = opt(current);
+            if (!options.find(opt => opt.value == currOpt.value)) {
+                options.push(opt(current));
+            }
+
+            return (
+                <NativeSelect
+                    options={options}
+                    currentlySelected={currOpt.value}
+                    onChange={opt => {
+                        browserHistory.push(opt.value);
+                    }}
+                />
+            );
+        }
+
+        const link = (url, label, className = 'c-sidebar__header') => (
+            <div className={className}>
+                <Link
+                    to={url}
+                    className="c-sidebar__link"
+                    activeClassName="active"
+                >
+                    {label}
+                </Link>
+            </div>
+        );
+
+        const moreLabel = <span>{tt('g.show_more_topics')}&hellip;</span>;
+        const commsHead = (
+            <div style={{ color: '#aaa', paddingTop: '1em' }}>Communities</div>
+        );
+
+        const list = (
+            <ul className="c-sidebar__list">
+                <li>{link('/trending', tt('g.all_tags'))}</li>
+                {username && (
+                    <li>{link(`/@${username}/feed`, 'My friends')}</li>
+                )}
+                {username && <li>{link(`/trending/my`, 'My communities')}</li>}
+                <li>{commsHead}</li>
+                {topics
+                    .toJS()
+                    .map(cat => (
+                        <li key={cat[0]}>
+                            {link(`/trending/${cat[0]}`, cat[1], '')}
+                        </li>
+                    ))}
+                <li>{link(`/tags`, moreLabel, 'c-sidebar__link--emphasis')}</li>
+            </ul>
+        );
+
         return (
             <div className="c-sidebar__module">
-                <div className="c-sidebar__content">
-                    <ul className="c-sidebar__list">
-                        <li className="c-sidebar__list-item">
-                            <div className="c-sidebar__header">
-                                <Link
-                                    to={'/' + order}
-                                    className="c-sidebar__link"
-                                    activeClassName="active"
-                                >
-                                    {tt('g.all_tags')}
-                                </Link>
-                            </div>
-                        </li>
-                        {categoriesLinks}
-                        <li className="c-sidebar__link">
-                            <Link
-                                className="c-sidebar__link c-sidebar__link--emphasis"
-                                to={`/tags`}
-                            >
-                                {tt('g.show_more_topics')}&hellip;
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
+                <div className="c-sidebar__content">{list}</div>
             </div>
         );
     }
-};
+}
 
-Topics.propTypes = {
-    categories: PropTypes.object.isRequired,
-    order: PropTypes.string.isRequired,
-    current: PropTypes.string,
-    compact: PropTypes.bool.isRequired,
-};
-
-Topics.defaultProps = {
-    current: '',
-};
-
-export default Topics;
+export default connect(
+    // mapStateToProps
+    (state, ownProps) => ({
+        ...ownProps,
+        communities: state.global.get('community'),
+    })
+)(Topics);

@@ -5,6 +5,7 @@ import { userWatches } from 'app/redux/UserSaga';
 import { authWatches } from 'app/redux/AuthSaga';
 import { transactionWatches } from 'app/redux/TransactionSaga';
 import { communityWatches } from 'app/redux/CommunitySaga';
+import { userProfilesWatches } from 'app/redux/UserProfilesSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -14,5 +15,6 @@ export default function* rootSaga() {
         ...authWatches,
         ...transactionWatches,
         ...communityWatches,
+        ...userProfilesWatches,
     ]);
 }

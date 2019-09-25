@@ -112,33 +112,33 @@ class Post extends React.Component {
 
         // A post should be hidden if it is not special, is not told to "show
         // anyway", and is designated "gray".
+        let postBody;
         const special = dis.get('special');
-        if (!special && !showAnyway) {
-            const { gray } = dis.get('stats').toJS();
-            if (gray) {
-                return (
-                    <div className="Post">
-                        <div className="row">
-                            <div className="column">
-                                <div className="PostFull">
-                                    <p onClick={this.showAnywayClick}>
-                                        {tt(
-                                            'promote_post_jsx.this_post_was_hidden_due_to_low_ratings'
-                                        )}.{' '}
-                                        <button
-                                            style={{ marginBottom: 0 }}
-                                            className="button hollow tiny float-right"
-                                            onClick={this.showAnywayClick}
-                                        >
-                                            {tt('g.show')}
-                                        </button>
-                                    </p>
-                                </div>
+        if (!special && !showAnyway && dis.getIn(['stats', 'gray'], false)) {
+            postBody = (
+                <div className="Post">
+                    <div className="row">
+                        <div className="column">
+                            <div className="PostFull">
+                                <p onClick={this.showAnywayClick}>
+                                    {tt(
+                                        'promote_post_jsx.this_post_was_hidden_due_to_low_ratings'
+                                    )}.{' '}
+                                    <button
+                                        style={{ marginBottom: 0 }}
+                                        className="button hollow tiny float-right"
+                                        onClick={this.showAnywayClick}
+                                    >
+                                        {tt('g.show')}
+                                    </button>
+                                </p>
                             </div>
                         </div>
                     </div>
-                );
-            }
+                </div>
+            );
+        } else {
+            postBody = <PostFull post={post} cont={content} />;
         }
 
         let replies = dis.get('replies').toJS();
@@ -222,9 +222,7 @@ class Post extends React.Component {
         return (
             <div className="Post">
                 <div className="row">
-                    <div className="column">
-                        <PostFull post={post} cont={content} />
-                    </div>
+                    <div className="column">{postBody}</div>
                 </div>
                 {!isLoggedIn() && (
                     <div className="row">

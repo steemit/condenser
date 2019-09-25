@@ -17,6 +17,7 @@ const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
 const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
+const RECEIVE_COMMUNITIES = 'global/RECEIVE_COMMUNITIES';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -111,7 +112,13 @@ export default function reducer(state = defaultState, action = {}) {
             }, state);
         }
 
+        case RECEIVE_COMMUNITIES: {
+            console.log('RECEIVE_COMMUNITIES', state, payload);
+            return state.update('community', Map(), a => a.mergeDeep(payload));
+        }
+
         case RECEIVE_COMMUNITY: {
+            console.log('RECEIVE_COMMUNITY', state, payload);
             return state.update('community', Map(), a => a.mergeDeep(payload));
         }
 
@@ -327,6 +334,11 @@ export const receiveAccount = payload => ({
 
 export const receiveAccounts = payload => ({
     type: RECEIVE_ACCOUNTS,
+    payload,
+});
+
+export const receiveCommunities = payload => ({
+    type: RECEIVE_COMMUNITIES,
     payload,
 });
 

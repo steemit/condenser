@@ -24,17 +24,21 @@ class SettingsEditButtonContainer extends React.Component {
     onSave = newSettings => {
         const community = this.props.community.get('name');
         this.setState({ loading: true });
+        // TODO: this.props.getCommunity(community) won't work as expected here
+        // because hivemind lags by 10s or so. We need a new saga which updates
+        // (local) global state for immediate feedback (i.e. without making any
+        // call to the server). We can assume the op was successful. See #3524
         this.props.saveSettings(
             this.props.username,
             community,
             newSettings,
             () => {
                 this.setState({ loading: false, settings: newSettings });
-                this.props.getCommunity(community);
+                //this.props.getCommunity(community);
             },
             () => {
                 this.setState({ loading: false });
-                this.props.getCommunity(community);
+                //this.props.getCommunity(community);
             }
         );
     };

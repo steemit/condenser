@@ -42,8 +42,9 @@ class NotificationsList extends React.Component {
 
     onClickLoadMore = e => {
         e.preventDefault();
-        const { username, notifications } = this.props;
-        getAccountNotifications(username, notifications.last().get('id'));
+        const { username, notifications, getAccountNotifications } = this.props;
+        const lastId = notifications.getIn(['notifications', -1, 'id']);
+        getAccountNotifications(username, lastId);
     };
 
     render() {
@@ -76,7 +77,8 @@ class NotificationsList extends React.Component {
                     </center>
                 )}
                 {!loading &&
-                    notifications.get('isLastPage', false) && (
+                    notifications &&
+                    !notifications.get('isLastPage', false) && (
                         <center>
                             <a href="#" onClick={this.onClickLoadMore}>
                                 Load more...

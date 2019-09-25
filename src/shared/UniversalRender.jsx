@@ -263,12 +263,12 @@ export async function serverRender(
 
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
-        /*
-         // TODO: check acct valid server side
+
+        // TODO: check acct valid server side
         if (
             (url.match(routeRegex.UserProfile1) ||
                 url.match(routeRegex.UserProfile3)) &&
-            Object.getOwnPropertyNames(onchain.accounts).length === 0
+            Object.getOwnPropertyNames(onchain.profiles).length === 0
         ) {
             // protect for invalid account
             return {
@@ -277,7 +277,6 @@ export async function serverRender(
                 body: renderToString(<NotFound />),
             };
         }
-        */
 
         // If we are not loading a post, truncate state data to bring response size down.
         if (!url.match(routeRegex.Post)) {
@@ -334,6 +333,7 @@ export async function serverRender(
         server_store = createStore(rootReducer, {
             app: initialState.app,
             global: onchain,
+            userProfiles: { profiles: onchain['profiles'] },
             offchain,
         });
         server_store.dispatch({

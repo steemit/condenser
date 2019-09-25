@@ -8,6 +8,7 @@ import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Settings from 'app/components/modules/Settings';
 import UserList from 'app/components/elements/UserList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import NotificationsList from 'app/components/cards/NotificationsList';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
@@ -48,6 +49,7 @@ export default class UserProfile extends React.Component {
             np.blogmode !== this.props.blogmode ||
             np.posts !== this.props.posts ||
             np.profile !== this.props.profile ||
+            np.notifications !== this.props.notifications ||
             ns.showResteem !== this.state.showResteem
         );
     }
@@ -103,6 +105,7 @@ export default class UserProfile extends React.Component {
                 order,
                 posts,
                 profile,
+                notifications,
             },
         } = this;
         const username = current_user ? current_user.get('username') : null;
@@ -131,6 +134,7 @@ export default class UserProfile extends React.Component {
         const isMyAccount = username === accountname;
         let tab_content = null;
 
+        // users following this user
         if (section === 'followers') {
             if (followers && followers.has('blog_result')) {
                 tab_content = (
@@ -142,6 +146,8 @@ export default class UserProfile extends React.Component {
                     </div>
                 );
             }
+
+            // users followed by this user
         } else if (section === 'followed') {
             if (following && following.has('blog_result')) {
                 tab_content = (
@@ -151,6 +157,33 @@ export default class UserProfile extends React.Component {
                     />
                 );
             }
+
+            // notifications
+        } else if (section === 'notifications') {
+            if (!fetching && (notifications && !notifications.size)) {
+                tab_content = (
+                    <Callout>
+                        {tt(
+                            'user_profile.user_hasnt_had_any_notifications_yet',
+                            {
+                                name: accountname,
+                            }
+                        ) + '.'}
+                    </Callout>
+                );
+            } else {
+                tab_content = (
+                    <div>
+                        <NotificationsList
+                            username={accountname}
+                            notifications={notifications}
+                            loading={fetching}
+                        />
+                    </div>
+                );
+            }
+
+            // account display settings
         } else if (section === 'settings') {
             tab_content = <Settings routeParams={this.props.routeParams} />;
 
@@ -315,6 +348,9 @@ export default class UserProfile extends React.Component {
                         <li>{_tablink('/comments', tt('g.comments'))}</li>
                         <li>{_tablink('/recent-replies', tt('g.replies'))}</li>
                         <li>{_tablink('/payout', tt('voting_jsx.payout'))}</li>
+                        <li>
+                            {_tablink('/notifications', tt('g.notifications'))}
+                        </li>
                     </ul>
                 </div>
                 <div className="columns shrink">
@@ -381,6 +417,10 @@ module.exports = {
                     'getFollowingAsync',
                     accountname,
                 ]),
+                notifications: state.global.getIn(
+                    ['notifications', accountname],
+                    null
+                ),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 profile: state.userProfiles.getIn(['profiles', accountname]),
                 walletUrl,

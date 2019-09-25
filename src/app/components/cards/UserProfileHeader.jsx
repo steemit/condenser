@@ -102,7 +102,9 @@ class UserProfileHeader extends React.Component {
                                 </Link>
                             </span>
                             <span>{profile.getIn(['stats', 'sp'], 0)} SP</span>
-                            <span>#{profile.getIn(['stats', 'rank'])}</span>
+                            {profile.getIn(['stats', 'rank'], 0) > 0 && (
+                                <span>#{profile.getIn(['stats', 'rank'])}</span>
+                            )}
                         </div>
 
                         <p className="UserProfile__info">

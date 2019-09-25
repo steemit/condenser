@@ -62,27 +62,17 @@ export function* addCommunityUser(action) {
     yield put(communityActions.addCommunityUserPending(true));
     try {
         const { community, username, role } = action.payload;
-        const currentUserState = yield select(state => state.user.toJS());
         const currentUser = yield select(state => state.user.get('current'));
         const currentUsername = currentUser && currentUser.get('username');
-        //username = username || currentUsername
-        debugger;
-        //const currentUserPostingKey =
         const signingKey = yield call(findSigningKey, {
             opType: 'custom_json',
             currentUsername,
         });
-        debugger;
-        // Get current username and posting...
-        debugger;
-        // TODO: Call list Community roles on success.
         const setRoleOperation = generateHivemindOperation(
             'setRole',
             { community: community, account: username, role: role },
             currentUsername
         );
-
-        debugger;
 
         yield broadcast.sendAsync(
             {
@@ -91,67 +81,11 @@ export function* addCommunityUser(action) {
             },
             [signingKey]
         );
+        yield call(wait, 4000);
+        yield call(listCommunityRoles);
         yield put(communityActions.addCommunityUserSuccess());
     } catch (error) {
         yield put(communityActions.addCommunityUserError(error));
     }
     yield put(communityActions.addCommunityUserPending(false));
-}
-
-export function* customOps(action) {
-    const {
-        accountName,
-        communityTitle,
-        communityDescription,
-        communityNSFW,
-        communityOwnerName,
-        communityOwnerWifPassword,
-    } = action.payload;
-    yield call(wait, 3000);
-    try {
-        const communityOwnerPosting = auth.getPrivateKeys(
-            communityOwnerName,
-            communityOwnerWifPassword,
-            ['posting']
-        );
-
-        const setRoleOperation = generateHivemindOperation(
-            'setRole',
-            {
-                community: communityOwnerName,
-                account: accountName,
-                role: 'admin',
-            },
-            communityOwnerName,
-            communityOwnerPosting
-        );
-
-        const updatePropsOperation = generateHivemindOperation(
-            'updateProps',
-            {
-                community: communityOwnerName,
-                props: {
-                    title: communityTitle,
-                    about: communityDescription,
-                    is_nsfw: !!communityNSFW,
-                },
-            },
-            communityOwnerName,
-            communityOwnerPosting
-        );
-
-        yield broadcast.sendAsync(
-            {
-                extensions: [],
-                operations: [setRoleOperation, updatePropsOperation],
-            },
-            [
-                auth.toWif(
-                    communityOwnerName,
-                    communityOwnerWifPassword,
-                    'posting'
-                ),
-            ]
-        );
-    } catch (error) {}
 }

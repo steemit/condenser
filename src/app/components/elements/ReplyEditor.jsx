@@ -13,7 +13,7 @@ import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
 import * as globalActions from 'app/redux/GlobalReducer';
-import { fromJS, Set, OrderedSet } from 'immutable';
+import { fromJS, OrderedSet } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
@@ -21,6 +21,7 @@ import tt from 'counterpart';
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
 const RTE_DEFAULT = false;
+const MAX_TAGS = 8;
 
 function allTags(userInput, originalCategory, hashtags) {
     // take space-delimited user input
@@ -39,7 +40,7 @@ function allTags(userInput, originalCategory, hashtags) {
 
     // append hashtags from post until limit is reached
     const tagged = [...hashtags];
-    while (tags.size < 5 && tagged.length > 0) {
+    while (tags.size < MAX_TAGS && tagged.length > 0) {
         tags = tags.add(tagged.shift());
     }
 
@@ -825,7 +826,9 @@ export default formId =>
             let { category, title, body } = ownProps;
             if (/submit_/.test(type)) title = body = '';
             if (isStory && jsonMetadata && jsonMetadata.tags) {
-                category = Set([category, ...jsonMetadata.tags]).join(' ');
+                category = OrderedSet([category, ...jsonMetadata.tags]).join(
+                    ' '
+                );
             }
 
             const defaultPayoutType = state.app.getIn(
@@ -989,7 +992,7 @@ export default formId =>
                     return;
                 }
 
-                if (meta.tags && meta.tags.length > 5) {
+                if (meta.tags && meta.tags.length > MAX_TAGS) {
                     const includingCategory = isEdit
                         ? tt('reply_editor.including_the_category', {
                               rootCategory: originalPost.category,

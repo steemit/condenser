@@ -25,6 +25,9 @@
         "community_settings_description":
             "Here you can customize this community as you see fit.",
         "community_list_header": "Communities",
+        "community_user_title_edit_header": "Change User's Community Title",
+        "community_user_title_edit_description":
+            "Here you may change the title of (username) within the community (community).",
         "comments": "Comments",
         "confirm": "Confirm",
         "convert": "Convert",

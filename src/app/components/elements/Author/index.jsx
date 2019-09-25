@@ -11,13 +11,14 @@ import AffiliationMap from 'app/utils/AffiliationMap';
 import tt from 'counterpart';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
+import UserTitleEditButtonContainer from 'app/components/elements/UserTitleEditButtonContainer';
 
 const { string, bool, number } = PropTypes;
 
 const closers = [];
 
 const fnCloseAll = () => {
-    var close;
+    let close;
     while ((close = closers.shift())) {
         close();
     }
@@ -32,6 +33,7 @@ class Author extends React.Component {
         showAffiliation: bool,
         role: string,
         title: string,
+        community: string,
     };
     static defaultProps = {
         follow: true,
@@ -39,6 +41,7 @@ class Author extends React.Component {
         showAffiliation: false,
         role: '',
         title: '',
+        community: '',
     };
 
     constructor(...args) {
@@ -101,6 +104,7 @@ class Author extends React.Component {
             showAffiliation,
             role,
             title,
+            community,
         } = this.props; // html
         const { username } = this.props; // redux
 
@@ -118,7 +122,16 @@ class Author extends React.Component {
                     <Reputation value={authorRep} />
                     {role && role != 'guest' && <span>[{role}]</span>}
                     {title != '' && (
-                        <span className="affiliation">{title}</span>
+                        <span className="affiliation">
+                            {title}
+                            {community != '' && (
+                                <UserTitleEditButtonContainer
+                                    username={username}
+                                    community={community}
+                                    title={title}
+                                />
+                            )}
+                        </span>
                     )}
                     {showAffiliation && AffiliationMap[author] ? (
                         <span className="affiliation">

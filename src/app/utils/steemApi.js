@@ -22,6 +22,7 @@ export async function getStateAsync(url, observer, ssr = false) {
         community: {},
         content: {},
         discussion_idx: {},
+        profiles: {},
     };
 
     // load `content` and `discussion_idx`
@@ -42,6 +43,15 @@ export async function getStateAsync(url, observer, ssr = false) {
             name: tag,
             observer: observer,
         });
+    }
+
+    if (ssr && tag && tag[0] == '@') {
+        // TODO: move to global reducer?
+        const account = tag.slice(1);
+        const profile = await callBridge('get_profile', { account });
+        if (profile && profile['name']) {
+            state['profiles'][account] = profile;
+        }
     }
 
     if (ssr) {

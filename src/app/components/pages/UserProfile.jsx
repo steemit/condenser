@@ -49,6 +49,7 @@ export default class UserProfile extends React.Component {
             np.blogmode !== this.props.blogmode ||
             np.posts !== this.props.posts ||
             np.profile !== this.props.profile ||
+            np.notifications !== this.props.notifications ||
             ns.showResteem !== this.state.showResteem
         );
     }

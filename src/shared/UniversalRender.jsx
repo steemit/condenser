@@ -245,7 +245,7 @@ export async function serverRender(
     }
 
     if (error || !renderProps) {
-        // debug('error')('Router error', error);
+        console.log('Router error [404]', error, 'props?', !!renderProps);
         return {
             title: 'Page Not Found - Steemit',
             statusCode: 404,
@@ -267,7 +267,7 @@ export async function serverRender(
         // TODO: check acct valid server side
         if (
             (url.match(routeRegex.UserProfile1) ||
-                url.match(routeRegex.UserProfile3)) &&
+                url.match(routeRegex.UserProfile2)) &&
             Object.getOwnPropertyNames(onchain.profiles).length === 0
         ) {
             // protect for invalid account
@@ -290,6 +290,8 @@ export async function serverRender(
         }
 
         // Are we loading an un-category-aliased post?
+        /*
+        TODO: use bridge.get_post_header. handle client-side for now.
         if (
             !url.match(routeRegex.PostsIndex) &&
             !url.match(routeRegex.UserProfile1) &&
@@ -315,6 +317,7 @@ export async function serverRender(
                 };
             }
         }
+        */
 
         // Insert the special posts into the list of posts, so there is no
         // jumping of content.

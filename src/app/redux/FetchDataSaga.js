@@ -152,20 +152,11 @@ function* getAccounts(usernames) {
  * @param {}
  */
 export function* listCommunities(action) {
-    console.log('listCommunities', action, arguments);
     const communities = yield call(callBridge, 'list_communities', {
-        // name: action.payload,
+        observer: action.payload.observer,
     });
     // TODO: Handle error state
-    // communities = Object.values(communities).map((c) => {
-    //   return {[c.name]: {...c}}
-    // })
-    const toReturn = {};
-    communities.forEach(c => {
-        toReturn[c.name] = c;
-    });
-    console.log('listCommunities::after-yield', communities, toReturn);
-    yield put(globalActions.receiveCommunities({ ...toReturn }));
+    yield put(globalActions.receiveCommunities(communities));
 }
 
 /**

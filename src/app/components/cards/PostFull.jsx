@@ -43,6 +43,7 @@ function TimeAuthorCategory({ content, authorRep, showTags, community }) {
                 role={content.author_role}
                 title={content.author_title}
                 community={community}
+                permlink={content.permlink}
             />
             {showTags && (
                 <span>
@@ -66,6 +67,7 @@ function TimeAuthorCategoryLarge({ content, authorRep, community }) {
                     role={content.author_role}
                     title={content.author_title}
                     community={community}
+                    permlink={content.permlink}
                 />
                 <span>
                     {' '}

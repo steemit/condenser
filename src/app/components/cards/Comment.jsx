@@ -454,6 +454,7 @@ class CommentImpl extends React.Component {
                                 showAffiliation
                                 role={comment.author_role}
                                 title={comment.author_title}
+                                permlink={comment.permlink}
                             />
                         </span>
                         &nbsp; &middot; &nbsp;

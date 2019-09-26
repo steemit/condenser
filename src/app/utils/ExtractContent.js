@@ -85,7 +85,6 @@ export default function extractContent(get, content) {
     //     image_link = image_link.replace(links.ipfsPrefix, config.ipfs_prefix)
 
     let desc;
-    let desc_complete = false;
     if (!desc) {
         // Short description.
         // Remove bold and header, etc.
@@ -119,8 +118,8 @@ export default function extractContent(get, content) {
                     .replace(/[,!\?]?\s+[^\s]+$/, '…');
             }
         }
-        desc_complete = body2 === desc; // is the entire body in desc?
     }
+
     const pending_payout = get(content, 'pending_payout_value');
     const community_title = get(content, 'community_title');
     return {
@@ -138,7 +137,6 @@ export default function extractContent(get, content) {
         link,
         image_link,
         desc,
-        desc_complete,
         body,
         pending_payout,
         community_title,

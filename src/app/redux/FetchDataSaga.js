@@ -20,6 +20,7 @@ const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 const LIST_COMMUNITIES = 'fetchDataSaga/LIST_COMMUNITIES';
+const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
@@ -29,6 +30,7 @@ export const fetchDataWatches = [
     takeEvery('global/FETCH_JSON', fetchJson),
     takeEvery(GET_COMMUNITY, getCommunity),
     takeEvery(LIST_COMMUNITIES, listCommunities),
+    takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
 ];
 
 export function* getContentCaller(action) {
@@ -38,8 +40,8 @@ export function* getContentCaller(action) {
 let is_initial_state = true;
 export function* fetchState(location_change_action) {
     const { pathname } = location_change_action.payload;
-    const m = pathname.match(/^\/@([a-z0-9\.-]+)/);
-    if (m && m.length === 2) {
+    const m = pathname.match(/^\/@([a-z0-9\.-]+)(\/notifications)?/);
+    if (m && m.length >= 2) {
         const username = m[1];
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
@@ -184,6 +186,46 @@ export function* getCommunity(action) {
         );
 }
 
+/**
+ * Request notifications for given account
+ * @param {object} payload containing:
+ *   - account (string)
+ *   - last_id (string), optional, for pagination
+ *   - limit (int), optional, defualt is 100
+ */
+export function* getAccountNotifications(action) {
+    if (!action.payload) throw 'no account specified';
+    yield put(appActions.fetchDataBegin());
+    try {
+        const notifications = yield call(
+            callBridge,
+            'account_notifications',
+            action.payload
+        );
+        if (notifications && notifications.error) {
+            console.error(
+                '~~ Saga getAccountNotifications error ~~>',
+                notifications.error
+            );
+            yield put(appActions.steemApiError(notifications.error.message));
+        } else {
+            const limit = action.payload.limit ? action.payload.limit : 100;
+            const isLastPage = notifications.length < action.payload.limit;
+            yield put(
+                globalActions.receiveNotifications({
+                    name: action.payload.account,
+                    notifications,
+                    isLastPage,
+                })
+            );
+        }
+    } catch (error) {
+        console.error('~~ Saga getAccountNotifications error ~~>', error);
+        yield put(appActions.steemApiError(error.message));
+    }
+    yield put(appActions.fetchDataEnd());
+}
+
 export function* fetchData(action) {
     const { order, author, permlink, postFilter, observer } = action.payload;
     let { category } = action.payload;
@@ -301,6 +343,11 @@ export const actions = {
 
     getCommunity: payload => ({
         type: GET_COMMUNITY,
+        payload,
+    }),
+
+    getAccountNotifications: payload => ({
+        type: GET_ACCOUNT_NOTIFICATIONS,
         payload,
     }),
 

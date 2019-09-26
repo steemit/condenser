@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CommunityContainer from './CommunityContainer';
+import Community from './Community';
 
 export default function CommunityList(props) {
     const { communities, communities_idx } = props;
@@ -42,9 +42,9 @@ export default function CommunityList(props) {
             {communities_idx
                 .map(name => communities.get(name))
                 .map(community => (
-                    <CommunityContainer
+                    <Community
                         key={community.get('name')}
-                        community={community.toJS()}
+                        {...community.toJS()}
                     />
                 ))}
         </div>

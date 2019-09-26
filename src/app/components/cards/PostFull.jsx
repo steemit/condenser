@@ -444,9 +444,9 @@ class PostFull extends React.Component {
                     <ul>
                         <li>
                             <Link
-                                to={`${content.category}/@${content.author}/${
-                                    content.permlink
-                                }`}
+                                to={`/${content.category}/@${
+                                    content.parent_author
+                                }/${content.parent_permlink}`}
                             >
                                 {tt('postfull_jsx.view_the_full_context')}
                             </Link>
@@ -532,7 +532,7 @@ class PostFull extends React.Component {
                         {tt('g.promote')}
                     </button>
                 )}
-                <TagList post={content} horizontal />
+                {content.depth == 0 && <TagList post={content} horizontal />}
                 <div className="PostFull__footer row">
                     <div className="columns medium-12 large-5">
                         <TimeAuthorCategory

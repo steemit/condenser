@@ -105,7 +105,13 @@ class Topics extends Component {
                             {link(`/trending/${cat[0]}`, cat[1], '')}
                         </li>
                     ))}
-                <li>{link(`/tags`, moreLabel, 'c-sidebar__link--emphasis')}</li>
+                <li>
+                    {link(
+                        `/communities`,
+                        moreLabel,
+                        'c-sidebar__link--emphasis'
+                    )}
+                </li>
             </ul>
         );
 

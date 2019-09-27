@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import * as globalActions from 'app/redux/GlobalReducer';
-
 import UserTitleEditButton from './UserTitleEditButton';
 
 class UserTitleEditButtonContainer extends React.Component {
@@ -25,14 +24,11 @@ class UserTitleEditButtonContainer extends React.Component {
     onSave = newTitle => {
         const community = this.props.community.get('name');
         this.setState({ loading: true });
-
         //-- Simulate a "receiveState" action to feed new title into post state
         let newstate = { content: {}, simulation: true };
         let content_key = this.props.username + '/' + this.props.permlink;
         newstate['content'][content_key] = { author_title: newTitle };
         this.props.pushState(newstate);
-        //--
-
         this.props.saveTitle(
             this.props.username,
             community,

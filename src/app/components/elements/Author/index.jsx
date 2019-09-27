@@ -105,6 +105,7 @@ class Author extends React.Component {
             role,
             title,
             community,
+            permlink,
         } = this.props; // html
         const { username } = this.props; // redux
 
@@ -129,6 +130,7 @@ class Author extends React.Component {
                                     username={username}
                                     community={community}
                                     title={title}
+                                    permlink={permlink}
                                 />
                             )}
                         </span>
@@ -198,7 +200,7 @@ class Author extends React.Component {
 import { connect } from 'react-redux';
 
 export default connect((state, ownProps) => {
-    const { author, follow, mute, authorRep } = ownProps;
+    const { author, follow, mute, authorRep, permlink } = ownProps;
     const username = state.user.getIn(['current', 'username']);
     return {
         author,
@@ -206,5 +208,6 @@ export default connect((state, ownProps) => {
         mute,
         authorRep,
         username,
+        permlink,
     };
 })(Author);

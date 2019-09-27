@@ -13,7 +13,7 @@ import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
 import * as globalActions from 'app/redux/GlobalReducer';
-import { fromJS, Set } from 'immutable';
+import { fromJS, OrderedSet } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
@@ -21,6 +21,31 @@ import tt from 'counterpart';
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
 const RTE_DEFAULT = false;
+const MAX_TAGS = 8;
+
+function allTags(userInput, originalCategory, hashtags) {
+    // take space-delimited user input
+    let tags = OrderedSet(
+        userInput
+            ? userInput
+                  .trim()
+                  .replace(/#/g, '')
+                  .split(/ +/)
+            : []
+    );
+
+    // remove original category, if present
+    if (originalCategory && /^[-a-z\d]+$/.test(originalCategory))
+        tags = tags.delete(originalCategory);
+
+    // append hashtags from post until limit is reached
+    const tagged = [...hashtags];
+    while (tags.size < MAX_TAGS && tagged.length > 0) {
+        tags = tags.add(tagged.shift());
+    }
+
+    return tags;
+}
 
 class ReplyEditor extends React.Component {
     static propTypes = {
@@ -238,9 +263,11 @@ class ReplyEditor extends React.Component {
     };
     showDraftSaved() {
         const { draft } = this.refs;
-        draft.className = 'ReplyEditor__draft';
-        void draft.offsetWidth; // reset animation
-        draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved';
+        if (draft) {
+            draft.className = 'ReplyEditor__draft';
+            void draft.offsetWidth; // reset animation
+            draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved';
+        }
     }
 
     showAdvancedSettings = e => {
@@ -799,7 +826,9 @@ export default formId =>
             let { category, title, body } = ownProps;
             if (/submit_/.test(type)) title = body = '';
             if (isStory && jsonMetadata && jsonMetadata.tags) {
-                category = Set([category, ...jsonMetadata.tags]).join(' ');
+                category = OrderedSet([category, ...jsonMetadata.tags]).join(
+                    ' '
+                );
             }
 
             const defaultPayoutType = state.app.getIn(
@@ -933,30 +962,15 @@ export default formId =>
                     return;
                 }
 
-                const formCategories = Set(
-                    category
-                        ? category
-                              .trim()
-                              .replace(/#/g, '')
-                              .split(/ +/)
-                        : []
+                const metaTags = allTags(
+                    category,
+                    originalPost.category,
+                    rtags.hashtags
                 );
-                const rootCategory =
-                    originalPost && originalPost.category
-                        ? originalPost.category
-                        : formCategories.first();
-                let allCategories = Set([...formCategories.toJS()]);
-                if (/^[-a-z\d]+$/.test(rootCategory))
-                    allCategories = allCategories.add(rootCategory);
-
-                let postHashtags = [...rtags.hashtags];
-                while (allCategories.size < 5 && postHashtags.length > 0) {
-                    allCategories = allCategories.add(postHashtags.shift());
-                }
 
                 // merge
                 const meta = isEdit ? jsonMetadata : {};
-                if (allCategories.size) meta.tags = allCategories.toJS();
+                if (metaTags.size) meta.tags = metaTags.toJS();
                 else delete meta.tags;
                 if (rtags.usertags.size) meta.users = rtags.usertags;
                 else delete meta.users;
@@ -978,10 +992,10 @@ export default formId =>
                     return;
                 }
 
-                if (meta.tags.length > 5) {
+                if (meta.tags && meta.tags.length > MAX_TAGS) {
                     const includingCategory = isEdit
                         ? tt('reply_editor.including_the_category', {
-                              rootCategory,
+                              rootCategory: originalPost.category,
                           })
                         : '';
                     errorCallback(
@@ -1041,7 +1055,7 @@ export default formId =>
 
                 const operation = {
                     ...linkProps,
-                    category: rootCategory,
+                    category: originalPost.category || metaTags.first(),
                     title,
                     body,
                     json_metadata: meta,

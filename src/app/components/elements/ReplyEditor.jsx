@@ -13,7 +13,7 @@ import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
 import * as globalActions from 'app/redux/GlobalReducer';
-import { Set } from 'immutable';
+import { fromJS, OrderedSet } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
@@ -21,6 +21,31 @@ import tt from 'counterpart';
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
 const RTE_DEFAULT = false;
+const MAX_TAGS = 8;
+
+function allTags(userInput, originalCategory, hashtags) {
+    // take space-delimited user input
+    let tags = OrderedSet(
+        userInput
+            ? userInput
+                  .trim()
+                  .replace(/#/g, '')
+                  .split(/ +/)
+            : []
+    );
+
+    // remove original category, if present
+    if (originalCategory && /^[-a-z\d]+$/.test(originalCategory))
+        tags = tags.delete(originalCategory);
+
+    // append hashtags from post until limit is reached
+    const tagged = [...hashtags];
+    while (tags.size < MAX_TAGS && tagged.length > 0) {
+        tags = tags.add(tagged.shift());
+    }
+
+    return tags;
+}
 
 class ReplyEditor extends React.Component {
     static propTypes = {
@@ -84,6 +109,8 @@ class ReplyEditor extends React.Component {
                 if (title) title.props.onChange(draft.title);
                 if (draft.payoutType)
                     this.props.setPayoutType(formId, draft.payoutType);
+                if (draft.beneficiaries)
+                    this.props.setBeneficiaries(formId, draft.beneficiaries);
                 raw = draft.body;
             }
 
@@ -125,10 +152,11 @@ class ReplyEditor extends React.Component {
                 ts.body.value !== ns.body.value ||
                 (ns.category && ts.category.value !== ns.category.value) ||
                 (ns.title && ts.title.value !== ns.title.value) ||
-                np.payoutType !== tp.payoutType
+                np.payoutType !== tp.payoutType ||
+                np.beneficiaries !== tp.beneficiaries
             ) {
                 // also prevents saving after parent deletes this information
-                const { formId, payoutType } = np;
+                const { formId, payoutType, beneficiaries } = np;
                 const { category, title, body } = ns;
                 const data = {
                     formId,
@@ -136,6 +164,7 @@ class ReplyEditor extends React.Component {
                     category: category ? category.value : undefined,
                     body: body.value,
                     payoutType,
+                    beneficiaries,
                 };
 
                 clearTimeout(saveEditorTimeout);
@@ -207,6 +236,7 @@ class ReplyEditor extends React.Component {
             });
             this.setState({ progress: {} });
             this.props.setPayoutType(formId, defaultPayoutType);
+            this.props.setBeneficiaries(formId, []);
             if (onCancel) onCancel(e);
         }
     };
@@ -233,9 +263,11 @@ class ReplyEditor extends React.Component {
     };
     showDraftSaved() {
         const { draft } = this.refs;
-        draft.className = 'ReplyEditor__draft';
-        void draft.offsetWidth; // reset animation
-        draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved';
+        if (draft) {
+            draft.className = 'ReplyEditor__draft';
+            void draft.offsetWidth; // reset animation
+            draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved';
+        }
     }
 
     showAdvancedSettings = e => {
@@ -330,6 +362,7 @@ class ReplyEditor extends React.Component {
             successCallback,
             defaultPayoutType,
             payoutType,
+            beneficiaries,
         } = this.props;
         const { submitting, valid, handleSubmit } = this.state.replyForm;
         const { postError, titleWarn, rte } = this.state;
@@ -343,6 +376,7 @@ class ReplyEditor extends React.Component {
         const successCallbackWrapper = (...args) => {
             this.setState({ loading: false });
             this.props.setPayoutType(formId, defaultPayoutType);
+            this.props.setBeneficiaries(formId, []);
             if (successCallback) successCallback(args);
         };
         const isEdit = type === 'edit';
@@ -359,6 +393,7 @@ class ReplyEditor extends React.Component {
             isStory,
             jsonMetadata,
             payoutType,
+            beneficiaries,
             successCallback: successCallbackWrapper,
             errorCallback,
         };
@@ -595,6 +630,25 @@ class ReplyEditor extends React.Component {
                                                         'reply_editor.power_up_100'
                                                     )}
                                             </div>
+                                            <div>
+                                                {beneficiaries &&
+                                                    beneficiaries.length >
+                                                        0 && (
+                                                        <span>
+                                                            {tt(
+                                                                'g.beneficiaries'
+                                                            )}
+                                                            {': '}
+                                                            {tt(
+                                                                'reply_editor.beneficiaries_set',
+                                                                {
+                                                                    count:
+                                                                        beneficiaries.length,
+                                                                }
+                                                            )}
+                                                        </span>
+                                                    )}
+                                            </div>
                                             <a
                                                 href="#"
                                                 onClick={
@@ -772,7 +826,9 @@ export default formId =>
             let { category, title, body } = ownProps;
             if (/submit_/.test(type)) title = body = '';
             if (isStory && jsonMetadata && jsonMetadata.tags) {
-                category = Set([category, ...jsonMetadata.tags]).join(' ');
+                category = OrderedSet([category, ...jsonMetadata.tags]).join(
+                    ' '
+                );
             }
 
             const defaultPayoutType = state.app.getIn(
@@ -791,6 +847,13 @@ export default formId =>
             if (!payoutType) {
                 payoutType = defaultPayoutType;
             }
+            let beneficiaries = state.user.getIn([
+                'current',
+                'post',
+                formId,
+                'beneficiaries',
+            ]);
+            beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
 
             const ret = {
                 ...ownProps,
@@ -799,6 +862,7 @@ export default formId =>
                 username,
                 defaultPayoutType,
                 payoutType,
+                beneficiaries,
                 initialValues: { title, body, category },
                 state,
                 formId,
@@ -820,6 +884,13 @@ export default formId =>
                         value: payoutType,
                     })
                 ),
+            setBeneficiaries: (formId, beneficiaries) =>
+                dispatch(
+                    userActions.set({
+                        key: ['current', 'post', formId, 'beneficiaries'],
+                        value: fromJS(beneficiaries),
+                    })
+                ),
             reply: ({
                 category,
                 title,
@@ -833,6 +904,7 @@ export default formId =>
                 type,
                 originalPost,
                 payoutType = '50%',
+                beneficiaries = [],
                 state,
                 jsonMetadata,
                 successCallback,
@@ -890,30 +962,15 @@ export default formId =>
                     return;
                 }
 
-                const formCategories = Set(
-                    category
-                        ? category
-                              .trim()
-                              .replace(/#/g, '')
-                              .split(/ +/)
-                        : []
+                const metaTags = allTags(
+                    category,
+                    originalPost.category,
+                    rtags.hashtags
                 );
-                const rootCategory =
-                    originalPost && originalPost.category
-                        ? originalPost.category
-                        : formCategories.first();
-                let allCategories = Set([...formCategories.toJS()]);
-                if (/^[-a-z\d]+$/.test(rootCategory))
-                    allCategories = allCategories.add(rootCategory);
-
-                let postHashtags = [...rtags.hashtags];
-                while (allCategories.size < 5 && postHashtags.length > 0) {
-                    allCategories = allCategories.add(postHashtags.shift());
-                }
 
                 // merge
                 const meta = isEdit ? jsonMetadata : {};
-                if (allCategories.size) meta.tags = allCategories.toJS();
+                if (metaTags.size) meta.tags = metaTags.toJS();
                 else delete meta.tags;
                 if (rtags.usertags.size) meta.users = rtags.usertags;
                 else delete meta.users;
@@ -935,10 +992,10 @@ export default formId =>
                     return;
                 }
 
-                if (meta.tags.length > 5) {
+                if (meta.tags && meta.tags.length > MAX_TAGS) {
                     const includingCategory = isEdit
                         ? tt('reply_editor.including_the_category', {
-                              rootCategory,
+                              rootCategory: originalPost.category,
                           })
                         : '';
                     errorCallback(
@@ -969,11 +1026,36 @@ export default formId =>
                             break;
                         default: // 50% steem power, 50% sd+steem
                     }
+                    if (beneficiaries && beneficiaries.length > 0) {
+                        if (!__config.comment_options) {
+                            __config.comment_options = {};
+                        }
+                        __config.comment_options.extensions = [
+                            [
+                                0,
+                                {
+                                    beneficiaries: beneficiaries
+                                        .sort(
+                                            (a, b) =>
+                                                a.username < b.username
+                                                    ? -1
+                                                    : a.username > b.username
+                                                      ? 1
+                                                      : 0
+                                        )
+                                        .map(elt => ({
+                                            account: elt.username,
+                                            weight: parseInt(elt.percent) * 100,
+                                        })),
+                                },
+                            ],
+                        ];
+                    }
                 }
 
                 const operation = {
                     ...linkProps,
-                    category: rootCategory,
+                    category: originalPost.category || metaTags.first(),
                     title,
                     body,
                     json_metadata: meta,

@@ -7,6 +7,7 @@
         "ask": "Ask",
         "balance": "Balance: %(balanceValue)s",
         "balances": "Balances",
+        "beneficiaries": "Beneficiaries",
         "bid": "Bid",
         "blog": "Blog",
         "browse": "Browse",
@@ -263,6 +264,7 @@
         "change_account_password": "Change Account Password",
         "vote_for_witnesses": "Vote for Witnesses",
         "advertise": "Advertise",
+        "media_kit": "Media Kit",
         "privacy_policy": "Privacy Policy",
         "terms_of_service": "Terms of Service",
         "sign_up": "Sign up",
@@ -312,7 +314,19 @@
         "title": "Title",
         "update_post": "Update Post",
         "markdown_not_supported": "Markdown is not supported here",
-        "advanced_settings": "Advanced settings"
+        "advanced_settings": "Advanced settings",
+        "beneficiaries_set": "%(count)s set"
+    },
+    "beneficiary_selector_jsx": {
+        "header": "Who should receive any rewards?",
+        "add": "Add account",
+        "exceeds_max_beneficiaries": "Can have at most 8 beneficiaries",
+        "beneficiary_cannot_be_self": "Cannot specify self as beneficiary",
+        "beneficiary_cannot_be_duplicate": "Beneficiary cannot be duplicate",
+        "beneficiary_percent_invalid":
+            "Beneficiary percentage must be from 1-100",
+        "beneficiary_percent_total_invalid":
+            "Beneficiary total percentage must be less than 100"
     },
     "category_selector_jsx": {
         "tag_your_story":

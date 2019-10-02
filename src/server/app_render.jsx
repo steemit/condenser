@@ -65,6 +65,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             gptCategorySlots: config.gpt_category_slots,
             gptBiddingSlots: config.gpt_bidding_slots,
             gptBannedTags: config.gpt_banned_tags,
+            videoAdsEnabled: !!config.video_ads_enabled,
         };
         const cookieConsent = {
             enabled: !!config.cookie_consent_enabled,
@@ -108,6 +109,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             meta,
             shouldSeeAds: googleAds.enabled,
             gptEnabled: googleAds.gptEnabled,
+            videoAdsEnabled: googleAds.videoAdsEnabled,
             adClient: googleAds.client,
             gptBidding: googleAds.gptBidding,
             shouldSeeCookieConsent: cookieConsent.enabled,

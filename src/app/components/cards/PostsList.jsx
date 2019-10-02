@@ -11,6 +11,7 @@ import debounce from 'lodash.debounce';
 import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import GptAd from 'app/components/elements/GptAd';
+import VideoAd from 'app/components/elements/VideoAd';
 
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
@@ -267,6 +268,27 @@ class PostsList extends React.Component {
         const renderSummary = items =>
             items.map((item, i) => {
                 const every = this.props.adSlots.in_feed_1.every;
+                if (this.props.videoAdsEnabled && i === 4) {
+                    return (
+                        <div key={item.item}>
+                            <li>
+                                <PostSummary
+                                    account={account}
+                                    post={item.item}
+                                    thumbSize={thumbSize}
+                                    ignore={item.ignore}
+                                    nsfwPref={nsfwPref}
+                                />
+                            </li>
+
+                            <div className="articles__content-block--ad">
+                                <VideoAd
+                                    id="player-5b3e40c6efca8c0001f3fd78"
+                                />
+                            </div>
+                        </div>
+                    ); 
+                }
                 if (this.props.shouldSeeAds && i >= every && i % every === 0) {
                     return (
                         <div key={item.item}>
@@ -353,6 +375,7 @@ export default connect(
             .get('promoted_posts')
             .toJS();
         const shouldSeeAds = state.app.getIn(['googleAds', 'enabled']);
+        const videoAdsEnabled = state.app.getIn(['googleAds', 'videoAdsEnabled']);
         const adSlots = state.app.getIn(['googleAds', 'adSlots']).toJS();
 
         return {
@@ -365,6 +388,7 @@ export default connect(
             featured,
             promoted,
             shouldSeeAds,
+            videoAdsEnabled,
             adSlots,
         };
     },

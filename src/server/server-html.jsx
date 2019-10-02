@@ -10,6 +10,7 @@ export default function ServerHTML({
     shouldSeeAds,
     adClient,
     gptEnabled,
+    videoAdsEnabled,
     gptBannedTags,
     gptBidding,
     shouldSeeCookieConsent,
@@ -215,7 +216,7 @@ export default function ServerHTML({
                         dangerouslySetInnerHTML={{ __html: body }}
                     />
                 }
-                
+                {videoAdsEnabled ? (
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `
@@ -241,7 +242,7 @@ export default function ServerHTML({
                         })();`
                     }}
                     />
-
+                ) : null}
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}

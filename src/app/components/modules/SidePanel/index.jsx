@@ -97,6 +97,11 @@ const SidePanel = ({
                 label: tt('navigation.vote_for_witnesses'),
                 link: `${walletUrl}/~witnesses`,
             },
+            {
+                value: 'proposals',
+                label: tt('navigation.steem_proposals'),
+                link: `${walletUrl}/proposals`,
+            },
         ],
         exchanges: [
             {

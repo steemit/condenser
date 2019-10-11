@@ -1,4 +1,9 @@
 import {
+    isDefaultImageSize,
+    defaultSrcSet,
+    defaultWidth,
+} from 'app/utils/ProxifyUrl';
+import {
     getPhishingWarningMessage,
     getExternalLinkWarningMessage,
 } from 'shared/HtmlReady'; // the only allowable title attributes for div and a tags
@@ -91,7 +96,7 @@ export default ({
 
         // style is subject to attack, filtering more below
         td: ['style'],
-        img: ['src', 'alt'],
+        img: ['src', 'srcset', 'alt', 'class'],
 
         // title is only set in the case of an external link warning
         a: ['href', 'rel', 'title'],
@@ -148,6 +153,10 @@ export default ({
             src = src.replace(/^http:\/\//i, '//');
             let atts = { src };
             if (alt && alt !== '') atts.alt = alt;
+            if (isDefaultImageSize(src)) {
+                atts['srcset'] = defaultSrcSet(src);
+                atts['class'] = 'normal-size';
+            }
             return { tagName, attribs: atts };
         },
         div: (tagName, attribs) => {

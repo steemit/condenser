@@ -126,6 +126,12 @@
   }
 }
 
+.Comment__body:hover {
+  @include themify($themes) {
+    background-color: themed('commentBodyHighlightBackgroundColor');
+  }
+}
+
 .Comment .Comment__block .Comment__footer {
   @include themify($themes) {
     margin-left: 62px;

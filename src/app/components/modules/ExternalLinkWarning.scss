@@ -1,0 +1,14 @@
+.ExternalLinkWarning {
+  a.button.hollow.open-external-link {
+    border: 1px solid #ddd;
+    color: $color-blue-black;
+    transition: 0.2s all ease-in-out;
+    @include font-size(16px);
+
+    &:hover {
+      border: 1px solid $color-teal-dark;
+      color: $color-teal-dark;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
+    }
+  }
+}

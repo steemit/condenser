@@ -19,6 +19,7 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
+import { hasNsfwTag } from 'app/utils/StateFunctions';
 
 class PostSummary extends React.Component {
     static propTypes = {
@@ -26,6 +27,9 @@ class PostSummary extends React.Component {
         pending_payout: PropTypes.string.isRequired,
         total_payout: PropTypes.string.isRequired,
         content: PropTypes.object.isRequired,
+        featured: PropTypes.bool,
+        promoted: PropTypes.bool,
+        onClose: PropTypes.func,
         thumbSize: PropTypes.string,
         nsfwPref: PropTypes.string,
     };
@@ -54,8 +58,8 @@ class PostSummary extends React.Component {
     }
 
     render() {
-        const { thumbSize, ignore } = this.props;
-        const { post, content } = this.props;
+        const { thumbSize, ignore, hideCategory } = this.props;
+        const { post, content, featured, promoted, onClose } = this.props;
         const { account } = this.props;
         if (!content) return null;
 
@@ -95,10 +99,9 @@ class PostSummary extends React.Component {
             );
         }
 
-        const { gray, authorRepLog10, flagWeight, isNsfw } = content
-            .get('stats', Map())
-            .toJS();
-        const pinned = content.get('pinned');
+        const { gray } = content.get('stats', Map()).toJS();
+        const isNsfw = hasNsfwTag(content);
+        const special = content.get('special');
         const p = extractContent(immutableAccessor, content);
         const desc = p.desc;
 
@@ -136,24 +139,12 @@ class PostSummary extends React.Component {
                     {isNsfw && <span className="nsfw-flag">nsfw</span>}
                     {title_text}
                 </Link>
+                {content.getIn(['stats', 'is_pinned']) && (
+                    <span className="FeaturedTag">Pinned</span>
+                )}
+                {featured && <span className="FeaturedTag">Featured</span>}
+                {promoted && <span className="PromotedTag">Sponsored</span>}
             </h2>
-        );
-
-        // author and category
-        const author_category = (
-            <span className="vcard">
-                <Userpic account={p.author} />
-                <Author
-                    author={p.author}
-                    authorRepLog10={authorRepLog10}
-                    follow={false}
-                    mute={false}
-                />
-                {} {tt('g.in')} <TagList post={p} single />&nbsp;•&nbsp;
-                <Link to={post_url}>
-                    <TimeAgoWrapper date={p.created} className="updated" />
-                </Link>
-            </span>
         );
 
         // New Post Summary heading
@@ -174,15 +165,17 @@ class PostSummary extends React.Component {
                         <span className="user__name">
                             <Author
                                 author={p.author}
-                                authorRepLog10={authorRepLog10}
+                                authorRep={content.get('author_reputation')}
                                 follow={false}
                                 mute={false}
                             />
                         </span>
 
-                        <span className="articles__tag-link">
-                            {tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;
-                        </span>
+                        {hideCategory || (
+                            <span className="articles__tag-link">
+                                {tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;
+                            </span>
+                        )}
                         <Link className="timestamp__link" to={post_url}>
                             <span className="timestamp__time">
                                 <TimeAgoWrapper
@@ -201,27 +194,17 @@ class PostSummary extends React.Component {
                             )}
                         </Link>
                     </div>
-                </div>
-                <div className="articles__flag clearfix">
-                    <Voting post={post} flag />
-                </div>
-            </div>
-        );
 
-        const content_footer = (
-            <div className="PostSummary__footer">
-                <Voting post={post} showList={false} />
-                <VotesAndComments post={post} commentsLink={comments_url} />
-                <span className="PostSummary__time_author_category">
-                    {!archived && (
-                        <Reblog
-                            author={p.author}
-                            permlink={p.permlink}
-                            parent_author={p.parent_author}
-                        />
+                    {(featured || promoted) && (
+                        <a
+                            onClick={onClose}
+                            className="PostDismiss"
+                            title="Dismiss Post"
+                        >
+                            <Icon name="close" />
+                        </a>
                     )}
-                    <span className="show-for-medium">{author_category}</span>
-                </span>
+                </div>
             </div>
         );
 
@@ -338,9 +321,9 @@ class PostSummary extends React.Component {
         }
 
         // A post is hidden if it's marked "gray" or "ignore" and it's not
-        // pinned.
+        // special.
         const commentClasses = [];
-        if (!pinned && (gray || ignore)) commentClasses.push('downvoted'); // rephide
+        if (!special && (gray || ignore)) commentClasses.push('downvoted'); // rephide
 
         return (
             <div className="articles__summary">
@@ -376,7 +359,7 @@ class PostSummary extends React.Component {
 
 export default connect(
     (state, props) => {
-        const { post } = props;
+        const { post, hideCategory } = props;
         const content = state.global.get('content').get(post);
         let pending_payout = 0;
         let total_payout = 0;
@@ -386,6 +369,7 @@ export default connect(
         }
         return {
             post,
+            hideCategory,
             content,
             pending_payout: pending_payout
                 ? pending_payout.toString()

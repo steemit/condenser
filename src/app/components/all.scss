@@ -1,6 +1,7 @@
 @import "./App";
 
 // cards
+@import "./cards/BeneficiarySelector";
 @import "./cards/Comment";
 @import "./cards/MarkdownViewer";
 @import "./cards/PostSummary";
@@ -38,16 +39,17 @@
 @import "./elements/Notices";
 @import "./elements/GoogleAd";
 @import "./elements/GptAd";
+@import "./elements/PostCategoryBanner";
 
 // modules
 @import "./modules/Header/styles";
 @import "./modules/LoginForm";
-@import "./modules/MiniHeader";
 @import "./modules/SidePanel/styles";
 @import "./modules/Settings";
 @import "./modules/BottomPanel";
 @import "./modules/UserWallet";
 @import "./modules/ConfirmTransactionForm";
+@import "./modules/CommunityList/styles";
 
 // pages
 @import "./pages/PostsIndex";
@@ -59,3 +61,4 @@
 @import "./pages/TagsIndex";
 @import "./pages/Welcome";
 @import "./pages/About";
+@import "./pages/CommunitiesIndex";

@@ -6,7 +6,6 @@ import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
 import { setUserPreferences } from 'app/utils/ServerApiClient';
-import { getStateAsync } from 'app/utils/steemApi';
 
 const wait = ms =>
     new Promise(resolve => {
@@ -14,7 +13,6 @@ const wait = ms =>
     });
 
 export const sharedWatches = [
-    takeEvery(globalActions.GET_STATE, getState),
     takeLatest(
         [
             appActions.SET_USER_PREFERENCES,
@@ -53,17 +51,6 @@ export function* getAccount(username, force = false) {
     return account;
 }
 
-/** Manual refreshes.  The router is in FetchDataSaga. */
-export function* getState({ payload: { url } }) {
-    try {
-        const state = yield call(getStateAsync, url);
-        yield put(globalActions.receiveState(state));
-    } catch (error) {
-        console.error('~~ Saga getState error ~~>', url, error);
-        yield put(appActions.steemApiError(error.message));
-    }
-}
-
 function* showTransactionErrorNotification() {
     const errors = yield select(state => state.transaction.get('errors'));
     for (const [key, message] of errors) {
@@ -78,6 +65,7 @@ function* showTransactionErrorNotification() {
 export function* getContent({ author, permlink, resolve, reject }) {
     let content;
     while (!content) {
+        console.log('getContent', author, permlink);
         content = yield call([api, api.getContentAsync], author, permlink);
         if (content['author'] == '') {
             // retry if content not found. #1870

@@ -7,6 +7,7 @@
         "ask": "Ask",
         "balance": "Balance: %(balanceValue)s",
         "balances": "Balances",
+        "beneficiaries": "Beneficiaries",
         "bid": "Bid",
         "blog": "Blog",
         "browse": "Browse",
@@ -20,6 +21,10 @@
         "clear": "Clear",
         "close": "Close",
         "collapse_or_expand": "Collapse/Expand",
+        "community_settings_header": "Community Settings",
+        "community_settings_description":
+            "Here you can customize this community as you see fit.",
+        "community_list_header": "Communities",
         "comments": "Comments",
         "confirm": "Confirm",
         "convert": "Convert",
@@ -30,6 +35,8 @@
         "email": "Email",
         "external_link_message":
             "This link will take you away from steemit.com",
+        "affiliation_steemit": "Steemit Team",
+        "affiliation_sm": "Steem Monsters Team",
         "feed": "Feed",
         "follow": "Follow",
         "for": " for ",
@@ -56,6 +63,7 @@
         "newer": "Newer",
         "next": "Next",
         "no": "No",
+        "notifications": "Notifications",
         "ok": "Ok",
         "older": "Older",
         "or": "or",
@@ -65,6 +73,7 @@
         "permissions": "Permissions",
         "phishy_message":
             "Link expanded to plain text; beware of a potential phishing attempt",
+        "pin": "Pin",
         "post": "Post",
         "post_as_user": "Post as %(username)s",
         "posts": "Posts",
@@ -77,6 +86,7 @@
         "promoted": "Promoted",
         "re": "RE",
         "re_to": "RE: %(topic)s",
+        "read_offical_blog": "Steemit Blog",
         "recent_password": "Recent Password",
         "receive": "Receive ",
         "remove": "Remove",
@@ -91,6 +101,7 @@
         },
         "reputation": "Reputation",
         "reveal_comment": "Reveal Comment",
+        "will_be_hidden_due_to_low_rating": "Will be hidden due to low rating",
         "request": "request",
         "required": "Required",
         "rewards": "Rewards",
@@ -100,6 +111,12 @@
         "sell": "Sell",
         "settings": "Settings",
         "share_this_post": "Share this post",
+        "mute_this_post": "Mute this post",
+        "mute_this_post_description":
+            "Please provide a note regarding your decision to mute this post.",
+        "unmute_this_post": "Unmute this post",
+        "unmute_this_post_description":
+            "Please provide a note regarding your decision to unmute this post.",
         "show": "Show",
         "sign_in": "Sign in",
         "sign_up": "Sign up",
@@ -111,14 +128,15 @@
         "to": " to ",
         "topics": "Topics",
         "toggle_nightmode": "Toggle Night Mode",
-        "all_tags": "All tags",
-        "all_tags_mobile": "All content",
+        "all_tags": "All posts",
+        "all_tags_mobile": "All posts",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",
         "try_again": "Try Again",
         "type": "Type",
         "unfollow": "Unfollow",
         "unmute": "Unmute",
+        "unpin": "Unpin",
         "unknown": "Unknown",
         "upvote": "Upvote",
         "upvote_post": "Upvote post",
@@ -226,7 +244,7 @@
         "read_only_mode":
             "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
         "tags_and_topics": "Tags",
-        "show_more_topics": "View all tags",
+        "show_more_topics": "Explore communities",
         "basic": "Basic",
         "advanced": "Advanced",
         "views": {
@@ -308,7 +326,19 @@
         "title": "Title",
         "update_post": "Update Post",
         "markdown_not_supported": "Markdown is not supported here",
-        "advanced_settings": "Advanced settings"
+        "advanced_settings": "Advanced settings",
+        "beneficiaries_set": "%(count)s set"
+    },
+    "beneficiary_selector_jsx": {
+        "header": "Who should receive any rewards?",
+        "add": "Add account",
+        "exceeds_max_beneficiaries": "Can have at most 8 beneficiaries",
+        "beneficiary_cannot_be_self": "Cannot specify self as beneficiary",
+        "beneficiary_cannot_be_duplicate": "Beneficiary cannot be duplicate",
+        "beneficiary_percent_invalid":
+            "Beneficiary percentage must be from 1-100",
+        "beneficiary_percent_total_invalid":
+            "Beneficiary total percentage must be less than 100"
     },
     "category_selector_jsx": {
         "tag_your_story":
@@ -361,6 +391,8 @@
         "user_hasnt_followed_anything_yet":
             "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
         "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+        "user_hasnt_had_any_notifications_yet":
+            "%(name)s hasn't had any notifications yet",
         "looks_like_you_havent_posted_anything_yet":
             "Looks like you haven't posted anything yet.",
         "create_a_post": "Create a Post",
@@ -409,9 +441,9 @@
         "hate_speech_or_internet_trolling": "Hate Speech or Internet Trolling",
         "intentional_miss_categorized_content_or_spam":
             "Intentional miss-categorized content or Spam",
-        "pending_payout": "Pending Payout $%(value)s",
+        "pending_payout": "Pending payout amount: $%(value)s",
         "payout_declined": "Payout Declined",
-        "max_accepted_payout": "Max Accepted Payout $%(value)s",
+        "max_accepted_payout": "Max accepted payout: $%(value)s",
         "promotion_cost": "Promotion Cost $%(value)s",
         "past_payouts": "Past Payouts $%(value)s",
         "past_payouts_author": " - Author $%(value)s",
@@ -430,7 +462,10 @@
         "votes_plural": {
             "one": "%(count)s vote",
             "other": "%(count)s votes"
-        }
+        },
+        "must_reached_minimum_payout": "(amount must reach $0.02 for payout)",
+        "payout": "Payout",
+        "breakdown": "Breakdown"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -600,9 +635,11 @@
         "login_warning_body":
             "You are attempting to use a key with more permissions than required for everyday Steemit.com use. Since keys and passwords are more likely to get compromised the more they are used, it is strongly recommended to only use your Posting Key to log in.",
         "continue_anyway": "Continue Anyway",
-        "login_warning_link_text": "View my Posting Key at Steemit Wallet",
+        "login_warning_link_text":
+            "Open my Steemit Wallet to access and view my posting key",
         "join_our": "Join our",
-        "sign_transfer": "Sign to complete transfer"
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",

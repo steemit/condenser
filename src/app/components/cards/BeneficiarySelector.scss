@@ -1,0 +1,43 @@
+.BeneficiarySelector__percentbox {
+  max-width: 2.6rem;
+}
+.BeneficiarySelector__percentrow {
+  padding-top: 5px;
+  padding-left: 2px;
+}
+
+.BeneficiarySelector .input-group {
+  margin-bottom: 1.25rem;
+}
+
+.react-autocomplete-input {
+  overflow-y: scroll;
+  max-height: 16em;
+  background-clip: padding-box;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.15);
+  bottom: auto;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+  display: block;
+  font-size: 14px;
+  list-style: none;
+  padding: 1px;
+  position: absolute;
+  text-align: left;
+  z-index: 20000;
+}
+
+.react-autocomplete-input > div {
+  cursor: pointer;
+  padding: 10px;
+  min-width: 100px;
+}
+
+.react-autocomplete-input > .active {
+  background-color: #06D6A9;
+  color: #333;
+  @include themify($themes) {
+    color: theme('textColorPrimary');
+    background-color: themed('textColorAccentHover');
+  }
+}

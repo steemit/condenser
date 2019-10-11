@@ -28,9 +28,10 @@
   dependencies:
     "@steemit/libcrypto" "^1.0.1"
 
-"@steemit/steem-js@0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.7.4.tgz#65053fffe0ad99a4c18bd4b089c2cd78ac09bf3d"
+"@steemit/steem-js@0.7.5":
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.7.5.tgz#2894b84005f839b56aa0b1152424cf316f702f78"
+  integrity sha512-qcjkUCFy3MMu5TrIQ2zwm4Ow5Yh3J2udTvRykFymQ4SE/dWWb1w4inXrYwp+SmWqyvesvoeak4bSKyp6OrTLuw==
   dependencies:
     "@steemit/rpc-auth" "^1.1.1"
     bigi "^1.4.2"
@@ -1772,6 +1773,11 @@ block-stream@*:
 blocked@1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/blocked/-/blocked-1.2.1.tgz#e22efe767863c65ab8197f6252929104e1ec9ce2"
+
+bluebird@3.5.5:
+  version "3.5.5"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.5.tgz#a8d0afd73251effbbd5fe384a77d73003c17a71f"
+  integrity sha512-5am6HnnfN+urzt4yfg7IgTbotDjIT/u8AJpEt0sIU9FtXfVeezXAPKswrG+xKUCOYAINpSdgZVDU6QFh+cuH3w==
 
 bluebird@^3.4.6:
   version "3.5.1"
@@ -8474,9 +8480,10 @@ stealthy-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
 
-steemscript@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/steemscript/-/steemscript-1.1.0.tgz#7d9c210c496263d4e5ccc8f4904aa49e39ee5d3b"
+steemscript@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/steemscript/-/steemscript-1.1.1.tgz#c7fee04f8e9b50774c84f66529262d29b038a6b7"
+  integrity sha512-Wuh5Pm6S1fev4bJNgRdeu3i350H/NwuL8PwM76QrQH3mUowCHJ+/40rb9LyLOcouwZbVVZSNG/W9/mDHFpmA1g==
 
 store@1.3.20:
   version "1.3.20"

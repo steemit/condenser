@@ -64,7 +64,7 @@ const SidePanel = ({
             {
                 value: 'tags',
                 label: tt('navigation.explore'),
-                link: `/tags`,
+                link: `/communities`,
             },
             {
                 value: 'market',
@@ -118,7 +118,8 @@ const SidePanel = ({
             {
                 value: 'jobs',
                 label: tt('navigation.jobs'),
-                link: 'https://jobs.lever.co/steemit',
+                link:
+                    'https://recruiting.paylocity.com/recruiting/jobs/List/3288/Steemit-Inc',
             },
             {
                 value: 'tools',

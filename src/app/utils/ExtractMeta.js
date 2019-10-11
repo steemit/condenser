@@ -86,18 +86,19 @@ export default function extractMeta(chain_data, rp) {
         }
     } else if (rp.accountname) {
         // user profile root
-        const account = chain_data.accounts[rp.accountname];
+        // TODO: read from profiles, add in src/shared/UniversalRender.jsx
+        const account = chain_data.accounts[rp.accountname] || {};
         let { name, about, profile_image } = normalizeProfile(account);
-        if (name == null) name = account.name;
+        if (name == null) name = rp.accountname;
         if (about == null)
             about =
                 'Join thousands on steemit who share, post and earn rewards.';
         if (profile_image == null)
             profile_image = 'https://steemit.com/images/steemit-twshare-2.png';
         // Set profile tags
-        const title = `@${account.name}`;
+        const title = `@${rp.accountname}`;
         const desc = `The latest posts from ${name}. Follow me at @${
-            account.name
+            rp.accountname
         }. ${about}`;
         const image = profile_image;
 

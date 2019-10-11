@@ -245,7 +245,7 @@ export async function serverRender(
     }
 
     if (error || !renderProps) {
-        // debug('error')('Router error', error);
+        console.log('Router error [404]', error, 'props?', !!renderProps);
         return {
             title: 'Page Not Found - Steemit',
             statusCode: 404,
@@ -255,18 +255,20 @@ export async function serverRender(
 
     let server_store, onchain;
     try {
-        const url = getUrlFromLocation(location);
+        const url = location;
 
-        requestTimer.startTimer('apiGetState_ms');
-        onchain = await apiGetState(url);
-        requestTimer.stopTimer('apiGetState_ms');
+        requestTimer.startTimer('apiFetchState_ms');
+        onchain = await apiFetchState(url);
+        requestTimer.stopTimer('apiFetchState_ms');
 
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
+
+        // TODO: check acct valid server side
         if (
             (url.match(routeRegex.UserProfile1) ||
-                url.match(routeRegex.UserProfile3)) &&
-            Object.getOwnPropertyNames(onchain.accounts).length === 0
+                url.match(routeRegex.UserProfile2)) &&
+            Object.getOwnPropertyNames(onchain.profiles).length === 0
         ) {
             // protect for invalid account
             return {
@@ -279,7 +281,6 @@ export async function serverRender(
         // If we are not loading a post, truncate state data to bring response size down.
         if (!url.match(routeRegex.Post)) {
             for (var key in onchain.content) {
-                //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
                 // Count some stats then remove voting data. But keep current user's votes. (#1040)
                 onchain.content[key]['stats'] = contentStats(
                     onchain.content[key]
@@ -289,6 +290,8 @@ export async function serverRender(
         }
 
         // Are we loading an un-category-aliased post?
+        /*
+        TODO: use bridge.get_post_header. handle client-side for now.
         if (
             !url.match(routeRegex.PostsIndex) &&
             !url.match(routeRegex.UserProfile1) &&
@@ -314,18 +317,26 @@ export async function serverRender(
                 };
             }
         }
+        */
 
-        // Insert the pinned posts into the list of posts, so there is no
+        // Insert the special posts into the list of posts, so there is no
         // jumping of content.
-        offchain.pinned_posts.pinned_posts.forEach(pinnedPost => {
+        offchain.special_posts.featured_posts.forEach(featuredPost => {
             onchain.content[
-                `${pinnedPost.author}/${pinnedPost.permlink}`
-            ] = pinnedPost;
+                `${featuredPost.author}/${featuredPost.permlink}`
+            ] = featuredPost;
+        });
+
+        offchain.special_posts.promoted_posts.forEach(promotedPost => {
+            onchain.content[
+                `${promotedPost.author}/${promotedPost.permlink}`
+            ] = promotedPost;
         });
 
         server_store = createStore(rootReducer, {
             app: initialState.app,
             global: onchain,
+            userProfiles: { profiles: onchain['profiles'] },
             offchain,
         });
         server_store.dispatch({
@@ -456,32 +467,30 @@ export function clientRender(initialState) {
     );
 }
 
-/**
- * Do some pre-state-fetch url rewriting.
- *
- * @param {string} location
- * @returns {string}
- */
-function getUrlFromLocation(location) {
-    let url = location === '/' ? 'trending' : location;
-    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
-    // to resolve data correctly
-    if (url.indexOf('/curation-rewards') !== -1)
-        url = url.replace(/\/curation-rewards$/, '/transfers');
-    if (url.indexOf('/author-rewards') !== -1)
-        url = url.replace(/\/author-rewards$/, '/transfers');
-
-    return url;
-}
-
-async function apiGetState(url) {
+async function apiFetchState(url) {
     let offchain;
 
     if (process.env.OFFLINE_SSR_TEST) {
         offchain = get_state_perf;
     }
 
-    offchain = await getStateAsync(url);
+    offchain = await getStateAsync(url, null, true);
+
+    try {
+        const history = await api.getFeedHistoryAsync();
+        const feed = history.price_history;
+        const last = feed[feed.length - 1];
+        offchain['feed_price'] = last;
+    } catch (error) {
+        console.log('Error fetching feed price:', error);
+    }
+
+    try {
+        const dgpo = await api.getDynamicGlobalPropertiesAsync();
+        offchain['props'] = { sbd_print_rate: dgpo['sbd_print_rate'] };
+    } catch (error) {
+        console.log('Error fetching dgpo:', error);
+    }
 
     return offchain;
 }

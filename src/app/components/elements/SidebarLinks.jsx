@@ -8,12 +8,6 @@ const SidebarLinks = ({ username }) => (
         </div>
         <div className="c-sidebar__content">
             <ul className="c-sidebar__list">
-                <li className="c-sidebar__list-item" key="feed">
-                    <a className="c-sidebar__link" href={`/@${username}/feed`}>
-                        {tt('g.my_feed')}
-                    </a>
-                </li>
-
                 <li className="c-sidebar__list-item">
                     <a className="c-sidebar__link" href={'/@' + username}>
                         {tt('g.my_blog')}
@@ -26,6 +20,11 @@ const SidebarLinks = ({ username }) => (
                     >
                         {tt('g.my_wallet')}
                     </a>
+                </li>
+                <li className="c-sidebar__list-item">
+                    <div style={{ color: '#aaa', paddingTop: '1em' }}>
+                        My subscriptions
+                    </div>
                 </li>
             </ul>
         </div>

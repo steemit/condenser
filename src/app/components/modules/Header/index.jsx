@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { immutableAccessor } from 'app/utils/Accessors';
+import extractContent from 'app/utils/ExtractContent';
 import Headroom from 'react-headroom';
 import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
@@ -19,25 +21,24 @@ import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
 import GptAd from 'app/components/elements/GptAd';
+import { Map } from 'immutable';
 
 class Header extends React.Component {
     static propTypes = {
         current_account_name: PropTypes.string,
-        account_meta: PropTypes.object,
+        display_name: PropTypes.string,
         category: PropTypes.string,
         order: PropTypes.string,
         pathname: PropTypes.string,
     };
 
-    constructor() {
-        super();
-        this.gptadshown = event => {
-            // This makes sure that the sticky header doesn't overlap the welcome splash.
-            this.forceUpdate();
-        };
-        this.hideAnnouncement = event => {
-            this.props.hideAnnouncement(event);
-            this.forceUpdate();
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            gptAdRendered: false,
+            showAd: false,
+            showAnnouncement: this.props.showAnnouncement,
         };
     }
 
@@ -51,7 +52,7 @@ class Header extends React.Component {
             return null;
         }
 
-        window.addEventListener('gptadshown', this.gptadshown);
+        window.addEventListener('gptadshown', e => this.gptAdRendered(e));
     }
 
     componentWillUnmount() {
@@ -63,8 +64,6 @@ class Header extends React.Component {
         ) {
             return null;
         }
-
-        window.removeEventListener('gptadshown', this.gptadshown);
     }
 
     // Consider refactor.
@@ -87,6 +86,23 @@ class Header extends React.Component {
         }
     }
 
+    headroomOnUnpin() {
+        this.setState({ showAd: false });
+    }
+
+    headroomOnUnfix() {
+        this.setState({ showAd: true });
+    }
+
+    gptAdRendered() {
+        this.setState({ showAd: true, gptAdRendered: true });
+    }
+
+    hideAnnouncement() {
+        this.setState({ showAnnouncement: false });
+        this.props.hideAnnouncement();
+    }
+
     render() {
         const {
             category,
@@ -100,18 +116,20 @@ class Header extends React.Component {
             vertical,
             nightmodeEnabled,
             toggleNightmode,
-            userPath,
             showSidePanel,
             navigate,
-            account_meta,
+            display_name,
             walletUrl,
+            content,
         } = this.props;
+
+        let { showAd, showAnnouncement } = this.state;
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
+        let tags = [];
         let home_account = false;
         let page_title = route.page;
-
         let sort_order = '';
         let topic = '';
         let page_name = null;
@@ -127,16 +145,34 @@ class Header extends React.Component {
                     home_account = true;
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
-                const type =
-                    route.params[0] == 'payout_comments' ? 'comments' : 'posts';
+                tags = [topic];
+
                 let prefix = route.params[0];
                 if (prefix == 'created') prefix = 'New';
-                if (prefix == 'payout') prefix = 'Pending payout';
-                if (prefix == 'payout_comments') prefix = 'Pending payout';
-                if (topic !== '') prefix += ` ${topic}`;
-                page_title = `${prefix} ${type}`;
+                if (prefix == 'payout') prefix = 'Pending';
+                if (prefix == 'payout_comments') prefix = 'Pending';
+                if (prefix == 'muted') prefix = 'Muted';
+                page_title = prefix;
+                if (topic !== '') {
+                    let name = this.props.community.getIn(
+                        [topic, 'title'],
+                        '#' + topic
+                    );
+                    page_title = `${name} / ${page_title}`;
+                } else {
+                    page_title += ' posts';
+                }
             }
         } else if (route.page === 'Post') {
+            const user = `${route.params[1]}`.replace('@', '');
+            const slug = `${route.params[2]}`;
+            if (content) {
+                const post_content = content.get(`${user}/${slug}`);
+                if (post_content) {
+                    const p = extractContent(immutableAccessor, post_content);
+                    tags = p.json_metadata.tags || [];
+                }
+            }
             sort_order = '';
             topic = route.params[0];
         } else if (route.page == 'SubmitPost') {
@@ -148,11 +184,10 @@ class Header extends React.Component {
         } else if (route.page == 'RecoverAccountStep1') {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
-            let user_name = route.params[0].slice(1);
-            const name = account_meta
-                ? normalizeProfile(account_meta.toJS()).name
-                : null;
-            const user_title = name ? `${name} (@${user_name})` : user_name;
+            const user_name = route.params[0].slice(1);
+            const user_title = display_name
+                ? `${display_name} (@${user_name})`
+                : user_name;
             page_title = user_title;
             if (route.params[1] === 'followers') {
                 page_title = tt('header_jsx.people_following', {
@@ -161,16 +196,6 @@ class Header extends React.Component {
             }
             if (route.params[1] === 'followed') {
                 page_title = tt('header_jsx.people_followed_by', {
-                    username: user_title,
-                });
-            }
-            if (route.params[1] === 'curation-rewards') {
-                page_title = tt('header_jsx.curation_rewards_by', {
-                    username: user_title,
-                });
-            }
-            if (route.params[1] === 'author-rewards') {
-                page_title = tt('header_jsx.author_rewards_by', {
                     username: user_title,
                 });
             }
@@ -237,27 +262,12 @@ class Header extends React.Component {
         const comments_link = `/@${username}/comments`;
         const wallet_link = `${walletUrl}/@${username}`;
         const settings_link = `/@${username}/settings`;
-        const pathCheck = userPath === '/submit.html' ? true : null;
 
         const user_menu = [
-            {
-                link: feed_link,
-                icon: 'home',
-                value: tt('g.feed'),
-            },
             { link: account_link, icon: 'profile', value: tt('g.blog') },
             { link: comments_link, icon: 'replies', value: tt('g.comments') },
-            {
-                link: replies_link,
-                icon: 'reply',
-                value: tt('g.replies'),
-            },
-            {
-                link: wallet_link,
-                icon: 'wallet',
-                value: tt('g.wallet'),
-            },
-
+            { link: replies_link, icon: 'reply', value: tt('g.replies') },
+            { link: wallet_link, icon: 'wallet', value: tt('g.wallet') },
             {
                 link: '#',
                 icon: 'eye',
@@ -274,17 +284,25 @@ class Header extends React.Component {
                   }
                 : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
-
+        showAd = true;
         return (
-            <Headroom>
+            <Headroom
+                onUnpin={e => this.headroomOnUnpin(e)}
+                onUnfix={e => this.headroomOnUnfix(e)}
+            >
                 <header className="Header">
-                    {this.props.showAnnouncement && (
-                        <Announcement onClose={this.hideAnnouncement} />
+                    {showAnnouncement && (
+                        <Announcement onClose={e => this.hideAnnouncement(e)} />
                     )}
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
-                    <div>
-                        <GptAd slotName="top_nav" />
+                    <div style={showAd ? {} : { display: 'none' }}>
+                        <GptAd
+                            tags={tags}
+                            type="Freestar"
+                            id="bsa-zone_1566493796250-1_123456"
+                        />
                     </div>
+
                     <nav className="row Header__nav">
                         <div className="small-5 large-4 columns Header__logotype">
                             {/*LOGO*/}
@@ -298,7 +316,7 @@ class Header extends React.Component {
                             <SortOrder
                                 sortOrder={order}
                                 topic={category === 'feed' ? '' : category}
-                                horizontal={true}
+                                horizontal
                                 pathname={pathname}
                             />
                         </div>
@@ -374,19 +392,21 @@ const mapStateToProps = (state, ownProps) => {
         return {
             username: null,
             loggedIn: false,
+            community: state.global.get('community', Map({})),
         };
     }
 
-    let user_profile;
+    // display name used in page title
+    let display_name;
     const route = resolveRoute(ownProps.pathname);
     if (route.page === 'UserProfile') {
-        user_profile = state.global.getIn([
+        const profile = state.global.getIn([
             'accounts',
             route.params[0].slice(1),
         ]);
+        display_name = profile ? normalizeProfile(profile.toJS()).name : null;
     }
 
-    const userPath = state.routing.locationBeforeTransitions.pathname;
     const username = state.user.getIn(['current', 'username']);
     const loggedIn = !!username;
     const current_account_name = username
@@ -395,17 +415,19 @@ const mapStateToProps = (state, ownProps) => {
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
     const walletUrl = state.app.get('walletUrl');
+    const content = state.global.get('content'); // TODO: needed for SSR?
 
     return {
         username,
         loggedIn,
-        userPath,
+        community: state.global.get('community', Map({})),
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
-        account_meta: user_profile,
+        display_name,
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         gptEnabled,
         walletUrl,
+        content,
         ...ownProps,
     };
 };

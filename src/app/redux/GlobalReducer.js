@@ -3,6 +3,7 @@ import resolveRoute from 'app/ResolveRoute';
 import { emptyContent } from 'app/redux/EmptyState';
 import { contentStats } from 'app/utils/StateFunctions';
 import constants from './constants';
+import { repLog10 } from 'app/utils/ParsersAndFormatters';
 
 export const emptyContentMap = Map(emptyContent);
 
@@ -13,31 +14,25 @@ export const defaultState = Map({
 // Action constants
 const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
+const RECEIVE_NOTIFICATIONS = 'global/RECEIVE_NOTIFICATIONS';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
-const SYNC_PINNED_POSTS = 'global/SYNC_PINNED_POSTS';
-const RECEIVE_COMMENT = 'global/RECEIVE_COMMENT';
+const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
+const RECEIVE_COMMUNITIES = 'global/RECEIVE_COMMUNITIES';
+const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
 const DELETE_CONTENT = 'global/DELETE_CONTENT';
 const VOTED = 'global/VOTED';
 const FETCHING_DATA = 'global/FETCHING_DATA';
 const RECEIVE_DATA = 'global/RECEIVE_DATA';
-const RECEIVE_RECENT_POSTS = 'global/RECEIVE_RECENT_POSTS';
-const REQUEST_META = 'global/REQUEST_META';
-const RECEIVE_META = 'global/RECEIVE_META';
 const SET = 'global/SET';
 const REMOVE = 'global/REMOVE';
 const UPDATE = 'global/UPDATE';
-const SET_META_DATA = 'global/SET_META_DATA';
-const CLEAR_META = 'global/CLEAR_META';
-const CLEAR_META_ELEMENT = 'global/CLEAR_META_ELEMENT';
 const FETCH_JSON = 'global/FETCH_JSON';
 const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT';
 const SHOW_DIALOG = 'global/SHOW_DIALOG';
 const HIDE_DIALOG = 'global/HIDE_DIALOG';
-// Saga-related:
-export const GET_STATE = 'global/GET_STATE';
 
 /**
  * Transfrom nested JS object to appropriate immutable collection.
@@ -90,6 +85,7 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_STATE: {
             let new_state = fromJS(payload);
+            console.log('Receive state', payload);
             if (new_state.has('content')) {
                 const content = new_state.get('content').withMutations(c => {
                     c.forEach((cc, key) => {
@@ -100,7 +96,22 @@ export default function reducer(state = defaultState, action = {}) {
                 });
                 new_state = new_state.set('content', content);
             }
-            return state.mergeDeep(new_state);
+            const merged = state.mergeDeep(new_state);
+            console.log('Merged state', merged.toJS());
+            return merged;
+        }
+
+        case RECEIVE_NOTIFICATIONS: {
+            console.log('Receive notifications', payload);
+            return state.updateIn(['notifications', payload.name], Map(), n =>
+                n.withMutations(nmut =>
+                    nmut
+                        .update('notifications', List(), a =>
+                            a.concat(fromJS(payload.notifications))
+                        )
+                        .set('isLastPage', payload.isLastPage)
+                )
+            );
         }
 
         case RECEIVE_ACCOUNT: {
@@ -115,64 +126,41 @@ export default function reducer(state = defaultState, action = {}) {
             }, state);
         }
 
-        // Interleave pinned posts into the map of posts.
-        case SYNC_PINNED_POSTS: {
-            return payload.pinnedPosts.reduce((acc, pinnedPost) => {
-                const author = pinnedPost.get('author');
-                const permlink = pinnedPost.get('permlink');
-                return acc.updateIn(
-                    ['content', `${author}/${permlink}`],
-                    Map(),
-                    p => p.mergeDeep(pinnedPost)
-                );
-            }, state);
+        case RECEIVE_COMMUNITIES: {
+            const map = Map(payload.map(c => [c.name, fromJS(c)]));
+            const idx = List(payload.map(c => c.name));
+            return state
+                .update('community', Map(), a => a.mergeDeep(map))
+                .update('community_idx', List(), a => a.mergeDeep(idx));
         }
 
-        case RECEIVE_COMMENT: {
-            const {
-                author,
-                permlink,
-                parent_author = '',
-                parent_permlink = '',
-                title = '',
-                body,
-            } = payload.op;
-            const key = author + '/' + permlink;
-            let updatedState = state.updateIn(
-                ['content', key],
-                Map(emptyContent),
-                r =>
-                    r.merge({
-                        author,
-                        permlink,
-                        parent_author,
-                        parent_permlink,
-                        title: title.toString('utf-8'),
-                        body: body.toString('utf-8'),
-                    })
-            );
-            if (parent_author !== '' && parent_permlink !== '') {
-                const parent_key = parent_author + '/' + parent_permlink;
-                updatedState = updatedState.updateIn(
-                    ['content', parent_key, 'replies'],
-                    List(),
-                    r => r.insert(0, key)
-                );
-                const children = updatedState.getIn(
-                    ['content', parent_key, 'replies'],
-                    List()
-                ).size;
-                updatedState = updatedState.updateIn(
-                    ['content', parent_key, 'children'],
-                    0,
-                    () => children
-                );
-            }
-            return updatedState;
+        case RECEIVE_COMMUNITY: {
+            console.log('RECEIVE_COMMUNITY', state, payload);
+            return state.update('community', Map(), a => a.mergeDeep(payload));
+        }
+
+        // Interleave special posts into the map of posts.
+        case SYNC_SPECIAL_POSTS: {
+            return payload.featuredPosts
+                .concat(payload.promotedPosts)
+                .reduce((acc, specialPost) => {
+                    const author = specialPost.get('author');
+                    const permlink = specialPost.get('permlink');
+                    return acc.updateIn(
+                        ['content', `${author}/${permlink}`],
+                        Map(),
+                        p => p.mergeDeep(specialPost)
+                    );
+                }, state);
         }
 
         case RECEIVE_CONTENT: {
-            const content = fromJS(payload.content);
+            let content = fromJS(payload.content);
+            content = content.set(
+                'author_reputation',
+                repLog10(content.get('author_reputation'))
+            );
+
             const key = content.get('author') + '/' + content.get('permlink');
             return state.updateIn(['content', key], Map(), c => {
                 c = emptyContentMap.mergeDeep(c);
@@ -263,46 +251,21 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_DATA: {
-            const {
-                data,
-                order,
-                category,
-                accountname,
-                fetching,
-                endOfData,
-            } = payload;
+            const { data, order, category, fetching, endOfData } = payload;
             let new_state;
-            if (
-                order === 'by_author' ||
-                order === 'by_feed' ||
-                order === 'by_comments' ||
-                order === 'by_replies'
-            ) {
-                // category is either "blog", "feed", "comments", or "recent_replies" (respectively) -- and all posts are keyed under current profile
-                const key = ['accounts', accountname, category];
-                new_state = state.updateIn(key, List(), list => {
-                    return list.withMutations(posts => {
-                        data.forEach(value => {
-                            const key2 = `${value.author}/${value.permlink}`;
-                            if (!posts.includes(key2)) posts.push(key2);
-                        });
+
+            // append content keys to `discussion_idx` list
+            const key = ['discussion_idx', category || '', order];
+            new_state = state.updateIn(key, List(), list => {
+                return list.withMutations(posts => {
+                    data.forEach(value => {
+                        const key = `${value.author}/${value.permlink}`;
+                        if (!posts.includes(key)) posts.push(key);
                     });
                 });
-            } else {
-                new_state = state.updateIn(
-                    ['discussion_idx', category || '', order],
-                    list => {
-                        return list.withMutations(posts => {
-                            data.forEach(value => {
-                                const entry = `${value.author}/${
-                                    value.permlink
-                                }`;
-                                if (!posts.includes(entry)) posts.push(entry);
-                            });
-                        });
-                    }
-                );
-            }
+            });
+
+            // append content stats data to each post
             new_state = new_state.updateIn(['content'], content => {
                 return content.withMutations(map => {
                     data.forEach(value => {
@@ -313,6 +276,7 @@ export default function reducer(state = defaultState, action = {}) {
                     });
                 });
             });
+
             new_state = new_state.updateIn(
                 ['status', category || '', order],
                 () => {
@@ -323,50 +287,6 @@ export default function reducer(state = defaultState, action = {}) {
                 }
             );
             return new_state;
-        }
-        case RECEIVE_RECENT_POSTS: {
-            const { data } = payload;
-            let new_state = state.updateIn(
-                ['discussion_idx', '', 'created'],
-                list => {
-                    if (!list) list = List();
-                    return list.withMutations(posts => {
-                        data.forEach(value => {
-                            const entry = `${value.author}/${value.permlink}`;
-                            if (!posts.includes(entry)) posts.unshift(entry);
-                        });
-                    });
-                }
-            );
-            new_state = new_state.updateIn(['content'], content => {
-                return content.withMutations(map => {
-                    data.forEach(value => {
-                        const key = `${value.author}/${value.permlink}`;
-                        if (!map.has(key)) {
-                            value = fromJS(value);
-                            value = value.set(
-                                'stats',
-                                fromJS(contentStats(value))
-                            );
-
-                            map.set(key, value);
-                        }
-                    });
-                });
-            });
-            return new_state;
-        }
-
-        case REQUEST_META: {
-            const { id, link } = payload;
-            return state.setIn(['metaLinkData', id], Map({ link }));
-        }
-
-        case RECEIVE_META: {
-            const { id, meta } = payload;
-            return state.updateIn(['metaLinkData', id], data =>
-                data.merge(meta)
-            );
         }
 
         case SET: {
@@ -385,22 +305,6 @@ export default function reducer(state = defaultState, action = {}) {
         case UPDATE: {
             const { key, notSet = Map(), updater } = payload;
             return state.updateIn(key, notSet, updater);
-        }
-
-        case SET_META_DATA: {
-            const { id, meta } = payload;
-            return state.setIn(['metaLinkData', id], fromJS(meta));
-        }
-
-        case CLEAR_META: {
-            return state.deleteIn(['metaLinkData', payload.id]);
-        }
-
-        case CLEAR_META_ELEMENT: {
-            const { formId, element } = payload;
-            return state.updateIn(['metaLinkData', formId], data =>
-                data.remove(element)
-            );
         }
 
         case FETCH_JSON: {
@@ -440,6 +344,11 @@ export const receiveState = payload => ({
     payload,
 });
 
+export const receiveNotifications = payload => ({
+    type: RECEIVE_NOTIFICATIONS,
+    payload,
+});
+
 export const receiveAccount = payload => ({
     type: RECEIVE_ACCOUNT,
     payload,
@@ -450,13 +359,18 @@ export const receiveAccounts = payload => ({
     payload,
 });
 
-export const syncPinnedPosts = payload => ({
-    type: SYNC_PINNED_POSTS,
+export const receiveCommunities = payload => ({
+    type: RECEIVE_COMMUNITIES,
     payload,
 });
 
-export const receiveComment = payload => ({
-    type: RECEIVE_COMMENT,
+export const receiveCommunity = payload => ({
+    type: RECEIVE_COMMUNITY,
+    payload,
+});
+
+export const syncSpecialPosts = payload => ({
+    type: SYNC_SPECIAL_POSTS,
     payload,
 });
 
@@ -490,21 +404,6 @@ export const receiveData = payload => ({
     payload,
 });
 
-export const receiveRecentPosts = payload => ({
-    type: RECEIVE_RECENT_POSTS,
-    payload,
-});
-
-export const requestMeta = payload => ({
-    type: REQUEST_META,
-    payload,
-});
-
-export const receiveMeta = payload => ({
-    type: RECEIVE_META,
-    payload,
-});
-
 // TODO: Find a better name for this
 export const set = payload => ({
     type: SET,
@@ -518,21 +417,6 @@ export const remove = payload => ({
 
 export const update = payload => ({
     type: UPDATE,
-    payload,
-});
-
-export const setMetaData = payload => ({
-    type: SET_META_DATA,
-    payload,
-});
-
-export const clearMeta = payload => ({
-    type: CLEAR_META,
-    payload,
-});
-
-export const clearMetaElement = payload => ({
-    type: CLEAR_META_ELEMENT,
     payload,
 });
 
@@ -553,10 +437,5 @@ export const showDialog = payload => ({
 
 export const hideDialog = payload => ({
     type: HIDE_DIALOG,
-    payload,
-});
-
-export const getState = payload => ({
-    type: GET_STATE,
     payload,
 });

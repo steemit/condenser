@@ -12,6 +12,8 @@ import normalizeProfile from 'app/utils/NormalizeProfile';
 import AffiliationMap from 'app/utils/AffiliationMap';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import SanitizedLink from 'app/components/elements/SanitizedLink';
+import { numberWithCommas } from 'app/utils/StateFunctions';
+import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 
 class UserProfileHeader extends React.Component {
     render() {
@@ -101,9 +103,18 @@ class UserProfileHeader extends React.Component {
                                     })}
                                 </Link>
                             </span>
-                            <span>{profile.getIn(['stats', 'sp'], 0)} SP</span>
+                            <span>
+                                {numberWithCommas(
+                                    profile.getIn(['stats', 'sp'], 0)
+                                )}{' '}
+                                SP
+                            </span>
                             {profile.getIn(['stats', 'rank'], 0) > 0 && (
-                                <span>#{profile.getIn(['stats', 'rank'])}</span>
+                                <span>
+                                    #{numberWithCommas(
+                                        profile.getIn(['stats', 'rank'])
+                                    )}
+                                </span>
                             )}
                         </div>
 
@@ -124,6 +135,8 @@ class UserProfileHeader extends React.Component {
                             )}
                             <Icon name="calendar" />{' '}
                             <DateJoinWrapper date={profile.get('created')} />
+                            <Icon name="calendar" /> Active{' '}
+                            <TimeAgoWrapper date={profile.get('active')} />
                         </p>
                     </div>
                     <div className="UserProfile__buttons_mobile show-for-small-only">

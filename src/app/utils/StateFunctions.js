@@ -7,7 +7,8 @@ import { VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
 import { fromJS } from 'immutable';
 import { formatter } from '@steemit/steem-js';
 
-export const numberWithCommas = x => x.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export const numberWithCommas = x =>
+    String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 export function ifHive(category) {
     return category && category.substring(0, 5) == 'hive-' ? category : null;

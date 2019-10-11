@@ -374,7 +374,6 @@ class ReplyEditor extends React.Component {
             this.setState({ postError: estr, loading: false });
         };
         const successCallbackWrapper = (...args) => {
-            replyForm.resetForm();
             this.setState({ loading: false });
             this.props.setPayoutType(formId, defaultPayoutType);
             this.props.setBeneficiaries(formId, []);

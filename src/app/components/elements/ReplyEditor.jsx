@@ -22,6 +22,31 @@ import tt from 'counterpart';
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
 const RTE_DEFAULT = false;
+const MAX_TAGS = 8;
+
+function allTags(userInput, originalCategory, hashtags) {
+    // take space-delimited user input
+    let tags = OrderedSet(
+        userInput
+            ? userInput
+                  .trim()
+                  .replace(/#/g, '')
+                  .split(/ +/)
+            : []
+    );
+
+    // remove original category, if present
+    if (originalCategory && /^[-a-z\d]+$/.test(originalCategory))
+        tags = tags.delete(originalCategory);
+
+    // append hashtags from post until limit is reached
+    const tagged = [...hashtags];
+    while (tags.size < MAX_TAGS && tagged.length > 0) {
+        tags = tags.add(tagged.shift());
+    }
+
+    return tags;
+}
 
 function allTags(userInput, originalCategory, hashtags) {
     // take space-delimited user input
@@ -869,7 +894,7 @@ export default formId =>
             let tags = category;
             if (/submit_/.test(type)) title = body = '';
             if (isStory && jsonMetadata && jsonMetadata.tags) {
-                tags = Set([category, ...jsonMetadata.tags]).join(' ');
+                tags = OrderedSet([category, ...jsonMetadata.tags]).join(' ');
             }
 
             const defaultPayoutType = state.app.getIn(
@@ -1035,7 +1060,7 @@ export default formId =>
                     return;
                 }
 
-                if (meta.tags && meta.tags.length > 5) {
+                if (meta.tags && meta.tags.length > MAX_TAGS) {
                     const includingCategory = isEdit
                         ? tt('reply_editor.including_the_category', {
                               rootCategory: originalPost.category,

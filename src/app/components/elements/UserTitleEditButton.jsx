@@ -56,7 +56,7 @@ class UserTitleEditButton extends React.Component {
         return (
             <span>
                 <a onClick={this.onToggleDialog}>
-                    <Icon name="pencil2" />
+                    <Icon name="pencil2" size="0_8x" />
                 </a>
                 {showDialog && (
                     <Reveal onHide={() => null} show>

@@ -6,6 +6,8 @@ import { cleanReduxInput } from 'app/utils/ReduxForms';
 import tt from 'counterpart';
 import { List } from 'immutable';
 
+const MAX_TAGS = 8;
+
 class CategorySelector extends React.Component {
     static propTypes = {
         // HTML props
@@ -52,9 +54,9 @@ export function validateCategory(category, required = true) {
     const cats = category.trim().split(' ');
     return (
         // !category || category.trim() === '' ? 'Required' :
-        cats.length > 5
+        cats.length > MAX_TAGS
             ? tt('category_selector_jsx.use_limited_amount_of_categories', {
-                  amount: 5,
+                  amount: MAX_TAGS,
               })
             : cats.find(c => c.length > 24)
               ? tt('category_selector_jsx.maximum_tag_length_is_24_characters')

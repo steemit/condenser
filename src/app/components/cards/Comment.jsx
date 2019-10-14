@@ -22,7 +22,10 @@ import { ifHive } from 'app/utils/StateFunctions';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
-    return cont.getIn([c, 'stats', 'hide']) && !hasPositivePayout(cont, c);
+    // TODO: re-evaluate
+    return (
+        false && cont.getIn([c, 'stats', 'hide']) && !hasPositivePayout(cont, c)
+    );
 }
 
 function hasPositivePayout(postmap, post_url) {

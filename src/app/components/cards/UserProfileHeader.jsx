@@ -60,7 +60,7 @@ class UserProfileHeader extends React.Component {
                             )}
                         >
                             <span className="UserProfile__rep">
-                                ({profile.get('reputation')})
+                                ({Math.floor(profile.get('reputation'))})
                             </span>
                         </Tooltip>
                         {AffiliationMap[accountname] ? (

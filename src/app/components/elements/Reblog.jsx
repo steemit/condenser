@@ -71,8 +71,7 @@ export default class Reblog extends React.Component {
     }
 
     render() {
-        if (this.props.author == this.props.account || this.props.parent_author)
-            return null;
+        if (this.props.parent_author) return null;
 
         const state = this.state.active ? 'active' : 'inactive';
         const loading = this.state.loading ? ' loading' : '';

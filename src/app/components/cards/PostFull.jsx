@@ -27,50 +27,52 @@ import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
+import ContentEditedWrapper from '../elements/ContentEditedWrapper';
+import { ifHive } from 'app/utils/StateFunctions';
 
-function TimeAuthorCategory({ content, authorRep, showTags }) {
+function ContentAuthor({ content, community, viewer_role }) {
+    return (
+        <Author
+            author={content.author}
+            authorRep={content.author_reputation}
+            showAffiliation
+            role={content.author_role}
+            title={content.author_title}
+            community={community}
+            permlink={content.permlink}
+            viewer_role={viewer_role}
+        />
+    );
+}
+
+function TimeAuthorCategory({ content, community, viewer_role }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
-            <TimeAgoWrapper date={content.created} />
-            {} {tt('g.by')}{' '}
-            <Author
-                author={content.author}
-                authorRep={authorRep}
-                showAffiliation
-                role={content.author_role}
-                title={content.author_title}
+            <TimeAgoWrapper date={content.created} /> {tt('g.by')}{' '}
+            <ContentAuthor
+                content={content}
+                community={community}
+                viewer_role={viewer_role}
             />
-            {showTags && (
-                <span>
-                    {' '}
-                    {tt('g.in')} <TagList post={content} single />
-                </span>
-            )}
         </span>
     );
 }
 
-function TimeAuthorCategoryLarge({ content, authorRep }) {
+function TimeAuthorCategoryLarge({ content, community, viewer_role }) {
     return (
         <span className="PostFull__time_author_category_large vcard">
             <Userpic account={content.author} />
             <div className="right-side">
-                <Author
-                    author={content.author}
-                    authorRep={authorRep}
-                    showAffiliation
-                    role={content.author_role}
-                    title={content.author_title}
+                <ContentAuthor
+                    content={content}
+                    community={community}
+                    viewer_role={viewer_role}
                 />
-                <span>
-                    {' '}
-                    {tt('g.in')} <TagList post={content} single />
-                </span>{' '}
-                •&nbsp; <TimeAgoWrapper date={content.created} />
-                &nbsp;{' '}
+                {tt('g.in')} <TagList post={content} single />
+                {' • '}
+                <TimeAgoWrapper date={content.created} />{' '}
                 <ContentEditedWrapper
                     createDate={content.created}
                     updateDate={content.last_update}
@@ -276,7 +278,7 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, community, post, role },
+            props: { username, community, post, viewer_role },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
@@ -465,13 +467,13 @@ class PostFull extends React.Component {
 
         const showPinToggle = CommunityAuthorization.CanPinPosts(
             username,
-            role
+            viewer_role
         );
         const { isPinned } = this.state;
 
         const showMuteToggle = CommunityAuthorization.CanMutePosts(
             username,
-            role
+            viewer_role
         );
         const { isMuted } = this.state;
 
@@ -515,7 +517,8 @@ class PostFull extends React.Component {
                             {post_header}
                             <TimeAuthorCategoryLarge
                                 content={content}
-                                authorRep={content.author_reputation}
+                                community={community}
+                                viewer_role={viewer_role}
                             />
                         </div>
                         <div className="PostFull__body entry-content">
@@ -537,7 +540,8 @@ class PostFull extends React.Component {
                     <div className="columns medium-12 large-5">
                         <TimeAuthorCategory
                             content={content}
-                            authorRep={content.author_reputation}
+                            community={community}
+                            viewer_role={viewer_role}
                         />
                     </div>
                     <div className="columns medium-12 large-2 ">
@@ -573,6 +577,7 @@ class PostFull extends React.Component {
                                 )}{' '}
                             {showMuteToggle && (
                                 <MuteButtonContainer
+                                    account={author}
                                     community={community}
                                     isMuted={isMuted}
                                     permlink={permlink}
@@ -637,7 +642,7 @@ export default connect(
             ...ownProps,
             community,
             username: state.user.getIn(['current', 'username']),
-            role: state.global.getIn(
+            viewer_role: state.global.getIn(
                 ['community', community, 'context', 'role'],
                 'guest'
             ),

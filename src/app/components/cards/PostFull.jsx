@@ -577,6 +577,7 @@ class PostFull extends React.Component {
                                 )}{' '}
                             {showMuteToggle && (
                                 <MuteButtonContainer
+                                    account={author}
                                     community={community}
                                     isMuted={isMuted}
                                     permlink={permlink}

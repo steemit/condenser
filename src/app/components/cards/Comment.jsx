@@ -311,7 +311,7 @@ class CommentImpl extends React.Component {
 
         const _isPaidout = comment.cashout_time === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
         const showEditOption = username === author;
-        const showMuteToggle = true;
+        const showMuteToggle = ['mod', 'admin'].includes(viewer_role);
         const showDeleteOption =
             username === author && allowDelete(comment) && !_isPaidout;
         const showReplyOption = username !== undefined && comment.depth < 255;
@@ -338,6 +338,7 @@ class CommentImpl extends React.Component {
                         )}{' '}
                         {showMuteToggle && (
                             <MuteButtonContainer
+                                account={comment.author}
                                 community={community}
                                 isMuted={isMuted}
                                 permlink={comment.permlink}

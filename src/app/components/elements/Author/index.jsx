@@ -12,6 +12,7 @@ import tt from 'counterpart';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
 import UserTitleEditButton from 'app/components/elements/UserTitleEditButton';
+import { Role } from 'app/utils/Community';
 
 const { string, bool, number } = PropTypes;
 
@@ -112,8 +113,7 @@ class Author extends React.Component {
             username,
         } = this.props;
 
-        const isMod =
-            username && community && ['mod', 'admin'].includes(viewer_role);
+        const isMod = username && community && Role.atLeast(viewer_role, 'mod');
 
         const userTitle = (
             <span>

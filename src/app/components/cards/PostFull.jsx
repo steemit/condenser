@@ -29,7 +29,7 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { allowDelete } from 'app/utils/StateFunctions';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
-import { ifHive } from 'app/utils/StateFunctions';
+import { ifHive, Role } from 'app/utils/Community';
 
 function ContentAuthor({ content, community, viewer_role }) {
     return (
@@ -453,16 +453,10 @@ class PostFull extends React.Component {
         const showPromote =
             false && username && !isPaidout && post.get('depth') == 0;
 
-        const showPinToggle = CommunityAuthorization.CanPinPosts(
-            username,
-            viewer_role
-        );
+        const showPinToggle = Role.atLeast(viewer_role, 'mod');
         const { isPinned } = this.state;
 
-        const showMuteToggle = CommunityAuthorization.CanMutePosts(
-            username,
-            viewer_role
-        );
+        const showMuteToggle = Role.atLeast(viewer_role, 'mod');
         const { isMuted } = this.state;
 
         const showReplyOption =
@@ -705,15 +699,3 @@ const saveOnShow = (formId, type) => {
         }
     }
 };
-
-class CommunityAuthorization {
-    static CanPinPosts = (username, role) => {
-        const allowableRoles = ['owner', 'admin', 'mod'];
-        return allowableRoles.includes(role);
-    };
-
-    static CanMutePosts = (username, role) => {
-        const allowableRoles = ['owner', 'admin', 'mod'];
-        return allowableRoles.includes(role);
-    };
-}

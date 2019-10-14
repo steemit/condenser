@@ -34,6 +34,7 @@ class Author extends React.Component {
         role: string,
         title: string,
         community: string,
+        viewer_role: string,
     };
     static defaultProps = {
         follow: true,
@@ -42,6 +43,7 @@ class Author extends React.Component {
         role: '',
         title: '',
         community: '',
+        viewer_role: 'guest',
     };
 
     constructor(...args) {
@@ -106,16 +108,20 @@ class Author extends React.Component {
             title,
             community,
             permlink,
-        } = this.props; // html
-        const { username } = this.props; // redux
+            viewer_role,
+            username,
+        } = this.props;
+
+        const isMod =
+            username && community && ['mod', 'admin'].includes(viewer_role);
 
         const userTitle = (
             <span>
                 {role && role != 'guest' && <span>[{role}]</span>}
-                {title != '' && (
+                {(title != '' || isMod) && (
                     <span className="affiliation">
                         {title}
-                        {community != '' && (
+                        {isMod && (
                             <UserTitleEditButton
                                 author={author}
                                 username={username}

@@ -36,8 +36,8 @@ class UserTitle extends Component {
                     <h4>{tt('g.community_user_title_edit_header')}</h4>
                     <p>
                         {tt('g.community_user_title_edit_description', {
-                            community: 'sdsd',
-                            username: 'sdssd',
+                            community: community,
+                            username: username,
                         })}
                     </p>
                 </div>

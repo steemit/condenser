@@ -467,7 +467,7 @@ class PostFull extends React.Component {
 
         const showReplyOption =
             username !== undefined && post.get('depth') < 255;
-        const showEditOption = username === author;
+        const showEditOption = username === author && !showEdit;
         const showDeleteOption =
             username === author && allowDelete(post) && !isPaidout;
 
@@ -537,9 +537,11 @@ class PostFull extends React.Component {
                             <Reblog author={author} permlink={permlink} />
                         )}
                         <span className="PostFull__reply">
+                            {/* all */}
                             {showReplyOption && (
                                 <a onClick={onShowReply}>{tt('g.reply')}</a>
                             )}{' '}
+                            {/* mods */}
                             {showPinToggle && (
                                 <a onClick={() => this.onTogglePin(isPinned)}>
                                     {isPinned ? tt('g.unpin') : tt('g.pin')}
@@ -553,16 +555,13 @@ class PostFull extends React.Component {
                                     permlink={permlink}
                                 />
                             )}{' '}
-                            {showEditOption &&
-                                !showEdit && (
-                                    <a onClick={onShowEdit}>{tt('g.edit')}</a>
-                                )}{' '}
-                            {showDeleteOption &&
-                                !showReply && (
-                                    <a onClick={onDeletePost}>
-                                        {tt('g.delete')}
-                                    </a>
-                                )}
+                            {/* owner */}
+                            {showEditOption && (
+                                <a onClick={onShowEdit}>{tt('g.edit')}</a>
+                            )}{' '}
+                            {showDeleteOption && (
+                                <a onClick={onDeletePost}>{tt('g.delete')}</a>
+                            )}
                         </span>
                         <span className="PostFull__responses">
                             <Link

@@ -30,51 +30,39 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { allowDelete } from 'app/utils/StateFunctions';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 
-function TimeAuthorCategory({ content, authorRep, showTags, community }) {
+function ContentAuthor({ content, community }) {
+    return (
+        <Author
+            author={content.author}
+            authorRep={content.author_reputation}
+            showAffiliation
+            role={content.author_role}
+            title={content.author_title}
+            community={community}
+            permlink={content.permlink}
+        />
+    );
+}
+
+function TimeAuthorCategory({ content, community }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
-            <TimeAgoWrapper date={content.created} />
-            {} {tt('g.by')}{' '}
-            <Author
-                author={content.author}
-                authorRep={authorRep}
-                showAffiliation
-                role={content.author_role}
-                title={content.author_title}
-                community={community}
-                permlink={content.permlink}
-            />
-            {showTags && (
-                <span>
-                    {' '}
-                    {tt('g.in')} <TagList post={content} single />
-                </span>
-            )}
+            <TimeAgoWrapper date={content.created} /> {tt('g.by')}{' '}
+            <ContentAuthor content={content} community={community} />
         </span>
     );
 }
 
-function TimeAuthorCategoryLarge({ content, authorRep, community }) {
+function TimeAuthorCategoryLarge({ content, community }) {
     return (
         <span className="PostFull__time_author_category_large vcard">
             <Userpic account={content.author} />
             <div className="right-side">
-                <Author
-                    author={content.author}
-                    authorRep={authorRep}
-                    showAffiliation
-                    role={content.author_role}
-                    title={content.author_title}
-                    community={community}
-                    permlink={content.permlink}
-                />
-                <span>
-                    {' '}
-                    {tt('g.in')} <TagList post={content} single />
-                </span>{' '}
-                •&nbsp; <TimeAgoWrapper date={content.created} />
-                &nbsp;{' '}
+                <ContentAuthor content={content} community={community} />{' '}
+                {tt('g.in')} <TagList post={content} single />
+                {' • '}
+                <TimeAgoWrapper date={content.created} />{' '}
                 <ContentEditedWrapper
                     createDate={content.created}
                     updateDate={content.last_update}
@@ -519,7 +507,6 @@ class PostFull extends React.Component {
                             {post_header}
                             <TimeAuthorCategoryLarge
                                 content={content}
-                                authorRep={content.author_reputation}
                                 community={community}
                             />
                         </div>
@@ -542,7 +529,6 @@ class PostFull extends React.Component {
                     <div className="columns medium-12 large-5">
                         <TimeAuthorCategory
                             content={content}
-                            authorRep={content.author_reputation}
                             community={community}
                         />
                     </div>

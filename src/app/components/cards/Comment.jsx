@@ -18,6 +18,7 @@ import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
+import { ifHive } from 'app/utils/StateFunctions';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -116,6 +117,8 @@ class CommentImpl extends React.Component {
         showNegativeComments: PropTypes.bool,
         onHide: PropTypes.func,
         noImage: PropTypes.bool,
+        community: PropTypes.string,
+        viewer_role: PropTypes.string,
 
         // component props (for recursion)
         depth: PropTypes.number,
@@ -240,7 +243,7 @@ class CommentImpl extends React.Component {
         this.setState({ PostReplyEditor, PostEditEditor });
     }
     render() {
-        const { cont } = this.props;
+        const { cont, community, viewer_role } = this.props;
         const dis = cont.get(this.props.content);
 
         if (!dis) {
@@ -335,7 +338,7 @@ class CommentImpl extends React.Component {
                         )}{' '}
                         {showMuteToggle && (
                             <MuteButtonContainer
-                                community={comment.category}
+                                community={community}
                                 isMuted={isMuted}
                                 permlink={comment.permlink}
                             />
@@ -455,6 +458,8 @@ class CommentImpl extends React.Component {
                                 role={comment.author_role}
                                 title={comment.author_title}
                                 permlink={comment.permlink}
+                                community={community}
+                                viewer_role={viewer_role}
                             />
                         </span>
                         &nbsp; &middot; &nbsp;
@@ -523,11 +528,18 @@ const Comment = connect(
               ])
             : null;
 
+        const community = ifHive(ownProps.cont.getIn([content, 'category']));
+
         return {
             ...ownProps,
             anchor_link: '#@' + content, // Using a hash here is not standard but intentional; see issue #124 for details
             username,
             ignore_list,
+            community,
+            viewer_role: state.global.getIn(
+                ['community', community, 'context', 'role'],
+                'guest'
+            ),
         };
     },
 

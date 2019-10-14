@@ -29,8 +29,9 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { allowDelete } from 'app/utils/StateFunctions';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
+import { ifHive } from 'app/utils/StateFunctions';
 
-function ContentAuthor({ content, community }) {
+function ContentAuthor({ content, community, viewer_role }) {
     return (
         <Author
             author={content.author}
@@ -40,26 +41,35 @@ function ContentAuthor({ content, community }) {
             title={content.author_title}
             community={community}
             permlink={content.permlink}
+            viewer_role={viewer_role}
         />
     );
 }
 
-function TimeAuthorCategory({ content, community }) {
+function TimeAuthorCategory({ content, community, viewer_role }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
             <TimeAgoWrapper date={content.created} /> {tt('g.by')}{' '}
-            <ContentAuthor content={content} community={community} />
+            <ContentAuthor
+                content={content}
+                community={community}
+                viewer_role={viewer_role}
+            />
         </span>
     );
 }
 
-function TimeAuthorCategoryLarge({ content, community }) {
+function TimeAuthorCategoryLarge({ content, community, viewer_role }) {
     return (
         <span className="PostFull__time_author_category_large vcard">
             <Userpic account={content.author} />
             <div className="right-side">
-                <ContentAuthor content={content} community={community} />{' '}
+                <ContentAuthor
+                    content={content}
+                    community={community}
+                    viewer_role={viewer_role}
+                />
                 {tt('g.in')} <TagList post={content} single />
                 {' • '}
                 <TimeAgoWrapper date={content.created} />{' '}
@@ -268,7 +278,7 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, community, post, role },
+            props: { username, community, post, viewer_role },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
@@ -457,13 +467,13 @@ class PostFull extends React.Component {
 
         const showPinToggle = CommunityAuthorization.CanPinPosts(
             username,
-            role
+            viewer_role
         );
         const { isPinned } = this.state;
 
         const showMuteToggle = CommunityAuthorization.CanMutePosts(
             username,
-            role
+            viewer_role
         );
         const { isMuted } = this.state;
 
@@ -508,6 +518,7 @@ class PostFull extends React.Component {
                             <TimeAuthorCategoryLarge
                                 content={content}
                                 community={community}
+                                viewer_role={viewer_role}
                             />
                         </div>
                         <div className="PostFull__body entry-content">
@@ -530,6 +541,7 @@ class PostFull extends React.Component {
                         <TimeAuthorCategory
                             content={content}
                             community={community}
+                            viewer_role={viewer_role}
                         />
                     </div>
                     <div className="columns medium-12 large-2 ">
@@ -629,7 +641,7 @@ export default connect(
             ...ownProps,
             community,
             username: state.user.getIn(['current', 'username']),
-            role: state.global.getIn(
+            viewer_role: state.global.getIn(
                 ['community', community, 'context', 'role'],
                 'guest'
             ),

@@ -10,7 +10,7 @@ import tt from 'counterpart';
 import Userpic from 'app/components/elements/Userpic';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import AffiliationMap from 'app/utils/AffiliationMap';
-import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import SanitizedLink from 'app/components/elements/SanitizedLink';
 
 class UserProfileHeader extends React.Component {

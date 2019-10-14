@@ -22,6 +22,7 @@ import GptAd from 'app/components/elements/GptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
+import { ifHive, Role } from 'app/utils/Community';
 
 class PostsIndex extends React.Component {
     static propTypes = {
@@ -83,6 +84,7 @@ class PostsIndex extends React.Component {
             account_name, // TODO: for feed
             order,
             posts,
+            viewer_role,
         } = this.props;
 
         let allowAdsOnContent = true;
@@ -290,18 +292,22 @@ class PostsIndex extends React.Component {
                                 {community.get('about')}
                             </div>
                             <div style={{ float: 'none', marginTop: '-5px' }}>
-                                <SubscribeButtonContainer
-                                    community={community.get('name')}
-                                />
+                                {this.props.username && (
+                                    <SubscribeButtonContainer
+                                        community={community.get('name')}
+                                    />
+                                )}
                                 <Link
                                     className="button slim hollow"
                                     to={`/submit.html?category=${category}`}
                                 >
                                     Create Post
                                 </Link>
-                                <SettingsEditButtonContainer
-                                    community={community.get('name')}
-                                />
+                                {Role.atLeast(viewer_role, 'mod') && (
+                                    <SettingsEditButtonContainer
+                                        community={community.get('name')}
+                                    />
+                                )}
                             </div>
                             {community.get('subscribers')} subscribers
                             <br />
@@ -403,6 +409,8 @@ module.exports = {
                 ? route.category
                 : route.order || constants.DEFAULT_SORT_ORDER;
 
+            const community = ifHive(category);
+
             return {
                 posts: state.global.getIn(
                     ['discussion_idx', category || '', order],
@@ -410,10 +418,7 @@ module.exports = {
                 ),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                community: state.global.getIn(
-                    ['community', ownProps.params.category],
-                    null
-                ),
+                community: state.global.getIn(['community', community], null),
                 account_name,
                 category,
                 order,
@@ -435,6 +440,10 @@ module.exports = {
                 isBrowser: process.env.BROWSER,
                 gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
                 gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
+                viewer_role: state.global.getIn(
+                    ['community', community, 'context', 'role'],
+                    'guest'
+                ),
             };
         },
         dispatch => {

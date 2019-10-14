@@ -39,14 +39,13 @@ const SidePanel = ({
                     </a>
                 </li>
             );
-        } else {
-            const cn = ix === arr.length - 1 ? 'last' : null;
-            return (
-                <li key={i.value} className={cn}>
-                    <Link to={i.link}>{i.label}</Link>
-                </li>
-            );
         }
+        const cn = ix === arr.length - 1 ? 'last' : null;
+        return (
+            <li key={i.value} className={cn}>
+                <Link to={i.link}>{i.label}</Link>
+            </li>
+        );
     };
 
     const sidePanelLinks = {
@@ -74,6 +73,12 @@ const SidePanel = ({
             {
                 value: 'advertise',
                 label: tt('navigation.advertise'),
+                link: 'https://selfserve.steemit.com',
+                isExternal: true,
+            },
+            {
+                value: 'media_kit',
+                label: tt('navigation.media_kit'),
                 link: 'https://staticfiles.steemit.com/SteemitMediaKit.pdf',
                 isExternal: true,
             },
@@ -91,6 +96,11 @@ const SidePanel = ({
                 value: 'vote_for_witnesses',
                 label: tt('navigation.vote_for_witnesses'),
                 link: `${walletUrl}/~witnesses`,
+            },
+            {
+                value: 'proposals',
+                label: tt('navigation.steem_proposals'),
+                link: `${walletUrl}/proposals`,
             },
         ],
         exchanges: [
@@ -196,10 +206,10 @@ const SidePanel = ({
             <div className={(visible ? 'visible ' : '') + alignment}>
                 <CloseButton onClick={hideSidePanel} />
                 <ul className={`vertical menu ${loggedIn}`}>
-                    {sidePanelLinks['extras'].map(makeLink)}
+                    {sidePanelLinks.extras.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['internal'].map(makeLink)}
+                    {sidePanelLinks.internal.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
                     <li>
@@ -207,16 +217,16 @@ const SidePanel = ({
                             {tt('navigation.third_party_exchanges')}
                         </a>
                     </li>
-                    {sidePanelLinks['exchanges'].map(makeLink)}
+                    {sidePanelLinks.exchanges.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['external'].map(makeLink)}
+                    {sidePanelLinks.external.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['organizational'].map(makeLink)}
+                    {sidePanelLinks.organizational.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['legal'].map(makeLink)}
+                    {sidePanelLinks.legal.map(makeLink)}
                 </ul>
             </div>
         </div>

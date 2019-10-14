@@ -80,6 +80,8 @@ const domains = [
     'us.aba.ae',
     'whaleboostup.ga',
     'whaleboostup.ml',
+    'steemboostup.icu',
+    'proservices.website',
 ];
 
 /**

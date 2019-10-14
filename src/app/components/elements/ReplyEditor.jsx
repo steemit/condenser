@@ -161,9 +161,11 @@ class ReplyEditor extends React.Component {
 
         // Overwrite category (even if draft loaded) if authoritative category was provided
         if (this.props.category) {
-            this.state.category.props.onChange(
-                this.props.initialValues.category
-            );
+            if (this.state.category) {
+                this.state.category.props.onChange(
+                    this.props.initialValues.category
+                );
+            }
             this.checkCategoryCommunity(this.props.category);
         }
     }
@@ -227,7 +229,11 @@ class ReplyEditor extends React.Component {
                 }, 500);
             }
 
-            if (ts.category.value !== ns.category.value) {
+            if (
+                ns.category &&
+                ts.category &&
+                ts.category.value !== ns.category.value
+            ) {
                 this.checkCategoryCommunity(ns.category.value);
             }
         }

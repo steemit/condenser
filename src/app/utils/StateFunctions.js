@@ -61,7 +61,7 @@ export function contentStats(content) {
     if (!content) return {};
     if (!(content instanceof Map)) content = fromJS(content);
 
-    let stats = content.get('stats', Map());
+    let stats = fromJS(content.get('stats', Map()));
 
     let net_rshares_adj = Long.ZERO;
     let total_votes = 0;
@@ -90,12 +90,14 @@ export function contentStats(content) {
     // TODO: remove 'gray' and 'hide' entirely when served by API
     if (!stats.has('gray')) {
         console.log('append internal stats values', stats, content.toJS());
-        stats['gray'] =
-            !hasPendingPayout && (authorRep < 1 || meetsGrayThreshold);
-        stats['hide'] = !hasPendingPayout && authorRep < 0; // rephide
+        stats = stats.set(
+            'gray',
+            !hasPendingPayout && (authorRep < 1 || meetsGrayThreshold)
+        );
+        stats = stats.set('hide', !hasPendingPayout && authorRep < 0); // rephide
     }
 
-    stats['total_votes'] = total_votes;
+    stats = stats.set('total_votes', total_votes);
 
     return stats;
 }

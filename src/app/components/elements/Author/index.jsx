@@ -109,6 +109,30 @@ class Author extends React.Component {
         } = this.props; // html
         const { username } = this.props; // redux
 
+        const userTitle = (
+            <span>
+                {role && role != 'guest' && <span>[{role}]</span>}
+                {title != '' && (
+                    <span className="affiliation">
+                        {title}
+                        {community != '' && (
+                            <UserTitleEditButtonContainer
+                                username={username}
+                                community={community}
+                                title={title}
+                                permlink={permlink}
+                            />
+                        )}
+                    </span>
+                )}
+                {showAffiliation && AffiliationMap[author] ? (
+                    <span className="affiliation">
+                        {tt('g.affiliation_' + AffiliationMap[author])}
+                    </span>
+                ) : null}
+            </span>
+        );
+
         if (!(follow || mute) || username === author) {
             return (
                 <span
@@ -121,25 +145,7 @@ class Author extends React.Component {
                         <Link to={'/@' + author}>{author}</Link>
                     </strong>{' '}
                     <Reputation value={authorRep} />
-                    {role && role != 'guest' && <span>[{role}]</span>}
-                    {title != '' && (
-                        <span className="affiliation">
-                            {title}
-                            {community != '' && (
-                                <UserTitleEditButtonContainer
-                                    username={username}
-                                    community={community}
-                                    title={title}
-                                    permlink={permlink}
-                                />
-                            )}
-                        </span>
-                    )}
-                    {showAffiliation && AffiliationMap[author] ? (
-                        <span className="affiliation">
-                            {tt('g.affiliation_' + AffiliationMap[author])}
-                        </span>
-                    ) : null}
+                    {userTitle}
                 </span>
             );
         }
@@ -160,21 +166,10 @@ class Author extends React.Component {
                             to={'/@' + author}
                         >
                             {author} <Reputation value={authorRep} />
-                            {role && role != 'guest' && <span>[{role}]</span>}
-                            {title != '' && (
-                                <span className="affiliation">{title}</span>
-                            )}
-                            {showAffiliation && AffiliationMap[author] ? (
-                                <span className="affiliation">
-                                    {tt(
-                                        'g.affiliation_' +
-                                            AffiliationMap[author]
-                                    )}
-                                </span>
-                            ) : null}
                             <Icon name="dropdown-arrow" />
                         </Link>
                     </strong>
+                    {userTitle}
                 </span>
                 <Overlay
                     show={this.state.show}

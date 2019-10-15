@@ -30,7 +30,7 @@ import Translator from 'app/Translator';
 import { routeRegex } from 'app/ResolveRoute';
 import { contentStats } from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
-import { getStateAsync } from 'app/utils/steemApi';
+import { callBridge, getStateAsync } from 'app/utils/steemApi';
 
 let get_state_perf,
     get_content_perf = false;
@@ -290,24 +290,26 @@ export async function serverRender(
         }
 
         // Are we loading an un-category-aliased post?
-        /*
-        TODO: use bridge.get_post_header. handle client-side for now.
         if (
             !url.match(routeRegex.PostsIndex) &&
             !url.match(routeRegex.UserProfile1) &&
             !url.match(routeRegex.UserProfile2) &&
             url.match(routeRegex.PostNoCategory)
         ) {
-            const params = url.substr(2, url.length - 1).split('/');
-            let content;
+            let header;
             if (process.env.OFFLINE_SSR_TEST) {
-                content = get_content_perf;
+                header = get_content_perf;
             } else {
-                content = await api.getContentAsync(params[0], params[1]);
+                const postref = url.substr(2, url.length - 1).split('/');
+                const params = { author: postref[0], permlink: postref[1] };
+                header = await callBridge('get_post_header', params);
             }
-            if (content.author && content.permlink) {
-                // valid short post url
-                onchain.content[url.substr(2, url.length - 1)] = content;
+            if (header.author && header.permlink && header.category) {
+                return {
+                    redirectUrl: `/${header.category}/@${header.author}/${
+                        header.permlink
+                    }`,
+                };
             } else {
                 // protect on invalid user pages (i.e /user/transferss)
                 return {
@@ -317,7 +319,6 @@ export async function serverRender(
                 };
             }
         }
-        */
 
         // Insert the special posts into the list of posts, so there is no
         // jumping of content.

@@ -18,7 +18,6 @@ import * as appActions from 'app/redux/AppReducer';
 import Userpic from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
-import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
 import GptAd from 'app/components/elements/GptAd';
 import { Map } from 'immutable';
@@ -400,11 +399,16 @@ const mapStateToProps = (state, ownProps) => {
     let display_name;
     const route = resolveRoute(ownProps.pathname);
     if (route.page === 'UserProfile') {
-        const profile = state.global.getIn([
-            'accounts',
-            route.params[0].slice(1),
-        ]);
-        display_name = profile ? normalizeProfile(profile.toJS()).name : null;
+        display_name = state.userProfiles.getIn(
+            [
+                'profiles',
+                route.params[0].slice(1),
+                'metadata',
+                'profile',
+                'name',
+            ],
+            null
+        );
     }
 
     const username = state.user.getIn(['current', 'username']);

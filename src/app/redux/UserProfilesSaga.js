@@ -9,17 +9,17 @@ export const userProfilesWatches = [
 ];
 
 export function* fetchUserProfile(action) {
-    const username = action.payload;
-    const account = yield call(callBridge, 'get_profile', {
-        account: username,
-    });
+    const { account, observer } = action.payload;
+    const ret = yield call(callBridge, 'get_profile', { account, observer });
+    if (!ret) throw new Error('Account not found');
 
     //TODO: use new profiles endpoint
-    //authorAccount.json_metadata = JSON.parse(authorAccount.json_metadata);
+    ret.metadata = JSON.parse(ret.json_metadata);
+    delete ret['json_metadata'];
 
-    if (!account) throw new Error('Account not found');
-
-    yield put(userProfileActions.addProfile({ username, account: account }));
+    yield put(
+        userProfileActions.addProfile({ username: account, account: ret })
+    );
 }
 
 // Action creators

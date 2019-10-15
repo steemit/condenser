@@ -47,13 +47,18 @@ const StoreWrapped = connect(
         const { routeParams } = props;
         const author = routeParams.username;
         const permlink = routeParams.slug;
+        const postref = author + '/' + permlink;
 
-        // check for category
-        const postref = routeParams.username + '/' + routeParams.slug;
-        const category = state.global.getIn(
-            ['content', postref, 'category'],
-            state.global.getIn(['headers', postref, 'category'])
-        );
+        // check for category (undefined: loading; null: not found)
+        let category = state.global.getIn(['content', postref, 'category']);
+        if (typeof category === 'undefined') {
+            if (state.global.hasIn(['headers', postref])) {
+                category = state.global.getIn(
+                    ['headers', postref, 'category'],
+                    null
+                );
+            }
+        }
 
         return {
             author,

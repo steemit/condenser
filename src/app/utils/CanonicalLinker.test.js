@@ -30,8 +30,8 @@ describe('makeCanonicalLink', () => {
         ],
         [
             'handles apps that do exist',
-            { ...post_data, json_metadata: { app: 'busy/1.1.1' } },
-            'https://busy.org/@test/test-post',
+            { ...post_data, json_metadata: { app: 'steempeak/1.1.1' } },
+            'https://steempeak.com/testing/@test/test-post',
         ],
         [
             'handles posts from steemit',
@@ -50,9 +50,7 @@ describe('makeCanonicalLink', () => {
         ],
     ];
     test_cases.forEach(v => {
-        // disable for now
-        // it(v[0], () => {
-        it.skip(v[0], () => {
+        it(v[0], () => {
             expect(makeCanonicalLink(v[1])).toBe(v[2]);
         });
     });

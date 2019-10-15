@@ -8,7 +8,6 @@ import {
 } from 'redux-saga/effects';
 import { api } from '@steemit/steem-js';
 import { loadFollows } from 'app/redux/FollowSaga';
-import { getContent } from 'app/redux/SagaShared';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import constants from './constants';
@@ -16,25 +15,28 @@ import { fromJS, Map, Set } from 'immutable';
 import { getStateAsync, callBridge } from 'app/utils/steemApi';
 
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
-const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
+const GET_POST_HEADER = 'fetchDataSaga/GET_POST_HEADER';
 const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 const LIST_COMMUNITIES = 'fetchDataSaga/LIST_COMMUNITIES';
 const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
-    takeEvery(GET_CONTENT, getContentCaller),
     takeLatest('@@router/LOCATION_CHANGE', fetchState),
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
+    takeEvery(GET_POST_HEADER, getPostHeader),
     takeEvery(GET_COMMUNITY, getCommunity),
     takeEvery(LIST_COMMUNITIES, listCommunities),
     takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
 ];
 
-export function* getContentCaller(action) {
-    yield getContent(action.payload);
+export function* getPostHeader(action) {
+    const header = yield call(callBridge, 'get_post_header', action.payload);
+    const { author, permlink } = action.payload;
+    const key = author + '/' + permlink;
+    yield put(globalActions.receivePostHeader({ [key]: header }));
 }
 
 let is_initial_state = true;
@@ -347,8 +349,8 @@ export const actions = {
         payload,
     }),
 
-    getContent: payload => ({
-        type: GET_CONTENT,
+    getPostHeader: payload => ({
+        type: GET_POST_HEADER,
         payload,
     }),
 

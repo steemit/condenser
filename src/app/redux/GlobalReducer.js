@@ -17,6 +17,7 @@ const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_NOTIFICATIONS = 'global/RECEIVE_NOTIFICATIONS';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
+const RECEIVE_POST_HEADER = 'global/RECEIVE_POST_HEADER';
 const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
 const RECEIVE_COMMUNITIES = 'global/RECEIVE_COMMUNITIES';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
@@ -124,6 +125,12 @@ export default function reducer(state = defaultState, action = {}) {
                 const transformed = transformAccount(curr);
                 return mergeAccounts(acc, transformed);
             }, state);
+        }
+
+        case RECEIVE_POST_HEADER: {
+            return state.update('headers', Map(), a =>
+                a.mergeDeep(fromJS(payload))
+            );
         }
 
         case RECEIVE_COMMUNITIES: {
@@ -356,6 +363,11 @@ export const receiveAccount = payload => ({
 
 export const receiveAccounts = payload => ({
     type: RECEIVE_ACCOUNTS,
+    payload,
+});
+
+export const receivePostHeader = payload => ({
+    type: RECEIVE_POST_HEADER,
     payload,
 });
 

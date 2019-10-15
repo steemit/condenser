@@ -75,9 +75,15 @@ export function* getContent({ author, permlink, resolve, reject }) {
         }
     }
 
-    console.log('raw content> ', JSON.stringify(content));
+    function dbg(content) {
+        const cop = Object.assign({}, content);
+        delete cop['active_votes'];
+        return JSON.stringify(cop);
+    }
+
+    console.log('raw content> ', dbg(content));
     content = yield call(callBridge, 'normalize_post', { post: content });
-    console.log('normalized> ', JSON.stringify(content));
+    console.log('normalized> ', dbg(content));
 
     yield put(globalActions.receiveContent({ content }));
     if (resolve && content) {

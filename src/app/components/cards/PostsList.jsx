@@ -27,14 +27,12 @@ class PostsList extends React.Component {
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
-        showSpam: PropTypes.bool,
         showResteem: PropTypes.bool,
         pathname: PropTypes.string,
         nsfwPref: PropTypes.string.isRequired,
     };
 
     static defaultProps = {
-        showSpam: false,
         loading: false,
     };
 
@@ -135,7 +133,6 @@ class PostsList extends React.Component {
             showFeatured,
             showPromoted,
             showResteem,
-            showSpam,
             loading,
             anyPosts,
             pathname,
@@ -160,7 +157,7 @@ class PostsList extends React.Component {
             const hideResteem =
                 !showResteem && account && cont.get('author') != account;
             const hide = cont.getIn(['stats', 'hide']);
-            if (!hideResteem && (!(ignore || hide) || showSpam))
+            if (!hideResteem && !(ignore || hide))
                 // rephide
                 postsInfo.push({ item, ignore });
         });

@@ -36,10 +36,6 @@ class PostsIndex extends React.Component {
         topics: PropTypes.object,
     };
 
-    static defaultProps = {
-        showSpam: false,
-    };
-
     constructor() {
         super();
         this.state = {};
@@ -70,9 +66,7 @@ class PostsIndex extends React.Component {
             observer: this.props.username,
         });
     }
-    onShowSpam = () => {
-        this.setState({ showSpam: !this.state.showSpam });
-    };
+
     render() {
         const {
             topics,
@@ -154,7 +148,6 @@ class PostsIndex extends React.Component {
             ? this.props.status.getIn([category || '', order])
             : null;
         const fetching = (status && status.fetching) || this.props.loading;
-        const { showSpam } = this.state;
 
         // If we're at one of the four sort order routes without a tag filter,
         // use the translated string for that sort order, f.ex "trending"
@@ -265,7 +258,6 @@ class PostsIndex extends React.Component {
                             loadMore={this.loadMore}
                             showFeatured
                             showPromoted
-                            showSpam={showSpam}
                             allowAdsOnContent={allowAdsOnContent}
                         />
                     )}
@@ -355,17 +347,6 @@ class PostsIndex extends React.Component {
                         username={this.props.username}
                         topics={topics}
                     />
-                    <small>
-                        <a
-                            className="c-sidebar__more-link"
-                            onClick={this.onShowSpam}
-                        >
-                            {showSpam
-                                ? tt('g.next_3_strings_together.show_less')
-                                : tt('g.next_3_strings_together.show_more')}
-                        </a>
-                        {' ' + tt('g.next_3_strings_together.value_posts')}
-                    </small>
                     {this.props.gptEnabled && allowAdsOnContent ? (
                         <div>
                             <div className="sidebar-ad">

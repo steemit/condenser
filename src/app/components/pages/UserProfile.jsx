@@ -259,7 +259,6 @@ export default class UserProfile extends React.Component {
                     loadMore={this.loadMore}
                     showPinned={false}
                     showResteem={showResteem} // 'blog' only
-                    showSpam
                 />
             );
 

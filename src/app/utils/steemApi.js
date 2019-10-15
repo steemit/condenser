@@ -46,11 +46,17 @@ export async function getStateAsync(url, observer, ssr = false) {
         });
     }
 
-    if (ssr && tag && tag[0] == '@') {
+    // for SSR, load profile on any profile page or discussion thread author
+    const account =
+        tag && tag[0] == '@'
+            ? tag.slice(1)
+            : page == 'thread' ? key[0].slice(1) : null;
+    if (ssr && account) {
         // TODO: move to global reducer?
-        const account = tag.slice(1);
         const profile = await callBridge('get_profile', { account });
         if (profile && profile['name']) {
+            profile.metadata = JSON.parse(profile.json_metadata);
+            delete profile['json_metadata'];
             state['profiles'][account] = profile;
         }
     }

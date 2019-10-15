@@ -17,7 +17,7 @@ import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
-import Userpic, { avatarSize } from 'app/components/elements/Userpic';
+import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import { hasNsfwTag } from 'app/utils/StateFunctions';
 
@@ -154,10 +154,7 @@ class PostSummary extends React.Component {
                     {!isNsfw ? (
                         <div className="user__col user__col--left">
                             <a className="user__link" href={'/@' + p.author}>
-                                <Userpic
-                                    account={p.author}
-                                    size={avatarSize.small}
-                                />
+                                <Userpic account={p.author} size={SIZE_SMALL} />
                             </a>
                         </div>
                     ) : null}

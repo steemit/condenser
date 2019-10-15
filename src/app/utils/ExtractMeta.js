@@ -1,6 +1,5 @@
 import extractContent from 'app/utils/ExtractContent';
 import { objAccessor } from 'app/utils/Accessors';
-import normalizeProfile from 'app/utils/NormalizeProfile';
 import { makeCanonicalLink } from 'app/utils/CanonicalLinker.js';
 
 const site_desc =
@@ -28,92 +27,107 @@ function addSiteMeta(metas) {
     });
 }
 
+function addPostMeta(metas, content, profile) {
+    const { profile_image } = profile;
+    const d = extractContent(objAccessor, content, false);
+    const url = 'https://steemit.com' + d.link;
+    const canonicalUrl = makeCanonicalLink(d);
+    const title = d.title + ' — Steemit';
+    const desc = d.desc + ' by ' + d.author;
+    const image = d.image_link || profile_image;
+    const { category, created } = d;
+
+    // Standard meta
+    metas.push({ title });
+    metas.push({ canonical: canonicalUrl });
+    metas.push({ name: 'description', content: desc });
+
+    // Open Graph data
+    metas.push({ name: 'og:title', content: title });
+    metas.push({ name: 'og:type', content: 'article' });
+    metas.push({ name: 'og:url', content: url });
+    metas.push({
+        name: 'og:image',
+        content: image || 'https://steemit.com/images/steemit.png',
+    });
+    metas.push({ name: 'og:description', content: desc });
+    metas.push({ name: 'og:site_name', content: 'Steemit' });
+    metas.push({ name: 'fb:app_id', content: $STM_Config.fb_app });
+    metas.push({ name: 'article:tag', content: category });
+    metas.push({
+        name: 'article:published_time',
+        content: created,
+    });
+
+    // Twitter card data
+    metas.push({
+        name: 'twitter:card',
+        content: image ? 'summary_large_image' : 'summary',
+    });
+    metas.push({ name: 'twitter:site', content: '@steemit' });
+    metas.push({ name: 'twitter:title', content: title });
+    metas.push({ name: 'twitter:description', content: desc });
+    metas.push({
+        name: 'twitter:image',
+        content: image || 'https://steemit.com/images/steemit-twshare-2.png',
+    });
+}
+
+function addAccountMeta(metas, accountname, profile) {
+    let { name, about, profile_image } = profile;
+
+    name = name || accountname;
+    about =
+        about || 'Join thousands on steemit who share, post and earn rewards.';
+    profile_image =
+        profile_image || 'https://steemit.com/images/steemit-twshare-2.png';
+
+    // Set profile tags
+    const title = `@${accountname}`;
+    const desc = `The latest posts from ${name}. Follow me at @${
+        accountname
+    }. ${about}`;
+
+    // Standard meta
+    metas.push({ name: 'description', content: desc });
+
+    // Twitter card data
+    metas.push({ name: 'twitter:card', content: 'summary' });
+    metas.push({ name: 'twitter:site', content: '@steemit' });
+    metas.push({ name: 'twitter:title', content: title });
+    metas.push({ name: 'twitter:description', content: desc });
+    metas.push({ name: 'twitter:image', content: profile_image });
+}
+
+function readProfile(chain_data, account) {
+    const profiles = chain_data.profiles;
+    if (!chain_data.profiles[account]) return {};
+    return chain_data.profiles[account]['metadata']['profile'];
+}
+
 export default function extractMeta(chain_data, rp) {
-    const metas = [];
+    let username;
+    let content;
     if (rp.username && rp.slug) {
         // post
-        const post = `${rp.username}/${rp.slug}`;
-        const content = chain_data.content[post];
-        const author = chain_data.accounts[rp.username];
-        const profile = normalizeProfile(author);
-        if (content && content.id !== '0.0.0') {
-            // API currently returns 'false' data with id 0.0.0 for posts that do not exist
-            const d = extractContent(objAccessor, content, false);
-            const url = 'https://steemit.com' + d.link;
-            const canonicalUrl = makeCanonicalLink(d);
-            const title = d.title + ' — Steemit';
-            const desc = d.desc + ' by ' + d.author;
-            const image = d.image_link || profile.profile_image;
-            const { category, created } = d;
-
-            // Standard meta
-            metas.push({ title });
-            metas.push({ canonical: canonicalUrl });
-            metas.push({ name: 'description', content: desc });
-
-            // Open Graph data
-            metas.push({ name: 'og:title', content: title });
-            metas.push({ name: 'og:type', content: 'article' });
-            metas.push({ name: 'og:url', content: url });
-            metas.push({
-                name: 'og:image',
-                content: image || 'https://steemit.com/images/steemit.png',
-            });
-            metas.push({ name: 'og:description', content: desc });
-            metas.push({ name: 'og:site_name', content: 'Steemit' });
-            metas.push({ name: 'fb:app_id', content: $STM_Config.fb_app });
-            metas.push({ name: 'article:tag', content: category });
-            metas.push({
-                name: 'article:published_time',
-                content: created,
-            });
-
-            // Twitter card data
-            metas.push({
-                name: 'twitter:card',
-                content: image ? 'summary_large_image' : 'summary',
-            });
-            metas.push({ name: 'twitter:site', content: '@steemit' });
-            metas.push({ name: 'twitter:title', content: title });
-            metas.push({ name: 'twitter:description', content: desc });
-            metas.push({
-                name: 'twitter:image',
-                content:
-                    image || 'https://steemit.com/images/steemit-twshare-2.png',
-            });
-        } else {
-            addSiteMeta(metas);
-        }
+        const obj = chain_data.content[`${rp.username}/${rp.slug}`];
+        content = obj && obj.id !== '0.0.0' ? obj : null;
+        username = content ? content.author : null;
     } else if (rp.accountname) {
         // user profile root
-        // TODO: read from profiles, add in src/shared/UniversalRender.jsx
-        const account = chain_data.accounts[rp.accountname] || {};
-        let { name, about, profile_image } = normalizeProfile(account);
-        if (name == null) name = rp.accountname;
-        if (about == null)
-            about =
-                'Join thousands on steemit who share, post and earn rewards.';
-        if (profile_image == null)
-            profile_image = 'https://steemit.com/images/steemit-twshare-2.png';
-        // Set profile tags
-        const title = `@${rp.accountname}`;
-        const desc = `The latest posts from ${name}. Follow me at @${
-            rp.accountname
-        }. ${about}`;
-        const image = profile_image;
+        username = rp.accountname;
+    }
 
-        // Standard meta
-        metas.push({ name: 'description', content: desc });
+    const profile = username ? readProfile(chain_data, username) : null;
 
-        // Twitter card data
-        metas.push({ name: 'twitter:card', content: 'summary' });
-        metas.push({ name: 'twitter:site', content: '@steemit' });
-        metas.push({ name: 'twitter:title', content: title });
-        metas.push({ name: 'twitter:description', content: desc });
-        metas.push({ name: 'twitter:image', content: image });
+    const metas = [];
+    if (content) {
+        addPostMeta(metas, content, profile);
+    } else if (username) {
+        addAccountMeta(metas, username, profile);
     } else {
-        // site
         addSiteMeta(metas);
     }
+
     return metas;
 }

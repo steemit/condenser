@@ -15,6 +15,7 @@ import tt from 'counterpart';
 import { List } from 'immutable';
 import Callout from 'app/components/elements/Callout';
 import userIllegalContent from 'app/utils/userIllegalContent';
+import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
 import UserProfileHeader from 'app/components/cards/UserProfileHeader';

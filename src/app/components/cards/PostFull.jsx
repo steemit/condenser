@@ -27,50 +27,52 @@ import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
+import ContentEditedWrapper from '../elements/ContentEditedWrapper';
+import { ifHive } from 'app/utils/StateFunctions';
 
-function TimeAuthorCategory({ content, authorRep, showTags }) {
+function ContentAuthor({ content, community, viewer_role }) {
+    return (
+        <Author
+            author={content.author}
+            authorRep={content.author_reputation}
+            showAffiliation
+            role={content.author_role}
+            title={content.author_title}
+            community={community}
+            permlink={content.permlink}
+            viewer_role={viewer_role}
+        />
+    );
+}
+
+function TimeAuthorCategory({ content, community, viewer_role }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
-            <TimeAgoWrapper date={content.created} />
-            {} {tt('g.by')}{' '}
-            <Author
-                author={content.author}
-                authorRep={authorRep}
-                showAffiliation
-                role={content.author_role}
-                title={content.author_title}
+            <TimeAgoWrapper date={content.created} /> {tt('g.by')}{' '}
+            <ContentAuthor
+                content={content}
+                community={community}
+                viewer_role={viewer_role}
             />
-            {showTags && (
-                <span>
-                    {' '}
-                    {tt('g.in')} <TagList post={content} single />
-                </span>
-            )}
         </span>
     );
 }
 
-function TimeAuthorCategoryLarge({ content, authorRep }) {
+function TimeAuthorCategoryLarge({ content, community, viewer_role }) {
     return (
         <span className="PostFull__time_author_category_large vcard">
             <Userpic account={content.author} />
             <div className="right-side">
-                <Author
-                    author={content.author}
-                    authorRep={authorRep}
-                    showAffiliation
-                    role={content.author_role}
-                    title={content.author_title}
+                <ContentAuthor
+                    content={content}
+                    community={community}
+                    viewer_role={viewer_role}
                 />
-                <span>
-                    {' '}
-                    {tt('g.in')} <TagList post={content} single />
-                </span>{' '}
-                •&nbsp; <TimeAgoWrapper date={content.created} />
-                &nbsp;{' '}
+                {tt('g.in')} <TagList post={content} single />
+                {' • '}
+                <TimeAgoWrapper date={content.created} />{' '}
                 <ContentEditedWrapper
                     createDate={content.created}
                     updateDate={content.last_update}
@@ -84,8 +86,8 @@ class PostFull extends React.Component {
     static propTypes = {
         // html props
         /* Show extra options (component is being viewed alone) */
-        cont: PropTypes.object.isRequired,
-        post: PropTypes.string.isRequired,
+        postref: PropTypes.string.isRequired,
+        post: PropTypes.object.isRequired,
 
         // connector props
         username: PropTypes.string,
@@ -98,7 +100,7 @@ class PostFull extends React.Component {
 
     constructor(props) {
         super(props);
-        const post = this.props.cont.get(this.props.post);
+        const { post } = this.props;
         const isPinned = post.get('stats').get('is_pinned');
         const isMuted = post.get('stats').get('gray');
 
@@ -121,15 +123,14 @@ class PostFull extends React.Component {
             saveOnShow(formId, !showEdit ? 'edit' : null);
         };
         this.onDeletePost = () => {
-            const { props: { deletePost } } = this;
-            const content = this.props.cont.get(this.props.post);
-            deletePost(content.get('author'), content.get('permlink'));
+            const { props: { deletePost, post } } = this;
+            deletePost(post.get('author'), post.get('permlink'));
         };
     }
 
     componentWillMount() {
-        const { post } = this.props;
-        const formId = `postFull-${post}`;
+        const { postref } = this.props;
+        const formId = `postFull-${postref}`;
         this.setState({
             formId,
             PostFullReplyEditor: ReplyEditor(formId + '-reply'),
@@ -147,14 +148,6 @@ class PostFull extends React.Component {
                 }
             }
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        const names = 'cont, post, username'.split(', ');
-        return (
-            names.findIndex(name => this.props[name] !== nextProps[name]) !==
-                -1 || this.state !== nextState
-        );
     }
 
     fbShare(e) {
@@ -236,10 +229,10 @@ class PostFull extends React.Component {
     }
 
     showPromotePost = () => {
-        const post_content = this.props.cont.get(this.props.post);
-        if (!post_content) return;
-        const author = post_content.get('author');
-        const permlink = post_content.get('permlink');
+        const { post } = this.props;
+        if (!post) return;
+        const author = post.get('author');
+        const permlink = post.get('permlink');
         this.props.showPromotePost(author, permlink);
     };
 
@@ -250,13 +243,12 @@ class PostFull extends React.Component {
     };
 
     onTogglePin = isPinned => {
-        const { community, username } = this.props;
+        const { community, username, post } = this.props;
         if (!community) return false; // Fail Fast
         if (!username) {
             return this.props.unlock();
         }
-        const post_content = this.props.cont.get(this.props.post);
-        const permlink = post_content.get('permlink');
+        const permlink = post.get('permlink');
 
         this.props.togglePinnedPost(
             !isPinned,
@@ -276,7 +268,7 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, community, post, role },
+            props: { username, community, post, postref, viewer_role },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
@@ -288,10 +280,9 @@ class PostFull extends React.Component {
             onShowEdit,
             onDeletePost,
         } = this;
-        const post_content = this.props.cont.get(this.props.post);
-        if (!post_content) return null;
-        const p = extractContent(immutableAccessor, post_content);
-        const content = post_content.toJS();
+        if (!post) return null;
+        const p = extractContent(immutableAccessor, post);
+        const content = post.toJS();
         const { author, permlink, parent_author, parent_permlink } = content;
         const jsonMetadata = this.state.showReply ? null : p.json_metadata;
 
@@ -404,7 +395,7 @@ class PostFull extends React.Component {
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
-        const full_power = post_content.get('percent_steem_dollars') === 0;
+        const full_power = post.get('percent_steem_dollars') === 0;
 
         let post_header = (
             <h1 className="entry-title">
@@ -457,32 +448,30 @@ class PostFull extends React.Component {
             );
         }
 
-        const isPaidout =
-            post_content.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
+        const isPaidout = post.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
         const showReblog = !isPaidout;
         const showPromote =
-            false && username && !isPaidout && post_content.get('depth') == 0;
+            false && username && !isPaidout && post.get('depth') == 0;
 
         const showPinToggle = CommunityAuthorization.CanPinPosts(
             username,
-            role
+            viewer_role
         );
         const { isPinned } = this.state;
 
         const showMuteToggle = CommunityAuthorization.CanMutePosts(
             username,
-            role
+            viewer_role
         );
         const { isMuted } = this.state;
 
         const showReplyOption =
-            username !== undefined && post_content.get('depth') < 255;
-        const showEditOption = username === author;
+            username !== undefined && post.get('depth') < 255;
+        const showEditOption = username === author && !showEdit;
         const showDeleteOption =
-            username === author && allowDelete(post_content) && !isPaidout;
+            username === author && allowDelete(post) && !isPaidout;
 
-        const isPreViewCount =
-            Date.parse(post_content.get('created')) < 1480723200000; // check if post was created before view-count tracking began (2016-12-03)
+        const isPreViewCount = Date.parse(post.get('created')) < 1480723200000; // check if post was created before view-count tracking began (2016-12-03)
         let contentBody;
 
         if (bShowLoading) {
@@ -515,7 +504,8 @@ class PostFull extends React.Component {
                             {post_header}
                             <TimeAuthorCategoryLarge
                                 content={content}
-                                authorRep={content.author_reputation}
+                                community={community}
+                                viewer_role={viewer_role}
                             />
                         </div>
                         <div className="PostFull__body entry-content">
@@ -534,60 +524,44 @@ class PostFull extends React.Component {
                 )}
                 {content.depth == 0 && <TagList post={content} horizontal />}
                 <div className="PostFull__footer row">
-                    <div className="columns medium-12 large-5">
+                    <div className="columns medium-12 large-6">
                         <TimeAuthorCategory
                             content={content}
-                            authorRep={content.author_reputation}
+                            community={community}
+                            viewer_role={viewer_role}
                         />
+                        <Voting post={postref} />
                     </div>
-                    <div className="columns medium-12 large-2 ">
-                        <Voting post={post} />
-                    </div>
-                    <div className="RightShare__Menu small-11 medium-12 large-5 columns">
+                    <div className="RightShare__Menu small-11 medium-12 large-6 columns">
                         {showReblog && (
                             <Reblog author={author} permlink={permlink} />
                         )}
                         <span className="PostFull__reply">
+                            {/* all */}
                             {showReplyOption && (
                                 <a onClick={onShowReply}>{tt('g.reply')}</a>
                             )}{' '}
-                            {showPinToggle &&
-                                isPinned && (
-                                    <a
-                                        onClick={() =>
-                                            this.onTogglePin(isPinned)
-                                        }
-                                    >
-                                        {tt('g.unpin')}
-                                    </a>
-                                )}{' '}
-                            {showPinToggle &&
-                                !isPinned && (
-                                    <a
-                                        onClick={() =>
-                                            this.onTogglePin(isPinned)
-                                        }
-                                    >
-                                        {tt('g.pin')}
-                                    </a>
-                                )}{' '}
+                            {/* mods */}
+                            {showPinToggle && (
+                                <a onClick={() => this.onTogglePin(isPinned)}>
+                                    {isPinned ? tt('g.unpin') : tt('g.pin')}
+                                </a>
+                            )}{' '}
                             {showMuteToggle && (
                                 <MuteButtonContainer
+                                    account={author}
                                     community={community}
                                     isMuted={isMuted}
                                     permlink={permlink}
                                 />
                             )}{' '}
-                            {showEditOption &&
-                                !showEdit && (
-                                    <a onClick={onShowEdit}>{tt('g.edit')}</a>
-                                )}{' '}
-                            {showDeleteOption &&
-                                !showReply && (
-                                    <a onClick={onDeletePost}>
-                                        {tt('g.delete')}
-                                    </a>
-                                )}
+                            {/* owner */}
+                            {showEditOption && (
+                                <a onClick={onShowEdit}>{tt('g.edit')}</a>
+                            )}{' '}
+                            {showDeleteOption && (
+                                <a onClick={onDeletePost}>{tt('g.delete')}</a>
+                            )}
                         </span>
                         <span className="PostFull__responses">
                             <Link
@@ -631,13 +605,16 @@ class PostFull extends React.Component {
 
 export default connect(
     (state, ownProps) => {
-        const post = ownProps.cont.get(ownProps.post);
+        const postref = ownProps.post;
+        const post = ownProps.cont.get(postref);
         const community = post.get('category');
+
         return {
-            ...ownProps,
+            post,
+            postref,
             community,
             username: state.user.getIn(['current', 'username']),
-            role: state.global.getIn(
+            viewer_role: state.global.getIn(
                 ['community', community, 'context', 'role'],
                 'guest'
             ),

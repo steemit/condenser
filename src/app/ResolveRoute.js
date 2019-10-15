@@ -45,6 +45,9 @@ export default function resolveRoute(path) {
     if (path === '/tags') {
         return { page: 'Tags' };
     }
+    if (path === '/communities') {
+        return { page: 'Communities' };
+    }
     if (path === '/tos.html') {
         return { page: 'Tos' };
     }

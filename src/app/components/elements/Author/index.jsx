@@ -11,13 +11,14 @@ import AffiliationMap from 'app/utils/AffiliationMap';
 import tt from 'counterpart';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
+import UserTitleEditButton from 'app/components/elements/UserTitleEditButton';
 
 const { string, bool, number } = PropTypes;
 
 const closers = [];
 
 const fnCloseAll = () => {
-    var close;
+    let close;
     while ((close = closers.shift())) {
         close();
     }
@@ -32,6 +33,8 @@ class Author extends React.Component {
         showAffiliation: bool,
         role: string,
         title: string,
+        community: string,
+        viewer_role: string,
     };
     static defaultProps = {
         follow: true,
@@ -39,6 +42,8 @@ class Author extends React.Component {
         showAffiliation: false,
         role: '',
         title: '',
+        community: '',
+        viewer_role: 'guest',
     };
 
     constructor(...args) {
@@ -101,8 +106,39 @@ class Author extends React.Component {
             showAffiliation,
             role,
             title,
-        } = this.props; // html
-        const { username } = this.props; // redux
+            community,
+            permlink,
+            viewer_role,
+            username,
+        } = this.props;
+
+        const isMod =
+            username && community && ['mod', 'admin'].includes(viewer_role);
+
+        const userTitle = (
+            <span>
+                {role && role != 'guest' && <span>[{role}]</span>}
+                {(title != '' || isMod) && (
+                    <span className="affiliation">
+                        {title}
+                        {isMod && (
+                            <UserTitleEditButton
+                                author={author}
+                                username={username}
+                                community={community}
+                                title={title}
+                                permlink={permlink}
+                            />
+                        )}
+                    </span>
+                )}
+                {showAffiliation && AffiliationMap[author] ? (
+                    <span className="affiliation">
+                        {tt('g.affiliation_' + AffiliationMap[author])}
+                    </span>
+                ) : null}
+            </span>
+        );
 
         if (!(follow || mute) || username === author) {
             return (
@@ -116,15 +152,7 @@ class Author extends React.Component {
                         <Link to={'/@' + author}>{author}</Link>
                     </strong>{' '}
                     <Reputation value={authorRep} />
-                    {role && role != 'guest' && <span>[{role}]</span>}
-                    {title != '' && (
-                        <span className="affiliation">{title}</span>
-                    )}
-                    {showAffiliation && AffiliationMap[author] ? (
-                        <span className="affiliation">
-                            {tt('g.affiliation_' + AffiliationMap[author])}
-                        </span>
-                    ) : null}
+                    {userTitle}
                 </span>
             );
         }
@@ -145,21 +173,10 @@ class Author extends React.Component {
                             to={'/@' + author}
                         >
                             {author} <Reputation value={authorRep} />
-                            {role && role != 'guest' && <span>[{role}]</span>}
-                            {title != '' && (
-                                <span className="affiliation">{title}</span>
-                            )}
-                            {showAffiliation && AffiliationMap[author] ? (
-                                <span className="affiliation">
-                                    {tt(
-                                        'g.affiliation_' +
-                                            AffiliationMap[author]
-                                    )}
-                                </span>
-                            ) : null}
                             <Icon name="dropdown-arrow" />
                         </Link>
                     </strong>
+                    {userTitle}
                 </span>
                 <Overlay
                     show={this.state.show}
@@ -185,7 +202,7 @@ class Author extends React.Component {
 import { connect } from 'react-redux';
 
 export default connect((state, ownProps) => {
-    const { author, follow, mute, authorRep } = ownProps;
+    const { author, follow, mute, authorRep, permlink } = ownProps;
     const username = state.user.getIn(['current', 'username']);
     return {
         author,
@@ -193,5 +210,6 @@ export default connect((state, ownProps) => {
         mute,
         authorRep,
         username,
+        permlink,
     };
 })(Author);

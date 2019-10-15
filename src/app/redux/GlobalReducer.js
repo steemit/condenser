@@ -18,6 +18,7 @@ const RECEIVE_NOTIFICATIONS = 'global/RECEIVE_NOTIFICATIONS';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
 const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
+const RECEIVE_COMMUNITIES = 'global/RECEIVE_COMMUNITIES';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -85,7 +86,7 @@ export default function reducer(state = defaultState, action = {}) {
         case RECEIVE_STATE: {
             let new_state = fromJS(payload);
             console.log('Receive state', payload);
-            if (new_state.has('content')) {
+            if (new_state.has('content') && !new_state.has('simulation')) {
                 const content = new_state.get('content').withMutations(c => {
                     c.forEach((cc, key) => {
                         cc = emptyContentMap.mergeDeep(cc);
@@ -125,7 +126,16 @@ export default function reducer(state = defaultState, action = {}) {
             }, state);
         }
 
+        case RECEIVE_COMMUNITIES: {
+            const map = Map(payload.map(c => [c.name, fromJS(c)]));
+            const idx = List(payload.map(c => c.name));
+            return state
+                .update('community', Map(), a => a.mergeDeep(map))
+                .update('community_idx', List(), a => a.mergeDeep(idx));
+        }
+
         case RECEIVE_COMMUNITY: {
+            console.log('RECEIVE_COMMUNITY', state, payload);
             return state.update('community', Map(), a => a.mergeDeep(payload));
         }
 
@@ -346,6 +356,11 @@ export const receiveAccount = payload => ({
 
 export const receiveAccounts = payload => ({
     type: RECEIVE_ACCOUNTS,
+    payload,
+});
+
+export const receiveCommunities = payload => ({
+    type: RECEIVE_COMMUNITIES,
     payload,
 });
 

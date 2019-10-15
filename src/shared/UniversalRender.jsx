@@ -245,7 +245,7 @@ export async function serverRender(
     }
 
     if (error || !renderProps) {
-        // debug('error')('Router error', error);
+        console.log('Router error [404]', error, 'props?', !!renderProps);
         return {
             title: 'Page Not Found - Steemit',
             statusCode: 404,
@@ -263,12 +263,12 @@ export async function serverRender(
 
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
-        /*
-         // TODO: check acct valid server side
+
+        // TODO: check acct valid server side
         if (
             (url.match(routeRegex.UserProfile1) ||
-                url.match(routeRegex.UserProfile3)) &&
-            Object.getOwnPropertyNames(onchain.accounts).length === 0
+                url.match(routeRegex.UserProfile2)) &&
+            Object.getOwnPropertyNames(onchain.profiles).length === 0
         ) {
             // protect for invalid account
             return {
@@ -277,7 +277,6 @@ export async function serverRender(
                 body: renderToString(<NotFound />),
             };
         }
-        */
 
         // If we are not loading a post, truncate state data to bring response size down.
         if (!url.match(routeRegex.Post)) {
@@ -291,6 +290,8 @@ export async function serverRender(
         }
 
         // Are we loading an un-category-aliased post?
+        /*
+        TODO: use bridge.get_post_header. handle client-side for now.
         if (
             !url.match(routeRegex.PostsIndex) &&
             !url.match(routeRegex.UserProfile1) &&
@@ -316,6 +317,7 @@ export async function serverRender(
                 };
             }
         }
+        */
 
         // Insert the special posts into the list of posts, so there is no
         // jumping of content.
@@ -334,6 +336,7 @@ export async function serverRender(
         server_store = createStore(rootReducer, {
             app: initialState.app,
             global: onchain,
+            userProfiles: { profiles: onchain['profiles'] },
             offchain,
         });
         server_store.dispatch({

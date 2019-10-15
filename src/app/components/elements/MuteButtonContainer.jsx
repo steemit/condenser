@@ -22,13 +22,14 @@ class MuteButtonContainer extends React.Component {
     };
 
     onToggleMute = (isMuted, notes) => {
-        const { community, username, permlink } = this.props;
+        const { account, community, username, permlink } = this.props;
         if (!notes || !community || !username) return false; // Fail Fast
 
         this.props.toggleMutedPost(
+            username,
             !isMuted,
             community,
-            username,
+            account,
             notes,
             permlink,
             () => {
@@ -64,6 +65,7 @@ class MuteButtonContainer extends React.Component {
 }
 
 MuteButtonContainer.propTypes = {
+    account: PropTypes.string.isRequired,
     permlink: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     community: PropTypes.string.isRequired, //TODO: Define shape
@@ -78,6 +80,7 @@ export default connect(
     },
     dispatch => ({
         toggleMutedPost: (
+            username,
             mutePost,
             community,
             account,
@@ -104,7 +107,7 @@ export default connect(
                     type: 'custom_json',
                     operation: {
                         id: 'community',
-                        required_posting_auths: [account],
+                        required_posting_auths: [username],
                         json: JSON.stringify(payload),
                     },
                     successCallback,

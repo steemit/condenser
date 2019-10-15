@@ -1,4 +1,4 @@
-import React from 'React';
+import React from 'react';
 import CommunityRoles from 'app/components/pages/CommunityRoles';
 
 module.exports = {

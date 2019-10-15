@@ -125,6 +125,7 @@ export default connect(
     (state, ownProps) => {
         const pathname = state.app.get('location').pathname;
         const communityName = ownProps.params.community;
+        console.log('Community state:', state.community.toJS());
         return {
             pathname,
             community: state.community.toJS(),
@@ -140,9 +141,9 @@ export default connect(
         listCommunityRoles: community => {
             dispatch(communityActions.listCommunityRoles(community));
         },
-        updateCommunityUser: communityUser => {
+        /*updateCommunityUser: communityUser => {
             dispatch(communityActions.updateCommunityUser(communityUser));
-        },
+        },*/
         addCommunityUser: communityUser => {
             dispatch(communityActions.addCommunityUser(communityUser));
         },

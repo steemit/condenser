@@ -16,6 +16,7 @@ import * as userActions from 'app/redux/UserReducer';
 import { DEBT_TICKER } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { isLoggedInWithKeychain } from 'app/utils/SteemKeychain';
+import { callBridge } from 'app/utils/steemApi';
 
 export const transactionWatches = [
     takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
@@ -471,6 +472,14 @@ export function* preBroadcast_comment({ operation, username }) {
     return comment_op;
 }
 
+function* permlinkExists(author, permlink) {
+    const head = yield call(callBridge, 'get_post_header', {
+        author,
+        permlink,
+    });
+    return !!head.category;
+}
+
 export function* createPermlink(title, author) {
     let permlink;
     if (title && title.trim() !== '') {
@@ -482,8 +491,11 @@ export function* createPermlink(title, author) {
         s = s.toLowerCase().replace(/[^a-z0-9-]+/g, '');
 
         // ensure the permlink is unique
-        const slugState = yield call([api, api.getContentAsync], author, s);
-        if (slugState.body !== '') {
+        const head = yield call(callBridge, 'get_post_header', {
+            author,
+            permlink: s,
+        });
+        if (!!head.category) {
             const noise = base58
                 .encode(secureRandom.randomBuffer(4))
                 .toLowerCase();

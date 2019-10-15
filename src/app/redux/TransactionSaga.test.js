@@ -2,6 +2,7 @@
 
 import { call, select, all, takeEvery } from 'redux-saga/effects';
 import steem, { api, broadcast } from '@steemit/steem-js';
+import { callBridge } from 'app/utils/steemApi';
 import { cloneableGenerator } from 'redux-saga/utils';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import {
@@ -72,11 +73,10 @@ describe('TransactionSaga', () => {
         const gen = createPermlink(operation.title, operation.author);
         it('should call the api to get a permlink if the title is valid', () => {
             const actual = gen.next().value;
-            const mockCall = call(
-                [api, api.getContentAsync],
-                operation.author,
-                operation.title
-            );
+            const mockCall = call(callBridge, 'get_post_header', {
+                author: operation.author,
+                permlink: operation.title,
+            });
             expect(actual).toEqual(mockCall);
         });
         it('should return a string containing the transformed data from the api', () => {
@@ -96,11 +96,10 @@ describe('TransactionSaga', () => {
         it('should call createPermlink', () => {
             const permlink = gen.next(operation.title, operation.author).value;
             const actual = permlink.next().value;
-            const expected = call(
-                [api, api.getContentAsync],
-                operation.author,
-                operation.title
-            );
+            const expected = call(callBridge, 'get_post_header', {
+                author: operation.author,
+                permlink: operation.title,
+            });
             expect(expected).toEqual(actual);
         });
         it('should return the comment options array.', () => {

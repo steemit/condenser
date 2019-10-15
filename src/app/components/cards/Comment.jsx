@@ -18,7 +18,7 @@ import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
-import { ifHive } from 'app/utils/StateFunctions';
+import { Role, ifHive } from 'app/utils/Community';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -314,7 +314,7 @@ class CommentImpl extends React.Component {
 
         const _isPaidout = comment.cashout_time === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
         const showEditOption = username === author;
-        const showMuteToggle = ['mod', 'admin'].includes(viewer_role);
+        const showMuteToggle = Role.atLeast(viewer_role, 'mod');
         const showDeleteOption =
             username === author && allowDelete(comment) && !_isPaidout;
         const showReplyOption = username !== undefined && comment.depth < 255;

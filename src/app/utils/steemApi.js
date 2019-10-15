@@ -5,7 +5,11 @@ import { ifHive } from 'app/utils/StateFunctions';
 import stateCleaner from 'app/redux/stateCleaner';
 
 export async function callBridge(method, params) {
-    console.log('call bridge', method, params);
+    console.log(
+        'call bridge',
+        method,
+        JSON.stringify(params).substring(0, 200)
+    );
     const call = (method, params, callback) => {
         return api.call('bridge.' + method, params, callback);
     };
@@ -46,11 +50,17 @@ export async function getStateAsync(url, observer, ssr = false) {
         });
     }
 
-    if (ssr && tag && tag[0] == '@') {
+    // for SSR, load profile on any profile page or discussion thread author
+    const account =
+        tag && tag[0] == '@'
+            ? tag.slice(1)
+            : page == 'thread' ? key[0].slice(1) : null;
+    if (ssr && account) {
         // TODO: move to global reducer?
-        const account = tag.slice(1);
         const profile = await callBridge('get_profile', { account });
         if (profile && profile['name']) {
+            profile.metadata = JSON.parse(profile.json_metadata);
+            delete profile['json_metadata'];
             state['profiles'][account] = profile;
         }
     }

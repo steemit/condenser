@@ -6,19 +6,20 @@ import Follow from 'app/components/elements/Follow';
 import Reputation from 'app/components/elements/Reputation';
 import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
 import { connect } from 'react-redux';
-import normalizeProfile from 'app/utils/NormalizeProfile';
 
 class AuthorDropdown extends Component {
     static propTypes = {};
     static defaultProps = {};
 
     componentWillMount() {
-        const { profile, author, fetchProfile } = this.props;
-        if (!profile) fetchProfile(author);
+        const { profile, fetchProfile, author, username } = this.props;
+        if (!profile) fetchProfile(author, username);
     }
 
     render() {
-        if (this.props.simple) {
+        const { author, simple, profile } = this.props;
+
+        if (simple) {
             return (
                 <span
                     className="author"
@@ -26,40 +27,35 @@ class AuthorDropdown extends Component {
                     itemScope
                     itemType="http://schema.org/Person"
                 >
-                    <Link to={'/@' + this.props.author}>
-                        <strong>{this.props.author}</strong>
+                    <Link to={'/@' + author}>
+                        <strong>{author}</strong>
                     </Link>{' '}
                     <Reputation value={this.props.authorRep} />
                 </span>
             );
         }
 
-        const obj = this.props.profile;
-        const { name, about } = obj ? normalizeProfile(obj.toJS()) : {};
+        const { name, about } = profile
+            ? profile.getIn(['metadata', 'profile']).toJS()
+            : {};
 
         return (
             <div className="Author__container">
                 <div className="Author__dropdown">
-                    <Link to={'/@' + this.props.author}>
-                        <Userpic account={this.props.author} />
+                    <Link to={'/@' + author}>
+                        <Userpic account={author} />
                     </Link>
-                    <Link
-                        to={'/@' + this.props.author}
-                        className="Author__name"
-                    >
+                    <Link to={'/@' + author} className="Author__name">
                         {name}
                     </Link>
-                    <Link
-                        to={'/@' + this.props.author}
-                        className="Author__username"
-                    >
-                        @{this.props.author}
+                    <Link to={'/@' + author} className="Author__username">
+                        @{author}
                     </Link>
                     <div>
                         <Follow
                             className="float-right"
                             follower={this.props.username}
-                            following={this.props.author}
+                            following={author}
                             what="blog"
                             showFollow={this.props.follow}
                             showMute={this.props.mute}
@@ -74,18 +70,24 @@ class AuthorDropdown extends Component {
 
 export default connect(
     (state, props) => {
-        const simple =
-            !(props.follow || props.mute) || props.username === props.author;
+        const { author, authorRep, username, follow, mute } = props;
+        const simple = !(follow || mute) || username === author;
 
         return {
-            ...props,
+            author,
+            authorRep,
+            username,
+            follow,
+            mute,
             simple,
-            profile: state.userProfiles.getIn(['profiles', props.author]),
+            profile: state.userProfiles.getIn(['profiles', author]),
         };
     },
     dispatch => ({
-        fetchProfile: author => {
-            dispatch(UserProfilesSagaActions.fetchProfile(author));
+        fetchProfile: (account, observer = null) => {
+            dispatch(
+                UserProfilesSagaActions.fetchProfile({ account, observer })
+            );
         },
     })
 )(AuthorDropdown);

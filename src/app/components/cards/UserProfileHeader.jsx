@@ -8,7 +8,6 @@ import Tooltip from 'app/components/elements/Tooltip';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import tt from 'counterpart';
 import Userpic from 'app/components/elements/Userpic';
-import normalizeProfile from 'app/utils/NormalizeProfile';
 import AffiliationMap from 'app/utils/AffiliationMap';
 import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import SanitizedLink from 'app/components/elements/SanitizedLink';
@@ -20,13 +19,9 @@ class UserProfileHeader extends React.Component {
         const { current_user, accountname, profile } = this.props;
         const isMyAccount = current_user === accountname;
 
-        const {
-            name,
-            location,
-            about,
-            website,
-            cover_image,
-        } = normalizeProfile(profile.toJS());
+        const { name, location, about, website, cover_image } = profile
+            ? profile.getIn(['metadata', 'profile']).toJS()
+            : {};
         const website_label = website
             ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
             : null;

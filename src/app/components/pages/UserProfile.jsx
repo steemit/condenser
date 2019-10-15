@@ -28,20 +28,23 @@ export default class UserProfile extends React.Component {
     }
 
     componentWillMount() {
-        const { profile, accountname, fetchProfile } = this.props;
-        if (!profile) fetchProfile(accountname);
+        const { profile, accountname, fetchProfile, username } = this.props;
+        if (!profile) fetchProfile(accountname, username);
     }
 
     componentDidUpdate(prevProps) {
-        const { profile, accountname, fetchProfile } = this.props;
-        if (prevProps.accountname != accountname) {
-            if (!profile) fetchProfile(accountname);
+        const { profile, accountname, fetchProfile, username } = this.props;
+        if (
+            prevProps.accountname != accountname ||
+            prevProps.username != username
+        ) {
+            if (!profile) fetchProfile(accountname, username);
         }
     }
 
     shouldComponentUpdate(np, ns) {
         return (
-            np.current_user !== this.props.current_user ||
+            np.username !== this.props.username ||
             np.global_status !== this.props.global_status ||
             np.followers !== this.props.followers ||
             np.following !== this.props.following ||
@@ -59,7 +62,7 @@ export default class UserProfile extends React.Component {
         if (!last_post) return;
         const {
             accountname,
-            current_user,
+            username,
             global_status,
             order,
             category,
@@ -81,7 +84,7 @@ export default class UserProfile extends React.Component {
             order,
             category,
             postFilter,
-            observer: current_user ? current_user.get('username') : null,
+            observer: username,
         });
     }
 
@@ -95,7 +98,7 @@ export default class UserProfile extends React.Component {
         const {
             state: { showResteem },
             props: {
-                current_user,
+                username,
                 global_status,
                 following,
                 followers,
@@ -109,7 +112,6 @@ export default class UserProfile extends React.Component {
                 notifications,
             },
         } = this;
-        const username = current_user ? current_user.get('username') : null;
 
         // Loading status
         const status = global_status
@@ -259,7 +261,6 @@ export default class UserProfile extends React.Component {
                     loadMore={this.loadMore}
                     showPinned={false}
                     showResteem={showResteem} // 'blog' only
-                    showSpam
                 />
             );
 
@@ -385,7 +386,7 @@ module.exports = {
     path: '@:accountname(/:section)',
     component: connect(
         (state, ownProps) => {
-            const current_user = state.user.get('current');
+            const username = state.user.getIn(['current', 'username']);
             const accountname = ownProps.routeParams.accountname.toLowerCase();
             const walletUrl = state.app.get('walletUrl');
 
@@ -404,7 +405,7 @@ module.exports = {
                     '@' + accountname,
                     order,
                 ]),
-                current_user,
+                username,
                 loading: state.app.get('loading'),
                 global_status: state.global.get('status'),
                 accountname: accountname,
@@ -436,8 +437,10 @@ module.exports = {
             },
             requestData: args =>
                 dispatch(fetchDataSagaActions.requestData(args)),
-            fetchProfile: author =>
-                dispatch(UserProfilesSagaActions.fetchProfile(author)),
+            fetchProfile: (account, observer) =>
+                dispatch(
+                    UserProfilesSagaActions.fetchProfile({ account, observer })
+                ),
         })
     )(UserProfile),
 };

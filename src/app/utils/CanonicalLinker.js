@@ -1,45 +1,55 @@
 import Apps from 'steemscript/apps.json';
 
+function read_md_app(metadata) {
+    return metadata &&
+        metadata.app &&
+        typeof metadata.app === 'string' &&
+        metadata.app.split('/').length === 2
+        ? metadata.app.split('/')[0]
+        : null;
+}
+
+function read_md_canonical(metadata) {
+    const url =
+        metadata.canonical_url &&
+        typeof d.json_metadata.canonical_url === 'string'
+            ? metadata.canonical_url
+            : null;
+
+    const saneUrl = new RegExp(/^https?:\/\//);
+    return saneUrl.test(url) ? url : null;
+}
+
+function build_scheme(scheme, post) {
+    // https://github.com/bonustrack/steemscript/blob/master/apps.json
+    return scheme
+        .split('{category}')
+        .join(post.category)
+        .split('{username}')
+        .join(post.author)
+        .split('{permlink}')
+        .join(post.permlink);
+}
+
+function allowed_app(app) {
+    // apps which follow (reciprocate) canonical URLs (as of 2019-10-15)
+    const whitelist = ['steemit', 'esteem', 'steempeak'];
+    return whitelist.includes(app);
+}
+
 export function makeCanonicalLink(d) {
-    let canonicalUrl = 'https://steemit.com' + d.link;
+    const metadata = d.json_metadata;
+    if (metadata) {
+        const canonUrl = read_md_canonical(metadata);
+        if (canonUrl) return canonUrl;
 
-    /*
-     * TODO: A number of apps listed in
-     * https://github.com/bonustrack/steemscript/blob/master/apps.json
-     * do not follow this standard. Audit reciprocating domains..
-    */ /*
-    if (d.json_metadata) {
-        if (
-            d.json_metadata.canonical_url &&
-            typeof d.json_metadata.canonical_url === 'string'
-        ) {
-            const urlTester = new RegExp(/^https?:\/\//);
-            if (urlTester.test(d.json_metadata.canonical_url)) {
-                return d.json_metadata.canonical_url;
+        const app = read_md_app(metadata);
+        if (app && allowed_app(app)) {
+            const scheme = Apps[app] ? Apps[app].url_scheme : null;
+            if (scheme && d.category) {
+                return build_scheme(scheme, d);
             }
         }
-
-        if (d.json_metadata.app && typeof d.json_metadata.app === 'string') {
-            const hasAppTemplateData =
-                d.json_metadata &&
-                d.json_metadata.app &&
-                d.category &&
-                d.json_metadata.app.split('/').length === 2;
-            if (hasAppTemplateData) {
-                const app = d.json_metadata.app.split('/')[0];
-                const hasAppData = Apps[app] && Apps[app].url_scheme;
-                if (hasAppData) {
-                    canonicalUrl = Apps[app].url_scheme
-                        .split('{category}')
-                        .join(d.category)
-                        .split('{username}')
-                        .join(d.author)
-                        .split('{permlink}')
-                        .join(d.permlink);
-                }
-            }
-        }
-        
-    }*/
-    return canonicalUrl;
+    }
+    return 'https://steemit.com' + d.link;
 }

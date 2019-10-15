@@ -19,6 +19,7 @@ const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
+const LIST_COMMUNITIES = 'fetchDataSaga/LIST_COMMUNITIES';
 const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
 
 export const fetchDataWatches = [
@@ -28,6 +29,7 @@ export const fetchDataWatches = [
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
     takeEvery(GET_COMMUNITY, getCommunity),
+    takeEvery(LIST_COMMUNITIES, listCommunities),
     takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
 ];
 
@@ -146,6 +148,18 @@ function* getAccounts(usernames) {
 }
 
 /**
+ * Request all communities
+ * @param {}
+ */
+export function* listCommunities(action) {
+    const communities = yield call(callBridge, 'list_communities', {
+        observer: action.payload.observer,
+    });
+    // TODO: Handle error state
+    yield put(globalActions.receiveCommunities(communities));
+}
+
+/**
  * Request data for given community
  * @param {string} name of community
  */
@@ -218,7 +232,7 @@ export function* fetchData(action) {
             limit: constants.FETCH_DATA_BATCH_SIZE,
             start_author: author,
             start_permlink: permlink,
-            observer: observer,
+            observer,
         };
     } else {
         call_name = 'get_ranked_posts';
@@ -228,7 +242,7 @@ export function* fetchData(action) {
             limit: constants.FETCH_DATA_BATCH_SIZE,
             start_author: author,
             start_permlink: permlink,
-            observer: observer,
+            observer,
         };
     }
 
@@ -313,6 +327,11 @@ function* fetchJson({
 
 // Action creators
 export const actions = {
+    listCommunities: payload => ({
+        type: LIST_COMMUNITIES,
+        payload,
+    }),
+
     getCommunity: payload => ({
         type: GET_COMMUNITY,
         payload,

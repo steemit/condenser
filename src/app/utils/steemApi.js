@@ -17,11 +17,13 @@ export async function getStateAsync(url, observer, ssr = false) {
 
     const { page, tag, sort, key } = parsePath(url);
 
+    console.log('GSA', url, observer, ssr);
     let state = {
         accounts: {},
         community: {},
         content: {},
         discussion_idx: {},
+        profiles: {},
     };
 
     // load `content` and `discussion_idx`
@@ -42,6 +44,15 @@ export async function getStateAsync(url, observer, ssr = false) {
             name: tag,
             observer: observer,
         });
+    }
+
+    if (ssr && tag && tag[0] == '@') {
+        // TODO: move to global reducer?
+        const account = tag.slice(1);
+        const profile = await callBridge('get_profile', { account });
+        if (profile && profile['name']) {
+            state['profiles'][account] = profile;
+        }
     }
 
     if (ssr) {
@@ -133,9 +144,13 @@ function parsePath(url) {
         page = 'account';
         sort = 'blog';
         tag = part[0];
-    } else if (parts == 2 && part[0][0] == '@' && acct_tabs.includes(part[1])) {
-        page = 'account';
-        sort = part[1] == 'recent-replies' ? 'replies' : part[1];
+    } else if (parts == 2 && part[0][0] == '@') {
+        if (acct_tabs.includes(part[1])) {
+            page = 'account';
+            sort = part[1] == 'recent-replies' ? 'replies' : part[1];
+        } else {
+            // settings, followers, etc (no-op)
+        }
         tag = part[0];
     } else {
         // no-op URL

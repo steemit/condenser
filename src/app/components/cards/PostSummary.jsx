@@ -16,7 +16,7 @@ import TagList from 'app/components/elements/TagList';
 import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
-import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import { hasNsfwTag } from 'app/utils/StateFunctions';

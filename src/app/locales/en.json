@@ -24,6 +24,10 @@
         "community_settings_header": "Community Settings",
         "community_settings_description":
             "Here you can customize this community as you see fit.",
+        "community_list_header": "Communities",
+        "community_user_title_edit_header": "Change User's Community Title",
+        "community_user_title_edit_description":
+            "Here you may change the title of (username) within the community (community).",
         "comments": "Comments",
         "confirm": "Confirm",
         "convert": "Convert",
@@ -276,6 +280,7 @@
         "change_account_password": "Change Account Password",
         "vote_for_witnesses": "Vote for Witnesses",
         "advertise": "Advertise",
+        "media_kit": "Media Kit",
         "privacy_policy": "Privacy Policy",
         "terms_of_service": "Terms of Service",
         "sign_up": "Sign up",
@@ -292,7 +297,8 @@
         "intro_tagline": "Your voice is worth something",
         "intro_paragraph":
             "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool.",
-        "jobs": "Jobs at Steemit"
+        "jobs": "Jobs at Steemit",
+        "steem_proposals": "Steem Proposals"
     },
     "main_menu": {
         "hot": "Hot",

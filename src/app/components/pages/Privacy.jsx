@@ -6,7 +6,7 @@ class Privacy extends React.Component {
             <div className="Privacy row">
                 <div className="column large-12">
                     <h1>Steemit, Inc Privacy Policy</h1>
-                    <h2>Effective: May 25, 2018</h2>
+                    <h2>Effective: Oct 7, 2019</h2>
                     <p className="c0">
                         <span className="c1" />
                     </p>
@@ -180,6 +180,9 @@ class Privacy extends React.Component {
                                 For compliance, fraud prevention, and safety
                             </span>
                         </li>
+                        <li className="c2 c9">
+                            <span className="c1">Communications</span>
+                        </li>
                     </ul>
                     <p className="c0">
                         <span className="c1" />
@@ -189,6 +192,17 @@ class Privacy extends React.Component {
                             We may use your personal information to protect,
                             investigate, and deter against fraudulent,
                             unauthorized, or illegal activity.
+                        </span>
+                    </p>
+                    <p className="c2">
+                        <span className="c1">
+                            We may use your personal information to contact you
+                            with newsletters, marketing or promotional materials
+                            and other information that may be of interest to
+                            you. You may opt out of receiving any, or all, of
+                            these communications from us by following the
+                            unsubscribe or instructions provided in any email
+                            send.
                         </span>
                     </p>
                     <p className="c0">

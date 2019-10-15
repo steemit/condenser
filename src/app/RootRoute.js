@@ -52,6 +52,10 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/TagsIndex')]);
             //});
+        } else if (route.page === 'Communities') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/CommunitiesIndex')]);
+            //});
         } else if (route.page === 'Tos') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Tos')]);

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 
@@ -41,6 +42,11 @@ class SettingsEditButtonContainer extends React.Component {
                 //this.props.getCommunity(community);
             }
         );
+
+        //-- Simulate a "receiveState" action to feed new title into post state
+        let newstate = { community: {}, simulation: true };
+        newstate['community'][community] = newSettings;
+        this.props.pushState(newstate);
     };
 
     render() {
@@ -114,6 +120,9 @@ export default connect(
                     errorCallback,
                 })
             );
+        },
+        pushState: state => {
+            dispatch(globalActions.receiveState(state));
         },
         getCommunity: communityName => {
             return dispatch(fetchDataSagaActions.getCommunity(communityName));

@@ -36,7 +36,7 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
         'overseer.collect',
         { collection: 'event', metadata: { type, value } },
         error => {
-            // if (error) console.warn('overseer error', error, error.data);
+            if (error) console.warn('overseer error', error, error.data);
         }
     );
 }

@@ -59,8 +59,6 @@ export async function getStateAsync(url, observer, ssr = false) {
         // TODO: move to global reducer?
         const profile = await callBridge('get_profile', { account });
         if (profile && profile['name']) {
-            profile.metadata = JSON.parse(profile.json_metadata);
-            delete profile['json_metadata'];
             state['profiles'][account] = profile;
         }
     }

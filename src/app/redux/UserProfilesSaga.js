@@ -12,11 +12,6 @@ export function* fetchUserProfile(action) {
     const { account, observer } = action.payload;
     const ret = yield call(callBridge, 'get_profile', { account, observer });
     if (!ret) throw new Error('Account not found');
-
-    //TODO: use new profiles endpoint
-    ret.metadata = JSON.parse(ret.json_metadata);
-    delete ret['json_metadata'];
-
     yield put(
         userProfileActions.addProfile({ username: account, account: ret })
     );

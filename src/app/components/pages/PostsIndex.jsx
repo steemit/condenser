@@ -6,7 +6,6 @@ import { Link } from 'react-router';
 import tt from 'counterpart';
 import { List, Map } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
-import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
@@ -394,7 +393,7 @@ module.exports = {
                 : route.category ? route.category.toLowerCase() : null;
             const order = account_name
                 ? route.category
-                : route.order || constants.DEFAULT_SORT_ORDER;
+                : route.order || 'trending';
 
             const community = ifHive(category);
 

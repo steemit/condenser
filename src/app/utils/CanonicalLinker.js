@@ -11,8 +11,7 @@ function read_md_app(metadata) {
 
 function read_md_canonical(metadata) {
     const url =
-        metadata.canonical_url &&
-        typeof d.json_metadata.canonical_url === 'string'
+        metadata.canonical_url && typeof metadata.canonical_url === 'string'
             ? metadata.canonical_url
             : null;
 

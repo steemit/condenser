@@ -16,8 +16,7 @@ class CommunityRoles extends React.Component {
     }
 
     componentDidMount() {
-        this.props.setCurrentCommunity(this.props.communityName);
-        this.props.listCommunityRoles(this.props.communityName);
+        this.props.loadCommunityRoles(this.props.communityName);
     }
 
     onAccountChange(event) {
@@ -35,7 +34,7 @@ class CommunityRoles extends React.Component {
             account: this.state.account,
             role: this.state.role,
         };
-        this.props.updateCommunityUser(params);
+        this.props.updateUser(params);
     }
 
     render() {
@@ -106,25 +105,27 @@ const CommunityRolesWrapped = connect(
     (state, ownProps) => {
         const communityName = ownProps.params.community;
 
+        const roles =
+            state.community.get('communityName') == communityName
+                ? state.community.get('roles', List())
+                : List();
+
         console.log('Community state:', state.community.toJS());
 
         return {
-            loading: state.community.get('listPending'),
-            updating: state.community.get('updatePending'),
-            roles: state.community.get('roles', List()),
             communityName,
+            roles,
+            loading: roles.size == 0,
+            updating: state.community.get('updatePending'),
         };
     },
 
     dispatch => ({
-        setCurrentCommunity: community => {
-            dispatch(communityActions.setCurrentCommunity(community));
+        loadCommunityRoles: community => {
+            dispatch(communityActions.loadCommunityRoles(community));
         },
-        listCommunityRoles: community => {
-            dispatch(communityActions.listCommunityRoles(community));
-        },
-        updateCommunityUser: communityUser => {
-            dispatch(communityActions.updateCommunityUser(communityUser));
+        updateUser: params => {
+            dispatch(communityActions.updateUserRole(params));
         },
     })
 )(CommunityRoles);

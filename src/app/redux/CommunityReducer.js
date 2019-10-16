@@ -2,16 +2,16 @@ import { fromJS, Map, List } from 'immutable';
 
 const SET_CURRENT_COMMUNITY = 'community/SET_CURRENT_COMMUNITY';
 
-const LIST_COMMUNITY_ROLES = 'community/LIST_COMMUNITY_ROLES';
-const LIST_COMMUNITY_ROLES_PENDING = 'community/LIST_COMMUNITY_ROLES_PENDING';
-const LIST_COMMUNITY_ROLES_SUCCESS = 'community/LIST_COMMUNITY_ROLES_SUCCESS';
+const LOAD_COMMUNITY_ROLES = 'community/LOAD_COMMUNITY_ROLES';
+const SET_COMMUNITY_ROLES_PENDING = 'community/SET_COMMUNITY_ROLES_PENDING';
+const RECEIVE_COMMUNITY_ROLES = 'community/RECEIVE_COMMUNITY_ROLES';
 
 const UPDATE_USER_ROLE = 'community/UPDATE_USER_ROLE';
-const UPDATE_USER_ROLE_PENDING = 'community/UPDATE_USER_ROLE_PENDING';
-const UPDATE_USER_ROLE_SUCCESS = 'community/UPDATE_USER_ROLE_SUCCESS';
+const SET_USER_ROLE_PENDING = 'community/SET_USER_ROLE_PENDING';
+const APPLY_USER_ROLE = 'community/APPLY_USER_ROLE';
 
 const defaultCommunityState = fromJS({
-    community: '',
+    communityName: '',
     roles: [],
     listPending: false,
     updatePending: false,
@@ -23,30 +23,28 @@ export default function reducer(state = defaultCommunityState, action) {
     switch (action.type) {
         // Has a saga watcher.
         case SET_CURRENT_COMMUNITY: {
-            return state.merge({ community: payload });
+            return state.set({ communityName: payload });
         }
 
-        // Has a saga watcher.
-        case LIST_COMMUNITY_ROLES: {
-            return state;
+        case SET_COMMUNITY_ROLES_PENDING: {
+            return state.merge({ listPending: payload });
         }
-        case LIST_COMMUNITY_ROLES_PENDING: {
-            return state.merge({
-                listPending: payload,
-            });
-        }
-        case LIST_COMMUNITY_ROLES_SUCCESS: {
-            return state.merge({ roles: payload });
+
+        case RECEIVE_COMMUNITY_ROLES: {
+            const { communityName, roles } = payload;
+            return state.merge({ communityName, roles });
         }
 
         // Has a saga watcher
         case UPDATE_USER_ROLE: {
             return state;
         }
-        case UPDATE_USER_ROLE_PENDING: {
+
+        case SET_USER_ROLE_PENDING: {
             return state.merge({ updatePending: payload });
         }
-        case UPDATE_USER_ROLE_SUCCESS: {
+
+        case APPLY_USER_ROLE: {
             const index = state
                 .get('roles')
                 .findIndex(r => r.get(0) === payload.account);
@@ -72,45 +70,35 @@ export default function reducer(state = defaultCommunityState, action) {
 }
 
 /**
-    @arg string community name.
-*/
-export const setCurrentCommunity = payload => ({
-    type: SET_CURRENT_COMMUNITY,
-    payload,
-});
-
-/**
     @arg {community: string} payload action payload.
 */
-export const listCommunityRoles = payload => {
-    return {
-        type: LIST_COMMUNITY_ROLES,
-        payload,
-    };
-};
+export const loadCommunityRoles = payload => ({
+    type: LOAD_COMMUNITY_ROLES,
+    payload,
+});
 
 /**
     @arg boolean payload action payload.
 */
-export const listCommunityRolesPending = payload => ({
-    type: LIST_COMMUNITY_ROLES_PENDING,
+export const setCommunityRolesPending = payload => ({
+    type: SET_COMMUNITY_ROLES_PENDING,
     payload,
 });
 
-export const listCommunityRolesSuccess = payload => ({
-    type: LIST_COMMUNITY_ROLES_SUCCESS,
+export const receiveCommunityRoles = payload => ({
+    type: RECEIVE_COMMUNITY_ROLES,
     payload,
 });
 
-export const updateCommunityUser = payload => ({
+export const updateUserRole = payload => ({
     type: UPDATE_USER_ROLE,
     payload,
 });
-export const updateCommunityUserPending = payload => ({
-    type: UPDATE_USER_ROLE_PENDING,
+export const setUserRolePending = payload => ({
+    type: SET_USER_ROLE_PENDING,
     payload,
 });
-export const updateCommunityUserSuccess = payload => ({
-    type: UPDATE_USER_ROLE_SUCCESS,
+export const applyUserRole = payload => ({
+    type: APPLY_USER_ROLE,
     payload,
 });

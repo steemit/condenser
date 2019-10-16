@@ -101,10 +101,6 @@ class PostFull extends React.Component {
     constructor(props) {
         super(props);
         const { post } = this.props;
-        const isPinned = post.get('stats').get('is_pinned');
-        const isMuted = post.get('stats').get('gray');
-
-        this.state = { isPinned, isMuted, showMuteNotesDialog: false };
 
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
@@ -243,26 +239,21 @@ class PostFull extends React.Component {
     };
 
     onTogglePin = isPinned => {
-        const { community, username, post } = this.props;
+        const { community, username, post, postref } = this.props;
         if (!community) return false; // Fail Fast
-        if (!username) {
-            return this.props.unlock();
-        }
-        const permlink = post.get('permlink');
+        if (!username) return this.props.unlock();
 
+        const key = ['content', postref, 'stats', 'is_pinned'];
+        this.props.stateSet(key, !isPinned);
+
+        const account = post.get('author');
+        const permlink = post.get('permlink');
         this.props.togglePinnedPost(
             !isPinned,
-            community,
             username,
-            permlink,
-            () => {
-                console.log('PostFull::onTogglePin()::success');
-                this.setState({ isPinned: !isPinned });
-            },
-            () => {
-                console.log('PostFull::onTogglePin()::failure');
-                this.setState({ isPinned });
-            }
+            community,
+            account,
+            permlink
         );
     };
 
@@ -456,7 +447,8 @@ class PostFull extends React.Component {
         const showEditOption = username === author && !showEdit;
         const showDeleteOption = username === author && allowDelete(post);
 
-        const { isPinned, isMuted } = this.state;
+        const isPinned = post.getIn(['stats', 'is_pinned'], false);
+        const isMuted = post.getIn(['stats', 'gray']);
 
         const isPreViewCount = Date.parse(post.get('created')) < 1480723200000; // check if post was created before view-count tracking began (2016-12-03)
         let contentBody;
@@ -628,6 +620,9 @@ export default connect(
                 })
             );
         },
+        stateSet: (key, value) => {
+            dispatch(globalActions.set({ key, value }));
+        },
         showPromotePost: (author, permlink) => {
             dispatch(
                 globalActions.showDialog({
@@ -646,6 +641,7 @@ export default connect(
         },
         togglePinnedPost: (
             pinPost,
+            username,
             community,
             account,
             permlink,
@@ -669,7 +665,7 @@ export default connect(
                     type: 'custom_json',
                     operation: {
                         id: 'community',
-                        required_posting_auths: [account],
+                        required_posting_auths: [username],
                         json: JSON.stringify(payload),
                     },
                     successCallback,

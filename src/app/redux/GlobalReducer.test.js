@@ -3,12 +3,6 @@ import { emptyContent } from 'app/redux/EmptyState';
 import * as globalActions from './GlobalReducer';
 import reducer, { defaultState } from './GlobalReducer';
 
-const expectedStats = Map({
-    gray: false,
-    hide: false,
-    total_votes: 0,
-});
-
 describe('Global reducer', () => {
     it('should provide a nice initial state', () => {
         const initial = reducer();
@@ -43,9 +37,6 @@ describe('Global reducer', () => {
         const actual = reducer(initial, globalActions.receiveState(payload));
         // Assert
         expect(actual.getIn(['content', 'barman', 'foo'])).toEqual('choo');
-        expect(actual.getIn(['content', 'barman', 'stats'])).toEqual(
-            expectedStats
-        );
     });
 
     it('should return correct state for a RECEIVE_ACCOUNT action', () => {

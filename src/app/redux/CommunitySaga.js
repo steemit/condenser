@@ -1,16 +1,11 @@
 import Promise from 'bluebird';
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { api, broadcast, auth } from '@steemit/steem-js';
+import { broadcast, auth } from '@steemit/steem-js';
 import * as communityActions from 'app/redux/CommunityReducer';
 import { postingOps, findSigningKey } from 'app/redux/AuthSaga';
 import { callBridge } from 'app/utils/steemApi';
 
-const wait = ms =>
-    new Promise(resolve => {
-        setTimeout(() => resolve(), ms);
-    });
-
-const generateHivemindOperation = (action, params, actor_name) => {
+const customOp = (action, params, actor_name) => {
     return [
         'custom_json',
         {
@@ -25,7 +20,6 @@ const generateHivemindOperation = (action, params, actor_name) => {
 export const communityWatches = [
     takeEvery('community/LIST_COMMUNITY_ROLES', listCommunityRoles),
     takeEvery('community/UPDATE_USER_ROLE', updateCommunityUser),
-    takeEvery('community/ADD_USER_WITH_ROLE_TO_COMMUNITY', addCommunityUser),
 ];
 
 export function* listCommunityRoles(action) {
@@ -36,11 +30,7 @@ export function* listCommunityRoles(action) {
         });
         yield put(communityActions.listCommunityRolesSuccess(communityRoles));
     } catch (error) {
-        yield put(
-            communityActions.listCommunityRolesError(
-                error ? error.toString() : true
-            )
-        );
+        console.log(error);
     }
     yield put(communityActions.listCommunityRolesPending(false));
 }
@@ -48,42 +38,20 @@ export function* listCommunityRoles(action) {
 export function* updateCommunityUser(action) {
     yield put(communityActions.updateCommunityUserPending(true));
     try {
-        // TODO: Call list Community roles on success.
-        yield put(communityActions.updateCommunityUserSuccess());
-    } catch (error) {
-        yield put(communityActions.updateCommunityUserError(error));
-    }
-    yield put(communityActions.updateCommunityUserPending(false));
-}
-
-export function* addCommunityUser(action) {
-    yield put(communityActions.addCommunityUserPending(true));
-    try {
-        const { community, username, role } = action.payload;
-        const currentUser = yield select(state => state.user.get('current'));
-        const currentUsername = currentUser && currentUser.get('username');
+        const username = yield select(state =>
+            state.user.getIn(['current', 'username'])
+        );
         const signingKey = yield call(findSigningKey, {
             opType: 'custom_json',
-            currentUsername,
+            username,
         });
-        const setRoleOperation = generateHivemindOperation(
-            'setRole',
-            { community: community, account: username, role: role },
-            currentUsername
-        );
 
-        yield broadcast.sendAsync(
-            {
-                extensions: [],
-                operations: [setRoleOperation],
-            },
-            [signingKey]
-        );
-        yield call(wait, 4000);
-        yield put(communityActions.listCommunityRoles(community));
-        yield put(communityActions.addCommunityUserSuccess());
+        const operations = [customOp('setRole', action.payload, username)];
+        yield broadcast.sendAsync({ extensions: [], operations }, [signingKey]);
+
+        yield put(communityActions.updateCommunityUserSuccess(action.payload));
     } catch (error) {
-        yield put(communityActions.addCommunityUserError(error));
+        console.log('update user error', error);
     }
-    yield put(communityActions.addCommunityUserPending(false));
+    yield put(communityActions.updateCommunityUserPending(false));
 }

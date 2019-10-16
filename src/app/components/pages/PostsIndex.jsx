@@ -291,6 +291,12 @@ class PostsIndex extends React.Component {
                                 )}
                                 <Link
                                     className="button slim hollow"
+                                    to={`/roles/${category}`}
+                                >
+                                    Edit Roles
+                                </Link>
+                                <Link
+                                    className="button slim hollow"
                                     to={`/submit.html?category=${category}`}
                                 >
                                     Create Post

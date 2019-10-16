@@ -2,28 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 
-import MuteButton from './MuteButton';
+import Reveal from 'app/components/elements/Reveal';
+import CloseButton from 'app/components/elements/CloseButton';
+import MutePost from 'app/components/modules/MutePost';
 
 class MuteButtonContainer extends React.Component {
     constructor(props) {
         super(props);
-        const { isMuted } = this.props;
-        this.state = {
-            showDialog: false,
-            loading: false,
-            isMuted,
-        };
+        this.state = { showDialog: false };
     }
 
-    onTogglePromptForMuteNotes = () => {
-        this.setState({ showDialog: !this.state.showDialog });
+    showDialog = () => {
+        this.setState({ showDialog: true });
     };
 
-    onToggleMute = (isMuted, notes) => {
+    hideDialog = () => {
+        this.setState({ showDialog: false });
+    };
+
+    onSubmit = (isMuted, notes) => {
         const { account, community, username, permlink } = this.props;
         if (!notes || !community || !username) return false; // Fail Fast
+
+        const postref = account + '/' + permlink;
+        const key = ['content', postref, 'stats', 'gray'];
+        this.props.stateSet(key, !isMuted);
 
         this.props.toggleMutedPost(
             username,
@@ -31,35 +37,30 @@ class MuteButtonContainer extends React.Component {
             community,
             account,
             notes,
-            permlink,
-            () => {
-                console.log('MuteButtonContainer::onToggleMute()::success');
-                this.setState({ isMuted: !isMuted });
-            },
-            () => {
-                console.log('MuteButtonContainer::onToggleMute()::failure');
-                this.setState({ isMuted });
-            }
+            permlink
         );
     };
 
     render() {
-        const { isMuted, showDialog, loading } = this.state;
-
-        let label = `Mute`;
-        if (isMuted) {
-            label = `Unmute`;
-        }
-
+        const { isMuted } = this.props;
         return (
-            <MuteButton
-                loading={loading}
-                label={label}
-                showDialog={showDialog}
-                onToggleMute={this.onToggleMute}
-                onToggleDialog={this.onTogglePromptForMuteNotes}
-                isMuted={isMuted}
-            />
+            <span>
+                <a onClick={() => this.showDialog()}>
+                    {isMuted ? 'Unmute' : 'Mute'}
+                </a>
+                {this.state.showDialog && (
+                    <Reveal onHide={() => null} show>
+                        <CloseButton onClick={() => this.hideDialot()} />
+                        <MutePost
+                            isMuted={isMuted}
+                            onSubmit={notes => {
+                                this.hideDialog();
+                                this.onSubmit(isMuted, notes);
+                            }}
+                        />
+                    </Reveal>
+                )}
+            </span>
         );
     }
 }
@@ -73,12 +74,18 @@ MuteButtonContainer.propTypes = {
 
 export default connect(
     (state, ownProps) => {
+        const { account, permlink, community } = ownProps;
         return {
-            ...ownProps,
+            account,
+            permlink,
+            community,
             username: state.user.getIn(['current', 'username']),
         };
     },
     dispatch => ({
+        stateSet: (key, value) => {
+            dispatch(globalActions.set({ key, value }));
+        },
         toggleMutedPost: (
             username,
             mutePost,
@@ -89,16 +96,14 @@ export default connect(
             successCallback,
             errorCallback
         ) => {
-            let action = 'unmutePost';
-            if (mutePost) action = 'mutePost';
-
+            const action = mutePost ? 'mutePost' : 'unmutePost';
             const payload = [
                 action,
                 {
                     community,
                     account,
-                    notes,
                     permlink,
+                    notes,
                 },
             ];
 

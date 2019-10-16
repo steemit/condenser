@@ -347,7 +347,8 @@ class Voting extends React.Component {
 
         const total_votes = post_obj.getIn(['stats', 'total_votes']);
 
-        const cashout_time = post_obj.get('cashout_time');
+        const payout_at = post_obj.get('payout_at');
+
         const max_payout = parsePayoutAmount(
             post_obj.get('max_accepted_payout')
         );
@@ -390,11 +391,10 @@ class Voting extends React.Component {
             (myVote > 0 ? ' Voting__button--upvoted' : '') +
             (votingUpActive ? ' votingUp' : '');
 
-        // There is an "active cashout" if: (a) there is a pending payout, OR (b) there is a valid cashout_time AND it's NOT a comment with 0 votes.
+        // There is an "active cashout" if: (a) there is a pending payout, OR (b) payout is pending AND it's NOT a comment with 0 votes.
         const cashout_active =
             pending_payout > 0 ||
-            (cashout_time.indexOf('1969') !== 0 &&
-                !(is_comment && total_votes == 0));
+            (!post_obj.get('is_paidout') && !(is_comment && total_votes == 0));
         const payoutItems = [];
 
         const minimumAmountForPayout = 0.02;
@@ -407,7 +407,7 @@ class Voting extends React.Component {
             const payoutDate = (
                 <span>
                     {tt('voting_jsx.payout')}{' '}
-                    <TimeAgoWrapper date={cashout_time} />
+                    <TimeAgoWrapper date={payout_at} />
                 </span>
             );
             payoutItems.push({

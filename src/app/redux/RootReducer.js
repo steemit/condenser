@@ -2,7 +2,6 @@ import { Map, fromJS } from 'immutable';
 import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
-import { contentStats } from 'app/utils/StateFunctions';
 import appReducer from './AppReducer';
 import globalReducer from './GlobalReducer';
 import userReducer from './UserReducer';
@@ -19,19 +18,6 @@ function initReducer(reducer, type) {
         if (action.type === '@@redux/INIT' || action.type === '@@INIT') {
             if (!(state instanceof Map)) {
                 state = fromJS(state);
-            }
-            if (type === 'global') {
-                const content = state.get('content').withMutations(c => {
-                    c.forEach((cc, key) => {
-                        if (!c.getIn([key, 'stats'])) {
-                            // This may have already been set in UniversalRender; if so, then
-                            //   active_votes were cleared from server response. In this case it
-                            //   is important to not try to recalculate the stats. (#1040)
-                            c.setIn([key, 'stats'], fromJS(contentStats(cc)));
-                        }
-                    });
-                });
-                state = state.set('content', content);
             }
             return state;
         }

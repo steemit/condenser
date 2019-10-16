@@ -28,7 +28,6 @@ import { component as NotFound } from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
 import { routeRegex } from 'app/ResolveRoute';
-import { contentStats } from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
 import { callBridge, getStateAsync } from 'app/utils/steemApi';
 
@@ -281,10 +280,6 @@ export async function serverRender(
         // If we are not loading a post, truncate state data to bring response size down.
         if (!url.match(routeRegex.Post)) {
             for (var key in onchain.content) {
-                // Count some stats then remove voting data. But keep current user's votes. (#1040)
-                onchain.content[key]['stats'] = contentStats(
-                    onchain.content[key]
-                );
                 onchain.content[key]['active_votes'] = null;
             }
         }

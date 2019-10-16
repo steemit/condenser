@@ -1,9 +1,6 @@
 import { Map, Set, List, fromJS, Iterable } from 'immutable';
 import resolveRoute from 'app/ResolveRoute';
 import { emptyContent } from 'app/redux/EmptyState';
-import { contentStats } from 'app/utils/StateFunctions';
-import constants from './constants';
-import { repLog10 } from 'app/utils/ParsersAndFormatters';
 
 export const emptyContentMap = Map(emptyContent);
 
@@ -85,19 +82,8 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_STATE: {
-            let new_state = fromJS(payload);
             console.log('Receive state', payload);
-            if (new_state.has('content') && !new_state.has('simulation')) {
-                const content = new_state.get('content').withMutations(c => {
-                    c.forEach((cc, key) => {
-                        cc = emptyContentMap.mergeDeep(cc);
-                        const stats = fromJS(contentStats(cc));
-                        c.setIn([key, 'stats'], stats);
-                    });
-                });
-                new_state = new_state.set('content', content);
-            }
-            const merged = state.mergeDeep(new_state);
+            const merged = state.mergeDeep(fromJS(payload));
             console.log('Merged state', merged.toJS());
             return merged;
         }
@@ -163,19 +149,11 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_CONTENT: {
             let content = fromJS(payload.content);
-            content = content.set(
-                'author_reputation',
-                repLog10(content.get('author_reputation'))
-            );
-
+            console.log('received content...', payload.content);
             const key = content.get('author') + '/' + content.get('permlink');
-            return state.updateIn(['content', key], Map(), c => {
-                c = emptyContentMap.mergeDeep(c);
-                c = c.delete('active_votes');
-                c = c.mergeDeep(content);
-                c = c.set('stats', fromJS(contentStats(c)));
-                return c;
-            });
+            return state.updateIn(['content', key], Map(), c =>
+                c.mergeDeep(content)
+            );
         }
 
         case LINK_REPLY: {
@@ -272,18 +250,17 @@ export default function reducer(state = defaultState, action = {}) {
                 });
             });
 
-            // append content stats data to each post
+            // append content to `content` map
             new_state = new_state.updateIn(['content'], content => {
                 return content.withMutations(map => {
                     data.forEach(value => {
                         const key = `${value.author}/${value.permlink}`;
-                        value = fromJS(value);
-                        value = value.set('stats', fromJS(contentStats(value)));
-                        map.set(key, value);
+                        map.set(key, fromJS(value));
                     });
                 });
             });
 
+            // update status
             new_state = new_state.updateIn(
                 ['status', category || '', order],
                 () => {

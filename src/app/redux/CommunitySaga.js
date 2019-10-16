@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
 import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { broadcast, auth } from '@steemit/steem-js';
-import * as communityActions from 'app/redux/CommunityReducer';
+import * as reducer from 'app/redux/CommunityReducer';
 import { postingOps, findSigningKey } from 'app/redux/AuthSaga';
 import { callBridge } from 'app/utils/steemApi';
 
@@ -23,25 +23,18 @@ export const communityWatches = [
 ];
 
 export function* loadCommunityRoles(action) {
-    yield put(communityActions.setCommunityRolesPending(true));
-    try {
-        const communityRoles = yield call(callBridge, 'list_community_roles', {
-            community: action.payload,
-        });
-        yield put(
-            communityActions.receiveCommunityRoles({
-                communityName: action.payload,
-                roles: communityRoles,
-            })
-        );
-    } catch (error) {
-        console.log(error);
-    }
-    yield put(communityActions.setCommunityRolesPending(false));
+    const community = action.payload;
+    console.log('loadCommunityRoles', community);
+    yield put(reducer.setCommunityRolesPending({ community, pending: true }));
+    const roles = yield call(callBridge, 'list_community_roles', { community });
+    yield put(reducer.receiveCommunityRoles({ community, roles }));
+    yield put(reducer.setCommunityRolesPending({ community, pending: false }));
 }
 
 export function* updateUserRole(action) {
-    yield put(communityActions.setUserRolePending(true));
+    const { community } = action.payload;
+
+    yield put(reducer.setUserRolePending({ community, pending: true }));
     try {
         const username = yield select(state =>
             state.user.getIn(['current', 'username'])
@@ -54,9 +47,9 @@ export function* updateUserRole(action) {
         const operations = [customOp('setRole', action.payload, username)];
         yield broadcast.sendAsync({ extensions: [], operations }, [signingKey]);
 
-        yield put(communityActions.applyUserRole(action.payload));
+        yield put(reducer.applyUserRole(action.payload));
     } catch (error) {
         console.log('update user error', error);
     }
-    yield put(communityActions.setUserRolePending(false));
+    yield put(reducer.setUserRolePending({ community, pending: false }));
 }

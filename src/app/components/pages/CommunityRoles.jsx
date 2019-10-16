@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as communityActions from 'app/redux/CommunityReducer';
-import { List } from 'immutable';
+import { Map, List } from 'immutable';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 class CommunityRoles extends React.Component {
     constructor(props) {
@@ -16,7 +17,7 @@ class CommunityRoles extends React.Component {
     }
 
     componentDidMount() {
-        this.props.loadCommunityRoles(this.props.communityName);
+        this.props.loadCommunityRoles(this.props.community);
     }
 
     onAccountChange(event) {
@@ -30,7 +31,7 @@ class CommunityRoles extends React.Component {
     onSubmit(event) {
         event.preventDefault();
         const params = {
-            community: this.props.communityName,
+            community: this.props.community,
             account: this.state.account,
             role: this.state.role,
         };
@@ -39,6 +40,12 @@ class CommunityRoles extends React.Component {
 
     render() {
         const { community, loading, updating, roles } = this.props;
+
+        const spinner = (
+            <center>
+                <LoadingIndicator type="circle" />
+            </center>
+        );
 
         const tableRows = roles.toJS().map((tuple, index) => (
             <tr key={tuple[0]}>
@@ -87,13 +94,17 @@ class CommunityRoles extends React.Component {
             <div className="CommunityRoles">
                 <div className="row">
                     <div className="column large-4">
-                        <div>Community Name: {this.props.communityName}</div>
+                        <h2>{community}</h2>
                         {updating && <div>Updating User...</div>}
-                        {loading && <div>Loading...</div>}
-                        <div>Community Members:</div>
-                        <div>{table}</div>
-                        <div>Add new user to community:</div>
-                        {form}
+                        {loading && spinner}
+                        {!loading && (
+                            <div>
+                                <div>User roles:</div>
+                                <div>{table}</div>
+                                <div>Modify user role:</div>
+                                {form}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -103,20 +114,17 @@ class CommunityRoles extends React.Component {
 
 const CommunityRolesWrapped = connect(
     (state, ownProps) => {
-        const communityName = ownProps.params.community;
-
-        const roles =
-            state.community.get('communityName') == communityName
-                ? state.community.get('roles', List())
-                : List();
-
-        console.log('Community state:', state.community.toJS());
+        const { community } = ownProps.params;
+        const tree = state.community.get(community, Map());
+        const roles = tree.get('roles', List());
+        const loading = roles.size == 0;
+        const updating = tree.get('updatePending', false);
 
         return {
-            communityName,
+            community,
             roles,
-            loading: roles.size == 0,
-            updating: state.community.get('updatePending'),
+            loading,
+            updating,
         };
     },
 

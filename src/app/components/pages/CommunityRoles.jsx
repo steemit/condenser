@@ -99,9 +99,9 @@ class CommunityRoles extends React.Component {
                         {loading && spinner}
                         {!loading && (
                             <div>
-                                <div>User roles:</div>
-                                <div>{table}</div>
-                                <div>Modify user role:</div>
+                                <h4>User Roles</h4>
+                                {table}
+                                <h4>Modify User Role</h4>
                                 {form}
                             </div>
                         )}

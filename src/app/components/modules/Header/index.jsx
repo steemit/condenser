@@ -180,7 +180,7 @@ class Header extends React.Component {
             page_title = tt('navigation.privacy_policy');
         } else if (route.page == 'Tos') {
             page_title = tt('navigation.terms_of_service');
-        } else if (route.page == 'CommunityRolesPage') {
+        } else if (route.page == 'CommunityRoles') {
             page_title = 'Community Roles';
         } else if (route.page == 'RecoverAccountStep1') {
             page_title = tt('header_jsx.stolen_account_recovery');

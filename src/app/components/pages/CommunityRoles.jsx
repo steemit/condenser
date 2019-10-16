@@ -102,7 +102,7 @@ class CommunityRoles extends React.Component {
     }
 }
 
-export default connect(
+const CommunityRolesWrapped = connect(
     (state, ownProps) => {
         const communityName = ownProps.params.community;
 
@@ -128,3 +128,8 @@ export default connect(
         },
     })
 )(CommunityRoles);
+
+module.exports = {
+    path: 'roles(/:community)',
+    component: CommunityRolesWrapped,
+};

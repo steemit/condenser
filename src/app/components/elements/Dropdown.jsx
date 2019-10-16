@@ -38,6 +38,15 @@ export default class Dropdown extends React.Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.shown == this.state.shown) return;
+        if (this.state.shown) {
+            document.addEventListener('click', this.hide);
+        } else {
+            document.removeEventListener('click', this.hide);
+        }
+    }
+
     componentWillUnmount() {
         document.removeEventListener('click', this.hide);
     }
@@ -53,7 +62,6 @@ export default class Dropdown extends React.Component {
         e.preventDefault();
         this.setState({ shown: true });
         this.props.onShow();
-        document.addEventListener('click', this.hide);
     };
 
     hide = e => {
@@ -61,6 +69,7 @@ export default class Dropdown extends React.Component {
         const inside_dropdown = !!findParent(e.target, 'dropdown__content');
         if (inside_dropdown) return;
         e.preventDefault();
+
         this.setState({ shown: false });
         this.props.onHide();
         document.removeEventListener('click', this.hide);

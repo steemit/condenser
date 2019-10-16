@@ -140,27 +140,27 @@
     cursor: default;
   }
 
-  a path {
+  span.flag path {
     fill: #f99;
   }
-  a circle {
+  span.flag circle {
     stroke: #f99;
   }
-  a:hover circle {
+  span.flag:hover circle {
     fill: #f66;
   }
-  a:hover path {
+  span.flag:hover path {
     fill: #fff;
   }
 
   &.Voting__button--downvoted {
-    a path {
+    span.flag path {
       fill: #fff;
     }
-    a circle {
+    span.flag circle {
       fill: #f99;
     }
-    a:hover circle {
+    span.flag:hover circle {
       fill: #f66;
     }
   }

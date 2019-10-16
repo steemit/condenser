@@ -464,29 +464,29 @@ export function clientRender(initialState) {
 }
 
 async function apiFetchState(url) {
-    let offchain;
+    let onchain;
 
     if (process.env.OFFLINE_SSR_TEST) {
-        offchain = get_state_perf;
+        onchain = get_state_perf;
     }
 
-    offchain = await getStateAsync(url, null, true);
+    onchain = await getStateAsync(url, null, true);
 
     try {
         const history = await api.getFeedHistoryAsync();
         const feed = history.price_history;
         const last = feed[feed.length - 1];
-        offchain['feed_price'] = last;
+        onchain['feed_price'] = last;
     } catch (error) {
         console.log('Error fetching feed price:', error);
     }
 
     try {
         const dgpo = await api.getDynamicGlobalPropertiesAsync();
-        offchain['props'] = { sbd_print_rate: dgpo['sbd_print_rate'] };
+        onchain['props'] = { sbd_print_rate: dgpo['sbd_print_rate'] };
     } catch (error) {
         console.log('Error fetching dgpo:', error);
     }
 
-    return offchain;
+    return onchain;
 }

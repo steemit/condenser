@@ -423,7 +423,12 @@ class ReplyEditor extends React.Component {
             payoutType,
             beneficiaries,
         } = this.props;
-        const { submitting, valid, handleSubmit } = this.state.replyForm;
+        const {
+            submitting,
+            valid,
+            handleSubmit,
+            resetForm,
+        } = this.state.replyForm;
         const { postError, titleWarn, rte } = this.state;
         const { progress, noClipboardData } = this.state;
         const disabled = submitting || !valid;
@@ -433,6 +438,7 @@ class ReplyEditor extends React.Component {
             this.setState({ postError: estr, loading: false });
         };
         const successCallbackWrapper = (...args) => {
+            resetForm();
             this.setState({ loading: false });
             this.props.setPayoutType(formId, defaultPayoutType);
             this.props.setBeneficiaries(formId, []);

@@ -34,7 +34,8 @@ export function allowDelete(comment) {
     const rshares = String(comment.get('net_rshares'));
     const hasPayout = !(rshares[0] == '0' || rshares[0] == '-');
     const hasChildren = comment.get('children') !== 0;
-    return !(hasPayout || hasChildren);
+    const archived = comment.get('is_paidout');
+    return !(hasPayout || hasChildren) && !archived;
 }
 
 export function hasNsfwTag(content) {
@@ -62,6 +63,10 @@ export function contentStats(content) {
     if (!content) return {};
     if (!(content instanceof Map)) content = fromJS(content);
 
+    if (!content.has('stats')) {
+        console.log(content);
+        throw 'wtf no stats...';
+    }
     let stats = fromJS(content.get('stats', Map()));
 
     let net_rshares_adj = Long.ZERO;

@@ -105,7 +105,7 @@ class PostSummary extends React.Component {
         const p = extractContent(immutableAccessor, content);
         const desc = p.desc;
 
-        const archived = content.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF17. #1259
+        const archived = content.get('is_paidout');
         const full_power = content.get('percent_steem_dollars') === 0;
 
         let post_url;

@@ -448,22 +448,15 @@ class PostFull extends React.Component {
             );
         }
 
-        const isPaidout = post.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
-        const showReblog = !isPaidout;
-        const showPromote =
-            false && username && !isPaidout && post.get('depth') == 0;
-
+        const showReblog = !post.get('is_paidout');
+        const showPromote = !post.get('is_paidout') && post.get('depth') == 0;
         const showPinToggle = Role.atLeast(viewer_role, 'mod');
-        const { isPinned } = this.state;
-
         const showMuteToggle = Role.atLeast(viewer_role, 'mod');
-        const { isMuted } = this.state;
-
-        const showReplyOption =
-            username !== undefined && post.get('depth') < 255;
+        const showReplyOption = username && post.get('depth') < 255;
         const showEditOption = username === author && !showEdit;
-        const showDeleteOption =
-            username === author && allowDelete(post) && !isPaidout;
+        const showDeleteOption = username === author && allowDelete(post);
+
+        const { isPinned, isMuted } = this.state;
 
         const isPreViewCount = Date.parse(post.get('created')) < 1480723200000; // check if post was created before view-count tracking began (2016-12-03)
         let contentBody;
@@ -508,14 +501,16 @@ class PostFull extends React.Component {
                     </span>
                 )}
 
-                {showPromote && (
-                    <button
-                        className="Promote__button float-right button hollow tiny"
-                        onClick={this.showPromotePost}
-                    >
-                        {tt('g.promote')}
-                    </button>
-                )}
+                {false &&
+                    showPromote &&
+                    username && (
+                        <button
+                            className="Promote__button float-right button hollow tiny"
+                            onClick={this.showPromotePost}
+                        >
+                            {tt('g.promote')}
+                        </button>
+                    )}
                 {content.depth == 0 && <TagList post={content} horizontal />}
                 <div className="PostFull__footer row">
                     <div className="columns medium-12 large-6">

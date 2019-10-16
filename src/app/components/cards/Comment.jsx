@@ -312,11 +312,9 @@ class CommentImpl extends React.Component {
         // hide images if author is in blacklist
         const hideImages = ImageUserBlockList.includes(author);
 
-        const _isPaidout = comment.cashout_time === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
         const showEditOption = username === author;
         const showMuteToggle = Role.atLeast(viewer_role, 'mod');
-        const showDeleteOption =
-            username === author && allowDelete(comment) && !_isPaidout;
+        const showDeleteOption = username === author && allowDelete(comment);
         const showReplyOption = username !== undefined && comment.depth < 255;
 
         let body = null;

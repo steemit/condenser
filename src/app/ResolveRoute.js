@@ -1,6 +1,7 @@
 import GDPRUserList from './utils/GDPRUserList';
 
 export const routeRegex = {
+    CommunityRoles: /^\/(roles)+\/([\w\.\d-]+)/gi,
     PostsIndex: /^\/(@[\w\.\d-]+)\/feed\/?$/,
     UserProfile1: /^\/(@[\w\.\d-]+)\/?$/,
     UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recent-replies|payout|feed|followed|followers|settings|notifications)\/?$/,
@@ -65,13 +66,18 @@ export default function resolveRoute(path) {
     if (path === '/submit.html') {
         return { page: 'SubmitPost' };
     }
-    let match = path.match(routeRegex.PostsIndex);
+    let match = path.match(routeRegex.CommunityRoles);
+    if (match) {
+        return { page: 'CommunityRoles', params: [match[0].split('/')[2]] };
+    }
+    match = path.match(routeRegex.PostsIndex);
     if (match) {
         if (GDPRUserList.includes(match[1].substring(1))) {
             return { page: 'NotFound' };
         }
         return { page: 'PostsIndex', params: ['home', match[1]] };
     }
+
     match =
         path.match(routeRegex.UserProfile1) ||
         // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)

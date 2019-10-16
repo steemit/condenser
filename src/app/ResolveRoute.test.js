@@ -60,6 +60,10 @@ describe('resolveRoute', () => {
             '/ceasar/@salad/circa90',
             { page: 'Post', params: ['ceasar', '@salad', 'circa90', ''] },
         ],
+        [
+            '/roles/hive-105677',
+            { page: 'CommunityRoles', params: ['hive-105677'] },
+        ],
         ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
     ];
     test_cases.forEach(r => {

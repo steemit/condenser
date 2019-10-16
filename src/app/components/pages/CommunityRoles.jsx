@@ -1,23 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as communityActions from 'app/redux/CommunityReducer';
+import { List } from 'immutable';
 
 class CommunityRoles extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            newCommunityUserName: '',
-            newCommunityUserRole: 'member',
+            account: '',
+            role: 'member',
         };
-        this.handleNewCommunityUserNameChange = this.handleNewCommunityUserNameChange.bind(
-            this
-        );
-        this.handleNewCommunityUserRoleChange = this.handleNewCommunityUserRoleChange.bind(
-            this
-        );
-        this.handleNewCommunityUserSubmit = this.handleNewCommunityUserSubmit.bind(
-            this
-        );
+        this.onAccountChange = this.onAccountChange.bind(this);
+        this.onRoleChange = this.onRoleChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -25,95 +20,81 @@ class CommunityRoles extends React.Component {
         this.props.listCommunityRoles(this.props.communityName);
     }
 
-    handleNewCommunityUserNameChange(event) {
-        this.setState({ newCommunityUserName: event.target.value });
+    onAccountChange(event) {
+        this.setState({ account: event.target.value });
     }
 
-    handleNewCommunityUserRoleChange(event) {
-        this.setState({ newCommunityUserRole: event.target.value });
+    onRoleChange(event) {
+        this.setState({ role: event.target.value });
     }
 
-    handleNewCommunityUserSubmit(event) {
+    onSubmit(event) {
         event.preventDefault();
-        const newCommunityUser = {
+        const params = {
             community: this.props.communityName,
-            username: this.state.newCommunityUserName,
-            role: this.state.newCommunityUserRole,
+            account: this.state.account,
+            role: this.state.role,
         };
-        this.props.addCommunityUser(newCommunityUser);
+        this.props.updateCommunityUser(params);
     }
 
     render() {
-        const { community } = this.props;
+        const { community, loading, updating, roles } = this.props;
 
-        const communityNewUserPending = community.communityAddUserWithRolePending ? (
-            <div>Adding User...</div>
-        ) : null;
+        const tableRows = roles.toJS().map((tuple, index) => (
+            <tr key={tuple[0]}>
+                <td>{tuple[0]}</td>
+                <td>{tuple[1]}</td>
+            </tr>
+        ));
 
-        const communityListUsersPending = community.communityListUsersWithRolesPending ? (
-            <div>Finding Community Users...</div>
-        ) : null;
-
-        const communityTableCells = community.communityUsersWithRoles.map(
-            (communityUserAndRole, index) => {
-                return (
-                    <tr key={`communityUser-${communityUserAndRole[0]}`}>
-                        <td>{communityUserAndRole[0]}</td>
-                        <td>{communityUserAndRole[1]}</td>
-                    </tr>
-                );
-            }
-        );
-
-        const communityTable = (
+        const table = (
             <table>
                 <thead>
                     <th>Username</th>
                     <th>Role</th>
                 </thead>
-                <tbody>{communityTableCells}</tbody>
+                <tbody>{tableRows}</tbody>
             </table>
         );
+
+        const form = (
+            <form onSubmit={this.onSubmit}>
+                <label>
+                    User:
+                    <input
+                        onChange={this.onAccountChange}
+                        type="text"
+                        name="name"
+                        required
+                    />
+                </label>
+                <label>
+                    Role:
+                    <select onChange={this.onRoleChange} required>
+                        <option value="" />
+                        <option value="admin">admin</option>
+                        <option value="mod">mod</option>
+                        <option value="member">member</option>
+                        <option value="guest">guest</option>
+                        <option value="muted">muted</option>
+                    </select>
+                </label>
+                <input type="submit" value="Submit" />
+            </form>
+        );
+
         return (
             <div className="CommunityRoles">
                 <div className="row">
                     <div className="column large-4">
-                        <div>Community Name: {community.community}</div>
-                        {communityListUsersPending}
-                        {communityNewUserPending}
+                        <div>Community Name: {this.props.communityName}</div>
+                        {updating && <div>Updating User...</div>}
+                        {loading && <div>Loading...</div>}
                         <div>Community Members:</div>
-                        <div>{communityTable}</div>
+                        <div>{table}</div>
                         <div>Add new user to community:</div>
-                        <form onSubmit={this.handleNewCommunityUserSubmit}>
-                            <label>
-                                User:
-                                <input
-                                    required
-                                    onChange={
-                                        this.handleNewCommunityUserNameChange
-                                    }
-                                    type="text"
-                                    name="name"
-                                />
-                            </label>
-                            <label>
-                                Role:
-                                <select
-                                    onChange={
-                                        this.handleNewCommunityUserRoleChange
-                                    }
-                                    required
-                                >
-                                    <option value="" />
-                                    <option value="admin">admin</option>
-                                    <option value="mod">mod</option>
-                                    <option value="member">member</option>
-                                    <option value="guest">guest</option>
-                                    <option value="muted">muted</option>
-                                </select>
-                            </label>
-                            <input type="submit" value="Submit" />
-                        </form>
+                        {form}
                     </div>
                 </div>
             </div>
@@ -123,17 +104,18 @@ class CommunityRoles extends React.Component {
 
 export default connect(
     (state, ownProps) => {
-        const pathname = state.app.get('location').pathname;
         const communityName = ownProps.params.community;
+
         console.log('Community state:', state.community.toJS());
+
         return {
-            pathname,
-            community: state.community.toJS(),
+            loading: state.community.get('listPending'),
+            updating: state.community.get('updatePending'),
+            roles: state.community.get('roles', List()),
             communityName,
-            user_preferences: state.app.get('user_preferences').toJS(),
-            ...ownProps,
         };
     },
+
     dispatch => ({
         setCurrentCommunity: community => {
             dispatch(communityActions.setCurrentCommunity(community));
@@ -141,11 +123,8 @@ export default connect(
         listCommunityRoles: community => {
             dispatch(communityActions.listCommunityRoles(community));
         },
-        /*updateCommunityUser: communityUser => {
+        updateCommunityUser: communityUser => {
             dispatch(communityActions.updateCommunityUser(communityUser));
-        },*/
-        addCommunityUser: communityUser => {
-            dispatch(communityActions.addCommunityUser(communityUser));
         },
     })
 )(CommunityRoles);

@@ -826,7 +826,6 @@ class ReplyEditor extends React.Component {
                                     <h6>{tt('g.preview')}</h6>
                                     <MarkdownViewer
                                         text={body.value}
-                                        jsonMetadata={jsonMetadata}
                                         large={isStory}
                                         noImage={noImage}
                                     />

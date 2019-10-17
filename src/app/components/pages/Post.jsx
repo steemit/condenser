@@ -150,8 +150,7 @@ class Post extends React.Component {
             return (
                 <div key={post + reply}>
                     <Comment
-                        root
-                        content={reply}
+                        postref={reply}
                         cont={content}
                         sort_order={sortOrder}
                         showNegativeComments={showNegativeComments}

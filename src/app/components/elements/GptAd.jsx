@@ -82,6 +82,7 @@ export default connect(
             !!state.app.getIn(['googleAds', 'gptEnabled']) &&
             !!process.env.BROWSER &&
             !!window.googletag;
+        console.log(`enabled: ${enabled}, state.app.getIn(['googleAds', 'gptEnabled']): ${state.app.getIn(['googleAds', 'gptEnabled'])}, process.env.BROWSER: ${process.env.BROWSER}, window.googletag: ${window.googletag}`);
         const postCategory = state.global.get('postCategory');
         const basicSlots = state.app.getIn(['googleAds', `gptBasicSlots`]);
         const biddingSlots = state.app.getIn(['googleAds', `gptBiddingSlots`]);
@@ -101,6 +102,8 @@ export default connect(
         if (type != 'Freestar') {
             slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
         }
+
+        console.log(`slot: ${slot}`);
 
         return {
             enabled,

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SubscribeButtonContainer from 'app/components/elements/SubscribeButtonContainer';
+import SubscribeButton from 'app/components/elements/SubscribeButton';
 import { Link } from 'react-router';
 
 export default function Community(props) {
@@ -13,7 +13,7 @@ export default function Community(props) {
             </div>
             <div className="communities__description">{about}</div>
             <div className="communities__subscription">
-                <SubscribeButtonContainer community={name} />
+                <SubscribeButton community={name} />
             </div>
         </div>
     );

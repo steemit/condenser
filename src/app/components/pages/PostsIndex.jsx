@@ -14,7 +14,7 @@ import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
-import SubscribeButtonContainer from 'app/components/elements/SubscribeButtonContainer';
+import SubscribeButton from 'app/components/elements/SubscribeButton';
 import SettingsEditButtonContainer from 'app/components/elements/SettingsEditButtonContainer';
 import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
@@ -284,7 +284,7 @@ class PostsIndex extends React.Component {
                             </div>
                             <div style={{ float: 'none', marginTop: '-5px' }}>
                                 {this.props.username && (
-                                    <SubscribeButtonContainer
+                                    <SubscribeButton
                                         community={community.get('name')}
                                     />
                                 )}

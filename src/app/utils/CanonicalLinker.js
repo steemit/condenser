@@ -36,19 +36,18 @@ function allowed_app(app) {
     return whitelist.includes(app);
 }
 
-export function makeCanonicalLink(d) {
-    const metadata = d.json_metadata;
+export function makeCanonicalLink(post, metadata) {
+    let scheme;
+
     if (metadata) {
         const canonUrl = read_md_canonical(metadata);
         if (canonUrl) return canonUrl;
 
         const app = read_md_app(metadata);
         if (app && allowed_app(app)) {
-            const scheme = Apps[app] ? Apps[app].url_scheme : null;
-            if (scheme && d.category) {
-                return build_scheme(scheme, d);
-            }
+            scheme = Apps[app] ? Apps[app].url_scheme : null;
         }
     }
-    return 'https://steemit.com' + d.link;
+    if (!scheme) scheme = Apps['steemit'].url_scheme;
+    return build_scheme(scheme, post);
 }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { immutableAccessor } from 'app/utils/Accessors';
-import extractContent from 'app/utils/ExtractContent'; // json_md.tags
+import { parseJsonTags } from 'app/utils/StateFunctions';
 import Headroom from 'react-headroom';
 import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
@@ -163,14 +163,11 @@ class Header extends React.Component {
                 }
             }
         } else if (route.page === 'Post') {
-            const user = `${route.params[1]}`.replace('@', '');
-            const slug = `${route.params[2]}`;
             if (content) {
-                const post_content = content.get(`${user}/${slug}`);
-                if (post_content) {
-                    const p = extractContent(immutableAccessor, post_content);
-                    gptTags = p.json_metadata.tags || [];
-                }
+                const user = `${route.params[1]}`.replace('@', '');
+                const slug = `${route.params[2]}`;
+                const post = content.get(`${user}/${slug}`);
+                gptTags = post ? parseJsonTags(post) : [];
             }
             sort_order = '';
             topic = route.params[0];

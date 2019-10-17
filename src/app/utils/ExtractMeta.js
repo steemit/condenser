@@ -1,4 +1,7 @@
-import extractContent from 'app/utils/ExtractContent';
+import {
+    extractBodySummary,
+    extractJsonMetadata,
+} from 'app/utils/ExtractContent';
 import { objAccessor } from 'app/utils/Accessors';
 import { makeCanonicalLink } from 'app/utils/CanonicalLinker.js';
 
@@ -29,13 +32,19 @@ function addSiteMeta(metas) {
 
 function addPostMeta(metas, content, profile) {
     const { profile_image } = profile;
-    const d = extractContent(objAccessor, content, false);
-    const url = 'https://steemit.com' + d.link;
-    const canonicalUrl = makeCanonicalLink(d);
-    const title = d.title + ' — Steemit';
-    const desc = d.desc + ' by ' + d.author;
-    const image = d.image_link || profile_image;
-    const { category, created } = d;
+    const { category, created, body } = content;
+    const isReply = content.depth > 1;
+
+    const title = content.title + ' — Steemit';
+    const desc = extractBodySummary(body, isReply) + ' by ' + content.author;
+    const { image_link, json_metadata } = extractJsonMetadata(
+        content.json_metadata,
+        body
+    );
+
+    const canonicalUrl = makeCanonicalLink(content, json_metadata);
+    const localUrl = makeCanonicalLink(content, null);
+    const image = image_link || profile_image;
 
     // Standard meta
     metas.push({ title });
@@ -45,7 +54,7 @@ function addPostMeta(metas, content, profile) {
     // Open Graph data
     metas.push({ name: 'og:title', content: title });
     metas.push({ name: 'og:type', content: 'article' });
-    metas.push({ name: 'og:url', content: url });
+    metas.push({ name: 'og:url', content: localUrl });
     metas.push({
         name: 'og:image',
         content: image || 'https://steemit.com/images/steemit.png',

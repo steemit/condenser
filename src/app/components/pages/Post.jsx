@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import { immutableAccessor } from 'app/utils/Accessors';
-import extractContent from 'app/utils/ExtractContent'; //json_md.tags
 import { connect } from 'react-redux';
 
+import { parseJsonTags } from 'app/utils/StateFunctions';
 import { sortComments } from 'app/components/cards/Comment';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import { Set } from 'immutable';
@@ -26,11 +26,6 @@ function isEmptyPost(post) {
         (post.get('created') === '1970-01-01T00:00:00' &&
             post.get('body') === '')
     );
-}
-
-function extractTags(post) {
-    const extracted = extractContent(immutableAccessor, post);
-    return extracted.json_metadata.tags;
 }
 
 class Post extends React.Component {
@@ -97,7 +92,7 @@ class Post extends React.Component {
                 </div>
             );
 
-        const tags = extractTags(dis);
+        const gptTags = parseJsonTags(dis);
 
         // A post should be hidden if it is not special, is not told to "show
         // anyway", and is designated "gray".
@@ -160,7 +155,7 @@ class Post extends React.Component {
                     {this.props.gptEnabled && showAd ? (
                         <div className="Post_footer__ad">
                             <GptAd
-                                tags={tags}
+                                tags={gptTags}
                                 type="Freestar"
                                 id="bsa-zone_1566494240874-7_123456"
                             />
@@ -238,7 +233,7 @@ class Post extends React.Component {
                 {this.props.gptEnabled && commentCount >= 5 ? (
                     <div className="Post_footer__ad">
                         <GptAd
-                            tags={tags}
+                            tags={gptTags}
                             type="Freestar"
                             id="bsa-zone_1566494147292-7_123456"
                         />
@@ -266,7 +261,7 @@ class Post extends React.Component {
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
                         <GptAd
-                            tags={tags}
+                            tags={gptTags}
                             type="Freestar"
                             id="bsa-zone_1566494371533-0_123456"
                         />

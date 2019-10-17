@@ -80,8 +80,7 @@ export default connect(
     (state, props) => {
         const enabled =
             !!state.app.getIn(['googleAds', 'gptEnabled']) &&
-            !!process.env.BROWSER &&
-            !!window.googletag;
+            !!process.env.BROWSER;
         const postCategory = state.global.get('postCategory');
         const basicSlots = state.app.getIn(['googleAds', `gptBasicSlots`]);
         const biddingSlots = state.app.getIn(['googleAds', `gptBiddingSlots`]);

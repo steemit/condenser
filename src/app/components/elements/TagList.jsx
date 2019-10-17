@@ -56,6 +56,7 @@ class TagList extends Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => ({
-        ...ownProps,
+        post: ownProps.post,
+        single: ownProps.single,
     })
 )(TagList);

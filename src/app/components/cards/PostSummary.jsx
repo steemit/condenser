@@ -168,7 +168,7 @@ class PostSummary extends React.Component {
                         {hideCategory || (
                             <span className="articles__tag-link">
                                 {tt('g.in')}&nbsp;<TagList
-                                    post={content}
+                                    post={content.toJS()}
                                     single
                                 />&nbsp;•&nbsp;
                             </span>

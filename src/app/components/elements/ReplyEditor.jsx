@@ -1053,12 +1053,14 @@ export default formId =>
                 else delete meta.tags;
                 if (rtags.usertags.size) meta.users = rtags.usertags;
                 else delete meta.users;
-                if (rtags.images.size) meta.image = rtags.images;
+                if (rtags.images.size)
+                    meta.image = rtags.images; // TODO: save first image
                 else delete meta.image;
-                if (rtags.links.size) meta.links = rtags.links;
+                if (rtags.links.size)
+                    meta.links = rtags.links; // TODO: remove? save first?
                 else delete meta.links;
 
-                meta.app = 'steemit/0.1';
+                meta.app = 'steemit/0.2';
                 if (isStory) {
                     meta.format = isHtml ? 'html' : 'markdown';
                 }
@@ -1136,7 +1138,7 @@ export default formId =>
                     category: originalPost.category || metaTags.first(),
                     title,
                     body,
-                    json_metadata: meta,
+                    json_metadata: JSON.stringify(meta),
                     __config,
                 };
                 dispatch(

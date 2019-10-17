@@ -103,7 +103,6 @@ class PostSummary extends React.Component {
         const isNsfw = hasNsfwTag(content);
         const special = content.get('special');
         const p = extractContent(immutableAccessor, content);
-        const desc = p.desc;
 
         const archived = content.get('is_paidout');
         const full_power = content.get('percent_steem_dollars') === 0;
@@ -130,7 +129,7 @@ class PostSummary extends React.Component {
 
         const content_body = (
             <div className="PostSummary__body entry-content">
-                <Link to={post_url}>{desc}</Link>
+                <Link to={post_url}>{p.desc}</Link>
             </div>
         );
         const content_title = (

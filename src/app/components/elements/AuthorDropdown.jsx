@@ -71,7 +71,7 @@ class AuthorDropdown extends Component {
 export default connect(
     (state, props) => {
         const { author, authorRep, username, follow, mute } = props;
-        const simple = !(follow || mute) || username === author;
+        const simple = !(follow || mute);
 
         return {
             author,

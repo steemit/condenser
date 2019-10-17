@@ -25,11 +25,11 @@ const operation = {
     body:
         "The Body is a pretty long chunck of text that represents the user's voice, it seems they have much to say, and this is one place where they can do that.",
     category: 'hi',
-    json_metadata: {
+    json_metadata: JSON.stringify({
         tags: ['hi'],
         app: 'steemit/0.1',
         format: 'markdown',
-    },
+    }),
     parent_author: 'candide',
     parent_permlink: 'cool',
     title: 'test',
@@ -118,7 +118,7 @@ describe('TransactionSaga', () => {
                         __config: operation.__config,
                         memo: operation.memo,
                         permlink: 'mock-permlink-123',
-                        json_metadata: JSON.stringify(operation.json_metadata),
+                        json_metadata: operation.json_metadata,
                         title: (operation.title || '').trim(),
                         body: operation.body,
                     },

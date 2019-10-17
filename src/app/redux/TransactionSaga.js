@@ -436,7 +436,6 @@ export function* preBroadcast_comment({ operation, username }) {
         permlink: permlink.toLowerCase(),
         parent_author,
         parent_permlink,
-        json_metadata,
         title: (operation.title || '').trim(),
         body: body2,
     };

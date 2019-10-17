@@ -419,8 +419,6 @@ export function* preBroadcast_comment({ operation, username }) {
 
     body = body.trim();
 
-    // TODO Slightly smaller blockchain comments: if body === json_metadata.steem.link && Object.keys(steem).length > 1 remove steem.link ..This requires an adjust of get_state and the API refresh of the comment to put the steem.link back if Object.keys(steem).length >= 1
-
     let body2;
     if (originalBody) {
         const patch = createPatch(originalBody, body);
@@ -431,8 +429,8 @@ export function* preBroadcast_comment({ operation, username }) {
     if (!body2) body2 = body;
     if (!permlink) permlink = yield createPermlink(title, author);
 
-    const md = operation.json_metadata;
-    const json_metadata = typeof md === 'string' ? md : JSON.stringify(md);
+    if (typeof operation.json_metadata !== 'string')
+        throw 'json not serialized';
     const op = {
         ...operation,
         permlink: permlink.toLowerCase(),

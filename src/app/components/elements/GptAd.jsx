@@ -12,8 +12,6 @@ class GptAd extends Component {
         this.tags = tags;
         this.bannedTags = bannedTags;
 
-        console.log(`enabled from props: ${enabled}`);
-
         if (ad_identifier != '') {
             // console.info(
             //     `ad_identifier of '${ad_identifier}' will render.`,
@@ -82,9 +80,7 @@ export default connect(
     (state, props) => {
         const enabled =
             !!state.app.getIn(['googleAds', 'gptEnabled']) &&
-            !!process.env.BROWSER &&
-            !!window.googletag;
-        console.log(`enabled: ${enabled}, state.app.getIn(['googleAds', 'gptEnabled']): ${state.app.getIn(['googleAds', 'gptEnabled'])}, process.env.BROWSER: ${process.env.BROWSER}, window.googletag: ${window.googletag}`);
+            !!process.env.BROWSER;
         const postCategory = state.global.get('postCategory');
         const basicSlots = state.app.getIn(['googleAds', `gptBasicSlots`]);
         const biddingSlots = state.app.getIn(['googleAds', `gptBiddingSlots`]);
@@ -104,8 +100,6 @@ export default connect(
         if (type != 'Freestar') {
             slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
         }
-
-        console.log(`slot: ${slot}`);
 
         return {
             enabled,

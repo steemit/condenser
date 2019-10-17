@@ -12,7 +12,7 @@ import Reblog from 'app/components/elements/Reblog';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import { immutableAccessor } from 'app/utils/Accessors';
-import extractContent from 'app/utils/ExtractContent';
+import extractContent from 'app/utils/ExtractContent'; // desc
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
@@ -272,10 +272,8 @@ class PostFull extends React.Component {
             onDeletePost,
         } = this;
         if (!post) return null;
-        const p = extractContent(immutableAccessor, post);
         const content = post.toJS();
         const { author, permlink, parent_author, parent_permlink } = content;
-        const jsonMetadata = this.state.showReply ? null : p.json_metadata;
 
         let link = `/@${content.author}/${content.permlink}`;
         if (content.category) link = `/${content.category}${link}`;
@@ -320,7 +318,7 @@ class PostFull extends React.Component {
             url: 'https://' + APP_DOMAIN + link,
             rawtitle: title,
             title: title + ' — ' + APP_NAME,
-            desc: p.desc,
+            desc: extractContent(immutableAccessor, post).desc,
         };
 
         const share_menu = [
@@ -359,6 +357,13 @@ class PostFull extends React.Component {
             : PostFullEditEditor;
         let renderedEditor = null;
         if (showReply || showEdit) {
+            let jsonMetadata = null;
+            if (!showReply) {
+                try {
+                    jsonMetadata = JSON.parse(content.json_metadata);
+                } catch (error) {}
+            }
+
             renderedEditor = (
                 <div key="editor">
                     <Editor
@@ -460,7 +465,6 @@ class PostFull extends React.Component {
                 <MarkdownViewer
                     formId={formId + '-viewer'}
                     text={content_body}
-                    jsonMetadata={jsonMetadata}
                     large
                     highQualityPost={high_quality_post}
                     noImage={content.stats.gray}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import { immutableAccessor } from 'app/utils/Accessors';
-import extractContent from 'app/utils/ExtractContent';
+import extractContent from 'app/utils/ExtractContent'; //json_md.tags
 import { connect } from 'react-redux';
 
 import { sortComments } from 'app/components/cards/Comment';

@@ -166,7 +166,7 @@ class PostsIndex extends React.Component {
                     account_name,
                 });
         } else if (category === 'my') {
-            page_title = 'My subscriptions';
+            page_title = 'My communities';
         } else if (community) {
             page_title = community.get('title');
         } else if (category) {
@@ -325,15 +325,13 @@ class PostsIndex extends React.Component {
                     {this.props.isBrowser && !this.props.username ? (
                         <SidebarNewUsers />
                     ) : (
-                        this.props.isBrowser && (
-                            <div>
-                                {/* <SidebarStats steemPower={123} followers={23} reputation={62} />  */}
-                                <SidebarLinks username={this.props.username} />
-                            </div>
+                        this.props.isBrowser &&
+                        !community && (
+                            <SidebarLinks username={this.props.username} />
                         )
                     )}
-                    <Notices notices={this.props.notices} />
-                    <SteemMarket />
+                    {!community && <Notices notices={this.props.notices} />}
+                    {!category && <SteemMarket />}
                     {this.props.gptEnabled && allowAdsOnContent ? (
                         <div className="sidebar-ad">
                             <GptAd

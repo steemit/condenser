@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { immutableAccessor } from 'app/utils/Accessors';
-import extractContent from 'app/utils/ExtractContent';
+import extractContent from 'app/utils/ExtractContent'; // json_md.tags
 import Headroom from 'react-headroom';
 import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
@@ -126,7 +126,7 @@ class Header extends React.Component {
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
-        let tags = [];
+        let gptTags = [];
         let home_account = false;
         let page_title = route.page;
         let sort_order = '';
@@ -144,7 +144,7 @@ class Header extends React.Component {
                     home_account = true;
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
-                tags = [topic];
+                gptTags = [topic];
 
                 let prefix = route.params[0];
                 if (prefix == 'created') prefix = 'New';
@@ -169,7 +169,7 @@ class Header extends React.Component {
                 const post_content = content.get(`${user}/${slug}`);
                 if (post_content) {
                     const p = extractContent(immutableAccessor, post_content);
-                    tags = p.json_metadata.tags || [];
+                    gptTags = p.json_metadata.tags || [];
                 }
             }
             sort_order = '';
@@ -298,7 +298,7 @@ class Header extends React.Component {
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
                     <div style={showAd ? {} : { display: 'none' }}>
                         <GptAd
-                            tags={tags}
+                            tags={gptTags}
                             type="Freestar"
                             id="bsa-zone_1566493796250-1_123456"
                         />

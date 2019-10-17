@@ -38,12 +38,11 @@ export function allowDelete(comment) {
     return !(hasPayout || hasChildren) && !archived;
 }
 
-export function hasNsfwTag(content) {
-    // Combine tags+category to check nsfw status
-    const json = content.get('json_metadata');
+export function parseJsonTags(content) {
+    const json_metadata = content.get('json_metadata');
     let tags = [];
     try {
-        tags = (json && JSON.parse(json).tags) || [];
+        tags = (json_metadata && JSON.parse(json_metadata).tags) || [];
         if (typeof tags == 'string') {
             tags = [tags];
         }
@@ -54,8 +53,12 @@ export function hasNsfwTag(content) {
         tags = [];
     }
     tags.push(content.get('category'));
-    tags = filterTags(tags);
-    const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
+    return filterTags(tags);
+}
+
+export function hasNsfwTag(content) {
+    const tags = parseJsonTags(content);
+    const isNsfw = tags.filter(tag => tag.match(/^nsfw$/i)).length > 0;
     return isNsfw;
 }
 

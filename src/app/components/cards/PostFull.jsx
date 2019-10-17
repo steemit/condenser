@@ -12,7 +12,7 @@ import Reblog from 'app/components/elements/Reblog';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import { immutableAccessor } from 'app/utils/Accessors';
-import extractContent from 'app/utils/ExtractContent'; // desc
+import { extractBodySummary } from 'app/utils/ExtractContent';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
@@ -274,9 +274,7 @@ class PostFull extends React.Component {
         if (!post) return null;
         const content = post.toJS();
         const { author, permlink, parent_author, parent_permlink } = content;
-
-        let link = `/@${content.author}/${content.permlink}`;
-        if (content.category) link = `/${content.category}${link}`;
+        const link = `${content.category}/@${author}/${permlink}`;
 
         const { category, title, body } = content;
         if (process.env.BROWSER && title)
@@ -318,7 +316,7 @@ class PostFull extends React.Component {
             url: 'https://' + APP_DOMAIN + link,
             rawtitle: title,
             title: title + ' — ' + APP_NAME,
-            desc: extractContent(immutableAccessor, post).desc,
+            desc: extractBodySummary(post.get('body')),
         };
 
         const share_menu = [
@@ -430,11 +428,7 @@ class PostFull extends React.Component {
                     <p>{content.root_title}</p>
                     <ul>
                         <li>
-                            <Link
-                                to={`/${content.category}/@${
-                                    content.parent_author
-                                }/${content.parent_permlink}`}
-                            >
+                            <Link to={content.url}>
                                 {tt('postfull_jsx.view_the_full_context')}
                             </Link>
                         </li>

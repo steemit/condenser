@@ -8,7 +8,10 @@ import * as userActions from 'app/redux/UserReducer';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import { immutableAccessor } from 'app/utils/Accessors';
-import extractContent from 'app/utils/ExtractContent';
+import {
+    extractBodySummary,
+    extractJsonMetadata,
+} from 'app/utils/ExtractContent';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import { Map } from 'immutable';
 import Author from 'app/components/elements/Author';
@@ -102,34 +105,29 @@ class PostSummary extends React.Component {
         const { gray } = content.get('stats', Map()).toJS();
         const isNsfw = hasNsfwTag(content);
         const special = content.get('special');
-        const p = extractContent(immutableAccessor, content);
+        const isReply = content.get('depth') > 1;
+        const desc = extractBodySummary(content.get('body'), isReply);
+        const { image_link } = extractJsonMetadata(
+            content.get('json_metadata'),
+            content.get('body')
+        );
 
         const archived = content.get('is_paidout');
         const full_power = content.get('percent_steem_dollars') === 0;
 
-        let post_url;
-        let title_text;
-        let comments_url;
+        const author = content.get('author');
+        const permlink = content.get('permlink');
+        const category = content.get('category');
+        const post_url = `/${category}/@${author}/${permlink}`;
 
+        let title_text = content.get('title');
         if (content.get('depth') > 0) {
             title_text = tt('g.re_to', { topic: content.get('root_title') });
-            post_url =
-                '/' +
-                content.get('category') +
-                '/@' +
-                content.get('author') +
-                '/' +
-                content.get('permlink');
-            comments_url = p.link + '#comments';
-        } else {
-            title_text = p.title;
-            post_url = p.link;
-            comments_url = post_url + '#comments';
         }
 
         const content_body = (
             <div className="PostSummary__body entry-content">
-                <Link to={post_url}>{p.desc}</Link>
+                <Link to={post_url}>{desc}</Link>
             </div>
         );
         const content_title = (
@@ -152,15 +150,15 @@ class PostSummary extends React.Component {
                 <div className="user">
                     {!isNsfw ? (
                         <div className="user__col user__col--left">
-                            <a className="user__link" href={'/@' + p.author}>
-                                <Userpic account={p.author} size={SIZE_SMALL} />
+                            <a className="user__link" href={'/@' + author}>
+                                <Userpic account={author} size={SIZE_SMALL} />
                             </a>
                         </div>
                     ) : null}
                     <div className="user__col user__col--right">
                         <span className="user__name">
                             <Author
-                                author={p.author}
+                                author={author}
                                 authorRep={content.get('author_reputation')}
                                 follow={false}
                                 mute={false}
@@ -169,13 +167,16 @@ class PostSummary extends React.Component {
 
                         {hideCategory || (
                             <span className="articles__tag-link">
-                                {tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;
+                                {tt('g.in')}&nbsp;<TagList
+                                    post={content}
+                                    single
+                                />&nbsp;•&nbsp;
                             </span>
                         )}
                         <Link className="timestamp__link" to={post_url}>
                             <span className="timestamp__time">
                                 <TimeAgoWrapper
-                                    date={p.created}
+                                    date={content.get('created')}
                                     className="updated"
                                 />
                             </span>
@@ -207,13 +208,16 @@ class PostSummary extends React.Component {
         const summary_footer = (
             <div className="articles__summary-footer">
                 <Voting post={post} showList={false} />
-                <VotesAndComments post={post} commentsLink={comments_url} />
+                <VotesAndComments
+                    post={post}
+                    commentsLink={post_url + '#comments'}
+                />
                 <span className="PostSummary__time_author_category">
                     {!archived && (
                         <Reblog
-                            author={p.author}
-                            permlink={p.permlink}
-                            parent_author={p.parent_author}
+                            author={content.get('author')}
+                            permlink={content.get('permlink')}
+                            parent_author={content.get('parent_author')}
                         />
                     )}
                 </span>
@@ -275,17 +279,17 @@ class PostSummary extends React.Component {
             }
         }
 
-        const userBlacklisted = ImageUserBlockList.includes(p.author);
+        const userBlacklisted = ImageUserBlockList.includes(author);
 
         let thumb = null;
-        if (!gray && p.image_link && !userBlacklisted) {
+        if (!gray && image_link && !userBlacklisted) {
             // on mobile, we always use blog layout style -- there's no toggler
             // on desktop, we offer a choice of either blog or list
             // if blogmode is false, output an image with a srcset
             // which has the 256x512 for whatever the large breakpoint is where the list layout is used
             // and the 640 for lower than that
 
-            const blogSize = proxifyImageUrl(p.image_link, '640x480').replace(
+            const blogSize = proxifyImageUrl(image_link, '640x480').replace(
                 / /g,
                 '%20'
             );
@@ -297,10 +301,10 @@ class PostSummary extends React.Component {
                     </span>
                 );
             } else {
-                const listSize = proxifyImageUrl(
-                    p.image_link,
-                    '256x512'
-                ).replace(/ /g, '%20');
+                const listSize = proxifyImageUrl(image_link, '256x512').replace(
+                    / /g,
+                    '%20'
+                );
 
                 thumb = (
                     <span className="articles__feature-img-container">

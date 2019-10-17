@@ -1063,7 +1063,6 @@ export default formId =>
                     meta.format = isHtml ? 'html' : 'markdown';
                 }
 
-                // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
                 const sanitizeErrors = [];
                 sanitize(body, sanitizeConfig({ sanitizeErrors }));
                 if (sanitizeErrors.length) {

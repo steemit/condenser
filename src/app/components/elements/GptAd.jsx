@@ -12,6 +12,8 @@ class GptAd extends Component {
         this.tags = tags;
         this.bannedTags = bannedTags;
 
+        console.log(`enabled from props: ${enabled}`);
+
         if (ad_identifier != '') {
             // console.info(
             //     `ad_identifier of '${ad_identifier}' will render.`,

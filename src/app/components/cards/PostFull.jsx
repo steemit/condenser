@@ -274,15 +274,14 @@ class PostFull extends React.Component {
         if (!post) return null;
         const content = post.toJS();
         const { author, permlink, parent_author, parent_permlink } = content;
-        const link = `${content.category}/@${author}/${permlink}`;
-
         const { category, title, body } = content;
+        const link = `${category}/@${author}/${permlink}`;
+
         if (process.env.BROWSER && title)
             document.title = title + ' — ' + APP_NAME;
 
         let content_body = content.body;
-        const url = `/${category}/@${author}/${permlink}`;
-        const bDMCAStop = DMCAList.includes(url);
+        const bDMCAStop = DMCAList.includes(link);
         const bIllegalContentUser = userIllegalContent.includes(content.author);
         if (bDMCAStop) {
             content_body = tt(
@@ -395,30 +394,25 @@ class PostFull extends React.Component {
         );
 
         if (isReply) {
+            const rooturl = content.url;
+            const prnturl = `/${category}/@${parent_author}/${parent_permlink}`;
             post_header = (
                 <div className="callout">
-                    <h3 className="entry-title">
-                        {tt('g.re')}: {content.root_title}
-                    </h3>
-                    <h5>
+                    <div>
                         {tt(
                             'postfull_jsx.you_are_viewing_a_single_comments_thread_from'
                         )}:
-                    </h5>
-                    <p>{content.root_title}</p>
+                    </div>
+                    <h4>{content.title}</h4>
                     <ul>
                         <li>
-                            <Link to={content.url}>
+                            <Link to={rooturl}>
                                 {tt('postfull_jsx.view_the_full_context')}
                             </Link>
                         </li>
                         {post.get('depth') > 1 && (
                             <li>
-                                <Link
-                                    to={`/${content.category}/@${
-                                        content.parent_author
-                                    }/${content.parent_permlink}`}
-                                >
+                                <Link to={prnturl}>
                                     {tt('postfull_jsx.view_the_direct_parent')}
                                 </Link>
                             </li>

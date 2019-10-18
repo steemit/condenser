@@ -206,14 +206,14 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case VOTED: {
-            const { username, author, permlink, weight } = payload;
-            const vote = Map({ voter: username, percent: weight });
+            const { voter, author, permlink, weight } = payload;
+            const vote = Map({ voter, percent: weight });
             const key = ['content', author + '/' + permlink, 'active_votes'];
             let votes = state.getIn(key, List());
 
-            const idx = votes.findIndex(v => v.get('voter') === username);
+            const idx = votes.findIndex(v => v.get('voter') === voter);
             votes = idx === -1 ? votes.push(vote) : votes.set(idx, vote);
-            console.log('Applying vote @ idx', idx, vote);
+            console.log('Applying vote @ idx', idx, payload);
 
             // TODO: new state never returned -- masked by RECEIVE_CONTENT
             state.setIn(key, votes);

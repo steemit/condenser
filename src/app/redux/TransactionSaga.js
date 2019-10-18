@@ -38,7 +38,7 @@ const toStringUtf8 = o =>
 
 function* preBroadcast_vote({ operation, username }) {
     if (!operation.voter) operation.voter = username;
-    const { voter, author, permlink, weight } = operation;
+    const { author, permlink } = operation;
     // give immediate feedback
     yield put(
         globalActions.set({
@@ -46,9 +46,7 @@ function* preBroadcast_vote({ operation, username }) {
             value: true,
         })
     );
-    yield put(
-        globalActions.voted({ username: voter, author, permlink, weight })
-    );
+    yield put(globalActions.voted(operation));
     return operation;
 }
 

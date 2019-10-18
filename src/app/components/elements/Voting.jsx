@@ -129,6 +129,9 @@ class Voting extends React.Component {
                 weight = up ? MAX_WEIGHT : -MAX_WEIGHT;
             }
 
+            const rshares = Math.floor(
+                0.05 * this.props.net_vests * 1e6 * (weight / 10000.0)
+            );
             const isFlag = up ? null : true;
             this.props.vote(weight, {
                 author,
@@ -136,6 +139,7 @@ class Voting extends React.Component {
                 username,
                 myVote,
                 isFlag,
+                rshares,
             });
         };
 
@@ -625,8 +629,7 @@ export default connect(
         let myVote = ownProps.myVote || null; // ownProps: test only
         if (username && active_votes) {
             const vote = active_votes.find(el => el.get('voter') === username);
-            // weight warning, the API may send a string or a number (when zero)
-            if (vote) myVote = parseInt(vote.get('rshares') || 0, 10);
+            if (vote) myVote = parseInt(vote.get('rshares'), 10);
         }
 
         return {
@@ -648,9 +651,15 @@ export default connect(
 
     // mapDispatchToProps
     dispatch => ({
-        vote: (weight, { author, permlink, username, myVote, isFlag }) => {
+        vote: (
+            weight,
+            { author, permlink, username, myVote, isFlag, rshares }
+        ) => {
             const confirm = () => {
+                // new vote
                 if (myVote == null) return null;
+
+                // changing a vote
                 if (weight === 0)
                     return isFlag
                         ? tt('voting_jsx.removing_your_vote')
@@ -679,6 +688,7 @@ export default connect(
                         author,
                         permlink,
                         weight,
+                        __rshares: rshares,
                         __config: {
                             title: weight < 0 ? 'Confirm Downvote' : null,
                         },

@@ -105,14 +105,14 @@ class PostSummary extends React.Component {
         const { gray } = content.get('stats', Map()).toJS();
         const isNsfw = hasNsfwTag(content);
         const special = content.get('special');
-        const isReply = content.get('depth') > 1;
+        const isReply = content.get('depth') > 0;
         const desc = extractBodySummary(content.get('body'), isReply);
         const { image_link } = extractJsonMetadata(
             content.get('json_metadata'),
             content.get('body')
         );
 
-        const archived = content.get('is_paidout');
+        const showReblog = !content.get('is_paidout') && !isReply;
         const full_power = content.get('percent_steem_dollars') === 0;
 
         const author = content.get('author');
@@ -121,7 +121,7 @@ class PostSummary extends React.Component {
         const post_url = `/${category}/@${author}/${permlink}`;
 
         let title_text = content.get('title');
-        if (content.get('depth') > 0) {
+        if (isReply) {
             title_text = tt('g.re_to', { topic: content.get('root_title') });
         }
 
@@ -213,11 +213,10 @@ class PostSummary extends React.Component {
                     commentsLink={post_url + '#comments'}
                 />
                 <span className="PostSummary__time_author_category">
-                    {!archived && (
+                    {showReblog && (
                         <Reblog
                             author={content.get('author')}
                             permlink={content.get('permlink')}
-                            parent_author={content.get('parent_author')}
                         />
                     )}
                 </span>

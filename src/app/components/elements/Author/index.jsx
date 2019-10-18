@@ -140,7 +140,7 @@ class Author extends React.Component {
             </span>
         );
 
-        if (!(follow || mute) || username === author) {
+        if (!(follow || mute)) {
             return (
                 <span
                     className="author"

@@ -632,7 +632,7 @@ export default connect(
         const author = post.get('author');
         const permlink = post.get('permlink');
         const active_votes = post.get('active_votes');
-        const is_comment = post.get('parent_author') !== '';
+        const is_comment = post.get('depth') == 0;
 
         const current = state.user.get('current');
         const username = current ? current.get('username') : null;

@@ -390,6 +390,7 @@ class PostFull extends React.Component {
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
         const full_power = post.get('percent_steem_dollars') === 0;
+        const isReply = post.get('depth') > 0;
 
         let post_header = (
             <h1 className="entry-title">
@@ -401,20 +402,8 @@ class PostFull extends React.Component {
                 )}
             </h1>
         );
-        if (content.depth > 0) {
-            const parent_link = `/${content.category}/@${
-                content.parent_author
-            }/${content.parent_permlink}`;
-            let direct_parent_link;
-            if (content.depth > 1) {
-                direct_parent_link = (
-                    <li>
-                        <Link to={parent_link}>
-                            {tt('postfull_jsx.view_the_direct_parent')}
-                        </Link>
-                    </li>
-                );
-            }
+
+        if (isReply) {
             post_header = (
                 <div className="callout">
                     <h3 className="entry-title">
@@ -432,14 +421,24 @@ class PostFull extends React.Component {
                                 {tt('postfull_jsx.view_the_full_context')}
                             </Link>
                         </li>
-                        {direct_parent_link}
+                        {post.get('depth') > 1 && (
+                            <li>
+                                <Link
+                                    to={`/${content.category}/@${
+                                        content.parent_author
+                                    }/${content.parent_permlink}`}
+                                >
+                                    {tt('postfull_jsx.view_the_direct_parent')}
+                                </Link>
+                            </li>
+                        )}
                     </ul>
                 </div>
             );
         }
 
-        const showReblog = !post.get('is_paidout');
-        const showPromote = !post.get('is_paidout') && post.get('depth') == 0;
+        const showReblog = !post.get('is_paidout') && !isReply;
+        const showPromote = !post.get('is_paidout') && !isReply;
         const showPinToggle = Role.atLeast(viewer_role, 'mod');
         const showMuteToggle = Role.atLeast(viewer_role, 'mod');
         const showReplyOption = username && post.get('depth') < 255;
@@ -501,7 +500,7 @@ class PostFull extends React.Component {
                             {tt('g.promote')}
                         </button>
                     )}
-                {content.depth == 0 && <TagList post={content} horizontal />}
+                {!isReply && <TagList post={content} horizontal />}
                 <div className="PostFull__footer row">
                     <div className="columns medium-12 large-6">
                         <TimeAuthorCategory

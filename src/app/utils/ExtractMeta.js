@@ -33,7 +33,7 @@ function addSiteMeta(metas) {
 function addPostMeta(metas, content, profile) {
     const { profile_image } = profile;
     const { category, created, body } = content;
-    const isReply = content.depth > 1;
+    const isReply = content.depth > 0;
 
     const title = content.title + ' — Steemit';
     const desc = extractBodySummary(body, isReply) + ' by ' + content.author;

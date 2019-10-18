@@ -1,5 +1,4 @@
 import { Map, OrderedMap, getIn, List, fromJS, Set, merge } from 'immutable';
-import { emptyContent } from 'app/redux/EmptyState';
 import * as globalActions from './GlobalReducer';
 import reducer, { defaultState } from './GlobalReducer';
 

@@ -13,7 +13,6 @@ export default class Reblog extends React.Component {
     static propTypes = {
         account: string,
         author: string,
-        parent_author: string,
         permlink: string,
         reblog: func,
     };
@@ -40,7 +39,7 @@ export default class Reblog extends React.Component {
         e.preventDefault();
         if (this.state.active) return;
         this.setState({ loading: true });
-        const { reblog, account, author, parent_author, permlink } = this.props;
+        const { reblog, account, author, permlink } = this.props;
         reblog(
             account,
             author,
@@ -71,8 +70,6 @@ export default class Reblog extends React.Component {
     }
 
     render() {
-        if (this.props.parent_author) return null;
-
         const state = this.state.active ? 'active' : 'inactive';
         const loading = this.state.loading ? ' loading' : '';
         return (

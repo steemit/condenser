@@ -1,8 +1,5 @@
 import { Map, Set, List, fromJS, Iterable } from 'immutable';
 import resolveRoute from 'app/ResolveRoute';
-import { emptyContent } from 'app/redux/EmptyState';
-
-export const emptyContentMap = Map(emptyContent);
 
 export const defaultState = Map({
     status: {},
@@ -31,6 +28,11 @@ const FETCH_JSON = 'global/FETCH_JSON';
 const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT';
 const SHOW_DIALOG = 'global/SHOW_DIALOG';
 const HIDE_DIALOG = 'global/HIDE_DIALOG';
+
+const postKey = (author, permlink) => {
+    if ((author || '') === '' || (permlink || '') === '') return null;
+    return author + '/' + permlink;
+};
 
 /**
  * Transfrom nested JS object to appropriate immutable collection.
@@ -163,9 +165,9 @@ export default function reducer(state = defaultState, action = {}) {
                 parent_author = '',
                 parent_permlink = '',
             } = payload;
-            if (parent_author === '' || parent_permlink === '') return state;
+            const parent_key = postKey(parent_author, parent_permlink);
+            if (!parent_key) return state;
             const key = author + '/' + permlink;
-            const parent_key = parent_author + '/' + parent_permlink;
             // Add key if not exist
             let updatedState = state.updateIn(
                 ['content', parent_key, 'replies'],
@@ -188,11 +190,12 @@ export default function reducer(state = defaultState, action = {}) {
             const { author, permlink } = payload;
             const key = author + '/' + permlink;
             const content = state.getIn(['content', key]);
-            const parent_author = content.get('parent_author') || '';
-            const parent_permlink = content.get('parent_permlink') || '';
+            const parent_key = postKey(
+                content.get('parent_author'),
+                content.get('parent_permlink')
+            );
             let updatedState = state.deleteIn(['content', key]);
-            if (parent_author !== '' && parent_permlink !== '') {
-                const parent_key = parent_author + '/' + parent_permlink;
+            if (parent_key) {
                 updatedState = updatedState.updateIn(
                     ['content', parent_key, 'replies'],
                     List(),

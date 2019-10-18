@@ -148,18 +148,11 @@ class PostsList extends React.Component {
         const postsInfo = [];
         posts.forEach(item => {
             const cont = content.get(item);
-            if (!cont) {
-                console.error('PostsList --> Missing cont key', item);
-                return;
-            }
-            const ignore =
-                ignore_result && ignore_result.has(cont.get('author'));
-            const hideResteem =
-                !showResteem && account && cont.get('author') != account;
-            const hide = cont.getIn(['stats', 'hide']);
-            if (!hideResteem && !(ignore || hide))
-                // rephide
-                postsInfo.push({ item, ignore });
+            if (!cont) throw 'PostsList --> Missing cont key: ' + item;
+            const author = cont.get('author');
+            const ignore = ignore_result && ignore_result.has(author);
+            const hideResteem = !showResteem && account && author != account;
+            if (!(hideResteem || ignore)) postsInfo.push({ item, ignore });
         });
 
         // Helper functions for determining whether to show special posts.

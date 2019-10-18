@@ -27,13 +27,10 @@ import { hasNsfwTag } from 'app/utils/StateFunctions';
 class PostSummary extends React.Component {
     static propTypes = {
         post: PropTypes.string.isRequired,
-        pending_payout: PropTypes.string.isRequired,
-        total_payout: PropTypes.string.isRequired,
         content: PropTypes.object.isRequired,
         featured: PropTypes.bool,
         promoted: PropTypes.bool,
         onClose: PropTypes.func,
-        thumbSize: PropTypes.string,
         nsfwPref: PropTypes.string,
     };
 
@@ -45,9 +42,6 @@ class PostSummary extends React.Component {
 
     shouldComponentUpdate(props, state) {
         return (
-            props.thumbSize !== this.props.thumbSize ||
-            props.pending_payout !== this.props.pending_payout ||
-            props.total_payout !== this.props.total_payout ||
             props.username !== this.props.username ||
             props.nsfwPref !== this.props.nsfwPref ||
             props.blogmode !== this.props.blogmode ||
@@ -61,7 +55,7 @@ class PostSummary extends React.Component {
     }
 
     render() {
-        const { thumbSize, ignore, hideCategory } = this.props;
+        const { ignore, hideCategory } = this.props;
         const { post, content, featured, promoted, onClose } = this.props;
         const { account } = this.props;
         if (!content) return null;
@@ -358,26 +352,19 @@ class PostSummary extends React.Component {
 
 export default connect(
     (state, props) => {
-        const { post, hideCategory } = props;
+        const { post, hideCategory, nsfwPref, featured, promoted } = props;
         const content = state.global.get('content').get(post);
-        let pending_payout = 0;
-        let total_payout = 0;
-        if (content) {
-            pending_payout = content.get('pending_payout_value');
-            total_payout = content.get('total_payout_value');
-        }
         return {
             post,
-            hideCategory,
             content,
-            pending_payout: pending_payout
-                ? pending_payout.toString()
-                : pending_payout,
-            total_payout: total_payout ? total_payout.toString() : total_payout,
+            hideCategory,
+            featured,
+            promoted,
             username:
                 state.user.getIn(['current', 'username']) ||
                 state.offchain.get('account'),
             blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+            nsfwPref,
         };
     },
 

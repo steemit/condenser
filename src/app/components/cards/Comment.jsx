@@ -20,81 +20,42 @@ import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
 import { Role, ifHive } from 'app/utils/Community';
 
-// returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
-function hideSubtree(cont, c) {
-    // TODO: re-evaluate
-    return (
-        false && cont.getIn([c, 'stats', 'hide']) && !hasPositivePayout(cont, c)
-    );
-}
-
-function hasPositivePayout(postmap, post_url) {
-    const post = postmap.get(post_url);
-    if (parseFloat(post.get('net_rshares')) > 0) {
-        return true;
-    }
-    if (post.get('replies').find(url => hasPositivePayout(postmap, url))) {
-        return true;
-    }
-    return false;
-}
-
 export function sortComments(cont, comments, sort_order) {
-    function netNegative(a) {
-        return a.getIn(['stats', 'gray']) || a.get('net_rshares') < 0;
-    }
-    function totalPayout(a) {
-        return (
-            parsePayoutAmount(a.get('pending_payout_value')) +
-            parsePayoutAmount(a.get('total_payout_value')) +
-            parsePayoutAmount(a.get('curator_payout_value'))
-        );
-    }
-    function netRshares(a) {
-        return Long.fromString(String(a.get('net_rshares')));
-    }
-    function countUpvotes(a) {
-        return a.get('active_votes').filter(vote => vote.get('percent') > 0)
-            .size;
-    }
+    const rshares = post => Long.fromString(String(post.get('net_rshares')));
+    const demote = post =>
+        post.getIn(['stats', 'gray']) || post.get('net_rshares') < 0;
+    const upvotes = post =>
+        post.get('active_votes').filter(v => v.get('percent') > 0).size;
+    const ts = post => Date.parse(post.get('created'));
+    const payout = post =>
+        parsePayoutAmount(post.get('pending_payout_value')) +
+        parsePayoutAmount(post.get('total_payout_value')) +
+        parsePayoutAmount(post.get('curator_payout_value'));
 
-    /** sorts replies by upvotes, age, or payout */
     const sort_orders = {
-        votes: (a, b) => {
-            const aactive = countUpvotes(cont.get(a));
-            const bactive = countUpvotes(cont.get(b));
-            return bactive - aactive;
+        votes: (pa, pb) => {
+            return upvotes(cont.get(pb)) - upvotes(cont.get(pa));
         },
-        new: (a, b) => {
-            const post_a = cont.get(a);
-            const post_b = cont.get(b);
-            if (netNegative(post_a) != netNegative(post_b))
-                return netNegative(post_a) ? 1 : -1;
-            const aactive = Date.parse(post_a.get('created'));
-            const bactive = Date.parse(post_b.get('created'));
-            return bactive - aactive;
+        new: (pa, pb) => {
+            const a = cont.get(pa);
+            const b = cont.get(pb);
+            if (demote(a) != demote(b)) return demote(a) ? 1 : -1;
+            return ts(b) - ts(a);
         },
-        trending: (a, b) => {
-            const post_a = cont.get(a);
-            const post_b = cont.get(b);
-            if (netNegative(post_a) != netNegative(post_b))
-                return netNegative(post_a) ? 1 : -1;
-            const apayout = totalPayout(post_a);
-            const bpayout = totalPayout(post_b);
-            if (apayout !== bpayout) return bpayout - apayout;
-            return netRshares(post_b).compare(netRshares(post_a));
-        },
-        author_reputation: (a, b) => {
-            return b.get('author_reputation') - a.get('author_reputation');
+        trending: (pa, pb) => {
+            const a = cont.get(pa);
+            const b = cont.get(pb);
+            if (demote(a) != demote(b)) return demote(a) ? 1 : -1;
+            if (payout(a) !== payout(b)) return payout(b) - payout(a);
+            return rshares(b).compare(rshares(a));
         },
     };
     comments.sort(sort_orders[sort_order]);
 }
 
 function commentUrl(post, rootRef) {
-    if (rootRef) {
+    if (rootRef)
         return `/${post.category}/@${rootRef}#@${post.author}/${post.permlink}`;
-    }
     return `/${post.category}/@${post.author}/${post.permlink}`;
 }
 
@@ -103,12 +64,7 @@ class CommentImpl extends React.Component {
         // html props
         cont: PropTypes.object.isRequired,
         postref: PropTypes.string.isRequired,
-        sort_order: PropTypes.oneOf([
-            'votes',
-            'new',
-            'trending',
-            'author_reputation',
-        ]).isRequired,
+        sort_order: PropTypes.oneOf(['votes', 'new', 'trending']).isRequired,
         showNegativeComments: PropTypes.bool,
         onHide: PropTypes.func,
         community: PropTypes.string,
@@ -182,7 +138,7 @@ class CommentImpl extends React.Component {
     _checkHide(props) {
         const { cont, postref, post } = props;
         if (post) {
-            const hide = hideSubtree(cont, postref);
+            const hide = false && post.getIn(['stats', 'hide']);
             const gray = post.getIn(['stats', 'gray']);
 
             if (hide) {
@@ -256,23 +212,23 @@ class CommentImpl extends React.Component {
         } = this.state;
         const Editor = showReply ? PostReplyEditor : PostEditEditor;
 
+        const author = post.get('author');
         const comment = post.toJS();
         const { gray } = comment.stats;
 
         const comment_link = commentUrl(comment, rootComment);
-        const ignore = ignore_list && ignore_list.has(comment.author);
+        const ignore = ignore_list && ignore_list.has(author);
 
         if (!showNegativeComments && (hide || ignore)) {
             return null;
         }
 
         // hide images if author is in blacklist
-        const hideImages = ImageUserBlockList.includes(comment.author);
+        const hideImages = ImageUserBlockList.includes(author);
 
-        const showEditOption = username === comment.author;
+        const showEditOption = username === author;
         const showMuteToggle = Role.atLeast(viewer_role, 'mod');
-        const showDeleteOption =
-            username === comment.author && allowDelete(comment);
+        const showDeleteOption = username === author && allowDelete(post);
         const showReplyOption = username !== undefined && comment.depth < 255;
 
         let body = null;
@@ -296,7 +252,7 @@ class CommentImpl extends React.Component {
                         )}{' '}
                         {showMuteToggle && (
                             <MuteButtonContainer
-                                account={comment.author}
+                                account={author}
                                 community={community}
                                 isMuted={gray}
                                 permlink={comment.permlink}
@@ -397,7 +353,7 @@ class CommentImpl extends React.Component {
             >
                 <div className={innerCommentClass}>
                     <div className="Comment__Userpic show-for-medium">
-                        <Userpic account={comment.author} />
+                        <Userpic account={author} />
                     </div>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
@@ -410,7 +366,7 @@ class CommentImpl extends React.Component {
                         </div>
                         <span className="Comment__header-user">
                             <div className="Comment__Userpic-small">
-                                <Userpic account={comment.author} />
+                                <Userpic account={author} />
                             </div>
                             <Author
                                 author={comment.author}
@@ -430,7 +386,7 @@ class CommentImpl extends React.Component {
                         &nbsp;
                         <ContentEditedWrapper
                             createDate={comment.created}
-                            updateDate={comment.last_update}
+                            updateDate={comment.updated}
                         />
                         {(this.state.collapsed || hide_body) && (
                             <Voting post={postref} showList={false} />

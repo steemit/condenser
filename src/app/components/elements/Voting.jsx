@@ -89,7 +89,6 @@ class Voting extends React.Component {
         super(props);
         this.state = {
             showWeight: false,
-            myVote: null,
             sliderWeight: {
                 up: MAX_WEIGHT,
                 down: MAX_WEIGHT,
@@ -108,8 +107,13 @@ class Voting extends React.Component {
             if (this.props.voting) return;
             this.setState({ votingUp: up, votingDown: !up });
             if (this.state.showWeight) this.setState({ showWeight: false });
-            const { myVote } = this.state;
-            const { author, permlink, username, is_comment } = this.props;
+            const {
+                myVote,
+                author,
+                permlink,
+                username,
+                is_comment,
+            } = this.props;
 
             let weight;
             if (myVote > 0 || myVote < 0) {
@@ -213,26 +217,9 @@ class Voting extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting');
     }
 
-    componentWillMount() {
-        const { username, active_votes } = this.props;
-        this._checkMyVote(username, active_votes);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { username, active_votes } = nextProps;
-        this._checkMyVote(username, active_votes);
-    }
-
-    _checkMyVote(username, active_votes) {
-        if (!username || !active_votes) return;
-        const vote = active_votes.find(el => el.get('voter') === username);
-        // weight warning, the API may send a string or a number (when zero)
-        if (vote)
-            this.setState({ myVote: parseInt(vote.get('percent') || 0, 10) });
-    }
-
     render() {
         const {
+            myVote,
             active_votes,
             showList,
             voting,
@@ -244,13 +231,7 @@ class Voting extends React.Component {
             username,
         } = this.props;
 
-        const {
-            votingUp,
-            votingDown,
-            showWeight,
-            showWeightDir,
-            myVote,
-        } = this.state;
+        const { votingUp, votingDown, showWeight, showWeightDir } = this.state;
 
         const votingUpActive = voting && votingUp;
         const votingDownActive = voting && votingDown;
@@ -367,7 +348,7 @@ class Voting extends React.Component {
 
         // pending payout, and completed author/curator payout
         const pending_payout = amt(post.get('pending_payout_value'));
-        const author_payout = amt(post.get('total_payout_value'));
+        const author_payout = amt(post.get('author_payout_value'));
         const curator_payout = amt(post.get('curator_payout_value'));
         const total_payout = pending_payout + author_payout + curator_payout;
 
@@ -498,34 +479,28 @@ class Voting extends React.Component {
 
         let voters_list = null;
         if (showList && total_votes > 0 && active_votes) {
-            const avotes = active_votes.toJS();
-            avotes.sort((a, b) => (abs(a.rshares) > abs(b.rshares) ? -1 : 1));
             let voters = [];
-            for (
-                let v = 0;
-                v < avotes.length && voters.length < MAX_VOTES_DISPLAY;
-                ++v
-            ) {
-                const { percent, voter } = avotes[v];
-                const sign = Math.sign(percent);
-                if (sign === 0) continue;
+
+            // add top votes
+            const avotes = active_votes.toJS();
+            const maxlen = Math.min(avotes.length, MAX_VOTES_DISPLAY);
+            avotes.sort((a, b) => (abs(a.rshares) > abs(b.rshares) ? -1 : 1));
+            for (let v = 0; v < maxlen; ++v) {
+                const { rshares, voter } = avotes[v];
+                if (rshares == '0') continue;
+                const sign = rshares[0] == '-' ? '- ' : '+ ';
+                voters.push({ value: sign + voter, link: '/@' + voter });
+            }
+
+            // add overflow, if any
+            const extra = total_votes - voters.length;
+            if (extra > 0) {
                 voters.push({
-                    value: (sign > 0 ? '+ ' : '- ') + voter,
-                    link: '/@' + voter,
+                    value: tt('voting_jsx.and_more', { count: extra }),
                 });
             }
-            if (total_votes > voters.length) {
-                voters.push({
-                    value: (
-                        <span>
-                            &hellip;{' '}
-                            {tt('voting_jsx.and_more', {
-                                count: total_votes - voters.length,
-                            })}
-                        </span>
-                    ),
-                });
-            }
+
+            // build voters list
             voters_list = (
                 <DropdownMenu
                     selected={tt('voting_jsx.votes_plural', {
@@ -647,12 +622,21 @@ export default connect(
         );
         const enable_slider = net_vests > VOTE_WEIGHT_DROPDOWN_THRESHOLD;
 
+        let myVote = ownProps.myVote || null; // ownProps: test only
+        if (username && active_votes) {
+            const vote = active_votes.find(el => el.get('voter') === username);
+            // weight warning, the API may send a string or a number (when zero)
+            if (vote) myVote = parseInt(vote.get('rshares') || 0, 10);
+        }
+
         return {
             post,
             showList: ownProps.showList,
+            net_vests,
             author,
             permlink,
             username,
+            myVote,
             active_votes,
             enable_slider,
             is_comment,

@@ -207,23 +207,16 @@ export default function reducer(state = defaultState, action = {}) {
 
         case VOTED: {
             const { username, author, permlink, weight } = payload;
+            const vote = Map({ voter: username, percent: weight });
             const key = ['content', author + '/' + permlink, 'active_votes'];
-            let active_votes = state.getIn(key, List());
-            const idx = active_votes.findIndex(
-                v => v.get('voter') === username
-            );
-            // steemd flips weight into percent
-            if (idx === -1) {
-                active_votes = active_votes.push(
-                    Map({ voter: username, percent: weight })
-                );
-            } else {
-                active_votes = active_votes.set(
-                    idx,
-                    Map({ voter: username, percent: weight })
-                );
-            }
-            state.setIn(key, active_votes);
+            let votes = state.getIn(key, List());
+
+            const idx = votes.findIndex(v => v.get('voter') === username);
+            votes = idx === -1 ? votes.push(vote) : votes.set(idx, vote);
+            console.log('Applying vote @ idx', idx, vote);
+
+            // TODO: new state never returned -- masked by RECEIVE_CONTENT
+            state.setIn(key, votes);
             return state;
         }
 

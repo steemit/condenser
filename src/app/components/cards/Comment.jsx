@@ -25,12 +25,9 @@ export function sortComments(cont, comments, sort_order) {
     const demote = post =>
         post.getIn(['stats', 'gray']) || post.get('net_rshares') < 0;
     const upvotes = post =>
-        post.get('active_votes').filter(v => v.get('percent') > 0).size;
+        post.get('active_votes').filter(v => v.get('rshares') != '0').size;
     const ts = post => Date.parse(post.get('created'));
-    const payout = post =>
-        parsePayoutAmount(post.get('pending_payout_value')) +
-        parsePayoutAmount(post.get('total_payout_value')) +
-        parsePayoutAmount(post.get('curator_payout_value'));
+    const payout = post => post.get('payout');
 
     const sort_orders = {
         votes: (pa, pb) => {

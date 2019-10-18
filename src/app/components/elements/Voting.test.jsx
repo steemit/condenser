@@ -130,6 +130,7 @@ describe('Voting', () => {
             <Voting
                 post="test"
                 flag={true}
+                myVote={0}
                 vote={(w, p) => {}}
                 post_obj={voteTestObj}
                 price_per_steem={1}
@@ -137,7 +138,6 @@ describe('Voting', () => {
                 store={mockStore}
             />
         ).dive();
-        wrapped.setState({ myVote: 0 });
         wrapped
             .find('Dropdown')
             .dive()
@@ -160,6 +160,7 @@ describe('Voting', () => {
             <Voting
                 post="test"
                 flag={true}
+                myVote={-666}
                 vote={(w, p) => {}}
                 post_obj={voteTestObj}
                 price_per_steem={1}
@@ -167,7 +168,6 @@ describe('Voting', () => {
                 store={mockStore}
             />
         ).dive();
-        wrapped.setState({ myVote: -666 });
         wrapped.find('#revoke_downvote_button').simulate('click');
         expect(mockStore.getActions()[0].type).toEqual(
             'transaction/BROADCAST_OPERATION'

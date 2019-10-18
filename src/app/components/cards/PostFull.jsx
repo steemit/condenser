@@ -75,7 +75,7 @@ function TimeAuthorCategoryLarge({ content, community, viewer_role }) {
                 <TimeAgoWrapper date={content.created} />{' '}
                 <ContentEditedWrapper
                     createDate={content.created}
-                    updateDate={content.last_update}
+                    updateDate={content.updated}
                 />
             </div>
         </span>

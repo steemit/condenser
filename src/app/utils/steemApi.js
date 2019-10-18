@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
 import { api } from '@steemit/steem-js';
-import { ifHive } from 'app/utils/StateFunctions';
+import { ifHive } from 'app/utils/Community';
 
 import stateCleaner from 'app/redux/stateCleaner';
 

@@ -2,29 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { filterTags } from 'app/utils/StateFunctions';
+import { normalizeTags } from 'app/utils/StateFunctions';
 import { ifHive } from 'app/utils/Community';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
-
-function normalizeTags(json, category) {
-    let tags = [];
-
-    try {
-        if (typeof json == 'object') {
-            tags = json.tags || [];
-        }
-        if (!Array.isArray(tags)) {
-            tags = [];
-        }
-    } catch (e) {
-        tags = [];
-    }
-
-    // Category should always be first.
-    tags.unshift(category);
-
-    return filterTags(tags);
-}
 
 class TagList extends Component {
     render() {

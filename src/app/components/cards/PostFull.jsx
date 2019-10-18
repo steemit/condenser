@@ -355,13 +355,6 @@ class PostFull extends React.Component {
             : PostFullEditEditor;
         let renderedEditor = null;
         if (showReply || showEdit) {
-            let jsonMetadata = null;
-            if (!showReply) {
-                try {
-                    jsonMetadata = JSON.parse(content.json_metadata);
-                } catch (error) {}
-            }
-
             renderedEditor = (
                 <div key="editor">
                     <Editor
@@ -381,7 +374,7 @@ class PostFull extends React.Component {
                             });
                             saveOnShow(formId, null);
                         }}
-                        jsonMetadata={jsonMetadata}
+                        jsonMetadata={showReply ? null : content.json_metadata}
                     />
                 </div>
             );

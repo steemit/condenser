@@ -1,7 +1,4 @@
-import {
-    extractBodySummary,
-    extractJsonMetadata,
-} from 'app/utils/ExtractContent';
+import { extractBodySummary, extractImageLink } from 'app/utils/ExtractContent';
 import { objAccessor } from 'app/utils/Accessors';
 import { makeCanonicalLink } from 'app/utils/CanonicalLinker.js';
 
@@ -32,15 +29,12 @@ function addSiteMeta(metas) {
 
 function addPostMeta(metas, content, profile) {
     const { profile_image } = profile;
-    const { category, created, body } = content;
+    const { category, created, body, json_metadata } = content;
     const isReply = content.depth > 0;
 
     const title = content.title + ' — Steemit';
     const desc = extractBodySummary(body, isReply) + ' by ' + content.author;
-    const { image_link, json_metadata } = extractJsonMetadata(
-        content.json_metadata,
-        body
-    );
+    const image_link = extractImageLink(json_metadata, body);
 
     const canonicalUrl = makeCanonicalLink(content, json_metadata);
     const localUrl = makeCanonicalLink(content, null);

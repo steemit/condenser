@@ -16,23 +16,13 @@ const getValidImage = array => {
         : null;
 };
 
-export function extractJsonMetadata(json_metadata, body = null) {
-    let jsonMetadata = {};
+export function extractImageLink(json_metadata, body = null) {
+    let json = json_metadata || {};
     let image_link;
 
     try {
-        jsonMetadata = JSON.parse(json_metadata);
-        if (typeof jsonMetadata == 'string') {
-            // At least one case where jsonMetadata was double-encoded: #895
-            jsonMetadata = JSON.parse(jsonMetadata);
-        }
-        // First, attempt to find an image url in the json metadata
-        if (jsonMetadata && jsonMetadata.image) {
-            image_link = getValidImage(jsonMetadata.image);
-        }
-    } catch (error) {
-        // console.error('Invalid json metadata string', json_metadata, 'in post', link);
-    }
+        image_link = json && json.image ? getValidImage(json.image) : null;
+    } catch (error) {}
 
     // If nothing found in json metadata, parse body and check images/links
     if (!image_link) {
@@ -57,10 +47,7 @@ export function extractJsonMetadata(json_metadata, body = null) {
     // if(config.ipfs_prefix && image_link) // allow localhost nodes to see ipfs images
     //     image_link = image_link.replace(links.ipfsPrefix, config.ipfs_prefix)
 
-    return {
-        json_metadata: jsonMetadata,
-        image_link,
-    };
+    return image_link;
 }
 
 /**

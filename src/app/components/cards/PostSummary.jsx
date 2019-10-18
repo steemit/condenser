@@ -111,11 +111,6 @@ class PostSummary extends React.Component {
         const category = content.get('category');
         const post_url = `/${category}/@${author}/${permlink}`;
 
-        let title_text = content.get('title');
-        if (isReply) {
-            title_text = tt('g.re_to', { topic: content.get('root_title') });
-        }
-
         const content_body = (
             <div className="PostSummary__body entry-content">
                 <Link to={post_url}>{desc}</Link>
@@ -125,7 +120,7 @@ class PostSummary extends React.Component {
             <h2 className="articles__h2 entry-title">
                 <Link to={post_url}>
                     {isNsfw && <span className="nsfw-flag">nsfw</span>}
-                    {title_text}
+                    {content.get('title')}
                 </Link>
                 {content.getIn(['stats', 'is_pinned']) && (
                     <span className="FeaturedTag">Pinned</span>

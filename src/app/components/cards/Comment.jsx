@@ -309,13 +309,6 @@ class CommentImpl extends React.Component {
 
         let renderedEditor = null;
         if (showReply || showEdit) {
-            let jsonMetadata = null;
-            if (!showReply) {
-                try {
-                    jsonMetadata = JSON.parse(comment.json_metadata);
-                } catch (error) {}
-            }
-
             renderedEditor = (
                 <div key="editor">
                     <Editor
@@ -335,7 +328,7 @@ class CommentImpl extends React.Component {
                             });
                             this.saveOnShow(null);
                         }}
-                        jsonMetadata={jsonMetadata}
+                        jsonMetadata={showReply ? null : comment.json_metadata}
                     />
                 </div>
             );

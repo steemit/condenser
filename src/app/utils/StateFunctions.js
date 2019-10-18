@@ -27,17 +27,17 @@ export function allowDelete(comment) {
     return !(hasPayout || hasChildren) && !archived;
 }
 
-export function parseJsonTags(content) {
-    const json_metadata = content.get('json_metadata');
+export function parseJsonTags(post) {
+    const metadata = post.get('json_metadata');
     let tags = [];
     try {
-        tags = (json_metadata && JSON.parse(json_metadata).tags) || [];
+        tags = (metadata && metadata.tags) || [];
         if (typeof tags == 'string') tags = [tags];
         if (!Array.isArray(tags)) tags = [];
     } catch (e) {
         tags = [];
     }
-    tags.push(content.get('category'));
+    tags.unshift(post.get('category'));
     return filterTags(tags);
 }
 

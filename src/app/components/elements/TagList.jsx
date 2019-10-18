@@ -3,19 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { filterTags } from 'app/utils/StateFunctions';
+import { ifHive } from 'app/utils/Community';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 
-function normalizeTags(post) {
-    const json = post.json_metadata;
+function normalizeTags(json, category) {
     let tags = [];
 
     try {
         if (typeof json == 'object') {
             tags = json.tags || [];
-        } else {
-            tags = (json && JSON.parse(json).tags) || [];
         }
-        if (typeof tags == 'string') tags = tags.split(' ');
         if (!Array.isArray(tags)) {
             tags = [];
         }
@@ -24,7 +21,7 @@ function normalizeTags(post) {
     }
 
     // Category should always be first.
-    tags.unshift(post.category);
+    tags.unshift(category);
 
     return filterTags(tags);
 }
@@ -34,7 +31,8 @@ class TagList extends Component {
         const { post, single } = this.props;
 
         const link = tag => {
-            const name = post.community_title || '#' + tag;
+            const name =
+                (ifHive(tag) ? post.community_title : null) || '#' + tag;
             return (
                 <Link to={`/trending/${tag}`} key={tag}>
                     {' '}
@@ -47,7 +45,7 @@ class TagList extends Component {
 
         return (
             <div className="TagList__horizontal">
-                {normalizeTags(post).map(link)}
+                {normalizeTags(post.json_metadata, post.category).map(link)}
             </div>
         );
     }

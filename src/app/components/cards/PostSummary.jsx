@@ -8,10 +8,7 @@ import * as userActions from 'app/redux/UserReducer';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import { immutableAccessor } from 'app/utils/Accessors';
-import {
-    extractBodySummary,
-    extractJsonMetadata,
-} from 'app/utils/ExtractContent';
+import { extractBodySummary, extractImageLink } from 'app/utils/ExtractContent';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import { Map } from 'immutable';
 import Author from 'app/components/elements/Author';
@@ -101,7 +98,7 @@ class PostSummary extends React.Component {
         const special = content.get('special');
         const isReply = content.get('depth') > 0;
         const desc = extractBodySummary(content.get('body'), isReply);
-        const { image_link } = extractJsonMetadata(
+        const image_link = extractImageLink(
             content.get('json_metadata'),
             content.get('body')
         );

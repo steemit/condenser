@@ -30,7 +30,7 @@ storiesOf('Elements', module)
                             case 'pending_payout_value':
                                 return 5;
                                 break;
-                            case 'total_payout_value':
+                            case 'author_payout_value':
                                 return 15;
                                 break;
                             case 'curator_payout_value':

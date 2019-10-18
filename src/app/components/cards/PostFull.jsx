@@ -386,9 +386,7 @@ class PostFull extends React.Component {
                 </div>
             );
         }
-        const pending_payout = parsePayoutAmount(content.pending_payout_value);
-        const total_payout = parsePayoutAmount(content.total_payout_value);
-        const high_quality_post = pending_payout + total_payout > 10.0;
+        const high_quality_post = content.payout > 10.0;
         const full_power = post.get('percent_steem_dollars') === 0;
         const isReply = post.get('depth') > 0;
 

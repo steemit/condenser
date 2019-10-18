@@ -51,9 +51,8 @@ export function sortComments(cont, comments, sort_order) {
 }
 
 function commentUrl(post, rootRef) {
-    if (rootRef)
-        return `/${post.category}/@${rootRef}#@${post.author}/${post.permlink}`;
-    return `/${post.category}/@${post.author}/${post.permlink}`;
+    const root = rootRef ? `@{rootRef}#` : '';
+    return `/${post.category}/${root}@${post.author}/${post.permlink}`;
 }
 
 class CommentImpl extends React.Component {
@@ -81,7 +80,7 @@ class CommentImpl extends React.Component {
         super();
         this.state = { collapsed: false, hide_body: false, highlight: false };
         this.revealBody = this.revealBody.bind(this);
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment');
+        //this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment');
         this.onShowReply = () => {
             const { showReply } = this.state;
             this.setState({ showReply: !showReply, showEdit: false });
@@ -178,14 +177,11 @@ class CommentImpl extends React.Component {
     render() {
         const { cont, post, postref, community, viewer_role } = this.props;
 
-        if (!post) {
-            return <div>{tt('g.loading')}...</div>;
-        }
-
         // Don't server-side render the comment if it has a certain number of newlines
         if (
-            global.process !== undefined &&
-            (post.get('body').match(/\r?\n/g) || '').length > 25
+            !post ||
+            (global.process !== undefined &&
+                (post.get('body').match(/\r?\n/g) || '').length > 25)
         ) {
             return <div>{tt('g.loading')}...</div>;
         }
@@ -196,7 +192,7 @@ class CommentImpl extends React.Component {
             depth,
             anchor_link,
             showNegativeComments,
-            ignore_list,
+            ignored,
             rootComment,
         } = this.props;
         const {
@@ -207,21 +203,16 @@ class CommentImpl extends React.Component {
             hide,
             hide_body,
         } = this.state;
+
         const Editor = showReply ? PostReplyEditor : PostEditEditor;
 
         const author = post.get('author');
         const comment = post.toJS();
-        const { gray } = comment.stats;
+        const gray = comment.stats.gray || ImageUserBlockList.includes(author);
 
-        const comment_link = commentUrl(comment, rootComment);
-        const ignore = ignore_list && ignore_list.has(author);
-
-        if (!showNegativeComments && (hide || ignore)) {
+        if (!showNegativeComments && (hide || ignored)) {
             return null;
         }
-
-        // hide images if author is in blacklist
-        const hideImages = ImageUserBlockList.includes(author);
 
         const showEditOption = username === author;
         const showMuteToggle = Role.atLeast(viewer_role, 'mod');
@@ -232,12 +223,16 @@ class CommentImpl extends React.Component {
         let controls = null;
 
         if (!this.state.collapsed && !hide_body) {
-            body = (
+            body = gray ? (
+                <pre style={{ opacity: 0.5, whiteSpace: 'pre-wrap' }}>
+                    {comment.body}
+                </pre>
+            ) : (
                 <MarkdownViewer
                     formId={postref + '-viewer'}
                     text={comment.body}
-                    noImage={gray}
-                    hideImages={hideImages}
+                    //noImage={gray}
+                    //hideImages={hideImages}
                 />
             );
             controls = (
@@ -299,7 +294,7 @@ class CommentImpl extends React.Component {
         if (this.state.collapsed) commentClasses.push('collapsed');
 
         let innerCommentClass = 'Comment__block';
-        if (ignore || gray) {
+        if (ignored || gray) {
             innerCommentClass += ' downvoted clearfix';
             if (!hide_body) {
                 innerCommentClass += ' revealed';
@@ -370,7 +365,10 @@ class CommentImpl extends React.Component {
                             />
                         </span>
                         &nbsp; &middot; &nbsp;
-                        <Link to={comment_link} className="PlainLink">
+                        <Link
+                            to={commentUrl(comment, rootComment)}
+                            className="PlainLink"
+                        >
                             <TimeAgoWrapper date={comment.created} />
                         </Link>
                         &nbsp;
@@ -400,7 +398,7 @@ class CommentImpl extends React.Component {
                             )}
                         {!this.state.collapsed &&
                             !hide_body &&
-                            (ignore || gray) && (
+                            (ignored || gray) && (
                                 <span>
                                     &nbsp; &middot; &nbsp;{' '}
                                     {tt('g.will_be_hidden_due_to_low_rating')}
@@ -425,19 +423,21 @@ const Comment = connect(
     // mapStateToProps
     (state, ownProps) => {
         const { postref, cont, sort_order } = ownProps;
-
-        const username = state.user.getIn(['current', 'username']);
-        const ignore_list = username
-            ? state.global.getIn([
-                  'follow',
-                  'getFollowingAsync',
-                  username,
-                  'ignore_result',
-              ])
-            : null;
-
         const post = ownProps.cont.get(postref);
+
         const community = ifHive(post.get('category'));
+        const author = post.get('author');
+        const username = state.user.getIn(['current', 'username']);
+        const ignored =
+            author && username
+                ? state.global.hasIn([
+                      'follow',
+                      'getFollowingAsync',
+                      username,
+                      'ignore_result',
+                      author,
+                  ])
+                : null;
 
         const depth = ownProps.depth || 1;
         const rootComment = ownProps.rootComment || postref;
@@ -453,7 +453,7 @@ const Comment = connect(
             rootComment,
             anchor_link: '#@' + postref, // Using a hash here is not standard but intentional; see issue #124 for details
             username,
-            ignore_list,
+            ignored,
             community,
             viewer_role: state.global.getIn(
                 ['community', community, 'context', 'role'],

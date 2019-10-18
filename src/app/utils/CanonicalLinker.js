@@ -32,7 +32,7 @@ function build_scheme(scheme, post) {
 
 function allowed_app(app) {
     // apps which follow (reciprocate) canonical URLs (as of 2019-10-15)
-    const whitelist = ['steemit', 'esteem', 'steempeak'];
+    const whitelist = ['steemit', 'esteem', 'steempeak', 'travelfeed'];
     return whitelist.includes(app);
 }
 

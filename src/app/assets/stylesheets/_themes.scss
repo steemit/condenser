@@ -118,7 +118,7 @@ $themes: (
 /*
  * Implementation of themes
  */
- @mixin themify($themes) {
+@mixin themify($themes) {
   @each $theme, $map in $themes {
     .theme-#{$theme} & {
       $theme-map: () !global;

@@ -118,7 +118,8 @@ $themes: (
 /*
  * Implementation of themes
  */
-@mixin themify($themes) {
+
+ @mixin themify($themes) {
   @each $theme, $map in $themes {
     .theme-#{$theme} & {
       $theme-map: () !global;
@@ -143,6 +144,7 @@ $themes: (
     @include MQ(M) {
       background-color: $color-background-off-white;
     }
+    padding-bottom: 1px;
   }
   .theme-light {
     background-color: $white;
@@ -150,10 +152,12 @@ $themes: (
     @include MQ(M) {
       background-color: $color-background-off-white;
     }
+    padding-bottom: 1px;
   }
   .theme-dark {
     background-color: $color-background-dark;
     color: $color-text-white;
+    padding-bottom: 1px;
   }
 
 

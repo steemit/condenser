@@ -138,6 +138,7 @@ class CommentImpl extends React.Component {
             const gray = post.getIn(['stats', 'gray']);
 
             if (hide) {
+                // trigger parent component to show 'reveal comments' button
                 const { onHide } = this.props;
                 if (onHide) onHide();
             }
@@ -354,12 +355,8 @@ class CommentImpl extends React.Component {
                                 <Userpic account={author} />
                             </div>
                             <Author
-                                author={comment.author}
-                                authorRep={comment.author_reputation}
+                                post={post}
                                 showAffiliation
-                                role={comment.author_role}
-                                title={comment.author_title}
-                                permlink={comment.permlink}
                                 community={community}
                                 viewer_role={viewer_role}
                             />

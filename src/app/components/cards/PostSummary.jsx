@@ -21,6 +21,9 @@ import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import { hasNsfwTag } from 'app/utils/StateFunctions';
 
+// TODO: document why ` ` => `%20` is needed, and/or move to base fucntion
+const proxify = (url, size) => proxifyImageUrl(url, size).replace(/ /g, '%20');
+
 class PostSummary extends React.Component {
     static propTypes = {
         post: PropTypes.string.isRequired,
@@ -93,7 +96,7 @@ class PostSummary extends React.Component {
             );
         }
 
-        const { gray } = content.get('stats', Map()).toJS();
+        const gray = content.getIn(['stats', 'gray']);
         const isNsfw = hasNsfwTag(content);
         const special = content.get('special');
         const isReply = content.get('depth') > 0;
@@ -143,18 +146,13 @@ class PostSummary extends React.Component {
                     ) : null}
                     <div className="user__col user__col--right">
                         <span className="user__name">
-                            <Author
-                                author={author}
-                                authorRep={content.get('author_reputation')}
-                                follow={false}
-                                mute={false}
-                            />
+                            <Author post={content} follow={false} />
                         </span>
 
                         {hideCategory || (
                             <span className="articles__tag-link">
                                 {tt('g.in')}&nbsp;
-                                <TagList post={content.toJS()} single />
+                                <TagList post={content} single />
                                 &nbsp;•&nbsp;
                             </span>
                         )}
@@ -263,45 +261,29 @@ class PostSummary extends React.Component {
             }
         }
 
-        const userBlacklisted = ImageUserBlockList.includes(author);
-
         let thumb = null;
-        if (!gray && image_link && !userBlacklisted) {
+        if (!gray && image_link && !ImageUserBlockList.includes(author)) {
             // on mobile, we always use blog layout style -- there's no toggler
             // on desktop, we offer a choice of either blog or list
             // if blogmode is false, output an image with a srcset
             // which has the 256x512 for whatever the large breakpoint is where the list layout is used
             // and the 640 for lower than that
-
-            const blogSize = proxifyImageUrl(image_link, '640x480').replace(
-                / /g,
-                '%20'
-            );
+            const blogImg = proxify(image_link, '640x480');
 
             if (this.props.blogmode) {
-                thumb = (
-                    <span className="articles__feature-img-container">
-                        <img className="articles__feature-img" src={blogSize} />
-                    </span>
-                );
+                thumb = <img className="articles__feature-img" src={blogImg} />;
             } else {
-                const listSize = proxifyImageUrl(image_link, '256x512').replace(
-                    / /g,
-                    '%20'
-                );
-
+                const listImg = proxify(image_link, '256x512');
                 thumb = (
-                    <span className="articles__feature-img-container">
-                        <picture className="articles__feature-img">
-                            <source
-                                srcSet={listSize}
-                                media="(min-width: 1000px)"
-                            />
-                            <img srcSet={blogSize} />
-                        </picture>
-                    </span>
+                    <picture className="articles__feature-img">
+                        <source srcSet={listImg} media="(min-width: 1000px)" />
+                        <img srcSet={blogImg} />
+                    </picture>
                 );
             }
+            thumb = (
+                <span className="articles__feature-img-container">{thumb}</span>
+            );
         }
 
         // A post is hidden if it's marked "gray" or "ignore" and it's not

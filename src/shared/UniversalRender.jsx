@@ -299,12 +299,10 @@ export async function serverRender(
                 const params = { author: postref[0], permlink: postref[1] };
                 header = await callBridge('get_post_header', params);
             }
+
             if (header.author && header.permlink && header.category) {
-                return {
-                    redirectUrl: `/${header.category}/@${header.author}/${
-                        header.permlink
-                    }`,
-                };
+                const { author, permlink, category } = header;
+                return { redirectUrl: `/${category}/@${author}/${permlink}` };
             } else {
                 // protect on invalid user pages (i.e /user/transferss)
                 return {
@@ -317,16 +315,12 @@ export async function serverRender(
 
         // Insert the special posts into the list of posts, so there is no
         // jumping of content.
-        offchain.special_posts.featured_posts.forEach(featuredPost => {
-            onchain.content[
-                `${featuredPost.author}/${featuredPost.permlink}`
-            ] = featuredPost;
+        offchain.special_posts.featured_posts.forEach(post => {
+            onchain.content[`${post.author}/${post.permlink}`] = post;
         });
 
-        offchain.special_posts.promoted_posts.forEach(promotedPost => {
-            onchain.content[
-                `${promotedPost.author}/${promotedPost.permlink}`
-            ] = promotedPost;
+        offchain.special_posts.promoted_posts.forEach(post => {
+            onchain.content[`${post.author}/${post.permlink}`] = post;
         });
 
         server_store = createStore(rootReducer, {

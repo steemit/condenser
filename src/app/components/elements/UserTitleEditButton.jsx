@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Map } from 'immutable';
+import { Role } from 'app/utils/Community';
 
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
@@ -8,16 +10,12 @@ import * as globalActions from 'app/redux/GlobalReducer';
 import Icon from 'app/components/elements/Icon';
 import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
-import UserTitle from 'app/components/modules/UserTitle';
+import UserTitleEditor from 'app/components/modules/UserTitleEditor';
 
 class UserTitleEditButton extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            showDialog: false,
-            loading: false,
-            title: this.props.title,
-        };
+        this.state = { showDialog: false };
     }
 
     onToggleDialog = () => {
@@ -26,7 +24,6 @@ class UserTitleEditButton extends React.Component {
 
     onSave = newTitle => {
         const community = this.props.community.get('name');
-        this.setState({ loading: true });
 
         //-- Simulate a "receiveState" action to feed new title into post state
         let newstate = { content: {}, simulation: true };
@@ -38,22 +35,24 @@ class UserTitleEditButton extends React.Component {
             this.props.username,
             this.props.author,
             community,
-            newTitle,
-            () => {
-                console.log('saveTitle::success');
-                this.setState({ loading: false, title: newTitle });
-            },
-            () => {
-                console.log('saveTitle::fail');
-                this.setState({ loading: false });
-            }
+            newTitle
         );
     };
 
     render() {
-        const { author, username, community } = this.props;
-        const { title, showDialog } = this.state;
-        return (
+        const {
+            author,
+            username,
+            community,
+            title,
+            role,
+            viewer_role,
+        } = this.props;
+        const { showDialog } = this.state;
+
+        const isMod = Role.atLeast(viewer_role, 'mod');
+
+        const editor = isMod ? (
             <span>
                 <a onClick={this.onToggleDialog}>
                     <Icon name="pencil2" size="0_8x" />
@@ -61,7 +60,7 @@ class UserTitleEditButton extends React.Component {
                 {showDialog && (
                     <Reveal onHide={() => null} show>
                         <CloseButton onClick={() => this.onToggleDialog()} />
-                        <UserTitle
+                        <UserTitleEditor
                             title={title}
                             username={author}
                             community={community.get('title')}
@@ -73,15 +72,29 @@ class UserTitleEditButton extends React.Component {
                     </Reveal>
                 )}
             </span>
+        ) : null;
+
+        const userTitle = (
+            <span>
+                {role && role != 'guest' && <span>[{role}]</span>}
+                {(title != '' || isMod) && (
+                    <span className="affiliation">
+                        {title}
+                        {editor}
+                    </span>
+                )}
+            </span>
         );
+
+        return userTitle;
     }
 }
 
 UserTitleEditButton.propTypes = {
-    author: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
-    permlink: PropTypes.string.isRequired,
     community: PropTypes.object,
+    author: PropTypes.string.isRequired,
+    permlink: PropTypes.string.isRequired,
     title: PropTypes.string,
 };
 
@@ -89,13 +102,19 @@ export default connect(
     (state, ownProps) => {
         const community = state.global.getIn(
             ['community', ownProps.community],
-            {}
+            Map()
         );
 
+        const viewer_role = community.getIn(['context', 'role'], 'guest');
+
+        const { author, permlink, title } = ownProps;
         return {
-            ...ownProps,
+            author,
+            permlink,
+            title,
             username: state.user.getIn(['current', 'username']),
             community,
+            viewer_role,
         };
     },
     dispatch => ({

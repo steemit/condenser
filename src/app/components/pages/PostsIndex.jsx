@@ -14,14 +14,13 @@ import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
-import SubscribeButton from 'app/components/elements/SubscribeButton';
-import SettingsEditButtonContainer from 'app/components/elements/SettingsEditButtonContainer';
 import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
-import { ifHive, Role } from 'app/utils/Community';
+import { ifHive } from 'app/utils/Community';
+import CommunityPane from 'app/components/elements/CommunityPane';
 
 const emptyFeedText = (isMyAccount, account_name) => {
     return isMyAccount ? (
@@ -113,35 +112,13 @@ class PostsIndex extends React.Component {
             emptyText = 'Nothing here to see...';
         }
 
-        function teamMembers(members) {
-            return members.map((row, idx) => (
-                <div key={idx} style={{ fontSize: '80%' }}>
-                    <Link to={'/@' + row.get(0)}>{'@' + row.get(0)}</Link>
-                    {' ['}
-                    {row.get(1)}
-                    {'] '}
-                    {row.get(2) && (
-                        <span className="affiliation">{row.get(2)}</span>
-                    )}
-                </div>
-            ));
-        }
-
         const status = this.props.status
             ? this.props.status.getIn([category || '', order])
             : null;
         const fetching = (status && status.fetching) || this.props.loading;
 
-        // If we're at one of the four sort order routes without a tag filter,
-        // use the translated string for that sort order, f.ex "trending"
-        //
-        // If you click on a tag while you're in a sort order route,
-        // the title should be the translated string for that sort order
-        // plus the tag string, f.ex "trending: blog"
-        //
-        // Logged-in:
-        // At homepage (@user/feed) say "My feed"
-        let page_title = 'Posts'; // sensible default here?
+        // page title
+        let page_title = tt('g.all_tags');
         if (order === 'feed') {
             if (account_name === this.props.username)
                 page_title = 'My friends' || tt('posts_index.my_feed');
@@ -155,11 +132,7 @@ class PostsIndex extends React.Component {
             page_title = community.get('title');
         } else if (category) {
             page_title = '#' + category;
-        } else {
-            page_title = tt('g.all_tags');
         }
-
-        const role = community && community.getIn(['context', 'role'], 'guest');
 
         const layoutClass = this.props.blogmode
             ? ' layout-block'
@@ -182,7 +155,7 @@ class PostsIndex extends React.Component {
                                 {community && (
                                     <div
                                         style={{
-                                            fontSize: '100%',
+                                            fontSize: '80%',
                                             color: 'gray',
                                         }}
                                     >
@@ -247,85 +220,29 @@ class PostsIndex extends React.Component {
 
                 <aside className="c-sidebar c-sidebar--right">
                     {community && (
-                        <div className="c-sidebar__module">
-                            <div className="c-sidebar__header">
-                                <h3 className="c-sidebar__h3">
-                                    {community.get('title')}
-                                </h3>
-                                {community.get('is_nsfw') && (
-                                    <span className="affiliation">nsfw</span>
-                                )}
-                            </div>
-                            <div
-                                style={{
-                                    border: '1px solid #ccc',
-                                    marginBottom: '16px',
-                                    padding: '0.5em',
-                                }}
-                            >
-                                {community.get('about')}
-                            </div>
-                            <div>
-                                <Link
-                                    className="button slim hollow primary"
-                                    style={{ minWidth: '6em' }}
-                                    to={`/submit.html?category=${category}`}
-                                >
-                                    New Post
-                                </Link>
-                                {this.props.username && (
-                                    <SubscribeButton
-                                        community={community.get('name')}
-                                    />
-                                )}
-                            </div>
-                            {community.get('subscribers')} subscribers
-                            <br />
-                            <br />
-                            <strong>Moderators</strong>
-                            {teamMembers(community.get('team', List()))}
-                            {Role.atLeast(role, 'mod') && (
-                                <Link
-                                    className="button slim hollow"
-                                    to={`/roles/${category}`}
-                                >
-                                    Edit Roles
-                                </Link>
-                            )}
-                            {Role.atLeast(role, 'mod') && (
-                                <SettingsEditButtonContainer
-                                    community={community.get('name')}
-                                />
-                            )}
-                            <br />
-                            <strong>Description</strong>
-                            <br />
-                            {community.get('description', 'empty')}
-                            <br />
-                            <br />
-                            <strong>Language</strong>
-                            <br />
-                            {community.get('lang')}
-                        </div>
+                        <CommunityPane
+                            community={community}
+                            username={this.props.username}
+                        />
                     )}
-                    {this.props.isBrowser && !this.props.username ? (
-                        <SidebarNewUsers />
-                    ) : (
-                        this.props.isBrowser &&
-                        !community && (
+                    {this.props.isBrowser &&
+                        !community &&
+                        !this.props.username && <SidebarNewUsers />}
+                    {this.props.isBrowser &&
+                        !community &&
+                        this.props.username && (
                             <SidebarLinks username={this.props.username} />
-                        )
-                    )}
+                        )}
                     {!community && <Notices />}
                     {!category && <SteemMarket />}
-                    {allowAdsOnContent ? (
+                    {allowAdsOnContent && (
                         <div className="sidebar-ad">
                             <GptAd
                                 type="Freestar"
                                 id="bsa-zone_1566495004689-0_123456"
                             />
                         </div>
-                    ) : null}
+                    )}
                 </aside>
 
                 <aside className="c-sidebar c-sidebar--left">
@@ -336,7 +253,7 @@ class PostsIndex extends React.Component {
                         username={this.props.username}
                         topics={topics}
                     />
-                    {allowAdsOnContent ? (
+                    {allowAdsOnContent && (
                         <div>
                             <div className="sidebar-ad">
                                 <GptAd
@@ -354,7 +271,7 @@ class PostsIndex extends React.Component {
                                 />
                             </div>
                         </div>
-                    ) : null}
+                    )}
                 </aside>
             </div>
         );
@@ -390,16 +307,16 @@ module.exports = {
                 );
 
             return {
+                status: state.global.get('status'),
+                loading: state.app.get('loading'),
+                account_name,
+                category,
+                order,
                 posts: state.global.getIn(
                     ['discussion_idx', category || '', order],
                     List()
                 ),
-                status: state.global.get('status'),
-                loading: state.app.get('loading'),
                 community,
-                account_name,
-                category,
-                order,
                 username:
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),

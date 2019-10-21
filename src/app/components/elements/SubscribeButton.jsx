@@ -46,7 +46,7 @@ class SubscribeButton extends React.Component {
                 style={{ minWidth: '6em' }}
                 type="button"
             >
-                {loading ? loader : subscribed ? 'Leave' : 'Join'}
+                {loading ? loader : subscribed ? 'Joined' : 'Join'}
             </button>
         );
     }

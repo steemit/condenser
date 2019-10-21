@@ -2,6 +2,7 @@ import React from 'react';
 import tt from 'counterpart';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import { connect } from 'react-redux';
 
 const Notice = ({ notice }) => {
     if (!notice || !notice.title) {
@@ -68,4 +69,9 @@ const SteemitNotices = ({ notices }) => {
     );
 };
 
-export default SteemitNotices;
+module.exports = connect(state => ({
+    notices: state.offchain
+        .get('special_posts')
+        .get('notices')
+        .toJS(),
+}))(SteemitNotices);

@@ -23,6 +23,29 @@ import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import { ifHive, Role } from 'app/utils/Community';
 
+const emptyFeedText = isMyAccount => {
+    return isMyAccount ? (
+        <div>
+            {tt('posts_index.empty_feed_1')}.<br />
+            <br />
+            {tt('posts_index.empty_feed_2')}.<br />
+            <br />
+            <Link to="/trending">{tt('posts_index.empty_feed_3')}</Link>
+            <br />
+            <Link to="/welcome">{tt('posts_index.empty_feed_4')}</Link>
+            <br />
+            <Link to="/faq.html">{tt('posts_index.empty_feed_5')}</Link>
+            <br />
+        </div>
+    ) : (
+        <div>
+            {tt('user_profile.user_hasnt_followed_anything_yet', {
+                name: account_name,
+            })}
+        </div>
+    );
+};
+
 class PostsIndex extends React.Component {
     static propTypes = {
         posts: PropTypes.object,
@@ -69,64 +92,24 @@ class PostsIndex extends React.Component {
     render() {
         const {
             topics,
-            featured,
-            promoted,
-            gptBannedTags,
+            allowAdsOnContent,
             community,
             category,
             account_name, // TODO: for feed
             order,
             posts,
-            viewer_role,
         } = this.props;
-
-        let allowAdsOnContent = true;
-        allowAdsOnContent =
-            this.props.gptEnabled &&
-            !GptUtils.HasBannedTags([category], gptBannedTags);
 
         let emptyText = '';
         if (order === 'feed') {
-            const isMyAccount = this.props.username === account_name;
-            if (isMyAccount) {
-                emptyText = (
-                    <div>
-                        {tt('posts_index.empty_feed_1')}.<br />
-                        <br />
-                        {tt('posts_index.empty_feed_2')}.<br />
-                        <br />
-                        <Link to="/trending">
-                            {tt('posts_index.empty_feed_3')}
-                        </Link>
-                        <br />
-                        <Link to="/welcome">
-                            {tt('posts_index.empty_feed_4')}
-                        </Link>
-                        <br />
-                        <Link to="/faq.html">
-                            {tt('posts_index.empty_feed_5')}
-                        </Link>
-                        <br />
-                    </div>
-                );
-            } else {
-                emptyText = (
-                    <div>
-                        {tt('user_profile.user_hasnt_followed_anything_yet', {
-                            name: account_name,
-                        })}
-                    </div>
-                );
-            }
-        } else if (posts && posts.size === 0) {
-            emptyText = (
-                <div>
-                    {'No ' +
-                        order +
-                        (category ? ' #' + category : '') +
-                        ' posts found'}
-                </div>
-            );
+            emptyText = emptyFeedText(this.props.username === account_name);
+        } else if (posts.size === 0) {
+            const cat = community
+                ? community.get('title')
+                : category ? ' #' + category : '';
+            emptyText = <div>{`No ${order} ${cat} posts found`}</div>;
+        } else {
+            emptyText = 'Nothing here to see...';
         }
 
         function teamMembers(members) {
@@ -174,6 +157,8 @@ class PostsIndex extends React.Component {
         } else {
             page_title = tt('g.all_tags');
         }
+
+        const role = community && community.getIn(['context', 'role'], 'guest');
 
         const layoutClass = this.props.blogmode
             ? ' layout-block'
@@ -241,15 +226,12 @@ class PostsIndex extends React.Component {
                         </div>
                     </div>
                     <hr className="articles__hr" />
-                    {!fetching &&
-                    (posts && !posts.size) &&
-                    (featured && !featured.size) &&
-                    (promoted && !promoted.size) ? (
+                    {!fetching && !posts.size ? (
                         <Callout>{emptyText}</Callout>
                     ) : (
                         <PostsList
                             ref="list"
-                            posts={posts ? posts : List()}
+                            posts={posts}
                             loading={fetching}
                             anyPosts
                             category={category}
@@ -301,7 +283,7 @@ class PostsIndex extends React.Component {
                             <br />
                             <strong>Moderators</strong>
                             {teamMembers(community.get('team', List()))}
-                            {Role.atLeast(viewer_role, 'mod') && (
+                            {Role.atLeast(role, 'mod') && (
                                 <Link
                                     className="button slim hollow"
                                     to={`/roles/${category}`}
@@ -309,7 +291,7 @@ class PostsIndex extends React.Component {
                                     Edit Roles
                                 </Link>
                             )}
-                            {Role.atLeast(viewer_role, 'mod') && (
+                            {Role.atLeast(role, 'mod') && (
                                 <SettingsEditButtonContainer
                                     community={community.get('name')}
                                 />
@@ -333,9 +315,9 @@ class PostsIndex extends React.Component {
                             <SidebarLinks username={this.props.username} />
                         )
                     )}
-                    {!community && <Notices notices={this.props.notices} />}
+                    {!community && <Notices />}
                     {!category && <SteemMarket />}
-                    {this.props.gptEnabled && allowAdsOnContent ? (
+                    {allowAdsOnContent ? (
                         <div className="sidebar-ad">
                             <GptAd
                                 type="Freestar"
@@ -353,7 +335,7 @@ class PostsIndex extends React.Component {
                         username={this.props.username}
                         topics={topics}
                     />
-                    {this.props.gptEnabled && allowAdsOnContent ? (
+                    {allowAdsOnContent ? (
                         <div>
                             <div className="sidebar-ad">
                                 <GptAd
@@ -396,16 +378,24 @@ module.exports = {
                 ? route.category
                 : route.order || 'trending';
 
-            const community = ifHive(category);
+            const hive = ifHive(category);
+            const community = state.global.getIn(['community', hive], null);
+
+            const allowAdsOnContent =
+                ownProps.gptEnabled &&
+                !GptUtils.HasBannedTags(
+                    [category],
+                    state.app.getIn(['googleAds', 'gptBannedTags'])
+                );
 
             return {
                 posts: state.global.getIn(
                     ['discussion_idx', category || '', order],
-                    Map()
+                    List()
                 ),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                community: state.global.getIn(['community', community], null),
+                community,
                 account_name,
                 category,
                 order,
@@ -414,23 +404,8 @@ module.exports = {
                     state.offchain.get('account'),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 topics: state.global.getIn(['topics'], List()),
-                featured: state.offchain
-                    .get('special_posts')
-                    .get('featured_posts'),
-                promoted: state.offchain
-                    .get('special_posts')
-                    .get('promoted_posts'),
-                notices: state.offchain
-                    .get('special_posts')
-                    .get('notices')
-                    .toJS(),
                 isBrowser: process.env.BROWSER,
-                gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
-                gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
-                viewer_role: state.global.getIn(
-                    ['community', community, 'context', 'role'],
-                    'guest'
-                ),
+                allowAdsOnContent,
             };
         },
         dispatch => {

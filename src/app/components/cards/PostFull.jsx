@@ -19,7 +19,7 @@ import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
-import MuteButtonContainer from 'app/components/elements/MuteButtonContainer';
+import MuteButton from 'app/components/elements/MuteButton';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
@@ -419,7 +419,6 @@ class PostFull extends React.Component {
         const showDeleteOption = username === author && allowDelete(post);
 
         const isPinned = post.getIn(['stats', 'is_pinned'], false);
-        const isMuted = post.getIn(['stats', 'gray']);
 
         const isPreViewCount = Date.parse(post.get('created')) < 1480723200000; // check if post was created before view-count tracking began (2016-12-03)
         let contentBody;
@@ -498,14 +497,7 @@ class PostFull extends React.Component {
                                     {isPinned ? tt('g.unpin') : tt('g.pin')}
                                 </a>
                             )}{' '}
-                            {showMuteToggle && (
-                                <MuteButtonContainer
-                                    account={author}
-                                    community={community}
-                                    isMuted={isMuted}
-                                    permlink={permlink}
-                                />
-                            )}{' '}
+                            {showMuteToggle && <MuteButton post={post} />}{' '}
                             {/* owner */}
                             {showEditOption && (
                                 <a onClick={onShowEdit}>{tt('g.edit')}</a>

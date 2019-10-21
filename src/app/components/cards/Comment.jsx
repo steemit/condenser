@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Author from 'app/components/elements/Author';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
-import MuteButtonContainer from 'app/components/elements/MuteButtonContainer';
+import MuteButton from 'app/components/elements/MuteButton';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Voting from 'app/components/elements/Voting';
@@ -243,14 +243,7 @@ class CommentImpl extends React.Component {
                         {showReplyOption && (
                             <a onClick={onShowReply}>{tt('g.reply')}</a>
                         )}{' '}
-                        {showMuteToggle && (
-                            <MuteButtonContainer
-                                account={author}
-                                community={community}
-                                isMuted={gray}
-                                permlink={comment.permlink}
-                            />
-                        )}{' '}
+                        {showMuteToggle && <MuteButton post={post} />}{' '}
                         {showEditOption && (
                             <a onClick={onShowEdit}>{tt('g.edit')}</a>
                         )}{' '}

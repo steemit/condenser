@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
-import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 
 import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
@@ -147,9 +146,6 @@ export default connect(
         },
         pushState: state => {
             dispatch(globalActions.receiveState(state));
-        },
-        getCommunity: communityName => {
-            return dispatch(fetchDataSagaActions.getCommunity(communityName));
         },
     })
 )(SettingsEditButton);

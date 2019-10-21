@@ -30,7 +30,7 @@
         "community_user_role_edit_header": "Change User's Community Role",
         "community_user_title_edit_header": "Change User's Community Title",
         "community_user_title_edit_description":
-            "Here you may change the title of %(username) within the community %(community).",
+            "Here you may change the title of %(username)s within the community %(community)s.",
         "comments": "Comments",
         "confirm": "Confirm",
         "convert": "Convert",

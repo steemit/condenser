@@ -355,12 +355,8 @@ class CommentImpl extends React.Component {
                                 <Userpic account={author} />
                             </div>
                             <Author
-                                author={comment.author}
-                                authorRep={comment.author_reputation}
+                                post={post}
                                 showAffiliation
-                                role={comment.author_role}
-                                title={comment.author_title}
-                                permlink={comment.permlink}
                                 community={community}
                                 viewer_role={viewer_role}
                             />

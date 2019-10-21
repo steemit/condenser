@@ -1,62 +1,155 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import * as globalActions from 'app/redux/GlobalReducer';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 
 import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
 import CommunitySettings from 'app/components/modules/CommunitySettings';
 
-export default function SettingsButton(props) {
-    const {
-        label,
-        loading,
-        onSave,
-        onToggleDialog,
-        showDialog,
-        settings,
-    } = props;
-
-    if (loading) {
-        return (
-            <button
-                disabled
-                className="button slim hollow secondary"
-                type="button"
-            >
-                Loading...
-            </button>
-        );
+class SettingsEditButton extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showDialog: false,
+            loading: false,
+            settings: this.props.settings,
+        };
     }
 
-    return (
-        <span>
-            <button
-                onClick={onToggleDialog}
-                className="button slim hollow secondary"
-                type="button"
-            >
-                {label}
-            </button>
-            {showDialog && (
-                <Reveal onHide={() => null} show>
-                    <CloseButton onClick={() => onToggleDialog()} />
-                    <CommunitySettings
-                        {...settings}
-                        onSubmit={newSettings => {
-                            onToggleDialog();
-                            onSave(newSettings);
-                        }}
-                    />
-                </Reveal>
-            )}
-        </span>
-    );
+    onToggleDialog = () => {
+        this.setState({ showDialog: !this.state.showDialog });
+    };
+
+    onSave = newSettings => {
+        const community = this.props.community.get('name');
+        this.setState({ loading: true });
+        this.props.saveSettings(
+            this.props.username,
+            community,
+            newSettings,
+            () => {
+                this.setState({ loading: false, settings: newSettings });
+            },
+            () => {
+                this.setState({ loading: false });
+            }
+        );
+
+        //-- Simulate a "receiveState" action to feed new title into post state
+        let newstate = { community: {}, simulation: true };
+        newstate['community'][community] = newSettings;
+        this.props.pushState(newstate);
+    };
+
+    render() {
+        const label = `Settings`;
+        const { showDialog, loading, settings } = this.state;
+
+        if (loading) {
+            return (
+                <button
+                    disabled
+                    className="button slim hollow secondary"
+                    type="button"
+                >
+                    Loading...
+                </button>
+            );
+        }
+
+        return (
+            <span>
+                <button
+                    onClick={this.onToggleDialog}
+                    className="button slim hollow secondary"
+                    type="button"
+                >
+                    {label}
+                </button>
+                {showDialog && (
+                    <Reveal onHide={() => null} show>
+                        <CloseButton onClick={() => this.onToggleDialog()} />
+                        <CommunitySettings
+                            {...settings}
+                            onSubmit={newSettings => {
+                                this.onToggleDialog();
+                                this.onSave(newSettings);
+                            }}
+                        />
+                    </Reveal>
+                )}
+            </span>
+        );
+    }
 }
 
-SettingsButton.propTypes = {
-    label: PropTypes.string.isRequired,
-    loading: PropTypes.bool.isRequired,
-    showDialog: PropTypes.bool.isRequired,
-    onSave: PropTypes.func.isRequired,
-    onToggleDialog: PropTypes.func.isRequired,
+SettingsEditButton.propTypes = {
+    username: PropTypes.string.isRequired,
+    community: PropTypes.object.isRequired, //TODO: Define this shape
     settings: PropTypes.object.isRequired, //TODO: Define this shape
 };
+
+export default connect(
+    (state, ownProps) => {
+        const community = state.global.getIn(
+            ['community', ownProps.community],
+            {}
+        );
+        const settings = {
+            title: community.get('title'),
+            about: community.get('about'),
+            is_nsfw: community.get('is_nsfw'),
+            description: community.get('description'),
+            flag_text: community.get('flag_text', ''),
+        };
+
+        return {
+            ...ownProps,
+            username: state.user.getIn(['current', 'username']),
+            community,
+            settings,
+        };
+    },
+    dispatch => ({
+        saveSettings: (
+            account,
+            community,
+            settings,
+            successCallback,
+            errorCallback
+        ) => {
+            const action = 'updateProps';
+
+            const payload = [
+                action,
+                {
+                    community,
+                    props: settings,
+                },
+            ];
+
+            return dispatch(
+                transactionActions.broadcastOperation({
+                    type: 'custom_json',
+                    operation: {
+                        id: 'community',
+                        required_posting_auths: [account],
+                        json: JSON.stringify(payload),
+                    },
+                    successCallback,
+                    errorCallback,
+                })
+            );
+        },
+        pushState: state => {
+            dispatch(globalActions.receiveState(state));
+        },
+        getCommunity: communityName => {
+            return dispatch(fetchDataSagaActions.getCommunity(communityName));
+        },
+    })
+)(SettingsEditButton);

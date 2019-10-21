@@ -369,7 +369,7 @@ module.exports = {
             //   or, @username/feed (category/order). Branch on presence of `@`.
             const route = ownProps.routeParams;
             const account_name =
-                route.order[0] == '@'
+                route.order && route.order[0] == '@'
                     ? route.order.slice(1).toLowerCase()
                     : null;
             const category = account_name

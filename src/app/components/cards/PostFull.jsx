@@ -558,7 +558,7 @@ export default connect(
     (state, ownProps) => {
         const postref = ownProps.post;
         const post = ownProps.cont.get(postref);
-        const community = post.get('category');
+        const community = ifHive(post.get('category'));
 
         return {
             post,

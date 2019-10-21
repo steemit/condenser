@@ -9,45 +9,41 @@ import { Link } from 'react-router';
 
 export default class CommunitiesIndex extends React.Component {
     componentWillMount = () => {
-        this.props.listCommunities(this.props.current_user);
+        this.props.listCommunities(this.props.username);
     };
 
     render() {
         const { communities, communities_idx } = this.props;
+        const ordered = communities_idx.map(name => communities.get(name));
 
-        if (communities.length == 0) {
+        if (communities_idx.length == 0) {
             return (
                 <center>
-                    <h5>
-                        Loading<br />
-                        <small>It's worth the wait. ;)</small>
-                    </h5>
+                    <h5>Loading...</h5>
                 </center>
             );
         }
 
-        const comm = comm => (
-            <tr key={comm.get('name')}>
+        const row = comm => (
+            <tr key={comm.name}>
                 <th>
-                    <Link to={`/trending/${comm.get(name)}`}>
-                        {comm.get('title')}
-                    </Link>
+                    <Link to={`/trending/${comm.name}`}>{comm.title}</Link>
                     <br />
-                    <small>{comm.get('subscribers')} subscribers</small>
+                    {comm.about}
                 </th>
-                <td>{comm.get('about')}</td>
                 <td>
-                    <SubscribeButton community={comm.get('name')} />
+                    <SubscribeButton community={comm.name} />
+                    <small>{comm.subscribers} subscribers</small>
                 </td>
             </tr>
         );
 
-        const list = communities_idx.map(name => comm(communities.get(name)));
-
         return (
             <div className="CommunitiesIndex row">
                 <h4>{tt('g.community_list_header')}</h4>
-                <table>{list}</table>
+                <table>
+                    <tbody>{ordered.map(comm => row(comm.toJS()))}</tbody>
+                </table>
             </div>
         );
     }
@@ -57,7 +53,7 @@ module.exports = {
     path: 'communities(/:username)',
     component: connect(
         state => ({
-            current_user: state.user.getIn(['current', 'username']),
+            username: state.user.getIn(['current', 'username']),
             communities: state.global.get('community', Map()),
             communities_idx: state.global.get('community_idx', List()),
         }),

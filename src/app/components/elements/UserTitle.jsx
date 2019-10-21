@@ -12,7 +12,7 @@ import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
 import UserTitleEditor from 'app/components/modules/UserTitleEditor';
 
-class UserTitleEditButton extends React.Component {
+class UserTitle extends React.Component {
     constructor(props) {
         super(props);
         this.state = { showDialog: false };
@@ -90,9 +90,9 @@ class UserTitleEditButton extends React.Component {
     }
 }
 
-UserTitleEditButton.propTypes = {
-    username: PropTypes.string.isRequired,
-    community: PropTypes.object,
+UserTitle.propTypes = {
+    username: PropTypes.string,
+    community: PropTypes.object.isRequired,
     author: PropTypes.string.isRequired,
     permlink: PropTypes.string.isRequired,
     title: PropTypes.string,
@@ -154,4 +154,4 @@ export default connect(
             );
         },
     })
-)(UserTitleEditButton);
+)(UserTitle);

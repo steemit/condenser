@@ -23,7 +23,7 @@ import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import { ifHive, Role } from 'app/utils/Community';
 
-const emptyFeedText = isMyAccount => {
+const emptyFeedText = (isMyAccount, account_name) => {
     return isMyAccount ? (
         <div>
             {tt('posts_index.empty_feed_1')}.<br />
@@ -102,7 +102,8 @@ class PostsIndex extends React.Component {
 
         let emptyText = '';
         if (order === 'feed') {
-            emptyText = emptyFeedText(this.props.username === account_name);
+            const isMyAccount = this.props.username === account_name;
+            emptyText = emptyFeedText(isMyAccount, account_name);
         } else if (posts.size === 0) {
             const cat = community
                 ? community.get('title')

@@ -11,7 +11,7 @@ import AffiliationMap from 'app/utils/AffiliationMap';
 import tt from 'counterpart';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
-import UserTitleEditButton from 'app/components/elements/UserTitleEditButton';
+import UserTitle from 'app/components/elements/UserTitle';
 import { Role } from 'app/utils/Community';
 
 const { string, bool, number } = PropTypes;
@@ -114,7 +114,7 @@ class Author extends React.Component {
         const userTitle = (
             <span>
                 {community && (
-                    <UserTitleEditButton
+                    <UserTitle
                         username={username}
                         community={community}
                         author={author}

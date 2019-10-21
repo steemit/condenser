@@ -35,7 +35,6 @@ class Author extends React.Component {
         role: string,
         title: string,
         community: string,
-        viewer_role: string,
     };
     static defaultProps = {
         follow: true,
@@ -44,7 +43,6 @@ class Author extends React.Component {
         role: '',
         title: '',
         community: '',
-        viewer_role: 'guest',
     };
 
     constructor(...args) {
@@ -101,36 +99,29 @@ class Author extends React.Component {
     render() {
         const {
             author,
+            authorRep,
+            username,
             follow,
             mute,
-            authorRep,
             showAffiliation,
-            role,
-            title,
+
             community,
             permlink,
-            viewer_role,
-            username,
+            role,
+            title,
         } = this.props;
-
-        const isMod = username && community && Role.atLeast(viewer_role, 'mod');
 
         const userTitle = (
             <span>
-                {role && role != 'guest' && <span>[{role}]</span>}
-                {(title != '' || isMod) && (
-                    <span className="affiliation">
-                        {title}
-                        {isMod && (
-                            <UserTitleEditButton
-                                author={author}
-                                username={username}
-                                community={community}
-                                title={title}
-                                permlink={permlink}
-                            />
-                        )}
-                    </span>
+                {community && (
+                    <UserTitleEditButton
+                        username={username}
+                        community={community}
+                        author={author}
+                        permlink={permlink}
+                        role={role}
+                        title={title}
+                    />
                 )}
                 {showAffiliation && AffiliationMap[author] ? (
                     <span className="affiliation">

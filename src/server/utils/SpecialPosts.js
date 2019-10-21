@@ -1,6 +1,5 @@
 import * as config from 'config';
 import * as https from 'https';
-import * as steem from '@steemit/steem-js';
 import { callBridge } from 'app/utils/steemApi';
 
 /**
@@ -44,9 +43,7 @@ function loadSpecialPosts() {
 
 async function getPost(url) {
     const [author, permlink] = url.split('@')[1].split('/');
-    let post = await steem.api.getContentAsync(author, permlink);
-    post = await callBridge('normalize_post', { post: post });
-    return post;
+    return await callBridge('get_post', { author, permlink });
 }
 
 /**

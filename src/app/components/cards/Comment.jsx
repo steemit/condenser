@@ -138,6 +138,7 @@ class CommentImpl extends React.Component {
             const gray = post.getIn(['stats', 'gray']);
 
             if (hide) {
+                // trigger parent component to show 'reveal comments' button
                 const { onHide } = this.props;
                 if (onHide) onHide();
             }

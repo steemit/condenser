@@ -193,14 +193,19 @@ class Author extends React.Component {
 import { connect } from 'react-redux';
 
 export default connect((state, ownProps) => {
-    const { author, follow, mute, authorRep, permlink } = ownProps;
+    const { follow, mute, post, viewer_role } = ownProps;
     const username = state.user.getIn(['current', 'username']);
+
     return {
-        author,
+        authorRep: post.get('author_reputation'),
+        author: post.get('author'),
+        permlink: post.get('permlink'),
+        role: post.get('author_role'),
+        title: post.get('author_title'),
         follow,
-        mute,
-        authorRep,
+        mute: typeof mute === 'undefined' ? follow : mute,
         username,
-        permlink,
+        viewer_role,
+        post,
     };
 })(Author);

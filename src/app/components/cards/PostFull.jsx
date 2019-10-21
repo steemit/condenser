@@ -31,28 +31,14 @@ import { allowDelete } from 'app/utils/StateFunctions';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { ifHive, Role } from 'app/utils/Community';
 
-function ContentAuthor({ content, community, viewer_role }) {
-    return (
-        <Author
-            author={content.get('author')}
-            authorRep={content.get('author_reputation')}
-            showAffiliation
-            role={content.get('author_role')}
-            title={content.get('author_title')}
-            community={community}
-            permlink={content.get('permlink')}
-            viewer_role={viewer_role}
-        />
-    );
-}
-
-function TimeAuthorCategory({ content, community, viewer_role }) {
+function TimeAuthorCategory({ post, community, viewer_role }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
-            <TimeAgoWrapper date={content.get('created')} /> {tt('g.by')}{' '}
-            <ContentAuthor
-                content={content}
+            <TimeAgoWrapper date={post.get('created')} /> {tt('g.by')}{' '}
+            <Author
+                post={post}
+                showAffiliation
                 community={community}
                 viewer_role={viewer_role}
             />
@@ -60,22 +46,23 @@ function TimeAuthorCategory({ content, community, viewer_role }) {
     );
 }
 
-function TimeAuthorCategoryLarge({ content, community, viewer_role }) {
+function TimeAuthorCategoryLarge({ post, community, viewer_role }) {
     return (
         <span className="PostFull__time_author_category_large vcard">
-            <Userpic account={content.get('author')} />
+            <Userpic account={post.get('author')} />
             <div className="right-side">
-                <ContentAuthor
-                    content={content}
+                <Author
+                    post={post}
+                    showAffiliation
                     community={community}
                     viewer_role={viewer_role}
                 />
-                {tt('g.in')} <TagList post={content.toJS()} single />
+                {tt('g.in')} <TagList post={post} single />
                 {' • '}
-                <TimeAgoWrapper date={content.get('created')} />{' '}
+                <TimeAgoWrapper date={post.get('created')} />{' '}
                 <ContentEditedWrapper
-                    createDate={content.get('created')}
-                    updateDate={content.get('updated')}
+                    createDate={post.get('created')}
+                    updateDate={post.get('updated')}
                 />
             </div>
         </span>
@@ -465,7 +452,7 @@ class PostFull extends React.Component {
                         <div className="PostFull__header">
                             {post_header}
                             <TimeAuthorCategoryLarge
-                                content={post}
+                                post={post}
                                 community={community}
                                 viewer_role={viewer_role}
                             />
@@ -486,11 +473,11 @@ class PostFull extends React.Component {
                             {tt('g.promote')}
                         </button>
                     )}
-                {!isReply && <TagList post={post.toJS()} horizontal />}
+                {!isReply && <TagList post={post} horizontal />}
                 <div className="PostFull__footer row">
                     <div className="columns medium-12 large-6">
                         <TimeAuthorCategory
-                            content={post}
+                            post={post}
                             community={community}
                             viewer_role={viewer_role}
                         />

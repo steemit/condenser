@@ -146,18 +146,13 @@ class PostSummary extends React.Component {
                     ) : null}
                     <div className="user__col user__col--right">
                         <span className="user__name">
-                            <Author
-                                author={author}
-                                authorRep={content.get('author_reputation')}
-                                follow={false}
-                                mute={false}
-                            />
+                            <Author post={content} follow={false} />
                         </span>
 
                         {hideCategory || (
                             <span className="articles__tag-link">
                                 {tt('g.in')}&nbsp;
-                                <TagList post={content.toJS()} single />
+                                <TagList post={content} single />
                                 &nbsp;•&nbsp;
                             </span>
                         )}

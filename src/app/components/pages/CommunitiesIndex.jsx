@@ -27,41 +27,27 @@ export default class CommunitiesIndex extends React.Component {
         }
 
         const comm = comm => (
-            <div className="communities__row">
-                <div className="communities__names">
+            <tr key={comm.get('name')}>
+                <th>
                     <Link to={`/trending/${comm.get(name)}`}>
                         {comm.get('title')}
                     </Link>
-                </div>
-                <div className="communities__description">
-                    {comm.get('about')}
                     <br />
-                    {comm.get('subscribers')} subscribers
-                </div>
-                <div className="communities__subscription">
+                    <small>{comm.get('subscribers')} subscribers</small>
+                </th>
+                <td>{comm.get('about')}</td>
+                <td>
                     <SubscribeButton community={comm.get('name')} />
-                </div>
-            </div>
+                </td>
+            </tr>
         );
 
-        const list = (
-            <div className="CommunitiesList">
-                <div className="communities__header">
-                    <div className="communities__names">Community Name</div>
-                    <div className="communities__description">Description</div>
-                    <div className="communities__subscription">Subscribe</div>
-                </div>
-                {communities_idx.map(name => comm(communities.get(name)))}
-            </div>
-        );
+        const list = communities_idx.map(name => comm(communities.get(name)));
 
         return (
             <div className="CommunitiesIndex row">
-                <div className="column">
-                    <br />
-                    <h4>{tt('g.community_list_header')}</h4>
-                    {list}
-                </div>
+                <h4>{tt('g.community_list_header')}</h4>
+                <table>{list}</table>
             </div>
         );
     }

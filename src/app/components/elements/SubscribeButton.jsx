@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
@@ -35,26 +36,17 @@ class SubscribeButton extends React.Component {
     render() {
         const { subscribed } = this.props;
         const { loading } = this.state;
-
-        if (loading) {
-            return (
-                <button
-                    disabled
-                    className="button slim hollow secondary"
-                    type="button"
-                >
-                    Loading...
-                </button>
-            );
-        }
-
+        const loader = <LoadingIndicator type="dots" />;
+        const hollowed = subscribed ? ' hollow' : '';
         return (
             <button
                 onClick={this.onClick}
-                className="button slim hollow secondary"
+                disabled={loading}
+                className={'button slim primary' + hollowed}
+                style={{ minWidth: '6em' }}
                 type="button"
             >
-                {subscribed ? 'Unsubscribe' : 'Subscribe'}
+                {loading ? loader : subscribed ? 'Leave' : 'Join'}
             </button>
         );
     }

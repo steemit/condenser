@@ -96,7 +96,7 @@ class CommunityRoles extends React.Component {
             const name = tuple[0];
             const title = tuple[2];
             let role = tuple[1];
-            if (availableRoles.filter(tuple[1]).length > 0) {
+            if (availableRoles.includes(tuple[1])) {
                 role = (
                     <span
                         className="community-user--role"

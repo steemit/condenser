@@ -34,13 +34,13 @@ import { ifHive, Role } from 'app/utils/Community';
 function ContentAuthor({ content, community, viewer_role }) {
     return (
         <Author
-            author={content.author}
-            authorRep={content.author_reputation}
+            author={content.get('author')}
+            authorRep={content.get('author_reputation')}
             showAffiliation
-            role={content.author_role}
-            title={content.author_title}
+            role={content.get('author_role')}
+            title={content.get('author_title')}
             community={community}
-            permlink={content.permlink}
+            permlink={content.get('permlink')}
             viewer_role={viewer_role}
         />
     );
@@ -50,7 +50,7 @@ function TimeAuthorCategory({ content, community, viewer_role }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
-            <TimeAgoWrapper date={content.created} /> {tt('g.by')}{' '}
+            <TimeAgoWrapper date={content.get('created')} /> {tt('g.by')}{' '}
             <ContentAuthor
                 content={content}
                 community={community}
@@ -63,19 +63,19 @@ function TimeAuthorCategory({ content, community, viewer_role }) {
 function TimeAuthorCategoryLarge({ content, community, viewer_role }) {
     return (
         <span className="PostFull__time_author_category_large vcard">
-            <Userpic account={content.author} />
+            <Userpic account={content.get('author')} />
             <div className="right-side">
                 <ContentAuthor
                     content={content}
                     community={community}
                     viewer_role={viewer_role}
                 />
-                {tt('g.in')} <TagList post={content} single />
+                {tt('g.in')} <TagList post={content.toJS()} single />
                 {' • '}
-                <TimeAgoWrapper date={content.created} />{' '}
+                <TimeAgoWrapper date={content.get('created')} />{' '}
                 <ContentEditedWrapper
-                    createDate={content.created}
-                    updateDate={content.updated}
+                    createDate={content.get('created')}
+                    updateDate={content.get('updated')}
                 />
             </div>
         </span>
@@ -274,15 +274,15 @@ class PostFull extends React.Component {
         if (!post) return null;
         const content = post.toJS();
         const { author, permlink, parent_author, parent_permlink } = content;
-        const { category, title, body } = content;
+        const { category, title } = content;
         const link = `${category}/@${author}/${permlink}`;
 
         if (process.env.BROWSER && title)
             document.title = title + ' — ' + APP_NAME;
 
-        let content_body = content.body;
+        let content_body = post.get('body');
         const bDMCAStop = DMCAList.includes(link);
-        const bIllegalContentUser = userIllegalContent.includes(content.author);
+        const bIllegalContentUser = userIllegalContent.includes(author);
         if (bDMCAStop) {
             content_body = tt(
                 'postfull_jsx.this_post_is_not_available_due_to_a_copyright_claim'
@@ -298,7 +298,7 @@ class PostFull extends React.Component {
         const bShowLoading = false;
 
         // hide images if user is on blacklist
-        const hideImages = ImageUserBlockList.includes(content.author);
+        const hideImages = ImageUserBlockList.includes(author);
 
         const replyParams = {
             author,
@@ -307,7 +307,7 @@ class PostFull extends React.Component {
             parent_permlink,
             category,
             title,
-            body,
+            body: post.get('body'),
         };
 
         this.share_params = {
@@ -354,6 +354,7 @@ class PostFull extends React.Component {
             : PostFullEditEditor;
         let renderedEditor = null;
         if (showReply || showEdit) {
+            const editJson = showReply ? null : post.get('json_metadata');
             renderedEditor = (
                 <div key="editor">
                     <Editor
@@ -373,18 +374,18 @@ class PostFull extends React.Component {
                             });
                             saveOnShow(formId, null);
                         }}
-                        jsonMetadata={showReply ? null : content.json_metadata}
+                        jsonMetadata={editJson}
                     />
                 </div>
             );
         }
-        const high_quality_post = content.payout > 10.0;
+        const high_quality_post = post.get('payout') > 10.0;
         const full_power = post.get('percent_steem_dollars') === 0;
         const isReply = post.get('depth') > 0;
 
         let post_header = (
             <h1 className="entry-title">
-                {content.title}
+                {post.get('title')}
                 {full_power && (
                     <span title={tt('g.powered_up_100')}>
                         <Icon name="steempower" />
@@ -394,7 +395,7 @@ class PostFull extends React.Component {
         );
 
         if (isReply) {
-            const rooturl = content.url;
+            const rooturl = post.get('url');
             const prnturl = `/${category}/@${parent_author}/${parent_permlink}`;
             post_header = (
                 <div className="callout">
@@ -403,7 +404,7 @@ class PostFull extends React.Component {
                             'postfull_jsx.you_are_viewing_a_single_comments_thread_from'
                         )}:
                     </div>
-                    <h4>{content.title}</h4>
+                    <h4>{post.get('title')}</h4>
                     <ul>
                         <li>
                             <Link to={rooturl}>
@@ -445,7 +446,7 @@ class PostFull extends React.Component {
                     text={content_body}
                     large
                     highQualityPost={high_quality_post}
-                    noImage={content.stats.gray}
+                    noImage={post.getIn(['stats', 'gray'])}
                     hideImages={hideImages}
                 />
             );
@@ -464,7 +465,7 @@ class PostFull extends React.Component {
                         <div className="PostFull__header">
                             {post_header}
                             <TimeAuthorCategoryLarge
-                                content={content}
+                                content={post}
                                 community={community}
                                 viewer_role={viewer_role}
                             />
@@ -485,11 +486,11 @@ class PostFull extends React.Component {
                             {tt('g.promote')}
                         </button>
                     )}
-                {!isReply && <TagList post={content} horizontal />}
+                {!isReply && <TagList post={post.toJS()} horizontal />}
                 <div className="PostFull__footer row">
                     <div className="columns medium-12 large-6">
                         <TimeAuthorCategory
-                            content={content}
+                            content={post}
                             community={community}
                             viewer_role={viewer_role}
                         />
@@ -530,14 +531,14 @@ class PostFull extends React.Component {
                             <Link
                                 to={link}
                                 title={tt('g.responses', {
-                                    count: content.children,
+                                    count: post.get('children'),
                                 })}
                             >
                                 <Icon
                                     name="chatboxes"
                                     className="space-right"
                                 />
-                                {content.children}
+                                {post.get('children')}
                             </Link>
                         </span>
                         <span className="PostFull__views">

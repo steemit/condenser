@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import tt from 'counterpart';
 
-class UserTitle extends Component {
+class UserTitleEditor extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -76,11 +76,11 @@ class UserTitle extends Component {
     }
 }
 
-UserTitle.propTypes = {
+UserTitleEditor.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     community: PropTypes.string.isRequired,
 };
 
-export default connect()(UserTitle);
+export default connect()(UserTitleEditor);

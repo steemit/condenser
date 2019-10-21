@@ -53,7 +53,7 @@ class SubscribeButton extends React.Component {
 }
 
 SubscribeButton.propTypes = {
-    username: PropTypes.string.isRequired,
+    username: PropTypes.string,
     subscribed: PropTypes.bool.isRequired,
     community: PropTypes.object.isRequired, //TODO: Define this shape
 };

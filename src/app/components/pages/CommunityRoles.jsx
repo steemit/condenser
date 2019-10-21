@@ -61,32 +61,55 @@ class CommunityRoles extends React.Component {
     }
 
     render() {
-        const { community, loading, updating, roles } = this.props;
-
+        const {
+            community,
+            loading,
+            updating,
+            roles,
+            communityMetadata,
+        } = this.props;
         const spinner = (
             <center>
                 <LoadingIndicator type="circle" />
             </center>
         );
 
+        const canEdit = {
+            owner: ['admin', 'mod', 'member', 'guest', 'muted'],
+            admin: ['mod', 'member', 'guest', 'muted'],
+            mod: ['member', 'guest', 'muted'],
+            member: ['guest', 'muted'],
+            guest: ['muted'],
+        };
+
+        let availableRoles = [];
+
+        if (
+            communityMetadata &&
+            communityMetadata.context &&
+            Object.keys(communityMetadata.context).length > 0
+        ) {
+            availableRoles = canEdit[communityMetadata.context.role];
+        }
+
         const tableRows = roles.toJS().map((tuple, index) => {
             const name = tuple[0];
             const title = tuple[2];
-            const role = (
-                <span
-                    className="community-user--role"
-                    onClick={() => {
-                        if (tuple[1] === 'owner') {
-                            return;
-                        }
-                        this.onEditUserRoleSelect(name, tuple[1], title);
-                        this.toggleUpdateRoleModal(true);
-                    }}
-                >
-                    <td>{tuple[1]}</td>
-                </span>
-            );
-
+            let role = tuple[1];
+            if (availableRoles.filter(tuple[1]).length > 0) {
+                role = (
+                    <span
+                        className="community-user--role"
+                        aria-labelledby="Community User Role"
+                        onClick={() => {
+                            this.onEditUserRoleSelect(name, tuple[1], title);
+                            this.toggleUpdateRoleModal(true);
+                        }}
+                    >
+                        <td>{tuple[1]}</td>
+                    </span>
+                );
+            }
             return (
                 <tr key={name}>
                     <td>{name}</td>
@@ -182,16 +205,20 @@ class CommunityRoles extends React.Component {
 const CommunityRolesWrapped = connect(
     (state, ownProps) => {
         const { community } = ownProps.params;
+        //console.log('COMMUNITY IS: ', state.community.toJS())
         const tree = state.community.get(community, Map());
         const roles = tree.get('roles', List());
         const loading = roles.size == 0;
         const updating = tree.get('updatePending', false);
+        const communityMetadata = state.global.getIn(['community', community]);
 
+        console.log(communityMetadata);
         return {
             community,
             roles,
             loading,
             updating,
+            communityMetadata: communityMetadata && communityMetadata.toJS(),
         };
     },
 

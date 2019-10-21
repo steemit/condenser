@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import tt from 'counterpart';
 import { Map, List } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
-import CommunityList from 'app/components/modules/CommunityList/CommunityList';
+import SubscribeButton from 'app/components/elements/SubscribeButton';
+import { Link } from 'react-router';
 
 export default class CommunitiesIndex extends React.Component {
     componentWillMount = () => {
@@ -14,15 +15,52 @@ export default class CommunitiesIndex extends React.Component {
     render() {
         const { communities, communities_idx } = this.props;
 
+        if (communities.length == 0) {
+            return (
+                <center>
+                    <h5>
+                        Loading<br />
+                        <small>It's worth the wait. ;)</small>
+                    </h5>
+                </center>
+            );
+        }
+
+        const comm = comm => (
+            <div className="communities__row">
+                <div className="communities__names">
+                    <Link to={`/trending/${comm.get(name)}`}>
+                        {comm.get('title')}
+                    </Link>
+                </div>
+                <div className="communities__description">
+                    {comm.get('about')}
+                    <br />
+                    {comm.get('subscribers')} subscribers
+                </div>
+                <div className="communities__subscription">
+                    <SubscribeButton community={comm.get('name')} />
+                </div>
+            </div>
+        );
+
+        const list = (
+            <div className="CommunitiesList">
+                <div className="communities__header">
+                    <div className="communities__names">Community Name</div>
+                    <div className="communities__description">Description</div>
+                    <div className="communities__subscription">Subscribe</div>
+                </div>
+                {communities_idx.map(name => comm(communities.get(name)))}
+            </div>
+        );
+
         return (
             <div className="CommunitiesIndex row">
                 <div className="column">
                     <br />
                     <h4>{tt('g.community_list_header')}</h4>
-                    <CommunityList
-                        communities={communities}
-                        communities_idx={communities_idx}
-                    />
+                    {list}
                 </div>
             </div>
         );

@@ -31,7 +31,7 @@ export function normalizeTags(metadata, category) {
     let tags = [];
 
     try {
-        tags = (metadata && metadata.tags) || [];
+        tags = (metadata && metadata.toJS().tags) || [];
         //if (typeof tags == 'string') tags = [tags];
         if (!Array.isArray(tags)) tags = [];
     } catch (e) {

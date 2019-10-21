@@ -9,10 +9,11 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 class TagList extends Component {
     render() {
         const { post, single } = this.props;
+        const category = post.get('category');
 
         const link = tag => {
             const name =
-                (ifHive(tag) ? post.community_title : null) || '#' + tag;
+                (ifHive(tag) ? post.get('community_title') : null) || '#' + tag;
             return (
                 <Link to={`/trending/${tag}`} key={tag}>
                     {' '}
@@ -21,11 +22,11 @@ class TagList extends Component {
             );
         };
 
-        if (single) return link(post.category);
+        if (single) return link(category);
 
         return (
             <div className="TagList__horizontal">
-                {normalizeTags(post.json_metadata, post.category).map(link)}
+                {normalizeTags(post.get('json_metadata'), category).map(link)}
             </div>
         );
     }

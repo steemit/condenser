@@ -48,30 +48,6 @@ function allTags(userInput, originalCategory, hashtags) {
     return tags;
 }
 
-function allTags(userInput, originalCategory, hashtags) {
-    // take space-delimited user input
-    let tags = OrderedSet(
-        userInput
-            ? userInput
-                  .trim()
-                  .replace(/#/g, '')
-                  .split(/ +/)
-            : []
-    );
-
-    // remove original category, if present
-    if (originalCategory && /^[-a-z\d]+$/.test(originalCategory))
-        tags = tags.delete(originalCategory);
-
-    // append hashtags from post until limit is reached
-    const tagged = [...hashtags];
-    while (tags.size < 5 && tagged.length > 0) {
-        tags = tags.add(tagged.shift());
-    }
-
-    return tags;
-}
-
 class ReplyEditor extends React.Component {
     static propTypes = {
         // html component attributes

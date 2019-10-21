@@ -282,26 +282,16 @@ class PostsIndex extends React.Component {
                             >
                                 {community.get('about')}
                             </div>
-                            <div style={{ float: 'none', marginTop: '-5px' }}>
-                                {this.props.username && (
-                                    <SubscribeButton
-                                        community={community.get('name')}
-                                    />
-                                )}
+                            <div>
                                 <Link
-                                    className="button slim hollow"
-                                    to={`/roles/${category}`}
-                                >
-                                    Edit Roles
-                                </Link>
-                                <Link
-                                    className="button slim hollow"
+                                    className="button slim hollow primary"
+                                    style={{ minWidth: '6em' }}
                                     to={`/submit.html?category=${category}`}
                                 >
-                                    Create Post
+                                    New Post
                                 </Link>
-                                {Role.atLeast(viewer_role, 'mod') && (
-                                    <SettingsEditButtonContainer
+                                {this.props.username && (
+                                    <SubscribeButton
                                         community={community.get('name')}
                                     />
                                 )}
@@ -311,6 +301,19 @@ class PostsIndex extends React.Component {
                             <br />
                             <strong>Moderators</strong>
                             {teamMembers(community.get('team', List()))}
+                            {Role.atLeast(viewer_role, 'mod') && (
+                                <Link
+                                    className="button slim hollow"
+                                    to={`/roles/${category}`}
+                                >
+                                    Edit Roles
+                                </Link>
+                            )}
+                            {Role.atLeast(viewer_role, 'mod') && (
+                                <SettingsEditButtonContainer
+                                    community={community.get('name')}
+                                />
+                            )}
                             <br />
                             <strong>Description</strong>
                             <br />

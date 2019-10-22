@@ -38,7 +38,7 @@ class CommunityPane extends Component {
         return (
             <div>
                 <div className="c-sidebar__module">
-                    {Role.atLeast(viewer_role, 'mod') && (
+                    {Role.atLeast(viewer_role, 'admin') && (
                         <div style={{ float: 'right', fontSize: '0.8em' }}>
                             <SettingsEditButton
                                 community={community.get('name')}
@@ -112,7 +112,7 @@ class CommunityPane extends Component {
                                 </Link>
                             </div>
                         )}
-                        <strong>Moderators</strong>
+                        <strong>Leadership</strong>
                         {teamMembers(community.get('team', List()))}
                     </div>
                 </div>

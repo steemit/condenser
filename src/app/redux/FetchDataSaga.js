@@ -169,9 +169,16 @@ export function* listCommunities(action) {
  */
 export function* getCommunity(action) {
     if (!action.payload) throw 'no community specified';
+
+    const currentUser = yield select(state => state.user.get('current'));
+    const currentUsername = currentUser && currentUser.get('username');
+
+    // TODO: If no current user is logged in, skip the observer param.
     const community = yield call(callBridge, 'get_community', {
         name: action.payload,
+        observer: currentUsername,
     });
+
     // TODO: Handle error state
     if (community.name)
         yield put(
@@ -348,10 +355,12 @@ export const actions = {
         payload,
     }),
 
-    getCommunity: payload => ({
-        type: GET_COMMUNITY,
-        payload,
-    }),
+    getCommunity: payload => {
+        return {
+            type: GET_COMMUNITY,
+            payload,
+        };
+    },
 
     getSubscriptions: payload => ({
         type: GET_SUBSCRIPTIONS,

@@ -15,6 +15,7 @@ class CommunityRoles extends React.Component {
             role: 'member',
             title: '',
             updateRoleModal: false,
+            addUserToCommunityModal: false,
             updatedRole: '',
         };
         this.onAccountChange = this.onAccountChange.bind(this);
@@ -22,6 +23,9 @@ class CommunityRoles extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.onEditUserRoleSelect = this.onEditUserRoleSelect.bind(this);
         this.toggleUpdateRoleModal = this.toggleUpdateRoleModal.bind(this);
+        this.toggleAddUserToCommunityModal = this.toggleAddUserToCommunityModal.bind(
+            this
+        );
     }
 
     componentDidMount() {
@@ -31,6 +35,11 @@ class CommunityRoles extends React.Component {
     toggleUpdateRoleModal(showModal) {
         this.setState({
             updateRoleModal: showModal,
+        });
+    }
+    toggleAddUserToCommunityModal(showModal) {
+        this.setState({
+            addUserToCommunityModal: showModal,
         });
     }
 
@@ -180,6 +189,31 @@ class CommunityRoles extends React.Component {
             </Reveal>
         );
 
+        const addUserModal = (
+            <Reveal onHide={() => null} show>
+                <CloseButton
+                    onClick={() => this.toggleAddUserToCommunityModal(false)}
+                />
+                <UserRole
+                    title={this.state.title}
+                    username={this.state.account}
+                    community={this.props.community}
+                    role={this.state.role}
+                    onSubmit={({ newUsername, newUserRole }) => {
+                        const params = {
+                            community: this.props.community,
+                            account: newUsername,
+                            role: newUserRole,
+                        };
+                        this.props.updateUser(params);
+                        this.toggleUpdateRoleModal(false);
+                    }}
+                    availableRoles={availableRoles}
+                    addUser
+                />
+            </Reveal>
+        );
+
         return (
             <div className="CommunityRoles">
                 <div className="row">
@@ -188,12 +222,21 @@ class CommunityRoles extends React.Component {
                         {updating && <div>Updating User...</div>}
                         {loading && spinner}
                         {this.state.updateRoleModal && editUserModal}
+                        {this.state.addUserToCommunityModal && addUserModal}
                         {!loading && (
                             <div>
                                 <h4>User Roles</h4>
                                 {table}
-                                <h4>Modify User Role</h4>
-                                {form}
+                                <button
+                                    onClick={() => {
+                                        this.toggleAddUserToCommunityModal(
+                                            true
+                                        );
+                                    }}
+                                    className="button slim hollow secondary"
+                                >
+                                    Add User
+                                </button>
                             </div>
                         )}
                     </div>

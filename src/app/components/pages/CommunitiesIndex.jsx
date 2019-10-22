@@ -26,12 +26,12 @@ export default class CommunitiesIndex extends React.Component {
 
         const row = comm => (
             <tr key={comm.name}>
-                <th>
+                <th width="600">
                     <Link to={`/trending/${comm.name}`}>{comm.title}</Link>
                     <br />
                     {comm.about}
                 </th>
-                <td>
+                <td width="40">
                     <SubscribeButton community={comm.name} />
                     <small>{comm.subscribers} subscribers</small>
                 </td>

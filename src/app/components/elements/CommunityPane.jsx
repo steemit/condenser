@@ -43,53 +43,61 @@ class CommunityPane extends Component {
                         <span className="affiliation">nsfw</span>
                     )}
                 </div>
-                <div
-                    style={{
-                        border: '1px solid #ccc',
-                        marginBottom: '16px',
-                        padding: '0.5em',
-                    }}
-                >
+                <div style={{ margin: '-12px 0 12px' }}>
                     {community.get('about')}
                 </div>
-                <div>
+                <div style={{ margin: '0 -8px' }}>
                     <Link
-                        className="button slim hollow primary"
-                        style={{ minWidth: '6em' }}
+                        className="button slim primary"
+                        style={{ minWidth: '6em', display: 'block' }}
                         to={`/submit.html?category=${category}`}
                     >
                         New Post
                     </Link>
-                    {this.props.username && (
-                        <SubscribeButton community={community.get('name')} />
-                    )}
+                    {community &&
+                        this.props.username && (
+                            <SubscribeButton
+                                community={community.get('name')}
+                                display="block"
+                            />
+                        )}
                 </div>
                 {community.get('subscribers')} subscribers
+                {/* {community.get('sum_pending')} pending */}
                 <br />
-                <br />
-                <strong>Moderators</strong>
-                {teamMembers(community.get('team', List()))}
-                <div style={{ fontSize: '0.8em' }}>
-                    {Role.atLeast(viewer_role, 'mod') && (
-                        <Link to={`/roles/${category}`}>Edit Roles...</Link>
-                    )}
+                <div>
+                    <br />
+                    <strong>Moderators</strong>
+                    {teamMembers(community.get('team', List()))}
                 </div>
-                <div style={{ fontSize: '0.8em' }}>
-                    {Role.atLeast(viewer_role, 'mod') && (
-                        <SettingsEditButton community={community.get('name')}>
-                            Edit Settings...
-                        </SettingsEditButton>
-                    )}
+                {Role.atLeast(viewer_role, 'mod') && (
+                    <div style={{ fontSize: '0.8em' }}>
+                        <hr />
+                        <Link to={`/roles/${category}`}>Edit Roles</Link>
+                        <br />
+                        {Role.atLeast(viewer_role, 'mod') && (
+                            <SettingsEditButton
+                                community={community.get('name')}
+                            >
+                                Edit Settings
+                            </SettingsEditButton>
+                        )}
+                    </div>
+                )}
+                {community.get('description') && (
+                    <div>
+                        <br />
+                        <strong>Description</strong>
+                        <br />
+                        {community.get('description', 'empty')}
+                    </div>
+                )}
+                <div>
+                    <br />
+                    <strong>Language</strong>
+                    <br />
+                    {community.get('lang')}
                 </div>
-                <br />
-                <strong>Description</strong>
-                <br />
-                {community.get('description', 'empty')}
-                <br />
-                <br />
-                <strong>Language</strong>
-                <br />
-                {community.get('lang')}
             </div>
         );
     }

@@ -25,7 +25,7 @@ class CommunityPaneMobile extends Component {
                         style={{ textAlign: 'center', lineHeight: '1em' }}
                     >
                         <div
-                            className="column large-5 medium-6 small-12"
+                            className="column large-5 medium-12 small-12"
                             style={{ textAlign: 'left' }}
                         >
                             <h3 className="c-sidebar__h3">
@@ -39,7 +39,7 @@ class CommunityPaneMobile extends Component {
                             </div>
                         </div>
 
-                        <div className="column large-1 medium-2 small-2">
+                        <div className="column large-1 medium-2 small-4">
                             {community.get('subscribers')}
                             <br />
                             <small>
@@ -48,19 +48,22 @@ class CommunityPaneMobile extends Component {
                                     : 'subscribers'}
                             </small>
                         </div>
-                        <div className="column large-1 medium-2 small-2">
+                        <div className="column large-1 medium-2 small-4">
                             {'$'}
                             {community.get('sum_pending')}
                             <br />
                             <small>pending rewards</small>
                         </div>
-                        <div className="column large-1 medium-2 small-2">
+                        <div
+                            className="column large-1 medium-2 small-4"
+                            style={{ marginBottom: '8px' }}
+                        >
                             {community.get('num_pending')}
                             <br />
                             <small>pending posts</small>
                         </div>
 
-                        <div className="column large-4 medium-12 small-6 xsmall-12">
+                        <div className="column large-4 medium-6 small-12">
                             <Link
                                 className="button primary"
                                 style={{ minWidth: '6em', marginRight: '16px' }}

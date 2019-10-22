@@ -287,9 +287,9 @@ export default class UserProfile extends React.Component {
         if (section === 'blog') {
             page_title = isMyAccount ? tt('g.my_blog') : tt('g.blog');
         } else if (section === 'comments') {
-            page_title = isMyAccount ? tt('g.my_comments') : tt('g.comments');
+            page_title = tt('g.posts');
         } else if (section === 'replies') {
-            page_title = isMyAccount ? tt('g.my_replies') : tt('g.replies');
+            page_title = tt('g.replies');
         } else if (section === 'settings') {
             page_title = tt('g.settings');
         } else if (section === 'payout') {
@@ -347,7 +347,7 @@ export default class UserProfile extends React.Component {
                 <div className="columns small-10 medium-12 medium-expand">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
                         <li>{_tablink('', tt('g.blog'))}</li>
-                        <li>{_tablink('/comments', tt('g.comments'))}</li>
+                        <li>{_tablink('/comments', tt('g.posts'))}</li>
                         <li>{_tablink('/recent-replies', tt('g.replies'))}</li>
                         <li>{_tablink('/payout', tt('voting_jsx.payout'))}</li>
                         <li>

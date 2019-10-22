@@ -16,17 +16,20 @@ class CommunityPane extends Component {
         const { community } = this.props;
 
         function teamMembers(members) {
-            return members.map((row, idx) => (
-                <div key={idx} style={{ fontSize: '80%' }}>
-                    <Link to={'/@' + row.get(0)}>{'@' + row.get(0)}</Link>
-                    {' ['}
-                    {row.get(1)}
-                    {'] '}
-                    {row.get(2) && (
-                        <span className="affiliation">{row.get(2)}</span>
-                    )}
-                </div>
-            ));
+            return members.map((row, idx) => {
+                const account = `@${row.get(0)}`;
+                const title = row.get(2);
+                const sep = title ? '/ ' : '';
+                const role = row.get(1) != 'mod' ? row.get(1) : null;
+
+                return (
+                    <div key={idx} style={{ fontSize: '80%' }}>
+                        <Link to={`/${account}`}>{account}</Link>
+                        {role && <span className="user_role"> {role} </span>}
+                        {title && <span className="affiliation">{title}</span>}
+                    </div>
+                );
+            });
         }
 
         const category = community.get('name');
@@ -66,17 +69,18 @@ class CommunityPane extends Component {
                 <br />
                 <strong>Moderators</strong>
                 {teamMembers(community.get('team', List()))}
-                {Role.atLeast(viewer_role, 'mod') && (
-                    <Link
-                        className="button slim hollow"
-                        to={`/roles/${category}`}
-                    >
-                        Edit Roles
-                    </Link>
-                )}
-                {Role.atLeast(viewer_role, 'mod') && (
-                    <SettingsEditButton community={community.get('name')} />
-                )}
+                <div style={{ fontSize: '0.8em' }}>
+                    {Role.atLeast(viewer_role, 'mod') && (
+                        <Link to={`/roles/${category}`}>Edit Roles...</Link>
+                    )}
+                </div>
+                <div style={{ fontSize: '0.8em' }}>
+                    {Role.atLeast(viewer_role, 'mod') && (
+                        <SettingsEditButton community={community.get('name')}>
+                            Edit Settings...
+                        </SettingsEditButton>
+                    )}
+                </div>
                 <br />
                 <strong>Description</strong>
                 <br />

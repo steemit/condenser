@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { normalizeTags } from 'app/utils/StateFunctions';
-import { ifHive } from 'app/utils/Community';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 
 class TagList extends Component {
@@ -12,14 +11,9 @@ class TagList extends Component {
         const category = post.get('category');
 
         const link = tag => {
-            const name =
-                (ifHive(tag) ? post.get('community_title') : null) || '#' + tag;
-            return (
-                <Link to={`/trending/${tag}`} key={tag}>
-                    {' '}
-                    {name}{' '}
-                </Link>
-            );
+            const primary = tag === category && post.get('community_title');
+            const name = primary || '#' + tag;
+            return <Link to={`/trending/${tag}`} key={tag}>{` ${name} `}</Link>;
         };
 
         if (single) return link(category);

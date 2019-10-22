@@ -29,34 +29,24 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { allowDelete } from 'app/utils/StateFunctions';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
-import { ifHive, Role } from 'app/utils/Community';
+import { Role } from 'app/utils/Community';
 
-function TimeAuthorCategory({ post, community, viewer_role }) {
+function TimeAuthorCategory({ post }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
             <TimeAgoWrapper date={post.get('created')} /> {tt('g.by')}{' '}
-            <Author
-                post={post}
-                showAffiliation
-                community={community}
-                viewer_role={viewer_role}
-            />
+            <Author post={post} showAffiliation />
         </span>
     );
 }
 
-function TimeAuthorCategoryLarge({ post, community, viewer_role }) {
+function TimeAuthorCategoryLarge({ post }) {
     return (
         <span className="PostFull__time_author_category_large vcard">
             <Userpic account={post.get('author')} />
             <div className="right-side">
-                <Author
-                    post={post}
-                    showAffiliation
-                    community={community}
-                    viewer_role={viewer_role}
-                />
+                <Author post={post} showAffiliation />
                 {tt('g.in')} <TagList post={post} single />
                 {' • '}
                 <TimeAgoWrapper date={post.get('created')} />{' '}
@@ -246,7 +236,7 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, community, post, postref, viewer_role },
+            props: { username, post, postref, viewer_role },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
@@ -291,7 +281,8 @@ class PostFull extends React.Component {
             author,
             permlink,
             parent_author,
-            parent_permlink,
+            parent_permlink:
+                post.get('depth') == 0 ? post.get('category') : parent_permlink,
             category,
             title,
             body: post.get('body'),
@@ -451,11 +442,7 @@ class PostFull extends React.Component {
                     <span>
                         <div className="PostFull__header">
                             {post_header}
-                            <TimeAuthorCategoryLarge
-                                post={post}
-                                community={community}
-                                viewer_role={viewer_role}
-                            />
+                            <TimeAuthorCategoryLarge post={post} />
                         </div>
                         <div className="PostFull__body entry-content">
                             {contentBody}
@@ -475,11 +462,7 @@ class PostFull extends React.Component {
                 {!isReply && <TagList post={post} horizontal />}
                 <div className="PostFull__footer row">
                     <div className="columns medium-12 large-6">
-                        <TimeAuthorCategory
-                            post={post}
-                            community={community}
-                            viewer_role={viewer_role}
-                        />
+                        <TimeAuthorCategory post={post} />
                         <Voting post={postref} />
                     </div>
                     <div className="RightShare__Menu small-11 medium-12 large-6 columns">
@@ -550,7 +533,9 @@ export default connect(
     (state, ownProps) => {
         const postref = ownProps.post;
         const post = ownProps.cont.get(postref);
-        const community = ifHive(post.get('category'));
+
+        const category = post.get('category');
+        const community = state.global.getIn(['community', category, 'name']);
 
         return {
             post,

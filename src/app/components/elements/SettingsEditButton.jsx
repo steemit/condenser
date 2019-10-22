@@ -20,7 +20,7 @@ class SettingsEditButton extends React.Component {
     }
 
     onToggleDialog = e => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         this.setState({ showDialog: !this.state.showDialog });
     };
 

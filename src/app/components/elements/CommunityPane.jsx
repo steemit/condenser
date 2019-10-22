@@ -36,67 +36,100 @@ class CommunityPane extends Component {
         const viewer_role = community.getIn(['context', 'role'], 'guest');
 
         return (
-            <div className="c-sidebar__module">
-                <div className="c-sidebar__header">
-                    <h3 className="c-sidebar__h3">{community.get('title')}</h3>
-                    {community.get('is_nsfw') && (
-                        <span className="affiliation">nsfw</span>
-                    )}
-                </div>
-                <div style={{ margin: '-12px 0 12px' }}>
-                    {community.get('about')}
-                </div>
-                <div style={{ margin: '0 -8px' }}>
-                    <Link
-                        className="button slim primary"
-                        style={{ minWidth: '6em', display: 'block' }}
-                        to={`/submit.html?category=${category}`}
-                    >
-                        New Post
-                    </Link>
-                    {community &&
-                        this.props.username && (
-                            <SubscribeButton
-                                community={community.get('name')}
-                                display="block"
-                            />
-                        )}
-                </div>
-                {community.get('subscribers')} subscribers
-                {/* {community.get('sum_pending')} pending */}
-                <br />
-                <div>
-                    <br />
-                    <strong>Moderators</strong>
-                    {teamMembers(community.get('team', List()))}
-                </div>
-                {Role.atLeast(viewer_role, 'mod') && (
-                    <div style={{ fontSize: '0.8em' }}>
-                        <hr />
-                        <Link to={`/roles/${category}`}>Edit Roles</Link>
-                        <br />
-                        {Role.atLeast(viewer_role, 'mod') && (
+            <div>
+                <div className="c-sidebar__module">
+                    {Role.atLeast(viewer_role, 'mod') && (
+                        <div style={{ float: 'right', fontSize: '0.8em' }}>
                             <SettingsEditButton
                                 community={community.get('name')}
                             >
-                                Edit Settings
+                                Edit
                             </SettingsEditButton>
+                        </div>
+                    )}
+                    <div className="c-sidebar__header">
+                        <h3 className="c-sidebar__h3">
+                            {community.get('title')}
+                        </h3>
+                        {community.get('is_nsfw') && (
+                            <span className="affiliation">nsfw</span>
                         )}
                     </div>
-                )}
-                {community.get('description') && (
-                    <div>
-                        <br />
-                        <strong>Description</strong>
-                        <br />
-                        {community.get('description', 'empty')}
+                    <div style={{ margin: '-6px 0 12px' }}>
+                        {community.get('about')}
                     </div>
-                )}
-                <div>
-                    <br />
-                    <strong>Language</strong>
-                    <br />
-                    {community.get('lang')}
+                    <div
+                        className="row"
+                        style={{ textAlign: 'center', lineHeight: '1em' }}
+                    >
+                        <div className="column small-4">
+                            {community.get('subscribers')}
+                            <br />
+                            <small>
+                                {community.get('subscribers') == 1
+                                    ? 'subscriber'
+                                    : 'subscribers'}
+                            </small>
+                        </div>
+                        <div className="column small-4">
+                            {'$'}
+                            {community.get('sum_pending')}
+                            <br />
+                            <small>pending rewards</small>
+                        </div>
+                        <div className="column small-4">
+                            {community.get('num_pending')}
+                            <br />
+                            <small>pending posts</small>
+                        </div>
+                    </div>
+
+                    <div style={{ margin: '12px 0 0' }}>
+                        <Link
+                            className="button primary"
+                            style={{
+                                minWidth: '6em',
+                                display: 'block',
+                                marginBottom: '8px',
+                            }}
+                            to={`/submit.html?category=${category}`}
+                        >
+                            New Post
+                        </Link>
+                        {community &&
+                            this.props.username && (
+                                <SubscribeButton
+                                    community={community.get('name')}
+                                    display="block"
+                                />
+                            )}
+                    </div>
+                    <div>
+                        {Role.atLeast(viewer_role, 'mod') && (
+                            <div style={{ float: 'right', fontSize: '0.8em' }}>
+                                <Link to={`/roles/${category}`}>
+                                    Edit Roles
+                                </Link>
+                            </div>
+                        )}
+                        <strong>Moderators</strong>
+                        {teamMembers(community.get('team', List()))}
+                    </div>
+                </div>
+                <div className="c-sidebar__module">
+                    {community.get('description') && (
+                        <div>
+                            <strong>Description</strong>
+                            <br />
+                            {community.get('description', 'empty')}
+                            <br />
+                        </div>
+                    )}
+                    <div>
+                        <strong>Language</strong>
+                        <br />
+                        {community.get('lang')}
+                    </div>
                 </div>
             </div>
         );

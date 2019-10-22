@@ -43,7 +43,7 @@ class SubscribeButton extends React.Component {
             <a
                 href="#"
                 onClick={this.onClick}
-                className={'button slim primary' + hollowed}
+                className={'button primary' + hollowed}
                 style={{
                     minWidth: '6em',
                     display: this.props.display || 'inline-block',

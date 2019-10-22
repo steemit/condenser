@@ -125,7 +125,7 @@ class PostSummary extends React.Component {
                     {isNsfw && <span className="nsfw-flag">nsfw</span>}
                     {content.get('title')}
                 </Link>
-                {content.getIn(['stats', 'is_pinned']) && (
+                {content.getIn(['stats', 'is_pinned'], false) && (
                     <span className="FeaturedTag">Pinned</span>
                 )}
                 {featured && <span className="FeaturedTag">Featured</span>}

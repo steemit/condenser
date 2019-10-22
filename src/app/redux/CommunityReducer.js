@@ -21,6 +21,7 @@ export default function reducer(state = defaultCommunityState, action) {
 
         case RECEIVE_COMMUNITY_ROLES: {
             const { community, roles } = payload;
+            state.setIn([community, 'roles'], fromJS(roles));
             return state.setIn([community, 'roles'], fromJS(roles));
         }
 

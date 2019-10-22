@@ -40,7 +40,10 @@ export default class CommunitiesIndex extends React.Component {
 
         return (
             <div className="CommunitiesIndex row">
-                <h4>{tt('g.community_list_header')}</h4>
+                <h4>
+                    {<Link to={`/`}>Home</Link>} &gt;{' '}
+                    {tt('g.community_list_header')}
+                </h4>
                 <table>
                     <tbody>{ordered.map(comm => row(comm.toJS()))}</tbody>
                 </table>

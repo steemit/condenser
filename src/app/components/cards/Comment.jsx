@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Map } from 'immutable';
 import Author from 'app/components/elements/Author';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
-import MuteButtonContainer from 'app/components/elements/MuteButtonContainer';
+import MuteButton from 'app/components/elements/MuteButton';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Voting from 'app/components/elements/Voting';
@@ -18,7 +19,7 @@ import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
-import { Role, ifHive } from 'app/utils/Community';
+import { Role } from 'app/utils/Community';
 
 export function sortComments(cont, comments, sort_order) {
     const rshares = post => Long.fromString(String(post.get('net_rshares')));
@@ -63,7 +64,6 @@ class CommentImpl extends React.Component {
         sort_order: PropTypes.oneOf(['votes', 'new', 'trending']).isRequired,
         showNegativeComments: PropTypes.bool,
         onHide: PropTypes.func,
-        community: PropTypes.string,
         viewer_role: PropTypes.string,
 
         // component props (for recursion)
@@ -176,7 +176,7 @@ class CommentImpl extends React.Component {
         this.setState({ PostReplyEditor, PostEditEditor });
     }
     render() {
-        const { cont, post, postref, community, viewer_role } = this.props;
+        const { cont, post, postref, viewer_role } = this.props;
 
         // Don't server-side render the comment if it has a certain number of newlines
         if (
@@ -243,14 +243,7 @@ class CommentImpl extends React.Component {
                         {showReplyOption && (
                             <a onClick={onShowReply}>{tt('g.reply')}</a>
                         )}{' '}
-                        {showMuteToggle && (
-                            <MuteButtonContainer
-                                account={author}
-                                community={community}
-                                isMuted={gray}
-                                permlink={comment.permlink}
-                            />
-                        )}{' '}
+                        {showMuteToggle && <MuteButton post={post} />}{' '}
                         {showEditOption && (
                             <a onClick={onShowEdit}>{tt('g.edit')}</a>
                         )}{' '}
@@ -354,12 +347,7 @@ class CommentImpl extends React.Component {
                             <div className="Comment__Userpic-small">
                                 <Userpic account={author} />
                             </div>
-                            <Author
-                                post={post}
-                                showAffiliation
-                                community={community}
-                                viewer_role={viewer_role}
-                            />
+                            <Author post={post} showAffiliation />
                         </span>
                         &nbsp; &middot; &nbsp;
                         <Link
@@ -422,7 +410,8 @@ const Comment = connect(
         const { postref, cont, sort_order } = ownProps;
         const post = ownProps.cont.get(postref);
 
-        const community = ifHive(post.get('category'));
+        const category = post.get('category');
+        const community = state.global.getIn(['community', category], Map());
         const author = post.get('author');
         const username = state.user.getIn(['current', 'username']);
         const ignored =
@@ -451,11 +440,7 @@ const Comment = connect(
             anchor_link: '#@' + postref, // Using a hash here is not standard but intentional; see issue #124 for details
             username,
             ignored,
-            community,
-            viewer_role: state.global.getIn(
-                ['community', community, 'context', 'role'],
-                'guest'
-            ),
+            viewer_role: community.getIn(['context', 'role'], 'guest'),
         };
     },
 

@@ -1,11 +1,14 @@
 import React from 'react';
 import tt from 'counterpart';
+import { Link } from 'react-router';
 
-const SidebarLinks = ({ username }) => (
+const SidebarLinks = ({ username, subscriptions }) => (
     <div className="c-sidebar__module">
+        {/*
         <div className="c-sidebar__header">
             <h3 className="c-sidebar__h3">{tt('g.links')}</h3>
         </div>
+        */}
         <div className="c-sidebar__content">
             <ul className="c-sidebar__list">
                 <li className="c-sidebar__list-item">
@@ -13,6 +16,7 @@ const SidebarLinks = ({ username }) => (
                         {tt('g.my_blog')}
                     </a>
                 </li>
+                {/*
                 <li className="c-sidebar__list-item">
                     <a
                         className="c-sidebar__link"
@@ -21,11 +25,25 @@ const SidebarLinks = ({ username }) => (
                         {tt('g.my_wallet')}
                     </a>
                 </li>
-                <li className="c-sidebar__list-item">
-                    <div style={{ color: '#aaa', paddingTop: '1em' }}>
-                        My subscriptions
-                    </div>
-                </li>
+                */}
+                {subscriptions && (
+                    <li className="c-sidebar__list-item">
+                        <div style={{ color: '#aaa', paddingTop: '1em' }}>
+                            My subscriptions
+                        </div>
+                    </li>
+                )}
+                {subscriptions &&
+                    subscriptions.map(item => (
+                        <li key={item[0]} className="c-sidebar__list-item">
+                            <Link
+                                className="c-sidebar__link"
+                                to={`/trending/${item[0]}`}
+                            >
+                                {item[1]}
+                            </Link>
+                        </li>
+                    ))}
             </ul>
         </div>
     </div>

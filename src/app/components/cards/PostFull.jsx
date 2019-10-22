@@ -19,7 +19,7 @@ import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
-import MuteButtonContainer from 'app/components/elements/MuteButtonContainer';
+import MuteButton from 'app/components/elements/MuteButton';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
@@ -29,34 +29,24 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { allowDelete } from 'app/utils/StateFunctions';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
-import { ifHive, Role } from 'app/utils/Community';
+import { Role } from 'app/utils/Community';
 
-function TimeAuthorCategory({ post, community, viewer_role }) {
+function TimeAuthorCategory({ post }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
             <TimeAgoWrapper date={post.get('created')} /> {tt('g.by')}{' '}
-            <Author
-                post={post}
-                showAffiliation
-                community={community}
-                viewer_role={viewer_role}
-            />
+            <Author post={post} showAffiliation />
         </span>
     );
 }
 
-function TimeAuthorCategoryLarge({ post, community, viewer_role }) {
+function TimeAuthorCategoryLarge({ post }) {
     return (
         <span className="PostFull__time_author_category_large vcard">
             <Userpic account={post.get('author')} />
             <div className="right-side">
-                <Author
-                    post={post}
-                    showAffiliation
-                    community={community}
-                    viewer_role={viewer_role}
-                />
+                <Author post={post} showAffiliation />
                 {tt('g.in')} <TagList post={post} single />
                 {' • '}
                 <TimeAgoWrapper date={post.get('created')} />{' '}
@@ -246,7 +236,7 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, community, post, postref, viewer_role },
+            props: { username, post, postref, viewer_role },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
@@ -291,7 +281,8 @@ class PostFull extends React.Component {
             author,
             permlink,
             parent_author,
-            parent_permlink,
+            parent_permlink:
+                post.get('depth') == 0 ? post.get('category') : parent_permlink,
             category,
             title,
             body: post.get('body'),
@@ -411,15 +402,15 @@ class PostFull extends React.Component {
         }
 
         const showReblog = !post.get('is_paidout') && !isReply;
-        const showPromote = !post.get('is_paidout') && !isReply;
-        const showPinToggle = Role.atLeast(viewer_role, 'mod');
+        const showPromote = false && !post.get('is_paidout') && !isReply;
+        const showPinToggle =
+            post.get('depth') == 0 && Role.atLeast(viewer_role, 'mod');
         const showMuteToggle = Role.atLeast(viewer_role, 'mod');
         const showReplyOption = username && post.get('depth') < 255;
         const showEditOption = username === author && !showEdit;
         const showDeleteOption = username === author && allowDelete(post);
 
         const isPinned = post.getIn(['stats', 'is_pinned'], false);
-        const isMuted = post.getIn(['stats', 'gray']);
 
         const isPreViewCount = Date.parse(post.get('created')) < 1480723200000; // check if post was created before view-count tracking began (2016-12-03)
         let contentBody;
@@ -451,11 +442,7 @@ class PostFull extends React.Component {
                     <span>
                         <div className="PostFull__header">
                             {post_header}
-                            <TimeAuthorCategoryLarge
-                                post={post}
-                                community={community}
-                                viewer_role={viewer_role}
-                            />
+                            <TimeAuthorCategoryLarge post={post} />
                         </div>
                         <div className="PostFull__body entry-content">
                             {contentBody}
@@ -463,8 +450,7 @@ class PostFull extends React.Component {
                     </span>
                 )}
 
-                {false &&
-                    showPromote &&
+                {showPromote &&
                     username && (
                         <button
                             className="Promote__button float-right button hollow tiny"
@@ -476,11 +462,7 @@ class PostFull extends React.Component {
                 {!isReply && <TagList post={post} horizontal />}
                 <div className="PostFull__footer row">
                     <div className="columns medium-12 large-6">
-                        <TimeAuthorCategory
-                            post={post}
-                            community={community}
-                            viewer_role={viewer_role}
-                        />
+                        <TimeAuthorCategory post={post} />
                         <Voting post={postref} />
                     </div>
                     <div className="RightShare__Menu small-11 medium-12 large-6 columns">
@@ -498,14 +480,7 @@ class PostFull extends React.Component {
                                     {isPinned ? tt('g.unpin') : tt('g.pin')}
                                 </a>
                             )}{' '}
-                            {showMuteToggle && (
-                                <MuteButtonContainer
-                                    account={author}
-                                    community={community}
-                                    isMuted={isMuted}
-                                    permlink={permlink}
-                                />
-                            )}{' '}
+                            {showMuteToggle && <MuteButton post={post} />}{' '}
                             {/* owner */}
                             {showEditOption && (
                                 <a onClick={onShowEdit}>{tt('g.edit')}</a>
@@ -558,7 +533,9 @@ export default connect(
     (state, ownProps) => {
         const postref = ownProps.post;
         const post = ownProps.cont.get(postref);
-        const community = post.get('category');
+
+        const category = post.get('category');
+        const community = state.global.getIn(['community', category, 'name']);
 
         return {
             post,

@@ -12,7 +12,7 @@ import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
 import UserTitleEditor from 'app/components/modules/UserTitleEditor';
 
-class UserTitleEditButton extends React.Component {
+class UserTitle extends React.Component {
     constructor(props) {
         super(props);
         this.state = { showDialog: false };
@@ -40,44 +40,46 @@ class UserTitleEditButton extends React.Component {
     };
 
     render() {
-        const {
-            author,
-            username,
-            community,
-            title,
-            role,
-            viewer_role,
-        } = this.props;
-        const { showDialog } = this.state;
-
+        const { title, role, viewer_role } = this.props;
         const isMod = Role.atLeast(viewer_role, 'mod');
+        const showRole = role && (isMod || role != 'guest');
+        const showTitle = isMod || title != '';
 
-        const editor = isMod ? (
-            <span>
-                <a onClick={this.onToggleDialog}>
-                    <Icon name="pencil2" size="0_8x" />
-                </a>
-                {showDialog && (
-                    <Reveal onHide={() => null} show>
-                        <CloseButton onClick={() => this.onToggleDialog()} />
-                        <UserTitleEditor
-                            title={title}
-                            username={author}
-                            community={community.get('title')}
-                            onSubmit={newTitle => {
-                                this.onToggleDialog();
-                                this.onSave(newTitle);
-                            }}
-                        />
-                    </Reveal>
-                )}
-            </span>
-        ) : null;
+        if (!showRole || !showTitle) return null;
 
-        const userTitle = (
+        let editor;
+        if (isMod) {
+            const { author, community, username } = this.props;
+            const { showDialog } = this.state;
+            editor = (
+                <span>
+                    <a onClick={this.onToggleDialog}>
+                        <Icon name="pencil2" size="0_8x" />
+                    </a>
+                    {showDialog && (
+                        <Reveal onHide={() => null} show>
+                            <CloseButton
+                                onClick={() => this.onToggleDialog()}
+                            />
+                            <UserTitleEditor
+                                title={title}
+                                username={author}
+                                community={community.get('title')}
+                                onSubmit={newTitle => {
+                                    this.onToggleDialog();
+                                    this.onSave(newTitle);
+                                }}
+                            />
+                        </Reveal>
+                    )}
+                </span>
+            );
+        }
+
+        return (
             <span>
-                {role && role != 'guest' && <span>[{role}]</span>}
-                {(title != '' || isMod) && (
+                {showRole && <span className="user_role">{role}</span>}
+                {showTitle && (
                     <span className="affiliation">
                         {title}
                         {editor}
@@ -85,16 +87,14 @@ class UserTitleEditButton extends React.Component {
                 )}
             </span>
         );
-
-        return userTitle;
     }
 }
 
-UserTitleEditButton.propTypes = {
-    username: PropTypes.string.isRequired,
-    community: PropTypes.object,
-    author: PropTypes.string.isRequired,
-    permlink: PropTypes.string.isRequired,
+UserTitle.propTypes = {
+    username: PropTypes.string, // edit only
+    community: PropTypes.object.isRequired, // edit only
+    author: PropTypes.string.isRequired, // edit only
+    permlink: PropTypes.string.isRequired, // edit only
     title: PropTypes.string,
 };
 
@@ -154,4 +154,4 @@ export default connect(
             );
         },
     })
-)(UserTitleEditButton);
+)(UserTitle);

@@ -14,14 +14,36 @@ import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
-import SubscribeButton from 'app/components/elements/SubscribeButton';
-import SettingsEditButtonContainer from 'app/components/elements/SettingsEditButtonContainer';
 import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
-import { ifHive, Role } from 'app/utils/Community';
+import { ifHive } from 'app/utils/Community';
+import CommunityPane from 'app/components/elements/CommunityPane';
+
+const emptyFeedText = (isMyAccount, account_name) => {
+    return isMyAccount ? (
+        <div>
+            {tt('posts_index.empty_feed_1')}.<br />
+            <br />
+            {tt('posts_index.empty_feed_2')}.<br />
+            <br />
+            <Link to="/trending">{tt('posts_index.empty_feed_3')}</Link>
+            <br />
+            <Link to="/welcome">{tt('posts_index.empty_feed_4')}</Link>
+            <br />
+            <Link to="/faq.html">{tt('posts_index.empty_feed_5')}</Link>
+            <br />
+        </div>
+    ) : (
+        <div>
+            {tt('user_profile.user_hasnt_followed_anything_yet', {
+                name: account_name,
+            })}
+        </div>
+    );
+};
 
 class PostsIndex extends React.Component {
     static propTypes = {
@@ -40,6 +62,11 @@ class PostsIndex extends React.Component {
         this.state = {};
         this.loadMore = this.loadMore.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsIndex');
+    }
+
+    componentWillMount() {
+        const { subscriptions, getSubscriptions, username } = this.props;
+        if (!subscriptions && username) getSubscriptions(username);
     }
 
     componentDidUpdate(prevProps) {
@@ -69,78 +96,26 @@ class PostsIndex extends React.Component {
     render() {
         const {
             topics,
-            featured,
-            promoted,
-            gptBannedTags,
+            subscriptions,
+            allowAdsOnContent,
             community,
             category,
             account_name, // TODO: for feed
             order,
             posts,
-            viewer_role,
         } = this.props;
-
-        let allowAdsOnContent = true;
-        allowAdsOnContent =
-            this.props.gptEnabled &&
-            !GptUtils.HasBannedTags([category], gptBannedTags);
 
         let emptyText = '';
         if (order === 'feed') {
             const isMyAccount = this.props.username === account_name;
-            if (isMyAccount) {
-                emptyText = (
-                    <div>
-                        {tt('posts_index.empty_feed_1')}.<br />
-                        <br />
-                        {tt('posts_index.empty_feed_2')}.<br />
-                        <br />
-                        <Link to="/trending">
-                            {tt('posts_index.empty_feed_3')}
-                        </Link>
-                        <br />
-                        <Link to="/welcome">
-                            {tt('posts_index.empty_feed_4')}
-                        </Link>
-                        <br />
-                        <Link to="/faq.html">
-                            {tt('posts_index.empty_feed_5')}
-                        </Link>
-                        <br />
-                    </div>
-                );
-            } else {
-                emptyText = (
-                    <div>
-                        {tt('user_profile.user_hasnt_followed_anything_yet', {
-                            name: account_name,
-                        })}
-                    </div>
-                );
-            }
-        } else if (posts && posts.size === 0) {
-            emptyText = (
-                <div>
-                    {'No ' +
-                        order +
-                        (category ? ' #' + category : '') +
-                        ' posts found'}
-                </div>
-            );
-        }
-
-        function teamMembers(members) {
-            return members.map((row, idx) => (
-                <div key={idx} style={{ fontSize: '80%' }}>
-                    <Link to={'/@' + row.get(0)}>{'@' + row.get(0)}</Link>
-                    {' ['}
-                    {row.get(1)}
-                    {'] '}
-                    {row.get(2) && (
-                        <span className="affiliation">{row.get(2)}</span>
-                    )}
-                </div>
-            ));
+            emptyText = emptyFeedText(isMyAccount, account_name);
+        } else if (posts.size === 0) {
+            const cat = community
+                ? community.get('title')
+                : category ? ' #' + category : '';
+            emptyText = <div>{`No ${order} ${cat} posts found`}</div>;
+        } else {
+            emptyText = 'Nothing here to see...';
         }
 
         const status = this.props.status
@@ -148,16 +123,8 @@ class PostsIndex extends React.Component {
             : null;
         const fetching = (status && status.fetching) || this.props.loading;
 
-        // If we're at one of the four sort order routes without a tag filter,
-        // use the translated string for that sort order, f.ex "trending"
-        //
-        // If you click on a tag while you're in a sort order route,
-        // the title should be the translated string for that sort order
-        // plus the tag string, f.ex "trending: blog"
-        //
-        // Logged-in:
-        // At homepage (@user/feed) say "My feed"
-        let page_title = 'Posts'; // sensible default here?
+        // page title
+        let page_title = tt('g.all_tags');
         if (order === 'feed') {
             if (account_name === this.props.username)
                 page_title = 'My friends' || tt('posts_index.my_feed');
@@ -171,8 +138,6 @@ class PostsIndex extends React.Component {
             page_title = community.get('title');
         } else if (category) {
             page_title = '#' + category;
-        } else {
-            page_title = tt('g.all_tags');
         }
 
         const layoutClass = this.props.blogmode
@@ -196,11 +161,11 @@ class PostsIndex extends React.Component {
                                 {community && (
                                     <div
                                         style={{
-                                            fontSize: '100%',
+                                            fontSize: '80%',
                                             color: 'gray',
                                         }}
                                     >
-                                        #{category}
+                                        Community
                                     </div>
                                 )}
                                 {!community &&
@@ -213,7 +178,7 @@ class PostsIndex extends React.Component {
                                                 color: 'gray',
                                             }}
                                         >
-                                            unmoderated tag
+                                            Unmoderated tag
                                         </div>
                                     )}
                             </div>
@@ -241,15 +206,12 @@ class PostsIndex extends React.Component {
                         </div>
                     </div>
                     <hr className="articles__hr" />
-                    {!fetching &&
-                    (posts && !posts.size) &&
-                    (featured && !featured.size) &&
-                    (promoted && !promoted.size) ? (
+                    {!fetching && !posts.size ? (
                         <Callout>{emptyText}</Callout>
                     ) : (
                         <PostsList
                             ref="list"
-                            posts={posts ? posts : List()}
+                            posts={posts}
                             loading={fetching}
                             anyPosts
                             category={category}
@@ -264,85 +226,32 @@ class PostsIndex extends React.Component {
 
                 <aside className="c-sidebar c-sidebar--right">
                     {community && (
-                        <div className="c-sidebar__module">
-                            <div className="c-sidebar__header">
-                                <h3 className="c-sidebar__h3">
-                                    {community.get('title')}
-                                </h3>
-                                {community.get('is_nsfw') && (
-                                    <span className="affiliation">nsfw</span>
-                                )}
-                            </div>
-                            <div
-                                style={{
-                                    border: '1px solid #ccc',
-                                    marginBottom: '16px',
-                                    padding: '0.5em',
-                                }}
-                            >
-                                {community.get('about')}
-                            </div>
-                            <div>
-                                <Link
-                                    className="button slim hollow primary"
-                                    style={{ minWidth: '6em' }}
-                                    to={`/submit.html?category=${category}`}
-                                >
-                                    New Post
-                                </Link>
-                                {this.props.username && (
-                                    <SubscribeButton
-                                        community={community.get('name')}
-                                    />
-                                )}
-                            </div>
-                            {community.get('subscribers')} subscribers
-                            <br />
-                            <br />
-                            <strong>Moderators</strong>
-                            {teamMembers(community.get('team', List()))}
-                            {Role.atLeast(viewer_role, 'mod') && (
-                                <Link
-                                    className="button slim hollow"
-                                    to={`/roles/${category}`}
-                                >
-                                    Edit Roles
-                                </Link>
-                            )}
-                            {Role.atLeast(viewer_role, 'mod') && (
-                                <SettingsEditButtonContainer
-                                    community={community.get('name')}
-                                />
-                            )}
-                            <br />
-                            <strong>Description</strong>
-                            <br />
-                            {community.get('description', 'empty')}
-                            <br />
-                            <br />
-                            <strong>Language</strong>
-                            <br />
-                            {community.get('lang')}
-                        </div>
+                        <CommunityPane
+                            community={community}
+                            username={this.props.username}
+                        />
                     )}
-                    {this.props.isBrowser && !this.props.username ? (
-                        <SidebarNewUsers />
-                    ) : (
-                        this.props.isBrowser &&
-                        !community && (
-                            <SidebarLinks username={this.props.username} />
-                        )
-                    )}
-                    {!community && <Notices notices={this.props.notices} />}
+                    {this.props.isBrowser &&
+                        !community &&
+                        !this.props.username && <SidebarNewUsers />}
+                    {this.props.isBrowser &&
+                        !community &&
+                        this.props.username && (
+                            <SidebarLinks
+                                username={this.props.username}
+                                subscriptions={subscriptions}
+                            />
+                        )}
+                    {!community && <Notices />}
                     {!category && <SteemMarket />}
-                    {this.props.gptEnabled && allowAdsOnContent ? (
+                    {allowAdsOnContent && (
                         <div className="sidebar-ad">
                             <GptAd
                                 type="Freestar"
                                 id="bsa-zone_1566495004689-0_123456"
                             />
                         </div>
-                    ) : null}
+                    )}
                 </aside>
 
                 <aside className="c-sidebar c-sidebar--left">
@@ -353,7 +262,7 @@ class PostsIndex extends React.Component {
                         username={this.props.username}
                         topics={topics}
                     />
-                    {this.props.gptEnabled && allowAdsOnContent ? (
+                    {allowAdsOnContent && (
                         <div>
                             <div className="sidebar-ad">
                                 <GptAd
@@ -371,7 +280,7 @@ class PostsIndex extends React.Component {
                                 />
                             </div>
                         </div>
-                    ) : null}
+                    )}
                 </aside>
             </div>
         );
@@ -386,7 +295,7 @@ module.exports = {
             //   or, @username/feed (category/order). Branch on presence of `@`.
             const route = ownProps.routeParams;
             const account_name =
-                route.order[0] == '@'
+                route.order && route.order[0] == '@'
                     ? route.order.slice(1).toLowerCase()
                     : null;
             const category = account_name
@@ -396,48 +305,44 @@ module.exports = {
                 ? route.category
                 : route.order || 'trending';
 
-            const community = ifHive(category);
+            const hive = ifHive(category);
+            const community = state.global.getIn(['community', hive], null);
+
+            const allowAdsOnContent =
+                ownProps.gptEnabled &&
+                !GptUtils.HasBannedTags(
+                    [category],
+                    state.app.getIn(['googleAds', 'gptBannedTags'])
+                );
+
+            const subscriptions = state.global.get('subscriptions');
 
             return {
-                posts: state.global.getIn(
-                    ['discussion_idx', category || '', order],
-                    Map()
-                ),
+                subscriptions: subscriptions ? subscriptions.toJS() : null,
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                community: state.global.getIn(['community', community], null),
                 account_name,
                 category,
                 order,
+                posts: state.global.getIn(
+                    ['discussion_idx', category || '', order],
+                    List()
+                ),
+                community,
                 username:
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 topics: state.global.getIn(['topics'], List()),
-                featured: state.offchain
-                    .get('special_posts')
-                    .get('featured_posts'),
-                promoted: state.offchain
-                    .get('special_posts')
-                    .get('promoted_posts'),
-                notices: state.offchain
-                    .get('special_posts')
-                    .get('notices')
-                    .toJS(),
                 isBrowser: process.env.BROWSER,
-                gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
-                gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
-                viewer_role: state.global.getIn(
-                    ['community', community, 'context', 'role'],
-                    'guest'
-                ),
+                allowAdsOnContent,
             };
         },
-        dispatch => {
-            return {
-                requestData: args =>
-                    dispatch(fetchDataSagaActions.requestData(args)),
-            };
-        }
+        dispatch => ({
+            getSubscriptions: account =>
+                dispatch(fetchDataSagaActions.getSubscriptions(account)),
+            requestData: args =>
+                dispatch(fetchDataSagaActions.requestData(args)),
+        })
     )(PostsIndex),
 };

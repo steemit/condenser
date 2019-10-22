@@ -44,10 +44,12 @@ export async function getStateAsync(url, observer, ssr = false) {
 
     // append `community` key
     if (tag && ifHive(tag)) {
-        state['community'][tag] = await callBridge('get_community', {
-            name: tag,
-            observer: observer,
-        });
+        try {
+            state['community'][tag] = await callBridge('get_community', {
+                name: tag,
+                observer: observer,
+            });
+        } catch (e) {}
     }
 
     // for SSR, load profile on any profile page or discussion thread author

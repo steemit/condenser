@@ -1,8 +1,8 @@
-import Promise from 'bluebird';
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { broadcast, auth } from '@steemit/steem-js';
+import { broadcast } from '@steemit/steem-js';
 import * as reducer from 'app/redux/CommunityReducer';
-import { postingOps, findSigningKey } from 'app/redux/AuthSaga';
+import { findSigningKey } from 'app/redux/AuthSaga';
+import { getCommunity } from 'app/redux/FetchDataSaga';
 import { callBridge } from 'app/utils/steemApi';
 
 const customOp = (action, params, actor_name) => {
@@ -24,16 +24,15 @@ export const communityWatches = [
 
 export function* loadCommunityRoles(action) {
     const community = action.payload;
-    console.log('loadCommunityRoles', community);
     yield put(reducer.setCommunityRolesPending({ community, pending: true }));
     const roles = yield call(callBridge, 'list_community_roles', { community });
+    yield call(getCommunity, action);
     yield put(reducer.receiveCommunityRoles({ community, roles }));
     yield put(reducer.setCommunityRolesPending({ community, pending: false }));
 }
 
 export function* updateUserRole(action) {
     const { community } = action.payload;
-
     yield put(reducer.setUserRolePending({ community, pending: true }));
     try {
         const username = yield select(state =>

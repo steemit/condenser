@@ -85,10 +85,7 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_STATE: {
-            console.log('Receive state', payload);
-            const merged = state.mergeDeep(fromJS(payload));
-            console.log('Merged state', merged.toJS());
-            return merged;
+            return state.mergeDeep(fromJS(payload));
         }
 
         case RECEIVE_NOTIFICATIONS: {
@@ -131,7 +128,6 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_COMMUNITY: {
-            console.log('RECEIVE_COMMUNITY', state, payload);
             return state.update('community', Map(), a => a.mergeDeep(payload));
         }
 

@@ -226,7 +226,6 @@ class PostSummary extends React.Component {
                             <span className="nsfw-flag">
                                 nsfw
                             </span>&nbsp;&nbsp;<span
-                                className="ptc"
                                 role="button"
                                 onClick={this.onRevealNsfw}
                             >

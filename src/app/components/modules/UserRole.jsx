@@ -30,24 +30,25 @@ class UserRole extends Component {
 
     onSubmit = () => {
         // TODO: Username validation can be added here.
-        if (this.state.newUsername === '') {
-            this.setState({
-                message: 'Please enter a valid username.',
-            });
-            return;
-        }
-        if (this.props.role === this.state.newRole) {
-            this.setState({
-                message: 'The user already has that role.',
-            });
-            return;
-        }
         if (this.props.addUser) {
+            if (this.state.newUsername === '') {
+                this.setState({
+                    message: 'Please enter a valid username.',
+                });
+                return;
+            }
+            debugger;
             this.props.onSubmit(
-                this.state.newRole.trim(),
-                this.state.newUsername.trim()
+                this.state.newUsername.trim(),
+                this.state.newRole.trim()
             );
         } else {
+            if (this.props.role === this.state.newRole) {
+                this.setState({
+                    message: 'The user already has that role.',
+                });
+                return;
+            }
             this.props.onSubmit(this.state.newRole.trim());
         }
     };
@@ -59,7 +60,6 @@ class UserRole extends Component {
             community,
             role,
             availableRoles,
-            children,
             addUser,
         } = this.props;
         const submitButtonLabel = 'Save';

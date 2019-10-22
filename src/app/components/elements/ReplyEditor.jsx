@@ -386,14 +386,12 @@ class ReplyEditor extends React.Component {
             username,
             isStory,
             formId,
-            noImage,
             author,
             permlink,
             parent_author,
             parent_permlink,
             type,
             jsonMetadata,
-            state,
             successCallback,
             defaultPayoutType,
             payoutType,
@@ -428,7 +426,7 @@ class ReplyEditor extends React.Component {
             parent_author,
             parent_permlink,
             type,
-            state,
+            username,
             originalPost,
             isHtml,
             isStory,
@@ -803,7 +801,6 @@ class ReplyEditor extends React.Component {
                                     <MarkdownViewer
                                         text={body.value}
                                         large={isStory}
-                                        noImage={noImage}
                                     />
                                 </div>
                             )}
@@ -908,8 +905,29 @@ export default formId =>
             ]);
             beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
 
+            // Post full
+            /*
+            const replyParams = {
+                author,
+                permlink,
+                parent_author,
+                parent_permlink,
+                category,
+                title,
+                body: post.get('body'),
+            }; */
+
+            //ownProps:
+            //  {...comment},
+            //  author, permlink,
+            //  body, title, category
+            //  parent_author, parent_permlink,
+            //  type, successCallback,
+            //  successCallBack, onCancel
             const ret = {
                 ...ownProps,
+                type, //XX
+                jsonMetadata, //XX (if not reply)
                 category,
                 fields,
                 isStory,
@@ -918,7 +936,6 @@ export default formId =>
                 payoutType,
                 beneficiaries,
                 initialValues: { title, body, category: tags },
-                state,
                 formId,
                 richTextEditor,
             };
@@ -960,15 +977,12 @@ export default formId =>
                 originalPost,
                 payoutType = '50%',
                 beneficiaries = [],
-                state,
+                username,
                 jsonMetadata,
                 successCallback,
                 errorCallback,
                 startLoadingIndicator,
             }) => {
-                // const post = state.global.getIn(['content', author + '/' + permlink])
-                const username = state.user.getIn(['current', 'username']);
-
                 const isEdit = type === 'edit';
                 const isNew = /^submit_/.test(type);
 

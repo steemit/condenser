@@ -342,6 +342,7 @@ export default `
 /salesforce/@sfdc.certificate/salesforce-certificates-dumps
 /dsj/@dsj/mv8793z1
 /community/@dsj/yqu2sh7d
+/nature/@nikapelex/ap-the-best-videos
 `
     .trim()
     .split('\n');

@@ -23,6 +23,7 @@ mihailm
 ardaia
 jemand
 chiefadu
+nikapelex
 `
     .trim()
     .split('\n');

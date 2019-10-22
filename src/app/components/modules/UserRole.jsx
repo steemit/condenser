@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import tt from 'counterpart';
-import { throws } from 'assert';
 
 class UserRole extends Component {
     constructor(props) {
@@ -29,7 +27,6 @@ class UserRole extends Component {
     };
 
     onSubmit = () => {
-        // TODO: Username validation can be added here.
         if (this.props.addUser) {
             if (this.state.newUsername === '') {
                 this.setState({
@@ -37,7 +34,6 @@ class UserRole extends Component {
                 });
                 return;
             }
-            debugger;
             this.props.onSubmit(
                 this.state.newUsername.trim(),
                 this.state.newRole.trim()

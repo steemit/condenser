@@ -141,32 +141,6 @@ class CommunityRoles extends React.Component {
             </table>
         );
 
-        const form = (
-            <form onSubmit={this.onSubmit}>
-                <label>
-                    User:
-                    <input
-                        onChange={this.onAccountChange}
-                        type="text"
-                        name="name"
-                        required
-                    />
-                </label>
-                <label>
-                    Role:
-                    <select onChange={this.onRoleChange} required>
-                        <option value="" />
-                        <option value="admin">admin</option>
-                        <option value="mod">mod</option>
-                        <option value="member">member</option>
-                        <option value="guest">guest</option>
-                        <option value="muted">muted</option>
-                    </select>
-                </label>
-                <input type="submit" value="Submit" />
-            </form>
-        );
-
         const editUserModal = (
             <Reveal onHide={() => null} show>
                 <CloseButton

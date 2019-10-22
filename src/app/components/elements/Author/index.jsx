@@ -157,7 +157,6 @@ class Author extends React.Component {
                 >
                     <strong>
                         <Link
-                            className="ptc"
                             ref={link => {
                                 this.authorProfileLink = link;
                             }}

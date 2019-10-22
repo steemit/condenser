@@ -14,6 +14,7 @@ const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
 const RECEIVE_POST_HEADER = 'global/RECEIVE_POST_HEADER';
 const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
 const RECEIVE_COMMUNITIES = 'global/RECEIVE_COMMUNITIES';
+const RECEIVE_SUBSCRIPTIONS = 'global/RECEIVE_SUBSCRIPTIONS';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -132,6 +133,10 @@ export default function reducer(state = defaultState, action = {}) {
         case RECEIVE_COMMUNITY: {
             console.log('RECEIVE_COMMUNITY', state, payload);
             return state.update('community', Map(), a => a.mergeDeep(payload));
+        }
+
+        case RECEIVE_SUBSCRIPTIONS: {
+            return state.set('subscriptions', fromJS(payload));
         }
 
         // Interleave special posts into the map of posts.
@@ -351,6 +356,11 @@ export const receiveCommunities = payload => ({
 
 export const receiveCommunity = payload => ({
     type: RECEIVE_COMMUNITY,
+    payload,
+});
+
+export const receiveSubscriptions = payload => ({
+    type: RECEIVE_SUBSCRIPTIONS,
     payload,
 });
 

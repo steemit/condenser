@@ -344,7 +344,7 @@ export default class UserProfile extends React.Component {
 
         const top_menu = (
             <div className="row UserProfile__top-menu">
-                <div className="columns small-10 medium-12 medium-expand">
+                <div className="columns small-9 medium-12 medium-expand">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
                         <li>{_tablink('', tt('g.blog'))}</li>
                         <li>{_tablink('/comments', tt('g.posts'))}</li>

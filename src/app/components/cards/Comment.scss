@@ -95,8 +95,7 @@
 .Comment__header-user {
   color: $black;
   font-size: 100%;
-  font-weight: 600;
-  a {    
+  a {
     @extend .link;
     @extend .link--primary;
   }

@@ -411,8 +411,9 @@ class PostFull extends React.Component {
         }
 
         const showReblog = !post.get('is_paidout') && !isReply;
-        const showPromote = !post.get('is_paidout') && !isReply;
-        const showPinToggle = Role.atLeast(viewer_role, 'mod');
+        const showPromote = false && !post.get('is_paidout') && !isReply;
+        const showPinToggle =
+            post.get('depth') == 0 && Role.atLeast(viewer_role, 'mod');
         const showMuteToggle = Role.atLeast(viewer_role, 'mod');
         const showReplyOption = username && post.get('depth') < 255;
         const showEditOption = username === author && !showEdit;
@@ -462,8 +463,7 @@ class PostFull extends React.Component {
                     </span>
                 )}
 
-                {false &&
-                    showPromote &&
+                {showPromote &&
                     username && (
                         <button
                             className="Promote__button float-right button hollow tiny"

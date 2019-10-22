@@ -43,6 +43,7 @@ class PostCategoryBannerContainer extends React.Component {
                 author={currentUser}
                 label={label}
                 labelSmall={labelSmall}
+                isCommunity={isCommunity}
             />
         );
     }

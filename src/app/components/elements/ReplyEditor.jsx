@@ -876,6 +876,7 @@ export default formId =>
                 : {};
 
             let tags = category;
+
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 tags = OrderedSet([category, ...jsonMetadata.tags]).join(' ');
             }

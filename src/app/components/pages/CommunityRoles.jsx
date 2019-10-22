@@ -106,7 +106,7 @@ class CommunityRoles extends React.Component {
                             this.toggleUpdateRoleModal(true);
                         }}
                     >
-                        <td>{tuple[1]}</td>
+                        {tuple[1]}
                     </span>
                 );
             }
@@ -175,6 +175,7 @@ class CommunityRoles extends React.Component {
                         this.props.updateUser(params);
                         this.toggleUpdateRoleModal(false);
                     }}
+                    availableRoles={availableRoles}
                 />
             </Reveal>
         );
@@ -211,8 +212,6 @@ const CommunityRolesWrapped = connect(
         const loading = roles.size == 0;
         const updating = tree.get('updatePending', false);
         const communityMetadata = state.global.getIn(['community', community]);
-
-        console.log(communityMetadata);
         return {
             community,
             roles,

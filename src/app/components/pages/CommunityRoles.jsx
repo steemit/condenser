@@ -131,9 +131,11 @@ class CommunityRoles extends React.Component {
         const table = (
             <table>
                 <thead>
-                    <th>Username</th>
-                    <th>Role</th>
-                    <th>Title</th>
+                    <tr>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Title</th>
+                    </tr>
                 </thead>
                 <tbody>{tableRows}</tbody>
             </table>
@@ -185,6 +187,7 @@ class CommunityRoles extends React.Component {
                         this.toggleUpdateRoleModal(false);
                     }}
                     availableRoles={availableRoles}
+                    addUser={false}
                 />
             </Reveal>
         );
@@ -199,14 +202,14 @@ class CommunityRoles extends React.Component {
                     username={this.state.account}
                     community={this.props.community}
                     role={this.state.role}
-                    onSubmit={({ newUsername, newUserRole }) => {
+                    onSubmit={(newUsername, newUserRole) => {
                         const params = {
                             community: this.props.community,
                             account: newUsername,
                             role: newUserRole,
                         };
                         this.props.updateUser(params);
-                        this.toggleUpdateRoleModal(false);
+                        this.toggleAddUserToCommunityModal(false);
                     }}
                     availableRoles={availableRoles}
                     addUser

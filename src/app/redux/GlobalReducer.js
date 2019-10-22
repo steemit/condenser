@@ -127,7 +127,6 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_COMMUNITY: {
-            console.log('RECEIVE_COMMUNITY', state, payload);
             return state.update('community', Map(), a => a.mergeDeep(payload));
         }
 

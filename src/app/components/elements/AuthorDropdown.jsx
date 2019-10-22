@@ -50,12 +50,11 @@ class AuthorDropdown extends Component {
 
         let spv;
         let unit;
-        if (sp > 1000000) {
-            spv = (sp / 1000000.0).toFixed(1);
-            unit = <small>M</small>;
-        } else if (sp > 10000) {
-            spv = (sp / 1000.0).toFixed(1);
-            unit = <small>K</small>;
+        if (sp > 10000) {
+            spv = numberWithCommas((sp / 1000.0).toFixed(0));
+            unit = (
+                <small style={{ fontWeight: 'bold', color: '#444' }}>K</small>
+            );
         } else {
             spv = numberWithCommas(sp);
         }
@@ -96,14 +95,14 @@ class AuthorDropdown extends Component {
                             }}
                         >
                             <div className="columns small-4">
-                                {numberWithCommas(following)}
-                                <br />
-                                <small>following</small>
-                            </div>
-                            <div className="columns small-4">
                                 {numberWithCommas(followers)}
                                 <br />
-                                <small>followers</small>
+                                <small>Followers</small>
+                            </div>
+                            <div className="columns small-4">
+                                {numberWithCommas(following)}
+                                <br />
+                                <small>Following</small>
                             </div>
                             <div className="columns small-4">
                                 {spv}

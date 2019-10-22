@@ -31,8 +31,12 @@ class UserRole extends Component {
 
     render() {
         const { newRole, message } = this.state;
-        const { username, community, role } = this.props;
+        const { username, community, role, availableRoles } = this.props;
         const submitButtonLabel = 'Save';
+
+        const roleSelector = availableRoles.map(role => (
+            <option value={role}>{role}</option>
+        ));
 
         return (
             <span>
@@ -55,11 +59,7 @@ class UserRole extends Component {
                         </small>
                     </span>
                     <select value={newRole} onChange={this.onSelect} required>
-                        <option value="admin">admin</option>
-                        <option value="mod">mod</option>
-                        <option value="member">member</option>
-                        <option value="guest">guest</option>
-                        <option value="muted">muted</option>
+                        {roleSelector}
                     </select>
                 </div>
 
@@ -82,10 +82,10 @@ class UserRole extends Component {
 
 UserRole.propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     community: PropTypes.string.isRequired,
     role: PropTypes.string.isRequired,
+    availableRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default UserRole;

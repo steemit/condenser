@@ -4,8 +4,8 @@ import reactForm from 'app/utils/ReactForm';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
-import CategorySelector from 'app/components/cards/CategorySelector';
-import { validateCategory } from 'app/components/cards/CategorySelector';
+import TagInput from 'app/components/cards/TagInput';
+import { validateTagInput } from 'app/components/cards/TagInput';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostCategoryBannerContainer from 'app/components/elements/PostCategoryBannerContainer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -232,7 +232,7 @@ class ReplyEditor extends React.Component {
                         : values.title.length > 255
                           ? tt('reply_editor.shorten_title')
                           : null),
-                category: isStory && validateCategory(values.category, !isEdit),
+                category: isStory && validateTagInput(values.category, !isEdit),
                 body: !values.body
                     ? tt('g.required')
                     : values.body.length > maxKb * 1024
@@ -640,7 +640,7 @@ class ReplyEditor extends React.Component {
                         >
                             {isStory && (
                                 <span>
-                                    <CategorySelector
+                                    <TagInput
                                         {...category.props}
                                         disabled={loading}
                                         isEdit={isEdit}

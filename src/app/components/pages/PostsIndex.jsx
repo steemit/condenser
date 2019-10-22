@@ -21,6 +21,7 @@ import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import { ifHive } from 'app/utils/Community';
 import CommunityPane from 'app/components/elements/CommunityPane';
+import CommunityPaneMobile from 'app/components/elements/CommunityPaneMobile';
 
 const emptyFeedText = (isMyAccount, account_name) => {
     return isMyAccount ? (
@@ -153,7 +154,7 @@ class PostsIndex extends React.Component {
             >
                 <article className="articles">
                     <span className="hide-for-mq-large articles__header-select">
-                        <CommunityPane
+                        <CommunityPaneMobile
                             community={community}
                             username={this.props.username}
                         />

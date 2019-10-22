@@ -12,7 +12,8 @@ class SubscribeButton extends React.Component {
         this.state = { loading: false };
     }
 
-    onClick = () => {
+    onClick = e => {
+        e.preventDefault();
         const { subscribed } = this.props;
         const community = this.props.community.get('name');
 
@@ -39,15 +40,17 @@ class SubscribeButton extends React.Component {
         const loader = <LoadingIndicator type="dots" />;
         const hollowed = subscribed ? ' hollow' : '';
         return (
-            <button
+            <a
+                href="#"
                 onClick={this.onClick}
-                disabled={loading}
                 className={'button slim primary' + hollowed}
-                style={{ minWidth: '6em' }}
-                type="button"
+                style={{
+                    minWidth: '6em',
+                    display: this.props.display || 'inline-block',
+                }}
             >
                 {loading ? loader : subscribed ? 'Joined' : 'Join'}
-            </button>
+            </a>
         );
     }
 }

@@ -19,7 +19,8 @@ class SettingsEditButton extends React.Component {
         };
     }
 
-    onToggleDialog = () => {
+    onToggleDialog = e => {
+        e.preventDefault();
         this.setState({ showDialog: !this.state.showDialog });
     };
 
@@ -45,30 +46,17 @@ class SettingsEditButton extends React.Component {
     };
 
     render() {
-        const label = `Settings`;
         const { showDialog, loading, settings } = this.state;
 
         if (loading) {
-            return (
-                <button
-                    disabled
-                    className="button slim hollow secondary"
-                    type="button"
-                >
-                    Loading...
-                </button>
-            );
+            return <span>Saving...</span>;
         }
 
         return (
             <span>
-                <button
-                    onClick={this.onToggleDialog}
-                    className="button slim hollow secondary"
-                    type="button"
-                >
-                    {label}
-                </button>
+                <a href="#" onClick={this.onToggleDialog}>
+                    {this.props.children}
+                </a>
                 {showDialog && (
                     <Reveal onHide={() => null} show>
                         <CloseButton onClick={() => this.onToggleDialog()} />

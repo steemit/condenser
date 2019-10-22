@@ -192,26 +192,17 @@ class Author extends React.Component {
 
 import { connect } from 'react-redux';
 
-export default connect((state, ownProps) => {
-    const { follow, mute, post } = ownProps;
-    const username = state.user.getIn(['current', 'username']);
-    const community = post.get('community_title') ? post.get('category') : null;
-    const viewer_role = state.global.getIn(
-        ['community', community, 'context', 'role'],
-        'guest'
-    );
-
+export default connect((state, props) => {
+    const { post } = props;
     return {
+        follow: typeof props.follow === 'undefined' ? true : props.follow,
+        mute: typeof props.mute === 'undefined' ? props.follow : props.mute,
+        username: state.user.getIn(['current', 'username']),
         authorRep: post.get('author_reputation'),
         author: post.get('author'),
-        permlink: post.get('permlink'),
-        role: post.get('author_role'),
-        title: post.get('author_title'),
-        community,
-        follow,
-        mute: typeof mute === 'undefined' ? follow : mute,
-        username,
-        viewer_role,
-        post,
+        community: post.get('community'), // UserTitle
+        permlink: post.get('permlink'), // UserTitle
+        role: post.get('author_role'), // UserTitle
+        title: post.get('author_title'), // UserTitle
     };
 })(Author);

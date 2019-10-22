@@ -159,7 +159,7 @@ class PostsIndex extends React.Component {
                                             color: 'gray',
                                         }}
                                     >
-                                        #{category}
+                                        Community
                                     </div>
                                 )}
                                 {!community &&
@@ -172,7 +172,7 @@ class PostsIndex extends React.Component {
                                                 color: 'gray',
                                             }}
                                         >
-                                            unmoderated tag
+                                            Unmoderated tag
                                         </div>
                                     )}
                             </div>

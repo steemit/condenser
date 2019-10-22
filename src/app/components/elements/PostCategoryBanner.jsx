@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Userpic from 'app/components/elements/Userpic';
 
 export default function PostCategoryBanner(props) {
-    const { label, labelSmall, loading } = props;
+    const { label, labelSmall, loading, isCommunity } = props;
 
     if (loading) {
         return <span>Loading...</span>;
@@ -13,7 +13,10 @@ export default function PostCategoryBanner(props) {
         <div className="PostCategoryBanner column small-12 ">
             <div className="postTo">
                 <small>
-                    Posting to <span className="smallLabel">{labelSmall}</span>
+                    Posting to{' '}
+                    <span className="smallLabel">
+                        {isCommunity ? label : labelSmall}
+                    </span>
                 </small>
             </div>
             <div className="categoryName">

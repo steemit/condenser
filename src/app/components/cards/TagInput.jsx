@@ -28,13 +28,24 @@ class TagInput extends React.Component {
         super();
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'TagInput');
     }
+
     render() {
         const { tabIndex, disabled } = this.props;
         const impProps = { ...this.props };
+        const inputSanitized = cleanReduxInput(impProps);
+        // Strip tags containing 'hive-'
+        const freshTags = inputSanitized.value
+            .split(' ')
+            .filter(tag => {
+                return !tag.includes('hive-');
+            })
+            .join(' ');
+
         const input = (
             <input
                 type="text"
-                {...cleanReduxInput(impProps)}
+                {...inputSanitized}
+                value={freshTags}
                 ref="tagInputRef"
                 tabIndex={tabIndex}
                 disabled={disabled}

@@ -64,6 +64,11 @@ class PostsIndex extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsIndex');
     }
 
+    componentWillMount() {
+        const { subscriptions, getSubscriptions, username } = this.props;
+        if (!subscriptions && username) getSubscriptions(username);
+    }
+
     componentDidUpdate(prevProps) {
         if (
             window.innerHeight &&
@@ -91,6 +96,7 @@ class PostsIndex extends React.Component {
     render() {
         const {
             topics,
+            subscriptions,
             allowAdsOnContent,
             community,
             category,
@@ -231,7 +237,10 @@ class PostsIndex extends React.Component {
                     {this.props.isBrowser &&
                         !community &&
                         this.props.username && (
-                            <SidebarLinks username={this.props.username} />
+                            <SidebarLinks
+                                username={this.props.username}
+                                subscriptions={subscriptions}
+                            />
                         )}
                     {!community && <Notices />}
                     {!category && <SteemMarket />}
@@ -306,7 +315,10 @@ module.exports = {
                     state.app.getIn(['googleAds', 'gptBannedTags'])
                 );
 
+            const subscriptions = state.global.get('subscriptions');
+
             return {
+                subscriptions: subscriptions ? subscriptions.toJS() : null,
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 account_name,
@@ -326,11 +338,11 @@ module.exports = {
                 allowAdsOnContent,
             };
         },
-        dispatch => {
-            return {
-                requestData: args =>
-                    dispatch(fetchDataSagaActions.requestData(args)),
-            };
-        }
+        dispatch => ({
+            getSubscriptions: account =>
+                dispatch(fetchDataSagaActions.getSubscriptions(account)),
+            requestData: args =>
+                dispatch(fetchDataSagaActions.requestData(args)),
+        })
     )(PostsIndex),
 };

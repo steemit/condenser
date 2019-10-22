@@ -18,27 +18,23 @@ class CommunitySettings extends Component {
     }
 
     onInput = event => {
-        const newState = {};
-        let newValue = event.target.value || '';
-        if (event.target.hasOwnProperty('checked'))
-            newValue = event.target.checked;
-        newState[event.target.name] = newValue;
-        this.setState(newState);
+        const el = event.target;
+        const field = el.name;
+        const value = el.hasOwnProperty('checked') ? el.checked : el.value;
+        this.setState({ [field]: value });
     };
 
-    onSubmit = () => {
+    onSubmit = e => {
+        e.preventDefault();
         // Trim leading and trailing whitespace before submission.
-        const settings = {};
-        Object.keys(this.state).filter(k => {
-            if (typeof this.state[k] === 'string') {
-                return (settings[k] = this.state[k].trim());
-            }
-            return (settings[k] = this.state[k]);
+        const payload = {};
+        Object.keys(this.state).forEach(k => {
+            if (typeof this.state[k] === 'string')
+                payload[k] = this.state[k].trim();
+            else payload[k] = this.state[k];
         });
-        // If there is no value for flag text, don't send it.
-        if (settings.flag_text == '') delete settings.flag_text;
-
-        this.props.onSubmit(settings);
+        console.log('payload', payload);
+        this.props.onSubmit(payload);
     };
 
     render() {
@@ -53,13 +49,7 @@ class CommunitySettings extends Component {
                 <hr />
                 <form onSubmit={this.onSubmit}>
                     <label className="input-group">
-                        <span className="input-group-label">
-                            Title &nbsp;<small>
-                                [<a title="the display name of this community (32 chars)">
-                                    ?
-                                </a>]
-                            </small>
-                        </span>{' '}
+                        <span className="input-group-label">Title </span>
                         <input
                             className="input-group-field"
                             type="text"
@@ -72,13 +62,7 @@ class CommunitySettings extends Component {
                         />
                     </label>
                     <label className="input-group">
-                        <span className="input-group-label">
-                            About &nbsp;<small>
-                                [<a title="short blurb about this community (120 chars)">
-                                    ?
-                                </a>]
-                            </small>
-                        </span>{' '}
+                        <span className="input-group-label">About </span>
                         <input
                             className="input-group-field"
                             type="text"
@@ -89,11 +73,7 @@ class CommunitySettings extends Component {
                         />
                     </label>
                     <label className="input-group">
-                        <span className="input-group-label">
-                            NSFW? &nbsp;<small>
-                                [<a title="true if this community is 18+">?</a>]
-                            </small>
-                        </span>{' '}
+                        <span className="input-group-label">NSFW? </span>
                         <input
                             className="input-group-field"
                             type="checkbox"
@@ -103,34 +83,26 @@ class CommunitySettings extends Component {
                         />
                     </label>
                     <label className="input-group">
-                        <span className="input-group-label">
-                            Description &nbsp;<small>
-                                [<a title="describes purpose of community, etc. (5000 chars)">
-                                    ?
-                                </a>]
-                            </small>
-                        </span>{' '}
+                        <span className="input-group-label">Description </span>
                         <textarea
                             className="input-group-field"
+                            style={{ whiteSpace: 'normal' }}
                             type="text"
                             maxLength={1000}
+                            rows="10"
                             onChange={e => this.onInput(e)}
                             name="description"
                             value={description}
                         />
                     </label>
                     <label className="input-group">
-                        <span className="input-group-label">
-                            Flag Text &nbsp;<small>
-                                [<a title="custom text for reporting content (2000 chars)">
-                                    ?
-                                </a>]
-                            </small>
-                        </span>{' '}
+                        <span className="input-group-label">Flag Text </span>
                         <textarea
                             className="input-group-field"
+                            style={{ whiteSpace: 'normal' }}
                             type="text"
                             maxLength={1000}
+                            rows="10"
                             onChange={e => this.onInput(e)}
                             name="flag_text"
                             value={flag_text}

@@ -467,14 +467,6 @@ export function* preBroadcast_comment({ operation, username }) {
     return comment_op;
 }
 
-function* permlinkExists(author, permlink) {
-    const head = yield call(callBridge, 'get_post_header', {
-        author,
-        permlink,
-    });
-    return !!head.category;
-}
-
 export function* createPermlink(title, author) {
     let permlink;
     if (title && title.trim() !== '') {
@@ -490,7 +482,7 @@ export function* createPermlink(title, author) {
             author,
             permlink: s,
         });
-        if (!!head.category) {
+        if (head && !!head.category) {
             const noise = base58
                 .encode(secureRandom.randomBuffer(4))
                 .toLowerCase();

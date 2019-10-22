@@ -34,6 +34,12 @@ class UserRole extends Component {
                 });
                 return;
             }
+            if (this.state.newUsername[0] === '@') {
+                this.setState({
+                    message: 'Please enter a username without "@".',
+                });
+                return;
+            }
             this.props.onSubmit(
                 this.state.newUsername.trim(),
                 this.state.newRole.trim()

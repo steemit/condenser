@@ -6,6 +6,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
 import UserRole from 'app/components/modules/UserRole';
+import { Link } from 'react-router';
 
 class CommunityRoles extends React.Component {
     constructor(props) {
@@ -107,21 +108,24 @@ class CommunityRoles extends React.Component {
             let role = tuple[1];
             if (availableRoles.includes(tuple[1])) {
                 role = (
-                    <span
+                    <a
                         className="community-user--role"
                         aria-labelledby="Community User Role"
-                        onClick={() => {
+                        onClick={e => {
+                            e.preventDefault();
                             this.onEditUserRoleSelect(name, tuple[1], title);
                             this.toggleUpdateRoleModal(true);
                         }}
                     >
                         {tuple[1]}
-                    </span>
+                    </a>
                 );
             }
             return (
                 <tr key={name}>
-                    <td>{name}</td>
+                    <td>
+                        <Link to={`/@${name}`}>@{name}</Link>
+                    </td>
                     <td>{role}</td>
                     <td>{title}</td>
                 </tr>
@@ -132,7 +136,7 @@ class CommunityRoles extends React.Component {
             <table>
                 <thead>
                     <tr>
-                        <th>Username</th>
+                        <th>Account</th>
                         <th>Role</th>
                         <th>Title</th>
                     </tr>
@@ -191,18 +195,25 @@ class CommunityRoles extends React.Component {
             </Reveal>
         );
 
+        const commName = (communityMetadata && communityMetadata.title) || null;
+
         return (
             <div className="CommunityRoles">
                 <div className="row">
-                    <div className="column large-4">
-                        <h2>{community}</h2>
+                    <div className="column large-3" />
+                    <div className="column large-6">
+                        <h3>
+                            <Link to={`/trending/${community}`}>
+                                {commName || community}
+                            </Link>
+                        </h3>
                         {updating && <div>Updating User...</div>}
                         {loading && spinner}
                         {this.state.updateRoleModal && editUserModal}
                         {this.state.addUserToCommunityModal && addUserModal}
                         {!loading && (
                             <div>
-                                <h4>User Roles</h4>
+                                <h5>Community Roles</h5>
                                 {table}
                                 <button
                                     onClick={() => {

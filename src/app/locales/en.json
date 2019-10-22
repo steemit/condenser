@@ -26,11 +26,11 @@
             "Here you can customize this community as you see fit.",
         "community_list_header": "Communities",
         "community_user_role_add_description":
-            "Here you may add a user with role to the community %(community)s.",
+            "Set the role of an account within this community.",
         "community_user_role_edit_description":
-            "Here you may change the role of %(username)s within the community %(community)s.",
-        "community_user_role_add_header": "Add User To Community",
-        "community_user_role_edit_header": "Change User's Community Role",
+            "Changing @%(username)s's role.",
+        "community_user_role_add_header": "Add User Role",
+        "community_user_role_edit_header": "Change User Role",
         "community_user_title_edit_header": "Change User's Community Title",
         "community_user_title_edit_description":
             "Here you may change the title of %(username)s within the community %(community)s.",

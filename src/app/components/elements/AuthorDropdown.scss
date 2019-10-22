@@ -49,9 +49,14 @@
     .Author__bio {
       clear: both;
       font-size: 90%;
-      padding-top: 15px;
+      padding-top: 10px;
       overflow: hidden;
       text-overflow: ellipsis;
+      line-height: 1em;
+      margin-bottom: 8px;
+      @include themify($themes) {
+        color: themed('textColorSecondary');
+      }
     }
   }
 }

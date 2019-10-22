@@ -11,7 +11,7 @@ import AffiliationMap from 'app/utils/AffiliationMap';
 import tt from 'counterpart';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
-import UserTitleEditButton from 'app/components/elements/UserTitleEditButton';
+import UserTitle from 'app/components/elements/UserTitle';
 import { Role } from 'app/utils/Community';
 
 const { string, bool, number } = PropTypes;
@@ -114,7 +114,7 @@ class Author extends React.Component {
         const userTitle = (
             <span>
                 {community && (
-                    <UserTitleEditButton
+                    <UserTitle
                         username={username}
                         community={community}
                         author={author}
@@ -192,20 +192,17 @@ class Author extends React.Component {
 
 import { connect } from 'react-redux';
 
-export default connect((state, ownProps) => {
-    const { follow, mute, post, viewer_role } = ownProps;
-    const username = state.user.getIn(['current', 'username']);
-
+export default connect((state, props) => {
+    const { post } = props;
     return {
+        follow: typeof props.follow === 'undefined' ? true : props.follow,
+        mute: typeof props.mute === 'undefined' ? props.follow : props.mute,
+        username: state.user.getIn(['current', 'username']),
         authorRep: post.get('author_reputation'),
         author: post.get('author'),
-        permlink: post.get('permlink'),
-        role: post.get('author_role'),
-        title: post.get('author_title'),
-        follow,
-        mute: typeof mute === 'undefined' ? follow : mute,
-        username,
-        viewer_role,
-        post,
+        community: post.get('community'), // UserTitle
+        permlink: post.get('permlink'), // UserTitle
+        role: post.get('author_role'), // UserTitle
+        title: post.get('author_title'), // UserTitle
     };
 })(Author);

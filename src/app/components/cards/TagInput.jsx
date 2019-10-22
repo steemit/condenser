@@ -8,7 +8,7 @@ import { List } from 'immutable';
 
 const MAX_TAGS = 8;
 
-class CategorySelector extends React.Component {
+class TagInput extends React.Component {
     static propTypes = {
         // HTML props
         id: PropTypes.string, // DOM id for active component (focusing, etc...)
@@ -22,38 +22,35 @@ class CategorySelector extends React.Component {
     };
     static defaultProps = {
         autoComplete: 'on',
-        id: 'CategorySelectorId',
+        id: 'TagInputId',
     };
     constructor() {
         super();
-        this.shouldComponentUpdate = shouldComponentUpdate(
-            this,
-            'CategorySelector'
-        );
+        this.shouldComponentUpdate = shouldComponentUpdate(this, 'TagInput');
     }
     render() {
         const { tabIndex, disabled } = this.props;
         const impProps = { ...this.props };
-        const categoryInput = (
+        const input = (
             <input
                 type="text"
                 {...cleanReduxInput(impProps)}
-                ref="categoryRef"
+                ref="tagInputRef"
                 tabIndex={tabIndex}
                 disabled={disabled}
                 autoCapitalize="none"
             />
         );
 
-        return <span>{categoryInput}</span>;
+        return <span>{input}</span>;
     }
 }
-export function validateCategory(category, required = true) {
-    if (!category || category.trim() === '')
+export function validateTagInput(value, required = true) {
+    if (!value || value.trim() === '')
         return required ? tt('g.required') : null;
-    const cats = category.trim().split(' ');
+    const cats = value.trim().split(' ');
     return (
-        // !category || category.trim() === '' ? 'Required' :
+        // !value || value.trim() === '' ? 'Required' :
         cats.length > MAX_TAGS
             ? tt('category_selector_jsx.use_limited_amount_of_categories', {
                   amount: MAX_TAGS,
@@ -82,4 +79,4 @@ export default connect((state, ownProps) => {
     // they are used here because default prop can't acces intl property
     const placeholder = tt('category_selector_jsx.tag_your_story');
     return { placeholder, ...ownProps };
-})(CategorySelector);
+})(TagInput);

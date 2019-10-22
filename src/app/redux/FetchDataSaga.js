@@ -19,6 +19,7 @@ const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 const GET_POST_HEADER = 'fetchDataSaga/GET_POST_HEADER';
 const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 const LIST_COMMUNITIES = 'fetchDataSaga/LIST_COMMUNITIES';
+const GET_SUBSCRIPTIONS = 'fetchDataSaga/GET_SUBSCRIPTIONS';
 const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
 
 export const fetchDataWatches = [
@@ -28,6 +29,7 @@ export const fetchDataWatches = [
     takeEvery('global/FETCH_JSON', fetchJson),
     takeEvery(GET_POST_HEADER, getPostHeader),
     takeEvery(GET_COMMUNITY, getCommunity),
+    takeLatest(GET_SUBSCRIPTIONS, getSubscriptions),
     takeEvery(LIST_COMMUNITIES, listCommunities),
     takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
 ];
@@ -184,6 +186,18 @@ export function* getCommunity(action) {
                 [community.name]: { ...community },
             })
         );
+}
+
+/**
+ * Request all user subscriptions
+ * @param {string} name of account
+ */
+export function* getSubscriptions(action) {
+    if (!action.payload) throw 'no account specified';
+    const subscriptions = yield call(callBridge, 'list_all_subscriptions', {
+        account: action.payload,
+    });
+    yield put(globalActions.receiveSubscriptions(subscriptions));
 }
 
 /**
@@ -347,6 +361,11 @@ export const actions = {
             payload,
         };
     },
+
+    getSubscriptions: payload => ({
+        type: GET_SUBSCRIPTIONS,
+        payload,
+    }),
 
     getAccountNotifications: payload => ({
         type: GET_ACCOUNT_NOTIFICATIONS,

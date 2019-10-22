@@ -9,7 +9,7 @@ import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
 import MutePost from 'app/components/modules/MutePost';
 
-class MuteButtonContainer extends React.Component {
+class MuteButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = { showDialog: false };
@@ -65,7 +65,7 @@ class MuteButtonContainer extends React.Component {
     }
 }
 
-MuteButtonContainer.propTypes = {
+MuteButton.propTypes = {
     account: PropTypes.string.isRequired,
     permlink: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
@@ -74,11 +74,16 @@ MuteButtonContainer.propTypes = {
 
 export default connect(
     (state, ownProps) => {
-        const { account, permlink, community } = ownProps;
+        const { post } = ownProps;
+        const account = post.get('author');
+        const permlink = post.get('permlink');
+        const community = post.get('category');
+        const isMuted = post.getIn(['stats', 'gray'], false);
         return {
             account,
             permlink,
             community,
+            isMuted,
             username: state.user.getIn(['current', 'username']),
         };
     },
@@ -121,4 +126,4 @@ export default connect(
             );
         },
     })
-)(MuteButtonContainer);
+)(MuteButton);

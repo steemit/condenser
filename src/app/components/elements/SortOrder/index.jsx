@@ -41,19 +41,22 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
                 label: tt('main_menu.hot'),
                 link: `/hot${tag}`,
             },
-            {
-                value: 'created',
-                label: tt('g.new'),
-                link: `/created${tag}`,
-            },
         ];
 
         if (!topMenu) {
+            out.push({
+                value: 'created',
+                label: tt('g.new'),
+                link: `/created${tag}`,
+            });
+
+            /*
             out.push({
                 value: 'promoted',
                 label: tt('g.promoted'),
                 link: `/promoted${tag}`,
             });
+            */
 
             out.push({
                 value: 'payout',

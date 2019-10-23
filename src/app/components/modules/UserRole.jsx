@@ -71,12 +71,13 @@ class UserRole extends Component {
         const editUserModalHeader = (
             <div>
                 <h4>{tt('g.community_user_role_edit_header')}</h4>
-                <p>
+                <hr />
+                {/*<p>
                     {tt('g.community_user_role_edit_description', {
                         community,
                         username,
                     })}{' '}
-                </p>
+                </p>*/}
             </div>
         );
         const addUserModalHeader = (
@@ -93,33 +94,33 @@ class UserRole extends Component {
         return (
             <span>
                 {addUser ? addUserModalHeader : editUserModalHeader}
-                <hr />
-                {addUser && (
-                    <div className="input-group">
-                        <span className="input-group-label">Username</span>
-                        <input
-                            className="input-group-field"
-                            type="text"
-                            maxLength={32}
-                            name="username"
-                            value={newUsername}
-                            onChange={e => this.onInput(e)}
-                        />
-                    </div>
-                )}
+                <div className="input-group">
+                    <span className="input-group-label">Username</span>
+                    <input
+                        className="input-group-field"
+                        type="text"
+                        maxLength={32}
+                        name="username"
+                        value={addUser ? newUsername : username}
+                        onChange={e => this.onInput(e)}
+                        disabled={!addUser}
+                    />
+                </div>
                 <div className="input-group">
                     <span className="input-group-label">Role</span>
                     <select value={newRole} onChange={this.onSelect} required>
                         {roleSelector}
                     </select>
                 </div>
-                <button
-                    className="button slim hollow secondary"
-                    type="submit"
-                    onClick={() => this.onSubmit()}
-                >
-                    Save
-                </button>{' '}
+                <div className="text-right">
+                    <button
+                        className="button"
+                        type="submit"
+                        onClick={() => this.onSubmit()}
+                    >
+                        Save
+                    </button>
+                </div>
                 <div>{message.length > 0 && message}</div>
             </span>
         );

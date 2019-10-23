@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Userpic from 'app/components/elements/Userpic';
+import { Link } from 'react-router';
 
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -21,9 +22,12 @@ class PostCategoryBanner extends React.Component {
 
     render() {
         const { username, community } = this.props;
-        const label = community
-            ? community.get('title')
-            : `@${username}'s blog`;
+        const url = community ? '/trending/' + community.get('name') : null;
+        const label = community ? (
+            <Link to={url}>{community.get('title')}</Link>
+        ) : (
+            `@${username}'s blog`
+        );
         const onClick = e => {
             e.preventDefault();
             this.props.onCancel();

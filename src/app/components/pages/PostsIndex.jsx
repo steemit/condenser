@@ -105,7 +105,6 @@ class PostsIndex extends React.Component {
             order,
             posts,
         } = this.props;
-        debugger;
 
         let emptyText = '';
         if (order === 'feed') {

@@ -153,14 +153,14 @@ class PostsIndex extends React.Component {
                 }
             >
                 <article className="articles">
-                    <span className="hide-for-mq-large articles__header-select">
-                        {community && (
+                    {community && (
+                        <span className="hide-for-mq-large articles__header-select">
                             <CommunityPaneMobile
                                 community={community}
                                 username={this.props.username}
                             />
-                        )}
-                    </span>
+                        </span>
+                    )}
                     <div className="articles__header row">
                         <div className="small-8 medium-7 large-8 column">
                             <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">

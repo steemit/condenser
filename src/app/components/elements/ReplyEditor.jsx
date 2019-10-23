@@ -154,7 +154,6 @@ class ReplyEditor extends React.Component {
                 community = comm[0]; // If multiple tags including 'hive-' are found, use the first that is found...
             }
         }
-
         this.setState({ community });
     }
 
@@ -462,6 +461,7 @@ class ReplyEditor extends React.Component {
             ? 'vframe__section--shrink'
             : '';
         const RichTextEditor = this.props.richTextEditor;
+
         return (
             <div className="ReplyEditor row">
                 {isStory &&
@@ -880,7 +880,6 @@ export default formId =>
                 : {};
 
             let tags = category;
-
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 tags = OrderedSet([category, ...jsonMetadata.tags]).join(' ');
             }

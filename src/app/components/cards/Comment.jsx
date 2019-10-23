@@ -23,8 +23,7 @@ import { Role } from 'app/utils/Community';
 
 export function sortComments(cont, comments, sort_order) {
     const rshares = post => Long.fromString(String(post.get('net_rshares')));
-    const demote = post =>
-        post.getIn(['stats', 'gray']) || post.get('net_rshares') < 0;
+    const demote = post => post.getIn(['stats', 'gray']);
     const upvotes = post =>
         post.get('active_votes').filter(v => v.get('rshares') != '0').size;
     const ts = post => Date.parse(post.get('created'));

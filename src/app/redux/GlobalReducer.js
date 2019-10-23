@@ -85,6 +85,10 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_STATE: {
+            console.log(
+                'Merging state',
+                state.mergeDeep(fromJS(payload)).toJS()
+            );
             return state.mergeDeep(fromJS(payload));
         }
 

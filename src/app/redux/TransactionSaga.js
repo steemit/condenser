@@ -77,10 +77,10 @@ export function* broadcastOperation({
         errorCallback,
         allowPostUnsafe,
     };
-    console.log('broadcastOperation', operationParam);
 
     const conf = typeof confirm === 'function' ? confirm() : confirm;
     if (conf) {
+        console.log('broadcastConfirm', operationParam);
         yield put(
             transactionActions.confirmOperation({
                 confirm,
@@ -91,6 +91,8 @@ export function* broadcastOperation({
         );
         return;
     }
+
+    console.log('broadcastOperation', operationParam);
     const payload = {
         operations: [[type, operation]],
         keys,
@@ -313,7 +315,7 @@ function* broadcastPayload({
         }
         if (successCallback)
             try {
-                successCallback();
+                successCallback(operations);
             } catch (error) {
                 console.error(error);
             }

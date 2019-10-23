@@ -137,6 +137,7 @@ class PostsList extends React.Component {
             anyPosts,
             pathname,
             category,
+            order,
             content,
             ignore_result,
             account,
@@ -148,7 +149,11 @@ class PostsList extends React.Component {
         const postsInfo = [];
         posts.forEach(item => {
             const cont = content.get(item);
-            if (!cont) throw 'PostsList --> Missing cont key: ' + item;
+            if (!cont) {
+                // can occur when deleting a post
+                console.error('PostsList --> Missing cont key: ' + item);
+                return;
+            }
             const author = cont.get('author');
             const ignore = ignore_result && ignore_result.has(author);
             const hideResteem = !showResteem && account && author != account;
@@ -241,20 +246,23 @@ class PostsList extends React.Component {
 
         const renderSummary = items =>
             items.map((item, i) => {
+                const ps = (
+                    <PostSummary
+                        account={account}
+                        post={item.item}
+                        thumbSize={thumbSize}
+                        ignore={item.ignore}
+                        nsfwPref={nsfwPref}
+                        hideCategory={hideCategory}
+                        order={order}
+                    />
+                );
+
                 const every = this.props.adSlots.in_feed_1.every;
                 if (this.props.shouldSeeAds && i >= every && i % every === 0) {
                     return (
                         <div key={item.item}>
-                            <li>
-                                <PostSummary
-                                    account={account}
-                                    post={item.item}
-                                    thumbSize={thumbSize}
-                                    ignore={item.ignore}
-                                    nsfwPref={nsfwPref}
-                                    hideCategory={hideCategory}
-                                />
-                            </li>
+                            <li>{ps}</li>
 
                             <div className="articles__content-block--ad">
                                 <GptAd
@@ -266,18 +274,7 @@ class PostsList extends React.Component {
                         </div>
                     );
                 }
-                return (
-                    <li key={item.item}>
-                        <PostSummary
-                            account={account}
-                            post={item.item}
-                            thumbSize={thumbSize}
-                            ignore={item.ignore}
-                            nsfwPref={nsfwPref}
-                            hideCategory={hideCategory}
-                        />
-                    </li>
-                );
+                return <li key={item.item}>{ps}</li>;
             });
 
         return (

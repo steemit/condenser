@@ -224,6 +224,7 @@ class PostsIndex extends React.Component {
                             posts={posts}
                             loading={fetching}
                             anyPosts
+                            order={order}
                             category={category}
                             hideCategory={!!community}
                             loadMore={this.loadMore}

@@ -23,8 +23,7 @@ import { Role } from 'app/utils/Community';
 
 export function sortComments(cont, comments, sort_order) {
     const rshares = post => Long.fromString(String(post.get('net_rshares')));
-    const demote = post =>
-        post.getIn(['stats', 'gray']) || post.get('net_rshares') < 0;
+    const demote = post => post.getIn(['stats', 'gray']);
     const upvotes = post =>
         post.get('active_votes').filter(v => v.get('rshares') != '0').size;
     const ts = post => Date.parse(post.get('created'));
@@ -52,7 +51,7 @@ export function sortComments(cont, comments, sort_order) {
 }
 
 function commentUrl(post, rootRef) {
-    const root = rootRef ? `@{rootRef}#` : '';
+    const root = rootRef ? `@${rootRef}#` : '';
     return `/${post.category}/${root}@${post.author}/${post.permlink}`;
 }
 
@@ -188,6 +187,7 @@ class CommentImpl extends React.Component {
         }
 
         const { onShowReply, onShowEdit, onDeletePost } = this;
+
         const {
             username,
             depth,
@@ -196,6 +196,7 @@ class CommentImpl extends React.Component {
             ignored,
             rootComment,
         } = this.props;
+
         const {
             PostReplyEditor,
             PostEditEditor,
@@ -205,24 +206,21 @@ class CommentImpl extends React.Component {
             hide_body,
         } = this.state;
 
+        if (!showNegativeComments && (hide || ignored)) return null;
+
         const Editor = showReply ? PostReplyEditor : PostEditEditor;
 
         const author = post.get('author');
         const comment = post.toJS();
         const gray = comment.stats.gray || ImageUserBlockList.includes(author);
 
-        if (!showNegativeComments && (hide || ignored)) {
-            return null;
-        }
-
         const showEditOption = username === author;
         const showMuteToggle = Role.atLeast(viewer_role, 'mod');
+        const showReplyOption = username && comment.depth < 255;
         const showDeleteOption = username === author && allowDelete(post);
-        const showReplyOption = username !== undefined && comment.depth < 255;
 
         let body = null;
         let controls = null;
-
         if (!this.state.collapsed && !hide_body) {
             body = gray ? (
                 <pre style={{ opacity: 0.5, whiteSpace: 'pre-wrap' }}>
@@ -290,9 +288,7 @@ class CommentImpl extends React.Component {
         let innerCommentClass = 'Comment__block';
         if (ignored || gray) {
             innerCommentClass += ' downvoted clearfix';
-            if (!hide_body) {
-                innerCommentClass += ' revealed';
-            }
+            if (!hide_body) innerCommentClass += ' revealed';
         }
         if (this.state.highlight) innerCommentClass += ' highlighted';
 
@@ -336,10 +332,7 @@ class CommentImpl extends React.Component {
                     </div>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
-                            <a
-                                title={tt('g.collapse_or_expand')}
-                                onClick={this.toggleCollapsed}
-                            >
+                            <a onClick={this.toggleCollapsed}>
                                 {this.state.collapsed ? '[+]' : '[-]'}
                             </a>
                         </div>
@@ -366,7 +359,7 @@ class CommentImpl extends React.Component {
                         )}
                         {this.state.collapsed &&
                             comment.children > 0 && (
-                                <span className="marginLeft1rem">
+                                <span>
                                     {tt('g.reply_count', {
                                         count: comment.children,
                                     })}
@@ -374,10 +367,7 @@ class CommentImpl extends React.Component {
                             )}
                         {!this.state.collapsed &&
                             hide_body && (
-                                <a
-                                    className="marginLeft1rem"
-                                    onClick={this.revealBody}
-                                >
+                                <a onClick={this.revealBody}>
                                     {tt('g.reveal_comment')}
                                 </a>
                             )}
@@ -385,7 +375,7 @@ class CommentImpl extends React.Component {
                             !hide_body &&
                             (ignored || gray) && (
                                 <span>
-                                    &nbsp; &middot; &nbsp;{' '}
+                                    &middot;&nbsp;
                                     {tt('g.will_be_hidden_due_to_low_rating')}
                                 </span>
                             )}

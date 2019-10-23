@@ -118,7 +118,6 @@ class Header extends React.Component {
             showSidePanel,
             navigate,
             display_name,
-            walletUrl,
             content,
         } = this.props;
 
@@ -258,14 +257,12 @@ class Header extends React.Component {
         const replies_link = `/@${username}/recent-replies`;
         const account_link = `/@${username}`;
         const comments_link = `/@${username}/comments`;
-        const wallet_link = `${walletUrl}/@${username}`;
         const settings_link = `/@${username}/settings`;
 
         const user_menu = [
             { link: account_link, icon: 'profile', value: tt('g.blog') },
             { link: comments_link, icon: 'replies', value: tt('g.comments') },
             { link: replies_link, icon: 'reply', value: tt('g.replies') },
-            { link: wallet_link, icon: 'wallet', value: tt('g.wallet') },
             {
                 link: '#',
                 icon: 'eye',
@@ -417,7 +414,6 @@ const mapStateToProps = (state, ownProps) => {
         : state.offchain.get('account');
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
-    const walletUrl = state.app.get('walletUrl');
     const content = state.global.get('content'); // TODO: needed for SSR?
 
     return {
@@ -429,7 +425,6 @@ const mapStateToProps = (state, ownProps) => {
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         gptEnabled,
-        walletUrl,
         content,
         ...ownProps,
     };

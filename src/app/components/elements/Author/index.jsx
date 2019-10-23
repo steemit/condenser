@@ -13,6 +13,7 @@ import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
 import UserTitle from 'app/components/elements/UserTitle';
 import { Role } from 'app/utils/Community';
+import { List } from 'immutable';
 
 const { string, bool, number } = PropTypes;
 
@@ -104,6 +105,7 @@ class Author extends React.Component {
             follow,
             mute,
             showAffiliation,
+            blacklists,
 
             community,
             permlink,
@@ -128,6 +130,14 @@ class Author extends React.Component {
                         {tt('g.affiliation_' + AffiliationMap[author])}
                     </span>
                 ) : null}
+                {blacklists && (
+                    <span
+                        style={{ fontWeight: 'bold', color: 'red' }}
+                        title={blacklists.join(', ')}
+                    >
+                        ❗️({blacklists.length})
+                    </span>
+                )}
             </span>
         );
 
@@ -182,6 +192,7 @@ class Author extends React.Component {
                         mute={mute}
                         authorRep={authorRep}
                         username={username}
+                        blacklists={blacklists}
                     />
                 </Overlay>
             </span>
@@ -193,6 +204,7 @@ import { connect } from 'react-redux';
 
 export default connect((state, props) => {
     const { post } = props;
+    const blacklists = post.get('blacklists', List()).toJS();
     return {
         follow: typeof props.follow === 'undefined' ? true : props.follow,
         mute: typeof props.mute === 'undefined' ? props.follow : props.mute,
@@ -203,5 +215,6 @@ export default connect((state, props) => {
         permlink: post.get('permlink'), // UserTitle
         role: post.get('author_role'), // UserTitle
         title: post.get('author_title'), // UserTitle
+        blacklists: blacklists.length > 0 ? blacklists : null,
     };
 })(Author);

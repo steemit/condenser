@@ -20,7 +20,7 @@ class AuthorDropdown extends Component {
     }
 
     render() {
-        const { author, simple, profile } = this.props;
+        const { author, simple, profile, blacklists } = this.props;
 
         if (simple) {
             return (
@@ -120,6 +120,15 @@ class AuthorDropdown extends Component {
                         <div style={{ fontSize: '0.8em', textAlign: 'center' }}>
                             <DateJoinWrapper date={created} /> &bull; last seen{' '}
                             <TimeAgoWrapper date={active} />
+                        </div>
+                    )}
+                    {blacklists && (
+                        <div>
+                            <br />
+                            <strong>Blacklists</strong>
+                            {blacklists.map(item => (
+                                <div key={item}>❗️ {item}</div>
+                            ))}
                         </div>
                     )}
                 </div>

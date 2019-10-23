@@ -22,8 +22,7 @@
         "close": "Close",
         "collapse_or_expand": "Collapse/Expand",
         "community_settings_header": "Community Settings",
-        "community_settings_description":
-            "Here you can customize this community as you see fit.",
+        "community_settings_description": "What does your community stand for?",
         "community_list_header": "Communities",
         "community_user_role_add_description":
             "Set the role of an account within this community.",
@@ -31,9 +30,9 @@
             "Changing @%(username)s's role.",
         "community_user_role_add_header": "Add User Role",
         "community_user_role_edit_header": "Change User Role",
-        "community_user_title_edit_header": "Change User's Community Title",
+        "community_user_title_edit_header": "Change User Title",
         "community_user_title_edit_description":
-            "Here you may change the title of %(username)s within the community %(community)s.",
+            "Changing @%(username)s's title.",
         "comments": "Comments",
         "confirm": "Confirm",
         "convert": "Convert",

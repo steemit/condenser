@@ -28,7 +28,6 @@ class UserTitleEditor extends Component {
     render() {
         const { title } = this.state;
         const { username, community } = this.props;
-        const submitButtonLabel = 'Save';
 
         return (
             <span>
@@ -43,13 +42,7 @@ class UserTitleEditor extends Component {
                 </div>
                 <hr />
                 <div className="input-group">
-                    <span className="input-group-label">
-                        Title &nbsp;<small>
-                            [<a title="this will be visible on all posts and comments by this user within this community">
-                                ?
-                            </a>]
-                        </small>
-                    </span>{' '}
+                    <span className="input-group-label">Title</span>
                     <input
                         className="input-group-field"
                         type="text"
@@ -67,9 +60,8 @@ class UserTitleEditor extends Component {
                         title={submitButtonLabel}
                         onClick={() => this.onSubmit()}
                     >
-                        {' '}
-                        {submitButtonLabel}{' '}
-                    </button>{' '}
+                        Save
+                    </button>
                 </div>
             </span>
         );

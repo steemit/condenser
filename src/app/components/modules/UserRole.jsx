@@ -64,7 +64,6 @@ class UserRole extends Component {
             availableRoles,
             addUser,
         } = this.props;
-        const submitButtonLabel = 'Save';
 
         const roleSelector = availableRoles.map(role => (
             <option value={role}>{role}</option>
@@ -97,13 +96,7 @@ class UserRole extends Component {
                 <hr />
                 {addUser && (
                     <div className="input-group">
-                        <span className="input-group-label">
-                            Username &nbsp;<small>
-                                [<a title="the username to add to this community">
-                                    ?
-                                </a>]
-                            </small>
-                        </span>{' '}
+                        <span className="input-group-label">Username</span>
                         <input
                             className="input-group-field"
                             type="text"
@@ -115,13 +108,7 @@ class UserRole extends Component {
                     </div>
                 )}
                 <div className="input-group">
-                    <span className="input-group-label">
-                        Role &nbsp;<small>
-                            [<a title="update user role within this community.">
-                                ?
-                            </a>]
-                        </small>
-                    </span>
+                    <span className="input-group-label">Role</span>
                     <select value={newRole} onChange={this.onSelect} required>
                         {roleSelector}
                     </select>
@@ -129,11 +116,9 @@ class UserRole extends Component {
                 <button
                     className="button slim hollow secondary"
                     type="submit"
-                    title={submitButtonLabel}
                     onClick={() => this.onSubmit()}
                 >
-                    {' '}
-                    {submitButtonLabel}{' '}
+                    Save
                 </button>{' '}
                 <div>{message.length > 0 && message}</div>
             </span>

@@ -10,7 +10,7 @@ import Voting from 'app/components/elements/Voting';
 import { immutableAccessor } from 'app/utils/Accessors';
 import { extractBodySummary, extractImageLink } from 'app/utils/ExtractContent';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
-import { Map } from 'immutable';
+import { List, Map } from 'immutable';
 import Author from 'app/components/elements/Author';
 import TagList from 'app/components/elements/TagList';
 import UserNames from 'app/components/elements/UserNames';
@@ -61,10 +61,7 @@ class PostSummary extends React.Component {
         if (!content) return null;
 
         let reblogged_by;
-        if (
-            content.get('reblogged_by') &&
-            content.get('reblogged_by').size > 0
-        ) {
+        if (content.get('reblogged_by', List()).size > 0) {
             reblogged_by = content.get('reblogged_by').toJS();
         }
 
@@ -98,14 +95,7 @@ class PostSummary extends React.Component {
 
         const gray = content.getIn(['stats', 'gray']);
         const isNsfw = hasNsfwTag(content);
-        const special = content.get('special');
         const isReply = content.get('depth') > 0;
-        const desc = extractBodySummary(content.get('body'), isReply);
-        const image_link = extractImageLink(
-            content.get('json_metadata'),
-            content.get('body')
-        );
-
         const showReblog = !content.get('is_paidout') && !isReply;
         const full_power = content.get('percent_steem_dollars') === 0;
 
@@ -114,11 +104,13 @@ class PostSummary extends React.Component {
         const category = content.get('category');
         const post_url = `/${category}/@${author}/${permlink}`;
 
+        const summary = extractBodySummary(content.get('body'), isReply);
         const content_body = (
             <div className="PostSummary__body entry-content">
-                <Link to={post_url}>{desc}</Link>
+                <Link to={post_url}>{summary}</Link>
             </div>
         );
+
         const content_title = (
             <h2 className="articles__h2 entry-title">
                 <Link to={post_url}>
@@ -260,6 +252,10 @@ class PostSummary extends React.Component {
             }
         }
 
+        const image_link = extractImageLink(
+            content.get('json_metadata'),
+            content.get('body')
+        );
         let thumb = null;
         if (!gray && image_link && !ImageUserBlockList.includes(author)) {
             // on mobile, we always use blog layout style -- there's no toggler
@@ -285,11 +281,6 @@ class PostSummary extends React.Component {
             );
         }
 
-        // A post is hidden if it's marked "gray" or "ignore" and it's not
-        // special.
-        const commentClasses = [];
-        if (!special && (gray || ignore)) commentClasses.push('downvoted'); // rephide
-
         return (
             <div className="articles__summary">
                 {reblogged_by}
@@ -298,7 +289,7 @@ class PostSummary extends React.Component {
                     className={
                         'articles__content hentry' +
                         (thumb ? ' with-image ' : ' ') +
-                        commentClasses.join(' ')
+                        (gray || ignore ? ' downvoted' : '')
                     }
                     itemScope
                     itemType="http://schema.org/blogPost"

@@ -1,22 +1,23 @@
 .PostCategoryBanner{
 
   margin: .5em 0 1em;
-  .postTo{
-    small{
+  .postTo {
+    small {
       font-size: 100%;
       color: #666;
-      .smallLabel{
-        color: #ccc;
+      .smallLabel {
+        color: #333;
+        font-weight: bold;
       }
+    }
   }
-}
 
-  .categoryName{
+  .categoryName {
     display: flex;
     justify-content: flex-start;
-align-items: center;
+    align-items: center;
   }
-  h3{
+  h3 {
     line-height: normal !important;
     padding: 0 0 0 .5em;
     overflow: hidden;

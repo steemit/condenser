@@ -57,7 +57,6 @@ class UserTitleEditor extends Component {
                     <button
                         className="button slim hollow secondary"
                         type="submit"
-                        title={submitButtonLabel}
                         onClick={() => this.onSubmit()}
                     >
                         Save

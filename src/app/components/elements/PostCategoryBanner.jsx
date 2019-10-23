@@ -1,36 +1,84 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Userpic from 'app/components/elements/Userpic';
+import { Link } from 'react-router';
 
-export default function PostCategoryBanner(props) {
-    const { label, labelSmall, loading } = props;
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
+import * as transactionActions from 'app/redux/TransactionReducer';
 
-    if (loading) {
-        return <span>Loading...</span>;
+class PostCategoryBanner extends React.Component {
+    componentWillMount() {
+        const { communityName, getCommunity, community } = this.props;
+        if (communityName && !community) getCommunity(communityName);
     }
 
-    return (
-        <div className="PostCategoryBanner column small-12 ">
-            <div className="postTo">
-                <small>
-                    Posting to <span className="smallLabel">{labelSmall}</span>
-                </small>
+    componentDidUpdate(prevProps) {
+        const { communityName, getCommunity, community } = this.props;
+        if (prevProps.communityName != communityName) {
+            if (communityName && !community) getCommunity(communityName);
+        }
+    }
+
+    render() {
+        const { username, community } = this.props;
+        const url = community ? '/trending/' + community.get('name') : null;
+        const label = community ? (
+            <Link to={url}>{community.get('title')}</Link>
+        ) : (
+            `@${username}'s blog`
+        );
+        const onClick = e => {
+            e.preventDefault();
+            this.props.onCancel();
+        };
+
+        return (
+            <div className="PostCategoryBanner column small-12 ">
+                {community && (
+                    <a href="#" onClick={onClick} style={{ float: 'right' }}>
+                        [Post to blog]
+                    </a>
+                )}
+                <div className="postTo">
+                    <small>
+                        Posting to {community ? 'Community: ' : ''}
+                        <span className="smallLabel">{label}</span>
+                    </small>
+                </div>
+                {/*
+                <div className="categoryName">
+                    <Userpic account={currentUser} />
+                    <h3>{label}</h3>
+                </div>
+                */}
             </div>
-            <div className="categoryName">
-                <Userpic account={props.author} />
-                <h3>{label}</h3>
-            </div>
-        </div>
-    );
+        );
+    }
 }
 
-PostCategoryBanner.defaultProps = {
-    labelSmall: '',
+PostCategoryBanner.propTypes = {
+    username: PropTypes.string.isRequired,
+    communityName: PropTypes.string,
+    community: PropTypes.object, // TODO: define shape
+    onCancel: PropTypes.func,
 };
 
-PostCategoryBanner.propTypes = {
-    label: PropTypes.string.isRequired,
-    labelSmall: PropTypes.string,
-    loading: PropTypes.bool.isRequired,
-    author: PropTypes.string.isRequired,
-};
+export default connect(
+    (state, ownProps) => {
+        const username = state.user.getIn(['current', 'username'], null);
+        return {
+            ...ownProps,
+            community: state.global.getIn(
+                ['community', ownProps.communityName],
+                null
+            ),
+            username,
+        };
+    },
+    dispatch => ({
+        getCommunity: communityName => {
+            return dispatch(fetchDataSagaActions.getCommunity(communityName));
+        },
+    })
+)(PostCategoryBanner);

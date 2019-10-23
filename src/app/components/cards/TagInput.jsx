@@ -34,27 +34,24 @@ class TagInput extends React.Component {
         const impProps = { ...this.props };
         const inputSanitized = cleanReduxInput(impProps);
 
-        const allTags = inputSanitized.value.split(' ');
-        // Strip tags containing 'hive-'
-        const tagsToDisplay = allTags.filter(tag => {
-            return !tag.includes('hive-');
-        });
-        const hiddenTags = allTags.filter(tag => !tagsToDisplay.includes(tag));
+        const tags = inputSanitized.value.split(' ');
+        const hidden = [];
+        if (tags && tags[0].substring(0, 5) == 'hive-')
+            hidden.push(tags.shift());
+        const value = tags.join(' ');
 
         const input = (
             <input
                 type="text"
+                value={value}
                 onChange={e => {
                     e.preventDefault();
                     // Re-insert any hidden tags first.
-                    const newTags = hiddenTags
-                        .concat(e.target.value.split(' '))
-                        .join(' ');
                     const updatedEvent = {
                         ...e,
                         target: {
                             ...e.target,
-                            value: newTags,
+                            value: hidden.concat([e.target.value]).join(' '),
                         },
                     };
                     onChange(updatedEvent);
@@ -72,7 +69,10 @@ class TagInput extends React.Component {
 export function validateTagInput(value, required = true) {
     if (!value || value.trim() === '')
         return required ? tt('g.required') : null;
-    const cats = value.trim().split(' ');
+    const cats = value
+        .trim()
+        .replace(/#/g, '')
+        .split(/ +/);
     return (
         // !value || value.trim() === '' ? 'Required' :
         cats.length > MAX_TAGS

@@ -30,22 +30,35 @@ class TagInput extends React.Component {
     }
 
     render() {
-        const { tabIndex, disabled } = this.props;
+        const { tabIndex, disabled, onChange } = this.props;
         const impProps = { ...this.props };
         const inputSanitized = cleanReduxInput(impProps);
+
+        const allTags = inputSanitized.value.split(' ');
         // Strip tags containing 'hive-'
-        const freshTags = inputSanitized.value
-            .split(' ')
-            .filter(tag => {
-                return !tag.includes('hive-');
-            })
-            .join(' ');
+        const tagsToDisplay = allTags.filter(tag => {
+            return !tag.includes('hive-');
+        });
+        const hiddenTags = allTags.filter(tag => !tagsToDisplay.includes(tag));
 
         const input = (
             <input
                 type="text"
-                {...inputSanitized}
-                value={freshTags}
+                onChange={e => {
+                    e.preventDefault();
+                    // Re-insert any hidden tags first.
+                    const newTags = hiddenTags
+                        .concat(e.target.value.split(' '))
+                        .join(' ');
+                    const updatedEvent = {
+                        ...e,
+                        target: {
+                            ...e.target,
+                            value: newTags,
+                        },
+                    };
+                    onChange(updatedEvent);
+                }}
                 ref="tagInputRef"
                 tabIndex={tabIndex}
                 disabled={disabled}

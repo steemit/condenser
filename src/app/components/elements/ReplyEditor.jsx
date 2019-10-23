@@ -147,11 +147,14 @@ class ReplyEditor extends React.Component {
     checkTagsCommunity(tagsInput) {
         let community = null;
         if (tagsInput) {
-            const primary = tagsInput.split(' ')[0];
-            if (primary.substring(0, 5) == 'hive-') {
-                community = primary;
+            const comm = tagsInput.split(' ').filter(tag => {
+                return tag.includes('hive-');
+            });
+            if (comm.length > 0) {
+                community = comm[0]; // If multiple tags including 'hive-' are found, use the first that is found...
             }
         }
+
         this.setState({ community });
     }
 
@@ -459,7 +462,6 @@ class ReplyEditor extends React.Component {
             ? 'vframe__section--shrink'
             : '';
         const RichTextEditor = this.props.richTextEditor;
-
         return (
             <div className="ReplyEditor row">
                 {isStory &&
@@ -636,6 +638,7 @@ class ReplyEditor extends React.Component {
                                 <span>
                                     <TagInput
                                         {...tags.props}
+                                        onChange={tags.props.onChange}
                                         disabled={loading}
                                         isEdit={isEdit}
                                         tabIndex={3}
@@ -845,6 +848,7 @@ function stateFromMarkdown(RichTextEditor, markdown) {
 }
 
 import { connect } from 'react-redux';
+
 const richTextEditor = process.env.BROWSER
     ? require('react-rte-image').default
     : null;

@@ -52,7 +52,7 @@ export function sortComments(cont, comments, sort_order) {
 }
 
 function commentUrl(post, rootRef) {
-    const root = rootRef ? `@{rootRef}#` : '';
+    const root = rootRef ? `@${rootRef}#` : '';
     return `/${post.category}/${root}@${post.author}/${post.permlink}`;
 }
 

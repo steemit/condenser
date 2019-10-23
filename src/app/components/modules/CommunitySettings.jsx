@@ -45,7 +45,6 @@ class CommunitySettings extends Component {
                     <h4>{tt('g.community_settings_header')}</h4>
                     <p>{tt('g.community_settings_description')}</p>
                 </div>
-                <hr />
                 <form onSubmit={this.onSubmit}>
                     <label className="input-group">
                         <span className="input-group-label">Title </span>
@@ -71,20 +70,9 @@ class CommunitySettings extends Component {
                             onChange={e => this.onInput(e)}
                         />
                     </label>
-                    <label className="input-group">
-                        <span className="input-group-label">NSFW? </span>
-                        <input
-                            className="input-group-field"
-                            type="checkbox"
-                            name="is_nsfw"
-                            checked={is_nsfw}
-                            onChange={e => this.onInput(e)}
-                        />
-                    </label>
-                    <label className="input-group">
-                        <span className="input-group-label">Description </span>
+                    <label style={{ margin: '0 0 1rem' }}>
+                        Description<br />
                         <textarea
-                            className="input-group-field"
                             style={{ whiteSpace: 'normal' }}
                             type="text"
                             maxLength={1000}
@@ -94,24 +82,30 @@ class CommunitySettings extends Component {
                             value={description}
                         />
                     </label>
-                    <label className="input-group">
-                        <span className="input-group-label">Flag Text </span>
+                    <label style={{ margin: '0 0 0.5rem' }}>
+                        Flag Text<br />
                         <textarea
-                            className="input-group-field"
                             style={{ whiteSpace: 'normal' }}
                             type="text"
                             maxLength={1000}
-                            rows="10"
+                            rows="7"
                             onChange={e => this.onInput(e)}
                             name="flag_text"
                             value={flag_text}
                         />
                     </label>
-                    <input
-                        className="button slim hollow secondary"
-                        type="submit"
-                        value="Save"
-                    />
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="is_nsfw"
+                            checked={is_nsfw}
+                            onChange={e => this.onInput(e)}
+                        />{' '}
+                        NSFW
+                    </label>
+                    <div className="text-right">
+                        <input className="button" type="submit" value="Save" />
+                    </div>
                 </form>
             </span>
         );

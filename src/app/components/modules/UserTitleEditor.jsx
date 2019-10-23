@@ -32,13 +32,13 @@ class UserTitleEditor extends Component {
         return (
             <span>
                 <div>
-                    <h4>{tt('g.community_user_title_edit_header')}</h4>
-                    <p>
+                    {/*<h4>{tt('g.community_user_title_edit_header')}</h4>*/}
+                    <h4>
                         {tt('g.community_user_title_edit_description', {
                             community: community,
                             username: username,
                         })}
-                    </p>
+                    </h4>
                 </div>
                 <hr />
                 <div className="input-group">
@@ -53,9 +53,9 @@ class UserTitleEditor extends Component {
                     />
                 </div>
 
-                <div className="input-group">
+                <div className="text-right">
                     <button
-                        className="button slim hollow secondary"
+                        className="button"
                         type="submit"
                         onClick={() => this.onSubmit()}
                     >

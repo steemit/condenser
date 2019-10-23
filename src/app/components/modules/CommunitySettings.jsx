@@ -39,7 +39,6 @@ class CommunitySettings extends Component {
 
     render() {
         const { title, about, is_nsfw, description, flag_text } = this.state;
-        const submitButtonLabel = 'Save';
         return (
             <span>
                 <div>
@@ -111,8 +110,7 @@ class CommunitySettings extends Component {
                     <input
                         className="button slim hollow secondary"
                         type="submit"
-                        title={submitButtonLabel}
-                        value={submitButtonLabel}
+                        value="Save"
                     />
                 </form>
             </span>

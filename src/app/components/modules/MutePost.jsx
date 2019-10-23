@@ -28,9 +28,6 @@ class MutePost extends Component {
         const { notes, disableSubmit } = this.state;
         const { isMuted } = this.props;
 
-        let submitButtonLabel = tt('g.mute');
-        if (isMuted) submitButtonLabel = tt('g.unmute');
-
         return (
             <span>
                 {isMuted ? (
@@ -61,11 +58,10 @@ class MutePost extends Component {
                     <button
                         className="button slim hollow secondary"
                         type="submit"
-                        title={submitButtonLabel}
                         disabled={disableSubmit}
                         onClick={() => this.onSubmit()}
                     >
-                        {submitButtonLabel}
+                        {isMuted ? tt('g.unmute') : tt('g.mute')}
                     </button>
                 </div>
             </span>

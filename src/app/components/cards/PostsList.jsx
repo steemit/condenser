@@ -137,6 +137,7 @@ class PostsList extends React.Component {
             anyPosts,
             pathname,
             category,
+            order,
             content,
             ignore_result,
             account,
@@ -241,20 +242,23 @@ class PostsList extends React.Component {
 
         const renderSummary = items =>
             items.map((item, i) => {
+                const ps = (
+                    <PostSummary
+                        account={account}
+                        post={item.item}
+                        thumbSize={thumbSize}
+                        ignore={item.ignore}
+                        nsfwPref={nsfwPref}
+                        hideCategory={hideCategory}
+                        order={order}
+                    />
+                );
+
                 const every = this.props.adSlots.in_feed_1.every;
                 if (this.props.shouldSeeAds && i >= every && i % every === 0) {
                     return (
                         <div key={item.item}>
-                            <li>
-                                <PostSummary
-                                    account={account}
-                                    post={item.item}
-                                    thumbSize={thumbSize}
-                                    ignore={item.ignore}
-                                    nsfwPref={nsfwPref}
-                                    hideCategory={hideCategory}
-                                />
-                            </li>
+                            <li>{ps}</li>
 
                             <div className="articles__content-block--ad">
                                 <GptAd
@@ -266,18 +270,7 @@ class PostsList extends React.Component {
                         </div>
                     );
                 }
-                return (
-                    <li key={item.item}>
-                        <PostSummary
-                            account={account}
-                            post={item.item}
-                            thumbSize={thumbSize}
-                            ignore={item.ignore}
-                            nsfwPref={nsfwPref}
-                            hideCategory={hideCategory}
-                        />
-                    </li>
-                );
+                return <li key={item.item}>{ps}</li>;
             });
 
         return (

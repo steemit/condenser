@@ -150,8 +150,15 @@ class PostSummary extends React.Component {
                         )}
                         <Link className="timestamp__link" to={post_url}>
                             <span className="timestamp__time">
+                                {this.props.order == 'payout' && (
+                                    <span>payout </span>
+                                )}
                                 <TimeAgoWrapper
-                                    date={content.get('created')}
+                                    date={
+                                        this.props.order == 'payout'
+                                            ? content.get('payout_at')
+                                            : content.get('created')
+                                    }
                                     className="updated"
                                 />
                             </span>

@@ -149,7 +149,11 @@ class PostsList extends React.Component {
         const postsInfo = [];
         posts.forEach(item => {
             const cont = content.get(item);
-            if (!cont) throw 'PostsList --> Missing cont key: ' + item;
+            if (!cont) {
+                // can occur when deleting a post
+                console.error('PostsList --> Missing cont key: ' + item);
+                return;
+            }
             const author = cont.get('author');
             const ignore = ignore_result && ignore_result.has(author);
             const hideResteem = !showResteem && account && author != account;

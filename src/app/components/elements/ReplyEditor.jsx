@@ -7,7 +7,7 @@ import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import TagInput from 'app/components/cards/TagInput';
 import { validateTagInput } from 'app/components/cards/TagInput';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import PostCategoryBannerContainer from 'app/components/elements/PostCategoryBannerContainer';
+import PostCategoryBanner from 'app/components/elements/PostCategoryBanner';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
 import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
@@ -153,6 +153,15 @@ class ReplyEditor extends React.Component {
             }
         }
         this.setState({ community });
+    }
+
+    shiftTagInput() {
+        const { tags } = this.state;
+        const value = tags.value
+            .split(' ')
+            .slice(1)
+            .join(' ');
+        tags.props.onChange(value);
     }
 
     componentDidMount() {
@@ -464,10 +473,10 @@ class ReplyEditor extends React.Component {
             <div className="ReplyEditor row">
                 {isStory &&
                     !isEdit && (
-                        <PostCategoryBannerContainer
+                        <PostCategoryBanner
                             communityName={community}
                             username={username}
-                            isCommunity={!!community}
+                            onCancel={this.shiftTagInput.bind(this)}
                         />
                     )}
                 <div className="column small-12">

@@ -254,7 +254,8 @@ export async function serverRender(
 
     let server_store, onchain;
     try {
-        const url = location;
+        // TODO: handle trending/Kittens -- redirect?
+        const url = location.toLowerCase();
 
         requestTimer.startTimer('apiFetchState_ms');
         onchain = await apiFetchState(url);
@@ -262,8 +263,6 @@ export async function serverRender(
 
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
-
-        // TODO: check acct valid server side
         if (
             (url.match(routeRegex.UserProfile1) ||
                 url.match(routeRegex.UserProfile2)) &&

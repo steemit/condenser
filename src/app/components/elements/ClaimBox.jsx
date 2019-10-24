@@ -99,9 +99,7 @@ const mapDispatchToProps = dispatch => {
         claimRewards: account => {
             const username = account.get('name');
             const successCallback = () => {
-                dispatch(
-                    globalActions.getState({ url: `@${username}/transfers` })
-                );
+                // TODO: do something here...
             };
             const operation = {
                 account: username,

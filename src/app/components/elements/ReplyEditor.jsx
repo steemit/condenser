@@ -150,6 +150,7 @@ class ReplyEditor extends React.Component {
             const primary = tagsInput.split(' ')[0];
             if (primary.substring(0, 5) == 'hive-') {
                 community = primary;
+                this.setState({ disabledCommunity: null });
             }
         }
         this.setState({ community });
@@ -157,11 +158,14 @@ class ReplyEditor extends React.Component {
 
     shiftTagInput() {
         const { tags } = this.state;
-        const value = tags.value
-            .split(' ')
-            .slice(1)
-            .join(' ');
-        tags.props.onChange(value);
+        const items = tags.value.split(' ');
+        this.setState({ disabledCommunity: items.shift() });
+        tags.props.onChange(items.join(' '));
+    }
+
+    unshiftTagInput(tag) {
+        const { tags } = this.state;
+        tags.props.onChange(tag + ' ' + tags.value);
     }
 
     componentDidMount() {
@@ -383,7 +387,7 @@ class ReplyEditor extends React.Component {
             body: this.props.body,
         };
         const { onCancel, onTitleChange } = this;
-        const { title, tags, body, community } = this.state;
+        const { title, tags, body, community, disabledCommunity } = this.state;
         const {
             reply,
             username,
@@ -475,8 +479,10 @@ class ReplyEditor extends React.Component {
                     !isEdit && (
                         <PostCategoryBanner
                             communityName={community}
+                            disabledCommunity={disabledCommunity}
                             username={username}
                             onCancel={this.shiftTagInput.bind(this)}
+                            onUndo={this.unshiftTagInput.bind(this)}
                         />
                     )}
                 <div className="column small-12">

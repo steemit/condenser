@@ -252,7 +252,7 @@ class PostsIndex extends React.Component {
                                 subscriptions={subscriptions}
                             />
                         )}
-                    {!community && <Notices />}
+                    {false && !community && <Notices />}
                     {!category && <SteemMarket />}
                     {allowAdsOnContent && (
                         <div className="sidebar-ad">

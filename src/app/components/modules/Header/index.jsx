@@ -126,7 +126,6 @@ class Header extends React.Component {
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
         let gptTags = [];
-        let home_account = false;
         let page_title = route.page;
         let sort_order = '';
         let topic = '';
@@ -134,13 +133,7 @@ class Header extends React.Component {
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
-                page_title = tt('header_jsx.home');
-                const account_name = route.params[1];
-                if (
-                    current_account_name &&
-                    account_name.indexOf(current_account_name) === 1
-                )
-                    home_account = true;
+                page_title = 'My Friends'; //tt('header_jsx.home');
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
                 gptTags = [topic];
@@ -156,6 +149,7 @@ class Header extends React.Component {
                         [topic, 'title'],
                         '#' + topic
                     );
+                    if (name == '#my') name = 'My Communities';
                     page_title = `${name} / ${page_title}`;
                 } else {
                     page_title += ' posts';

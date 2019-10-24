@@ -4,8 +4,9 @@ import tt from 'counterpart';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 
+const nothingToClaim = 'No rewards pending redemption.';
+
 const getRewardsString = account => {
-    console.log('ACCOUNT2', account);
     const reward_steem =
         parseFloat(account.get('reward_steem_balance').split(' ')[0]) > 0
             ? account.get('reward_steem_balance')
@@ -36,33 +37,61 @@ const getRewardsString = account => {
             rewards_str = `${rewards[0]}`;
             break;
         default:
-            rewards_str = 'No steem, sbd, sp rewards found.';
+            rewards_str = nothingToClaim;
     }
     return rewards_str;
 };
 
 class ClaimBox extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             claimInProgress: false,
+            rewards_str: props.account
+                ? getRewardsString(props.account)
+                : 'Loading...',
         };
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.account !== prevProps.account) {
+            const rewards_str = this.props.account
+                ? getRewardsString(this.props.account)
+                : 'Loading...';
+            this.setState({
+                rewards_str,
+            });
+            if (rewards_str === nothingToClaim) {
+                this.setState({
+                    claimInProgress: true, // Disable claim button if nothing to claim.
+                });
+            }
+        }
+    }
+
+    claimRewardsSuccess = () => {
+        this.setState({
+            claimInProgress: false,
+            rewards_str: 'Claim Successful.',
+        });
+    };
+
     handleClaimRewards = account => {
-        this.setState({ claimInProgress: true }); // disable the claim button
-        this.props.claimRewards(account);
+        this.setState({
+            claimInProgress: true,
+        }); // disable the claim button
+        this.props.claimRewards(account, this.claimRewardsSuccess);
     };
 
     render() {
         const { account } = this.props;
-        const rewards_str = account ? getRewardsString(account) : 'Checking...';
+
         return (
             <div className="row">
                 <div className="columns small-12">
                     <div className="UserWallet__claimbox">
                         <span className="UserWallet__claimbox-text">
-                            Your current rewards: {rewards_str}
+                            Your current rewards: {this.state.rewards_str}
                         </span>
                         <button
                             disabled={this.state.claimInProgress}
@@ -96,10 +125,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        claimRewards: account => {
+        claimRewards: (account, successCB) => {
             const username = account.get('name');
             const successCallback = () => {
                 // TODO: do something here...
+                successCB();
             };
             const operation = {
                 account: username,

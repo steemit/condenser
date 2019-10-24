@@ -300,7 +300,7 @@ export default class UserProfile extends React.Component {
             ? 'layout-block'
             : 'layout-list';
 
-        const tab_header = (
+        const tab_header = page_title && (
             <div>
                 <div className="articles__header">
                     <div className="articles__header-col">

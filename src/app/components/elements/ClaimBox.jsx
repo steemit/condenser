@@ -46,6 +46,8 @@ class ClaimBox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            claimed: false,
+            empty: true,
             claimInProgress: false,
             rewards_str: props.account
                 ? getRewardsString(props.account)
@@ -60,19 +62,15 @@ class ClaimBox extends React.Component {
                 : 'Loading...';
             this.setState({
                 rewards_str,
+                empty: rewards_str == nothingToClaim,
             });
-            if (rewards_str === nothingToClaim) {
-                this.setState({
-                    claimInProgress: true, // Disable claim button if nothing to claim.
-                });
-            }
         }
     }
 
     claimRewardsSuccess = () => {
         this.setState({
             claimInProgress: false,
-            rewards_str: 'Claim Successful.',
+            claimed: true,
         });
     };
 
@@ -85,25 +83,34 @@ class ClaimBox extends React.Component {
 
     render() {
         const { account } = this.props;
+        if (this.state.empty) return null;
 
         return (
-            <div className="row">
+            <div className="row" style={{ margin: '0 0 1.5em' }}>
                 <div className="columns small-12">
-                    <div className="UserWallet__claimbox">
-                        <span className="UserWallet__claimbox-text">
-                            Your current rewards: {this.state.rewards_str}
-                        </span>
-                        <button
-                            disabled={this.state.claimInProgress}
-                            className="button"
-                            onClick={e => {
-                                e.preventDefault();
-                                this.handleClaimRewards(account);
-                            }}
-                        >
-                            {tt('userwallet_jsx.redeem_rewards')}
-                        </button>
-                    </div>
+                    {this.state.claimed ? (
+                        <div className="UserWallet__claimbox">
+                            <span className="UserWallet__claimbox-text">
+                                Claim successful.
+                            </span>
+                        </div>
+                    ) : (
+                        <div className="UserWallet__claimbox">
+                            <span className="UserWallet__claimbox-text">
+                                Your current rewards: {this.state.rewards_str}
+                            </span>
+                            <button
+                                disabled={this.state.claimInProgress}
+                                className="button"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    this.handleClaimRewards(account);
+                                }}
+                            >
+                                {tt('userwallet_jsx.redeem_rewards')}
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         );

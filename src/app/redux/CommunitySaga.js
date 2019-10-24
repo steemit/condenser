@@ -1,21 +1,9 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { broadcast } from '@steemit/steem-js';
 import * as reducer from 'app/redux/CommunityReducer';
 import { findSigningKey } from 'app/redux/AuthSaga';
 import { getCommunity } from 'app/redux/FetchDataSaga';
 import { callBridge } from 'app/utils/steemApi';
-
-const customOp = (action, params, actor_name) => {
-    return [
-        'custom_json',
-        {
-            required_auths: [],
-            required_posting_auths: [actor_name],
-            id: 'community',
-            json: JSON.stringify([action, params]),
-        },
-    ];
-};
+import * as transactionActions from './TransactionReducer';
 
 export const communityWatches = [
     takeEvery('community/LOAD_COMMUNITY_ROLES', loadCommunityRoles),
@@ -38,13 +26,19 @@ export function* updateUserRole(action) {
         const username = yield select(state =>
             state.user.getIn(['current', 'username'])
         );
-        const signingKey = yield call(findSigningKey, {
-            opType: 'custom_json',
-            username,
-        });
 
-        const operations = [customOp('setRole', action.payload, username)];
-        yield broadcast.sendAsync({ extensions: [], operations }, [signingKey]);
+        yield put(
+            transactionActions.broadcastOperation({
+                type: 'custom_json',
+                operation: {
+                    id: 'community',
+                    required_posting_auths: [username],
+                    json: JSON.stringify(['setRole', action.payload]),
+                },
+                //successCallback,
+                //errorCallback,
+            })
+        );
 
         yield put(reducer.applyUserRole(action.payload));
     } catch (error) {

@@ -21,7 +21,7 @@ class PostCategoryBanner extends React.Component {
     }
 
     render() {
-        const { username, community } = this.props;
+        const { username, community, disabledCommunity } = this.props;
         const url = community ? '/trending/' + community.get('name') : null;
         const label = community ? (
             <Link to={url}>{community.get('title')}</Link>
@@ -32,12 +32,21 @@ class PostCategoryBanner extends React.Component {
             e.preventDefault();
             this.props.onCancel();
         };
+        const onUndo = e => {
+            e.preventDefault();
+            this.props.onUndo(disabledCommunity);
+        };
 
         return (
             <div className="PostCategoryBanner column small-12 ">
                 {community && (
                     <a href="#" onClick={onClick} style={{ float: 'right' }}>
                         [Post to blog]
+                    </a>
+                )}
+                {disabledCommunity && (
+                    <a href="#" onClick={onUndo} style={{ float: 'right' }}>
+                        [Post to Community]
                     </a>
                 )}
                 <div className="postTo">

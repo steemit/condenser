@@ -200,8 +200,8 @@ class CommunityRoles extends React.Component {
         return (
             <div className="CommunityRoles">
                 <div className="row">
-                    <div className="column large-3" />
-                    <div className="column large-6">
+                    <div className="column large-3 medium-2 small-0" />
+                    <div className="column large-6 medium-8 small-12">
                         <h3>
                             <Link to={`/trending/${community}`}>
                                 {commName || community}

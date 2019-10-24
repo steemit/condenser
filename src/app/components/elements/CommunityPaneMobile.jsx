@@ -17,6 +17,16 @@ class CommunityPaneMobile extends Component {
         const category = community.get('name');
         const viewer_role = community.getIn(['context', 'role'], 'guest');
 
+        const settings = Role.atLeast(viewer_role, 'admin') && (
+            <SettingsEditButton community={community.get('name')}>
+                Settings
+            </SettingsEditButton>
+        );
+
+        const roles = Role.atLeast(viewer_role, 'mod') && (
+            <Link to={`/roles/${category}`}>Roles</Link>
+        );
+
         return (
             <div>
                 <div className="c-sidebar__module CommunityPaneMobile">
@@ -28,6 +38,18 @@ class CommunityPaneMobile extends Component {
                             className="column large-5 medium-12 small-12"
                             style={{ textAlign: 'left' }}
                         >
+                            {roles && (
+                                <div style={{ float: 'right' }}>
+                                    Mod{': '}
+                                    {roles}
+                                    {settings && (
+                                        <span>
+                                            {' / '}
+                                            {settings}
+                                        </span>
+                                    )}
+                                </div>
+                            )}
                             <h3 className="c-sidebar__h3">
                                 {community.get('title')}
                             </h3>

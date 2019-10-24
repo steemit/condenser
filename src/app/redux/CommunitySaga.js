@@ -1,6 +1,5 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
 import * as reducer from 'app/redux/CommunityReducer';
-import { findSigningKey } from 'app/redux/AuthSaga';
 import { getCommunity } from 'app/redux/FetchDataSaga';
 import { callBridge } from 'app/utils/steemApi';
 import * as transactionActions from './TransactionReducer';

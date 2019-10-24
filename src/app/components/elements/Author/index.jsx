@@ -29,6 +29,7 @@ const fnCloseAll = () => {
 class Author extends React.Component {
     static propTypes = {
         author: string.isRequired,
+        hideEditor: bool,
         follow: bool,
         mute: bool,
         authorRep: number,
@@ -123,6 +124,7 @@ class Author extends React.Component {
                         permlink={permlink}
                         role={role}
                         title={title}
+                        hideEdit={this.props.hideEditor}
                     />
                 )}
                 {showAffiliation && AffiliationMap[author] ? (

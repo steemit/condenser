@@ -92,7 +92,6 @@ export function* broadcastOperation({
         return;
     }
 
-    console.log('broadcastOperation', operationParam);
     const payload = {
         operations: [[type, operation]],
         keys,
@@ -185,6 +184,8 @@ function* broadcastPayload({
     payload: { operations, keys, username, successCallback, errorCallback },
 }) {
     let needsActiveAuth = false;
+
+    console.log('broadcastPayload', payload);
 
     // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;

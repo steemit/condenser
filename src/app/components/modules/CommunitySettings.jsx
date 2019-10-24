@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import Unicode from 'app/utils/Unicode';
 import tt from 'counterpart';
 import { throws } from 'assert';
 
@@ -22,6 +23,14 @@ class CommunitySettings extends Component {
         const field = el.name;
         const value = el.hasOwnProperty('checked') ? el.checked : el.value;
         this.setState({ [field]: value });
+
+        if (field == 'title') {
+            let formError = null;
+            const rx = new RegExp('^[' + Unicode.L + ']');
+            if (value && !rx.test(value))
+                formError = 'Must start with a letter.';
+            this.setState({ formError });
+        }
     };
 
     onSubmit = e => {
@@ -33,12 +42,18 @@ class CommunitySettings extends Component {
                 payload[k] = this.state[k].trim();
             else payload[k] = this.state[k];
         });
-        console.log('payload', payload);
         this.props.onSubmit(payload);
     };
 
     render() {
-        const { title, about, is_nsfw, description, flag_text } = this.state;
+        const {
+            title,
+            about,
+            is_nsfw,
+            description,
+            flag_text,
+            formError,
+        } = this.state;
         return (
             <span>
                 <div>
@@ -46,13 +61,14 @@ class CommunitySettings extends Component {
                     <p>{tt('g.community_settings_description')}</p>
                 </div>
                 <form onSubmit={this.onSubmit}>
+                    {formError && <span className="error">{formError}</span>}
                     <label className="input-group">
                         <span className="input-group-label">Title </span>
                         <input
                             className="input-group-field"
                             type="text"
-                            maxLength={32}
-                            minLength={4}
+                            maxLength={20}
+                            minLength={3}
                             name="title"
                             value={title}
                             onChange={e => this.onInput(e)}

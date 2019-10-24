@@ -13,7 +13,12 @@ export default class CommunitiesIndex extends React.Component {
     };
 
     render() {
-        const { communities, communities_idx } = this.props;
+        const {
+            communities,
+            communities_idx,
+            username,
+            walletUrl,
+        } = this.props;
         const ordered = communities_idx.map(name => communities.get(name));
 
         if (communities_idx.length == 0) {
@@ -40,13 +45,23 @@ export default class CommunitiesIndex extends React.Component {
 
         return (
             <div className="CommunitiesIndex row">
-                <h4>
-                    {<Link to={`/`}>Home</Link>} &gt;{' '}
-                    {tt('g.community_list_header')}
-                </h4>
-                <table>
-                    <tbody>{ordered.map(comm => row(comm.toJS()))}</tbody>
-                </table>
+                <div className="column">
+                    {username && (
+                        <div style={{ float: 'right' }}>
+                            <a href={`${walletUrl}/@${username}/communities`}>
+                                Create a Community
+                            </a>
+                        </div>
+                    )}
+                    <h4>
+                        {/* {<Link to={`/`}>Home</Link>} &gt;{' '} */}
+                        {tt('g.community_list_header')}
+                    </h4>
+                    <hr />
+                    <table>
+                        <tbody>{ordered.map(comm => row(comm.toJS()))}</tbody>
+                    </table>
+                </div>
             </div>
         );
     }
@@ -56,6 +71,7 @@ module.exports = {
     path: 'communities(/:username)',
     component: connect(
         state => ({
+            walletUrl: state.app.get('walletUrl'),
             username: state.user.getIn(['current', 'username']),
             communities: state.global.get('community', Map()),
             communities_idx: state.global.get('community_idx', List()),

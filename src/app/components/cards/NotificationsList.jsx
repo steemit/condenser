@@ -7,6 +7,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import ClaimBox from 'app/components/elements/ClaimBox';
 
 class NotificationsList extends React.Component {
     static propTypes = {
@@ -49,7 +50,12 @@ class NotificationsList extends React.Component {
     };
 
     render() {
-        const { notifications, loading } = this.props;
+        const {
+            notifications,
+            loading,
+            isOwnAccount,
+            accountName,
+        } = this.props;
 
         const renderItem = item => (
             <div>
@@ -73,6 +79,7 @@ class NotificationsList extends React.Component {
 
         return (
             <div id="posts_list" className="PostsList">
+                {isOwnAccount && <ClaimBox accountName={accountName} />}
                 {notifications && (
                     <ul className="PostsList__summaries hfeed" itemScope>
                         {notifications
@@ -108,8 +115,13 @@ class NotificationsList extends React.Component {
 
 export default connect(
     (state, props) => {
+        const accountName = props.username;
+        const isOwnAccount =
+            state.user.getIn(['current', 'username'], '') == accountName;
         return {
             ...props,
+            isOwnAccount,
+            accountName,
         };
     },
     dispatch => ({

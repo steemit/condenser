@@ -185,7 +185,7 @@ function* broadcastPayload({
 }) {
     let needsActiveAuth = false;
 
-    console.log('broadcastPayload', payload);
+    console.log('broadcastPayload', operations, username);
 
     // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;

@@ -83,6 +83,7 @@ class ClaimBox extends React.Component {
 
     render() {
         const { account } = this.props;
+        if (!account) return null;
         if (this.state.empty) return null;
 
         return (

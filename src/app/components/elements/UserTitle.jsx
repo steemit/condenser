@@ -40,15 +40,15 @@ class UserTitle extends React.Component {
     };
 
     render() {
-        const { title, role, viewer_role } = this.props;
+        const { title, role, viewer_role, hideEdit } = this.props;
         const isMod = Role.atLeast(viewer_role, 'mod');
         const showRole = role && (isMod || role != 'guest');
-        const showTitle = isMod || title != '';
+        const showTitle = title != '' || (isMod && !hideEdit);
 
         if (!showRole || !showTitle) return null;
 
         let editor;
-        if (isMod) {
+        if (isMod && !hideEdit) {
             const { author, community, username } = this.props;
             const { showDialog } = this.state;
             editor = (

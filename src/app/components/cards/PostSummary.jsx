@@ -138,7 +138,11 @@ class PostSummary extends React.Component {
                     ) : null}
                     <div className="user__col user__col--right">
                         <span className="user__name">
-                            <Author post={content} follow={false} />
+                            <Author
+                                post={content}
+                                follow={false}
+                                hideEditor={true}
+                            />
                         </span>
 
                         {hideCategory || (

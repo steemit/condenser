@@ -135,7 +135,7 @@ class Header extends React.Component {
             if (sort_order === 'home') {
                 page_title = 'My Friends'; //tt('header_jsx.home');
             } else {
-                topic = route.params.length > 1 ? route.params[1] : '';
+                topic = route.params.length > 1 ? route.params[1] || '' : '';
                 gptTags = [topic];
 
                 let prefix = route.params[0];

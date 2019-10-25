@@ -236,7 +236,7 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, post, postref, viewer_role },
+            props: { username, post, postref, community, viewer_role },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
@@ -401,14 +401,15 @@ class PostFull extends React.Component {
             );
         }
 
-        const showReblog = !post.get('is_paidout') && !isReply;
-        const showPromote = false && !post.get('is_paidout') && !isReply;
-        const showPinToggle =
+        const allowReply = Role.canComment(community, viewer_role);
+        const canReblog = !post.get('is_paidout') && !isReply;
+        const canPromote = false && !post.get('is_paidout') && !isReply;
+        const canPin =
             post.get('depth') == 0 && Role.atLeast(viewer_role, 'mod');
-        const showMuteToggle = Role.atLeast(viewer_role, 'mod');
-        const showReplyOption = username && post.get('depth') < 255;
-        const showEditOption = username === author && !showEdit;
-        const showDeleteOption = username === author && allowDelete(post);
+        const canMute = username && Role.atLeast(viewer_role, 'mod');
+        const canReply = username && allowReply && post.get('depth') < 255;
+        const canEdit = username === author && !showEdit;
+        const canDelete = username === author && allowDelete(post);
 
         const isPinned = post.getIn(['stats', 'is_pinned'], false);
 
@@ -450,7 +451,7 @@ class PostFull extends React.Component {
                     </span>
                 )}
 
-                {showPromote &&
+                {canPromote &&
                     username && (
                         <button
                             className="Promote__button float-right button hollow tiny"
@@ -466,26 +467,26 @@ class PostFull extends React.Component {
                         <Voting post={postref} />
                     </div>
                     <div className="RightShare__Menu small-11 medium-12 large-6 columns">
-                        {showReblog && (
+                        {canReblog && (
                             <Reblog author={author} permlink={permlink} />
                         )}
                         <span className="PostFull__reply">
                             {/* all */}
-                            {showReplyOption && (
+                            {canReply && (
                                 <a onClick={onShowReply}>{tt('g.reply')}</a>
                             )}{' '}
                             {/* mods */}
-                            {showPinToggle && (
+                            {canPin && (
                                 <a onClick={() => this.onTogglePin(isPinned)}>
                                     {isPinned ? tt('g.unpin') : tt('g.pin')}
                                 </a>
                             )}{' '}
-                            {showMuteToggle && <MuteButton post={post} />}{' '}
+                            {canMute && <MuteButton post={post} />}{' '}
                             {/* owner */}
-                            {showEditOption && (
+                            {canEdit && (
                                 <a onClick={onShowEdit}>{tt('g.edit')}</a>
                             )}{' '}
-                            {showDeleteOption && (
+                            {canDelete && (
                                 <a onClick={onDeletePost}>{tt('g.delete')}</a>
                             )}
                         </span>

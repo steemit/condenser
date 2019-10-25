@@ -17,7 +17,6 @@ import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
 import { repLog10, parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList';
-import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
@@ -524,12 +523,6 @@ class PostFull extends React.Component {
                                 />
                                 {content.children}
                             </Link>
-                        </span>
-                        <span className="PostFull__views">
-                            <PageViewsCounter
-                                hidden={false}
-                                sinceDate={isPreViewCount ? 'Dec 2016' : null}
-                            />
                         </span>
                         <ShareMenu menu={share_menu} />
                         <button

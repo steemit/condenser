@@ -195,8 +195,7 @@ class Header extends React.Component {
                     username: user_title,
                 });
             }
-            // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-            if (route.params[1] === 'posts' || route.params[1] === 'comments') {
+            if (route.params[1] === 'comments') {
                 page_title = tt('header_jsx.comments_by', {
                     username: user_title,
                 });
@@ -217,12 +216,8 @@ class Header extends React.Component {
         )
             document.title = page_title + ' — ' + APP_NAME;
 
-        const logo_link =
-            resolveRoute(pathname).params &&
-            resolveRoute(pathname).params.length > 1 &&
-            this.last_sort_order
-                ? '/' + this.last_sort_order
-                : current_account_name ? `/@${current_account_name}/feed` : '/';
+        const _feed = current_account_name && `/@${current_account_name}/feed`;
+        const logo_link = _feed && pathname != _feed ? _feed : '/';
 
         //TopRightHeader Stuff
         const defaultNavigate = e => {
@@ -255,7 +250,7 @@ class Header extends React.Component {
 
         const user_menu = [
             { link: account_link, icon: 'profile', value: tt('g.blog') },
-            { link: comments_link, icon: 'replies', value: tt('g.comments') },
+            { link: comments_link, icon: 'replies', value: tt('g.posts') },
             { link: replies_link, icon: 'reply', value: tt('g.replies') },
             {
                 link: '#',
@@ -294,14 +289,12 @@ class Header extends React.Component {
 
                     <nav className="row Header__nav">
                         <div className="small-5 large-4 columns Header__logotype">
-                            {/*LOGO*/}
                             <Link to={logo_link}>
                                 <SteemLogo />
                             </Link>
                         </div>
 
                         <div className="large-4 columns show-for-large large-centered Header__sort">
-                            {/*SORT*/}
                             <SortOrder
                                 sortOrder={order}
                                 topic={category === 'feed' ? '' : category}
@@ -309,6 +302,7 @@ class Header extends React.Component {
                                 pathname={pathname}
                             />
                         </div>
+
                         <div className="small-7 large-4 columns Header__buttons">
                             {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
                             {!loggedIn && (

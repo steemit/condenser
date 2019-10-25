@@ -315,10 +315,14 @@ class PostSummary extends React.Component {
                     <div className="articles__content-block articles__content-block--text">
                         {content_title}
                         {content_body}
-                        {this.props.blogmode ? null : summary_footer}
                     </div>
-                    {this.props.blogmode ? summary_footer : null}
+                    {this.props.blogmode ? summary_footer: null}
                 </div>
+                {this.props.blogmode ? null : (
+                  <div className="articles__footer">
+                      {summary_footer}
+                  </div>
+                )}
             </div>
         );
     }

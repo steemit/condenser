@@ -254,8 +254,7 @@ export async function serverRender(
 
     let server_store, onchain;
     try {
-        // TODO: handle trending/Kittens -- redirect?
-        const url = location.toLowerCase();
+        const url = location;
 
         requestTimer.startTimer('apiFetchState_ms');
         onchain = await apiFetchState(url);
@@ -264,8 +263,7 @@ export async function serverRender(
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
         if (
-            (url.match(routeRegex.UserProfile1) ||
-                url.match(routeRegex.UserProfile2)) &&
+            url.match(routeRegex.UserProfile) &&
             Object.getOwnPropertyNames(onchain.profiles).length === 0
         ) {
             // protect for invalid account
@@ -285,9 +283,7 @@ export async function serverRender(
 
         // Are we loading an un-category-aliased post?
         if (
-            !url.match(routeRegex.PostsIndex) &&
-            !url.match(routeRegex.UserProfile1) &&
-            !url.match(routeRegex.UserProfile2) &&
+            !url.match(routeRegex.UserProfile) &&
             url.match(routeRegex.PostNoCategory)
         ) {
             let header;
@@ -335,7 +331,7 @@ export async function serverRender(
         server_store.dispatch(appActions.setUserPreferences(userPreferences));
     } catch (e) {
         // Ensure 404 page when username not found
-        if (location.match(routeRegex.UserProfile1)) {
+        if (location.match(routeRegex.UserProfile)) {
             console.error('User/not found: ', location);
             return {
                 title: 'Page Not Found - Steemit',

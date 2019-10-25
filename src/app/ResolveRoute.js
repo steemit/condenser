@@ -2,10 +2,9 @@ import GDPRUserList from './utils/GDPRUserList';
 
 export const routeRegex = {
     CommunityRoles: /^\/(roles)+\/([\w\.\d-]+)/gi,
-    PostsIndex: /^\/(@[\w\.\d-]+)\/feed\/?$/,
-    UserProfile1: /^\/(@[\w\.\d-]+)\/?$/,
-    UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recent-replies|payout|feed|followed|followers|settings|notifications)\/?$/,
-    CategoryFilters: /^\/(hot|trending|promoted|payout|payout_comments|muted|created)\/?$/gi,
+    UserFeed: /^\/(@[\w\.\d-]+)\/feed\/?$/,
+    UserProfile: /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|recent-replies|payout|feed|followed|followers|settings|notifications))?\/?$/,
+    CategoryFilters: /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(?:\/([\w\d-]+))?\/?$/i,
     PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,
     Post: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
     PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
@@ -69,7 +68,7 @@ export default function resolveRoute(path) {
     if (match) {
         return { page: 'CommunityRoles', params: [match[0].split('/')[2]] };
     }
-    match = path.match(routeRegex.PostsIndex);
+    match = path.match(routeRegex.UserFeed);
     if (match) {
         if (GDPRUserList.includes(match[1].substring(1))) {
             return { page: 'NotFound' };
@@ -77,10 +76,7 @@ export default function resolveRoute(path) {
         return { page: 'PostsIndex', params: ['home', match[1]] };
     }
 
-    match =
-        path.match(routeRegex.UserProfile1) ||
-        // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-        path.match(routeRegex.UserProfile2);
+    match = path.match(routeRegex.UserProfile);
     if (match) {
         if (GDPRUserList.includes(match[1].substring(1))) {
             return { page: 'NotFound' };
@@ -101,13 +97,7 @@ export default function resolveRoute(path) {
         }
         return { page: 'Post', params: match.slice(1) };
     }
-    match =
-        path.match(
-            /^\/(hot|trending|promoted|payout|payout_comments|muted|created)\/?$/
-        ) ||
-        path.match(
-            /^\/(hot|trending|promoted|payout|payout_comments|muted|created)\/([\w\d-]+)\/?$/
-        );
+    match = path.match(routeRegex.CategoryFilters);
     if (match) {
         return { page: 'PostsIndex', params: match.slice(1) };
     }

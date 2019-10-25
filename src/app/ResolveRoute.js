@@ -17,36 +17,21 @@ export default function resolveRoute(path) {
     if (path === '/') return { page: 'PostsIndex', params: ['trending'] };
 
     // static
-    if (path === '/about.html') return { page: 'About' };
     if (path === '/welcome') return { page: 'Welcome' };
     if (path === '/faq.html') return { page: 'Faq' };
+    if (path === '/tos.html') return { page: 'Tos' };
+    if (path === '/about.html') return { page: 'About' };
     if (path === '/privacy.html') return { page: 'Privacy' };
     if (path === '/support.html') return { page: 'Support' };
-    if (path === '/tos.html') return { page: 'Tos' };
-
-    // moved to wallet
-    if (path === '/change_password') return { page: 'ChangePassword' };
-    if (path === '/recover_account_step_1')
-        return { page: 'RecoverAccountStep1' };
-    if (path === '/market') return { page: 'Market' };
-    if (path === '/~witnesses') return { page: 'Witnesses' };
-
-    // developer
-    if (path === '/xss/test' && process.env.NODE_ENV === 'development')
-        return { page: 'XSSTest' };
-    if (path === '/benchmark' && process.env.OFFLINE_SSR_TEST)
-        return { page: 'Benchmark' };
 
     // general functions
     if (path === '/login.html') return { page: 'Login' };
     if (path === '/submit.html') return { page: 'SubmitPost' };
-    if (path === '/tags') return { page: 'Tags' };
     if (path === '/communities') return { page: 'Communities' };
-
-    let match;
+    if (path === '/tags') return { page: 'Tags' };
 
     // /roles/hive-123
-    match = path.match(routeRegex.CommunityRoles);
+    let match = path.match(routeRegex.CommunityRoles);
     if (match)
         return { page: 'CommunityRoles', params: [match[0].split('/')[2]] };
 
@@ -57,7 +42,7 @@ export default function resolveRoute(path) {
             ? { page: 'NotFound' }
             : { page: 'PostsIndex', params: ['home', match[1]] };
 
-    /// @user, /@user/blog, /@user/settings
+    // /@user, /@user/blog, /@user/settings
     match = path.match(routeRegex.UserProfile);
     if (match)
         return GDPRUserList.includes(match[1].substring(1))
@@ -81,6 +66,14 @@ export default function resolveRoute(path) {
     // /trending, /trending/category
     match = path.match(routeRegex.CategoryFilters);
     if (match) return { page: 'PostsIndex', params: match.slice(1) };
+
+    // -----------
+
+    // developer
+    if (path === '/xss/test' && process.env.NODE_ENV === 'development')
+        return { page: 'XSSTest' };
+    if (path === '/benchmark' && process.env.OFFLINE_SSR_TEST)
+        return { page: 'Benchmark' };
 
     return { page: 'NotFound' };
 }

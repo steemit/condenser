@@ -6,6 +6,11 @@ import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import TagInput from 'app/components/cards/TagInput';
 import { validateTagInput } from 'app/components/cards/TagInput';
+import SlateEditor, {
+    serializeHtml,
+    deserializeHtml,
+    getDemoState,
+} from 'app/components/elements/SlateEditor';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostCategoryBanner from 'app/components/elements/PostCategoryBanner';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -129,9 +134,7 @@ class ReplyEditor extends React.Component {
             body.props.onChange(raw);
             this.setState({
                 rte,
-                rte_value: rte
-                    ? stateFromHtml(this.props.richTextEditor, raw)
-                    : null,
+                rte_value: rte ? stateFromHtml(raw) : null,
             });
         }
 
@@ -170,9 +173,9 @@ class ReplyEditor extends React.Component {
 
     componentDidMount() {
         setTimeout(() => {
-            if (this.props.isStory) this.refs.titleRef.focus();
+            if (this.refs.rte) this.refs.rte._focus();
+            else if (this.props.isStory) this.refs.titleRef.focus();
             else if (this.refs.postRef) this.refs.postRef.focus();
-            else if (this.refs.rte) this.refs.rte._focus();
         }, 300);
     }
 
@@ -273,9 +276,8 @@ class ReplyEditor extends React.Component {
             confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))
         ) {
             replyForm.resetForm();
-            this.setState({
-                rte_value: stateFromHtml(this.props.richTextEditor),
-            });
+            if (this.refs.rte)
+                this.refs.rte.setState({ state: stateFromHtml() });
             this.setState({ progress: {} });
             this.props.setPayoutType(formId, defaultPayoutType);
             this.props.setBeneficiaries(formId, []);
@@ -285,7 +287,7 @@ class ReplyEditor extends React.Component {
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
     onChange = rte_value => {
-        this.setState({ rte_value });
+        this.refs.rte.setState({ state: rte_value });
         const html = stateToHtml(rte_value);
         const { body } = this.state;
         if (body.value !== html) body.props.onChange(html);
@@ -297,8 +299,8 @@ class ReplyEditor extends React.Component {
         if (state.rte) {
             const { body } = this.state;
             state.rte_value = isHtmlTest(body.value)
-                ? stateFromHtml(this.props.richTextEditor, body.value)
-                : stateFromMarkdown(this.props.richTextEditor, body.value);
+                ? stateFromHtml(body.value)
+                : stateFromMarkdown(body.value);
         }
         this.setState(state);
         localStorage.setItem('replyEditorData-rte', !this.state.rte);
@@ -562,13 +564,15 @@ class ReplyEditor extends React.Component {
                             }
                         >
                             {process.env.BROWSER && rte ? (
-                                <RichTextEditor
+                                <SlateEditor
                                     ref="rte"
-                                    readOnly={loading}
-                                    value={this.state.rte_value}
+                                    placeholder={
+                                        isStory
+                                            ? 'Write your story...'
+                                            : 'Reply'
+                                    }
+                                    initialState={this.state.rte_value}
                                     onChange={this.onChange}
-                                    onBlur={body.onBlur}
-                                    tabIndex={2}
                                 />
                             ) : (
                                 <span>
@@ -828,28 +832,25 @@ function stripHtmlWrapper(text) {
     const m = text.match(/<html>\n*([\S\s]+?)?\n*<\/html>/m);
     return m && m.length === 2 ? m[1] : text;
 }
-
 // See also MarkdownViewer render
 const isHtmlTest = text => /^<html>/.test(text);
 
 function stateToHtml(state) {
-    let html = state.toString('html');
+    let html = serializeHtml(state);
     if (html === '<p></p>') html = '';
     if (html === '<p><br></p>') html = '';
     if (html == '') return '';
     return `<html>\n${html}\n</html>`;
 }
 
-function stateFromHtml(RichTextEditor, html = null) {
-    if (!RichTextEditor) return null;
+function stateFromHtml(html = null) {
     if (html) html = stripHtmlWrapper(html);
     if (html && html.trim() == '') html = null;
-    return html
-        ? RichTextEditor.createValueFromString(html, 'html')
-        : RichTextEditor.createEmptyValue();
+    return html ? deserializeHtml(html) : getDemoState();
 }
 
-function stateFromMarkdown(RichTextEditor, markdown) {
+//var htmlclean = require('htmlclean');
+function stateFromMarkdown(markdown) {
     let html;
     if (markdown && markdown.trim() !== '') {
         html = remarkable.render(markdown);
@@ -857,7 +858,7 @@ function stateFromMarkdown(RichTextEditor, markdown) {
         //html = htmlclean(html) // normalize whitespace
         console.log('markdown converted to:', html);
     }
-    return stateFromHtml(RichTextEditor, html);
+    return stateFromHtml(html);
 }
 
 import { connect } from 'react-redux';

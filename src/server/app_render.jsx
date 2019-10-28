@@ -64,6 +64,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             gptBasicSlots: config.gpt_basic_slots,
             gptCategorySlots: config.gpt_category_slots,
             gptBiddingSlots: config.gpt_bidding_slots,
+            gptBannedTags: config.gpt_banned_tags,
         };
         const cookieConsent = {
             enabled: !!config.cookie_consent_enabled,

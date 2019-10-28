@@ -36,6 +36,8 @@ $themes: (
     buttonTextShadow: 0 1px 0 rgba(0,0,0,0.20),
     buttonTextHover: $color-text-white,
     buttonBoxShadow: $color-transparent,
+    modalBackgroundColor: $color-background-almost-white,
+    modalTextColorPrimary: $color-text-dark,
   ),
   light: (
     colorAccent: $color-teal,
@@ -75,6 +77,8 @@ $themes: (
     buttonTextHover: $color-white,
     buttonBoxShadow: $color-teal,
     buttonBoxShadowHover: $color-blue-black,
+    modalBackgroundColor: $color-white,
+    modalTextColorPrimary: $color-text-dark,
   ),
   dark: (
     colorAccent: $color-teal,
@@ -115,6 +119,8 @@ $themes: (
     buttonBoxShadow: $color-teal,
     buttonBoxShadowHover: $color-white,
     inputPriceWarning: rgba(255, 153, 0, 0.83),
+    modalBackgroundColor: $color-white,
+    modalTextColorPrimary: $color-text-dark,
   ),
 );
 

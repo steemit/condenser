@@ -7,6 +7,7 @@
         "ask": "Ask",
         "balance": "Balance: %(balanceValue)s",
         "balances": "Balances",
+        "beneficiaries": "Beneficiaries",
         "bid": "Bid",
         "blog": "Blog",
         "browse": "Browse",
@@ -94,6 +95,7 @@
         },
         "reputation": "Reputation",
         "reveal_comment": "Reveal Comment",
+        "will_be_hidden_due_to_low_rating": "Will be hidden due to low rating",
         "request": "request",
         "required": "Required",
         "rewards": "Rewards",
@@ -262,6 +264,7 @@
         "change_account_password": "Change Account Password",
         "vote_for_witnesses": "Vote for Witnesses",
         "advertise": "Advertise",
+        "media_kit": "Media Kit",
         "privacy_policy": "Privacy Policy",
         "terms_of_service": "Terms of Service",
         "sign_up": "Sign up",
@@ -278,7 +281,8 @@
         "intro_tagline": "Your voice is worth something",
         "intro_paragraph":
             "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool.",
-        "jobs": "Jobs at Steemit"
+        "jobs": "Jobs at Steemit",
+        "steem_proposals": "Steem Proposals"
     },
     "main_menu": {
         "hot": "Hot",
@@ -311,7 +315,19 @@
         "title": "Title",
         "update_post": "Update Post",
         "markdown_not_supported": "Markdown is not supported here",
-        "advanced_settings": "Advanced settings"
+        "advanced_settings": "Advanced settings",
+        "beneficiaries_set": "%(count)s set"
+    },
+    "beneficiary_selector_jsx": {
+        "header": "Who should receive any rewards?",
+        "add": "Add account",
+        "exceeds_max_beneficiaries": "Can have at most 8 beneficiaries",
+        "beneficiary_cannot_be_self": "Cannot specify self as beneficiary",
+        "beneficiary_cannot_be_duplicate": "Beneficiary cannot be duplicate",
+        "beneficiary_percent_invalid":
+            "Beneficiary percentage must be from 1-100",
+        "beneficiary_percent_total_invalid":
+            "Beneficiary total percentage must be less than 100"
     },
     "category_selector_jsx": {
         "tag_your_story":
@@ -606,7 +622,8 @@
         "login_warning_body":
             "You are attempting to use a key with more permissions than required for everyday Steemit.com use. Since keys and passwords are more likely to get compromised the more they are used, it is strongly recommended to only use your Posting Key to log in.",
         "continue_anyway": "Continue Anyway",
-        "login_warning_link_text": "View my Posting Key at Steemit Wallet",
+        "login_warning_link_text":
+            "Open my Steemit Wallet to access and view my posting key",
         "join_our": "Join our",
         "sign_transfer": "Sign to complete transfer",
         "use_keychain": "Use keychain extension"

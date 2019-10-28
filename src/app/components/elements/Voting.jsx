@@ -336,7 +336,6 @@ class Voting extends React.Component {
                 </Dropdown>
             );
 
-            const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
             //const flag =
             //    myVote === null || myVote === 0 ? dropdown : revokeFlag;
             downVote = (
@@ -438,6 +437,20 @@ class Voting extends React.Component {
                         INVEST_TOKEN_SHORT,
                 });
             }
+            // add beneficiary info. use toFixed due to a bug of formatDecimal (5.00 is shown as 5,.00)
+            const beneficiaries = post_obj.get('beneficiaries');
+            if (beneficiaries) {
+                beneficiaries.forEach(function(key) {
+                    payoutItems.push({
+                        value:
+                            key.get('account') +
+                            ': ' +
+                            (parseFloat(key.get('weight')) / 100).toFixed(2) +
+                            '%',
+                        link: '/@' + key.get('account'),
+                    });
+                });
+            }
             payoutItems.push({ value: payoutDate });
             if (warnZeroPayout !== '') {
                 payoutItems.push({ value: warnZeroPayout });
@@ -460,7 +473,9 @@ class Voting extends React.Component {
                 }),
             });
         }
-        if (total_author_payout > 0) {
+        // - payout instead of total_author_payout: total_author_payout can be zero with 100% beneficiary
+        // - !cashout_active is needed to avoid the info is also shown for pending posts.
+        if (!cashout_active && payout > 0) {
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts', {
                     value: formatDecimal(

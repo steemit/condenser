@@ -218,7 +218,7 @@ class PostsList extends React.Component {
                             thumbSize={thumbSize}
                             ignore={false}
                             nsfwPref={nsfwPref}
-                            featured={true}
+                            featured
                             onClose={close}
                         />
                     </li>
@@ -256,7 +256,7 @@ class PostsList extends React.Component {
                             thumbSize={thumbSize}
                             ignore={false}
                             nsfwPref={nsfwPref}
-                            promoted={true}
+                            promoted
                             onClose={close}
                         />
                     </li>
@@ -282,8 +282,9 @@ class PostsList extends React.Component {
 
                             <div className="articles__content-block--ad">
                                 <GptAd
+                                    tags={[category]}
                                     type="Freestar"
-                                    id="steemit_728x90_468x60_300x250_InFeed"
+                                    id="bsa-zone_1566495089502-1_123456"
                                 />
                             </div>
                         </div>
@@ -360,7 +361,6 @@ export default connect(
             username,
             content,
             ignore_result,
-            pathname,
             nsfwPref,
             featured,
             promoted,

@@ -64,6 +64,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             gptBasicSlots: config.gpt_basic_slots,
             gptCategorySlots: config.gpt_category_slots,
             gptBiddingSlots: config.gpt_bidding_slots,
+            gptBannedTags: config.gpt_banned_tags,
         };
         const cookieConsent = {
             enabled: !!config.cookie_consent_enabled,
@@ -80,7 +81,13 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             },
         };
 
-        const { body, title, statusCode, meta } = await serverRender(
+        const {
+            body,
+            title,
+            statusCode,
+            meta,
+            redirectUrl,
+        } = await serverRender(
             ctx.request.url,
             initial_state,
             ErrorPage,
@@ -88,6 +95,13 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             offchain,
             ctx.state.requestTimer
         );
+
+        if (redirectUrl) {
+            console.log('Redirecting to', redirectUrl);
+            ctx.status = 302;
+            ctx.redirect(redirectUrl);
+            return;
+        }
 
         let assets;
         // If resolvedAssets argument parameter is falsey we infer that we are in
@@ -117,6 +131,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);
     } catch (err) {
         // Render 500 error page from server
+        console.log('AppRender error', err);
         const { error, redirect } = err;
         if (error) throw error;
 

@@ -8,12 +8,11 @@ describe('routeRegex', () => {
             ['UserProfile1', /^\/(@[\w\.\d-]+)\/?$/],
             [
                 'UserProfile2',
-                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
+                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recent-replies|payout|feed|followed|followers|settings|notifications)\/?$/,
             ],
-            ['UserProfile3', /^\/(@[\w\.\d-]+)\/[\w\.\d-]+/],
             [
                 'CategoryFilters',
-                /^\/(hot|trending|promoted|payout|payout_comments|created)\/?$/gi,
+                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)\/?$/gi,
             ],
             ['PostNoCategory', /^\/(@[\w\.\d-]+)\/([\w\d-]+)/],
             ['Post', /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/],
@@ -59,6 +58,10 @@ describe('resolveRoute', () => {
         [
             '/ceasar/@salad/circa90',
             { page: 'Post', params: ['ceasar', '@salad', 'circa90', ''] },
+        ],
+        [
+            '/roles/hive-105677',
+            { page: 'CommunityRoles', params: ['hive-105677'] },
         ],
         ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
     ];

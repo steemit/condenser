@@ -1,6 +1,6 @@
 import * as config from 'config';
 import * as https from 'https';
-import * as steem from '@steemit/steem-js';
+import { callBridge } from 'app/utils/steemApi';
 
 /**
  * Load special posts - including notices, featured, and promoted.
@@ -40,6 +40,12 @@ function loadSpecialPosts() {
         });
     });
 }
+
+async function getPost(url) {
+    const [author, permlink] = url.split('@')[1].split('/');
+    return await callBridge('get_post', { author, permlink });
+}
+
 /**
  * [async] Get special posts - including notices, featured, and promoted.
  *
@@ -57,25 +63,20 @@ export async function specialPosts() {
     };
 
     for (const url of postData.featured_posts) {
-        const [username, postId] = url.split('@')[1].split('/');
-        let post = await steem.api.getContentAsync(username, postId);
+        let post = await getPost(url);
         post.special = true;
         loadedPostData.featured_posts.push(post);
     }
 
     for (const url of postData.promoted_posts) {
-        const [username, postId] = url.split('@')[1].split('/');
-        let post = await steem.api.getContentAsync(username, postId);
+        let post = await getPost(url);
         post.special = true;
         loadedPostData.promoted_posts.push(post);
     }
 
     for (const notice of postData.notices) {
         if (notice.permalink) {
-            const [username, postId] = notice.permalink
-                .split('@')[1]
-                .split('/');
-            let post = await steem.api.getContentAsync(username, postId);
+            let post = await getPost(notice.permalink);
             loadedPostData.notices.push(Object.assign({}, notice, post));
         } else {
             loadedPostData.notices.push(notice);

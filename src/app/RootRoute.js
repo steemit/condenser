@@ -11,7 +11,9 @@ export default {
     component: App,
     getChildRoutes(nextState, cb) {
         const route = resolveRoute(nextState.location.pathname);
-        if (route.page === 'About') {
+        if (route.page === 'CommunityRoles') {
+            cb(null, [require('app/components/pages/CommunityRoles')]);
+        } else if (route.page === 'About') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/About')]);
             //});
@@ -49,6 +51,10 @@ export default {
         } else if (route.page === 'Tags') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/TagsIndex')]);
+            //});
+        } else if (route.page === 'Communities') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/CommunitiesIndex')]);
             //});
         } else if (route.page === 'Tos') {
             //require.ensure([], (require) => {

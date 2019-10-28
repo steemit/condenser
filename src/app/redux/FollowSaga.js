@@ -8,21 +8,6 @@ import * as globalActions from 'app/redux/GlobalReducer';
     This loadFollows both 'blog' and 'ignore'
 */
 
-//fetch for follow/following count
-export function* fetchFollowCount(account) {
-    const counts = yield call([api, api.getFollowCountAsync], account);
-    yield put(
-        globalActions.update({
-            key: ['follow_count', account],
-            updater: m =>
-                m.mergeDeep({
-                    follower_count: counts.follower_count,
-                    following_count: counts.following_count,
-                }),
-        })
-    );
-}
-
 // Test limit with 2 (not 1, infinate looping)
 export function* loadFollows(method, account, type, force = false) {
     if (

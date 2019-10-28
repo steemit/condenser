@@ -33,7 +33,7 @@ const mockGlobal = Map({
             max_accepted_payout: '999999 SBD',
             percent_steem_dollars: 0,
             pending_payout_value: '10 SBD',
-            cashout_time: '2018-03-30T10:00:00Z',
+            payout_at: '2018-03-30T10:00:00Z',
             pending_payout_sbd: 99,
         }),
     }),
@@ -48,7 +48,7 @@ const voteTestObj = fromJS({
     max_accepted_payout: '999999 SBD',
     percent_steem_dollars: 0,
     pending_payout_value: '10 SBD',
-    cashout_time: '2018-03-30T10:00:00Z',
+    payout_at: '2018-03-30T10:00:00Z',
 });
 
 describe('Voting', () => {
@@ -130,6 +130,7 @@ describe('Voting', () => {
             <Voting
                 post="test"
                 flag={true}
+                myVote={0}
                 vote={(w, p) => {}}
                 post_obj={voteTestObj}
                 price_per_steem={1}
@@ -137,7 +138,6 @@ describe('Voting', () => {
                 store={mockStore}
             />
         ).dive();
-        wrapped.setState({ myVote: 0 });
         wrapped
             .find('Dropdown')
             .dive()
@@ -160,6 +160,7 @@ describe('Voting', () => {
             <Voting
                 post="test"
                 flag={true}
+                myVote={-666}
                 vote={(w, p) => {}}
                 post_obj={voteTestObj}
                 price_per_steem={1}
@@ -167,7 +168,6 @@ describe('Voting', () => {
                 store={mockStore}
             />
         ).dive();
-        wrapped.setState({ myVote: -666 });
         wrapped.find('#revoke_downvote_button').simulate('click');
         expect(mockStore.getActions()[0].type).toEqual(
             'transaction/BROADCAST_OPERATION'
@@ -244,7 +244,7 @@ describe('Voting', () => {
             max_accepted_payout: '999999 SBD',
             percent_steem_dollars: 0,
             pending_payout_value: '10 SBD',
-            cashout_time: '2018-03-30T10:00:00Z',
+            payout_at: '2018-03-30T10:00:00Z',
         });
         const store = createStore(rootReducer);
         const component = renderer.create(
@@ -274,7 +274,7 @@ describe('Voting', () => {
             max_accepted_payout: '999999 SBD',
             percent_steem_dollars: 10000,
             pending_payout_value: '10 SBD',
-            cashout_time: '2018-03-30T10:00:00Z',
+            payout_at: '2018-03-30T10:00:00Z',
         });
         const component = renderer.create(
             <Provider store={store}>
@@ -302,7 +302,7 @@ describe('Voting', () => {
             max_accepted_payout: '999999 SBD',
             percent_steem_dollars: 10000,
             pending_payout_value: '10 SBD',
-            cashout_time: '2018-03-30T10:00:00Z',
+            payout_at: '2018-03-30T10:00:00Z',
         });
         const store = createStore(rootReducer);
         const component = renderer.create(

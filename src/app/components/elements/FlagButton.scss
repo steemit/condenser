@@ -1,0 +1,25 @@
+  .flag__button {
+    padding-right: .4rem;
+    margin-right: .4rem;
+    @include themify($themes) {
+        border-right: themed('border');
+    }
+    cursor: pointer;
+    .flag2 {
+      display: none !important;
+      visibility: hidden;
+    }
+    &:hover {
+      .flag1 {
+        display: none !important;
+        visibility: hidden;
+      }
+      .flag2 {
+        visibility: visible;
+        display: inline-block !important;
+      }
+      svg {
+        fill: red;
+      }
+    }
+  }

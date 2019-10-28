@@ -38,6 +38,7 @@ class CommunitySettings extends Component {
         // Trim leading and trailing whitespace before submission.
         const payload = {};
         Object.keys(this.state).forEach(k => {
+            if (k == 'formError') return;
             if (typeof this.state[k] === 'string')
                 payload[k] = this.state[k].trim();
             else payload[k] = this.state[k];

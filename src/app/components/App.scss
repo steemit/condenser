@@ -49,9 +49,20 @@
     border: none;
   }
 }
+
 .PlainLink {
     @extend .link;
     @extend .link--secondary;
+}
+
+.text-muted {
+    @include themify($themes) {
+        color: themed('textColorSecondary');
+        svg {
+            fill: themed('textColorSecondary');
+            opacity: 0.7;
+        }
+    }
 }
 
 .welcomeBanner {

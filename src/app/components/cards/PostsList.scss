@@ -105,13 +105,13 @@
 
     A.PostDismiss {
         position: absolute;
-        right: 0;
+        right: 0.15rem;
 
         svg {
             @include themify($themes) {
-                width: 0.8rem;
-                height: 0.8rem;
-                opacity: 0.5;
+                width: 0.6rem;
+                height: 0.6rem;
+                opacity: 0.3;
                 fill: themed('textColorSecondary');
             }
         }

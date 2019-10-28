@@ -187,7 +187,6 @@ function* broadcastPayload({
 
     console.log('broadcastPayload', operations, username);
 
-    // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;
     for (const [type] of operations) {
         // see also transaction/ERROR
@@ -223,7 +222,7 @@ function* broadcastPayload({
                 try {
                     hook['broadcasted_' + type]({ operation });
                 } catch (error) {
-                    console.error(error);
+                    console.error('broadcastPayload error', error);
                 }
             }
         }
@@ -268,7 +267,6 @@ function* broadcastPayload({
                         keys,
                         err => {
                             if (err) {
-                                console.error(err);
                                 reject(err);
                             } else {
                                 broadcastedEvent();
@@ -300,7 +298,7 @@ function* broadcastPayload({
                 try {
                     yield call(hook['accepted_' + type], { operation });
                 } catch (error) {
-                    console.error(error);
+                    console.error('accepted_', error);
                 }
             }
             const config = operation.__config;
@@ -318,7 +316,7 @@ function* broadcastPayload({
             try {
                 successCallback(operations);
             } catch (error) {
-                console.error(error);
+                console.error('defaultErrorCallback', error);
             }
     } catch (error) {
         console.error('TransactionSaga\tbroadcastPayload', error);
@@ -331,7 +329,7 @@ function* broadcastPayload({
                 try {
                     yield call(hook['error_' + type], { operation });
                 } catch (error2) {
-                    console.error(error2);
+                    console.error('error_ hook error', error2);
                 }
             }
         }

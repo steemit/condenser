@@ -74,7 +74,6 @@ class CommentImpl extends React.Component {
         rootComment: PropTypes.string,
         anchor_link: PropTypes.string.isRequired,
         deletePost: PropTypes.func.isRequired,
-        communityName: PropTypes.string.isRequired,
     };
 
     constructor() {
@@ -197,7 +196,7 @@ class CommentImpl extends React.Component {
             showNegativeComments,
             ignored,
             rootComment,
-            communityName,
+            community,
         } = this.props;
 
         const {
@@ -217,12 +216,13 @@ class CommentImpl extends React.Component {
         const comment = post.toJS();
         const gray = comment.stats.gray || ImageUserBlockList.includes(author);
 
-        const showEditOption = username === author;
-        const showMuteToggle = Role.atLeast(viewer_role, 'mod');
-        const showFlagToggle =
-            communityName && Role.atLeast(viewer_role, 'guest');
-        const showReplyOption = username && comment.depth < 255;
-        const showDeleteOption = username === author && allowDelete(post);
+        const allowReply = Role.canComment(community, viewer_role);
+        const canEdit = username && username === author;
+        const canDelete = username && username === author && allowDelete(post);
+        const canReply = username && allowReply && comment.depth < 255;
+        const canMute = username && Role.atLeast(viewer_role, 'mod');
+        const canFlag =
+            username && community && Role.atLeast(viewer_role, 'guest');
 
         let body = null;
         let controls = null;
@@ -243,14 +243,12 @@ class CommentImpl extends React.Component {
                 <div>
                     <Voting post={postref} />
                     <span className="Comment__footer__controls">
-                        {showReplyOption && (
+                        {canReply && (
                             <a onClick={onShowReply}>{tt('g.reply')}</a>
                         )}{' '}
-                        {showMuteToggle && <MuteButton post={post} />}{' '}
-                        {showEditOption && (
-                            <a onClick={onShowEdit}>{tt('g.edit')}</a>
-                        )}{' '}
-                        {showDeleteOption && (
+                        {canMute && <MuteButton post={post} />}{' '}
+                        {canEdit && <a onClick={onShowEdit}>{tt('g.edit')}</a>}{' '}
+                        {canDelete && (
                             <a onClick={onDeletePost}>{tt('g.delete')}</a>
                         )}
                     </span>
@@ -337,7 +335,7 @@ class CommentImpl extends React.Component {
                     </div>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
-                            {showFlagToggle && (
+                            {canFlag && (
                                 <FlagButton post={post} isComment={true} />
                             )}
                             <a onClick={this.toggleCollapsed}>
@@ -410,11 +408,6 @@ const Comment = connect(
 
         const category = post.get('category');
         const community = state.global.getIn(['community', category], Map());
-        const communityName = state.global.getIn([
-            'community',
-            category,
-            'name',
-        ]);
         const author = post.get('author');
         const username = state.user.getIn(['current', 'username']);
         const ignored =
@@ -443,8 +436,8 @@ const Comment = connect(
             anchor_link: '#@' + postref, // Using a hash here is not standard but intentional; see issue #124 for details
             username,
             ignored,
+            community: community.get('name', null),
             viewer_role: community.getIn(['context', 'role'], 'guest'),
-            communityName,
         };
     },
 

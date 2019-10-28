@@ -8,6 +8,7 @@ cracked-games
 gautampartapsoni
 jimreitz
 bitchminer
+nikapelex
 `
     .trim()
     .split('\n');

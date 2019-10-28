@@ -81,9 +81,9 @@ export function* getContent({ author, permlink, resolve, reject }) {
         return JSON.stringify(cop);
     }
 
-    console.log('raw content> ', dbg(content));
+    //console.log('raw content> ', dbg(content));
     content = yield call(callBridge, 'normalize_post', { post: content });
-    console.log('normalized> ', dbg(content));
+    //console.log('normalized> ', dbg(content));
 
     yield put(globalActions.receiveContent({ content }));
     if (resolve && content) {

@@ -4,15 +4,14 @@ import resolveRoute, { routeRegex } from './ResolveRoute';
 describe('routeRegex', () => {
     it('should produce the desired regex patterns', () => {
         const test_cases = [
-            ['PostsIndex', /^\/(@[\w\.\d-]+)\/feed\/?$/],
-            ['UserProfile1', /^\/(@[\w\.\d-]+)\/?$/],
+            ['UserFeed', /^\/(@[\w\.\d-]+)\/feed\/?$/],
             [
-                'UserProfile2',
-                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recent-replies|payout|feed|followed|followers|settings|notifications)\/?$/,
+                'UserProfile',
+                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|recent-replies|payout|feed|followed|followers|settings|notifications))?\/?$/,
             ],
             [
                 'CategoryFilters',
-                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)\/?$/gi,
+                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(?:\/([\w\d-]+))?\/?$/i,
             ],
             ['PostNoCategory', /^\/(@[\w\.\d-]+)\/([\w\d-]+)/],
             ['Post', /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/],
@@ -33,6 +32,8 @@ describe('routeRegex', () => {
 describe('resolveRoute', () => {
     const test_cases = [
         ['/', { page: 'PostsIndex', params: ['trending'] }],
+        ['/trending', { page: 'PostsIndex', params: ['trending', undefined] }],
+        ['/trending/cat', { page: 'PostsIndex', params: ['trending', 'cat'] }],
         ['/about.html', { page: 'About' }],
         ['/faq.html', { page: 'Faq' }],
         ['/login.html', { page: 'Login' }],
@@ -40,21 +41,14 @@ describe('resolveRoute', () => {
         ['/support.html', { page: 'Support' }],
         ['/tos.html', { page: 'Tos' }],
         ['/submit.html', { page: 'SubmitPost' }],
-        [
-            '/@maitland/feed',
-            { page: 'PostsIndex', params: ['home', '@maitland'] },
-        ],
+        ['/@steem/feed', { page: 'PostsIndex', params: ['home', '@steem'] }],
         ['/@gdpr/feed', { page: 'NotFound' }],
-        [
-            '/@maitland/blog',
-            { page: 'UserProfile', params: ['@maitland', 'blog'] },
-        ],
+        ['/@steem', { page: 'UserProfile', params: ['@steem', undefined] }],
+        ['/@steem/blog', { page: 'UserProfile', params: ['@steem', 'blog'] }],
         ['/@gdpr/blog', { page: 'NotFound' }],
-        [
-            '/@cool/nice345',
-            { page: 'PostNoCategory', params: ['@cool', 'nice345'] },
-        ],
+        ['/@foo/bar34', { page: 'PostNoCategory', params: ['@foo', 'bar34'] }],
         ['/@gdpr/nice345', { page: 'NotFound' }],
+        ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
         [
             '/ceasar/@salad/circa90',
             { page: 'Post', params: ['ceasar', '@salad', 'circa90', ''] },
@@ -63,7 +57,6 @@ describe('resolveRoute', () => {
             '/roles/hive-105677',
             { page: 'CommunityRoles', params: ['hive-105677'] },
         ],
-        ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
     ];
     test_cases.forEach(r => {
         it(`should resolve the route for the ${r[1].page} page`, () => {

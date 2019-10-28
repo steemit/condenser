@@ -182,6 +182,7 @@ export default function ServerHTML({
                             __html: `
                             (function() {
                               var bsa_optimize = document.createElement('script');
+                              window.optimize = { queue: [] };
                               bsa_optimize.type = 'text/javascript';
                               bsa_optimize.async = true;
                               bsa_optimize.src = 'https://cdn-s2s.buysellads.net/pub/steemit.js?' + (new Date() - new Date() % 3600000);
@@ -206,6 +207,9 @@ export default function ServerHTML({
                         async
                     />
                 ) : null}
+                {process.env.NODE_ENV === 'production' && (
+                    <script src="//cdn.catchjs.com/catch.js" />
+                )}
                 <title>{page_title}</title>
             </head>
             <body>

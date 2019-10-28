@@ -6,6 +6,7 @@ import { List } from 'immutable';
 import { Role } from 'app/utils/Community';
 import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
+import Icon from 'app/components/elements/Icon';
 
 class CommunityPane extends Component {
     static propTypes = {
@@ -34,6 +35,7 @@ class CommunityPane extends Component {
 
         const category = community.get('name');
         const viewer_role = community.getIn(['context', 'role'], 'guest');
+        const canPost = Role.canPost(category, viewer_role);
 
         return (
             <div>
@@ -85,17 +87,30 @@ class CommunityPane extends Component {
                     </div>
 
                     <div style={{ margin: '12px 0 0' }}>
-                        <Link
-                            className="button primary"
-                            style={{
-                                minWidth: '6em',
-                                display: 'block',
-                                marginBottom: '8px',
-                            }}
-                            to={`/submit.html?category=${category}`}
-                        >
-                            New Post
-                        </Link>
+                        {canPost && (
+                            <Link
+                                className="button primary"
+                                style={{
+                                    minWidth: '6em',
+                                    display: 'block',
+                                    marginBottom: '8px',
+                                }}
+                                to={`/submit.html?category=${category}`}
+                            >
+                                New Post
+                            </Link>
+                        )}
+                        {!canPost && (
+                            <div
+                                className="text-center"
+                                style={{ marginBottom: '8px' }}
+                            >
+                                <small className="text-muted">
+                                    <Icon name="eye" />&nbsp; Only approved
+                                    members can post
+                                </small>
+                            </div>
+                        )}
                         {community &&
                             this.props.username && (
                                 <SubscribeButton

@@ -7,14 +7,10 @@ class ChangePassword extends React.Component {
     render() {
         return (
             <div>
-                {tt('g.external_link_message')}
-                {': '}
-                <Link to={`${$STM_Config.wallet_url}/market`}>
-                    {tt('navigation.currency_market')}
-                </Link>
+                <Link to={`${$STM_Config.wallet_url}`}>Visit Wallet</Link>
             </div>
         );
     }
 }
 
-export default reduxForm()(ChangePassword);
+export default ChangePassword;

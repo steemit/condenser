@@ -207,6 +207,9 @@ export default function ServerHTML({
                         async
                     />
                 ) : null}
+                {process.env.NODE_ENV === 'production' && (
+                    <script src="//cdn.catchjs.com/catch.js" />
+                )}
                 <title>{page_title}</title>
             </head>
             <body>

@@ -11,11 +11,13 @@ const SidebarLinks = ({ username, subscriptions }) => (
         */}
         <div className="c-sidebar__content">
             <ul className="c-sidebar__list">
+                {/*
                 <li className="c-sidebar__list-item">
                     <a className="c-sidebar__link" href={'/@' + username}>
                         {tt('g.my_blog')}
                     </a>
                 </li>
+                */}
                 {/*
                 <li className="c-sidebar__list-item">
                     <a
@@ -28,7 +30,7 @@ const SidebarLinks = ({ username, subscriptions }) => (
                 */}
                 {subscriptions && (
                     <li className="c-sidebar__list-item">
-                        <div style={{ color: '#aaa', paddingTop: '1em' }}>
+                        <div style={{ color: '#aaa', paddingTop: '0em' }}>
                             My subscriptions
                         </div>
                     </li>

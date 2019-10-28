@@ -66,6 +66,10 @@ export default class SlateEditor extends React.Component {
         this.setState({ state: this.props.initialState });
     };
 
+    _focus = () => {
+        this.refs.editor.focus();
+    };
+
     componentDidMount = () => {
         this.updateMenu();
         this.updateSidebar();
@@ -105,7 +109,7 @@ export default class SlateEditor extends React.Component {
         return state.blocks.some(
             node =>
                 node.type == type ||
-                !!document.getClosest(node, parent => parent.type == type)
+                !!document.getClosest(node.key, parent => parent.type == type)
         );
     };
 
@@ -547,6 +551,7 @@ export default class SlateEditor extends React.Component {
         return (
             <div className="SlateEditor Markdown">
                 <Editor
+                    ref="editor"
                     schema={schema}
                     placeholder={this.props.placeholder || 'Enter some text...'}
                     plugins={plugins}

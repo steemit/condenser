@@ -77,7 +77,8 @@ class PostFull extends React.Component {
 
     constructor(props) {
         super(props);
-        const { post, community } = this.props;
+        const { post } = this.props;
+
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
         this.redditShare = this.redditShare.bind(this);

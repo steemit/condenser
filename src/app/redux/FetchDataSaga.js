@@ -18,6 +18,7 @@ import { getStateAsync } from 'app/utils/steemApi';
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
+const GET_ACCOUNTS = 'fetchDataSaga/GET_ACCOUNTS';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
@@ -25,10 +26,15 @@ export const fetchDataWatches = [
     takeLatest('@@router/LOCATION_CHANGE', fetchState),
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
+    takeEvery(GET_ACCOUNTS, getAccountsCaller),
 ];
 
 export function* getContentCaller(action) {
     yield getContent(action.payload);
+}
+
+export function* getAccountsCaller(action) {
+    yield getAccounts(action.payload);
 }
 
 let is_initial_state = true;
@@ -339,6 +345,11 @@ export const actions = {
 
     fetchState: payload => ({
         type: FETCH_STATE,
+        payload,
+    }),
+
+    getAccounts: payload => ({
+        type: GET_ACCOUNTS,
         payload,
     }),
 };

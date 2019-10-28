@@ -664,6 +664,8 @@ export default connect(
         const enable_slider =
             net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD;
 
+        const currentAccountData = state.global.getIn(['accounts', username]);
+        const votingData = computeVotingData(currentAccountData);
         return {
             post: ownProps.post,
             showList: ownProps.showList,
@@ -678,6 +680,7 @@ export default connect(
             voting,
             price_per_steem,
             sbd_print_rate,
+            votingData,
         };
     },
 

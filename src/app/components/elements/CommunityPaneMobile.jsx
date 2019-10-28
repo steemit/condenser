@@ -16,6 +16,7 @@ class CommunityPaneMobile extends Component {
 
         const category = community.get('name');
         const viewer_role = community.getIn(['context', 'role'], 'guest');
+        const canPost = Role.canPost(category, viewer_role);
 
         const settings = Role.atLeast(viewer_role, 'admin') && (
             <SettingsEditButton community={community.get('name')}>
@@ -86,13 +87,18 @@ class CommunityPaneMobile extends Component {
                         </div>
 
                         <div className="column large-4 medium-6 small-12">
-                            <Link
-                                className="button primary"
-                                style={{ minWidth: '6em', marginRight: '16px' }}
-                                to={`/submit.html?category=${category}`}
-                            >
-                                Post
-                            </Link>
+                            {canPost && (
+                                <Link
+                                    className="button primary"
+                                    style={{
+                                        minWidth: '6em',
+                                        marginRight: '16px',
+                                    }}
+                                    to={`/submit.html?category=${category}`}
+                                >
+                                    Post
+                                </Link>
+                            )}
                             {community &&
                                 this.props.username && (
                                     <SubscribeButton

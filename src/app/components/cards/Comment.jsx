@@ -4,6 +4,7 @@ import { Map } from 'immutable';
 import Author from 'app/components/elements/Author';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import MuteButton from 'app/components/elements/MuteButton';
+import FlagButton from 'app/components/elements/FlagButton';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Voting from 'app/components/elements/Voting';
@@ -73,6 +74,7 @@ class CommentImpl extends React.Component {
         rootComment: PropTypes.string,
         anchor_link: PropTypes.string.isRequired,
         deletePost: PropTypes.func.isRequired,
+        communityName: PropTypes.string.isRequired,
     };
 
     constructor() {
@@ -195,6 +197,7 @@ class CommentImpl extends React.Component {
             showNegativeComments,
             ignored,
             rootComment,
+            communityName,
         } = this.props;
 
         const {
@@ -216,6 +219,8 @@ class CommentImpl extends React.Component {
 
         const showEditOption = username === author;
         const showMuteToggle = Role.atLeast(viewer_role, 'mod');
+        const showFlagToggle =
+            communityName && Role.atLeast(viewer_role, 'guest');
         const showReplyOption = username && comment.depth < 255;
         const showDeleteOption = username === author && allowDelete(post);
 
@@ -332,6 +337,9 @@ class CommentImpl extends React.Component {
                     </div>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
+                            {showFlagToggle && (
+                                <FlagButton post={post} isComment={true} />
+                            )}
                             <a onClick={this.toggleCollapsed}>
                                 {this.state.collapsed ? '[+]' : '[-]'}
                             </a>
@@ -402,6 +410,11 @@ const Comment = connect(
 
         const category = post.get('category');
         const community = state.global.getIn(['community', category], Map());
+        const communityName = state.global.getIn([
+            'community',
+            category,
+            'name',
+        ]);
         const author = post.get('author');
         const username = state.user.getIn(['current', 'username']);
         const ignored =
@@ -431,6 +444,7 @@ const Comment = connect(
             username,
             ignored,
             viewer_role: community.getIn(['context', 'role'], 'guest'),
+            communityName,
         };
     },
 

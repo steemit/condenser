@@ -9,6 +9,7 @@
   padding-top: 2rem;
   margin: 0 auto;
   max-width: 54rem;
+  position: relative;
   @include themify($themes) {
       border-bottom: themed('border');
   }

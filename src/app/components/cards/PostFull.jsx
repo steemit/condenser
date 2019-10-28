@@ -437,6 +437,7 @@ class PostFull extends React.Component {
                 itemScope
                 itemType="http://schema.org/Blog"
             >
+                {showFlagToggle && <FlagButton post={post} />}
                 {showEdit ? (
                     renderedEditor
                 ) : (
@@ -470,9 +471,6 @@ class PostFull extends React.Component {
                         {showReblog && (
                             <Reblog author={author} permlink={permlink} />
                         )}
-                        <span className="Flag__button">
-                            {showFlagToggle && <FlagButton post={post} />}
-                        </span>
                         <span className="PostFull__reply">
                             {/* all */}
                             {showReplyOption && (

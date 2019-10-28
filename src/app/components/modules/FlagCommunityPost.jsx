@@ -26,12 +26,20 @@ class FlagCommunityPost extends Component {
 
     render() {
         const { disableSubmit } = this.state;
-        const { flagText } = this.props;
+        const { flagText, isComment } = this.props;
         return (
             <span>
                 <div>
-                    <h4>{tt('g.flag_this_post')}</h4>
-                    <p>{tt('g.flag_this_post_description')}</p>
+                    <h4>
+                        {tt('g.flag_this_post', {
+                            type: isComment ? 'comment' : 'post',
+                        })}
+                    </h4>
+                    <p>
+                        {tt('g.flag_this_post_description', {
+                            type: isComment ? 'comment' : 'post',
+                        })}
+                    </p>
                     {flagText && flagText.length > 0 && <p>{flagText}</p>}
                 </div>
                 <hr />
@@ -65,6 +73,11 @@ class FlagCommunityPost extends Component {
 FlagCommunityPost.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     flagText: PropTypes.string.isRequired,
+    isComment: PropTypes.bool,
+};
+
+FlagCommunityPost.defaultProps = {
+    isComment: false,
 };
 
 export default connect()(FlagCommunityPost);

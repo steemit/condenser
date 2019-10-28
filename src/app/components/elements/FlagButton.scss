@@ -1,9 +1,4 @@
   .flag__button {
-    padding-right: .4rem;
-    margin-right: .4rem;
-    @include themify($themes) {
-        border-right: themed('border');
-    }
     cursor: pointer;
     .flag2 {
       display: none !important;
@@ -22,4 +17,9 @@
         fill: red;
       }
     }
+  }
+
+  .flag__button--post {
+    position: absolute;
+    right: 0;
   }

@@ -52,7 +52,7 @@ class FlagButton extends React.Component {
                                 this.hideDialog();
                                 this.onSubmit(notes);
                             }}
-                            flagText={flagText}
+                            flagText={this.props.flagText}
                         />
                     </Reveal>
                 )}

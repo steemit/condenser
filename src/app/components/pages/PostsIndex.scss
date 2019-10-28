@@ -201,7 +201,7 @@
 
 .articles {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding: 4px 1em 1em 1em;
+  padding: 0.25em 1em;
   transition: all 0.2s ease-out;
   border: transparent;
   min-width: 300px;
@@ -210,21 +210,19 @@
   background-color: transparent;
   box-shadow: none;
 
+  h2 {
+    font-family: sans-serif;
+  }
   @include MQ(M) {
-    margin: 0 1em;
-    padding: 0.5em 0em;
+    padding: 0.25em 1em;
     min-width: 500px;
     max-width: 664px;
     order: 2;
 
   }
-  h2 {
-    font-family: sans-serif;
-  }
   @include MQ(L) {
     min-width: 550px;
     max-width: 664px;
-    padding: 0;
     @include themify($themes) {
       border: themed('borderTransparent');
       background-color: themed('transparent');
@@ -697,7 +695,6 @@ a#changeLayout:focus {
       }
     }
     .articles {
-      padding: 1.5em 1.5em;
       max-width: none;
       max-width: 1056px;
       @include MQ(XL) {
@@ -725,10 +722,10 @@ a#changeLayout:focus {
         }
       }
       &__h2 {
-        @include font-size(16px);
+        @include font-size(15px);
 
         @include MQ(M) {
-          -webkit-line-clamp: 2;
+          -webkit-line-clamp: 1;
         }
         @include MQ(XL) {
           -webkit-line-clamp: 1;
@@ -749,7 +746,7 @@ a#changeLayout:focus {
         transform:translateY(-50%)
       }
       &__summary-header {
-        padding: 2px 0 5px;
+        padding: 2px 0 0;
         border: transparent;
       }
       &__summary-footer {
@@ -806,6 +803,7 @@ a#changeLayout:focus {
       }
       .articles__hr {
         margin-bottom: 0.3em;
+        display: none;
       }
     }
     // ,user layout-list
@@ -817,20 +815,6 @@ a#changeLayout:focus {
           @include font-size(14px);
         }
       }
-    }
-  }
-}
-
-
-.layout-list {
-  @include MQ(L) {
-    .articles {
-      padding: 1.5em 3em;
-    }
-  }
-  @include MQ(XL) {
-    .articles {
-      padding: 0;
     }
   }
 }
@@ -847,61 +831,6 @@ a#changeLayout:focus {
     margin-right: 12px;
   }
 }
-
-.layout-compressed {
-  @extend .layout-list;
-
-  @include MQ(M) {
-    .Userpic {
-      display: none;
-    }
-    .articles {
-      &__summary {
-        margin: 0 0 10px;
-        padding-bottom: 0;
-      }
-      &__summary-header {
-        padding: 2px 0;
-      }
-      &__summary-footer {
-        padding: 0;
-      }
-      &__h2 {
-        @include font-size(14px);
-        padding-bottom: 2px;
-      }
-      .PostSummary__body {
-        padding: 0;
-        @include font-size(14px);
-      }
-      &__content-block {
-        &--img {
-          margin-right: 12px;
-        }
-      }
-      &__feature-img-container {
-        width: 90px;
-        height: 56px;
-      }
-      &__hr {
-        margin-bottom: 12px;
-      }
-    }
-    .c-sidebar {
-      &__content {
-        @include font-size(14px);
-      }
-    }
-    .user {
-      &__name {
-        a {
-          font-weight: normal;
-        }
-      }
-    }
-  }
-}
-
 
 .icon-svg {
   transition: 0.2s all ease-in-out;

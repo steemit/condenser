@@ -65,6 +65,10 @@ function runApp(initial_state) {
         }
     };
 
+    window.onunhandledrejection = function(evt) {
+        console.error('unhandled rejection', evt.reason);
+    };
+
     window.document.body.onkeypress = e => {
         buff.shift();
         buff.push(e.key);

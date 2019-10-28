@@ -53,7 +53,6 @@ export default function reducer(state = defaultState, action) {
 
         case ERROR: {
             const { operations, error, errorCallback } = payload;
-            console.error('Error.message', error.message);
 
             let msg;
             let key = error.toString().replace(/rethrow$/, '');
@@ -84,15 +83,18 @@ export default function reducer(state = defaultState, action) {
                         sp
                     } STEEM.`;
                 } catch (e) {
-                    console.error(e);
+                    console.error('bandwidth parse error', key);
                     msg = 'Bandwidth error: ' + last_part(key, ':');
                 }
             } else if (/unknown key: /.test(key)) {
                 // RPCError: unknown key:unknown key:
                 msg = "Transaction failed: Steem account doesn't exist.";
+            } else if (/missing required posting authority/.test(key)) {
+                // missing required posting authority:Missing Posting Authority test-safari
+                msg = last_part(key, ':');
             } else {
                 msg = 'Transaction broadcast error: ' + last_part(key, ':');
-                console.error('unhandled error:', key);
+                console.error('unhandled error:', key, 'msg:', error.message);
             }
 
             // SagaShared / showTransactionErrorNotification

@@ -51,7 +51,7 @@ describe('makeCanonicalLink', () => {
     ];
     test_cases.forEach(v => {
         it(v[0], () => {
-            expect(makeCanonicalLink(v[1])).toBe(v[2]);
+            expect(makeCanonicalLink(v[1], v[1].json_metadata)).toBe(v[2]);
         });
     });
 });

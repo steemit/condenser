@@ -175,8 +175,8 @@
 }
 .downvoted {
     opacity: 0.5;
-    -webkit-filter: grayscale(1); // image
-    filter: gray; // image grayscale
+    //-webkit-filter: grayscale(1); // image
+    //filter: gray; // image grayscale
     transition: 0.2s all ease-in-out;
     color: #848282;
     @include themify($themes) {

@@ -4,16 +4,17 @@ import reactForm from 'app/utils/ReactForm';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
-import CategorySelector from 'app/components/cards/CategorySelector';
-import { validateCategory } from 'app/components/cards/CategorySelector';
+import TagInput from 'app/components/cards/TagInput';
+import { validateTagInput } from 'app/components/cards/TagInput';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import PostCategoryBanner from 'app/components/elements/PostCategoryBanner';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
 import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
 import * as globalActions from 'app/redux/GlobalReducer';
-import { fromJS, OrderedSet } from 'immutable';
+import { fromJS, Set, OrderedSet } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
@@ -34,7 +35,7 @@ function allTags(userInput, originalCategory, hashtags) {
             : []
     );
 
-    // remove original category, if present
+    // remove original cat, if present
     if (originalCategory && /^[-a-z\d]+$/.test(originalCategory))
         tags = tags.delete(originalCategory);
 
@@ -104,8 +105,13 @@ class ReplyEditor extends React.Component {
             let draft = localStorage.getItem('replyEditorData-' + formId);
             if (draft) {
                 draft = JSON.parse(draft);
-                const { category, title } = this.state;
-                if (category) category.props.onChange(draft.category);
+                const { tags, title } = this.state;
+
+                if (tags) {
+                    this.checkTagsCommunity(draft.tags);
+                    tags.props.onChange(draft.tags);
+                }
+
                 if (title) title.props.onChange(draft.title);
                 if (draft.payoutType)
                     this.props.setPayoutType(formId, draft.payoutType);
@@ -128,6 +134,38 @@ class ReplyEditor extends React.Component {
                     : null,
             });
         }
+
+        // Overwrite category (even if draft loaded) if authoritative category was provided
+        if (this.props.category) {
+            if (this.state.tags) {
+                this.state.tags.props.onChange(this.props.initialValues.tags);
+            }
+            this.checkTagsCommunity(this.props.category);
+        }
+    }
+
+    checkTagsCommunity(tagsInput) {
+        let community = null;
+        if (tagsInput) {
+            const primary = tagsInput.split(' ')[0];
+            if (primary.substring(0, 5) == 'hive-') {
+                community = primary;
+                this.setState({ disabledCommunity: null });
+            }
+        }
+        this.setState({ community });
+    }
+
+    shiftTagInput() {
+        const { tags } = this.state;
+        const items = tags.value.split(' ');
+        this.setState({ disabledCommunity: items.shift() });
+        tags.props.onChange(items.join(' '));
+    }
+
+    unshiftTagInput(tag) {
+        const { tags } = this.state;
+        tags.props.onChange(tag + ' ' + tags.value);
     }
 
     componentDidMount() {
@@ -150,18 +188,18 @@ class ReplyEditor extends React.Component {
             // Save curent draft to localStorage
             if (
                 ts.body.value !== ns.body.value ||
-                (ns.category && ts.category.value !== ns.category.value) ||
+                (ns.tags && ts.tags.value !== ns.tags.value) ||
                 (ns.title && ts.title.value !== ns.title.value) ||
                 np.payoutType !== tp.payoutType ||
                 np.beneficiaries !== tp.beneficiaries
             ) {
                 // also prevents saving after parent deletes this information
                 const { formId, payoutType, beneficiaries } = np;
-                const { category, title, body } = ns;
+                const { tags, title, body } = ns;
                 const data = {
                     formId,
                     title: title ? title.value : undefined,
-                    category: category ? category.value : undefined,
+                    tags: tags ? tags.value : undefined,
                     body: body.value,
                     payoutType,
                     beneficiaries,
@@ -176,6 +214,10 @@ class ReplyEditor extends React.Component {
                     );
                     this.showDraftSaved();
                 }, 500);
+            }
+
+            if (ns.tags && ts.tags && ts.tags.value !== ns.tags.value) {
+                this.checkTagsCommunity(ns.tags.value);
             }
         }
     }
@@ -197,7 +239,7 @@ class ReplyEditor extends React.Component {
                         : values.title.length > 255
                           ? tt('reply_editor.shorten_title')
                           : null),
-                category: isStory && validateCategory(values.category, !isEdit),
+                tags: isStory && validateTagInput(values.tags, !isEdit),
                 body: !values.body
                     ? tt('g.required')
                     : values.body.length > maxKb * 1024
@@ -345,20 +387,18 @@ class ReplyEditor extends React.Component {
             body: this.props.body,
         };
         const { onCancel, onTitleChange } = this;
-        const { title, category, body } = this.state;
+        const { title, tags, body, community, disabledCommunity } = this.state;
         const {
             reply,
             username,
             isStory,
             formId,
-            noImage,
             author,
             permlink,
             parent_author,
             parent_permlink,
             type,
             jsonMetadata,
-            state,
             successCallback,
             defaultPayoutType,
             payoutType,
@@ -393,7 +433,7 @@ class ReplyEditor extends React.Component {
             parent_author,
             parent_permlink,
             type,
-            state,
+            username,
             originalPost,
             isHtml,
             isStory,
@@ -435,6 +475,16 @@ class ReplyEditor extends React.Component {
 
         return (
             <div className="ReplyEditor row">
+                {isStory &&
+                    !isEdit && (
+                        <PostCategoryBanner
+                            communityName={community}
+                            disabledCommunity={disabledCommunity}
+                            username={username}
+                            onCancel={this.shiftTagInput.bind(this)}
+                            onUndo={this.unshiftTagInput.bind(this)}
+                        />
+                    )}
                 <div className="column small-12">
                     <div
                         ref="draft"
@@ -599,15 +649,16 @@ class ReplyEditor extends React.Component {
                         >
                             {isStory && (
                                 <span>
-                                    <CategorySelector
-                                        {...category.props}
+                                    <TagInput
+                                        {...tags.props}
+                                        onChange={tags.props.onChange}
                                         disabled={loading}
                                         isEdit={isEdit}
                                         tabIndex={3}
                                     />
                                     <div className="error">
-                                        {(category.touched || category.value) &&
-                                            category.error}&nbsp;
+                                        {(tags.touched || tags.value) &&
+                                            tags.error}&nbsp;
                                     </div>
                                 </span>
                             )}
@@ -759,9 +810,7 @@ class ReplyEditor extends React.Component {
                                     <h6>{tt('g.preview')}</h6>
                                     <MarkdownViewer
                                         text={body.value}
-                                        jsonMetadata={jsonMetadata}
                                         large={isStory}
-                                        noImage={noImage}
                                     />
                                 </div>
                             )}
@@ -822,19 +871,29 @@ export default formId =>
         (state, ownProps) => {
             const username = state.user.getIn(['current', 'username']);
             const fields = ['body'];
-            const { type, parent_author, jsonMetadata } = ownProps;
+            const { type, parent_author } = ownProps;
             const isEdit = type === 'edit';
             const isStory =
-                /submit_story/.test(type) || (isEdit && parent_author === '');
+                /submit_story/.test(type) || (isEdit && !parent_author);
             if (isStory) fields.push('title');
-            if (isStory) fields.push('category');
+            if (isStory) fields.push('tags');
 
             let { category, title, body } = ownProps;
             if (/submit_/.test(type)) title = body = '';
+            // type: PropTypes.oneOf(['submit_story', 'submit_comment', 'edit'])
+
+            const query = state.routing.locationBeforeTransitions.query;
+            if (query && query.category) {
+                category = query.category;
+            }
+
+            const jsonMetadata = ownProps.jsonMetadata
+                ? ownProps.jsonMetadata.toJS()
+                : {};
+
+            let tags = category;
             if (isStory && jsonMetadata && jsonMetadata.tags) {
-                category = OrderedSet([category, ...jsonMetadata.tags]).join(
-                    ' '
-                );
+                tags = OrderedSet([category, ...jsonMetadata.tags]).join(' ');
             }
 
             const defaultPayoutType = state.app.getIn(
@@ -861,19 +920,41 @@ export default formId =>
             ]);
             beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
 
+            // Post full
+            /*
+            const replyParams = {
+                author,
+                permlink,
+                parent_author,
+                parent_permlink,
+                category,
+                title,
+                body: post.get('body'),
+            }; */
+
+            //ownProps:
+            //  {...comment},
+            //  author, permlink,
+            //  body, title, category
+            //  parent_author, parent_permlink,
+            //  type, successCallback,
+            //  successCallBack, onCancel
             const ret = {
                 ...ownProps,
+                type, //XX
+                jsonMetadata, //XX (if not reply)
+                category,
                 fields,
                 isStory,
                 username,
                 defaultPayoutType,
                 payoutType,
                 beneficiaries,
-                initialValues: { title, body, category },
-                state,
+                initialValues: { title, body, tags },
                 formId,
                 richTextEditor,
             };
+
             return ret;
         },
 
@@ -898,7 +979,7 @@ export default formId =>
                     })
                 ),
             reply: ({
-                category,
+                tags,
                 title,
                 body,
                 author,
@@ -911,15 +992,12 @@ export default formId =>
                 originalPost,
                 payoutType = '50%',
                 beneficiaries = [],
-                state,
+                username,
                 jsonMetadata,
                 successCallback,
                 errorCallback,
                 startLoadingIndicator,
             }) => {
-                // const post = state.global.getIn(['content', author + '/' + permlink])
-                const username = state.user.getIn(['current', 'username']);
-
                 const isEdit = type === 'edit';
                 const isNew = /^submit_/.test(type);
 
@@ -969,7 +1047,7 @@ export default formId =>
                 }
 
                 const metaTags = allTags(
-                    category,
+                    tags,
                     originalPost.category,
                     rtags.hashtags
                 );
@@ -980,17 +1058,18 @@ export default formId =>
                 else delete meta.tags;
                 if (rtags.usertags.size) meta.users = rtags.usertags;
                 else delete meta.users;
-                if (rtags.images.size) meta.image = rtags.images;
+                if (rtags.images.size)
+                    meta.image = rtags.images; // TODO: save first image
                 else delete meta.image;
-                if (rtags.links.size) meta.links = rtags.links;
+                if (rtags.links.size)
+                    meta.links = rtags.links; // TODO: remove? save first?
                 else delete meta.links;
 
-                meta.app = 'steemit/0.1';
+                meta.app = 'steemit/0.2';
                 if (isStory) {
                     meta.format = isHtml ? 'html' : 'markdown';
                 }
 
-                // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
                 const sanitizeErrors = [];
                 sanitize(body, sanitizeConfig({ sanitizeErrors }));
                 if (sanitizeErrors.length) {
@@ -1064,7 +1143,7 @@ export default formId =>
                     category: originalPost.category || metaTags.first(),
                     title,
                     body,
-                    json_metadata: meta,
+                    json_metadata: JSON.stringify(meta),
                     __config,
                 };
                 dispatch(

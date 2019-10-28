@@ -89,24 +89,6 @@ a, path, circle {
   }
 }
 
-.ptc,
-a.ptc {
-    cursor:pointer;
-  text-decoration: none;
-  transition: 0.2s all ease-in-out;
-  @include themify($themes) {
-    color: themed('textColorPrimary');
-  }
-
-  &:hover, &:focus {
-    color: $dark-gray;
-    text-decoration: none;
-    @include themify($themes) {
-        color: themed('textColorAccent');
-    }
-  }
-}
-
 .button.hollow.no-border {
   border: none;
   text-decoration: underline;
@@ -216,14 +198,25 @@ a[rel="nofollow noopener"]:after {
 .affiliation {
   font-weight: 400;
   display: inline;
-  margin: 0 0.3rem;
+  margin: 0 0.25rem;
   padding: 0 0.4rem 0.1rem;
   border-radius: 0.3rem;
   text-shadow: none;
   font-size: 0.75rem;
-  vertical-align: middle;
   @include themify($themes) {
     background-color: themed('colorAccent');
     color: themed('buttonText');
   }
+
+  .Icon {
+    margin-left: 0.25em;
+    fill: white;
+  }
+}
+
+.user_role {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    color: gray;
+    margin-left: 0.25em;
 }

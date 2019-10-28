@@ -42,16 +42,6 @@ export const userWatches = [
             // TODO: log error to server, conveyor is unavailable
         }
     }),
-    function* getLatestFeedPrice() {
-        try {
-            const history = yield call([api, api.getFeedHistoryAsync]);
-            const feed = history.price_history;
-            const last = fromJS(feed[feed.length - 1]);
-            yield put(userActions.setLatestFeedPrice(last));
-        } catch (error) {
-            // (exceedingly rare) ignore, UI will fall back to feed_price
-        }
-    },
 ];
 
 const strCmp = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
@@ -497,6 +487,8 @@ function* promptTosAcceptance(username) {
 }
 
 function* getFeatureFlags(username, posting_private) {
+    // not yet in use
+    return;
     try {
         let flags;
         if (!posting_private && hasCompatibleKeychain()) {

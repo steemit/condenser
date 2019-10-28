@@ -4,36 +4,37 @@ import ReplyEditor from 'app/components/elements/ReplyEditor';
 import { SUBMIT_FORM_ID } from 'shared/constants';
 
 const formId = SUBMIT_FORM_ID;
-// const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
-// const SubmitReplyEditor = ReplyEditor(formId, richTextEditor);
 const SubmitReplyEditor = ReplyEditor(formId);
 
+function _redirect_url(operations) {
+    try {
+        const { category } = operations[0][0][1];
+        return '/created/' + category;
+    } catch (e) {
+        console.error(e);
+    }
+    return '/created';
+}
+
 class SubmitPost extends React.Component {
-    // static propTypes = {
-    //     routeParams: PropTypes.object.isRequired,
-    // }
     constructor() {
         super();
-        this.success = (/*operation*/) => {
-            // const { category } = operation
+        this.success = operations => {
             localStorage.removeItem('replyEditorData-' + formId);
-            browserHistory.push('/created'); //'/category/' + category)
+            browserHistory.push(_redirect_url(operations));
         };
     }
     render() {
-        const { success } = this;
         return (
-            <div className="SubmitPost">
-                <SubmitReplyEditor
-                    type="submit_story"
-                    successCallback={success}
-                />
-            </div>
+            <SubmitReplyEditor
+                type="submit_story"
+                successCallback={this.success}
+            />
         );
     }
 }
 
 module.exports = {
     path: 'submit.html',
-    component: SubmitPost, // connect(state => ({ global: state.global }))(SubmitPost)
+    component: SubmitPost,
 };

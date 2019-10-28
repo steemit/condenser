@@ -6,49 +6,26 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import SvgImage from 'app/components/elements/SvgImage';
 
 class PostWrapper extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            loading: true,
-        };
-    }
-
     componentWillMount() {
-        const route_params = this.props.routeParams;
-        const post = route_params.username + '/' + route_params.slug;
-        const dis = this.props.content.get(post);
-        if (!dis) {
-            this.props
-                .getContent({
-                    author: route_params.username,
-                    permlink: route_params.slug,
-                })
-                .then(content => {
-                    if (content) {
-                        browserHistory.replace(`/${content.category}/@${post}`);
-                    }
-                })
-                .catch(() => {
-                    this.setState({ loading: false });
-                });
-        } else if (dis.get('id') === '0.0.0') {
-            // non-existing post
-            this.setState({ loading: false });
-        } else {
-            if (browserHistory)
-                browserHistory.replace(`/${dis.get('category')}/@${post}`);
+        const { redirectUrl, loading, author, permlink } = this.props;
+        if (redirectUrl) {
+            if (browserHistory) browserHistory.replace(redirectUrl);
+        } else if (loading) {
+            this.props.getPostHeader({ author, permlink });
         }
     }
 
-    shouldComponentUpdate(np, ns) {
-        return ns.loading !== this.state.loading;
+    componentDidUpdate(prevProps) {
+        const { redirectUrl } = this.props;
+        if (redirectUrl && redirectUrl != prevProps.redirectUrl) {
+            if (browserHistory) browserHistory.replace(redirectUrl);
+        }
     }
 
     render() {
         return (
             <div>
-                {this.state.loading ? (
+                {this.props.loading ? (
                     <center>
                         <LoadingIndicator type="circle" />
                     </center>
@@ -65,22 +42,34 @@ class PostWrapper extends React.Component {
 }
 
 const StoreWrapped = connect(
-    state => {
+    (state, props) => {
+        // read route
+        const { routeParams } = props;
+        const author = routeParams.username;
+        const permlink = routeParams.slug;
+        const postref = author + '/' + permlink;
+
+        // check for category (undefined: loading; null: not found)
+        let category = state.global.getIn(['content', postref, 'category']);
+        if (typeof category === 'undefined') {
+            if (state.global.hasIn(['headers', postref])) {
+                category = state.global.getIn(
+                    ['headers', postref, 'category'],
+                    null
+                );
+            }
+        }
+
         return {
-            content: state.global.get('content'),
+            author,
+            permlink,
+            redirectUrl: category ? `/${category}/@${postref}` : null,
+            loading: typeof category === 'undefined',
         };
     },
     dispatch => ({
-        getContent: payload =>
-            new Promise((resolve, reject) => {
-                dispatch(
-                    fetchDataSagaActions.getContent({
-                        ...payload,
-                        resolve,
-                        reject,
-                    })
-                );
-            }),
+        getPostHeader: payload =>
+            dispatch(fetchDataSagaActions.getPostHeader(payload)),
     })
 )(PostWrapper);
 

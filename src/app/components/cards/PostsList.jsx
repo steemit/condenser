@@ -27,15 +27,12 @@ class PostsList extends React.Component {
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
-        showSpam: PropTypes.bool,
         showResteem: PropTypes.bool,
-        fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
         nsfwPref: PropTypes.string.isRequired,
     };
 
     static defaultProps = {
-        showSpam: false,
         loading: false,
     };
 
@@ -59,9 +56,6 @@ class PostsList extends React.Component {
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
-        const post_overlay = document.getElementById('post_overlay');
-        if (post_overlay)
-            post_overlay.removeEventListener('click', this.closeOnOutsideClick);
         document.getElementsByTagName('body')[0].className = '';
     }
 
@@ -79,12 +73,6 @@ class PostsList extends React.Component {
                 'PostsList__post_top_bar'
             );
             if (!inside_top_bar) {
-                const post_overlay = document.getElementById('post_overlay');
-                if (post_overlay)
-                    post_overlay.removeEventListener(
-                        'click',
-                        this.closeOnOutsideClick
-                    );
                 this.closePostModal();
             }
         }
@@ -93,12 +81,6 @@ class PostsList extends React.Component {
     fetchIfNeeded() {
         this.scrollListener();
     }
-
-    toggleNegativeReplies = () => {
-        this.setState({
-            showNegativeComments: !this.state.showNegativeComments,
-        });
-    };
 
     scrollListener = debounce(() => {
         const el = window.document.getElementById('posts_list');
@@ -115,10 +97,10 @@ class PostsList extends React.Component {
             topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight <
             10
         ) {
-            const { loadMore, posts, category, showResteem } = this.props;
-            if (loadMore && posts && posts.size)
-                loadMore(posts.last(), category, showResteem);
+            const { loadMore, posts } = this.props;
+            if (loadMore && posts && posts.size) loadMore(posts.last());
         }
+
         // Detect if we're in mobile mode (renders larger preview imgs)
         const mq = window.matchMedia('screen and (max-width: 39.9375em)');
         if (mq.matches) {
@@ -151,33 +133,31 @@ class PostsList extends React.Component {
             showFeatured,
             showPromoted,
             showResteem,
-            showSpam,
             loading,
             anyPosts,
             pathname,
             category,
+            order,
             content,
             ignore_result,
             account,
             username,
             nsfwPref,
+            hideCategory,
         } = this.props;
         const { thumbSize } = this.state;
         const postsInfo = [];
         posts.forEach(item => {
             const cont = content.get(item);
             if (!cont) {
-                console.error('PostsList --> Missing cont key', item);
+                // can occur when deleting a post
+                console.error('PostsList --> Missing cont key: ' + item);
                 return;
             }
-            const ignore =
-                ignore_result && ignore_result.has(cont.get('author'));
-            const hideResteem =
-                !showResteem && account && cont.get('author') != account;
-            const hide = cont.getIn(['stats', 'hide']);
-            if (!hideResteem && (!(ignore || hide) || showSpam))
-                // rephide
-                postsInfo.push({ item, ignore });
+            const author = cont.get('author');
+            const ignore = ignore_result && ignore_result.has(author);
+            const hideResteem = !showResteem && account && author != account;
+            if (!(hideResteem || ignore)) postsInfo.push({ item, ignore });
         });
 
         // Helper functions for determining whether to show special posts.
@@ -266,19 +246,23 @@ class PostsList extends React.Component {
 
         const renderSummary = items =>
             items.map((item, i) => {
+                const ps = (
+                    <PostSummary
+                        account={account}
+                        post={item.item}
+                        thumbSize={thumbSize}
+                        ignore={item.ignore}
+                        nsfwPref={nsfwPref}
+                        hideCategory={hideCategory}
+                        order={order}
+                    />
+                );
+
                 const every = this.props.adSlots.in_feed_1.every;
                 if (this.props.shouldSeeAds && i >= every && i % every === 0) {
                     return (
                         <div key={item.item}>
-                            <li>
-                                <PostSummary
-                                    account={account}
-                                    post={item.item}
-                                    thumbSize={thumbSize}
-                                    ignore={item.ignore}
-                                    nsfwPref={nsfwPref}
-                                />
-                            </li>
+                            <li>{ps}</li>
 
                             <div className="articles__content-block--ad">
                                 <GptAd
@@ -290,17 +274,7 @@ class PostsList extends React.Component {
                         </div>
                     );
                 }
-                return (
-                    <li key={item.item}>
-                        <PostSummary
-                            account={account}
-                            post={item.item}
-                            thumbSize={thumbSize}
-                            ignore={item.ignore}
-                            nsfwPref={nsfwPref}
-                        />
-                    </li>
-                );
+                return <li key={item.item}>{ps}</li>;
             });
 
         return (
@@ -371,9 +345,6 @@ export default connect(
     dispatch => ({
         fetchState: pathname => {
             dispatch(fetchDataSagaActions.fetchState({ pathname }));
-        },
-        removeHighSecurityKeys: () => {
-            dispatch(userActions.removeHighSecurityKeys());
         },
     })
 )(PostsList);

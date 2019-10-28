@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { immutableAccessor } from 'app/utils/Accessors';
-import extractContent from 'app/utils/ExtractContent';
+import { parseJsonTags } from 'app/utils/StateFunctions';
 import Headroom from 'react-headroom';
 import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
@@ -18,9 +18,9 @@ import * as appActions from 'app/redux/AppReducer';
 import Userpic from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
-import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
 import GptAd from 'app/components/elements/GptAd';
+import { Map } from 'immutable';
 
 class Header extends React.Component {
     static propTypes = {
@@ -115,11 +115,9 @@ class Header extends React.Component {
             vertical,
             nightmodeEnabled,
             toggleNightmode,
-            userPath,
             showSidePanel,
             navigate,
             display_name,
-            walletUrl,
             content,
         } = this.props;
 
@@ -127,8 +125,7 @@ class Header extends React.Component {
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
-        let tags = [];
-        let home_account = false;
+        let gptTags = [];
         let page_title = route.page;
         let sort_order = '';
         let topic = '';
@@ -136,34 +133,34 @@ class Header extends React.Component {
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
-                page_title = tt('header_jsx.home');
-                const account_name = route.params[1];
-                if (
-                    current_account_name &&
-                    account_name.indexOf(current_account_name) === 1
-                )
-                    home_account = true;
+                page_title = 'My Friends'; //tt('header_jsx.home');
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
-                tags = [topic];
-                const type =
-                    route.params[0] == 'payout_comments' ? 'comments' : 'posts';
+                gptTags = [topic];
+
                 let prefix = route.params[0];
                 if (prefix == 'created') prefix = 'New';
-                if (prefix == 'payout') prefix = 'Pending payout';
-                if (prefix == 'payout_comments') prefix = 'Pending payout';
-                if (topic !== '') prefix += ` ${topic}`;
-                page_title = `${prefix} ${type}`;
+                if (prefix == 'payout') prefix = 'Pending';
+                if (prefix == 'payout_comments') prefix = 'Pending';
+                if (prefix == 'muted') prefix = 'Muted';
+                page_title = prefix;
+                if (topic !== '') {
+                    let name = this.props.community.getIn(
+                        [topic, 'title'],
+                        '#' + topic
+                    );
+                    if (name == '#my') name = 'My Communities';
+                    page_title = `${name} / ${page_title}`;
+                } else {
+                    page_title += ' posts';
+                }
             }
         } else if (route.page === 'Post') {
-            const user = `${route.params[1]}`.replace('@', '');
-            const slug = `${route.params[2]}`;
             if (content) {
-                const post_content = content.get(`${user}/${slug}`);
-                if (post_content) {
-                    const p = extractContent(immutableAccessor, post_content);
-                    tags = p.json_metadata.tags || [];
-                }
+                const user = `${route.params[1]}`.replace('@', '');
+                const slug = `${route.params[2]}`;
+                const post = content.get(`${user}/${slug}`);
+                gptTags = post ? parseJsonTags(post) : [];
             }
             sort_order = '';
             topic = route.params[0];
@@ -173,6 +170,8 @@ class Header extends React.Component {
             page_title = tt('navigation.privacy_policy');
         } else if (route.page == 'Tos') {
             page_title = tt('navigation.terms_of_service');
+        } else if (route.page == 'CommunityRoles') {
+            page_title = 'Community Roles';
         } else if (route.page == 'RecoverAccountStep1') {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
@@ -252,29 +251,12 @@ class Header extends React.Component {
         const replies_link = `/@${username}/recent-replies`;
         const account_link = `/@${username}`;
         const comments_link = `/@${username}/comments`;
-        const wallet_link = `${walletUrl}/@${username}`;
         const settings_link = `/@${username}/settings`;
-        const pathCheck = userPath === '/submit.html' ? true : null;
 
         const user_menu = [
-            {
-                link: feed_link,
-                icon: 'home',
-                value: tt('g.feed'),
-            },
             { link: account_link, icon: 'profile', value: tt('g.blog') },
             { link: comments_link, icon: 'replies', value: tt('g.comments') },
-            {
-                link: replies_link,
-                icon: 'reply',
-                value: tt('g.replies'),
-            },
-            {
-                link: wallet_link,
-                icon: 'wallet',
-                value: tt('g.wallet'),
-            },
-
+            { link: replies_link, icon: 'reply', value: tt('g.replies') },
             {
                 link: '#',
                 icon: 'eye',
@@ -304,7 +286,7 @@ class Header extends React.Component {
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
                     <div style={showAd ? {} : { display: 'none' }}>
                         <GptAd
-                            tags={tags}
+                            tags={gptTags}
                             type="Freestar"
                             id="bsa-zone_1566493796250-1_123456"
                         />
@@ -399,20 +381,26 @@ const mapStateToProps = (state, ownProps) => {
         return {
             username: null,
             loggedIn: false,
+            community: state.global.get('community', Map({})),
         };
     }
 
+    // display name used in page title
     let display_name;
     const route = resolveRoute(ownProps.pathname);
     if (route.page === 'UserProfile') {
-        const profile = state.global.getIn([
-            'accounts',
-            route.params[0].slice(1),
-        ]);
-        display_name = profile ? normalizeProfile(profile.toJS()).name : null;
+        display_name = state.userProfiles.getIn(
+            [
+                'profiles',
+                route.params[0].slice(1),
+                'metadata',
+                'profile',
+                'name',
+            ],
+            null
+        );
     }
 
-    const userPath = state.routing.locationBeforeTransitions.pathname;
     const username = state.user.getIn(['current', 'username']);
     const loggedIn = !!username;
     const current_account_name = username
@@ -420,19 +408,17 @@ const mapStateToProps = (state, ownProps) => {
         : state.offchain.get('account');
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
-    const walletUrl = state.app.get('walletUrl');
-    const content = state.global.get('content');
+    const content = state.global.get('content'); // TODO: needed for SSR?
 
     return {
         username,
         loggedIn,
-        userPath,
+        community: state.global.get('community', Map({})),
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         display_name,
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         gptEnabled,
-        walletUrl,
         content,
         ...ownProps,
     };

@@ -21,6 +21,17 @@
         "clear": "Clear",
         "close": "Close",
         "collapse_or_expand": "Collapse/Expand",
+        "community_settings_header": "Community Settings",
+        "community_settings_description": "What does your community stand for?",
+        "community_list_header": "Communities",
+        "community_user_role_add_description":
+            "Set the role of a user in this community.",
+        "community_user_role_edit_description":
+            "Changing @%(username)s's role.",
+        "community_user_role_add_header": "Add User Role",
+        "community_user_role_edit_header": "Change User Role",
+        "community_user_title_edit_header": "Change User Title",
+        "community_user_title_edit_description": "Set Title for @%(username)s",
         "comments": "Comments",
         "confirm": "Confirm",
         "convert": "Convert",
@@ -59,6 +70,7 @@
         "newer": "Newer",
         "next": "Next",
         "no": "No",
+        "notifications": "Notifications",
         "ok": "Ok",
         "older": "Older",
         "or": "or",
@@ -68,6 +80,7 @@
         "permissions": "Permissions",
         "phishy_message":
             "Link expanded to plain text; beware of a potential phishing attempt",
+        "pin": "Pin",
         "post": "Post",
         "post_as_user": "Post as %(username)s",
         "posts": "Posts",
@@ -105,6 +118,12 @@
         "sell": "Sell",
         "settings": "Settings",
         "share_this_post": "Share this post",
+        "mute_this_post": "Mute this post",
+        "mute_this_post_description":
+            "Please provide a note regarding your decision to mute this post.",
+        "unmute_this_post": "Unmute this post",
+        "unmute_this_post_description":
+            "Please provide a note regarding your decision to unmute this post.",
         "show": "Show",
         "sign_in": "Sign in",
         "sign_up": "Sign up",
@@ -116,14 +135,15 @@
         "to": " to ",
         "topics": "Topics",
         "toggle_nightmode": "Toggle Night Mode",
-        "all_tags": "All tags",
-        "all_tags_mobile": "All content",
+        "all_tags": "All posts",
+        "all_tags_mobile": "All posts",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",
         "try_again": "Try Again",
         "type": "Type",
         "unfollow": "Unfollow",
         "unmute": "Unmute",
+        "unpin": "Unpin",
         "unknown": "Unknown",
         "upvote": "Upvote",
         "upvote_post": "Upvote post",
@@ -231,7 +251,7 @@
         "read_only_mode":
             "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
         "tags_and_topics": "Tags",
-        "show_more_topics": "View all tags",
+        "show_more_topics": "Explore communities",
         "basic": "Basic",
         "advanced": "Advanced",
         "views": {
@@ -380,6 +400,8 @@
         "user_hasnt_followed_anything_yet":
             "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
         "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+        "user_hasnt_had_any_notifications_yet":
+            "%(name)s hasn't had any notifications yet",
         "looks_like_you_havent_posted_anything_yet":
             "Looks like you haven't posted anything yet.",
         "create_a_post": "Create a Post",

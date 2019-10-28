@@ -156,6 +156,8 @@ class Modals extends React.Component {
 
 export default connect(
     state => {
+        const rcErr = state.transaction.getIn(['errors', 'bandwidthError']);
+
         return {
             username: state.user.getIn(['current', 'username']),
             show_login_modal: state.user.get('show_login_modal'),
@@ -168,10 +170,7 @@ export default connect(
                     '/tos.html' &&
                 state.routing.locationBeforeTransitions.pathname !==
                     '/privacy.html',
-            show_bandwidth_error_modal: state.transaction.getIn([
-                'errors',
-                'bandwidthError',
-            ]),
+            show_bandwidth_error_modal: rcErr,
             show_post_advanced_settings_modal: state.user.get(
                 'show_post_advanced_settings_modal'
             ),

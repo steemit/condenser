@@ -6,7 +6,7 @@ import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
 import { setUserPreferences } from 'app/utils/ServerApiClient';
-import { getStateAsync } from 'app/utils/steemApi';
+import { callBridge } from 'app/utils/steemApi';
 
 const wait = ms =>
     new Promise(resolve => {
@@ -14,7 +14,6 @@ const wait = ms =>
     });
 
 export const sharedWatches = [
-    takeEvery(globalActions.GET_STATE, getState),
     takeLatest(
         [
             appActions.SET_USER_PREFERENCES,
@@ -53,17 +52,6 @@ export function* getAccount(username, force = false) {
     return account;
 }
 
-/** Manual refreshes.  The router is in FetchDataSaga. */
-export function* getState({ payload: { url } }) {
-    try {
-        const state = yield call(getStateAsync, url);
-        yield put(globalActions.receiveState(state));
-    } catch (error) {
-        console.error('~~ Saga getState error ~~>', url, error);
-        yield put(appActions.steemApiError(error.message));
-    }
-}
-
 function* showTransactionErrorNotification() {
     const errors = yield select(state => state.transaction.get('errors'));
     for (const [key, message] of errors) {
@@ -78,6 +66,7 @@ function* showTransactionErrorNotification() {
 export function* getContent({ author, permlink, resolve, reject }) {
     let content;
     while (!content) {
+        console.log('getContent', author, permlink);
         content = yield call([api, api.getContentAsync], author, permlink);
         if (content['author'] == '') {
             // retry if content not found. #1870
@@ -85,6 +74,16 @@ export function* getContent({ author, permlink, resolve, reject }) {
             yield call(wait, 3000);
         }
     }
+
+    function dbg(content) {
+        const cop = Object.assign({}, content);
+        delete cop['active_votes'];
+        return JSON.stringify(cop);
+    }
+
+    console.log('raw content> ', dbg(content));
+    content = yield call(callBridge, 'normalize_post', { post: content });
+    console.log('normalized> ', dbg(content));
 
     yield put(globalActions.receiveContent({ content }));
     if (resolve && content) {

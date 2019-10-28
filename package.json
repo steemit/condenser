@@ -41,6 +41,7 @@
     "babel-preset-stage-0": "6.24.1",
     "bigi": "1.4.2",
     "blocked": "1.2.1",
+    "bluebird": "3.5.5",
     "blueimp-file-upload": "9.12.6",
     "bs58": "3.1.0",
     "bytebuffer": "5.0.1",

@@ -63,7 +63,7 @@ const SidePanel = ({
             {
                 value: 'tags',
                 label: tt('navigation.explore'),
-                link: `/tags`,
+                link: `/communities`,
             },
             {
                 value: 'market',

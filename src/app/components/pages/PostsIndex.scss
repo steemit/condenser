@@ -122,7 +122,7 @@
   &--left {
     display: none;
     order: 1;
-    @include MQ(L) {
+    @include MQ(M) {
       display: block;
       margin-left: 1em;
     }
@@ -130,7 +130,7 @@
   &--right {
     display: none;
     order: 3;
-    @include MQ(M) {
+    @include MQ(L) {
       display: block;
       margin-right: 1em;
     }
@@ -213,7 +213,7 @@
   @include MQ(M) {
     margin: 0 1em;
     padding: 0.5em 0em;
-    min-width: 550px;
+    min-width: 500px;
     max-width: 664px;
     order: 2;
 
@@ -684,9 +684,6 @@ a#changeLayout:focus {
       &--layout-line1 {
         y: 6px;
       }
-    }
-    .content-container {
-      max-width: 1520px;
     }
     .c-sidebar {
       &--right {

@@ -67,7 +67,9 @@ export async function getStateAsync(url, observer, ssr = false) {
 
     if (ssr) {
         // append `topics` key
-        state['topics'] = await callBridge('get_trending_topics', { observer });
+        state['topics'] = await callBridge('get_trending_topics', {
+            limit: 12,
+        });
     }
 
     const cleansed = stateCleaner(state);

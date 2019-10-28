@@ -29,10 +29,17 @@ export default class CommunitiesIndex extends React.Component {
             );
         }
 
+        const role = comm =>
+            comm.context &&
+            comm.context.role != 'guest' && (
+                <span className="user_role">{comm.context.role}</span>
+            );
+
         const row = comm => (
             <tr key={comm.name}>
                 <th width="600">
                     <Link to={`/trending/${comm.name}`}>{comm.title}</Link>
+                    {role(comm)}
                     <br />
                     {comm.about}
                 </th>

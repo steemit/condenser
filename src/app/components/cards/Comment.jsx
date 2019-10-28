@@ -195,6 +195,7 @@ class CommentImpl extends React.Component {
             showNegativeComments,
             ignored,
             rootComment,
+            community,
         } = this.props;
 
         const {
@@ -214,10 +215,11 @@ class CommentImpl extends React.Component {
         const comment = post.toJS();
         const gray = comment.stats.gray || ImageUserBlockList.includes(author);
 
-        const showEditOption = username === author;
-        const showMuteToggle = Role.atLeast(viewer_role, 'mod');
-        const showReplyOption = username && comment.depth < 255;
-        const showDeleteOption = username === author && allowDelete(post);
+        const allowReply = Role.canComment(community, viewer_role);
+        const canEdit = username && username === author;
+        const canDelete = username && username === author && allowDelete(post);
+        const canReply = username && allowReply && comment.depth < 255;
+        const canMute = username && Role.atLeast(viewer_role, 'mod');
 
         let body = null;
         let controls = null;
@@ -238,14 +240,12 @@ class CommentImpl extends React.Component {
                 <div>
                     <Voting post={postref} />
                     <span className="Comment__footer__controls">
-                        {showReplyOption && (
+                        {canReply && (
                             <a onClick={onShowReply}>{tt('g.reply')}</a>
                         )}{' '}
-                        {showMuteToggle && <MuteButton post={post} />}{' '}
-                        {showEditOption && (
-                            <a onClick={onShowEdit}>{tt('g.edit')}</a>
-                        )}{' '}
-                        {showDeleteOption && (
+                        {canMute && <MuteButton post={post} />}{' '}
+                        {canEdit && <a onClick={onShowEdit}>{tt('g.edit')}</a>}{' '}
+                        {canDelete && (
                             <a onClick={onDeletePost}>{tt('g.delete')}</a>
                         )}
                     </span>
@@ -430,6 +430,7 @@ const Comment = connect(
             anchor_link: '#@' + postref, // Using a hash here is not standard but intentional; see issue #124 for details
             username,
             ignored,
+            community: community.get('name', null),
             viewer_role: community.getIn(['context', 'role'], 'guest'),
         };
     },

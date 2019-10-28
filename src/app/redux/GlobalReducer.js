@@ -65,16 +65,6 @@ const mergeAccounts = (state, account) => {
 export default function reducer(state = defaultState, action = {}) {
     const payload = action.payload;
 
-    // Set post category
-    const pathname = state.get('pathname');
-    if (pathname) {
-        const route = resolveRoute(pathname);
-        if (route.page === 'PostsIndex') {
-            const postCategory = route.params[1];
-            state = state.set('postCategory', postCategory);
-        }
-    }
-
     switch (action.type) {
         case SET_COLLAPSED: {
             return state.withMutations(map => {

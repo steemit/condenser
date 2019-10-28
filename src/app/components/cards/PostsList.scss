@@ -1,35 +1,3 @@
-.PostsList__post_overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 300;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-    backface-visibility: hidden;
-}
-
-.PostsList__post_top_overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 310;
-    height: 3rem;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    @include themify($themes) {
-        border-bottom: themed('border');
-    }
-    @media screen and (min-width: 60rem) {
-        @include themify($themes) {
-            border-bottom: themed('borderTransparent');
-        }
-    }
-}
-
 .PostsList__post_top_bar {
     position: relative;
     width: 100%;
@@ -70,18 +38,7 @@
     transform: translateZ(0);
 }
 
-body.with-post-overlay {
-    overflow: hidden;
-}
 @media screen and (min-width: 60rem) {
-    .PostsList__post_overlay {
-        background-color: rgba(0, 0, 0, 0.85);
-    }
-
-    .PostsList__post_top_overlay {
-        border-bottom: none;
-    }
-
     .PostsList__post_top_bar {
         width: 56rem;
         background-color: transparent;

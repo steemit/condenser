@@ -2,6 +2,10 @@
   clear: right;
 }
 
+.c-sidebar__module.CommunityPaneMobile {
+    padding: 0.75em 1em 0em;
+}
+
 .PostsList__summaries {
   list-style-type: none;
   margin-left: 0;
@@ -95,7 +99,7 @@
 
 .c-sidebar {
   width: 100%;
-  flex: 0 0 240px;
+  flex: 0 0 320px;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   &__module {
     padding: 1.5em 2em;
@@ -113,16 +117,8 @@
         box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
       }
     }
-    &--tags {
-      display: none;
-      @include MQ(FL) {
-        display: block;
-      }
-      @include MQ(L) {
-        display: none;
-      }
-    }
   }
+
   &--left {
     display: none;
     order: 1;
@@ -144,9 +140,8 @@
     margin: 0;
     padding: 0;
   }
-  &__list-item {
-    margin-bottom: 10px;
-    line-height: 1.2;
+
+  .li {
     &:last-child {
       margin-bottom: 0;
     }
@@ -227,7 +222,7 @@
     font-family: sans-serif;
   }
   @include MQ(L) {
-    min-width: 664px;
+    min-width: 550px;
     max-width: 664px;
     padding: 0;
     @include themify($themes) {
@@ -265,13 +260,12 @@
     position: relative;
   }
   &__summary {
-    margin: 0em 0 1em;
+    margin: 0;
     transition: 0.2s all ease-in-out;
     border: transparent;
-    padding-bottom: 10px;
+    padding-bottom: 0;
     @include themify($themes) {
       background-color: themed('moduleBackgroundColor');
-      border-bottom: themed('border');
     }
     @include MQ(M) {
       margin: 0 0 40px;
@@ -401,7 +395,6 @@
     font-weight: bold;
     @include font-size(18px);
     margin: 0;
-    text-transform: capitalize;
     @include MQ(M) {
       @include font-size(18px);
     }
@@ -698,6 +691,7 @@ a#changeLayout:focus {
     .c-sidebar {
       &--right {
         display: none;
+        max-width: 320px;
         order: 3;
         @include MQ(L) {
           display: block;
@@ -710,7 +704,7 @@ a#changeLayout:focus {
       max-width: none;
       max-width: 1056px;
       @include MQ(XL) {
-        min-width: 1050px;
+        min-width: 850px;
       }
       @include themify($themes) {
         background-color: transparent;
@@ -729,9 +723,6 @@ a#changeLayout:focus {
         box-shadow: none;
         padding-bottom: 0px;
         margin: 0;
-        @include themify($themes) {
-          border-bottom: themed('borderTransparent');
-        }
         @include MQ(M) {
           padding-bottom: 0;
         }
@@ -787,7 +778,7 @@ a#changeLayout:focus {
       &__footer {
         @include themify($themes) {
           border-top: themed('borderLight');
-          margin-top: 0.5em;
+          margin-top: 0.25em;
         }
       }
       &__content-block {
@@ -815,6 +806,9 @@ a#changeLayout:focus {
           padding-left: 0;
           padding-right: 0;
         }
+      }
+      .articles__hr {
+        margin-bottom: 0.3em;
       }
     }
     // ,user layout-list
@@ -844,7 +838,7 @@ a#changeLayout:focus {
   }
 }
 
-.layout-list .user .Userpic {
+.layout-list .user > .user__col > .user__link > .Userpic {
   width: 24px !important;
   height: 24px !important;
   margin-right: 8px;
@@ -868,9 +862,6 @@ a#changeLayout:focus {
       &__summary {
         margin: 0 0 10px;
         padding-bottom: 0;
-        @include themify($themes) {
-          border-bottom: themed('borderTransparent');
-        }
       }
       &__summary-header {
         padding: 2px 0;

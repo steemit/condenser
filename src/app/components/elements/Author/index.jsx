@@ -5,21 +5,22 @@ import ReactDOM from 'react-dom';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
-import { authorNameAndRep } from 'app/utils/ComponentFormatters';
 import AuthorDropdown from '../AuthorDropdown';
 import Reputation from 'app/components/elements/Reputation';
-import normalizeProfile from 'app/utils/NormalizeProfile';
 import AffiliationMap from 'app/utils/AffiliationMap';
 import tt from 'counterpart';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
+import UserTitle from 'app/components/elements/UserTitle';
+import { Role } from 'app/utils/Community';
+import { List } from 'immutable';
 
 const { string, bool, number } = PropTypes;
 
 const closers = [];
 
 const fnCloseAll = () => {
-    var close;
+    let close;
     while ((close = closers.shift())) {
         close();
     }
@@ -28,15 +29,22 @@ const fnCloseAll = () => {
 class Author extends React.Component {
     static propTypes = {
         author: string.isRequired,
+        hideEditor: bool,
         follow: bool,
         mute: bool,
-        authorRepLog10: number,
+        authorRep: number,
         showAffiliation: bool,
+        role: string,
+        title: string,
+        community: string,
     };
     static defaultProps = {
         follow: true,
         mute: true,
         showAffiliation: false,
+        role: '',
+        title: '',
+        community: '',
     };
 
     constructor(...args) {
@@ -93,17 +101,49 @@ class Author extends React.Component {
     render() {
         const {
             author,
+            authorRep,
+            username,
             follow,
             mute,
-            authorRepLog10,
             showAffiliation,
-        } = this.props; // html
-        const { username } = this.props; // redux
-        const { name, about } = this.props.account
-            ? normalizeProfile(this.props.account.toJS())
-            : {};
+            blacklists,
 
-        if (!(follow || mute) || username === author) {
+            community,
+            permlink,
+            role,
+            title,
+        } = this.props;
+
+        const userTitle = (
+            <span>
+                {community && (
+                    <UserTitle
+                        username={username}
+                        community={community}
+                        author={author}
+                        permlink={permlink}
+                        role={role}
+                        title={title}
+                        hideEdit={this.props.hideEditor}
+                    />
+                )}
+                {showAffiliation && AffiliationMap[author] ? (
+                    <span className="affiliation">
+                        {tt('g.affiliation_' + AffiliationMap[author])}
+                    </span>
+                ) : null}
+                {blacklists && (
+                    <span
+                        style={{ fontWeight: 'bold', color: 'red' }}
+                        title={blacklists.join(', ')}
+                    >
+                        ❗️({blacklists.length})
+                    </span>
+                )}
+            </span>
+        );
+
+        if (!(follow || mute)) {
             return (
                 <span
                     className="author"
@@ -114,12 +154,8 @@ class Author extends React.Component {
                     <strong>
                         <Link to={'/@' + author}>{author}</Link>
                     </strong>{' '}
-                    <Reputation value={authorRepLog10} />
-                    {showAffiliation && AffiliationMap[author] ? (
-                        <span className="affiliation">
-                            {tt('g.affiliation_' + AffiliationMap[author])}
-                        </span>
-                    ) : null}
+                    <Reputation value={authorRep} />
+                    {userTitle}
                 </span>
             );
         }
@@ -133,24 +169,16 @@ class Author extends React.Component {
                 >
                     <strong>
                         <Link
-                            className="ptc"
                             ref={link => {
                                 this.authorProfileLink = link;
                             }}
                             to={'/@' + author}
                         >
-                            {author} <Reputation value={authorRepLog10} />
-                            {showAffiliation && AffiliationMap[author] ? (
-                                <span className="affiliation">
-                                    {tt(
-                                        'g.affiliation_' +
-                                            AffiliationMap[author]
-                                    )}
-                                </span>
-                            ) : null}
+                            {author} <Reputation value={authorRep} />
                             <Icon name="dropdown-arrow" />
                         </Link>
                     </strong>
+                    {userTitle}
                 </span>
                 <Overlay
                     show={this.state.show}
@@ -164,10 +192,9 @@ class Author extends React.Component {
                         author={author}
                         follow={follow}
                         mute={mute}
-                        authorRepLog10={authorRepLog10}
-                        name={name}
-                        about={about}
+                        authorRep={authorRep}
                         username={username}
+                        blacklists={blacklists}
                     />
                 </Overlay>
             </span>
@@ -177,16 +204,19 @@ class Author extends React.Component {
 
 import { connect } from 'react-redux';
 
-export default connect((state, ownProps) => {
-    const { author, follow, mute, authorRepLog10 } = ownProps;
-    const username = state.user.getIn(['current', 'username']);
-    const account = state.global.getIn(['accounts', author]);
+export default connect((state, props) => {
+    const { post } = props;
+    const blacklists = post.get('blacklists', List()).toJS();
     return {
-        author,
-        follow,
-        mute,
-        authorRepLog10,
-        username,
-        account,
+        follow: typeof props.follow === 'undefined' ? true : props.follow,
+        mute: typeof props.mute === 'undefined' ? props.follow : props.mute,
+        username: state.user.getIn(['current', 'username']),
+        authorRep: post.get('author_reputation'),
+        author: post.get('author'),
+        community: post.get('community'), // UserTitle
+        permlink: post.get('permlink'), // UserTitle
+        role: post.get('author_role'), // UserTitle
+        title: post.get('author_title'), // UserTitle
+        blacklists: blacklists.length > 0 ? blacklists : null,
     };
 })(Author);

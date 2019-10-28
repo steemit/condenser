@@ -142,11 +142,13 @@ span.Header__hamburger.toggle-menu {
 .annoucement-banner {
   text-align: left;
   position: relative;
-  background: #171FC9;
+  background: #171FC9; //Notice Blue
+  // background: #fff3cd;
   color: #fff;
+  // color: #856404;
   @include themify($themes) {
       border-bottom: themed('borderLight');
-  }  
+  }
   @include MQ(M) {
     text-align: center;
   }
@@ -159,7 +161,7 @@ span.Header__hamburger.toggle-menu {
     &:hover, &:focus {
       color: #ccc;
     }
-  }  
+  }
 }
 
 .announcement-banner__text {
@@ -172,5 +174,6 @@ span.Header__hamburger.toggle-menu {
 
 .announcement-banner__link {
    color: #fafafa !important;
+   // color: #856404 !important;;
    text-decoration: underline;
 }

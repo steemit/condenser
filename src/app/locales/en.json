@@ -7,6 +7,7 @@
         "ask": "Ask",
         "balance": "Balance: %(balanceValue)s",
         "balances": "Balances",
+        "beneficiaries": "Beneficiaries",
         "bid": "Bid",
         "blog": "Blog",
         "browse": "Browse",
@@ -20,6 +21,17 @@
         "clear": "Clear",
         "close": "Close",
         "collapse_or_expand": "Collapse/Expand",
+        "community_settings_header": "Community Settings",
+        "community_settings_description": "What does your community stand for?",
+        "community_list_header": "Communities",
+        "community_user_role_add_description":
+            "Set the role of a user in this community.",
+        "community_user_role_edit_description":
+            "Changing @%(username)s's role.",
+        "community_user_role_add_header": "Add User Role",
+        "community_user_role_edit_header": "Change User Role",
+        "community_user_title_edit_header": "Change User Title",
+        "community_user_title_edit_description": "Set Title for @%(username)s",
         "comments": "Comments",
         "confirm": "Confirm",
         "convert": "Convert",
@@ -58,6 +70,7 @@
         "newer": "Newer",
         "next": "Next",
         "no": "No",
+        "notifications": "Notifications",
         "ok": "Ok",
         "older": "Older",
         "or": "or",
@@ -67,6 +80,7 @@
         "permissions": "Permissions",
         "phishy_message":
             "Link expanded to plain text; beware of a potential phishing attempt",
+        "pin": "Pin",
         "post": "Post",
         "post_as_user": "Post as %(username)s",
         "posts": "Posts",
@@ -94,6 +108,7 @@
         },
         "reputation": "Reputation",
         "reveal_comment": "Reveal Comment",
+        "will_be_hidden_due_to_low_rating": "Will be hidden due to low rating",
         "request": "request",
         "required": "Required",
         "rewards": "Rewards",
@@ -103,6 +118,12 @@
         "sell": "Sell",
         "settings": "Settings",
         "share_this_post": "Share this post",
+        "mute_this_post": "Mute this post",
+        "mute_this_post_description":
+            "Please provide a note regarding your decision to mute this post.",
+        "unmute_this_post": "Unmute this post",
+        "unmute_this_post_description":
+            "Please provide a note regarding your decision to unmute this post.",
         "show": "Show",
         "sign_in": "Sign in",
         "sign_up": "Sign up",
@@ -114,14 +135,15 @@
         "to": " to ",
         "topics": "Topics",
         "toggle_nightmode": "Toggle Night Mode",
-        "all_tags": "All tags",
-        "all_tags_mobile": "All content",
+        "all_tags": "All posts",
+        "all_tags_mobile": "All posts",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",
         "try_again": "Try Again",
         "type": "Type",
         "unfollow": "Unfollow",
         "unmute": "Unmute",
+        "unpin": "Unpin",
         "unknown": "Unknown",
         "upvote": "Upvote",
         "upvote_post": "Upvote post",
@@ -229,7 +251,7 @@
         "read_only_mode":
             "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
         "tags_and_topics": "Tags",
-        "show_more_topics": "View all tags",
+        "show_more_topics": "Explore communities",
         "basic": "Basic",
         "advanced": "Advanced",
         "views": {
@@ -262,6 +284,7 @@
         "change_account_password": "Change Account Password",
         "vote_for_witnesses": "Vote for Witnesses",
         "advertise": "Advertise",
+        "media_kit": "Media Kit",
         "privacy_policy": "Privacy Policy",
         "terms_of_service": "Terms of Service",
         "sign_up": "Sign up",
@@ -278,7 +301,8 @@
         "intro_tagline": "Your voice is worth something",
         "intro_paragraph":
             "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool.",
-        "jobs": "Jobs at Steemit"
+        "jobs": "Jobs at Steemit",
+        "steem_proposals": "Steem Proposals"
     },
     "main_menu": {
         "hot": "Hot",
@@ -311,7 +335,19 @@
         "title": "Title",
         "update_post": "Update Post",
         "markdown_not_supported": "Markdown is not supported here",
-        "advanced_settings": "Advanced settings"
+        "advanced_settings": "Advanced settings",
+        "beneficiaries_set": "%(count)s set"
+    },
+    "beneficiary_selector_jsx": {
+        "header": "Who should receive any rewards?",
+        "add": "Add account",
+        "exceeds_max_beneficiaries": "Can have at most 8 beneficiaries",
+        "beneficiary_cannot_be_self": "Cannot specify self as beneficiary",
+        "beneficiary_cannot_be_duplicate": "Beneficiary cannot be duplicate",
+        "beneficiary_percent_invalid":
+            "Beneficiary percentage must be from 1-100",
+        "beneficiary_percent_total_invalid":
+            "Beneficiary total percentage must be less than 100"
     },
     "category_selector_jsx": {
         "tag_your_story":
@@ -364,6 +400,8 @@
         "user_hasnt_followed_anything_yet":
             "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
         "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+        "user_hasnt_had_any_notifications_yet":
+            "%(name)s hasn't had any notifications yet",
         "looks_like_you_havent_posted_anything_yet":
             "Looks like you haven't posted anything yet.",
         "create_a_post": "Create a Post",
@@ -606,7 +644,8 @@
         "login_warning_body":
             "You are attempting to use a key with more permissions than required for everyday Steemit.com use. Since keys and passwords are more likely to get compromised the more they are used, it is strongly recommended to only use your Posting Key to log in.",
         "continue_anyway": "Continue Anyway",
-        "login_warning_link_text": "View my Posting Key at Steemit Wallet",
+        "login_warning_link_text":
+            "Open my Steemit Wallet to access and view my posting key",
         "join_our": "Join our",
         "sign_transfer": "Sign to complete transfer",
         "use_keychain": "Use keychain extension"

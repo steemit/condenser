@@ -16,6 +16,7 @@ import * as userActions from 'app/redux/UserReducer';
 import { DEBT_TICKER } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { isLoggedInWithKeychain } from 'app/utils/SteemKeychain';
+import { callBridge } from 'app/utils/steemApi';
 
 export const transactionWatches = [
     takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
@@ -37,7 +38,7 @@ const toStringUtf8 = o =>
 
 function* preBroadcast_vote({ operation, username }) {
     if (!operation.voter) operation.voter = username;
-    const { voter, author, permlink, weight } = operation;
+    const { author, permlink } = operation;
     // give immediate feedback
     yield put(
         globalActions.set({
@@ -45,9 +46,7 @@ function* preBroadcast_vote({ operation, username }) {
             value: true,
         })
     );
-    yield put(
-        globalActions.voted({ username: voter, author, permlink, weight })
-    );
+    yield put(globalActions.voted(operation));
     return operation;
 }
 
@@ -78,10 +77,10 @@ export function* broadcastOperation({
         errorCallback,
         allowPostUnsafe,
     };
-    console.log('broadcastOperation', operationParam);
 
     const conf = typeof confirm === 'function' ? confirm() : confirm;
     if (conf) {
+        console.log('broadcastConfirm', operationParam);
         yield put(
             transactionActions.confirmOperation({
                 confirm,
@@ -92,6 +91,7 @@ export function* broadcastOperation({
         );
         return;
     }
+
     const payload = {
         operations: [[type, operation]],
         keys,
@@ -184,6 +184,8 @@ function* broadcastPayload({
     payload: { operations, keys, username, successCallback, errorCallback },
 }) {
     let needsActiveAuth = false;
+
+    console.log('broadcastPayload', operations, username);
 
     // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;
@@ -314,7 +316,7 @@ function* broadcastPayload({
         }
         if (successCallback)
             try {
-                successCallback();
+                successCallback(operations);
             } catch (error) {
                 console.error(error);
             }
@@ -340,10 +342,7 @@ function* accepted_comment({ operation }) {
     const { author, permlink } = operation;
     // update again with new $$ amount from the steemd node
     yield call(getContent, { author, permlink });
-    // receiveComment did the linking already (but that is commented out)
     yield put(globalActions.linkReply(operation));
-    // mark the time (can only post 1 per min)
-    // yield put(user.actions.acceptedComment())
 }
 
 function updateFollowState(action, following, state) {
@@ -421,8 +420,6 @@ export function* preBroadcast_comment({ operation, username }) {
 
     body = body.trim();
 
-    // TODO Slightly smaller blockchain comments: if body === json_metadata.steem.link && Object.keys(steem).length > 1 remove steem.link ..This requires an adjust of get_state and the API refresh of the comment to put the steem.link back if Object.keys(steem).length >= 1
-
     let body2;
     if (originalBody) {
         const patch = createPatch(originalBody, body);
@@ -433,14 +430,13 @@ export function* preBroadcast_comment({ operation, username }) {
     if (!body2) body2 = body;
     if (!permlink) permlink = yield createPermlink(title, author);
 
-    const md = operation.json_metadata;
-    const json_metadata = typeof md === 'string' ? md : JSON.stringify(md);
+    if (typeof operation.json_metadata !== 'string')
+        throw 'json not serialized';
     const op = {
         ...operation,
         permlink: permlink.toLowerCase(),
         parent_author,
         parent_permlink,
-        json_metadata,
         title: (operation.title || '').trim(),
         body: body2,
     };
@@ -485,8 +481,11 @@ export function* createPermlink(title, author) {
         s = s.toLowerCase().replace(/[^a-z0-9-]+/g, '');
 
         // ensure the permlink is unique
-        const slugState = yield call([api, api.getContentAsync], author, s);
-        if (slugState.body !== '') {
+        const head = yield call(callBridge, 'get_post_header', {
+            author,
+            permlink: s,
+        });
+        if (head && !!head.category) {
             const noise = base58
                 .encode(secureRandom.randomBuffer(4))
                 .toLowerCase();

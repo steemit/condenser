@@ -18,6 +18,11 @@ const defaultState = fromJS({
     },
 });
 
+function last_part(value, sep) {
+    const parts = value.split(sep);
+    return parts[parts.length - 1];
+}
+
 export default function reducer(state = defaultState, action) {
     const payload = action.payload;
 
@@ -48,98 +53,60 @@ export default function reducer(state = defaultState, action) {
 
         case ERROR: {
             const { operations, error, errorCallback } = payload;
+            console.error('Error.message', error.message);
 
-            let errorStr = error.toString();
-            let errorKey = 'Transaction broadcast error.';
-            for (const [type /*, operation*/] of operations) {
-                switch (type) {
-                    case 'vote':
-                        if (/uniqueness constraint/.test(errorStr)) {
-                            errorKey = 'You already voted for this post';
-                            console.error('You already voted for this post.');
-                        }
-                        if (/Voting weight is too small/.test(errorStr)) {
-                            errorKey = 'Voting weight is too small';
-                            errorStr =
-                                'Voting weight is too small, please accumulate more voting power or steem power.';
-                        }
-                        break;
-                    case 'comment':
-                        if (
-                            /You may only post once per minute/.test(errorStr)
-                        ) {
-                            errorKey = 'You may only post once per minute.';
-                        } else if (errorStr === 'Testing, fake error')
-                            errorKey = 'Testing, fake error';
-                        break;
-                    default:
-                        break;
-                }
-                if (state.hasIn(['TransactionError', type + '_listener'])) {
-                    state = state.setIn(
-                        ['TransactionError', type],
-                        fromJS({ key: errorKey, exception: errorStr })
-                    );
-                } else {
-                    if (error.message) {
-                        // TODO: This reformatting could be better, in most cases, errorKey and errorString end up being similar if not identical.
-                        // Depends on FC_ASSERT formatting
-                        // https://github.com/steemit/steemit.com/issues/222
-                        const err_lines = error.message.split('\n');
-                        if (err_lines.length > 2) {
-                            errorKey = err_lines[1];
-                            const txt = errorKey.split(': ');
-                            if (
-                                txt.length &&
-                                txt[txt.length - 1].trim() !== ''
-                            ) {
-                                errorKey = errorStr = txt[txt.length - 1];
-                            } else
-                                errorStr = `Transaction failed: ${
-                                    err_lines[1]
-                                }`;
-                        }
-                    }
-                    // TODO: This would perhaps be better expressed as a Case, Switch statement.
-                    // TODO: The precise reason for why this clipping needs to happen is unclear.
-                    if (errorStr.length > 200)
-                        errorStr = errorStr.substring(0, 200);
-                    // Catch for unknown key better error handling
-                    if (/unknown key: /.test(errorKey)) {
-                        errorKey = "Steem account doesn't exist.";
-                        errorStr =
-                            "Transaction failed: Steem account doesn't exist.";
-                    }
-                    // Catch for invalid active authority
-                    if (/Missing Active Authority /.test(errorKey)) {
-                        errorKey = 'Not your valid active key.';
-                        errorStr =
-                            'Transaction failed: Not your valid active key.';
-                    }
-                    // TODO: refactor this so that the keys are consistent and sane, i.e. do not include user name in error key.
-                    state = state.update('errors', errors => {
-                        return errors
-                            ? errors.set(errorKey, errorStr)
-                            : Map({ [errorKey]: errorStr });
-                    });
-                    // Sane error key for the bandwidth error.
-                    if (
-                        errorKey.includes('bandwidth') ||
-                        errorStr.includes('bandwidth') ||
-                        errorStr.includes('RC') // Error key for HF-20 insufficient RC error, #3001.
-                    ) {
-                        state = state.setIn(['errors', 'bandwidthError'], true);
-                    }
-                }
-            }
+            let msg;
+            let key = error.toString().replace(/rethrow$/, '');
 
-            if (errorCallback) {
-                errorCallback(errorKey);
+            if (/You may only post once every/.test(key)) {
+                // Assert Exception:( now - auth.last_root_post ) > STEEM_MIN_ROOT_COMMENT_INTERVAL: You may only post once every 5 minutes.
+                msg = 'You may only post once every five minutes.';
+            } else if (
+                /Your current vote on this comment is identical/.test(key)
+            ) {
+                // Assert Exception:itr->vote_percent != o.weight: Your current vote on this comment is identical to this vote.
+                msg =
+                    'Your current vote on this comment is identical to this vote.';
+            } else if (/Please wait to transact, or power up STEEM/.test(key)) {
+                // plugin exception:Account: test-safari has 1154101776 RC, needs 1274161808 RC. Please wait to transact, or power up STEEM.rethrow
+                try {
+                    const m = [...key.matchAll(/(\d+) RC/g)];
+                    const spv = 0.0005;
+                    const fudge = 1.1;
+                    const has_vests = parseInt(m[0][1], 10) / 1e6;
+                    const needs_vests = parseInt(m[1][1], 10) / 1e6;
+                    const sp = (
+                        (needs_vests - has_vests) *
+                        spv *
+                        fudge
+                    ).toFixed(3);
+                    msg = `Bandwidth error: insufficient Resource Credits. Please wait to transact, or power up ${
+                        sp
+                    } STEEM.`;
+                } catch (e) {
+                    console.error(e);
+                    msg = 'Bandwidth error: ' + last_part(key, ':');
+                }
+            } else if (/unknown key: /.test(key)) {
+                // RPCError: unknown key:unknown key:
+                msg = "Transaction failed: Steem account doesn't exist.";
             } else {
-                throw new Error(
-                    'PANIC: no callback registered to handle error ' + errorKey
-                );
+                msg = 'Transaction broadcast error: ' + last_part(key, ':');
+                console.error('unhandled error:', key);
             }
+
+            // SagaShared / showTransactionErrorNotification
+            state = state.update('errors', errors => {
+                return errors ? errors.set(key, msg) : Map({ [key]: msg });
+            });
+
+            if (msg.includes('RC')) {
+                state = state.setIn(['errors', 'bandwidthError'], true); //show_bandwidth_error_modal
+            }
+
+            if (!errorCallback)
+                throw new Error(`PANIC: no error callback for '${errorKey}'`);
+            errorCallback(msg);
 
             return state;
         }

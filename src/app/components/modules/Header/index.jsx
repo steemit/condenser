@@ -217,7 +217,8 @@ class Header extends React.Component {
             document.title = page_title + ' — ' + APP_NAME;
 
         const _feed = current_account_name && `/@${current_account_name}/feed`;
-        const logo_link = _feed && pathname != _feed ? _feed : '/';
+        //const logo_link = _feed && pathname != _feed ? _feed : '/';
+        const logo_link = '/';
 
         //TopRightHeader Stuff
         const defaultNavigate = e => {

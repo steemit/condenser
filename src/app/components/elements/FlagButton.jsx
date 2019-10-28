@@ -113,7 +113,7 @@ export default connect(
                     community,
                     account,
                     permlink,
-                    comment: notes,
+                    notes,
                 },
             ];
 

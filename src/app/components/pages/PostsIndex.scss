@@ -260,13 +260,12 @@
     position: relative;
   }
   &__summary {
-    margin: 0em 0 1em;
+    margin: 0;
     transition: 0.2s all ease-in-out;
     border: transparent;
-    padding-bottom: 10px;
+    padding-bottom: 0;
     @include themify($themes) {
       background-color: themed('moduleBackgroundColor');
-      border-bottom: themed('border');
     }
     @include MQ(M) {
       margin: 0 0 40px;
@@ -724,9 +723,6 @@ a#changeLayout:focus {
         box-shadow: none;
         padding-bottom: 0px;
         margin: 0;
-        @include themify($themes) {
-          border-bottom: themed('borderTransparent');
-        }
         @include MQ(M) {
           padding-bottom: 0;
         }
@@ -782,7 +778,7 @@ a#changeLayout:focus {
       &__footer {
         @include themify($themes) {
           border-top: themed('borderLight');
-          margin-top: 0.5em;
+          margin-top: 0.25em;
         }
       }
       &__content-block {
@@ -810,6 +806,9 @@ a#changeLayout:focus {
           padding-left: 0;
           padding-right: 0;
         }
+      }
+      .articles__hr {
+        margin-bottom: 0.3em;
       }
     }
     // ,user layout-list
@@ -863,9 +862,6 @@ a#changeLayout:focus {
       &__summary {
         margin: 0 0 10px;
         padding-bottom: 0;
-        @include themify($themes) {
-          border-bottom: themed('borderTransparent');
-        }
       }
       &__summary-header {
         padding: 2px 0;

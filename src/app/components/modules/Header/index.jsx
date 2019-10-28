@@ -288,13 +288,13 @@ class Header extends React.Component {
                     </div>
 
                     <nav className="row Header__nav">
-                        <div className="small-5 large-4 columns Header__logotype">
+                        <div className="small-6 medium-4 large-4 columns Header__logotype">
                             <Link to={logo_link}>
                                 <SteemLogo />
                             </Link>
                         </div>
 
-                        <div className="large-4 columns show-for-large large-centered Header__sort">
+                        <div className="large-4 medium-4 columns show-for-medium large-centered Header__sort">
                             <SortOrder
                                 sortOrder={order}
                                 topic={category === 'feed' ? '' : category}
@@ -303,7 +303,7 @@ class Header extends React.Component {
                             />
                         </div>
 
-                        <div className="small-7 large-4 columns Header__buttons">
+                        <div className="small-6 medium-4 large-4 columns Header__buttons">
                             {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
                             {!loggedIn && (
                                 <span className="Header__user-signup show-for-medium">

@@ -12,22 +12,23 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import tt from 'counterpart';
-import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
+import { repLog10, parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
+import { allowDelete } from 'app/utils/StateFunctions';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
     return cont.getIn([c, 'stats', 'hide']) && !hasPositivePayout(cont, c);
 }
 
-function hasPositivePayout(cont, c) {
-    const post = cont.get(c);
-    if (post.getIn(['stats', 'hasPendingPayout'])) {
+function hasPositivePayout(postmap, post_url) {
+    const post = postmap.get(post_url);
+    if (parseFloat(post.get('net_rshares')) > 0) {
         return true;
     }
-    if (post.get('replies').find(reply => hasPositivePayout(cont, reply))) {
+    if (post.get('replies').find(url => hasPositivePayout(postmap, url))) {
         return true;
     }
     return false;
@@ -195,12 +196,17 @@ class CommentImpl extends React.Component {
         if (content) {
             const hide = hideSubtree(props.cont, props.content);
             const gray = content.getIn(['stats', 'gray']);
+
+            const author = content.get('author');
+            const { username } = this.props;
+            const notOwn = username !== author;
+
             if (hide) {
                 const { onHide } = this.props;
                 // console.log('Comment --> onHide')
                 if (onHide) onHide();
             }
-            this.setState({ hide, hide_body: hide || gray });
+            this.setState({ hide, hide_body: notOwn && (hide || gray) });
         }
     }
 
@@ -254,7 +260,8 @@ class CommentImpl extends React.Component {
             console.error('Comment -- missing stats object');
             comment.stats = {};
         }
-        const { allowDelete, authorRepLog10, gray } = comment.stats;
+        const { gray } = comment.stats;
+        const authorRepLog10 = repLog10(comment.author_reputation);
         const { author, json_metadata } = comment;
         const {
             username,
@@ -295,8 +302,6 @@ class CommentImpl extends React.Component {
         } catch (error) {
             // console.error('Invalid json metadata string', json_metadata, 'in post', this.props.content);
         }
-        // const get_asset_value = ( asset_str ) => { return parseFloat( asset_str.split(' ')[0] ); }
-        // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
         // hide images if author is in blacklist
         const hideImages = ImageUserBlockList.includes(author);
@@ -304,7 +309,7 @@ class CommentImpl extends React.Component {
         const _isPaidout = comment.cashout_time === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
         const showEditOption = username === author;
         const showDeleteOption =
-            username === author && allowDelete && !_isPaidout;
+            username === author && allowDelete(comment) && !_isPaidout;
         const showReplyOption = username !== undefined && comment.depth < 255;
 
         let body = null;
@@ -470,6 +475,14 @@ class CommentImpl extends React.Component {
                                 >
                                     {tt('g.reveal_comment')}
                                 </a>
+                            )}
+                        {!this.state.collapsed &&
+                            !hide_body &&
+                            (ignore || gray) && (
+                                <span>
+                                    &nbsp; &middot; &nbsp;{' '}
+                                    {tt('g.will_be_hidden_due_to_low_rating')}
+                                </span>
                             )}
                     </div>
                     <div className="Comment__body entry-content">

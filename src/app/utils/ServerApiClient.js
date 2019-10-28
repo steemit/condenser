@@ -32,6 +32,10 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
     if (last_call && new Date() - last_call < rate_limit_ms) return;
     last_call = new Date();
     const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
+    if (catchjs) {
+        catchjs.log(type, value);
+    }
+    return;
     api.call(
         'overseer.collect',
         { collection: 'event', metadata: { type, value } },

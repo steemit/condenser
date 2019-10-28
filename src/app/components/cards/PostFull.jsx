@@ -20,6 +20,7 @@ import DMCAList from 'app/utils/DMCAList';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import MuteButton from 'app/components/elements/MuteButton';
+import FlagButton from 'app/components/elements/FlagButton';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
@@ -77,8 +78,7 @@ class PostFull extends React.Component {
 
     constructor(props) {
         super(props);
-        const { post } = this.props;
-
+        const { post, community } = this.props;
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
         this.redditShare = this.redditShare.bind(this);
@@ -236,7 +236,7 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, post, postref, viewer_role },
+            props: { username, post, postref, viewer_role, community },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
@@ -406,6 +406,7 @@ class PostFull extends React.Component {
         const showPinToggle =
             post.get('depth') == 0 && Role.atLeast(viewer_role, 'mod');
         const showMuteToggle = Role.atLeast(viewer_role, 'mod');
+        const showFlagToggle = community && Role.atLeast(viewer_role, 'guest');
         const showReplyOption = username && post.get('depth') < 255;
         const showEditOption = username === author && !showEdit;
         const showDeleteOption = username === author && allowDelete(post);
@@ -469,6 +470,9 @@ class PostFull extends React.Component {
                         {showReblog && (
                             <Reblog author={author} permlink={permlink} />
                         )}
+                        <span className="Flag__button">
+                            {showFlagToggle && <FlagButton post={post} />}
+                        </span>
                         <span className="PostFull__reply">
                             {/* all */}
                             {showReplyOption && (

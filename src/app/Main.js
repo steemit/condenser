@@ -66,7 +66,7 @@ function runApp(initial_state) {
     };
 
     window.onunhandledrejection = function(evt) {
-        console.error('unhandled rejection', evt.reason);
+        console.error('unhandled rejection', evt ? evt.toString() : '<null>');
     };
 
     window.document.body.onkeypress = e => {

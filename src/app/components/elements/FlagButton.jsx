@@ -25,21 +25,20 @@ class FlagButton extends React.Component {
     };
 
     onSubmit = notes => {
-        const {
-            account,
-            community,
-            username,
-            permlink,
-            flagPost,
-            flagText,
-        } = this.props;
+        const { account, community, username, permlink, flagPost } = this.props;
         if (!notes || !community || !username) return false; // Fail Fast
         flagPost(username, community, account, notes, permlink);
     };
 
     render() {
         return (
-            <span className="flag__button">
+            <span
+                className={` flag__button ${
+                    this.props.isComment
+                        ? 'flag__button--comment'
+                        : 'flag__button--post'
+                } `}
+            >
                 <a onClick={() => this.showDialog()}>
                     <Icon name="flag1" />
                     <Icon name="flag2" />
@@ -53,6 +52,7 @@ class FlagButton extends React.Component {
                                 this.onSubmit(notes);
                             }}
                             flagText={this.props.flagText}
+                            isComment={this.props.isComment}
                         />
                     </Reveal>
                 )}
@@ -67,6 +67,11 @@ FlagButton.propTypes = {
     username: PropTypes.string.isRequired,
     community: PropTypes.string.isRequired, //TODO: Define shape
     flagText: PropTypes.string.isRequired,
+    isComment: PropTypes.bool,
+};
+
+FlagButton.defaultProps = {
+    isComment: false,
 };
 
 export default connect(

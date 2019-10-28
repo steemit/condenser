@@ -46,9 +46,9 @@
         "affiliation_sm": "Steem Monsters Team",
         "feed": "Feed",
         "flag": "Flag",
-        "flag_this_post": "Flag this post",
+        "flag_this_post": "Flag this %(type)s",
         "flag_this_post_description":
-            "Please provide a note regarding your decision to flag this post, it will be reviewed by community moderators.",
+            "Please provide a note regarding your decision to flag this %(type)s, it will be reviewed by community moderators.",
         "follow": "Follow",
         "for": " for ",
         "from": " from ",

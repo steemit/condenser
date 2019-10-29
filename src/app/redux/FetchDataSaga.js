@@ -19,6 +19,7 @@ const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 const GET_ACCOUNTS = 'fetchDataSaga/GET_ACCOUNTS';
+const GET_REWARD_FUND = 'fetchDataSaga/GET_REWARD_FUND';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
@@ -27,6 +28,7 @@ export const fetchDataWatches = [
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
     takeEvery(GET_ACCOUNTS, getAccountsCaller),
+    takeEvery(GET_REWARD_FUND, getRewardFund),
 ];
 
 export function* getContentCaller(action) {
@@ -35,6 +37,11 @@ export function* getContentCaller(action) {
 
 export function* getAccountsCaller(action) {
     yield getAccounts(action.payload);
+}
+
+export function* getRewardFund(action) {
+    const rewardFund = yield call([api, api.getRewardFundAsync], 'post');
+    yield put(globalActions.set({ key: ['rewardFund'], value: rewardFund }));
 }
 
 let is_initial_state = true;
@@ -350,6 +357,11 @@ export const actions = {
 
     getAccounts: payload => ({
         type: GET_ACCOUNTS,
+        payload,
+    }),
+
+    getRewardFund: payload => ({
+        type: GET_REWARD_FUND,
         payload,
     }),
 };

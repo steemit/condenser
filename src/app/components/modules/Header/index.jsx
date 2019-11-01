@@ -11,6 +11,7 @@ import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 import SortOrder from 'app/components/elements/SortOrder';
 import SearchInput from 'app/components/elements/SearchInput';
+import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
 import IconButton from 'app/components/elements/IconButton';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import * as userActions from 'app/redux/UserReducer';
@@ -327,6 +328,7 @@ class Header extends React.Component {
                             {/*CUSTOM SEARCH*/}
                             <span className="Header__search--desktop">
                                 <SearchInput />
+                                <ElasticSearchInput />
                             </span>
                             <span className="Header__search">
                                 <a href="/static/search.html">

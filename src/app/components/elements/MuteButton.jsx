@@ -50,7 +50,7 @@ class MuteButton extends React.Component {
                 </a>
                 {this.state.showDialog && (
                     <Reveal onHide={() => null} show>
-                        <CloseButton onClick={() => this.hideDialot()} />
+                        <CloseButton onClick={() => this.hideDialog()} />
                         <MutePost
                             isMuted={isMuted}
                             onSubmit={notes => {

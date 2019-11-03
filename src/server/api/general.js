@@ -6,7 +6,8 @@ import { getRemoteIp, rateLimitReq, checkCSRF } from 'server/utils/misc';
 import coBody from 'co-body';
 import Mixpanel from 'mixpanel';
 import { PublicKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
-import { api, broadcast } from '@steemit/steem-js';
+import { api } from '@steemit/steem-js';
+import fetch from 'node-fetch';
 
 const ACCEPTED_TOS_TAG = 'accepted_tos_20180614';
 
@@ -306,6 +307,35 @@ export default function useGeneralApi(app) {
                 this.session.uid,
                 error
             );
+            this.body = JSON.stringify({ error: error.message });
+            this.status = 500;
+        }
+    });
+    router.post('/search', koaBody, function*() {
+        const params = this.request.body;
+        const passThrough = {
+            method: this.request.method,
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: config.get('esteem_elastic_search_api_key'),
+            },
+            body: this.request.body,
+            // TODO: remove this, purely for testing, localhost vs SSL.
+            agentOptions: { checkServerIdentity: () => {} },
+        };
+        const { csrf } =
+            typeof params === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+        try {
+            const searchResult = yield fetch(
+                'https://api.search.esteem.app/search',
+                passThrough
+            );
+            const resultJson = yield searchResult.json();
+            this.body = JSON.stringify(resultJson);
+            this.status = 200;
+        } catch (error) {
+            console.error('Error in /search api call', this.session.uid, error);
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }

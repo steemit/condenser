@@ -9,7 +9,10 @@ import NativeSelect from 'app/components/elements/NativeSelect';
 class Topics extends Component {
     static propTypes = {
         topics: PropTypes.object.isRequired,
+<<<<<<< HEAD
         subscriptions: PropTypes.object,
+=======
+>>>>>>> add search page and route
         current: PropTypes.string,
         compact: PropTypes.bool.isRequired,
     };

@@ -14,7 +14,6 @@ import {
 } from 'react-router';
 import { Provider } from 'react-redux';
 import { api } from '@steemit/steem-js';
-
 import RootRoute from 'app/RootRoute';
 import * as appActions from 'app/redux/AppReducer';
 import { createStore, applyMiddleware, compose } from 'redux';

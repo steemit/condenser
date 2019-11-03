@@ -298,10 +298,9 @@ class SearchIndex extends React.Component {
 }
 
 module.exports = {
-    path: ':order(/:category)', // TODO: match url for search with order, ':order(/:searchTerm)'
+    path: 'search(/:order)(/:category)',
     component: connect(
         (state, ownProps) => {
-            debugger;
             // route can be e.g. trending/food (order/category);
             //   or, @username/feed (category/order). Branch on presence of `@`.
             const route = ownProps.routeParams;

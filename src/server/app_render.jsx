@@ -80,7 +80,6 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 steemMarket: ctx.steemMarketData,
             },
         };
-
         const {
             body,
             title,

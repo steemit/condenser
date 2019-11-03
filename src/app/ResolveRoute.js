@@ -68,10 +68,10 @@ export default function resolveRoute(path) {
     match = path.match(routeRegex.CategoryFilters);
     if (match) return { page: 'PostsIndex', params: match.slice(1) };
 
-    // /search, /search//searchTerm
+    // /search, /search/searchOrder/searchTerm
     match = path.match(routeRegex.Search);
-    debugger;
-    if (match) return { page: 'SearchIndex', params: match.slice(1) };
+    if (match)
+        return { page: 'SearchIndex', params: match.slice(1, match.length) };
 
     // -----------
 

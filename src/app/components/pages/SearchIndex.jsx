@@ -117,21 +117,22 @@ class SearchIndex extends React.Component {
                         <div
                             className={
                                 'articles__content hentry' +
-                                (r.image_url ? ' with-image ' : ' ')
+                                (r.img_url ? ' with-image ' : ' ')
                             }
                             itemScope
                             itemType="http://schema.org/blogPost"
                         >
                             <div className="articles__content-block articles__content-block--img">
-                                <Link
-                                    className="articles__link"
-                                    to={'SORTTHISOUT!'}
-                                >
-                                    ww{' '}
-                                    <img
-                                        className="articles__feature-img"
-                                        src={r.img_url}
-                                    />;
+                                <Link className="articles__link" to={id}>
+                                    <span className="articles__feature-img-container">
+                                        <picture className="articles__feature-img">
+                                            <source
+                                                srcSet={r.img_url}
+                                                media="(min-width: 1000px)"
+                                            />
+                                            <img srcSet={r.img_url} />
+                                        </picture>
+                                    </span>
                                 </Link>
                             </div>
                             <div className="articles__content-block articles__content-block--text">
@@ -177,7 +178,11 @@ class SearchIndex extends React.Component {
                     {!loading && !result.length === 0 ? (
                         <Callout>{'Nothing was found.'}</Callout>
                     ) : (
-                        <div>{searchResults}</div>
+                        <div id="posts_list" className="PostsList">
+                            <ul className="PostsList__summaries hfeed">
+                                {searchResults}
+                            </ul>
+                        </div>
                     )}
                 </article>
             </div>

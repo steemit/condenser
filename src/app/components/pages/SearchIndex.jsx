@@ -10,6 +10,8 @@ import Reputation from 'app/components/elements/Reputation';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import { extractBodySummary } from 'app/utils/ExtractContent';
+import DropdownMenu from 'app/components/elements/DropdownMenu';
+import FormattedAsset from 'app/components/elements/FormattedAsset';
 
 class SearchIndex extends React.Component {
     static propTypes = {
@@ -61,12 +63,12 @@ class SearchIndex extends React.Component {
         const layoutClass = 'layout-list';
 
         const searchResults = result.map(r => {
-            const id = `${r.author}/${r.permlink}`;
+            const path = `/@${r.author}/${r.permlink}`;
 
             const summary = extractBodySummary(r.body);
             const content_body = (
                 <div className="PostSummary__body entry-content">
-                    <Link to={id}>{summary}</Link>
+                    <Link to={path}> {summary}</Link>
                 </div>
             );
             const summary_header = (
@@ -97,7 +99,7 @@ class SearchIndex extends React.Component {
                                     </span>
                                 </span>
                             </span>
-                            <Link className="timestamp__link" to={'/notsure'}>
+                            <Link className="timestamp__link" to={path}>
                                 <span className="timestamp__time">
                                     <TimeAgoWrapper
                                         date={r.created_at}
@@ -110,8 +112,46 @@ class SearchIndex extends React.Component {
                 </div>
             );
 
+            const summary_footer = (
+                <div className="articles__summary-footer">
+                    <span className="Voting">
+                        <span className="Voting__inner">
+                            <span>
+                                <FormattedAsset amount={r.payout} asset="$" />
+                            </span>
+                        </span>
+                    </span>
+                    <span className="VotesAndComments">
+                        <span
+                            className="VotesAndComments__votes"
+                            title={tt('votesandcomments_jsx.vote_count', {
+                                count: r.total_votes,
+                            })}
+                        >
+                            <Icon size="1x" name="chevron-up-circle" />&nbsp;{
+                                r.total_votes
+                            }
+                        </span>
+                        <span
+                            className={
+                                'VotesAndComments__comments' +
+                                (r.children === 0 ? ' no-comments' : '')
+                            }
+                        >
+                            <Link to={path} title={'comments'}>
+                                <Icon
+                                    name={
+                                        r.children > 1 ? 'chatboxes' : 'chatbox'
+                                    }
+                                />&nbsp;{r.children}
+                            </Link>
+                        </span>
+                    </span>
+                </div>
+            );
+
             return (
-                <li key={id}>
+                <li key={path}>
                     <div className="articles__summary">
                         {summary_header}
                         <div
@@ -122,23 +162,25 @@ class SearchIndex extends React.Component {
                             itemScope
                             itemType="http://schema.org/blogPost"
                         >
-                            <div className="articles__content-block articles__content-block--img">
-                                <Link className="articles__link" to={id}>
-                                    <span className="articles__feature-img-container">
-                                        <picture className="articles__feature-img">
-                                            <source
-                                                srcSet={r.img_url}
-                                                media="(min-width: 1000px)"
-                                            />
-                                            <img srcSet={r.img_url} />
-                                        </picture>
-                                    </span>
-                                </Link>
-                            </div>
+                            {r.img_url && (
+                                <div className="articles__content-block articles__content-block--img">
+                                    <Link className="articles__link" to={path}>
+                                        <span className="articles__feature-img-container">
+                                            <picture className="articles__feature-img">
+                                                <source
+                                                    srcSet={r.img_url}
+                                                    media="(min-width: 1000px)"
+                                                />
+                                                <img srcSet={r.img_url} />
+                                            </picture>
+                                        </span>
+                                    </Link>
+                                </div>
+                            )}
                             <div className="articles__content-block articles__content-block--text">
                                 {r.title}
                                 {content_body}
-                                {/*this.props.blogmode ? null : summary_footer*/}
+                                {summary_footer}
                             </div>
                         </div>
                     </div>
@@ -146,13 +188,7 @@ class SearchIndex extends React.Component {
             );
         });
         return (
-            <div
-                className={
-                    'SearchIndex row' +
-                    (loading ? ' fetching' : '') +
-                    layoutClass
-                }
-            >
+            <div className={'PostsIndex row ' + 'layout-list'}>
                 <article className="articles">
                     <div className="articles__header row">
                         <div className="small-8 medium-7 large-8 column">

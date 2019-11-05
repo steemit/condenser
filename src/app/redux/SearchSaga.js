@@ -13,8 +13,7 @@ export function* search(action) {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                Authorization:
-                    'EXY6JKII02OMA1PVGZGZAEWKOXZEFOQQCS3SUDBCR6ABDEVIBIGPYTRYBRZV',
+                Authorization: 'SOME AUTH KEY HERE',
             },
             body: JSON.stringify({
                 q: searchParams.category,

@@ -9,7 +9,6 @@ import NativeSelect from 'app/components/elements/NativeSelect';
 class Topics extends Component {
     static propTypes = {
         topics: PropTypes.object.isRequired,
-        order: PropTypes.string.isRequired,
         current: PropTypes.string,
         compact: PropTypes.bool.isRequired,
     };
@@ -19,14 +18,7 @@ class Topics extends Component {
     };
 
     render() {
-        const {
-            order,
-            current,
-            compact,
-            username,
-            topics,
-            communities,
-        } = this.props;
+        const { current, compact, username, topics, communities } = this.props;
 
         if (compact) {
             const opt = (tag, label = null) => {

@@ -145,6 +145,7 @@ export function* broadcastOperation({
                 }
             }
         }
+        debugger;
         yield call(broadcastPayload, { payload });
         let eventType = type
             .replace(/^([a-z])/, g => g.toUpperCase())
@@ -157,7 +158,8 @@ export function* broadcastOperation({
                 : '';
         serverApiRecordEvent(eventType, page);
     } catch (error) {
-        console.error('TransactionSage', error);
+        console.error('TransactionSaga', error);
+        debugger;
         if (errorCallback) errorCallback(error.toString());
     }
 }
@@ -262,6 +264,7 @@ function* broadcastPayload({
                 }, 2000);
             } else {
                 if (!isLoggedInWithKeychain()) {
+                    debugger;
                     broadcast.send(
                         { extensions: [], operations },
                         keys,
@@ -320,6 +323,7 @@ function* broadcastPayload({
             }
     } catch (error) {
         console.error('TransactionSaga\tbroadcastPayload', error);
+        debugger;
         // status: error
         yield put(
             transactionActions.error({ operations, error, errorCallback })

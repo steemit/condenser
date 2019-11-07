@@ -118,12 +118,12 @@
         "sell": "Sell",
         "settings": "Settings",
         "share_this_post": "Share this post",
-        "mute_this_post": "Mute this post",
+        "mute_this_post": "Mute post/comment",
         "mute_this_post_description":
-            "Please provide a note regarding your decision to mute this post.",
-        "unmute_this_post": "Unmute this post",
+            "Please provide a note regarding your decision to mute this content.",
+        "unmute_this_post": "Unmute this post/comment",
         "unmute_this_post_description":
-            "Please provide a note regarding your decision to unmute this post.",
+            "Please provide a note regarding your decision to unmute this content.",
         "show": "Show",
         "sign_in": "Sign in",
         "sign_up": "Sign up",

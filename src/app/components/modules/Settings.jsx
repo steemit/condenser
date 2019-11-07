@@ -159,16 +159,17 @@ class Settings extends React.Component {
         debugger;
         const accountObject = account.toJS();
         updateAccount({
-            account: account.get('name'),
+            account: accountname,
             posting_json_metadata: JSON.stringify(metaData),
-            json_metadata: '',
             /*
             memo_key: account.get('memo_key'),
             posting_key: accountObject.posting.key_auths[0][0],
             active_key: accountObject.active.key_auths[0][0],
             owner_key: accountObject.owner.key_auths[0][0],
+            json_metadata: '',
+            required_posting_auths: [accountname],
+            posting: accountObject.posting,
             */
-            // required_posting_auths: [accountname],
             errorCallback: e => {
                 if (e === 'Canceled') {
                     this.setState({

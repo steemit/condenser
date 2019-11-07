@@ -154,12 +154,21 @@ class Settings extends React.Component {
         if (!metaData.profile.location) delete metaData.profile.location;
         if (!metaData.profile.website) delete metaData.profile.website;
 
-        const { account, updateAccount } = this.props;
+        const { account, updateAccount, accountname } = this.props;
         this.setState({ loading: true });
+        debugger;
+        const accountObject = account.toJS();
         updateAccount({
-            json_metadata: JSON.stringify(metaData),
-            account: account.name,
-            memo_key: account.memo_key,
+            account: account.get('name'),
+            posting_json_metadata: JSON.stringify(metaData),
+            json_metadata: '',
+            /*
+            memo_key: account.get('memo_key'),
+            posting_key: accountObject.posting.key_auths[0][0],
+            active_key: accountObject.active.key_auths[0][0],
+            owner_key: accountObject.owner.key_auths[0][0],
+            */
+            // required_posting_auths: [accountname],
             errorCallback: e => {
                 if (e === 'Canceled') {
                     this.setState({
@@ -388,23 +397,6 @@ class Settings extends React.Component {
 
                 {isOwnAccount && (
                     <div className="row">
-                        <div className="small-12 columns">
-                            <p>
-                                To update your public profile, visit{' '}
-                                <a
-                                    href={
-                                        walletUrl +
-                                        '/@' +
-                                        account.name +
-                                        '/settings'
-                                    }
-                                >
-                                    Steemitwallet.com
-                                </a>.
-                            </p>
-                        </div>
-                        <hr />
-                        <br />
                         <div className="small-12 medium-4 large-4 columns">
                             <h4>{tt('settings_jsx.preferences')}</h4>
 
@@ -533,9 +525,10 @@ export default connect(
                 accountname,
                 'ignore_result',
             ]);
-        const account = state.global.getIn(['accounts', accountname]).toJS();
+        const account = state.global.getIn(['accounts', accountname]);
         const current_user = state.user.get('current');
         const username = current_user ? current_user.get('username') : '';
+        // TODO: look for posting_json_metadata in account obj.
         let metaData = account
             ? o2j.ifStringParseJSON(account.json_metadata)
             : {};
@@ -566,7 +559,7 @@ export default connect(
             dispatch(userActions.uploadImage({ file, progress })),
         updateAccount: ({ successCallback, errorCallback, ...operation }) => {
             const options = {
-                type: 'account_update',
+                type: 'account_update2',
                 operation,
                 successCallback,
                 errorCallback,

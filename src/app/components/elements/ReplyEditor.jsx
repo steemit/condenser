@@ -132,6 +132,7 @@ class ReplyEditor extends React.Component {
 
             // console.log("initial reply body:", raw || '(empty)')
             body.props.onChange(raw);
+
             this.setState({
                 rte,
                 rte_value: rte ? stateFromHtml(raw) : null,
@@ -563,7 +564,7 @@ class ReplyEditor extends React.Component {
                                     : vframe_section_shrink_class)
                             }
                         >
-                            {process.env.BROWSER && rte ? (
+                            {process.env.BROWSER ? (
                                 <SlateEditor
                                     ref="rte"
                                     placeholder={

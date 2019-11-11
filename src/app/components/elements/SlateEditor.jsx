@@ -1,5 +1,7 @@
 import React from 'react';
-import Slate, { Editor, Mark, Raw, Html } from 'slate';
+import { Editor, Value } from 'slate';
+import Plain from 'slate-plain-serializer';
+import Html from 'slate-html-serializer';
 import Portal from 'react-portal';
 import position from 'selection-position';
 import Icon from 'app/components/elements/Icon';
@@ -19,8 +21,12 @@ export const serializeHtml = state =>
         .serialize(state, { render: false })
         .map(el => ReactDOMServer.renderToStaticMarkup(el))
         .join('\n');
+
+// TODO: make sure this works.
 export const deserializeHtml = html => serializer.deserialize(html);
-export const getDemoState = () => Raw.deserialize(demoState, { terse: true });
+
+// TODO: make sure this works.
+export const getDemoState = () => Value.fromJSON(demoState);
 
 const DEFAULT_NODE = 'paragraph';
 
@@ -30,9 +36,9 @@ import InsertBlockOnEnter from 'slate-insert-block-on-enter';
 import TrailingBlock from 'slate-trailing-block';
 
 if (process.env.BROWSER) {
+    // Plugins used here require slate-react which in turn requires react > 16.6
     //import InsertImages from 'slate-drop-or-paste-images'
-    const InsertImages = require('slate-drop-or-paste-images').default;
-
+    /*
     plugins.push(
         InsertImages({
             extensions: ['jpeg', 'png', 'gif'],
@@ -45,6 +51,7 @@ if (process.env.BROWSER) {
             },
         })
     );
+    */
 
     plugins.push(
         InsertBlockOnEnter({
@@ -67,6 +74,7 @@ export default class SlateEditor extends React.Component {
     };
 
     _focus = () => {
+        if (!this.refs) return;
         this.refs.editor.focus();
     };
 
@@ -98,6 +106,7 @@ export default class SlateEditor extends React.Component {
     // Check if the current selection has a mark with `type` in it.
     hasMark = type => {
         const { state } = this.state;
+        if (!state) return;
         if (!state.isExpanded) return;
         return state.marks.some(mark => mark.type == type);
     };
@@ -105,6 +114,7 @@ export default class SlateEditor extends React.Component {
     // Check if the current selection has a block with `type` in it.
     hasBlock = type => {
         const { state } = this.state;
+        if (!state) return;
         const { document } = state;
         return state.blocks.some(
             node =>
@@ -116,6 +126,9 @@ export default class SlateEditor extends React.Component {
     // Check if the current selection has an inline of `type`.
     hasInline = type => {
         const { state } = this.state;
+        if (!state) {
+            return false;
+        }
         return state.inlines.some(inline => inline.type == type);
     };
 
@@ -372,6 +385,7 @@ export default class SlateEditor extends React.Component {
 
     renderSidebar = () => {
         const { state } = this.state;
+        if (!state) return null;
         const isOpen = state.isExpanded && state.isFocused;
         return (
             <Portal isOpened onOpen={this.onSidebarOpen}>
@@ -457,7 +471,7 @@ export default class SlateEditor extends React.Component {
 
     renderMenu = () => {
         const { state } = this.state;
-        const isOpen = state.isExpanded && state.isFocused;
+        // const isOpen = state.isExpanded && state.isFocused;
 
         return (
             <Portal isOpened onOpen={this.onMenuOpen}>
@@ -548,8 +562,19 @@ export default class SlateEditor extends React.Component {
     };
 
     renderEditor = () => {
+        const myEditor = new Editor({
+            placeholder: 'Enter some plain text...',
+            defaultValue: Plain.deserialize(
+                'This is editable plain text, just like a <textarea>!'
+            ),
+            construct: false,
+        });
+
         return (
             <div className="SlateEditor Markdown">
+                <h1>SLATE EDITOR:</h1>
+                {myEditor.run('onConstruct')}
+                {/*
                 <Editor
                     ref="editor"
                     schema={schema}
@@ -560,6 +585,7 @@ export default class SlateEditor extends React.Component {
                     onKeyDown={this.onKeyDown}
                     onPaste={this.onPaste}
                 />
+      */}
             </div>
         );
     };
@@ -567,6 +593,7 @@ export default class SlateEditor extends React.Component {
     // move sidebar to float left of current blank paragraph
     updateSidebar = () => {
         const { sidebar, state } = this.state;
+        if (!state) return;
         if (!sidebar) return;
 
         const rect = getCollapsedClientRect();
@@ -585,6 +612,7 @@ export default class SlateEditor extends React.Component {
     updateMenu = () => {
         const { menu, state } = this.state;
         if (!menu) return;
+        if (!state) return;
 
         if (state.isBlurred || state.isCollapsed) {
             menu.removeAttribute('style');

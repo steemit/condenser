@@ -42,10 +42,13 @@ export default class CommunitiesIndex extends React.Component {
                     {role(comm)}
                     <br />
                     {comm.about}
+                    <small>
+                        {comm.subscribers} subscribers &bull; {comm.num_pending}{' '}
+                        posts
+                    </small>
                 </th>
                 <td width="40">
                     <SubscribeButton community={comm.name} />
-                    <small>{comm.subscribers} subscribers</small>
                 </td>
             </tr>
         );

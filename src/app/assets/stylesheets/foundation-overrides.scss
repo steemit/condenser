@@ -122,6 +122,11 @@ tbody tr:nth-child(even) {
     background-color: themed('modalBackgroundColor');
     color: themed('modalTextColorPrimary');
   }
+  label {
+    @include themify($themes) {
+      color: themed('modalTextColorPrimary');
+    }
+  }
   .button {
     @extend .e-btn;
     @extend .e-btn--black;

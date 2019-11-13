@@ -57,7 +57,6 @@ class PostSummary extends React.Component {
     render() {
         const { ignore, hideCategory } = this.props;
         const { post, content, featured, promoted, onClose } = this.props;
-        const { account } = this.props;
         if (!content) return null;
 
         let reblogged_by;
@@ -80,6 +79,7 @@ class PostSummary extends React.Component {
         }
 
         // 'account' is the current blog being viewed, if applicable.
+        const { account } = this.props;
         if (account && account != content.get('author')) {
             reblogged_by = (
                 <div className="articles__resteem">

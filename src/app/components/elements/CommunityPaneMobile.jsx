@@ -83,7 +83,7 @@ class CommunityPaneMobile extends Component {
                         >
                             {community.get('num_pending')}
                             <br />
-                            <small>pending posts</small>
+                            <small>active posts</small>
                         </div>
 
                         <div className="column large-4 medium-6 small-12">

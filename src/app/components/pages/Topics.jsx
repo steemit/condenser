@@ -37,6 +37,11 @@ class Topics extends Component {
                     };
                 if (tag === 'my')
                     return { value: `/trending/my`, label: 'My subscriptions' };
+                if (tag == 'explore')
+                    return {
+                        value: `/communities`,
+                        label: 'Explore Communities...',
+                    };
                 if (tag)
                     return {
                         value: `/trending/${tag}`,
@@ -56,6 +61,8 @@ class Topics extends Component {
             options = options.concat(
                 (subscriptions || topics).toJS().map(cat => opt(cat[0], cat[1]))
             );
+
+            options.push(opt('explore'));
 
             const currOpt = opt(current);
             if (!options.find(opt => opt.value == currOpt.value)) {

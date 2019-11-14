@@ -6,6 +6,7 @@ import { Map, List } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
 import { Link } from 'react-router';
+import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 
 export default class CommunitiesIndex extends React.Component {
     componentWillMount = () => {
@@ -54,8 +55,12 @@ export default class CommunitiesIndex extends React.Component {
         );
 
         return (
-            <div className="CommunitiesIndex row">
-                <div className="column">
+            <PostsIndexLayout
+                category={null}
+                enableAds={false}
+                blogmode={false}
+            >
+                <div className="CommunitiesIndex">
                     {username && (
                         <div style={{ float: 'right' }}>
                             <a href={`${walletUrl}/@${username}/communities`}>
@@ -72,7 +77,7 @@ export default class CommunitiesIndex extends React.Component {
                         <tbody>{ordered.map(comm => row(comm.toJS()))}</tbody>
                     </table>
                 </div>
-            </div>
+            </PostsIndexLayout>
         );
     }
 }

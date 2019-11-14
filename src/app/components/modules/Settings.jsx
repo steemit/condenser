@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import tt from 'counterpart';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
-import UserList from 'app/components/elements/UserList';
+import MuteList from 'app/components/elements/MuteList';
 
 class Settings extends React.Component {
     constructor(props) {
@@ -48,7 +48,7 @@ class Settings extends React.Component {
         const {
             walletUrl,
             ignores,
-            account,
+            accountname,
             isOwnAccount,
             user_preferences,
         } = this.props;
@@ -64,7 +64,7 @@ class Settings extends React.Component {
                                     href={
                                         walletUrl +
                                         '/@' +
-                                        account.name +
+                                        accountname +
                                         '/settings'
                                     }
                                 >
@@ -174,9 +174,9 @@ class Settings extends React.Component {
                         <div className="row">
                             <div className="small-12 medium-6 large-6 columns">
                                 <br />
-                                <br />
-                                <UserList
-                                    title={tt('settings_jsx.muted_users')}
+                                <h4>Muted Users</h4>
+                                <MuteList
+                                    account={accountname}
                                     users={ignores}
                                 />
                             </div>
@@ -206,7 +206,6 @@ export default connect(
             accountname,
             isOwnAccount,
             ignores,
-            account: state.global.getIn(['accounts', accountname]).toJS(),
             user_preferences: state.app.get('user_preferences').toJS(),
             walletUrl: state.app.get('walletUrl'),
             ...ownProps,

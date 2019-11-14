@@ -401,7 +401,7 @@ class PostFull extends React.Component {
         }
 
         const allowReply = Role.canComment(community, viewer_role);
-        const canReblog = !post.get('is_paidout') && !isReply;
+        const canReblog = !isReply;
         const canPromote = false && !post.get('is_paidout') && !isReply;
         const canPin =
             post.get('depth') == 0 && Role.atLeast(viewer_role, 'mod');

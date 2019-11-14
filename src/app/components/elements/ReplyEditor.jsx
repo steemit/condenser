@@ -889,7 +889,9 @@ export default formId =>
             }
 
             const jsonMetadata = ownProps.jsonMetadata
-                ? ownProps.jsonMetadata.toJS()
+                ? ownProps.jsonMetadata instanceof Map
+                  ? ownProps.jsonMetadata.toJS()
+                  : ownProps.jsonMetadata
                 : {};
 
             let tags = category;

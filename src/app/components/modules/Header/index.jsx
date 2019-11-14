@@ -296,12 +296,14 @@ class Header extends React.Component {
                         </div>
 
                         <div className="large-4 medium-3 columns show-for-medium large-centered Header__sort">
+                            {/*
                             <SortOrder
                                 sortOrder={order}
                                 topic={category === 'feed' ? '' : category}
                                 horizontal
                                 pathname={pathname}
                             />
+                            */}
                         </div>
 
                         <div className="small-6 medium-6 large-4 columns Header__buttons">

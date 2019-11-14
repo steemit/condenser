@@ -255,7 +255,7 @@ export default class UserProfile extends React.Component {
         } else {
             tab_content = (
                 <PostsList
-                    account={accountname} // 'blog' only
+                    account={section == 'blog' ? accountname : null} // 'blog' only
                     posts={posts}
                     loading={fetching}
                     loadMore={this.loadMore}

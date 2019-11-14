@@ -12,12 +12,12 @@ class FlagCommunityPost extends Component {
 
     componentWillUpdate = (nextProps, nextState) => {
         if (nextState.notes != this.state.notes) {
-            this.setState({ disableSubmit: false });
+            this.setState({ disableSubmit: nextState.notes == '' });
         }
     };
 
     onInput = e => {
-        this.setState({ notes: `${e.target.value || ''}` });
+        this.setState({ notes: `${e.target.value || ''}`.trim() });
     };
 
     onSubmit = () => {

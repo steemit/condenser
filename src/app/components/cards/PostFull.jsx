@@ -20,6 +20,7 @@ import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import MuteButton from 'app/components/elements/MuteButton';
+import FlagButton from 'app/components/elements/FlagButton';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
@@ -407,6 +408,8 @@ class PostFull extends React.Component {
         const canPin =
             post.get('depth') == 0 && Role.atLeast(viewer_role, 'mod');
         const canMute = username && Role.atLeast(viewer_role, 'mod');
+        const canFlag =
+            username && community && Role.atLeast(viewer_role, 'guest');
         const canReply = username && allowReply && post.get('depth') < 255;
         const canEdit = username === author && !showEdit;
         const canDelete = username === author && allowDelete(post);
@@ -437,6 +440,7 @@ class PostFull extends React.Component {
                 itemScope
                 itemType="http://schema.org/Blog"
             >
+                {canFlag && <FlagButton post={post} />}
                 {showEdit ? (
                     renderedEditor
                 ) : (

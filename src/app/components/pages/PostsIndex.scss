@@ -33,10 +33,6 @@
   }
 }
 
-.PostsIndex.fetching .PostsIndex__topics_compact {
-  visibility: hidden;
-}
-
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   .PostsIndex__left {
@@ -334,6 +330,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
     line-height: 1;
+    min-height: 50px;
     @include MQ(M) {
       padding-top: 0;
     }

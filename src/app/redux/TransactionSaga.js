@@ -77,6 +77,7 @@ export function* broadcastOperation({
         errorCallback,
         allowPostUnsafe,
     };
+
     const conf = typeof confirm === 'function' ? confirm() : confirm;
     if (conf) {
         console.log('broadcastConfirm', operationParam);
@@ -156,7 +157,7 @@ export function* broadcastOperation({
                 : '';
         serverApiRecordEvent(eventType, page);
     } catch (error) {
-        console.error('TransactionSaga', error);
+        console.error('TransactionSage', error);
         if (errorCallback) errorCallback(error.toString());
     }
 }
@@ -261,11 +262,6 @@ function* broadcastPayload({
                 }, 2000);
             } else {
                 if (!isLoggedInWithKeychain()) {
-                    console.log('broadcast.send: ');
-                    console.log('extensions: ', []);
-                    console.log('operations: ', operations);
-                    console.log('keys: ', keys);
-
                     broadcast.send(
                         { extensions: [], operations },
                         keys,
@@ -324,7 +320,6 @@ function* broadcastPayload({
             }
     } catch (error) {
         console.error('TransactionSaga\tbroadcastPayload', error);
-        debugger;
         // status: error
         yield put(
             transactionActions.error({ operations, error, errorCallback })

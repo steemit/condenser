@@ -96,7 +96,7 @@ class PostSummary extends React.Component {
         const gray = content.getIn(['stats', 'gray']);
         const isNsfw = hasNsfwTag(content);
         const isReply = content.get('depth') > 0;
-        const showReblog = !content.get('is_paidout') && !isReply;
+        const showReblog = !isReply;
         const full_power = content.get('percent_steem_dollars') === 0;
 
         const author = content.get('author');

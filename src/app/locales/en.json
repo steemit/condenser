@@ -432,7 +432,7 @@
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Now showing comments with low ratings",
-        "sort_order": "Sort Order",
+        "sort_order": "Sort",
         "comments_were_hidden_due_to_low_ratings":
             "Comments were hidden due to low ratings",
         "comment_sort_order": {

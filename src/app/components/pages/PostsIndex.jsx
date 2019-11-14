@@ -10,18 +10,12 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import Callout from 'app/components/elements/Callout';
-import SidebarLinks from 'app/components/elements/SidebarLinks';
-import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
-import Notices from 'app/components/elements/Notices';
-import SteemMarket from 'app/components/elements/SteemMarket';
 import { GptUtils } from 'app/utils/GptUtils';
-import GptAd from 'app/components/elements/GptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import { ifHive } from 'app/utils/Community';
-import CommunityPane from 'app/components/elements/CommunityPane';
-import CommunityPaneMobile from 'app/components/elements/CommunityPaneMobile';
+import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 
 const emptyFeedText = (isMyAccount, account_name) => {
     return isMyAccount ? (
@@ -98,7 +92,7 @@ class PostsIndex extends React.Component {
         const {
             topics,
             subscriptions,
-            allowAdsOnContent,
+            enableAds,
             community,
             category,
             account_name, // TODO: for feed
@@ -141,158 +135,84 @@ class PostsIndex extends React.Component {
             page_title = '#' + category;
         }
 
-        const layoutClass = this.props.blogmode
-            ? ' layout-block'
-            : ' layout-list';
         return (
-            <div
-                className={
-                    'PostsIndex row' +
-                    (fetching ? ' fetching' : '') +
-                    layoutClass
-                }
+            <PostsIndexLayout
+                category={category}
+                enableAds={enableAds}
+                blogmode={this.props.blogmode}
             >
-                <article className="articles">
-                    {community && (
-                        <span className="hide-for-mq-large articles__header-select">
-                            <CommunityPaneMobile
-                                community={community}
-                                username={this.props.username}
-                            />
-                        </span>
-                    )}
-                    <div className="articles__header row">
-                        <div className="small-8 medium-7 large-8 column">
-                            <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
-                                {page_title}
-                            </h1>
-                            <div className="show-for-mq-large">
-                                {community && (
+                <div className="articles__header row">
+                    <div className="small-8 medium-7 large-8 column">
+                        <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
+                            {page_title}
+                        </h1>
+                        <div className="show-for-mq-large">
+                            {community && (
+                                <div
+                                    style={{
+                                        fontSize: '80%',
+                                        color: 'gray',
+                                    }}
+                                >
+                                    Community
+                                </div>
+                            )}
+                            {!community &&
+                                category &&
+                                order !== 'feed' &&
+                                category !== 'my' && (
                                     <div
                                         style={{
                                             fontSize: '80%',
                                             color: 'gray',
                                         }}
                                     >
-                                        Community
+                                        Unmoderated tag
                                     </div>
                                 )}
-                                {!community &&
-                                    category &&
-                                    order !== 'feed' &&
-                                    category !== 'my' && (
-                                        <div
-                                            style={{
-                                                fontSize: '80%',
-                                                color: 'gray',
-                                            }}
-                                        >
-                                            Unmoderated tag
-                                        </div>
-                                    )}
-                            </div>
-                            <span className="hide-for-mq-large articles__header-select">
-                                <Topics
-                                    username={this.props.username}
-                                    order={order}
-                                    current={category}
-                                    topics={topics}
-                                    compact
-                                />
-                            </span>
                         </div>
-                        {order != 'feed' && (
-                            <div className="small-4 medium-4 large-3 column hide-for-largeX articles__header-select">
-                                <SortOrder
-                                    sortOrder={order}
-                                    topic={category}
-                                    horizontal={false}
-                                />
-                            </div>
-                        )}
-                        <div className="medium-1 show-for-mq-medium column">
-                            <ArticleLayoutSelector />
-                        </div>
-                    </div>
-                    <hr className="articles__hr" />
-                    {!fetching && !posts.size ? (
-                        <Callout>{emptyText}</Callout>
-                    ) : (
-                        <PostsList
-                            ref="list"
-                            posts={posts}
-                            loading={fetching}
-                            anyPosts
-                            order={order}
-                            category={category}
-                            hideCategory={!!community}
-                            loadMore={this.loadMore}
-                            showFeatured
-                            showPromoted
-                            allowAdsOnContent={allowAdsOnContent}
-                        />
-                    )}
-                </article>
-
-                <aside className="c-sidebar c-sidebar--right">
-                    {community && (
-                        <CommunityPane
-                            community={community}
-                            username={this.props.username}
-                        />
-                    )}
-                    {this.props.isBrowser &&
-                        !community &&
-                        !this.props.username && <SidebarNewUsers />}
-                    {this.props.isBrowser &&
-                        !community &&
-                        this.props.username && (
-                            <SidebarLinks
+                        <span className="hide-for-mq-large articles__header-select">
+                            <Topics
                                 username={this.props.username}
-                                subscriptions={subscriptions}
+                                current={category}
+                                topics={subscriptions || topics}
+                                compact
                             />
-                        )}
-                    {false && !community && <Notices />}
-                    {!category && <SteemMarket />}
-                    {allowAdsOnContent && (
-                        <div className="sidebar-ad">
-                            <GptAd
-                                type="Freestar"
-                                id="bsa-zone_1566495004689-0_123456"
+                        </span>
+                    </div>
+                    {order != 'feed' && (
+                        <div className="small-4 medium-4 large-3 column articles__header-select">
+                            <SortOrder
+                                sortOrder={order}
+                                topic={category}
+                                horizontal={false}
                             />
                         </div>
                     )}
-                </aside>
+                    <div className="medium-1 show-for-mq-medium column">
+                        <ArticleLayoutSelector />
+                    </div>
+                </div>
+                <hr className="articles__hr" />
 
-                <aside className="c-sidebar c-sidebar--left">
-                    <Topics
+                {!fetching && !posts.size ? (
+                    <Callout>{emptyText}</Callout>
+                ) : (
+                    <PostsList
+                        ref="list"
+                        posts={posts}
+                        loading={fetching}
+                        anyPosts
                         order={order}
-                        current={category}
-                        compact={false}
-                        username={this.props.username}
-                        topics={topics}
+                        category={category}
+                        hideCategory={!!community}
+                        loadMore={this.loadMore}
+                        showFeatured
+                        showPromoted
+                        allowAdsOnContent={enableAds}
                     />
-                    {allowAdsOnContent && (
-                        <div>
-                            <div className="sidebar-ad">
-                                <GptAd
-                                    type="Freestar"
-                                    slotName="bsa-zone_1566494461953-7_123456"
-                                />
-                            </div>
-                            <div
-                                className="sidebar-ad"
-                                style={{ marginTop: 20 }}
-                            >
-                                <GptAd
-                                    type="Freestar"
-                                    slotName="bsa-zone_1566494856923-9_123456"
-                                />
-                            </div>
-                        </div>
-                    )}
-                </aside>
-            </div>
+                )}
+            </PostsIndexLayout>
         );
     }
 }
@@ -318,17 +238,15 @@ module.exports = {
             const hive = ifHive(category);
             const community = state.global.getIn(['community', hive], null);
 
-            const allowAdsOnContent =
+            const enableAds =
                 ownProps.gptEnabled &&
                 !GptUtils.HasBannedTags(
                     [category],
                     state.app.getIn(['googleAds', 'gptBannedTags'])
                 );
 
-            const subscriptions = state.global.get('subscriptions');
-
             return {
-                subscriptions: subscriptions ? subscriptions.toJS() : null,
+                subscriptions: state.global.get('subscriptions'),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 account_name,
@@ -345,7 +263,7 @@ module.exports = {
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 topics: state.global.getIn(['topics'], List()),
                 isBrowser: process.env.BROWSER,
-                allowAdsOnContent,
+                enableAds,
             };
         },
         dispatch => ({

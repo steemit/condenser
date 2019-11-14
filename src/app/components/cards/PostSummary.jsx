@@ -12,7 +12,7 @@ import { extractBodySummary, extractImageLink } from 'app/utils/ExtractContent';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import { List, Map } from 'immutable';
 import Author from 'app/components/elements/Author';
-import TagList from 'app/components/elements/TagList';
+import Tag from 'app/components/elements/Tag';
 import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
@@ -148,7 +148,7 @@ class PostSummary extends React.Component {
                         {hideCategory || (
                             <span className="articles__tag-link">
                                 {tt('g.in')}&nbsp;
-                                <TagList post={content} single />
+                                <Tag post={content} />
                                 &nbsp;•&nbsp;
                             </span>
                         )}

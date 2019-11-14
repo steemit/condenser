@@ -135,7 +135,7 @@
     "svgo-loader": "1.2.1",
     "twilio": "3.17.0",
     "uncontrollable": "3.3.1",
-    "underscore.string": "3.3.4",
+    "underscore.string": "3.3.5",
     "url-loader": "0.6.2",
     "web-push": "3.2.3",
     "webpack": "3.7.1",

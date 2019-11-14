@@ -22,6 +22,20 @@ class Settings extends React.Component {
         this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this);
     }
 
+    componentWillMount() {
+        const { account } = this.props;
+        if (account) {
+            this.initForm(this.props);
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        const { account } = this.props;
+        if (prevProps.account !== account && account) {
+            this.initForm(this.props);
+        }
+    }
+
     initForm(props) {
         reactForm({
             instance: this,
@@ -154,27 +168,12 @@ class Settings extends React.Component {
         if (!metaData.profile.location) delete metaData.profile.location;
         if (!metaData.profile.website) delete metaData.profile.website;
 
-        const { account, updateAccount, accountname } = this.props;
+        const { account, updateAccount } = this.props;
         this.setState({ loading: true });
-        const accountObject = account.toJS();
-        const account_update2_operation = {
-            account: accountname,
-            posting_json_metadata: JSON.stringify(metaData),
-            //posting_key: accountObject.posting.key_auths[0][0],
-            // posting: account.get('posting').toJS()
-            posting: accountObject.posting.key_auths[0][0],
-        };
-        debugger;
         updateAccount({
-            /*
-            memo_key: account.get('memo_key'),
-            active_key: accountObject.active.key_auths[0][0],
-            owner_key: accountObject.owner.key_auths[0][0],
+            account: account.get('name'),
             json_metadata: '',
-            required_posting_auths: [accountname],
-            posting: accountObject.posting,
-            */
-            ...account_update2_operation,
+            posting_json_metadata: JSON.stringify(metaData),
             errorCallback: e => {
                 if (e === 'Canceled') {
                     this.setState({
@@ -534,9 +533,9 @@ export default connect(
         const account = state.global.getIn(['accounts', accountname]);
         const current_user = state.user.get('current');
         const username = current_user ? current_user.get('username') : '';
-        // TODO: look for posting_json_metadata in account obj.
+
         let metaData = account
-            ? o2j.ifStringParseJSON(account.json_metadata)
+            ? o2j.ifStringParseJSON(account.get('posting_json_metadata'))
             : {};
         if (typeof metaData === 'string')
             metaData = o2j.ifStringParseJSON(metaData); // issue #1237

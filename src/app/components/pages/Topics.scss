@@ -18,4 +18,7 @@ ul.Topics {
   font-weight: bold;
   font-size: 1.125rem;
   margin: 0 0 1rem 0;
+  @include themify($themes) {
+    border-bottom: themed('border');
+  }
 }

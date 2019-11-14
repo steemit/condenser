@@ -37,7 +37,10 @@ const SidebarLinks = ({ username, subscriptions }) => (
                 )}
                 {subscriptions &&
                     subscriptions.map(item => (
-                        <li key={item[0]} className="c-sidebar__list-item">
+                        <li
+                            key={item[0]}
+                            className="c-sidebar__list-item clickable"
+                        >
                             <Link
                                 className="c-sidebar__link"
                                 to={`/trending/${item[0]}`}

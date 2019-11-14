@@ -102,7 +102,7 @@
   flex: 0 0 320px;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   &__module {
-    padding: 1.5em 2em;
+    padding: 0;
     @include themify($themes) {
       border-radius: themed('roundedCorners');
       background-color: themed('moduleBackgroundColor');
@@ -140,10 +140,16 @@
     margin: 0;
     padding: 0;
   }
-
-  .li {
+  li {
+    padding: 0.2em 1.5em;
+    &.clickable:hover {
+      background-color: #ededed;
+    }
+    &:first-child {
+      margin-top: 0.5em;
+    }
     &:last-child {
-      margin-bottom: 0;
+      margin-bottom: 1em;
     }
   }
   &__h3 {
@@ -163,6 +169,8 @@
     &--emphasis {
       font-weight: bold;
     }
+    width: 100%;
+    display: block;
   }
   &__more-link {
     @extend .link;

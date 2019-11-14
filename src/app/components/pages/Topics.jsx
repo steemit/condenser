@@ -92,20 +92,26 @@ class Topics extends Component {
 
         const list = (
             <ul className="c-sidebar__list">
-                <li>{link('/trending', tt('g.all_tags'))}</li>
+                <li className="c-sidebar__list-item clickable">
+                    {link('/trending', tt('g.all_tags'))}
+                </li>
                 {username && (
-                    <li>{link(`/@${username}/feed`, 'My friends')}</li>
+                    <li className="c-sidebar__list-item clickable">
+                        {link(`/@${username}/feed`, 'My friends')}
+                    </li>
                 )}
-                {username && <li>{link(`/trending/my`, 'My communities')}</li>}
-                <li>{commsHead}</li>
-                {topics
-                    .toJS()
-                    .map(cat => (
-                        <li key={cat[0]}>
-                            {link(`/trending/${cat[0]}`, cat[1], '')}
-                        </li>
-                    ))}
-                <li>
+                {username && (
+                    <li className="c-sidebar__list-item clickable">
+                        {link(`/trending/my`, 'My communities')}
+                    </li>
+                )}
+                <li className="c-sidebar__list-item">{commsHead}</li>
+                {topics.toJS().map(cat => (
+                    <li key={cat[0]} className="c-sidebar__list-item clickable">
+                        {link(`/trending/${cat[0]}`, cat[1], '')}
+                    </li>
+                ))}
+                <li className="c-sidebar__list-item clickable">
                     {link(
                         `/communities`,
                         moreLabel,

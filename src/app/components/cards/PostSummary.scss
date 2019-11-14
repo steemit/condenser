@@ -5,6 +5,9 @@ ul.PostsList__summaries {
 ul.PostsList__summaries li {
   padding: 0.1em 0.5em 0 0.5em;
   margin-bottom: 0.8em;
+  @include themify($themes) {
+    box-shadow: 1px 1px 3px 0 themed('contentBorder');
+  }
 
   @include themify($themes) {
     border-radius: themed('roundedCorners');
@@ -15,7 +18,7 @@ ul.PostsList__summaries li {
   &:hover {
     @include MQ(L) {
       @include themify($themes) {
-        box-shadow: 2px 2px 3px 0 themed('contentBorderAccent');
+        box-shadow: 1px 1px 3px 0 themed('contentBorderAccent');
       }
     }
   }

@@ -1,21 +1,23 @@
 .Post {
   @include themify($themes) {
-    background-color: themed('moduleBackgroundColor');
+    background-color: themed('transparent');
   }
 }
 
 .PostFull {
-  padding-bottom: 1rem;
-  padding-top: 2rem;
+  padding: 2rem 1rem 1rem 1rem;
   margin: 0 auto;
   max-width: 54rem;
+  position: relative;
   @include themify($themes) {
-      border-bottom: themed('border');
+    border-radius: themed('roundedCorners');
+    border: themed('border');
+    background-color: themed('moduleBackgroundColor');
   }
   .button.hollow {
     @include themify($themes) {
-        border: themed('borderAccent');
-        color: themed('textColorAccent');
+      border: themed('borderAccent');
+      color: themed('textColorAccent');
     }
   }
 
@@ -28,8 +30,8 @@
   font-weight: 400;
   border-right: none!important;
   @include themify($themes) {
-      border-right: themed('border');
-      color: themed('textColorSecondary');
+    border-right: themed('border');
+    color: themed('textColorSecondary');
   }
 
   padding-right: .6rem;
@@ -43,8 +45,8 @@
   margin: 1rem 0 1rem 0;
   line-height: 1.2;
   @include themify($themes) {
-      color: themed('textColorSecondary');
-    }
+    color: themed('textColorSecondary');
+  }
   strong, a {
     @include themify($themes) {
       color: themed('textColorSecondary');
@@ -96,7 +98,7 @@
       top: 5px;
       svg {
         @include themify($themes) {
-            fill: themed('textColorSecondary');
+          fill: themed('textColorSecondary');
         }
       }
     }
@@ -118,7 +120,7 @@
   font-size: 94%;
   svg {
     @include themify($themes) {
-        fill: themed('textColorSecondary');
+      fill: themed('textColorSecondary');
     }
   }
   .RightShare__Menu {
@@ -139,7 +141,7 @@
     padding-right: .4rem;
     margin-right: .4rem;
     @include themify($themes) {
-        border-right: themed('border');
+      border-right: themed('border');
     }
   }
 }
@@ -154,8 +156,8 @@
   font-size: 94%;
   font-weight: 600;
   @include themify($themes) {
-      border-right: themed('border');
-      fill: themed('textColorSecondary');
+    border-right: themed('border');
+    fill: themed('textColorSecondary');
   }
 }
 
@@ -163,7 +165,7 @@
   padding-right: .4rem;
   margin-right: .4rem;
   @include themify($themes) {
-      border-right: themed('border');
+    border-right: themed('border');
   }
   a {margin: 0 0.15rem;}
 }
@@ -210,11 +212,11 @@ input.share-box {
 }
 
 .chain-right {
-    -webkit-transform: rotate(120deg);
-    -moz-transform: rotate(120deg);
-    -ms-transform: rotate(120deg);
-    -o-transform: rotate(120deg);
-    transform: rotate(120deg);
+  -webkit-transform: rotate(120deg);
+  -moz-transform: rotate(120deg);
+  -ms-transform: rotate(120deg);
+  -o-transform: rotate(120deg);
+  transform: rotate(120deg);
 }
 
 /* Small only */

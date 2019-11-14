@@ -82,7 +82,7 @@ class CommunityPane extends Component {
                         <div className="column small-4">
                             {community.get('num_pending')}
                             <br />
-                            <small>pending posts</small>
+                            <small>active posts</small>
                         </div>
                     </div>
 

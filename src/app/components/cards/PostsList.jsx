@@ -56,7 +56,6 @@ class PostsList extends React.Component {
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
-        document.getElementsByTagName('body')[0].className = '';
     }
 
     onBackButton(e) {

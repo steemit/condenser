@@ -202,11 +202,13 @@ class CommunityRoles extends React.Component {
                 <div className="row">
                     <div className="column large-3 medium-2 small-0" />
                     <div className="column large-6 medium-8 small-12">
-                        <h3>
-                            <Link to={`/trending/${community}`}>
-                                {commName || community}
-                            </Link>
-                        </h3>
+                        {!loading && (
+                            <h3>
+                                <Link to={`/trending/${community}`}>
+                                    {commName || community}
+                                </Link>
+                            </h3>
+                        )}
                         {updating && <div>Updating User...</div>}
                         {loading && spinner}
                         {this.state.updateRoleModal && editUserModal}

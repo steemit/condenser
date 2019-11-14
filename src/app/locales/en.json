@@ -45,6 +45,10 @@
         "affiliation_steemit": "Steemit Team",
         "affiliation_sm": "Steem Monsters Team",
         "feed": "Feed",
+        "flag": "Flag",
+        "flag_this_post": "Flag this %(type)s",
+        "flag_this_post_description":
+            "Please provide a note regarding your decision to flag this %(type)s, it will be reviewed by community moderators.",
         "follow": "Follow",
         "for": " for ",
         "from": " from ",
@@ -432,7 +436,7 @@
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Now showing comments with low ratings",
-        "sort_order": "Sort Order",
+        "sort_order": "Sort",
         "comments_were_hidden_due_to_low_ratings":
             "Comments were hidden due to low ratings",
         "comment_sort_order": {

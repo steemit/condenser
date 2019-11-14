@@ -9,7 +9,7 @@ import NativeSelect from 'app/components/elements/NativeSelect';
 class Topics extends Component {
     static propTypes = {
         topics: PropTypes.object.isRequired,
-        order: PropTypes.string.isRequired,
+        subscriptions: PropTypes.object,
         current: PropTypes.string,
         compact: PropTypes.bool.isRequired,
     };
@@ -20,11 +20,11 @@ class Topics extends Component {
 
     render() {
         const {
-            order,
             current,
             compact,
             username,
             topics,
+            subscriptions,
             communities,
         } = this.props;
 
@@ -37,6 +37,11 @@ class Topics extends Component {
                     };
                 if (tag === 'my')
                     return { value: `/trending/my`, label: 'My subscriptions' };
+                if (tag == 'explore')
+                    return {
+                        value: `/communities`,
+                        label: 'Explore Communities...',
+                    };
                 if (tag)
                     return {
                         value: `/trending/${tag}`,
@@ -54,8 +59,10 @@ class Topics extends Component {
             }
 
             options = options.concat(
-                topics.toJS().map(cat => opt(cat[0], cat[1]))
+                (subscriptions || topics).toJS().map(cat => opt(cat[0], cat[1]))
             );
+
+            options.push(opt('explore'));
 
             const currOpt = opt(current);
             if (!options.find(opt => opt.value == currOpt.value)) {
@@ -86,19 +93,22 @@ class Topics extends Component {
         );
 
         const moreLabel = <span>{tt('g.show_more_topics')}&hellip;</span>;
+        const title = subscriptions
+            ? 'My Subscriptions'
+            : 'Trending Communities';
         const commsHead = (
-            <div style={{ color: '#aaa', paddingTop: '1em' }}>Communities</div>
+            <div style={{ color: '#aaa', paddingTop: '0em' }}>{title}</div>
         );
 
         const list = (
             <ul className="c-sidebar__list">
-                <li>{link('/trending', tt('g.all_tags'))}</li>
+                {/*<li>{link('/trending', tt('g.all_tags'))}</li>*/}
                 {username && (
                     <li>{link(`/@${username}/feed`, 'My friends')}</li>
                 )}
                 {username && <li>{link(`/trending/my`, 'My communities')}</li>}
                 <li>{commsHead}</li>
-                {topics
+                {(subscriptions || topics)
                     .toJS()
                     .map(cat => (
                         <li key={cat[0]}>

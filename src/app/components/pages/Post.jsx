@@ -206,29 +206,30 @@ class Post extends React.Component {
                 <div className="row">
                     <div className="column">{postBody}</div>
                 </div>
-                {!isLoggedIn() && (
-                    <div className="row">
-                        <div className="column">
-                            <div className="Post__promo">
-                                {tt(
-                                    'g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post'
-                                )}.
-                                <br />
-                                {tt(
-                                    'g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount'
-                                )}
-                                <br />
-                                <button
-                                    type="button"
-                                    className="button e-btn"
-                                    onClick={showSignUp}
-                                >
-                                    {tt('loginform_jsx.sign_up_get_steem')}
-                                </button>
+                {false &&
+                    !isLoggedIn() && (
+                        <div className="row">
+                            <div className="column">
+                                <div className="Post__promo">
+                                    {tt(
+                                        'g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post'
+                                    )}.
+                                    <br />
+                                    {tt(
+                                        'g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount'
+                                    )}
+                                    <br />
+                                    <button
+                                        type="button"
+                                        className="button e-btn"
+                                        onClick={showSignUp}
+                                    >
+                                        {tt('loginform_jsx.sign_up_get_steem')}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
                 {this.props.gptEnabled && commentCount >= 5 ? (
                     <div className="Post_footer__ad">
                         <GptAd

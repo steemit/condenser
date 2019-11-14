@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import tt from 'counterpart';
 
-class MutePost extends Component {
+class FlagCommunityPost extends Component {
     constructor(props) {
         super(props);
         this.state = { notes: '', disableSubmit: true };
@@ -25,22 +25,23 @@ class MutePost extends Component {
     };
 
     render() {
-        const { notes, disableSubmit } = this.state;
-        const { isMuted } = this.props;
-
+        const { disableSubmit } = this.state;
+        const { flagText, isComment } = this.props;
         return (
             <span>
-                {isMuted ? (
-                    <div>
-                        <h4>{tt('g.unmute_this_post')}</h4>{' '}
-                        <p> {tt('g.unmute_this_post_description')}</p>
-                    </div>
-                ) : (
-                    <div>
-                        <h4>{tt('g.mute_this_post')}</h4>
-                        <p>{tt('g.mute_this_post_description')}</p>
-                    </div>
-                )}
+                <div>
+                    <h4>
+                        {tt('g.flag_this_post', {
+                            type: isComment ? 'comment' : 'post',
+                        })}
+                    </h4>
+                    <p>
+                        {tt('g.flag_this_post_description', {
+                            type: isComment ? 'comment' : 'post',
+                        })}
+                    </p>
+                    {flagText && flagText.length > 0 && <p>{flagText}</p>}
+                </div>
                 <hr />
                 <div className="input-group">
                     <span className="input-group-label">Notes</span>
@@ -61,7 +62,7 @@ class MutePost extends Component {
                         disabled={disableSubmit}
                         onClick={() => this.onSubmit()}
                     >
-                        {isMuted ? tt('g.unmute') : tt('g.mute')}
+                        {tt('g.flag')}
                     </button>
                 </div>
             </span>
@@ -69,13 +70,14 @@ class MutePost extends Component {
     }
 }
 
-MutePost.propTypes = {
+FlagCommunityPost.propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    isMuted: PropTypes.bool,
+    flagText: PropTypes.string.isRequired,
+    isComment: PropTypes.bool,
 };
 
-MutePost.defaultProps = {
-    isMuted: false,
+FlagCommunityPost.defaultProps = {
+    isComment: false,
 };
 
-export default connect()(MutePost);
+export default connect()(FlagCommunityPost);

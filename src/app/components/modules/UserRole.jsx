@@ -122,6 +122,21 @@ class UserRole extends Component {
                     </button>
                 </div>
                 <div>{message.length > 0 && message}</div>
+                <div>
+                    <h5>Role Permissions</h5>
+                    <p>
+                        <strong>Owner</strong> - assign admins<br />
+                        <strong>Admin</strong> - edit settings, assign mods<br
+                        />
+                        <strong>Moderator</strong> - mute, pin, set user titles<br
+                        />
+                        <strong>Member</strong> - listed on leadership team<br
+                        />
+                        <strong>Guest</strong> - default; can post and comment<br
+                        />
+                        <strong>Muted</strong> - new posts automatically muted
+                    </p>
+                </div>
             </span>
         );
     }

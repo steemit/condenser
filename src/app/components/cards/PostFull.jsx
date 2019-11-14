@@ -13,6 +13,7 @@ import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import { immutableAccessor } from 'app/utils/Accessors';
 import { extractBodySummary } from 'app/utils/ExtractContent';
+import Tag from 'app/components/elements/Tag';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
@@ -47,7 +48,7 @@ function TimeAuthorCategoryLarge({ post }) {
             <Userpic account={post.get('author')} />
             <div className="right-side">
                 <Author post={post} showAffiliation />
-                {tt('g.in')} <TagList post={post} single />
+                {tt('g.in')} <Tag post={post} />
                 {' • '}
                 <TimeAgoWrapper date={post.get('created')} />{' '}
                 <ContentEditedWrapper
@@ -402,7 +403,7 @@ class PostFull extends React.Component {
         }
 
         const allowReply = Role.canComment(community, viewer_role);
-        const canReblog = !post.get('is_paidout') && !isReply;
+        const canReblog = !isReply;
         const canPromote = false && !post.get('is_paidout') && !isReply;
         const canPin =
             post.get('depth') == 0 && Role.atLeast(viewer_role, 'mod');
@@ -463,7 +464,7 @@ class PostFull extends React.Component {
                             {tt('g.promote')}
                         </button>
                     )}
-                {!isReply && <TagList post={post} horizontal />}
+                {!isReply && <TagList post={post} />}
                 <div className="PostFull__footer row">
                     <div className="columns medium-12 large-6">
                         <TimeAuthorCategory post={post} />

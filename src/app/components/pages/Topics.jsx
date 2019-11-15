@@ -66,7 +66,9 @@ class Topics extends Component {
 
             const currOpt = opt(current);
             if (!options.find(opt => opt.value == currOpt.value)) {
-                options.push(opt(current));
+                options.push(
+                    opt(current, communities.getIn([current, 'title']))
+                );
             }
 
             return (

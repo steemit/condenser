@@ -172,8 +172,6 @@ class Header extends React.Component {
             page_title = tt('navigation.terms_of_service');
         } else if (route.page == 'CommunityRoles') {
             page_title = 'Community Roles';
-        } else if (route.page == 'RecoverAccountStep1') {
-            page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
             const user_name = route.params[0].slice(1);
             const user_title = display_name
@@ -345,13 +343,10 @@ class Header extends React.Component {
                                     items={user_menu}
                                     title={username}
                                     el="span"
-                                    selected={tt('g.rewards')}
                                     position="left"
                                 >
                                     <li className={'Header__userpic '}>
-                                        <span title={username}>
-                                            <Userpic account={username} />
-                                        </span>
+                                        <Userpic account={username} />
                                     </li>
                                 </DropdownMenu>
                             )}

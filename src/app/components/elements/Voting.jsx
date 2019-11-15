@@ -604,7 +604,7 @@ export default connect(
         );
 
         if (!post) {
-            console.log('props', ownProps);
+            console.error('post_not_found', ownProps);
             throw 'post not found';
         }
 

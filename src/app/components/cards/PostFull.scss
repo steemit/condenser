@@ -106,7 +106,7 @@
 }
 
 .PostFull__body {
-  padding: 1rem 0 2rem 0;
+  padding: 1rem 0 1rem 0;
   clear: left;
   a {
     @extend .link;
@@ -126,11 +126,6 @@
   .RightShare__Menu {
     @include MQ(FL) {
       text-align: right;
-    }
-  }
-  .VerticalMenu > li > a {
-    @include themify($themes) {
-      fill: themed('textColorSecondary');
     }
   }
   span {

@@ -1,6 +1,4 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
-import config from 'config';
-import axios from 'axios';
 import * as reducer from 'app/redux/SearchReducer';
 
 export const searchWatches = [takeEvery('search/SEARCH_DISPATCH', search)];
@@ -14,7 +12,7 @@ export function* search(action) {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                Authorization: config.esteem_elastic_search_api_key,
+                Authorization: $STM_Config.esteem_elastic_search_api_key,
             },
             body: JSON.stringify({
                 q: searchParams.category,

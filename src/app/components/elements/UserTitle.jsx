@@ -45,7 +45,7 @@ class UserTitle extends React.Component {
         const showRole = role && role != 'guest';
         const showTitle = title != '' || (isMod && !hideEdit);
 
-        if (!showRole || !showTitle) return null;
+        if (!showRole && !showTitle) return null;
 
         let editor;
         if (isMod && !hideEdit) {

@@ -79,11 +79,6 @@ class CommunityRoles extends React.Component {
             roles,
             communityMetadata,
         } = this.props;
-        const spinner = (
-            <center>
-                <LoadingIndicator type="circle" />
-            </center>
-        );
 
         const canEdit = {
             owner: ['admin', 'mod', 'member', 'guest', 'muted'],
@@ -198,6 +193,43 @@ class CommunityRoles extends React.Component {
 
         const commName = (communityMetadata && communityMetadata.title) || null;
 
+        let body;
+        if (loading) {
+            body = (
+                <center>
+                    <LoadingIndicator type="circle" />
+                </center>
+            );
+        } else {
+            body = (
+                <div>
+                    <h1 className="articles__h1">
+                        <Link to={`/trending/${community}`}>
+                            {commName || community}
+                        </Link>
+                    </h1>
+                    <br />
+                    <div className="c-sidebar__module">
+                        <h4>User Roles</h4>
+                        {updating && <div>Updating User...</div>}
+                        {this.state.updateRoleModal && editUserModal}
+                        {this.state.addUserToCommunityModal && addUserModal}
+                        <div>
+                            {table}
+                            <button
+                                onClick={() => {
+                                    this.toggleAddUserToCommunityModal(true);
+                                }}
+                                className="button slim hollow secondary"
+                            >
+                                Add User
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <PostsIndexLayout
                 category={community}
@@ -206,36 +238,8 @@ class CommunityRoles extends React.Component {
             >
                 <div className="CommunityRoles">
                     <div className="row">
-                        <div className="column large-7 medium-9 small-12">
-                            {!loading && (
-                                <div>
-                                    <h1 className="articles__h1">
-                                        <Link to={`/trending/${community}`}>
-                                            {commName || community}
-                                        </Link>
-                                    </h1>
-                                    <h4>User Roles</h4>
-                                </div>
-                            )}
-                            {updating && <div>Updating User...</div>}
-                            {loading && spinner}
-                            {this.state.updateRoleModal && editUserModal}
-                            {this.state.addUserToCommunityModal && addUserModal}
-                            {!loading && (
-                                <div>
-                                    {table}
-                                    <button
-                                        onClick={() => {
-                                            this.toggleAddUserToCommunityModal(
-                                                true
-                                            );
-                                        }}
-                                        className="button slim hollow secondary"
-                                    >
-                                        Add User
-                                    </button>
-                                </div>
-                            )}
+                        <div className="column large-9 medium-12 small-12">
+                            {body}
                         </div>
                     </div>
                 </div>

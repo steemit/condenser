@@ -7,8 +7,8 @@ import * as appActions from 'app/redux/AppReducer';
 import o2j from 'shared/clash/object2json';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import reactForm from 'app/utils/ReactForm';
-import UserList from 'app/components/elements/UserList';
 import Dropzone from 'react-dropzone';
+import MuteList from 'app/components/elements/MuteList';
 
 class Settings extends React.Component {
     constructor(props) {
@@ -236,7 +236,7 @@ class Settings extends React.Component {
         const {
             walletUrl,
             ignores,
-            account,
+            accountname,
             isOwnAccount,
             user_preferences,
             follow,
@@ -502,9 +502,9 @@ class Settings extends React.Component {
                         <div className="row">
                             <div className="small-12 medium-6 large-6 columns">
                                 <br />
-                                <br />
-                                <UserList
-                                    title={tt('settings_jsx.muted_users')}
+                                <h4>Muted Users</h4>
+                                <MuteList
+                                    account={accountname}
                                     users={ignores}
                                 />
                             </div>
@@ -548,6 +548,7 @@ export default connect(
             accountname,
             isOwnAccount,
             ignores,
+            user_preferences: state.app.get('user_preferences').toJS(),
             walletUrl: state.app.get('walletUrl'),
             profile,
             follow: state.global.get('follow'),

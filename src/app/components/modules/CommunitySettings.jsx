@@ -100,7 +100,7 @@ class CommunitySettings extends Component {
                         />
                     </label>
                     <label style={{ margin: '0 0 0.5rem' }}>
-                        Flag Text<br />
+                        Rules (one per line)<br />
                         <textarea
                             style={{ whiteSpace: 'normal' }}
                             type="text"

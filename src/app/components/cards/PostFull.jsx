@@ -299,30 +299,22 @@ class PostFull extends React.Component {
 
         const share_menu = [
             {
-                link: '#',
                 onClick: this.fbShare,
-                value: 'Facebook',
                 title: tt('postfull_jsx.share_on_facebook'),
                 icon: 'facebook',
             },
             {
-                link: '#',
                 onClick: this.twitterShare,
-                value: 'Twitter',
                 title: tt('postfull_jsx.share_on_twitter'),
                 icon: 'twitter',
             },
             {
-                link: '#',
                 onClick: this.redditShare,
-                value: 'Reddit',
                 title: tt('postfull_jsx.share_on_reddit'),
                 icon: 'reddit',
             },
             {
-                link: '#',
                 onClick: this.linkedInShare,
-                value: 'LinkedIn',
                 title: tt('postfull_jsx.share_on_linkedin'),
                 icon: 'linkedin',
             },

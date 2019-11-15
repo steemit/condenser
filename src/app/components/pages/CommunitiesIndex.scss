@@ -1,6 +1,8 @@
 .CommunitiesIndex {
     max-width: 800px;
     table {margin-top: 1em;}
+    table tbody {background: transparent;}
+    table tbody tr {background: transparent !important;}
     table th {text-align: left; font-weight: normal}
     table th a {font-weight: 400; font-size: 1.3em;}
     table td {vertical-align: middle; color: #666; text-align: center;}

@@ -8,6 +8,16 @@ import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
 import Icon from 'app/components/elements/Icon';
 
+const nl2br = text =>
+    text.split('\n').map((item, key) => (
+        <span key={key}>
+            {item}
+            <br />
+        </span>
+    ));
+const nl2li = text =>
+    text.split('\n').map((item, key) => <li key={key}>{item}</li>);
+
 class CommunityPane extends Component {
     static propTypes = {
         community: PropTypes.object.isRequired,
@@ -136,7 +146,15 @@ class CommunityPane extends Component {
                         <div>
                             <strong>Description</strong>
                             <br />
-                            {community.get('description', 'empty')}
+                            {nl2br(community.get('description', 'empty'))}
+                            <br />
+                        </div>
+                    )}
+                    {community.get('flag_text') && (
+                        <div>
+                            <strong>Rules</strong>
+                            <br />
+                            <ol>{nl2li(community.get('flag_text'))}</ol>
                             <br />
                         </div>
                     )}

@@ -113,7 +113,7 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
         };
     } catch (error) {
         // xmldom error is bad
-        console.log(
+        console.error(
             'rendering error',
             JSON.stringify({ error: error.message, html })
         );
@@ -143,7 +143,9 @@ function link(state, child) {
         state.links.add(url);
         if (state.mutate) {
             // If this link is not relative, http, https, steem or esteem -- add https.
-            if (!/^((#)|(\/(?!\/))|(((steem|esteem|https?):)?\/\/))/.test(url)) {
+            if (
+                !/^((#)|(\/(?!\/))|(((steem|esteem|https?):)?\/\/))/.test(url)
+            ) {
                 child.setAttribute('href', 'https://' + url);
             }
 
@@ -255,7 +257,7 @@ function linkifyNode(child, state) {
             return newChild;
         }
     } catch (error) {
-        console.log(error);
+        console.error('linkify_error', error);
     }
 }
 
@@ -330,7 +332,7 @@ function embedYouTubeNode(child, links, images) {
         if (links) links.add(yt.url);
         if (images) images.add(yt.thumbnail);
     } catch (error) {
-        console.log(error);
+        console.error('yt_node', error);
     }
     return child;
 }
@@ -379,7 +381,7 @@ function embedVimeoNode(child, links /*images*/) {
         if (links) links.add(vimeo.canonical);
         // if(images) images.add(vimeo.thumbnail) // not available
     } catch (error) {
-        console.log(error);
+        console.error('vimeo_embed', error);
     }
     return child;
 }
@@ -413,7 +415,7 @@ function embedTwitchNode(child, links /*images*/) {
 
         if (links) links.add(twitch.canonical);
     } catch (error) {
-        console.error(error);
+        console.error('twitch_error', error);
     }
     return child;
 }
@@ -443,7 +445,7 @@ function embedDTubeNode(child, links /*images*/) {
 
         if (links) links.add(dtube.canonical);
     } catch (error) {
-        console.log(error);
+        console.error('dtube_embed', error);
     }
     return child;
 }

@@ -60,7 +60,7 @@ export default class CommunitiesIndex extends React.Component {
                 enableAds={false}
                 blogmode={false}
             >
-                <div className="CommunitiesIndex">
+                <div className="CommunitiesIndex c-sidebar__module">
                     {username && (
                         <div style={{ float: 'right' }}>
                             <a href={`${walletUrl}/@${username}/communities`}>

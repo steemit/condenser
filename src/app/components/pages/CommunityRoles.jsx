@@ -7,6 +7,7 @@ import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
 import UserRole from 'app/components/modules/UserRole';
 import { Link } from 'react-router';
+import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 
 class CommunityRoles extends React.Component {
     constructor(props) {
@@ -78,11 +79,6 @@ class CommunityRoles extends React.Component {
             roles,
             communityMetadata,
         } = this.props;
-        const spinner = (
-            <center>
-                <LoadingIndicator type="circle" />
-            </center>
-        );
 
         const canEdit = {
             owner: ['admin', 'mod', 'member', 'guest', 'muted'],
@@ -197,41 +193,57 @@ class CommunityRoles extends React.Component {
 
         const commName = (communityMetadata && communityMetadata.title) || null;
 
-        return (
-            <div className="CommunityRoles">
-                <div className="row">
-                    <div className="column large-3 medium-2 small-0" />
-                    <div className="column large-6 medium-8 small-12">
-                        {!loading && (
-                            <h3>
-                                <Link to={`/trending/${community}`}>
-                                    {commName || community}
-                                </Link>
-                            </h3>
-                        )}
+        let body;
+        if (loading) {
+            body = (
+                <center>
+                    <LoadingIndicator type="circle" />
+                </center>
+            );
+        } else {
+            body = (
+                <div>
+                    <h1 className="articles__h1">
+                        <Link to={`/trending/${community}`}>
+                            {commName || community}
+                        </Link>
+                    </h1>
+                    <br />
+                    <div className="c-sidebar__module">
+                        <h4>User Roles</h4>
                         {updating && <div>Updating User...</div>}
-                        {loading && spinner}
                         {this.state.updateRoleModal && editUserModal}
                         {this.state.addUserToCommunityModal && addUserModal}
-                        {!loading && (
-                            <div>
-                                <h5>Community Roles</h5>
-                                {table}
-                                <button
-                                    onClick={() => {
-                                        this.toggleAddUserToCommunityModal(
-                                            true
-                                        );
-                                    }}
-                                    className="button slim hollow secondary"
-                                >
-                                    Add User
-                                </button>
-                            </div>
-                        )}
+                        <div>
+                            {table}
+                            <button
+                                onClick={() => {
+                                    this.toggleAddUserToCommunityModal(true);
+                                }}
+                                className="button slim hollow secondary"
+                            >
+                                Add User
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            );
+        }
+
+        return (
+            <PostsIndexLayout
+                category={community}
+                enableAds={false}
+                blogmode={false}
+            >
+                <div className="CommunityRoles">
+                    <div className="row">
+                        <div className="column large-9 medium-12 small-12">
+                            {body}
+                        </div>
+                    </div>
+                </div>
+            </PostsIndexLayout>
         );
     }
 }

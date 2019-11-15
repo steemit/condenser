@@ -420,14 +420,16 @@ class ReplyEditor extends React.Component {
         const errorCallback = estr => {
             this.setState({ postError: estr, loading: false });
         };
+        const isEdit = type === 'edit';
         const successCallbackWrapper = (...args) => {
-            resetForm();
+            if (!isEdit) {
+                resetForm();
+            }
             this.setState({ loading: false });
             this.props.setPayoutType(formId, defaultPayoutType);
             this.props.setBeneficiaries(formId, []);
             if (successCallback) successCallback(args);
         };
-        const isEdit = type === 'edit';
         const isHtml = rte || isHtmlTest(body.value);
         const replyParams = {
             author,

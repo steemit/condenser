@@ -54,7 +54,6 @@ export default class TagsIndex extends React.Component {
 
     render() {
         const { tagsAll } = this.props;
-        //console.log('-- TagsIndex.render -->', tagsAll.toJS());
         const { order } = this.state;
         let tags = tagsAll;
 

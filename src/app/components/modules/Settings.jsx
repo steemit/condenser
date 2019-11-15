@@ -267,7 +267,9 @@ class Settings extends React.Component {
                         onSubmit={this.handleSubmitForm}
                         className="small-12 medium-6 large-4 columns"
                     >
-                        <h4>{tt('settings_jsx.public_profile_settings')}</h4>
+                        <div className="preferences__header">
+                            {tt('settings_jsx.public_profile_settings')}
+                        </div>
                         {progress.message && (
                             <div className="info">{progress.message}</div>
                         )}
@@ -403,7 +405,11 @@ class Settings extends React.Component {
                 {isOwnAccount && (
                     <div className="row">
                         <div className="small-12 medium-4 large-4 columns">
-                            <h4>{tt('settings_jsx.preferences')}</h4>
+                            <div className="articles__header">
+                                <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
+                                    {tt('settings_jsx.preferences')}
+                                </h1>
+                            </div>
 
                             <label>
                                 {tt('g.choose_language')}

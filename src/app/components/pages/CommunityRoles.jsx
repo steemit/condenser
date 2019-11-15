@@ -7,6 +7,7 @@ import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
 import UserRole from 'app/components/modules/UserRole';
 import { Link } from 'react-router';
+import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 
 class CommunityRoles extends React.Component {
     constructor(props) {
@@ -198,40 +199,47 @@ class CommunityRoles extends React.Component {
         const commName = (communityMetadata && communityMetadata.title) || null;
 
         return (
-            <div className="CommunityRoles">
-                <div className="row">
-                    <div className="column large-3 medium-2 small-0" />
-                    <div className="column large-6 medium-8 small-12">
-                        {!loading && (
-                            <h3>
-                                <Link to={`/trending/${community}`}>
-                                    {commName || community}
-                                </Link>
-                            </h3>
-                        )}
-                        {updating && <div>Updating User...</div>}
-                        {loading && spinner}
-                        {this.state.updateRoleModal && editUserModal}
-                        {this.state.addUserToCommunityModal && addUserModal}
-                        {!loading && (
-                            <div>
-                                <h5>Community Roles</h5>
-                                {table}
-                                <button
-                                    onClick={() => {
-                                        this.toggleAddUserToCommunityModal(
-                                            true
-                                        );
-                                    }}
-                                    className="button slim hollow secondary"
-                                >
-                                    Add User
-                                </button>
-                            </div>
-                        )}
+            <PostsIndexLayout
+                category={community}
+                enableAds={false}
+                blogmode={false}
+            >
+                <div className="CommunityRoles">
+                    <div className="row">
+                        <div className="column large-7 medium-9 small-12">
+                            {!loading && (
+                                <div>
+                                    <h1 className="articles__h1">
+                                        <Link to={`/trending/${community}`}>
+                                            {commName || community}
+                                        </Link>
+                                    </h1>
+                                    <h4>User Roles</h4>
+                                </div>
+                            )}
+                            {updating && <div>Updating User...</div>}
+                            {loading && spinner}
+                            {this.state.updateRoleModal && editUserModal}
+                            {this.state.addUserToCommunityModal && addUserModal}
+                            {!loading && (
+                                <div>
+                                    {table}
+                                    <button
+                                        onClick={() => {
+                                            this.toggleAddUserToCommunityModal(
+                                                true
+                                            );
+                                        }}
+                                        className="button slim hollow secondary"
+                                    >
+                                        Add User
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </PostsIndexLayout>
         );
     }
 }

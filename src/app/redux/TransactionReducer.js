@@ -92,6 +92,11 @@ export default function reducer(state = defaultState, action) {
             } else if (/missing required posting authority/.test(key)) {
                 // missing required posting authority:Missing Posting Authority test-safari
                 msg = last_part(key, ':');
+            } else if (
+                /Cannot delete a comment with net positive votes/.test(key)
+            ) {
+                // Assert Exception:comment.net_rshares <= 0: Cannot delete a comment with net positive votes.
+                msg = last_part(key, ':');
             } else {
                 msg = 'Transaction broadcast error: ' + last_part(key, ':');
                 console.error('unhandled error:', key, 'msg:', error.message);
@@ -107,7 +112,7 @@ export default function reducer(state = defaultState, action) {
             }
 
             if (!errorCallback)
-                throw new Error(`PANIC: no error callback for '${errorKey}'`);
+                throw new Error(`PANIC: no error callback for '${key}'`);
             errorCallback(msg);
 
             return state;

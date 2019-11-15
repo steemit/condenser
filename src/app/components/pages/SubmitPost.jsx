@@ -11,7 +11,7 @@ function _redirect_url(operations) {
         const { category } = operations[0][0][1];
         return '/created/' + category;
     } catch (e) {
-        console.error(e);
+        console.error('redirect_url', e);
     }
     return '/created';
 }

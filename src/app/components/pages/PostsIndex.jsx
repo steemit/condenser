@@ -76,6 +76,7 @@ class PostsIndex extends React.Component {
 
     loadMore(last_post) {
         if (!last_post) return;
+        if (last_post == this.props.pending) return; // if last post is 'pending', its an invalid start token
         const { category, order, status } = this.props;
         if (isFetchingOrRecentlyUpdated(status, order, category || '')) return;
         const [author, permlink] = last_post.split('/');
@@ -245,6 +246,17 @@ module.exports = {
                     state.app.getIn(['googleAds', 'gptBannedTags'])
                 );
 
+            const key = ['discussion_idx', category || '', order];
+            let posts = state.global.getIn(key, List());
+
+            // if 'pending' post is found, prepend it to posts list
+            //   (see GlobalReducer RECEIVE_CONTENT)
+            const pkey = ['discussion_idx', category || '', '_' + order];
+            const pending = state.global.getIn(pkey, null);
+            if (pending && !posts.includes(pending)) {
+                posts = posts.unshift(pending);
+            }
+
             return {
                 subscriptions: state.global.get('subscriptions'),
                 status: state.global.get('status'),
@@ -252,10 +264,8 @@ module.exports = {
                 account_name,
                 category,
                 order,
-                posts: state.global.getIn(
-                    ['discussion_idx', category || '', order],
-                    List()
-                ),
+                posts,
+                pending,
                 community,
                 username:
                     state.user.getIn(['current', 'username']) ||

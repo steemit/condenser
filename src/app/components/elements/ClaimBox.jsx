@@ -83,36 +83,31 @@ class ClaimBox extends React.Component {
 
     render() {
         const { account } = this.props;
+        const { rewards_str } = this.state;
         if (!account) return null;
         if (this.state.empty) return null;
 
-        return (
-            <div className="row" style={{ margin: '0 0 1.5em' }}>
-                <div className="columns small-12">
-                    {this.state.claimed ? (
-                        <div className="UserWallet__claimbox">
-                            <span className="UserWallet__claimbox-text">
-                                Claim successful.
-                            </span>
-                        </div>
-                    ) : (
-                        <div className="UserWallet__claimbox">
-                            <span className="UserWallet__claimbox-text">
-                                Your current rewards: {this.state.rewards_str}
-                            </span>
-                            <button
-                                disabled={this.state.claimInProgress}
-                                className="button"
-                                onClick={e => {
-                                    e.preventDefault();
-                                    this.handleClaimRewards(account);
-                                }}
-                            >
-                                {tt('userwallet_jsx.redeem_rewards')}
-                            </button>
-                        </div>
-                    )}
+        if (this.state.claimed) {
+            return (
+                <div className="UserWallet__claimbox">
+                    <strong>Claim successful.</strong>
                 </div>
+            );
+        }
+
+        return (
+            <div className="UserWallet__claimbox">
+                <strong>Unclaimed rewards: {rewards_str}</strong>
+                <button
+                    disabled={this.state.claimInProgress}
+                    className="button"
+                    onClick={e => {
+                        e.preventDefault();
+                        this.handleClaimRewards(account);
+                    }}
+                >
+                    Redeem
+                </button>
             </div>
         );
     }

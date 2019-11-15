@@ -1,4 +1,5 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
+import config from 'config';
 import axios from 'axios';
 import * as reducer from 'app/redux/SearchReducer';
 
@@ -13,7 +14,7 @@ export function* search(action) {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                Authorization: 'SOME AUTH KEY HERE',
+                Authorization: config.esteem_elastic_search_api_key,
             },
             body: JSON.stringify({
                 q: searchParams.category,

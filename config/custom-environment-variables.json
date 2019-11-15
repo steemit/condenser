@@ -59,5 +59,6 @@
   "steem_market_endpoint": "STEEM_MARKET_ENDPOINT",
   "steem_market_token": "STEEM_MARKET_TOKEN",
   "cookie_consent_enabled": "SDC_ENABLE_COOKIE_CONSENT",
-  "cookie_consent_api_key": "SDC_COOKIE_CONSENT_KEY"
+  "cookie_consent_api_key": "SDC_COOKIE_CONSENT_KEY",
+  "esteem_elastic_search_api_key": "ESTEEM_ELASTIC_SEARCH_API_KEY" 
 }

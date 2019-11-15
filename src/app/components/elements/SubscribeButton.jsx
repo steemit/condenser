@@ -45,11 +45,13 @@ class SubscribeButton extends React.Component {
                 onClick={this.onClick}
                 className={'community--subscribe button primary' + hollowed}
                 style={{
-                    minWidth: '6em',
+                    minWidth: '7em',
                     display: this.props.display || 'inline-block',
                 }}
             >
-                <span>{loading ? loader : subscribed ? 'Joined' : 'Join'}</span>
+                <span>
+                    {loading ? loader : subscribed ? 'Joined' : 'Subscribe'}
+                </span>
             </a>
         );
     }

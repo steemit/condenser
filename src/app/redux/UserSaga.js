@@ -569,7 +569,7 @@ function* saveLogin_localStorage() {
                 throw 'Login will not be saved, posting key is the same as owner key';
         });
     } catch (e) {
-        console.error(e);
+        console.error('login_auth_err', e);
         return;
     }
 
@@ -747,7 +747,15 @@ function* uploadImage({
     xhr.open('POST', postUrl);
     xhr.onload = function() {
         console.log(xhr.status, xhr.responseText);
-        const res = JSON.parse(xhr.responseText);
+
+        let res = {};
+        try {
+            res = JSON.parse(xhr.responseText);
+        } catch (error) {
+            console.error('upload_resp', error, xhr.responseText);
+            res = { error: 'invalid server response' };
+        }
+
         const { error } = res;
         if (error) {
             progress({ error: 'Error: ' + error });
@@ -757,7 +765,7 @@ function* uploadImage({
         progress({ url });
     };
     xhr.onerror = function(error) {
-        console.error(filename, error);
+        console.error('xhr', filename, error);
         progress({ error: 'Unable to contact the server.' });
     };
     xhr.upload.onprogress = function(event) {

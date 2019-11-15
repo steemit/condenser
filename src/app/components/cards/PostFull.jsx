@@ -13,12 +13,14 @@ import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import { immutableAccessor } from 'app/utils/Accessors';
 import { extractBodySummary } from 'app/utils/ExtractContent';
+import Tag from 'app/components/elements/Tag';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import MuteButton from 'app/components/elements/MuteButton';
+import FlagButton from 'app/components/elements/FlagButton';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
@@ -46,7 +48,7 @@ function TimeAuthorCategoryLarge({ post }) {
             <Userpic account={post.get('author')} />
             <div className="right-side">
                 <Author post={post} showAffiliation />
-                {tt('g.in')} <TagList post={post} single />
+                {tt('g.in')} <Tag post={post} />
                 {' • '}
                 <TimeAgoWrapper date={post.get('created')} />{' '}
                 <ContentEditedWrapper
@@ -297,30 +299,22 @@ class PostFull extends React.Component {
 
         const share_menu = [
             {
-                link: '#',
                 onClick: this.fbShare,
-                value: 'Facebook',
                 title: tt('postfull_jsx.share_on_facebook'),
                 icon: 'facebook',
             },
             {
-                link: '#',
                 onClick: this.twitterShare,
-                value: 'Twitter',
                 title: tt('postfull_jsx.share_on_twitter'),
                 icon: 'twitter',
             },
             {
-                link: '#',
                 onClick: this.redditShare,
-                value: 'Reddit',
                 title: tt('postfull_jsx.share_on_reddit'),
                 icon: 'reddit',
             },
             {
-                link: '#',
                 onClick: this.linkedInShare,
-                value: 'LinkedIn',
                 title: tt('postfull_jsx.share_on_linkedin'),
                 icon: 'linkedin',
             },
@@ -401,11 +395,13 @@ class PostFull extends React.Component {
         }
 
         const allowReply = Role.canComment(community, viewer_role);
-        const canReblog = !post.get('is_paidout') && !isReply;
+        const canReblog = !isReply;
         const canPromote = false && !post.get('is_paidout') && !isReply;
         const canPin =
             post.get('depth') == 0 && Role.atLeast(viewer_role, 'mod');
         const canMute = username && Role.atLeast(viewer_role, 'mod');
+        const canFlag =
+            username && community && Role.atLeast(viewer_role, 'guest');
         const canReply = username && allowReply && post.get('depth') < 255;
         const canEdit = username === author && !showEdit;
         const canDelete = username === author && allowDelete(post);
@@ -436,6 +432,7 @@ class PostFull extends React.Component {
                 itemScope
                 itemType="http://schema.org/Blog"
             >
+                {canFlag && <FlagButton post={post} />}
                 {showEdit ? (
                     renderedEditor
                 ) : (
@@ -459,7 +456,7 @@ class PostFull extends React.Component {
                             {tt('g.promote')}
                         </button>
                     )}
-                {!isReply && <TagList post={post} horizontal />}
+                {!isReply && <TagList post={post} />}
                 <div className="PostFull__footer row">
                     <div className="columns medium-12 large-6">
                         <TimeAuthorCategory post={post} />

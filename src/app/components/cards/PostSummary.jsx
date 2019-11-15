@@ -12,7 +12,7 @@ import { extractBodySummary, extractImageLink } from 'app/utils/ExtractContent';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import { List, Map } from 'immutable';
 import Author from 'app/components/elements/Author';
-import TagList from 'app/components/elements/TagList';
+import Tag from 'app/components/elements/Tag';
 import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
@@ -57,7 +57,6 @@ class PostSummary extends React.Component {
     render() {
         const { ignore, hideCategory } = this.props;
         const { post, content, featured, promoted, onClose } = this.props;
-        const { account } = this.props;
         if (!content) return null;
 
         let reblogged_by;
@@ -80,6 +79,7 @@ class PostSummary extends React.Component {
         }
 
         // 'account' is the current blog being viewed, if applicable.
+        const { account } = this.props;
         if (account && account != content.get('author')) {
             reblogged_by = (
                 <div className="articles__resteem">
@@ -96,7 +96,7 @@ class PostSummary extends React.Component {
         const gray = content.getIn(['stats', 'gray']);
         const isNsfw = hasNsfwTag(content);
         const isReply = content.get('depth') > 0;
-        const showReblog = !content.get('is_paidout') && !isReply;
+        const showReblog = !isReply;
         const full_power = content.get('percent_steem_dollars') === 0;
 
         const author = content.get('author');
@@ -148,7 +148,7 @@ class PostSummary extends React.Component {
                         {hideCategory || (
                             <span className="articles__tag-link">
                                 {tt('g.in')}&nbsp;
-                                <TagList post={content} single />
+                                <Tag post={content} />
                                 &nbsp;•&nbsp;
                             </span>
                         )}
@@ -315,7 +315,11 @@ class PostSummary extends React.Component {
                     <div className="articles__content-block articles__content-block--text">
                         {content_title}
                         {content_body}
-                        {this.props.blogmode ? null : summary_footer}
+                        {this.props.blogmode ? null : (
+                            <div className="articles__footer">
+                                {summary_footer}
+                            </div>
+                        )}
                     </div>
                     {this.props.blogmode ? summary_footer : null}
                 </div>

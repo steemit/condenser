@@ -61,18 +61,6 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Tos')]);
             //});
-        } else if (route.page === 'ChangePassword') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/ChangePasswordPage')]);
-            //});
-        } else if (route.page === 'RecoverAccountStep1') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/RecoverAccountStep1')]);
-            //});
-        } else if (route.page === 'Witnesses') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/Witnesses')]);
-            //});
         } else if (route.page === 'SubmitPost') {
             if (process.env.BROWSER) {
                 // require.ensure([], (require) => {
@@ -87,10 +75,6 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/UserProfile')]);
             //});
-        } else if (route.page === 'Market') {
-            require.ensure([], require => {
-                cb(null, [require('app/components/pages/Market')]);
-            });
         } else if (route.page === 'Post') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/PostPage')]);

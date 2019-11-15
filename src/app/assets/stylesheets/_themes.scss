@@ -20,6 +20,9 @@ $themes: (
     borderAccent: 1px solid $color-blue,
     borderDotted: 1px dotted $color-border-light,
     borderTransparent: transparent,
+    roundedCorners: 5px,
+    roundedCornersTop: 5px 5px 0 0,
+    roundedCornersBottom: 0px 0px 5px 5px,
     iconColorSecondary: #cacaca,
     textColorPrimary: $color-text-dark,
     textColorSecondary: $color-text-gray,
@@ -55,8 +58,11 @@ $themes: (
     borderLight: 1px solid $color-border-light-lightest,
     borderDark: 1px solid $color-text-gray,
     borderAccent: 1px solid $color-teal,
-    borderDotted: 1px dotted $color-border-light,
+    borderDotted: 1px dotted $color-border-less-light,
     borderTransparent: transparent,
+    roundedCorners: 5px,
+    roundedCornersTop: 5px 5px 0 0,
+    roundedCornersBottom: 0px 0px 5px 5px,
     iconColorSecondary: #cacaca,
     textColorPrimary: $color-text-dark,
     textColorSecondary: $color-text-gray,
@@ -82,19 +88,22 @@ $themes: (
     backgroundColor: $color-background-dark,
     backgroundColorEmphasis: $color-background-super-dark,
     backgroundColorOpaque: $color-blue-dark,
-    moduleBackgroundColor: $color-background-dark,
+    moduleBackgroundColor: $color-background-less-dark,
     backgroundTransparent: transparent,
     menuBackgroundColor: $color-blue-dark,
     moduleMediumBackgroundColor: $color-background-dark,
-    navBackgroundColor: $color-background-dark,
+    navBackgroundColor: $color-background-less-dark,
     highlightBackgroundColor: $color-blue-black-darkest,
     tableRowEvenBackgroundColor: #212C33,
-    border: 1px solid $color-border-dark,
+    border: 1px solid $color-border-dark-lightest,
     borderLight: 1px solid $color-border-dark-lightest,
     borderDark: 1px solid $color-text-gray-light,
     borderAccent: 1px solid $color-teal,
     borderDotted: 1px dotted $color-border-dark,
     borderTransparent: transparent,
+    roundedCorners: 5px,
+    roundedCornersTop: 5px 5px 0 0,
+    roundedCornersBottom: 0px 0px 5px 5px,
     iconColorSecondary: $color-text-gray-light,
     textColorPrimary: $color-text-white,
     textColorSecondary: $color-text-gray-light,
@@ -137,24 +146,24 @@ $themes: (
 }
 
 
-  .theme-original {
-    background-color: $white;
-    color: $color-text-dark;
-    @include MQ(M) {
-      background-color: $color-background-off-white;
-    }
+.theme-original {
+  background-color: $white;
+  color: $color-text-dark;
+  @include MQ(M) {
+    background-color: $color-background-off-white;
   }
-  .theme-light {
-    background-color: $white;
-    color: $color-text-dark;
-    @include MQ(M) {
-      background-color: $color-background-off-white;
-    }
+}
+.theme-light {
+  background-color: $color-background-off-white;
+  color: $color-text-dark;
+  @include MQ(M) {
+    background-color: $color-background-off-white;
   }
-  .theme-dark {
-    background-color: $color-background-dark;
-    color: $color-text-white;
-  }
+}
+.theme-dark {
+  background-color: $color-background-dark;
+  color: $color-text-white;
+}
 
 
 // Utility classes to be used with @extend
@@ -164,46 +173,46 @@ $themes: (
   transition: 0.2s all ease-in-out;
   &--primary {
     @include themify($themes) {
-        color: themed('textColorPrimary');
+      color: themed('textColorPrimary');
     }
     &:visited, &:active {
       @include themify($themes) {
-          color: themed('textColorPrimary');
+        color: themed('textColorPrimary');
       }
     }
     &:hover, &:focus {
       @include themify($themes) {
-          color: themed('textColorAccent');
+        color: themed('textColorAccent');
       }
     }
   }
   &--secondary {
     @include themify($themes) {
-        color: themed('textColorSecondary');
+      color: themed('textColorSecondary');
     }
     &:visited, &:active {
       @include themify($themes) {
-          color: themed('textColorSecondary');
+        color: themed('textColorSecondary');
       }
     }
     &:hover, &:focus {
       @include themify($themes) {
-          color: themed('textColorAccent');
+        color: themed('textColorAccent');
       }
     }
   }
   &--accent {
     @include themify($themes) {
-        color: themed('textColorAccent');
+      color: themed('textColorAccent');
     }
     &:visited, &:active {
       @include themify($themes) {
-          color: themed('textColorAccent');
+        color: themed('textColorAccent');
       }
     }
     &:hover, &:focus {
       @include themify($themes) {
-          color: themed('textColorAccentHover');
+        color: themed('textColorAccentHover');
       }
     }
   }
@@ -262,11 +271,11 @@ $themes: (
   opacity: 0.25;
   cursor: not-allowed;
   box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-    @include themify($themes) {
-      background-color: themed('buttonBackground');
-      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-      color: themed('buttonText');
-    }
+  @include themify($themes) {
+    background-color: themed('buttonBackground');
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+    color: themed('buttonText');
+  }
   &:hover {
     @include themify($themes) {
       background-color: themed('buttonBackground');

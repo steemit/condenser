@@ -243,7 +243,7 @@ export async function serverRender(
     }
 
     if (error || !renderProps) {
-        console.log('Router error [404]', error, 'props?', !!renderProps);
+        console.error('Router error [404]', error, 'props?', !!renderProps);
         return {
             title: 'Page Not Found - Steemit',
             statusCode: 404,
@@ -466,14 +466,14 @@ async function apiFetchState(url) {
         const last = feed[feed.length - 1];
         onchain['feed_price'] = last;
     } catch (error) {
-        console.log('Error fetching feed price:', error);
+        console.error('Error fetching feed price:', error);
     }
 
     try {
         const dgpo = await api.getDynamicGlobalPropertiesAsync();
         onchain['props'] = { sbd_print_rate: dgpo['sbd_print_rate'] };
     } catch (error) {
-        console.log('Error fetching dgpo:', error);
+        console.error('Error fetching dgpo:', error);
     }
 
     return onchain;

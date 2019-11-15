@@ -44,7 +44,6 @@ class PostsList extends React.Component {
         };
         this.scrollListener = this.scrollListener.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
-        this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList');
     }
 
@@ -56,26 +55,12 @@ class PostsList extends React.Component {
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
-        document.getElementsByTagName('body')[0].className = '';
     }
 
     onBackButton(e) {
         if ('keyCode' in e && e.keyCode !== 27) return;
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
-    }
-
-    closeOnOutsideClick(e) {
-        const inside_post = findParent(e.target, 'PostsList__post_container');
-        if (!inside_post) {
-            const inside_top_bar = findParent(
-                e.target,
-                'PostsList__post_top_bar'
-            );
-            if (!inside_top_bar) {
-                this.closePostModal();
-            }
-        }
     }
 
     fetchIfNeeded() {

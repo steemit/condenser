@@ -1,81 +1,9 @@
-.PostsList__post_top_bar {
-    position: relative;
-    width: 100%;
-    height: 3rem;
-    margin: 0 auto;
-    overflow: hidden;
-    @include themify($themes) {
-        background-color: themed('navBackgroundColor');
-    }
-    @media screen and (min-width: 60rem) {
-        @include themify($themes) {
-            background-color: themed('backgroundTransparent');
-        }
-    }
-
-    a {
-        span.Icon path {
-            @include themify($themes) {
-                fill: themed('textColorAccent');
-            }
-        }
-    }
-
-    > .close-button {
-        visibility: hidden;
-        top: 1rem;
-        right: 0;
-    }
-}
-
-.PostsList__post_container {
-    position: relative;
-    @include themify($themes) {
-        background-color: themed('moduleBackgroundColor');
-    }
-    margin: 1rem auto;
-    padding: 2rem 0.9rem 0;
-    transform: translateZ(0);
-}
-
-@media screen and (min-width: 60rem) {
-    .PostsList__post_top_bar {
-        width: 56rem;
-        background-color: transparent;
-
-        > .close-button {
-            visibility: visible;
-        }
-
-        > .back-button-menu {
-            visibility: hidden;
-        }
-    }
-
-    .PostsList__post_container {
-        width: 56rem;
-        margin-bottom: 3em;
-        @include themify($themes) {
-            box-shadow: 5px 5px 0 0 themed('contentBorderAccent');
-        }
-    }
-}
-@media screen and (min-width: 67rem) {
-    .PostsList__post_container {
-        width: 62rem;
-    }
-
-    .PostsList__post_top_bar {
-        width: 62rem;
-    }
-}
-
 .PostsList__summaries {
     .articles__summary {
         position: relative;
     }
 
-    .FeaturedTag {
+    .FeaturedTag, .PromotedTag {
         font-weight: 400;
         display: inline;
         padding: 0.1rem 0.2rem;
@@ -88,18 +16,9 @@
             color: themed('buttonText');
         }
     }
-
     .PromotedTag {
-        font-weight: 400;
-        display: inline;
-        padding: 0.1rem 0.2rem;
-        margin: 0 1rem 0 0.5rem;
-        border-radius: 0.3rem;
-        font-size: 0.75rem;
-        vertical-align: 15%;
         @include themify($themes) {
             background-color: themed('iconColorSecondary');
-            color: themed('buttonText');
         }
     }
 

@@ -4,6 +4,7 @@ import { Map } from 'immutable';
 import Author from 'app/components/elements/Author';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import MuteButton from 'app/components/elements/MuteButton';
+import FlagButton from 'app/components/elements/FlagButton';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Voting from 'app/components/elements/Voting';
@@ -220,6 +221,8 @@ class CommentImpl extends React.Component {
         const canDelete = username && username === author && allowDelete(post);
         const canReply = username && allowReply && comment.depth < 255;
         const canMute = username && Role.atLeast(viewer_role, 'mod');
+        const canFlag =
+            username && community && Role.atLeast(viewer_role, 'guest');
 
         let body = null;
         let controls = null;
@@ -332,6 +335,9 @@ class CommentImpl extends React.Component {
                     </div>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
+                            {canFlag && (
+                                <FlagButton post={post} isComment={true} />
+                            )}
                             <a onClick={this.toggleCollapsed}>
                                 {this.state.collapsed ? '[+]' : '[-]'}
                             </a>

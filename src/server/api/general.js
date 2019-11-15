@@ -15,6 +15,20 @@ const mixpanel = config.get('mixpanel')
     : null;
 
 const _stringval = v => (typeof v === 'string' ? v : JSON.stringify(v));
+
+const _parse = params => {
+    if (typeof params === 'string') {
+        try {
+            return JSON.parse(params);
+        } catch (error) {
+            console.error('json_parse', error, params);
+            return {};
+        }
+    } else {
+        return params;
+    }
+};
+
 function logRequest(path, ctx, extra) {
     let d = { ip: getRemoteIp(ctx.req) };
     if (ctx.session) {
@@ -48,8 +62,7 @@ export default function useGeneralApi(app) {
     router.post('/login_account', koaBody, function*() {
         // if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const { csrf, account, signatures } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf, account, signatures } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
 
         logRequest('login_account', this, { account });
@@ -154,8 +167,7 @@ export default function useGeneralApi(app) {
     router.post('/logout_account', koaBody, function*() {
         // if (rateLimitReq(this, this.req)) return; - logout maybe immediately followed with login_attempt event
         const params = this.request.body;
-        const { csrf } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
         logRequest('logout_account', this);
         try {
@@ -204,8 +216,7 @@ export default function useGeneralApi(app) {
 
     router.post('/setUserPreferences', koaBody, function*() {
         const params = this.request.body;
-        const { csrf, payload } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf, payload } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
         console.log(
             '-- /setUserPreferences -->',
@@ -236,8 +247,7 @@ export default function useGeneralApi(app) {
 
     router.post('/isTosAccepted', koaBody, function*() {
         const params = this.request.body;
-        const { csrf } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
 
         this.body = '{}';
@@ -271,8 +281,7 @@ export default function useGeneralApi(app) {
 
     router.post('/acceptTos', koaBody, function*() {
         const params = this.request.body;
-        const { csrf } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
 
         if (!this.session.a) {

@@ -172,8 +172,6 @@ class Header extends React.Component {
             page_title = tt('navigation.terms_of_service');
         } else if (route.page == 'CommunityRoles') {
             page_title = 'Community Roles';
-        } else if (route.page == 'RecoverAccountStep1') {
-            page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
             const user_name = route.params[0].slice(1);
             const user_title = display_name
@@ -296,12 +294,14 @@ class Header extends React.Component {
                         </div>
 
                         <div className="large-4 medium-3 columns show-for-medium large-centered Header__sort">
+                            {/*
                             <SortOrder
                                 sortOrder={order}
                                 topic={category === 'feed' ? '' : category}
                                 horizontal
                                 pathname={pathname}
                             />
+                            */}
                         </div>
 
                         <div className="small-6 medium-6 large-4 columns Header__buttons">
@@ -345,13 +345,10 @@ class Header extends React.Component {
                                     items={user_menu}
                                     title={username}
                                     el="span"
-                                    selected={tt('g.rewards')}
                                     position="left"
                                 >
                                     <li className={'Header__userpic '}>
-                                        <span title={username}>
-                                            <Userpic account={username} />
-                                        </span>
+                                        <Userpic account={username} />
                                     </li>
                                 </DropdownMenu>
                             )}

@@ -65,7 +65,7 @@
         color: $white;
     }
     > div.column {
-        background: $color-blue-black;
+        background: $color-background-less-dark;
         background-size: cover;
         background-repeat: no-repeat;
         background-position: 50% 50%;
@@ -137,12 +137,6 @@
     }
 }
 
-.UserWallet__balance {
-    > div:nth-child(2) {
-        text-align: right;
-    }
-}
-
 @media screen and (max-width: 39.9375em) {
 
     div.UserProfile__top-nav .menu li>a {
@@ -173,18 +167,6 @@
         .button {
             background-color: $white;
             color: $black;
-        }
-    }
-
-    .UserWallet__balance {
-        > div:last-of-type {
-            text-align: left;
-        }
-    }
-
-    .UserReward__row {
-        > div:last-of-type {
-            padding-left: 20px;
         }
     }
 }

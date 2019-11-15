@@ -45,6 +45,10 @@
         "affiliation_steemit": "Steemit Team",
         "affiliation_sm": "Steem Monsters Team",
         "feed": "Feed",
+        "flag": "Flag",
+        "flag_this_post": "Flag this %(type)s",
+        "flag_this_post_description":
+            "Please provide a note regarding your decision to flag this %(type)s, it will be reviewed by community moderators.",
         "follow": "Follow",
         "for": " for ",
         "from": " from ",
@@ -118,12 +122,12 @@
         "sell": "Sell",
         "settings": "Settings",
         "share_this_post": "Share this post",
-        "mute_this_post": "Mute this post",
+        "mute_this_post": "Mute post/comment",
         "mute_this_post_description":
-            "Please provide a note regarding your decision to mute this post.",
-        "unmute_this_post": "Unmute this post",
+            "Please provide a note regarding your decision to mute this content.",
+        "unmute_this_post": "Unmute this post/comment",
         "unmute_this_post_description":
-            "Please provide a note regarding your decision to unmute this post.",
+            "Please provide a note regarding your decision to unmute this content.",
         "show": "Show",
         "sign_in": "Sign in",
         "sign_up": "Sign up",
@@ -351,12 +355,11 @@
     },
     "category_selector_jsx": {
         "tag_your_story":
-            "Tag (up to 5 tags), the first tag is your main category.",
+            "Tag (up to 8 tags), the first tag is your main category.",
         "select_a_tag": "Select a tag",
         "maximum_tag_length_is_24_characters":
             "Maximum tag length is 24 characters",
-        "use_limited_amount_of_categories":
-            "Please use only %(amount)s categories",
+        "use_limited_amount_of_categories": "Please use only %(amount)s tags",
         "use_only_lowercase_letters": "Use only lowercase letters",
         "use_one_dash": "Use only one dash",
         "use_spaces_to_separate_tags": "Use spaces to separate tags",
@@ -432,7 +435,7 @@
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Now showing comments with low ratings",
-        "sort_order": "Sort Order",
+        "sort_order": "Sort",
         "comments_were_hidden_due_to_low_ratings":
             "Comments were hidden due to low ratings",
         "comment_sort_order": {

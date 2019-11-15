@@ -27,7 +27,8 @@ function loadSpecialPosts() {
             });
             resp.on('end', () => {
                 const json = JSON.parse(data);
-                console.info('Received special posts payload', json);
+                console.info('Received special posts payload');
+                //console.info('Received special posts payload', json);
                 if (json === Object(json)) {
                     resolve(json);
                 }
@@ -55,7 +56,7 @@ export async function specialPosts() {
     console.info('Loading special posts');
 
     const postData = await loadSpecialPosts();
-    console.info('Loading special posts', postData);
+    //console.info('Loaded special posts', postData);
     let loadedPostData = {
         featured_posts: [],
         promoted_posts: [],

@@ -5,11 +5,12 @@ import { connect } from 'react-redux';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 
+import Icon from 'app/components/elements/Icon';
 import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
-import MutePost from 'app/components/modules/MutePost';
+import FlagCommunityPost from '../modules/FlagCommunityPost';
 
-class MuteButton extends React.Component {
+class FlagButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = { showDialog: false };
@@ -23,40 +24,35 @@ class MuteButton extends React.Component {
         this.setState({ showDialog: false });
     };
 
-    onSubmit = (isMuted, notes) => {
-        const { account, community, username, permlink } = this.props;
+    onSubmit = notes => {
+        const { account, community, username, permlink, flagPost } = this.props;
         if (!notes || !community || !username) return false; // Fail Fast
-
-        const postref = account + '/' + permlink;
-        const key = ['content', postref, 'stats', 'gray'];
-        this.props.stateSet(key, !isMuted);
-
-        this.props.toggleMutedPost(
-            username,
-            !isMuted,
-            community,
-            account,
-            notes,
-            permlink
-        );
+        flagPost(username, community, account, notes, permlink);
     };
 
     render() {
-        const { isMuted } = this.props;
         return (
-            <span>
+            <span
+                className={` flag__button ${
+                    this.props.isComment
+                        ? 'flag__button--comment'
+                        : 'flag__button--post'
+                } `}
+            >
                 <a onClick={() => this.showDialog()}>
-                    {isMuted ? 'Unmute' : 'Mute'}
+                    <Icon name="flag1" />
+                    <Icon name="flag2" />
                 </a>
                 {this.state.showDialog && (
                     <Reveal onHide={() => null} show>
                         <CloseButton onClick={() => this.hideDialog()} />
-                        <MutePost
-                            isMuted={isMuted}
+                        <FlagCommunityPost
                             onSubmit={notes => {
                                 this.hideDialog();
-                                this.onSubmit(isMuted, notes);
+                                this.onSubmit(notes);
                             }}
+                            flagText={this.props.flagText}
+                            isComment={this.props.isComment}
                         />
                     </Reveal>
                 )}
@@ -65,11 +61,17 @@ class MuteButton extends React.Component {
     }
 }
 
-MuteButton.propTypes = {
+FlagButton.propTypes = {
     account: PropTypes.string.isRequired,
     permlink: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     community: PropTypes.string.isRequired, //TODO: Define shape
+    flagText: PropTypes.string.isRequired,
+    isComment: PropTypes.bool,
+};
+
+FlagButton.defaultProps = {
+    isComment: false,
 };
 
 export default connect(
@@ -78,22 +80,25 @@ export default connect(
         const account = post.get('author');
         const permlink = post.get('permlink');
         const community = post.get('category');
-        const isMuted = post.getIn(['stats', 'gray'], false);
+        const flagText = state.global.getIn([
+            'community',
+            community,
+            'flag_text',
+        ]);
         return {
             account,
             permlink,
             community,
-            isMuted,
             username: state.user.getIn(['current', 'username']),
+            flagText,
         };
     },
     dispatch => ({
         stateSet: (key, value) => {
             dispatch(globalActions.set({ key, value }));
         },
-        toggleMutedPost: (
+        flagPost: (
             username,
-            mutePost,
             community,
             account,
             notes,
@@ -101,7 +106,7 @@ export default connect(
             successCallback,
             errorCallback
         ) => {
-            const action = mutePost ? 'mutePost' : 'unmutePost';
+            const action = 'flagPost';
             const payload = [
                 action,
                 {
@@ -126,4 +131,4 @@ export default connect(
             );
         },
     })
-)(MuteButton);
+)(FlagButton);

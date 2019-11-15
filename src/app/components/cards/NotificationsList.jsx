@@ -58,38 +58,36 @@ class NotificationsList extends React.Component {
         } = this.props;
 
         const renderItem = item => (
-            <div>
-                <div
-                    style={{
-                        padding: '0.5em 1em',
-                        background: 'rgba(225,255,225,' + item.score + '%)',
-                    }}
-                >
-                    <span style={{ float: 'right', color: '#999' }}>
-                        {item.type}{' '}
-                    </span>
+            <div
+                key={item.id}
+                style={{
+                    padding: '0.5em 1em',
+                    background: 'rgba(225,255,225,' + item.score + '%)',
+                }}
+            >
+                <span style={{ opacity: '0.5' }}>
+                    {item.type}
+                    {' / '}
+                </span>
+                <strong>
                     <a href={`/${item.url}`}>{item.msg}</a>
-                    <br />
-                    <small>
-                        <TimeAgoWrapper date={item.date + 'Z'} />
-                    </small>
-                </div>
+                </strong>
+                <br />
+                <small>
+                    <TimeAgoWrapper date={item.date + 'Z'} />
+                </small>
             </div>
         );
 
         return (
-            <div id="posts_list" className="PostsList">
+            <div className="">
                 {isOwnAccount && <ClaimBox accountName={accountName} />}
                 {notifications && (
-                    <ul className="PostsList__summaries hfeed" itemScope>
+                    <div style={{ lineHeight: '1rem' }}>
                         {notifications
                             .get('notifications')
-                            .map(item => (
-                                <li key={item.get('id')}>
-                                    {renderItem(item.toJS())}
-                                </li>
-                            ))}
-                    </ul>
+                            .map(item => renderItem(item.toJS()))}
+                    </div>
                 )}
                 {loading && (
                     <center>
@@ -103,8 +101,9 @@ class NotificationsList extends React.Component {
                     notifications &&
                     !notifications.get('isLastPage', false) && (
                         <center>
+                            <br />
                             <a href="#" onClick={this.onClickLoadMore}>
-                                Load more...
+                                <strong>Load more...</strong>
                             </a>
                         </center>
                     )}

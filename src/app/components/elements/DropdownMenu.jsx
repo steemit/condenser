@@ -103,7 +103,6 @@ export default class DropdownMenu extends React.Component {
                 title={title}
                 items={items}
                 hideValue={selected}
-                className="VerticalMenu"
             />
         );
         const cls =

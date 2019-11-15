@@ -131,7 +131,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);
     } catch (err) {
         // Render 500 error page from server
-        console.log('AppRender error', err);
+        console.error('AppRender error', pathname, err);
         const { error, redirect } = err;
         if (error) throw error;
 

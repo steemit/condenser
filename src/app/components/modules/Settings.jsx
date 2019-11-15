@@ -9,6 +9,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import reactForm from 'app/utils/ReactForm';
 import UserList from 'app/components/elements/UserList';
 import Dropzone from 'react-dropzone';
+import { isLoggedIn } from 'app/utils/UserUtil';
 
 class Settings extends React.Component {
     constructor(props) {
@@ -232,7 +233,6 @@ class Settings extends React.Component {
 
     render() {
         const { state, props } = this;
-
         const {
             walletUrl,
             ignores,
@@ -263,143 +263,154 @@ class Settings extends React.Component {
         return (
             <div className="Settings">
                 <div className="row">
-                    <form
-                        onSubmit={this.handleSubmitForm}
-                        className="small-12 medium-6 large-4 columns"
-                    >
-                        <div className="preferences__header">
-                            {tt('settings_jsx.public_profile_settings')}
-                        </div>
-                        {progress.message && (
-                            <div className="info">{progress.message}</div>
-                        )}
-                        {progress.error && (
-                            <div className="error">
-                                {tt('reply_editor.image_upload')}
-                                {': '}
-                                {progress.error}
-                            </div>
-                        )}
-                        <label>
-                            {tt('settings_jsx.profile_image_url')}
-                            <Dropzone
-                                onDrop={this.onDrop}
-                                className={'none'}
-                                disableClick
-                                multiple={false}
-                                accept="image/*"
-                                ref={node => {
-                                    this.dropzone = node;
-                                }}
+                    {isLoggedIn() &&
+                        isOwnAccount && (
+                            <form
+                                onSubmit={this.handleSubmitForm}
+                                className="small-12 medium-6 large-4 columns"
                             >
-                                <input
-                                    type="url"
-                                    {...profile_image.props}
-                                    autoComplete="off"
-                                />
-                            </Dropzone>
-                            <a
-                                onClick={() =>
-                                    this.onOpenClick('profile_image')
-                                }
-                            >
-                                {tt('settings_jsx.upload_image')}
-                            </a>
-                        </label>
-                        <div className="error">
-                            {profile_image.blur &&
-                                profile_image.touched &&
-                                profile_image.error}
-                        </div>
-                        <label>
-                            {tt('settings_jsx.cover_image_url')}
-                            <input
-                                type="url"
-                                {...cover_image.props}
-                                autoComplete="off"
-                            />
-                            <a onClick={() => this.onOpenClick('cover_image')}>
-                                {tt('settings_jsx.upload_image')}
-                            </a>
-                        </label>
-                        <div className="error">
-                            {cover_image.blur &&
-                                cover_image.touched &&
-                                cover_image.error}
-                        </div>
-                        <label>
-                            {tt('settings_jsx.profile_name')}
-                            <input
-                                type="text"
-                                {...name.props}
-                                maxLength="20"
-                                autoComplete="off"
-                            />
-                        </label>
-                        <div className="error">
-                            {name.touched && name.error}
-                        </div>
-                        <label>
-                            {tt('settings_jsx.profile_about')}
-                            <input
-                                type="text"
-                                {...about.props}
-                                maxLength="160"
-                                autoComplete="off"
-                            />
-                        </label>
-                        <div className="error">
-                            {about.touched && about.error}
-                        </div>
-                        <label>
-                            {tt('settings_jsx.profile_location')}
-                            <input
-                                type="text"
-                                {...location.props}
-                                maxLength="30"
-                                autoComplete="off"
-                            />
-                        </label>
-                        <div className="error">
-                            {location.touched && location.error}
-                        </div>
-                        <label>
-                            {tt('settings_jsx.profile_website')}
-                            <input
-                                type="url"
-                                {...website.props}
-                                maxLength="100"
-                                autoComplete="off"
-                            />
-                        </label>
-                        <div className="error">
-                            {website.blur && website.touched && website.error}
-                        </div>
-                        <br />
-                        {state.loading && (
-                            <span>
-                                <LoadingIndicator type="circle" />
+                                <div className="preferences__header">
+                                    {tt('settings_jsx.public_profile_settings')}
+                                </div>
+                                {progress.message && (
+                                    <div className="info">
+                                        {progress.message}
+                                    </div>
+                                )}
+                                {progress.error && (
+                                    <div className="error">
+                                        {tt('reply_editor.image_upload')}
+                                        {': '}
+                                        {progress.error}
+                                    </div>
+                                )}
+                                <label>
+                                    {tt('settings_jsx.profile_image_url')}
+                                    <Dropzone
+                                        onDrop={this.onDrop}
+                                        className={'none'}
+                                        disableClick
+                                        multiple={false}
+                                        accept="image/*"
+                                        ref={node => {
+                                            this.dropzone = node;
+                                        }}
+                                    >
+                                        <input
+                                            type="url"
+                                            {...profile_image.props}
+                                            autoComplete="off"
+                                        />
+                                    </Dropzone>
+                                    <a
+                                        onClick={() =>
+                                            this.onOpenClick('profile_image')
+                                        }
+                                    >
+                                        {tt('settings_jsx.upload_image')}
+                                    </a>
+                                </label>
+                                <div className="error">
+                                    {profile_image.blur &&
+                                        profile_image.touched &&
+                                        profile_image.error}
+                                </div>
+                                <label>
+                                    {tt('settings_jsx.cover_image_url')}
+                                    <input
+                                        type="url"
+                                        {...cover_image.props}
+                                        autoComplete="off"
+                                    />
+                                    <a
+                                        onClick={() =>
+                                            this.onOpenClick('cover_image')
+                                        }
+                                    >
+                                        {tt('settings_jsx.upload_image')}
+                                    </a>
+                                </label>
+                                <div className="error">
+                                    {cover_image.blur &&
+                                        cover_image.touched &&
+                                        cover_image.error}
+                                </div>
+                                <label>
+                                    {tt('settings_jsx.profile_name')}
+                                    <input
+                                        type="text"
+                                        {...name.props}
+                                        maxLength="20"
+                                        autoComplete="off"
+                                    />
+                                </label>
+                                <div className="error">
+                                    {name.touched && name.error}
+                                </div>
+                                <label>
+                                    {tt('settings_jsx.profile_about')}
+                                    <input
+                                        type="text"
+                                        {...about.props}
+                                        maxLength="160"
+                                        autoComplete="off"
+                                    />
+                                </label>
+                                <div className="error">
+                                    {about.touched && about.error}
+                                </div>
+                                <label>
+                                    {tt('settings_jsx.profile_location')}
+                                    <input
+                                        type="text"
+                                        {...location.props}
+                                        maxLength="30"
+                                        autoComplete="off"
+                                    />
+                                </label>
+                                <div className="error">
+                                    {location.touched && location.error}
+                                </div>
+                                <label>
+                                    {tt('settings_jsx.profile_website')}
+                                    <input
+                                        type="url"
+                                        {...website.props}
+                                        maxLength="100"
+                                        autoComplete="off"
+                                    />
+                                </label>
+                                <div className="error">
+                                    {website.blur &&
+                                        website.touched &&
+                                        website.error}
+                                </div>
                                 <br />
-                            </span>
+                                {state.loading && (
+                                    <span>
+                                        <LoadingIndicator type="circle" />
+                                        <br />
+                                    </span>
+                                )}
+                                {!state.loading && (
+                                    <input
+                                        type="submit"
+                                        className="button"
+                                        value={tt('settings_jsx.update')}
+                                        disabled={disabled}
+                                    />
+                                )}{' '}
+                                {state.errorMessage ? (
+                                    <small className="error">
+                                        {state.errorMessage}
+                                    </small>
+                                ) : state.successMessage ? (
+                                    <small className="success uppercase">
+                                        {state.successMessage}
+                                    </small>
+                                ) : null}
+                            </form>
                         )}
-                        {!state.loading && (
-                            <input
-                                type="submit"
-                                className="button"
-                                value={tt('settings_jsx.update')}
-                                disabled={disabled}
-                            />
-                        )}{' '}
-                        {state.errorMessage ? (
-                            <small className="error">
-                                {state.errorMessage}
-                            </small>
-                        ) : state.successMessage ? (
-                            <small className="success uppercase">
-                                {state.successMessage}
-                            </small>
-                        ) : null}
-                    </form>
                 </div>
 
                 {isOwnAccount && (

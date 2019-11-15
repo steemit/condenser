@@ -25,22 +25,8 @@
     "secret_key": "SDC_RECAPTCHA_SECRET_KEY",
     "site_key": "SDC_RECAPTCHA_SITE_KEY"
   },
-  "sendgrid": {
-    "from": "SDC_SENDGRID_FROM",
-    "key": "SDC_SENDGRID_API_KEY",
-    "templates": {
-    }
-  },
   "server_session_secret": "SDC_SESSION_SECRETKEY",
   "site_domain": "SDC_SITE_DOMAIN",
-  "telesign": {
-    "customer_id": "SDC_TELESIGN_CUSTOMER_ID",
-    "rest_api_key": "SDC_TELESIGN_API_KEY"
-  },
-  "twilio": {
-    "account_sid": "SDC_TWILIO_ACCOUNT_SID",
-    "auth_token": "SDC_TWILIO_AUTH_TOKEN"
-  },
   "upload_image": "SDC_UPLOAD_IMAGE_URL",
   "session_cookie_key": "SDC_SESSION_COOKIE_KEY",
   "steemd_connection_client": "SDC_CLIENT_STEEMD_URL",

@@ -145,12 +145,23 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_CONTENT: {
-            let content = fromJS(payload.content);
-            console.log('received content...', payload.content);
+            const content = fromJS(payload.content);
             const key = content.get('author') + '/' + content.get('permlink');
-            return state.updateIn(['content', key], Map(), c =>
+            console.log('received content...', payload.content);
+
+            // merge content object into map
+            let new_state = state.updateIn(['content', key], Map(), c =>
                 c.mergeDeep(content)
             );
+
+            // set creation-pending key (optimistic UI update)
+            if (content.get('depth') == 0) {
+                const category = content.get('category');
+                const dkey = ['discussion_idx', category, '_created'];
+                new_state = new_state.setIn(dkey, key);
+            }
+
+            return new_state;
         }
 
         case LINK_REPLY: {

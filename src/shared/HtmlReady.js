@@ -143,7 +143,9 @@ function link(state, child) {
         state.links.add(url);
         if (state.mutate) {
             // If this link is not relative, http, https, steem or esteem -- add https.
-            if (!/^((#)|(\/(?!\/))|(((steem|esteem|https?):)?\/\/))/.test(url)) {
+            if (
+                !/^((#)|(\/(?!\/))|(((steem|esteem|https?):)?\/\/))/.test(url)
+            ) {
                 child.setAttribute('href', 'https://' + url);
             }
 
@@ -413,7 +415,7 @@ function embedTwitchNode(child, links /*images*/) {
 
         if (links) links.add(twitch.canonical);
     } catch (error) {
-        console.error(error);
+        console.error('twitch_error', error);
     }
     return child;
 }

@@ -345,13 +345,10 @@ class Header extends React.Component {
                                     items={user_menu}
                                     title={username}
                                     el="span"
-                                    selected={tt('g.rewards')}
                                     position="left"
                                 >
                                     <li className={'Header__userpic '}>
-                                        <span title={username}>
-                                            <Userpic account={username} />
-                                        </span>
+                                        <Userpic account={username} />
                                     </li>
                                 </DropdownMenu>
                             )}

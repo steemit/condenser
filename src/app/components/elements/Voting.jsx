@@ -276,15 +276,17 @@ class Voting extends React.Component {
             // myVote === current vote
 
             const invokeFlag = (
-                <span
+                <a
                     href="#"
-                    onClick={this.toggleWeightDown}
+                    onClick={
+                        enable_slider ? this.toggleWeightDown : this.voteDown
+                    }
                     title="Downvote"
                     id="downvote_button"
                     className="flag"
                 >
                     {down}
-                </span>
+                </a>
             );
 
             const revokeFlag = (
@@ -299,43 +301,47 @@ class Voting extends React.Component {
                 </a>
             );
 
-            const dropdown = (
-                <Dropdown
-                    show={showWeight && showWeightDir == 'down'}
-                    onHide={() => this.setState({ showWeight: false })}
-                    onShow={() => {
-                        this.setState({ showWeight: true });
-                        this.readSliderWeight();
-                    }}
-                    title={invokeFlag}
-                    position={'right'}
-                >
-                    <div className="Voting__adjust_weight_down">
-                        {(myVote == null || myVote === 0) &&
-                            enable_slider && (
-                                <div className="weight-container">
-                                    {slider(false)}
-                                </div>
-                            )}
-                        <CloseButton
-                            onClick={() => this.setState({ showWeight: false })}
-                        />
-                        <div className="clear Voting__about-flag">
-                            {ABOUT_FLAG}
-                            <br />
-                            <span
-                                href="#"
-                                onClick={this.voteDown}
-                                className="button outline"
-                                title="Downvote"
-                            >
-                                Submit
-                            </span>
+            let dropdown = invokeFlag;
+            if (enable_slider) {
+                dropdown = (
+                    <Dropdown
+                        show={showWeight && showWeightDir == 'down'}
+                        onHide={() => this.setState({ showWeight: false })}
+                        onShow={() => {
+                            this.setState({ showWeight: true });
+                            this.readSliderWeight();
+                        }}
+                        title={invokeFlag}
+                        position={'right'}
+                    >
+                        <div className="Voting__adjust_weight_down">
+                            {(myVote == null || myVote === 0) &&
+                                enable_slider && (
+                                    <div className="weight-container">
+                                        {slider(false)}
+                                    </div>
+                                )}
+                            <CloseButton
+                                onClick={() =>
+                                    this.setState({ showWeight: false })
+                                }
+                            />
+                            <div className="clear Voting__about-flag">
+                                {ABOUT_FLAG}
+                                <br />
+                                <span
+                                    href="#"
+                                    onClick={this.voteDown}
+                                    className="button outline"
+                                    title="Downvote"
+                                >
+                                    Submit
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </Dropdown>
-            );
-
+                    </Dropdown>
+                );
+            }
             downVote = (
                 <span className={classDown}>
                     {myVote === null || myVote === 0 ? dropdown : revokeFlag}

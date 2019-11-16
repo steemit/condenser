@@ -31,7 +31,7 @@ class CommunityPane extends Component {
                 const account = `@${row.get(0)}`;
                 const title = row.get(2);
                 const sep = title ? '/ ' : '';
-                const role = row.get(1) != 'mod' ? row.get(1) : null;
+                const role = row.get(1);
 
                 return (
                     <div key={idx} style={{ fontSize: '80%' }}>

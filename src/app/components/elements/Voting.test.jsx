@@ -74,76 +74,9 @@ describe('Voting', () => {
             />
         ).dive();
         expect(wrapped.find('.Voting').length).toEqual(1);
-        expect(wrapped.find('Dropdown').html()).toContain(
-            '<span href="#" title="Downvote" id="downvote_button" class="flag">'
+        expect(wrapped.find('.Voting__button-down').html()).toContain(
+            '<a href="#" title="Downvote" id="downvote_button" class="flag">'
         );
-    });
-
-    it('should change state.weight and state.showWeight as expected when flag is clicked', () => {
-        const mockStore = configureMockStore()({
-            global: mockGlobal,
-            offchain: {},
-            user: mockUser,
-            transaction: {},
-            discussion: {},
-            routing: {},
-            app: {},
-        });
-        let wrapped = shallow(
-            <Voting
-                post="test"
-                flag={true}
-                vote={(w, p) => {}}
-                post_obj={voteTestObj}
-                price_per_steem={1}
-                sbd_print_rate={10000}
-                store={mockStore}
-            />
-        ).dive();
-        wrapped.setState({ weight: 666, showWeight: false });
-        expect(
-            wrapped
-                .find('Dropdown')
-                .dive()
-                .find('#downvote_button').length
-        ).toEqual(1);
-        wrapped
-            .find('Dropdown')
-            .dive()
-            .find('#downvote_button')
-            .simulate('click');
-        expect(wrapped.state().weight).toEqual(666);
-        expect(wrapped.state().showWeight).toEqual(true);
-    });
-
-    it('should not dispatch an action when flag is clicked and myVote is 0.', () => {
-        const mockStore = configureMockStore()({
-            global: mockGlobal,
-            offchain: {},
-            user: mockUser,
-            transaction: {},
-            discussion: {},
-            routing: {},
-            app: {},
-        });
-        let wrapped = shallow(
-            <Voting
-                post="test"
-                flag={true}
-                myVote={0}
-                vote={(w, p) => {}}
-                post_obj={voteTestObj}
-                price_per_steem={1}
-                sbd_print_rate={10000}
-                store={mockStore}
-            />
-        ).dive();
-        wrapped
-            .find('Dropdown')
-            .dive()
-            .find('#downvote_button')
-            .simulate('click');
-        expect(mockStore.getActions()).toEqual([]);
     });
 
     it('should dispatch an action when flag is clicked and myVote is negative', () => {
@@ -199,7 +132,7 @@ describe('Voting', () => {
                 store={mockStore}
             />
         ).dive();
-        expect(wrapped.find('.flag').length).toEqual(0);
+        expect(wrapped.find('#downvote_button').length).toEqual(1);
         expect(wrapped.find('.upvote').length).toEqual(1);
     });
 

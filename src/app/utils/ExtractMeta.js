@@ -3,7 +3,7 @@ import { objAccessor } from 'app/utils/Accessors';
 import { makeCanonicalLink } from 'app/utils/CanonicalLinker.js';
 
 const site_desc =
-    'Steemit is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system (Steem) for digital rewards.';
+    'Communities without borders. A social network owned and operated by its users, powered by Steem.';
 
 function addSiteMeta(metas) {
     metas.push({ title: 'Steemit' });
@@ -80,8 +80,7 @@ function addAccountMeta(metas, accountname, profile) {
     let { name, about, profile_image } = profile;
 
     name = name || accountname;
-    about =
-        about || 'Join thousands on steemit who share, post and earn rewards.';
+    about = about || 'Steemit: Communities Without Borders.';
     profile_image =
         profile_image || 'https://steemit.com/images/steemit-twshare-2.png';
 

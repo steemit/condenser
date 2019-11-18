@@ -104,7 +104,7 @@ class Topics extends Component {
 
         const list = (
             <ul className="c-sidebar__list">
-                {/*<li>{link('/trending', tt('g.all_tags'))}</li>*/}
+                <li>{link('/trending', tt('g.all_tags'))}</li>
                 {username && (
                     <li>{link(`/@${username}/feed`, 'My friends')}</li>
                 )}

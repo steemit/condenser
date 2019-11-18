@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
+import debounce from 'lodash.debounce';
 import { search } from 'app/redux/SearchReducer';
 import Callout from 'app/components/elements/Callout';
 import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
@@ -10,8 +11,9 @@ import Reputation from 'app/components/elements/Reputation';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import { extractBodySummary } from 'app/utils/ExtractContent';
-import DropdownMenu from 'app/components/elements/DropdownMenu';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import IconButton from 'app/components/elements/IconButton';
 
 class SearchIndex extends React.Component {
     static propTypes = {
@@ -48,23 +50,43 @@ class SearchIndex extends React.Component {
         ).isRequired, // TODO: Proptype for search result shape.
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {};
+        this.fetchMoreResults = this.fetchMoreResults.bind(this);
     }
 
     componentDidMount() {
         const { performSearch, params } = this.props;
         performSearch(params);
+        window.onscroll = debounce(() => {
+            if (
+                window.innerHeight + document.documentElement.scrollTop ===
+                document.documentElement.offsetHeight
+            ) {
+                this.fetchMoreResults();
+            }
+        }, 800);
+    }
+
+    fetchMoreResults() {
+        const { params, performSearch, scrollId } = this.props;
+        const updatedParams = {
+            ...params,
+            scroll_id: scrollId,
+        };
+        performSearch(updatedParams);
     }
 
     render() {
-        const { result, loading, params, performSearch, scrollId } = this.props;
+        const { result, loading } = this.props;
+        console.log('LOADING: ', loading);
 
         const page_title = tt('g.all_tags');
 
         const layoutClass = 'layout-list';
 
+        /*
         const fetchMoreResults = e => {
             const updatedParams = {
                 ...params,
@@ -72,6 +94,7 @@ class SearchIndex extends React.Component {
             };
             performSearch(updatedParams);
         };
+        */
 
         const searchResults = result.map(r => {
             const path = `/@${r.author}/${r.permlink}`;
@@ -140,9 +163,8 @@ class SearchIndex extends React.Component {
                                 count: r.total_votes,
                             })}
                         >
-                            <Icon size="1x" name="chevron-up-circle" />&nbsp;{
-                                r.total_votes
-                            }
+                            <Icon size="1x" name="chevron-up-circle" />
+                            &nbsp;{r.total_votes}
                         </span>
                         <span
                             className={
@@ -155,7 +177,8 @@ class SearchIndex extends React.Component {
                                     name={
                                         r.children > 1 ? 'chatboxes' : 'chatbox'
                                     }
-                                />&nbsp;{r.children}
+                                />
+                                &nbsp;{r.children}
                             </Link>
                         </span>
                     </span>
@@ -231,9 +254,14 @@ class SearchIndex extends React.Component {
                                 {searchResults}
                             </ul>
                             <div>
-                                <button onClick={fetchMoreResults}>
-                                    LOAD MORE
-                                </button>
+                                {loading && (
+                                    <center>
+                                        <LoadingIndicator
+                                            style={{ marginBottom: '2rem' }}
+                                            type="circle"
+                                        />
+                                    </center>
+                                )}
                             </div>
                         </div>
                     )}

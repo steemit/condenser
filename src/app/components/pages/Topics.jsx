@@ -117,7 +117,7 @@ class Topics extends Component {
                             {link(`/trending/${cat[0]}`, cat[1], '')}
                         </li>
                     ))}
-                <li>
+                <li style={{ marginTop: '1rem' }}>
                     {link(
                         `/communities`,
                         moreLabel,

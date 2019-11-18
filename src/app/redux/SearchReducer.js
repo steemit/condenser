@@ -21,12 +21,12 @@ export default function reducer(state = defaultSearchState, action) {
             return state;
         }
         case SEARCH_PENDING: {
-            const { search, pending } = payload;
-            return state.setIn([search, 'pending'], pending);
+            const { pending } = payload;
+            return state.setIn(['pending'], pending);
         }
         case SEARCH_ERROR: {
-            const { search, error } = payload;
-            return state.setIn([search, 'error'], error);
+            const { error } = payload;
+            return state.setIn(['error'], error);
         }
         case SEARCH_RESULT: {
             const { hits, results, scroll_id, append } = payload;

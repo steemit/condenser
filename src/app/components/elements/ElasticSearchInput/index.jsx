@@ -19,7 +19,7 @@ class ElasticSearchInput extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        browserHistory.push(`/search/relevance/${this.state.value}`);
+        browserHistory.push(`/search?q=${this.state.value}`);
     };
 
     render() {

@@ -70,7 +70,6 @@ export default function resolveRoute(path) {
 
     // /search, /search?q=searchTerm&s=searchOrder
     match = path.match(routeRegex.Search);
-    debugger;
     if (match) return { page: 'SearchIndex', params: match.slice(1) };
 
     // -----------

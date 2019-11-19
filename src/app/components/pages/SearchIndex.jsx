@@ -69,7 +69,7 @@ class SearchIndex extends React.Component {
             ) {
                 this.fetchMoreResults();
             }
-        }, 800);
+        }, 300);
     }
 
     fetchMoreResults() {

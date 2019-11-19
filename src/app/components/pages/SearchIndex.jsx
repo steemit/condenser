@@ -20,8 +20,8 @@ class SearchIndex extends React.Component {
         loading: PropTypes.bool.isRequired,
         performSearch: PropTypes.func.isRequired,
         params: PropTypes.shape({
-            order: PropTypes.string,
-            category: PropTypes.string,
+            q: PropTypes.string,
+            s: PropTypes.string,
         }).isRequired,
         scrollId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool])
             .isRequired,
@@ -58,6 +58,9 @@ class SearchIndex extends React.Component {
 
     componentDidMount() {
         const { performSearch, params } = this.props;
+        if (!params.s) {
+            params.s = undefined;
+        }
         performSearch(params);
         window.onscroll = debounce(() => {
             if (
@@ -83,18 +86,6 @@ class SearchIndex extends React.Component {
         console.log('LOADING: ', loading);
 
         const page_title = tt('g.all_tags');
-
-        const layoutClass = 'layout-list';
-
-        /*
-        const fetchMoreResults = e => {
-            const updatedParams = {
-                ...params,
-                scroll_id: scrollId,
-            };
-            performSearch(updatedParams);
-        };
-        */
 
         const searchResults = result.map(r => {
             const path = `/@${r.author}/${r.permlink}`;
@@ -272,15 +263,16 @@ class SearchIndex extends React.Component {
 }
 
 module.exports = {
-    path: 'search(/:order)(/:category)',
+    path: 'search',
     component: connect(
         (state, ownProps) => {
+            const params = ownProps.location.query;
             return {
                 loading: state.search.get('pending'),
                 result: state.search.get('result').toJS(),
                 scrollId: state.search.get('scrollId'),
                 isBrowser: process.env.BROWSER,
-                params: ownProps.routeParams,
+                params,
             };
         },
         dispatch => ({

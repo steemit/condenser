@@ -5,15 +5,15 @@ import { conductSearch } from 'app/utils/ServerApiClient';
 export const searchWatches = [takeEvery('search/SEARCH_DISPATCH', search)];
 
 export function* search(action) {
-    const searchParams = action.payload;
+    const { q, s, scroll_id } = action.payload;
     const append = action.payload.scroll_id ? true : false;
     yield put(reducer.searchPending({ pending: true }));
     try {
         const requestParams = {
             body: {
-                q: searchParams.category,
-                sort: searchParams.order,
-                scroll_id: searchParams.scroll_id ? searchParams.scroll_id : '',
+                q,
+                sort: s ? s : 'relevance',
+                scroll_id: scroll_id ? scroll_id : '',
             },
         };
         const searchResponse = yield call(conductSearch, requestParams);

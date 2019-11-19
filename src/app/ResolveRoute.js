@@ -10,7 +10,7 @@ export const routeRegex = {
     PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
     UserJson: /^\/(@[\w\.\d-]+)(\.json)$/,
     UserNameJson: /^.*(?=(\.json))/,
-    Search: /^\/(search)\/(newest|popularity|relevance)(?:\/([\w\d-]+))?\/?$/i,
+    Search: /^\/(?:search)(?:\?q=)?([\w\d-_]+)?(?:&s=)?([\w\d]+)?/,
 };
 
 export default function resolveRoute(path) {
@@ -68,10 +68,10 @@ export default function resolveRoute(path) {
     match = path.match(routeRegex.CategoryFilters);
     if (match) return { page: 'PostsIndex', params: match.slice(1) };
 
-    // /search, /search/searchOrder/searchTerm
+    // /search, /search?q=searchTerm&s=searchOrder
     match = path.match(routeRegex.Search);
-    if (match)
-        return { page: 'SearchIndex', params: match.slice(1, match.length) };
+    debugger;
+    if (match) return { page: 'SearchIndex', params: match.slice(1) };
 
     // -----------
 

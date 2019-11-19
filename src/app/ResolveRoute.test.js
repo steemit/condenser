@@ -57,9 +57,14 @@ describe('resolveRoute', () => {
             '/roles/hive-105677',
             { page: 'CommunityRoles', params: ['hive-105677'] },
         ],
+        ['/search', { page: 'SearchIndex', params: [undefined, undefined] }],
         [
-            '/search/relevance/nice345',
-            { page: 'SearchIndex', params: ['search', 'relevance', 'nice345'] },
+            '/search?q=nice345',
+            { page: 'SearchIndex', params: ['nice345', undefined] },
+        ],
+        [
+            '/search?q=nice345&s=relevance',
+            { page: 'SearchIndex', params: ['nice345', 'relevance'] },
         ],
     ];
     test_cases.forEach(r => {

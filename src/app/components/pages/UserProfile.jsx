@@ -267,11 +267,20 @@ export default class UserProfile extends React.Component {
             if (section === 'blog') {
                 tab_content = (
                     <div>
-                        <a href="#" onClick={this.toggleShowResteem}>
+                        <a
+                            href="#"
+                            onClick={this.toggleShowResteem}
+                            style={{
+                                float: 'left',
+                                margin: '-1rem 0 0.5rem',
+                                fontSize: '0.9rem',
+                            }}
+                        >
                             {showResteem
                                 ? tt('user_profile.hide_resteems')
                                 : tt('user_profile.show_all')}
                         </a>
+                        <div style={{ clear: 'both' }} />
                         {tab_content}
                     </div>
                 );
@@ -324,7 +333,7 @@ export default class UserProfile extends React.Component {
                     )}
                 >
                     <article className="articles">
-                        {tab_header}
+                        {/*tab_header*/}
                         {tab_content}
                     </article>
                 </div>

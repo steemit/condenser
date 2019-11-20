@@ -19,10 +19,10 @@ export default function resolveRoute(path) {
     // static
     if (path === '/welcome') return { page: 'Welcome' };
     if (path === '/faq.html') return { page: 'Faq' };
-    if (path === '/tos.html') return { page: 'Tos' };
     if (path === '/about.html') return { page: 'About' };
-    if (path === '/privacy.html') return { page: 'Privacy' };
     if (path === '/support.html') return { page: 'Support' };
+    if (path === '/privacy.html') return { page: 'Privacy' };
+    if (path === '/tos.html') return { page: 'Tos' };
 
     // general functions
     if (path === '/login.html') return { page: 'Login' };

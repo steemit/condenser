@@ -13,7 +13,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import { extractBodySummary } from 'app/utils/ExtractContent';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import IconButton from 'app/components/elements/IconButton';
+import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
 
 class SearchIndex extends React.Component {
     static propTypes = {
@@ -40,8 +40,6 @@ class SearchIndex extends React.Component {
                 img_url: PropTypes.string,
                 payout: PropTypes.number,
                 permlink: PropTypes.string,
-                tags: PropTypes.oneOfType([PropTypes.string, PropTypes.bool])
-                    .isRequired,
                 title: PropTypes.string,
                 title_marked: PropTypes.string,
                 total_votes: PropTypes.number,
@@ -61,7 +59,9 @@ class SearchIndex extends React.Component {
         if (!params.s) {
             params.s = undefined;
         }
-        performSearch(params);
+        if (params.q) {
+            performSearch(params);
+        }
         window.onscroll = debounce(() => {
             if (
                 window.innerHeight + document.documentElement.scrollTop ===
@@ -70,6 +70,13 @@ class SearchIndex extends React.Component {
                 this.fetchMoreResults();
             }
         }, 300);
+    }
+
+    componentDidUpdate(prevProps) {
+        const { performSearch, params } = this.props;
+        if (prevProps.params !== params) {
+            performSearch(params);
+        }
     }
 
     fetchMoreResults() {
@@ -82,11 +89,7 @@ class SearchIndex extends React.Component {
     }
 
     render() {
-        const { result, loading } = this.props;
-        console.log('LOADING: ', loading);
-
-        const page_title = tt('g.all_tags');
-
+        const { result, loading, params, performSearch } = this.props;
         const searchResults = result.map(r => {
             const path = `/@${r.author}/${r.permlink}`;
 
@@ -217,26 +220,16 @@ class SearchIndex extends React.Component {
             <div className={'PostsIndex row ' + 'layout-list'}>
                 <article className="articles">
                     <div className="articles__header row">
-                        <div className="small-8 medium-7 large-8 column">
-                            <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
-                                {page_title}
-                            </h1>
-                            <div className="show-for-mq-large">
-                                <div
-                                    style={{
-                                        fontSize: '80%',
-                                        color: 'gray',
-                                    }}
-                                >
-                                    Search Results
-                                </div>
-                            </div>
-                        </div>
-                        <div className="small-4 medium-4 large-3 column hide-for-largeX articles__header-select">
-                            {/*TODO: SortOrder component for search can go here*/}
+                        <div className="small-12 medium-12 large-12 column">
+                            <ElasticSearchInput
+                                initValue={params.q}
+                                expanded={true}
+                                handleSubmit={q => {
+                                    performSearch({ q, s: undefined });
+                                }}
+                            />
                         </div>
                     </div>
-                    <hr className="articles__hr" />
                     {!loading && !result.length === 0 ? (
                         <Callout>{'Nothing was found.'}</Callout>
                     ) : (

@@ -246,11 +246,13 @@ class Header extends React.Component {
         const account_link = `/@${username}`;
         const comments_link = `/@${username}/comments`;
         const settings_link = `/@${username}/settings`;
+        const notifs_link = `/@${username}/notifications`;
 
         const user_menu = [
             { link: account_link, icon: 'profile', value: tt('g.blog') },
             { link: comments_link, icon: 'replies', value: tt('g.posts') },
             { link: replies_link, icon: 'reply', value: tt('g.replies') },
+            { link: notifs_link, icon: 'clock', value: tt('g.notifications') },
             {
                 link: '#',
                 icon: 'eye',

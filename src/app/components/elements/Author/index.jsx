@@ -137,7 +137,7 @@ class Author extends React.Component {
                         style={{ fontWeight: 'bold', color: 'red' }}
                         title={blacklists.join(', ')}
                     >
-                        ❗️({blacklists.length})
+                        ({blacklists.length})
                     </span>
                 )}
             </span>

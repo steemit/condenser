@@ -22,7 +22,7 @@ const noFriendsText = (
     <div>
         You haven't followed anyone yet!<br />
         <br />
-        <span style={{ fontSize: '1.25rem' }}>
+        <span style={{ fontSize: '1.1rem' }}>
             <Link to="/">Explore Trending</Link>
         </span>
         <br />
@@ -35,7 +35,7 @@ const noCommunitiesText = (
     <div>
         You haven't joined any communities yet!<br />
         <br />
-        <span style={{ fontSize: '1.25rem' }}>
+        <span style={{ fontSize: '1.1rem' }}>
             <Link to="/communities">Explore Communities</Link>
         </span>
         {/*

@@ -201,6 +201,7 @@ export default class UserProfile extends React.Component {
             // post lists -- empty
         } else if (!fetching && !posts.size) {
             let emptyText;
+            const aname = '@' + accountname;
             if (section == 'blog') {
                 if (isMyAccount) {
                     emptyText = (
@@ -232,18 +233,18 @@ export default class UserProfile extends React.Component {
                     emptyText = tt(
                         'user_profile.user_hasnt_started_bloggin_yet',
                         {
-                            name: accountname,
+                            name: aname,
                         }
                     );
                 }
             } else if (section == 'comments') {
                 emptyText = tt('user_profile.user_hasnt_made_any_posts_yet', {
-                    name: accountname,
+                    name: aname,
                 });
             } else if (section == 'replies') {
                 emptyText =
                     tt('user_profile.user_hasnt_had_any_replies_yet', {
-                        name: accountname,
+                        name: aname,
                     }) + '.';
             } else if (section == 'payout') {
                 emptyText = 'No pending payouts.';

@@ -17,28 +17,28 @@ import SortOrder from 'app/components/elements/SortOrder';
 import { ifHive } from 'app/utils/Community';
 import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 
-const emptyFeedText = (isMyAccount, account_name) => {
-    return isMyAccount ? (
-        <div>
-            {tt('posts_index.empty_feed_1')}.<br />
-            <br />
-            {tt('posts_index.empty_feed_2')}.<br />
-            <br />
-            <Link to="/trending">{tt('posts_index.empty_feed_3')}</Link>
-            <br />
-            <Link to="/welcome">{tt('posts_index.empty_feed_4')}</Link>
-            <br />
-            <Link to="/faq.html">{tt('posts_index.empty_feed_5')}</Link>
-            <br />
-        </div>
-    ) : (
-        <div>
-            {tt('user_profile.user_hasnt_followed_anything_yet', {
-                name: account_name,
-            })}
-        </div>
-    );
-};
+// posts_index.empty_feed_1 [-5]
+const noFriendsText = (
+    <div>
+        You haven't followed anyone yet!<br />
+        <br />
+        <Link to="/">Explore Trending Articles</Link>
+        <br />
+        <Link to="/welcome">Read the Welcome Guide</Link>
+        <br />
+    </div>
+);
+
+const noCommunitiesText = (
+    <div>
+        You haven't subscribed to any communities yet!<br />
+        <br />
+        <Link to="/communities">Explore Communities</Link>
+        <br />
+        <Link to="/welcome">Read the Welcome Guide</Link>
+        <br />
+    </div>
+);
 
 class PostsIndex extends React.Component {
     static propTypes = {
@@ -103,8 +103,9 @@ class PostsIndex extends React.Component {
 
         let emptyText = '';
         if (order === 'feed') {
-            const isMyAccount = this.props.username === account_name;
-            emptyText = emptyFeedText(isMyAccount, account_name);
+            emptyText = noFriendsText;
+        } else if (category === 'my') {
+            emptyText = noCommunitiesText;
         } else if (posts.size === 0) {
             const cat = community
                 ? community.get('title')

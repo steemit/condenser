@@ -119,7 +119,6 @@ class PostsList extends React.Component {
             showPromoted,
             showResteem,
             loading,
-            anyPosts,
             pathname,
             category,
             order,
@@ -155,9 +154,7 @@ class PostsList extends React.Component {
 
         const areFeaturedPostsVisible =
             showFeatured && (isLoggedInOnFeed || isLoggedOutOnTrending);
-        const areFeaturedPostsReady = isLoggedInOnFeed
-            ? anyPosts
-            : postsInfo.length > 0;
+        const areFeaturedPostsReady = !isLoggedInOnFeed && postsInfo.length > 0;
         const showFeaturedPosts =
             areFeaturedPostsVisible && areFeaturedPostsReady;
 
@@ -193,9 +190,7 @@ class PostsList extends React.Component {
 
         const arePromotedPostsVisible =
             showPromoted && (isLoggedInOnFeed || isLoggedOutOnTrending);
-        const arePromotedPostsReady = isLoggedInOnFeed
-            ? anyPosts
-            : postsInfo.length > 0;
+        const arePromotedPostsReady = !isLoggedInOnFeed && postsInfo.length > 0;
         const showPromotedPosts =
             arePromotedPostsVisible && arePromotedPostsReady;
 

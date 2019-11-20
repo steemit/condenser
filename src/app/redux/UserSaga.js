@@ -350,10 +350,10 @@ function* usernamePasswordLogin2({
             localStorage.removeItem('autopost2');
             return;
         }
+        if (username) feedURL = '/@' + username + '/feed';
 
         // If user is signing operation by operaion and has no saved login, don't save to RAM
         if (!operationType || saveLogin) {
-            if (username) feedURL = '/@' + username + '/feed';
             // Keep the posting key in RAM but only when not signing an operation.
             // No operation or the user has checked: Keep me logged in...
             yield put(
@@ -371,7 +371,6 @@ function* usernamePasswordLogin2({
                 })
             );
         } else {
-            if (username) feedURL = '/@' + username + '/feed';
             yield put(
                 userActions.setUser({
                     username,

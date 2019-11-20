@@ -45,7 +45,7 @@ class SearchIndex extends React.Component {
                 total_votes: PropTypes.number,
                 up_votes: PropTypes.number,
             })
-        ).isRequired, // TODO: Proptype for search result shape.
+        ).isRequired,
     };
 
     constructor(props) {

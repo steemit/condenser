@@ -468,8 +468,9 @@ function* usernamePasswordLogin2({
     if (afterLoginRedirectToWelcome) {
         console.log('Redirecting to welcome page');
         browserHistory.push('/welcome');
+    } else if (feedURL && document.location.pathname === '/login.html') {
+        browserHistory.push('/trending/my');
     } else if (feedURL && document.location.pathname === '/') {
-        console.log('Redirecting to feed page', feedURL);
         //browserHistory.push(feedURL);
         browserHistory.push('/trending/my');
     }

@@ -330,7 +330,7 @@ class Header extends React.Component {
                                 <ElasticSearchInput />
                             </span>
                             <span className="Header__search">
-                                <a href="/static/search.html">
+                                <a href="/search">
                                     <IconButton icon="magnifyingGlass" />
                                 </a>
                             </span>

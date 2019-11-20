@@ -190,7 +190,7 @@ class PostsIndex extends React.Component {
                     </div>
                     {order != 'feed' &&
                         !(category === 'my' && !posts.size) && (
-                            <div className="small-4 medium-4 large-3 column articles__header-select">
+                            <div className="small-4 medium-5 large-4 column articles__header-select">
                                 <SortOrder
                                     sortOrder={order}
                                     topic={category}
@@ -198,9 +198,11 @@ class PostsIndex extends React.Component {
                                 />
                             </div>
                         )}
+                    {/*
+                    medium-4 large-3
                     <div className="medium-1 show-for-mq-medium column">
                         <ArticleLayoutSelector />
-                    </div>
+                    </div>*/}
                 </div>
                 <hr className="articles__hr" />
 

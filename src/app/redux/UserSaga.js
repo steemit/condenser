@@ -470,7 +470,8 @@ function* usernamePasswordLogin2({
         browserHistory.push('/welcome');
     } else if (feedURL && document.location.pathname === '/') {
         console.log('Redirecting to feed page', feedURL);
-        browserHistory.push(feedURL);
+        //browserHistory.push(feedURL);
+        browserHistory.push('/trending/my');
     }
 }
 

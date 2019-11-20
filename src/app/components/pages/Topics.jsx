@@ -109,7 +109,7 @@ class Topics extends Component {
                     <li>{link(`/@${username}/feed`, 'My friends')}</li>
                 )}
                 {username && <li>{link(`/trending/my`, 'My communities')}</li>}
-                <li>{commsHead}</li>
+                {(subscriptions || topics).size > 0 && <li>{commsHead}</li>}
                 {(subscriptions || topics)
                     .toJS()
                     .map(cat => (
@@ -117,7 +117,7 @@ class Topics extends Component {
                             {link(`/trending/${cat[0]}`, cat[1], '')}
                         </li>
                     ))}
-                <li style={{ marginTop: '1rem' }}>
+                <li>
                     {link(
                         `/communities`,
                         moreLabel,

@@ -33,10 +33,10 @@ class Topics extends Component {
                 if (tag && tag[0] === '@')
                     return {
                         value: `/@${username}/feed`,
-                        label: 'My Friends' || `tt('g.my_feed')`,
+                        label: 'My friends' || `tt('g.my_feed')`,
                     };
                 if (tag === 'my')
-                    return { value: `/trending/my`, label: 'My Communities' };
+                    return { value: `/trending/my`, label: 'My communities' };
                 if (tag == 'explore')
                     return {
                         value: `/communities`,

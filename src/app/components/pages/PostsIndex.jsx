@@ -22,21 +22,25 @@ const noFriendsText = (
     <div>
         You haven't followed anyone yet!<br />
         <br />
-        <Link to="/">Explore Trending Articles</Link>
+        <span style={{ fontSize: '1.25rem' }}>
+            <Link to="/">Explore Trending</Link>
+        </span>
         <br />
-        <Link to="/welcome">Read the Welcome Guide</Link>
         <br />
+        <Link to="/welcome">New users guide</Link>
     </div>
 );
 
 const noCommunitiesText = (
     <div>
-        You haven't subscribed to any communities yet!<br />
+        You haven't joined any communities yet!<br />
         <br />
-        <Link to="/communities">Explore Communities</Link>
-        <br />
-        <Link to="/welcome">Read the Welcome Guide</Link>
-        <br />
+        <span style={{ fontSize: '1.25rem' }}>
+            <Link to="/communities">Explore Communities</Link>
+        </span>
+        {/*
+        <br /><br />
+        <Link to="/welcome">New users guide</Link>*/}
     </div>
 );
 
@@ -184,15 +188,16 @@ class PostsIndex extends React.Component {
                             />
                         </span>
                     </div>
-                    {order != 'feed' && (
-                        <div className="small-4 medium-4 large-3 column articles__header-select">
-                            <SortOrder
-                                sortOrder={order}
-                                topic={category}
-                                horizontal={false}
-                            />
-                        </div>
-                    )}
+                    {order != 'feed' &&
+                        !(category === 'my' && !posts.size) && (
+                            <div className="small-4 medium-4 large-3 column articles__header-select">
+                                <SortOrder
+                                    sortOrder={order}
+                                    topic={category}
+                                    horizontal={false}
+                                />
+                            </div>
+                        )}
                     <div className="medium-1 show-for-mq-medium column">
                         <ArticleLayoutSelector />
                     </div>

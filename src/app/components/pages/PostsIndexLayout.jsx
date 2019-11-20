@@ -28,6 +28,12 @@ class PostsIndexLayout extends React.Component {
         if (!subscriptions && username) getSubscriptions(username);
     }
 
+    componentDidUpdate(prevProps) {
+        const { subscriptions, getSubscriptions, username } = this.props;
+        if (!subscriptions && username && username != prevProps.username)
+            getSubscriptions(username);
+    }
+
     render() {
         const {
             topics,

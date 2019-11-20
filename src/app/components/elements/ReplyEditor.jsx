@@ -480,7 +480,8 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 {isStory &&
-                    !isEdit && (
+                    !isEdit &&
+                    username && (
                         <PostCategoryBanner
                             communityName={community}
                             disabledCommunity={disabledCommunity}

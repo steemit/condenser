@@ -7,7 +7,7 @@ class ElasticSearchInput extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: '',
+            value: this.props.initValue ? this.props.initValue : '',
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -19,13 +19,21 @@ class ElasticSearchInput extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        browserHistory.push(`/search?q=${this.state.value}`);
+        if (this.props.handleSubmit) {
+            this.props.handleSubmit(this.state.value);
+            browserHistory.push(`/search?q=${this.state.value}`);
+        } else {
+            browserHistory.push(`/search?q=${this.state.value}`);
+        }
     };
 
     render() {
+        const formClass = this.props.expanded
+            ? 'search-input--expanded'
+            : 'search-input';
         return (
             <span>
-                <form className={'search-input'} onSubmit={this.handleSubmit}>
+                <form className={formClass} onSubmit={this.handleSubmit}>
                     <svg
                         className="search-input__icon"
                         width="42"
@@ -48,12 +56,7 @@ class ElasticSearchInput extends React.Component {
                         type="search"
                         placeholder={tt('g.search')}
                         onChange={this.handleChange}
-                    />
-                    <button
-                        className="input-group-button"
-                        href="/static/search.html"
-                        type="submit"
-                        title={tt('g.search')}
+                        value={this.state.value}
                     />
                 </form>
             </span>

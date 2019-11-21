@@ -44,7 +44,7 @@ export default class UserProfile extends React.Component {
     shouldComponentUpdate(np, ns) {
         return (
             np.username !== this.props.username ||
-            np.global_status !== this.props.global_status ||
+            np.status !== this.props.status ||
             np.followers !== this.props.followers ||
             np.following !== this.props.following ||
             np.loading !== this.props.loading ||
@@ -58,11 +58,10 @@ export default class UserProfile extends React.Component {
 
     loadMore(last_post) {
         if (!last_post) return;
-        const { username, global_status, order, category } = this.props;
+        //if (last_post == this.props.pending) return; // if last post is 'pending', its an invalid start token
+        const { username, status, order, category } = this.props;
 
-        if (isFetchingOrRecentlyUpdated(global_status, order, category)) {
-            return;
-        }
+        if (isFetchingOrRecentlyUpdated(status, order, category)) return;
 
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
@@ -78,7 +77,7 @@ export default class UserProfile extends React.Component {
         const {
             props: {
                 username,
-                global_status,
+                status,
                 following,
                 followers,
                 accountname,
@@ -93,10 +92,8 @@ export default class UserProfile extends React.Component {
         } = this;
 
         // Loading status
-        const status = global_status
-            ? global_status.getIn([category, order])
-            : null;
-        const fetching = (status && status.fetching) || this.props.loading;
+        const _state = status ? status.getIn([category, order]) : null;
+        const fetching = (_state && _state.fetching) || this.props.loading;
 
         if (profile) {
         } else if (fetching) {
@@ -118,27 +115,11 @@ export default class UserProfile extends React.Component {
 
         // users following this user
         if (section === 'followers') {
-            if (followers && followers.has('blog_result')) {
-                tab_content = (
-                    <div>
-                        <UserList
-                            title={tt('user_profile.followers')}
-                            users={followers.get('blog_result')}
-                        />
-                    </div>
-                );
-            }
+            tab_content = <UserList title="Followers" users={followers} />;
 
             // users followed by this user
         } else if (section === 'followed') {
-            if (following && following.has('blog_result')) {
-                tab_content = (
-                    <UserList
-                        title="Followed"
-                        users={following.get('blog_result')}
-                    />
-                );
-            }
+            tab_content = <UserList title="Followed" users={following} />;
 
             // notifications
         } else if (section === 'notifications') {
@@ -190,22 +171,30 @@ export default class UserProfile extends React.Component {
                             )}
                             <br />
                             <br />
+                            <Link to="/communities">
+                                <strong>Explore Communities</strong>
+                            </Link>
+                            <br />
                             <Link to="/submit.html">
                                 {tt('user_profile.create_a_post')}
                             </Link>
                             <br />
                             <Link to="/trending">
-                                {tt('user_profile.explore_trending_articles')}
+                                Trending Articles
+                                {/*tt('user_profile.explore_trending_articles')*/}
                             </Link>
                             <br />
                             <Link to="/welcome">
-                                {tt('user_profile.read_the_quick_start_guide')}
+                                Welcome Guide
+                                {/*tt('user_profile.read_the_quick_start_guide')*/}
                             </Link>
                             <br />
+                            {/*
+                            TODO: introduceyourself nudge, FUUX
                             <Link to="/faq.html">
                                 {tt('user_profile.browse_the_faq')}
                             </Link>
-                            <br />
+                            <br />*/}
                         </div>
                     );
                 } else {
@@ -239,11 +228,9 @@ export default class UserProfile extends React.Component {
         } else {
             tab_content = (
                 <PostsList
-                    account={section == 'blog' ? accountname : null} // 'blog' only
                     posts={posts}
                     loading={fetching}
                     loadMore={this.loadMore}
-                    showPinned={false}
                 />
             );
         }
@@ -384,17 +371,19 @@ module.exports = {
                 ]),
                 username,
                 loading: state.app.get('loading'),
-                global_status: state.global.get('status'),
+                status: state.global.get('status'),
                 accountname: accountname,
                 followers: state.global.getIn([
                     'follow',
                     'getFollowersAsync',
                     accountname,
+                    'blog_result',
                 ]),
                 following: state.global.getIn([
                     'follow',
                     'getFollowingAsync',
                     accountname,
+                    'blog_result',
                 ]),
                 notifications: state.global.getIn(
                     ['notifications', accountname],

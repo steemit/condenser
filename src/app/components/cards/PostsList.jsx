@@ -121,7 +121,6 @@ class PostsList extends React.Component {
             order,
             content,
             mutes,
-            account,
             username,
             nsfwPref,
             hideCategory,
@@ -162,7 +161,6 @@ class PostsList extends React.Component {
                 return (
                     <li key={id}>
                         <PostSummary
-                            account={account}
                             post={id}
                             thumbSize={thumbSize}
                             ignore={false}
@@ -179,7 +177,6 @@ class PostsList extends React.Component {
             items.map((item, i) => {
                 const ps = (
                     <PostSummary
-                        account={account}
                         post={item.item}
                         thumbSize={thumbSize}
                         ignore={item.ignore}

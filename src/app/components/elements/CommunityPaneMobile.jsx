@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Role } from 'app/utils/Community';
 import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
+import { numberWithCommas } from 'app/utils/StateFunctions';
 
 class CommunityPaneMobile extends Component {
     static propTypes = {
@@ -63,7 +64,7 @@ class CommunityPaneMobile extends Component {
                         </div>
 
                         <div className="column large-1 medium-2 small-4">
-                            {community.get('subscribers')}
+                            {numberWithCommas(community.get('subscribers'))}
                             <br />
                             <small>
                                 {community.get('subscribers') == 1
@@ -73,17 +74,21 @@ class CommunityPaneMobile extends Component {
                         </div>
                         <div className="column large-1 medium-2 small-4">
                             {'$'}
-                            {community.get('sum_pending')}
+                            {numberWithCommas(community.get('sum_pending'))}
                             <br />
-                            <small>pending rewards</small>
+                            <small>
+                                pending<br />rewards
+                            </small>
                         </div>
                         <div
                             className="column large-1 medium-2 small-4"
                             style={{ marginBottom: '8px' }}
                         >
-                            {community.get('num_authors')}
+                            {numberWithCommas(community.get('num_authors'))}
                             <br />
-                            <small>active users</small>
+                            <small>
+                                active<br />posters
+                            </small>
                         </div>
 
                         <div className="column large-4 medium-6 small-12">

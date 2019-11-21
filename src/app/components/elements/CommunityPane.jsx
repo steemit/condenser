@@ -7,6 +7,7 @@ import { Role } from 'app/utils/Community';
 import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
 import Icon from 'app/components/elements/Icon';
+import { numberWithCommas } from 'app/utils/StateFunctions';
 
 const nl2br = text =>
     text.split('\n').map((item, key) => (
@@ -75,7 +76,7 @@ class CommunityPane extends Component {
                         style={{ textAlign: 'center', lineHeight: '1em' }}
                     >
                         <div className="column small-4">
-                            {community.get('subscribers')}
+                            {numberWithCommas(community.get('subscribers'))}
                             <br />
                             <small>
                                 {community.get('subscribers') == 1
@@ -85,14 +86,18 @@ class CommunityPane extends Component {
                         </div>
                         <div className="column small-4">
                             {'$'}
-                            {community.get('sum_pending')}
+                            {numberWithCommas(community.get('sum_pending'))}
                             <br />
-                            <small>pending rewards</small>
+                            <small>
+                                pending<br />rewards
+                            </small>
                         </div>
                         <div className="column small-4">
-                            {community.get('num_authors')}
+                            {numberWithCommas(community.get('num_authors'))}
                             <br />
-                            <small>active users</small>
+                            <small>
+                                active<br />posters
+                            </small>
                         </div>
                     </div>
 

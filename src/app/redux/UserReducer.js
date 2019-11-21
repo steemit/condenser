@@ -54,15 +54,16 @@ export default function reducer(state = defaultState, action) {
 
     switch (action.type) {
         case SHOW_LOGIN: {
-            let operation, loginDefault;
+            let operation, loginDefault, login_type;
             if (payload) {
                 operation = fromJS(payload.operation);
                 loginDefault = fromJS(payload.loginDefault);
+                login_type = payload.type;
             }
             return state.merge({
                 login_error: undefined,
                 show_login_modal: true,
-                login_type: payload.type,
+                login_type,
                 loginBroadcastOperation: operation,
                 loginDefault,
             });

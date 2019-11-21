@@ -114,9 +114,12 @@ class PostsIndex extends React.Component {
             emptyText = noCommunitiesText;
         } else if (posts.size === 0) {
             const cat = community
-                ? community.get('title')
+                ? 'community' //community.get('title')
                 : category ? ' #' + category : '';
-            emptyText = <div>{`No ${order} ${cat} posts found`}</div>;
+
+            if (order == 'payout') emptyText = `No pending ${cat} posts found.`;
+            else if (order == 'created') emptyText = `No posts in ${cat} yet!`;
+            else emptyText = `No ${order} ${cat} posts found.`;
         } else {
             emptyText = 'Nothing here to see...';
         }

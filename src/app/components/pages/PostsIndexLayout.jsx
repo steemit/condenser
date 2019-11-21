@@ -126,6 +126,8 @@ class PostsIndexLayout extends React.Component {
 
 export default connect(
     (state, props) => {
+        console.log(state.community.toJS());
+        console.log(state.global.get('community').toJS());
         return {
             blogmode: props.blogmode,
             enableAds: props.enableAds,

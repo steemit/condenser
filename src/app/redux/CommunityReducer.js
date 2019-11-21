@@ -1,8 +1,14 @@
 import { fromJS, Map, List } from 'immutable';
 
-const LOAD_COMMUNITY_ROLES = 'community/LOAD_COMMUNITY_ROLES';
-const SET_COMMUNITY_ROLES_PENDING = 'community/SET_COMMUNITY_ROLES_PENDING';
-const RECEIVE_COMMUNITY_ROLES = 'community/RECEIVE_COMMUNITY_ROLES';
+const GET_COMMUNITY_ROLES = 'community/GET_COMMUNITY_ROLES';
+const GET_COMMUNITY_ROLES_PENDING = 'community/GET_COMMUNITY_ROLES_PENDING';
+const SET_COMMUNITY_ROLES = 'community/SET_COMMUNITY_ROLES';
+
+const GET_COMMUNITY_SUBSCRIBERS = 'community/GET_COMMUNITY_SUBSCRIBERS';
+const GET_COMMUNITY_SUBSCRIBERS_PENDING =
+    'community/GET_COMMUNITY_SUBSCRIBERS_PENDING';
+const SET_COMMUNITY_SUBSCRIBERS = 'community/SET_COMMUNITY_SUBSCRIBERS';
+const GET_COMMUNITY_SUBSCRIBERS_ERROR = 'community/SET_COMMUNITY_SUBSCRIBERS';
 
 const UPDATE_USER_ROLE = 'community/UPDATE_USER_ROLE';
 const SET_USER_ROLE_PENDING = 'community/SET_USER_ROLE_PENDING';
@@ -14,12 +20,37 @@ export default function reducer(state = defaultCommunityState, action) {
     const payload = action.payload;
 
     switch (action.type) {
-        case SET_COMMUNITY_ROLES_PENDING: {
-            const { community, pending } = payload;
-            return state.setIn([community, 'listPending'], pending);
+        // Has Saga watcher.
+        case GET_COMMUNITY_SUBSCRIBERS: {
+            return state;
         }
 
-        case RECEIVE_COMMUNITY_ROLES: {
+        case GET_COMMUNITY_SUBSCRIBERS_PENDING: {
+            const { community, pending } = payload;
+            return state.setIn([community, 'listSubscribersPending'], pending);
+        }
+
+        case GET_COMMUNITY_SUBSCRIBERS_ERROR: {
+            const { community, error } = payload;
+            return state.setIn([community, 'listSubscribersError'], error);
+        }
+
+        case SET_COMMUNITY_SUBSCRIBERS: {
+            const { community, subscribers } = payload;
+            state.setIn([community, 'subscribers'], fromJS(subscribers));
+            return state.setIn([community, 'subscribers'], fromJS(subscribers));
+        }
+
+        // Has Saga watcher.
+        case GET_COMMUNITY_ROLES: {
+            return state;
+        }
+
+        case GET_COMMUNITY_ROLES_PENDING: {
+            const { community, pending } = payload;
+            return state.setIn([community, 'listRolesPending'], pending);
+        }
+        case SET_COMMUNITY_ROLES: {
             const { community, roles } = payload;
             state.setIn([community, 'roles'], fromJS(roles));
             return state.setIn([community, 'roles'], fromJS(roles));
@@ -59,21 +90,50 @@ export default function reducer(state = defaultCommunityState, action) {
 /**
     @arg {community: string} payload action payload.
 */
-export const loadCommunityRoles = payload => ({
-    type: LOAD_COMMUNITY_ROLES,
+export const getCommunityRoles = payload => ({
+    type: GET_COMMUNITY_ROLES,
     payload,
 });
 
 /**
     @arg boolean payload action payload.
 */
-export const setCommunityRolesPending = payload => ({
-    type: SET_COMMUNITY_ROLES_PENDING,
+export const getCommunityRolesPending = payload => ({
+    type: GET_COMMUNITY_ROLES_PENDING,
     payload,
 });
 
-export const receiveCommunityRoles = payload => ({
-    type: RECEIVE_COMMUNITY_ROLES,
+export const setCommunityRoles = payload => ({
+    type: SET_COMMUNITY_ROLES,
+    payload,
+});
+
+/**
+    @arg {community: string} payload action payload.
+*/
+export const getCommunitySubscribers = payload => ({
+    type: GET_COMMUNITY_SUBSCRIBERS,
+    payload,
+});
+
+/**
+    @arg boolean payload action payload.
+*/
+export const getCommunitySubscribersPending = payload => ({
+    type: GET_COMMUNITY_SUBSCRIBERS_PENDING,
+    payload,
+});
+
+/**
+    @arg error payload action payload.
+*/
+export const getCommunitySubscribersError = payload => ({
+    type: GET_COMMUNITY_SUBSCRIBERS_ERROR,
+    payload,
+});
+
+export const setCommunitySubscribers = payload => ({
+    type: SET_COMMUNITY_SUBSCRIBERS,
     payload,
 });
 

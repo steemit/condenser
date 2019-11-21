@@ -10,6 +10,7 @@ import QrReader from 'app/components/elements/QrReader';
 import CheckLoginOwner from 'app/components/elements/CheckLoginOwner';
 import PromotePost from 'app/components/modules/PromotePost';
 import ExplorePost from 'app/components/modules/ExplorePost';
+import { CommunitySubscriberList } from './CommunitySubscriberList';
 
 class Dialogs extends React.Component {
     static propTypes = {
@@ -63,6 +64,16 @@ class Dialogs extends React.Component {
                         <Reveal onHide={this['hide_' + k]} show>
                             <CloseButton onClick={this['hide_' + k]} />
                             <ExplorePost
+                                onClick={this['hide_' + k]}
+                                {...v.get('params').toJS()}
+                            />
+                        </Reveal>
+                    </span>
+                ) : k === 'communitySubscribers' ? (
+                    <span>
+                        <Reveal onHide={this['hide_' + k]} show>
+                            <CloseButton onClick={this['hide_' + k]} />
+                            <CommunitySubscriberList
                                 onClick={this['hide_' + k]}
                                 {...v.get('params').toJS()}
                             />

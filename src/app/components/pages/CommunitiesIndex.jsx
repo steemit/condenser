@@ -44,8 +44,8 @@ export default class CommunitiesIndex extends React.Component {
                     <br />
                     {comm.about}
                     <small>
-                        {comm.subscribers} subscribers &bull; {comm.num_pending}{' '}
-                        posts
+                        {comm.subscribers} subscribers &bull; {comm.num_authors}{' '}
+                        users &bull; {comm.num_pending} posts
                     </small>
                 </th>
                 <td width="40">

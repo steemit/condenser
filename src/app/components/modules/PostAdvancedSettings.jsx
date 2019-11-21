@@ -67,8 +67,6 @@ class PostAdvancedSettings extends Component {
                         this.props.setPayoutType(formId, payoutType);
                         this.props.setBeneficiaries(formId, data.beneficiaries);
                         this.props.hideAdvancedSettings();
-                    } else {
-                        this.setState({ beneficiaries: newBeneficiaries });
                     }
                 })}
             >

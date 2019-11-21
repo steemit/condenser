@@ -755,14 +755,25 @@ function* uploadImage({
     xhr.open('POST', postUrl);
     xhr.onload = function() {
         console.log(xhr.status, xhr.responseText);
-        const res = JSON.parse(xhr.responseText);
-        const { error } = res;
-        if (error) {
-            progress({ error: 'Error: ' + error });
+        if (xhr.status === 200) {
+            try {
+                const res = JSON.parse(xhr.responseText);
+                const { error } = res;
+                if (error) {
+                    progress({ error: 'Error: ' + error });
+                    return;
+                }
+
+                const { url } = res;
+                progress({ url });
+            } catch (e) {
+                progress({ error: 'Error: response not JSON' });
+                return;
+            }
+        } else {
+            progress({ error: `Error: ${xhr.status}: ${xhr.statusText}` });
             return;
         }
-        const { url } = res;
-        progress({ url });
     };
     xhr.onerror = function(error) {
         console.error(filename, error);

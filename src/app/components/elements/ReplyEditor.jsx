@@ -325,7 +325,7 @@ class ReplyEditor extends React.Component {
         // Insert the temporary tag where the cursor currently is
         body.props.onChange(
             body.value.substring(0, selectionStart) +
-                `![Uploading image #${imagesUploadCount}...]()` +
+                `\n![Uploading image #${imagesUploadCount}...]()\n` +
                 body.value.substring(selectionStart, body.value.length)
         );
 
@@ -337,7 +337,6 @@ class ReplyEditor extends React.Component {
             const { body } = this.state;
 
             if (progress.url) {
-                console.log('Upload successful');
                 this.setState({ progress: {} });
                 const { url } = progress;
                 const image_md = `![${name}](${url})`;
@@ -351,15 +350,18 @@ class ReplyEditor extends React.Component {
                 );
             } else {
                 this.setState({ progress });
-                console.log('Upload failed', progress);
+                const { error, message } = progress;
+                if (error) {
+                    console.log('Image upload failed', progress);
 
-                // Remove temporary image MD tag
-                body.props.onChange(
-                    body.value.replace(
-                        `![Uploading image #${imagesUploadCount}...]()`,
-                        ''
-                    )
-                );
+                    // Remove temporary image MD tag
+                    body.props.onChange(
+                        body.value.replace(
+                            `![Uploading image #${imagesUploadCount}...]()`,
+                            ''
+                        )
+                    );
+                }
             }
             setTimeout(() => {
                 this.setState({ progress: {} });

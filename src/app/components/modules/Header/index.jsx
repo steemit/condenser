@@ -119,6 +119,7 @@ class Header extends React.Component {
             navigate,
             display_name,
             content,
+            walletUrl,
         } = this.props;
 
         let { showAd, showAnnouncement } = this.state;
@@ -193,6 +194,11 @@ class Header extends React.Component {
                     username: user_title,
                 });
             }
+            if (route.params[1] === 'posts') {
+                page_title = tt('header_jsx.posts_by', {
+                    username: user_title,
+                });
+            }
             if (route.params[1] === 'comments') {
                 page_title = tt('header_jsx.comments_by', {
                     username: user_title,
@@ -246,12 +252,14 @@ class Header extends React.Component {
         const comments_link = `/@${username}/comments`;
         const settings_link = `/@${username}/settings`;
         const notifs_link = `/@${username}/notifications`;
+        const wallet_link = `${walletUrl}/@${username}`;
 
         const user_menu = [
             { link: account_link, icon: 'profile', value: tt('g.blog') },
-            { link: comments_link, icon: 'replies', value: tt('g.posts') },
+            //{ link: comments_link, icon: 'replies', value: tt('g.posts') },
             { link: replies_link, icon: 'reply', value: tt('g.replies') },
             { link: notifs_link, icon: 'clock', value: tt('g.notifications') },
+            { link: wallet_link, icon: 'wallet', value: tt('g.wallet') },
             {
                 link: '#',
                 icon: 'eye',
@@ -411,6 +419,7 @@ const mapStateToProps = (state, ownProps) => {
         display_name,
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
+        walletUrl: state.app.get('walletUrl'),
         gptEnabled,
         content,
         ...ownProps,

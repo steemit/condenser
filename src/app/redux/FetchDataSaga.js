@@ -241,6 +241,7 @@ export function* getAccountNotifications(action) {
 }
 
 export function* fetchData(action) {
+    // TODO: postFilter unused
     const { order, author, permlink, postFilter, observer } = action.payload;
     let { category } = action.payload;
     if (!category) category = '';

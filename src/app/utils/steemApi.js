@@ -133,7 +133,14 @@ function parsePath(url) {
         'payout_comments',
         'muted',
     ];
-    const acct_tabs = ['blog', 'feed', 'comments', 'recent-replies', 'payout'];
+    const acct_tabs = [
+        'blog',
+        'feed',
+        'posts',
+        'comments',
+        'recent-replies',
+        'payout',
+    ];
 
     let page = null;
     let tag = null;
@@ -161,7 +168,7 @@ function parsePath(url) {
             page = 'account';
             sort = part[1] == 'recent-replies' ? 'replies' : part[1];
         } else {
-            // settings, followers, etc (no-op)
+            // settings, followers, notifications, etc (no-op)
         }
         tag = part[0];
     } else {

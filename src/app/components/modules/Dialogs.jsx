@@ -10,7 +10,7 @@ import QrReader from 'app/components/elements/QrReader';
 import CheckLoginOwner from 'app/components/elements/CheckLoginOwner';
 import PromotePost from 'app/components/modules/PromotePost';
 import ExplorePost from 'app/components/modules/ExplorePost';
-import { CommunitySubscriberList } from './CommunitySubscriberList';
+import CommunitySubscriberList from './CommunitySubscriberList';
 
 class Dialogs extends React.Component {
     static propTypes = {

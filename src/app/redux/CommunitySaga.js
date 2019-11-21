@@ -13,9 +13,15 @@ export const communityWatches = [
 export function* getCommunityRoles(action) {
     const community = action.payload;
     yield put(reducer.getCommunityRolesPending({ community, pending: true }));
-    const roles = yield call(callBridge, 'list_community_roles', { community });
-    yield call(getCommunity, action);
-    yield put(reducer.setCommunityRoles({ community, roles }));
+    try {
+        const roles = yield call(callBridge, 'list_community_roles', {
+            community,
+        });
+        yield call(getCommunity, action);
+        yield put(reducer.setCommunityRoles({ community, roles }));
+    } catch (error) {
+        yield put(reducer.getCommunityRolesError({ community, error }));
+    }
     yield put(reducer.getCommunityRolesPending({ community, pending: false }));
 }
 

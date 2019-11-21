@@ -3,6 +3,7 @@ import { fromJS, Map, List } from 'immutable';
 const GET_COMMUNITY_ROLES = 'community/GET_COMMUNITY_ROLES';
 const GET_COMMUNITY_ROLES_PENDING = 'community/GET_COMMUNITY_ROLES_PENDING';
 const SET_COMMUNITY_ROLES = 'community/SET_COMMUNITY_ROLES';
+const GET_COMMUNITY_ROLES_ERROR = 'community/GET_COMMUNITY_ROLES_ERROR';
 
 const GET_COMMUNITY_SUBSCRIBERS = 'community/GET_COMMUNITY_SUBSCRIBERS';
 const GET_COMMUNITY_SUBSCRIBERS_PENDING =
@@ -100,6 +101,11 @@ export const getCommunityRoles = payload => ({
 */
 export const getCommunityRolesPending = payload => ({
     type: GET_COMMUNITY_ROLES_PENDING,
+    payload,
+});
+
+export const getCommunityRolesError = payload => ({
+    type: GET_COMMUNITY_ROLES_ERROR,
     payload,
 });
 

@@ -24,12 +24,10 @@ class CommunityPane extends Component {
         community: PropTypes.object.isRequired,
         showRecentSubscribers: PropTypes.func.isRequired,
     };
-    debugger;
 
     render() {
         const { community, showRecentSubscribers } = this.props;
         const handleSubscriberClick = () => {
-            debugger;
             showRecentSubscribers(community);
         };
 

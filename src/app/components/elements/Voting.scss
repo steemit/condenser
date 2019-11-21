@@ -197,9 +197,14 @@
   fill: $color-red;
 }
 
-.Voting .DropdownMenu ul {
+
+.Voting .DropdownMenu.Voting__voters_list {
+    /* reserve enough space for dropdown (otherwise overflow) */
+    min-width: 140px;
+}
+.Voting .DropdownMenu.Voting__voters_list ul {
   width: auto;
-  min-width: 260px;
+  min-width: 140px;
   max-width: 360px;
 
   li > a {
@@ -208,23 +213,13 @@
   }
 
   li > span {
-    padding: 0 0.5rem;
     line-height: 1.25;
-  }
-}
-
-.DropdownMenu.Voting__voters_list ul {
-  li > a {
-    //font-weight: 200;
-  }
-
-  li > span {
     padding: 0.25rem 0.5rem;
     font-size: 82.5%;
     display: block;
     @include themify($themes) {
-      color: themed('textColorSecondary');  
-    }  
+      color: themed('textColorSecondary');
+    }
   }
 }
 

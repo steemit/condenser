@@ -78,21 +78,6 @@ class PostSummary extends React.Component {
             );
         }
 
-        // 'account' is the current blog being viewed, if applicable.
-        const { account } = this.props;
-        if (account && account != content.get('author')) {
-            reblogged_by = (
-                <div className="articles__resteem">
-                    <p className="articles__resteem-text">
-                        <span className="articles__resteem-icon">
-                            <Icon name="reblog" />
-                        </span>
-                        {tt('postsummary_jsx.resteemed')}
-                    </p>
-                </div>
-            );
-        }
-
         const gray = content.getIn(['stats', 'gray']);
         const isNsfw = hasNsfwTag(content);
         const isReply = content.get('depth') > 0;

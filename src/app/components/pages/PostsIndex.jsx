@@ -81,15 +81,17 @@ class PostsIndex extends React.Component {
     loadMore(last_post) {
         if (!last_post) return;
         if (last_post == this.props.pending) return; // if last post is 'pending', its an invalid start token
-        const { category, order, status } = this.props;
-        if (isFetchingOrRecentlyUpdated(status, order, category || '')) return;
+        const { username, status, order, category } = this.props;
+
+        if (isFetchingOrRecentlyUpdated(status, order, category)) return;
+
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
             author,
             permlink,
             order,
             category,
-            observer: this.props.username,
+            observer: username,
         });
     }
 

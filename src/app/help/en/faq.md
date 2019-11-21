@@ -121,7 +121,6 @@
 - <a href="#What_are_the_valid_reasons_for_downvoting">What are the valid reasons for downvoting?</a>
 - <a href="#Does_a_downvote_mean_that_I_did_something_wrong">Does a downvote mean that I did something wrong?</a>
 - <a href="#Will_a_downvote_hurt_my_reputation">Will a downvote hurt my reputation?</a>
-- <a href="#What_is_the_difference_between_a_downvote_and_a_flag">What is the difference between a downvote and a flag?</a>
 
 ### <span id="Table_of_Contents_Plagiarism__Spam__and_Abuse">Plagiarism, Spam, and Abuse</span>
 - <a href="#What_is_considered_spam_or_abuse">What is considered spam or abuse?</a>
@@ -205,7 +204,7 @@ Steemit has redefined social media by building a living, breathing, and growing 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="How_does_Steemit_work">How does Steemit work?</span>
 
-Steemit.com is one of the many websites (including [Busy.org](https://busy.org/), [DTube](https://d.tube/), and [Utopian.io](https://utopian.io/)) that are powered by the Steem blockchain and STEEM cryptocurrency. All of these websites read and write content to the Steem blockchain, which stores the content in an immutable blockchain ledger, and rewards users for their contributions with digital tokens called STEEM.
+Steemit.com is one of the many websites (including [Busy.org](https://busy.org/), [DTube](https://d.tube/), and [SteemPeak.com](https://steempeak.com/)) that are powered by the Steem blockchain and STEEM cryptocurrency. All of these websites read and write content to the Steem blockchain, which stores the content in an immutable blockchain ledger, and rewards users for their contributions with digital tokens called STEEM.
 
 Every day, the Steem blockchain mints new STEEM tokens and adds them to a community's "rewards pool". These tokens are then awarded to users for their contributions, based on the votes that their content receives. Users who hold more tokens in their account as "Steem Power" will get to decide where a larger portion of the rewards pool is distributed.
 
@@ -274,7 +273,7 @@ A Smart Media Token (SMT) is a native digital asset on the Steem blockchain that
 
 They're like Ethereum's ERC-20 tokens, but with certain built-in ‘Proof-of-Brain’ properties and a token distribution reward system designed specifically for digital content businesses.
 
-SMTs are planned to be launched in 2019!
+SMTs are planned to be launched in 2020!
 
 More information can be found on the SMTs website: [smt.steem.io](https://smt.steem.io/).
 
@@ -405,9 +404,9 @@ You can get to your account menu by clicking on the avatar icon in the top-right
 
 **Replies** - Here is where you go to see all replies other users have made to your posts and comments.
 
-**Wallet** - Here is where you go to see your wallet balances, make transfers, exchange STEEM or Steem Dollars, and Power Up.
+**Toggle Night Mode** - This will toggle the steemit.com website views between "night" and "day" mode themes.
 
-**Change Password** - Here is where you go to change your password.
+**Wallet** - This will take you to [steemitwallet.com](https://steemitwallet.com), where you go to see your wallet balances, make transfers, exchange STEEM or Steem Dollars, manage your account, and Power Up.
 
 **Settings** - Here is where you go to update your settings.
 
@@ -416,18 +415,18 @@ You can get to your account menu by clicking on the avatar icon in the top-right
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="How_do_I_see_my_recent_rewards">How do I see my recent rewards?</span>
 
-The Rewards drop-down menu is available on your profile/blog page. Click it and there are two links:
+The Rewards drop-down menu is available on [steemitwallet.com](https://steemitwallet.com). Click it and there are two links:
 
 **Curation rewards** - Shows the rewards earned for upvoting posts and comments.
 
 **Author rewards** - Shows the rewards earned by your own posts and comments.
 
-You can also view the same information for other users by visiting their profile.
+You can also view the same information for other users by visiting their wallet profile.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_information_is_shown_in_my_wallet">What information is shown in my wallet?</span>
 
-Your wallet shows how many STEEM and Steem Dollar tokens you have in your account. It shows how much Steem Power it has, and how much SP is delegated. It also shows how many of your STEEM and Steem Dollar tokens are being held in the savings account, which is a balance that is subject to 3 day withdraw waiting period. The wallet page shows any the progress of any Steem Dollar to STEEM conversions as well as the status of a power down. It also shows an estimated value of all the tokens in your account, based on the recent market price of STEEM.
+Your [steemitwallet.com](https://steemitwallet.com) wallet shows how many STEEM and Steem Dollar tokens you have in your account. It shows how much Steem Power it has, and how much SP is delegated. It also shows how many of your STEEM and Steem Dollar tokens are being held in the savings account, which is a balance that is subject to 3 day withdraw waiting period. The wallet page shows any the progress of any Steem Dollar to STEEM conversions as well as the status of a power down. It also shows an estimated value of all the tokens in your account, based on the recent market price of STEEM.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings">How do I transfer my STEEM or Steem Dollars into savings?</span>
@@ -448,25 +447,21 @@ Your savings balance is STEEM and SBD tokens that are subject to 3 day withdraw 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="Will_I_receive_notifications_when_there_is_activity_with_my_account">Will I receive notifications when there is activity with my account?</span>
 
-When there is new activity in your feed, you receive a reply from another user, or there is a new transfer in your wallet, you will receive a notification in your account menu. It will show a little red number showing the number of new notifications.
-
-Steemit also allows you to subscribe to receive additional notifications when users mention you in a comment or post.
-
-Currently, there are no options to receive notifications for votes directly on steemit.com. But, there is a third-party application https://steemstats.com/, developed by @jesta, which has an option to set up additional notifications on your computer.
+Notifications are currently not supported, but they are a feature we are planning to add.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_is_shown_in_my_profile">What is shown in my profile?</span>
 
 At the top of your profile is your display name and reputation score. Below your display name is the number of followers you have, the number of posts and comments you have written, and the number of people you are following. It also shows the month and year when your account was created.
 
-You have the option to change your avatar and display name on the Settings page. There, you can set additional information such as "about" information, your location, and add a link to a website of your choosing. You also have the option to set a cover image for your profile.
+You have the option to change your avatar and display name on the [steemitwallet.com](https://steemitwallet.com) Settings page. There, you can set additional information such as "about" information, your location, and add a link to a website of your choosing. You also have the option to set a cover image for your profile.
 
 You can view your own profile by clicking on the link to your Blog in your account menu.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="How_do_I_change_my_avatar_image_and_other_profile_information">How do I change my avatar image and other profile information?</span>
 
-Your profile info, avatar image, and cover image are set in your Settings page. In order to update your avatar picture and cover image, you will need to host the images somewhere. This can be done by uploading it to a Steemit comment or post, or using a third-party image hosting site such as <a href="http://postimage.io/">Postimage</a>.  Once your image is uploaded, copy its URL and paste it into the "Profile Picture URL" box for the avatar, or the "Cover Image URL" box for the cover image. Then click the Update button and enter your password or active key.
+Your profile info, avatar image, and cover image are set in your [steemitwallet.com](https://steemitwallet.com) Settings page. In order to update your avatar picture and cover image, you will need to host the images somewhere. This can be done by uploading it via the wallet GUI, or using a third-party image hosting site such as <a href="http://postimage.io/">Postimage</a>.  Once your image is uploaded, copy its URL and paste it into the "Profile Picture URL" box for the avatar, or the "Cover Image URL" box for the cover image. Then click the Update button and enter your password or active key.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_is_the_recommend_size_for_the_cover_image">What is the recommend size for the cover image?</span>
@@ -571,7 +566,7 @@ All tags must be lowercase letters. Spaces aren't allowed, but hyphenated words 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="How_many_tags_can_I_use">How many tags can I use?</span>
 
-You can use up to 5 tags per post.
+You can use up to 8 tags per post.
 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="Why_is_the_Post_button_grayed_out">Why is the "Post" button grayed out?</span>
@@ -673,8 +668,9 @@ Starting with the network's 16th hard fork in December 2016, Steem began creatin
 ## <span id="How_are_the_new_tokens_distributed">How are the new tokens distributed?</span>
 
 Out of the new tokens that are generated:
-- 75% go to the reward pool, which is split between authors and curators.
+- 65% go to the reward pool, which is split between authors and curators.
 - 15% of the new tokens are awarded to holders of Steem Power.
+- 10% of the new tokens are awarded to the Steem Proposal System.
 - The remaining 10% pays for the witnesses to power the blockchain.
 
 <a href="#Table_of_Contents_Economics">^</a>
@@ -708,9 +704,9 @@ Every day, a fixed amount of STEEM tokens are allocated to the network reward fu
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_is_the_reward_pool_split_between_authors_and_curators">How is the reward pool split between authors and curators?</span>
 
-Up to 25% of a post's payout is awarded to curators (the people who upvoted the post) as a reward for discovering the content. The other 75% is awarded to the author.
+Up to 50% of a post's payout is awarded to curators (the people who upvoted the post) as a reward for discovering the content. The other 50% is awarded to the author.
 
-If curators vote for a post within the first 15 minutes of it being created, a portion of their curation reward remains in the rewards pool for other authors/curators. This portion is linear to the age of the post between 0 and 15 minutes. As an example: upvoting at ten minutes will donate 1/3 of your potential curation reward back to the rewards pool.
+If curators vote for a post within the first 5 minutes of it being created, a portion of their curation reward remains in the rewards pool for other authors/curators. This portion is linear to the age of the post between 0 and 5 minutes. As an example: upvoting at two minutes will donate 60% of your potential curation reward back to the rewards pool.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Will_the_reward_pool_pay_out_more_or_less_depending_on_who_votes">Will the reward pool pay out more or less depending on who votes?</span>
@@ -898,6 +894,8 @@ As you use more of your voting mana, your votes will carry less influence. A vot
 
 Every 100% vote you cast will use 2% of your remaining voting mana. Your voting mana will recharge by 20% each day. You can vote more than 10 times per day, but each vote will be worth less, and it will take longer to reach full voting mana again.
 
+Each user also has a mana pool specifically for down votes. This pool is 25% of the upvote mana pool. Downvotes will consume this mana first before consuming regular mana. When voting, 1/50th of the remaining mana is used for a 100% vote. The same math is used for downvote mana but multiplied by 4 because the downvote mana pool is 25% the size of the normal mana pool. The maximum of these values is used. When both mana pools are at 100%, the values are the same. When downvote mana runs out normal mana is used in the same manner as the current behavior.
+
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Can_I_vote_with_less_than_100__of_my_voting_strength">Can I vote with less than 100% of my voting strength?</span>
 
@@ -907,8 +905,6 @@ Once you reach about 500 Steem Power, you will see a vote slider appear when you
 
 <img src="https://steemitimages.com/DQmV6c21tzSrgXwPHx4tvuc1UiCXBEvzkLBH9QCZHtVN6Ma/image.png">
 
-Upvotes and downvotes use the same amount of voting mana.
-
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Where_can_I_check_my_voting_mana">Where can I check my voting mana?</span>
 
@@ -917,15 +913,16 @@ You can view your current voting mana using third party tools such as https://st
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">What determines how much of the curation reward goes to the author versus curators?</span>
 
-The rewards are allocated so that 75% of the payout goes to the author of the post/comment, and 25% goes to the curator.
+The rewards are allocated so that 50% of the payout goes to the author of the post/comment, and 50% goes to the curator.
 
-Of the 25% that goes to the curator, the curator will receive less than 100% if the curator votes within the first 15 minutes. The split of the 25% that the curator receives during the first 15 minutes is calculated linearly based on the time the vote is cast.
+Of the 50% that goes to the curator, the curator will receive less than 100% if the curator votes within the first 5 minutes. The split of the 50% that the curator receives during the first 5 minutes is calculated linearly based on the time the vote is cast.
 
 - If a post is upvoted the moment of posting, 100% of the curation reward will remain in the rewards pool.
-- At 1.5 minutes, the curator receives 10%, and 90% remains in the rewards pool.
-- At 7.5 minutes, the curator receives 50%, and 50% remains in the rewards pool.
-- At 13.5 minutes, the curator receives 90%, and 10% remains in the rewards pool.
-- If a post is upvoted 15 minutes (or later) after posting, 100% of the curation reward goes to the curator.
+- At 1 minute, the curator receives 20%, and 80% remains in the rewards pool.
+- At 2 minutes, the curator receives 40%, and 60% remains in the rewards pool.
+- At 3 minutes, the curator receives 60%, and 40% remains in the rewards pool.
+- At 4 minutes, the curator receives 80%, and 20% remains in the rewards pool.
+- If a post is upvoted 5 minutes (or later) after posting, 100% of the curation reward goes to the curator.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Can_I_get_curation_rewards_for_upvoting_comments">Can I get curation rewards for upvoting comments?</span>
@@ -970,11 +967,6 @@ Just because you received a downvote does not mean that you did something wrong.
 ## <span id="Will_a_downvote_hurt_my_reputation">Will a downvote hurt my reputation?</span>
 
 Not necessarily. See: <a href="#What_causes_my_reputation_score_to_go_down">What causes my reputation score to go down?</a>
-
-<a href="#Table_of_Contents_Voting_and_Curating">^</a>
-## <span id="What_is_the_difference_between_a_downvote_and_a_flag">What is the difference between a downvote and a flag?</span>
-
-With the current implementation, there is no difference between a downvote and a flag. They are treated the same at the blockchain level.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 # Plagiarism, Spam, and Abuse
@@ -1177,8 +1169,8 @@ Though not considered an investment, you can purchase STEEM tokens which can go 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 ## <span id="What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</span>
 
-You can view the 2017 Roadmap here:
-https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
+You can view the latest Roadmap here:
+https://steemitwallet.com/about.html
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 ## <span id="Am_I_allowed_to_use_the_Steem_and_Steemit_logos">Am I allowed to use the Steem and Steemit logos?</span>

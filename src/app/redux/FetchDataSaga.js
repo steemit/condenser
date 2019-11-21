@@ -48,25 +48,26 @@ export function* fetchState(location_change_action) {
         state.offchain.get('server_location')
     );
     const ignore_fetch = pathname === server_location && is_initial_state;
-    is_initial_state = false;
+
     if (ignore_fetch) {
         return;
     }
-
-    let url = `${pathname}`;
-    if (url === '/') url = 'trending';
-    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
-    // to resolve data correctly
-    if (url.indexOf('/curation-rewards') !== -1)
-        url = url.replace('/curation-rewards', '/transfers');
-    if (url.indexOf('/author-rewards') !== -1)
-        url = url.replace('/author-rewards', '/transfers');
+    is_initial_state = false;
+    if (
+        process.env.BROWSER &&
+        window &&
+        window.optimize &&
+        window.optimize.isInitialized
+    ) {
+        window.optimize.refreshAll({ refresh: false });
+    }
+    const url = pathname;
 
     yield put(appActions.fetchDataBegin());
     try {
         const state = yield call(getStateAsync, url);
         yield put(globalActions.receiveState(state));
-        yield call(syncPinnedPosts);
+        yield call(syncSpecialPosts);
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put(appActions.steemApiError(error.message));
@@ -75,31 +76,51 @@ export function* fetchState(location_change_action) {
     yield put(appActions.fetchDataEnd());
 }
 
-function* syncPinnedPosts() {
+function* syncSpecialPosts() {
     // Bail if we're rendering serverside since there is no localStorage
     if (!process.env.BROWSER) return null;
 
-    // Get pinned posts from the store.
-    const pinnedPosts = yield select(state =>
-        state.offchain.get('pinned_posts')
+    // Get special posts from the store.
+    const specialPosts = yield select(state =>
+        state.offchain.get('special_posts')
     );
 
-    // Mark seen posts.
-    const seenPinnedPosts = pinnedPosts.get('pinned_posts').map(post => {
+    // Mark seen featured posts.
+    const seenFeaturedPosts = specialPosts.get('featured_posts').map(post => {
         const id = `${post.get('author')}/${post.get('permlink')}`;
         return post.set(
             'seen',
-            localStorage.getItem(`pinned-post-seen:${id}`) === 'true'
+            localStorage.getItem(`featured-post-seen:${id}`) === 'true'
+        );
+    });
+
+    // Mark seen promoted posts.
+    const seenPromotedPosts = specialPosts.get('promoted_posts').map(post => {
+        const id = `${post.get('author')}/${post.get('permlink')}`;
+        return post.set(
+            'seen',
+            localStorage.getItem(`promoted-post-seen:${id}`) === 'true'
         );
     });
 
     // Look up seen post URLs.
-    yield put(globalActions.syncPinnedPosts({ pinnedPosts: seenPinnedPosts }));
+    yield put(
+        globalActions.syncSpecialPosts({
+            featuredPosts: seenFeaturedPosts,
+            promotedPosts: seenPromotedPosts,
+        })
+    );
 
-    // Mark all pinned posts as seen.
-    pinnedPosts.get('pinned_posts').forEach(post => {
+    // Mark all featured posts as seen.
+    specialPosts.get('featured_posts').forEach(post => {
         const id = `${post.get('author')}/${post.get('permlink')}`;
-        localStorage.setItem(`pinned-post-seen:${id}`, 'true');
+        localStorage.setItem(`featured-post-seen:${id}`, 'true');
+    });
+
+    // Mark all promoted posts as seen.
+    specialPosts.get('promoted_posts').forEach(post => {
+        const id = `${post.get('author')}/${post.get('permlink')}`;
+        localStorage.setItem(`promoted-post-seen:${id}`, 'true');
     });
 }
 
@@ -273,53 +294,6 @@ export function* fetchData(action) {
         yield put(appActions.steemApiError(error.message));
     }
     yield put(appActions.fetchDataEnd());
-}
-
-// export function* watchMetaRequests() {
-//     yield* takeLatest('global/REQUEST_META', fetchMeta);
-// }
-export function* fetchMeta({ payload: { id, link } }) {
-    try {
-        const metaArray = yield call(
-            () =>
-                new Promise((resolve, reject) => {
-                    function reqListener() {
-                        const resp = JSON.parse(this.responseText);
-                        if (resp.error) {
-                            reject(resp.error);
-                            return;
-                        }
-                        resolve(resp);
-                    }
-                    const oReq = new XMLHttpRequest();
-                    oReq.addEventListener('load', reqListener);
-                    oReq.open('GET', '/http_metadata/' + link);
-                    oReq.send();
-                })
-        );
-        const { title, metaTags } = metaArray;
-        let meta = { title };
-        for (let i = 0; i < metaTags.length; i++) {
-            const [name, content] = metaTags[i];
-            meta[name] = content;
-        }
-        // http://postimg.org/image/kbefrpbe9/
-        meta = {
-            link,
-            card: meta['twitter:card'],
-            site: meta['twitter:site'], // @username tribbute
-            title: meta['twitter:title'],
-            description: meta['twitter:description'],
-            image: meta['twitter:image'],
-            alt: meta['twitter:alt'],
-        };
-        if (!meta.image) {
-            meta.image = meta['twitter:image:src'];
-        }
-        yield put(globalActions.receiveMeta({ id, meta }));
-    } catch (error) {
-        yield put(globalActions.receiveMeta({ id, meta: { error } }));
-    }
 }
 
 /**

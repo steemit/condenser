@@ -47,15 +47,11 @@ class Settings extends React.Component {
 
         const {
             walletUrl,
-            follow,
+            ignores,
             account,
             isOwnAccount,
             user_preferences,
         } = this.props;
-        const following =
-            follow && follow.getIn(['getFollowingAsync', account.name]);
-        const ignores =
-            isOwnAccount && following && following.get('ignore_result');
 
         return (
             <div className="Settings">
@@ -181,7 +177,6 @@ class Settings extends React.Component {
                                 <br />
                                 <UserList
                                     title={tt('settings_jsx.muted_users')}
-                                    account={account}
                                     users={ignores}
                                 />
                             </div>
@@ -195,12 +190,23 @@ class Settings extends React.Component {
 export default connect(
     (state, ownProps) => {
         const { accountname } = ownProps.routeParams;
+
+        const isOwnAccount =
+            state.user.getIn(['current', 'username'], '') == accountname;
+        const ignores =
+            isOwnAccount &&
+            state.global.getIn([
+                'follow',
+                'getFollowingAsync',
+                accountname,
+                'ignore_result',
+            ]);
+
         return {
             accountname,
+            isOwnAccount,
+            ignores,
             account: state.global.getIn(['accounts', accountname]).toJS(),
-            isOwnAccount:
-                state.user.getIn(['current', 'username'], '') == accountname,
-            follow: state.global.get('follow'),
             user_preferences: state.app.get('user_preferences').toJS(),
             walletUrl: state.app.get('walletUrl'),
             ...ownProps,

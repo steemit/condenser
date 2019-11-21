@@ -7,6 +7,7 @@
         "ask": "Demande",
         "balance": "Solde",
         "balances": "Soldes",
+        "beneficiaries": "Beneficiaries",
         "bid": "Offre",
         "blog": "Blog",
         "browse": "Naviguer",
@@ -306,7 +307,20 @@
         "or_by": "ou par",
         "title": "Titre",
         "update_post": "Mettre l'article à jour",
-        "markdown_not_supported": "Le format Markdown n'est pas supporté ici"
+        "markdown_not_supported": "Le format Markdown n'est pas supporté ici",
+        "advanced_settings": "Advanced settings",
+        "beneficiaries_set": "%(count)s set"
+    },
+    "beneficiary_selector_jsx": {
+        "header": "Who should receive any rewards?",
+        "add": "Add account",
+        "exceeds_max_beneficiaries": "Can have at most 8 beneficiaries",
+        "beneficiary_cannot_be_self": "Cannot specify self as beneficiary",
+        "beneficiary_cannot_be_duplicate": "Beneficiary cannot be duplicate",
+        "beneficiary_percent_invalid":
+            "Beneficiary percentage must be from 1-100",
+        "beneficiary_percent_total_invalid":
+            "Beneficiary total percentage must be less than 100"
     },
     "category_selector_jsx": {
         "tag_your_story":
@@ -589,7 +603,9 @@
         "signup_button": "Sign up now to earn ",
         "signup_button_emphasis": "FREE STEEM!",
         "returning_users": "Utilisateurs de retour: ",
-        "join_our": "Rejoignez notre"
+        "join_our": "Rejoignez notre",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "Le nom du compte doit ",

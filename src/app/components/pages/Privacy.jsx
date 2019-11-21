@@ -6,7 +6,7 @@ class Privacy extends React.Component {
             <div className="Privacy row">
                 <div className="column large-12">
                     <h1>Steemit, Inc Privacy Policy</h1>
-                    <h2>Effective: May 25, 2018</h2>
+                    <h2>Effective: Oct 7, 2019</h2>
                     <p className="c0">
                         <span className="c1" />
                     </p>
@@ -180,6 +180,11 @@ class Privacy extends React.Component {
                                 For compliance, fraud prevention, and safety
                             </span>
                         </li>
+                        <li className="c2 c9">
+                            <span className="c1">
+                                Communications
+                            </span>
+                        </li>
                     </ul>
                     <p className="c0">
                         <span className="c1" />
@@ -189,6 +194,15 @@ class Privacy extends React.Component {
                             We may use your personal information to protect,
                             investigate, and deter against fraudulent,
                             unauthorized, or illegal activity.
+                        </span>
+                    </p>
+                    <p className="c2">
+                        <span className="c1">
+                            We may use your personal information to contact you with newsletters,
+                            marketing or promotional materials and other information that may be of interest to you.
+                            You may opt out of receiving any, or all,
+                            of these communications from us by following the unsubscribe or
+                            instructions provided in any email send.
                         </span>
                     </p>
                     <p className="c0">
@@ -1004,195 +1018,6 @@ class Privacy extends React.Component {
                             Subjects&rdquo;, including the right to inspect and
                             correct or delete the data that we have about you.
                         </span>
-                    </p>
-                    <p className="c0">
-                        <span className="c1" />
-                    </p>
-                    <p className="c0">
-                        <span className="c1" />
-                    </p>
-                    <a id="t.ca7358478ca487b30407b112aa1b3080e68b51bc" />
-                    <a id="t.0" />
-                    <table className="c22">
-                        <tbody>
-                            <tr className="c17">
-                                <td className="c19" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c10">
-                                            Name of Cookie/Identifier
-                                        </span>
-                                    </p>
-                                </td>
-                                <td className="c11" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c10">
-                                            What does the cookie generally do
-                                            (e.g., website function and
-                                            administration, analytics,
-                                            marketing)?
-                                        </span>
-                                    </p>
-                                </td>
-                                <td className="c7" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c10">
-                                            Is it a 1st or 3rd party cookie and
-                                            what is the name of the party
-                                            providing it?
-                                        </span>
-                                    </p>
-                                </td>
-                                <td className="c3" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c10">
-                                            What type of cookie is it
-                                            (persistent or session)?
-                                        </span>
-                                    </p>
-                                </td>
-                                <td className="c18" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c10">
-                                            What is the duration of the cookie
-                                            on the website (if not cleared by
-                                            the user)?
-                                        </span>
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr className="c15">
-                                <td className="c19" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">_ga</span>
-                                    </p>
-                                </td>
-                                <td className="c11" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">
-                                            Google Analytics
-                                        </span>
-                                    </p>
-                                </td>
-                                <td className="c7" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">
-                                            Third-party; Google
-                                        </span>
-                                    </p>
-                                </td>
-                                <td className="c3" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">Persistent</span>
-                                    </p>
-                                </td>
-                                <td className="c18" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">2 years</span>
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr className="c25">
-                                <td className="c19" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">AWSALB</span>
-                                    </p>
-                                </td>
-                                <td className="c11" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">
-                                            Website function
-                                        </span>
-                                    </p>
-                                </td>
-                                <td className="c7" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">
-                                            Third-party; Amazon
-                                        </span>
-                                    </p>
-                                </td>
-                                <td className="c3" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">Persistent</span>
-                                    </p>
-                                </td>
-                                <td className="c18" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">1 week</span>
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr className="c24">
-                                <td className="c19" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">stm1.sig</span>
-                                    </p>
-                                </td>
-                                <td className="c11" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">
-                                            Website function
-                                        </span>
-                                    </p>
-                                </td>
-                                <td className="c7" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">First-party</span>
-                                    </p>
-                                </td>
-                                <td className="c3" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">Persistent</span>
-                                    </p>
-                                </td>
-                                <td className="c18" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">1 month</span>
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr className="c21">
-                                <td className="c19" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">stm1</span>
-                                    </p>
-                                </td>
-                                <td className="c11" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">
-                                            Website function
-                                        </span>
-                                    </p>
-                                </td>
-                                <td className="c7" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">First-party</span>
-                                    </p>
-                                </td>
-                                <td className="c3" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">Persistent</span>
-                                    </p>
-                                </td>
-                                <td className="c18" colSpan="1" rowSpan="1">
-                                    <p className="c2">
-                                        <span className="c4">1 month</span>
-                                    </p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p className="c0">
-                        <span className="c1" />
-                    </p>
-                    <p className="c0">
-                        <span className="c1" />
-                    </p>
-                    <p className="c0">
-                        <span className="c1" />
-                    </p>
-                    <p className="c0">
-                        <span className="c1" />
                     </p>
                 </div>
             </div>

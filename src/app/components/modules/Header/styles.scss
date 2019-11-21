@@ -142,11 +142,13 @@ span.Header__hamburger.toggle-menu {
 .annoucement-banner {
   text-align: left;
   position: relative;
-  background: #171FC9;
+  background: #171FC9; //Notice Blue
+  // background: #fff3cd;
   color: #fff;
+  // color: #856404;
   @include themify($themes) {
       border-bottom: themed('borderLight');
-  }  
+  }
   @include MQ(M) {
     text-align: center;
   }
@@ -159,18 +161,19 @@ span.Header__hamburger.toggle-menu {
     &:hover, &:focus {
       color: #ccc;
     }
-  }  
+  }
 }
 
 .announcement-banner__text {
     margin: 0;
     padding: 10px 44px 10px 10px;
-    font-family: helvetica, sans-serif;
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.3;
  }
 
 .announcement-banner__link {
    color: #fafafa !important;
+   // color: #856404 !important;;
    text-decoration: underline;
 }

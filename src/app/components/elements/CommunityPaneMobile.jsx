@@ -81,9 +81,9 @@ class CommunityPaneMobile extends Component {
                             className="column large-1 medium-2 small-4"
                             style={{ marginBottom: '8px' }}
                         >
-                            {community.get('num_pending')}
+                            {community.get('num_authors')}
                             <br />
-                            <small>active posts</small>
+                            <small>active users</small>
                         </div>
 
                         <div className="column large-4 medium-6 small-12">

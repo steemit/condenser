@@ -90,9 +90,9 @@ class CommunityPane extends Component {
                             <small>pending rewards</small>
                         </div>
                         <div className="column small-4">
-                            {community.get('num_pending')}
+                            {community.get('num_authors')}
                             <br />
-                            <small>active posts</small>
+                            <small>active users</small>
                         </div>
                     </div>
 

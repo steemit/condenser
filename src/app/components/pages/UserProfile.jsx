@@ -23,7 +23,6 @@ import UserProfileHeader from 'app/components/cards/UserProfileHeader';
 export default class UserProfile extends React.Component {
     constructor() {
         super();
-        this.state = { showResteem: true };
         this.loadMore = this.loadMore.bind(this);
     }
 
@@ -53,29 +52,17 @@ export default class UserProfile extends React.Component {
             np.blogmode !== this.props.blogmode ||
             np.posts !== this.props.posts ||
             np.profile !== this.props.profile ||
-            np.notifications !== this.props.notifications ||
-            ns.showResteem !== this.state.showResteem
+            np.notifications !== this.props.notifications
         );
     }
 
     loadMore(last_post) {
         if (!last_post) return;
-        const {
-            accountname,
-            username,
-            global_status,
-            order,
-            category,
-        } = this.props;
+        const { username, global_status, order, category } = this.props;
 
         if (isFetchingOrRecentlyUpdated(global_status, order, category)) {
             return;
         }
-
-        const postFilter =
-            order == 'blog' && !this.state.showResteem
-                ? value => value.author === accountname
-                : null;
 
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
@@ -83,20 +70,12 @@ export default class UserProfile extends React.Component {
             permlink,
             order,
             category,
-            postFilter,
             observer: username,
         });
     }
 
-    toggleShowResteem = e => {
-        e.preventDefault();
-        const newShowResteem = !this.state.showResteem;
-        this.setState({ showResteem: newShowResteem });
-    };
-
     render() {
         const {
-            state: { showResteem },
             props: {
                 username,
                 global_status,
@@ -237,6 +216,10 @@ export default class UserProfile extends React.Component {
                         }
                     );
                 }
+            } else if (section == 'posts') {
+                emptyText = tt('user_profile.user_hasnt_made_any_posts_yet', {
+                    name: aname,
+                });
             } else if (section == 'comments') {
                 emptyText = tt('user_profile.user_hasnt_made_any_posts_yet', {
                     name: aname,
@@ -261,31 +244,8 @@ export default class UserProfile extends React.Component {
                     loading={fetching}
                     loadMore={this.loadMore}
                     showPinned={false}
-                    showResteem={showResteem} // 'blog' only
                 />
             );
-
-            if (section === 'blog') {
-                tab_content = (
-                    <div>
-                        <a
-                            href="#"
-                            onClick={this.toggleShowResteem}
-                            style={{
-                                float: 'left',
-                                margin: '-1rem 0 0.5rem',
-                                fontSize: '0.9rem',
-                            }}
-                        >
-                            {showResteem
-                                ? tt('user_profile.hide_resteems')
-                                : tt('user_profile.show_all')}
-                        </a>
-                        <div style={{ clear: 'both' }} />
-                        {tab_content}
-                    </div>
-                );
-            }
         }
 
         // detect illegal users
@@ -296,8 +256,10 @@ export default class UserProfile extends React.Component {
         var page_title = '';
         if (section === 'blog') {
             page_title = isMyAccount ? tt('g.my_blog') : tt('g.blog');
-        } else if (section === 'comments') {
+        } else if (section === 'posts') {
             page_title = tt('g.posts');
+        } else if (section === 'comments') {
+            page_title = tt('g.comments');
         } else if (section === 'replies') {
             page_title = tt('g.replies');
         } else if (section === 'settings') {
@@ -357,7 +319,8 @@ export default class UserProfile extends React.Component {
                 <div className="columns small-9 medium-12 medium-expand">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
                         <li>{_tablink('', tt('g.blog'))}</li>
-                        <li>{_tablink('/comments', tt('g.posts'))}</li>
+                        <li>{_tablink('/posts', tt('g.posts'))}</li>
+                        <li>{_tablink('/comments', tt('g.comments'))}</li>
                         <li>{_tablink('/recent-replies', tt('g.replies'))}</li>
                         <li>{_tablink('/payout', tt('voting_jsx.payout'))}</li>
                         <li>
@@ -403,9 +366,13 @@ module.exports = {
             let { section } = ownProps.routeParams;
             if (!section) section = 'blog';
             if (section == 'recent-replies') section = 'replies';
-            const order = ['blog', 'comments', 'replies', 'payout'].includes(
-                section
-            )
+            const order = [
+                'blog',
+                'posts',
+                'comments',
+                'replies',
+                'payout',
+            ].includes(section)
                 ? section
                 : null;
 

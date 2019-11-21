@@ -7,6 +7,7 @@
         "ask": "Preguntar",
         "balance": "Saldo",
         "balances": "Saldos",
+        "beneficiaries": "Beneficiaries",
         "bid": "Oferta",
         "blog": "Blog",
         "browse": "Navegar",
@@ -296,7 +297,20 @@
         "or_by": "o por",
         "title": "Título",
         "update_post": "Actualizar Publicación",
-        "markdown_not_supported": "Markdown no soportado aquí"
+        "markdown_not_supported": "Markdown no soportado aquí",
+        "advanced_settings": "Advanced settings",
+        "beneficiaries_set": "%(count)s set"
+    },
+    "beneficiary_selector_jsx": {
+        "header": "Who should receive any rewards?",
+        "add": "Add account",
+        "exceeds_max_beneficiaries": "Can have at most 8 beneficiaries",
+        "beneficiary_cannot_be_self": "Cannot specify self as beneficiary",
+        "beneficiary_cannot_be_duplicate": "Beneficiary cannot be duplicate",
+        "beneficiary_percent_invalid":
+            "Beneficiary percentage must be from 1-100",
+        "beneficiary_percent_total_invalid":
+            "Beneficiary total percentage must be less than 100"
     },
     "category_selector_jsx": {
         "tag_your_story":
@@ -568,7 +582,9 @@
         "signup_button": "Crea una cuenta, comienza a ganar ",
         "signup_button_emphasis": "FREE STEEM!",
         "returning_users": "Inicia sesion",
-        "join_our": "Únete a nuestro"
+        "join_our": "Únete a nuestro",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "El nombre de la cuenta debería",

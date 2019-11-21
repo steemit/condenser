@@ -50,7 +50,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             csrf: ctx.csrf,
             new_visit: ctx.session.new_visit,
             config: $STM_Config,
-            pinned_posts: await ctx.app.pinnedPostsPromise,
+            special_posts: await ctx.app.specialPostsPromise,
             login_challenge,
         };
 
@@ -64,6 +64,11 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             gptBasicSlots: config.gpt_basic_slots,
             gptCategorySlots: config.gpt_category_slots,
             gptBiddingSlots: config.gpt_bidding_slots,
+            gptBannedTags: config.gpt_banned_tags,
+        };
+        const cookieConsent = {
+            enabled: !!config.cookie_consent_enabled,
+            api_key: config.cookie_consent_api_key,
         };
         // ... and that's the end of user-session-related SSR
         const initial_state = {
@@ -105,6 +110,8 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             gptEnabled: googleAds.gptEnabled,
             adClient: googleAds.client,
             gptBidding: googleAds.gptBidding,
+            shouldSeeCookieConsent: cookieConsent.enabled,
+            cookieConsentApiKey: cookieConsent.api_key,
         };
         ctx.status = statusCode;
         ctx.body =

@@ -30,8 +30,8 @@ describe('makeCanonicalLink', () => {
         ],
         [
             'handles apps that do exist',
-            { ...post_data, json_metadata: { app: 'busy/1.1.1' } },
-            'https://busy.org/@test/test-post',
+            { ...post_data, json_metadata: { app: 'steempeak/1.1.1' } },
+            'https://steempeak.com/testing/@test/test-post',
         ],
         [
             'handles posts from steemit',

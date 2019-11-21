@@ -8,7 +8,7 @@
   padding-bottom: 1rem;
   padding-top: 2rem;
   margin: 0 auto;
-  max-width: 50rem;
+  max-width: 54rem;
   @include themify($themes) {
       border-bottom: themed('border');
   }
@@ -221,8 +221,6 @@ input.share-box {
 @media screen and (max-width: 39.9375em) {
   .Post {
     width: 100%;
-    overflow-x: hidden;
-    overflow-y: visible;
   }
   .PostFull__footer > .column {
     -webkit-box-flex: 0;

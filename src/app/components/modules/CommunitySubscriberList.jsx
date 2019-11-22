@@ -3,12 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as communityActions from 'app/redux/CommunityReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
+import { Role } from 'app/utils/Community';
 import UserTitle from 'app/components/elements/UserTitle';
 import UserTitleEditor from 'app/components/modules/UserTitleEditor';
 
 class CommunitySubscriberList extends React.Component {
     static propTypes = {
-        community: PropTypes.string,
+        community: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
+        viewerRole: PropTypes.string.isRequired,
+        fetchSubscribers: PropTypes.func.isRequired,
+        saveTitle: PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -26,9 +31,8 @@ class CommunitySubscriberList extends React.Component {
         }
     }
 
-    onSave = newTitle => {
-        const community = this.props.community.name;
-
+    onSave = (newTitle, subscriberName) => {
+        const { community, loading, username, saveTitle } = this.props;
         /*
         //-- Simulate a "receiveState" action to feed new title into post state
         let newstate = { content: {}, simulation: true };
@@ -36,46 +40,32 @@ class CommunitySubscriberList extends React.Component {
         newstate['content'][content_key] = { author_title: newTitle };
         this.props.pushState(newstate);
         */
-
-        this.props.saveTitle(
-            this.props.username,
-            this.props.author,
-            community,
-            newTitle
-        );
+        debugger;
+        saveTitle(username, subscriberName, community, newTitle);
     };
 
     render() {
-        const { loading, subscribers, community } = this.props;
+        const { loading, subscribers, community, viewerRole } = this.props;
+
+        const isMod = Role.atLeast(viewerRole, 'mod');
         const subs = this.props.subscribers.map(s => {
             console.log('S is: ', s);
-            return (
+            const subscriberTitle = isMod ? (
                 <UserTitleEditor
                     title={s[2]}
                     username={s[0]}
                     community={community.title}
                     onSubmit={newTitle => {
-                        console.log('NEW TITLE', newTitle);
+                        this.onSave(newTitle, s[0]);
                         return;
                     }}
                     key={s[0]}
                 />
+            ) : (
+                <div>{s[0]}</div>
             );
+            return subscriberTitle;
         });
-        // Map over community Subscribers list
-        /*
-      return (
-                    <UserTitle
-                        username={username}
-                        community={community}
-                        author={author}
-                        permlink={permlink}
-                        role={role}
-                        title={title}
-                        hideEdit={this.props.hideEditor}
-                    />
-                    )
-                  */
         return (
             <div>
                 <div>Community Subscribers</div>
@@ -105,9 +95,15 @@ const ConnectedCommunitySubscriberList = connect(
                 'listSubscribersPending',
             ]);
         }
+
         return {
             subscribers,
             loading,
+            username: state.user.getIn(['current', 'username']),
+            viewerRole: state.community.getIn(
+                [ownProps.community.name, 'context', 'role'],
+                'guest'
+            ),
         };
     },
     // mapDispatchToProps

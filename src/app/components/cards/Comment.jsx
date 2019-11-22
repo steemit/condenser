@@ -348,7 +348,7 @@ class CommentImpl extends React.Component {
                             </div>
                             <Author post={post} showAffiliation />
                         </span>
-                        &nbsp; &middot; &nbsp;
+                        &nbsp;{/* &middot; &nbsp;*/}
                         <Link
                             to={commentUrl(comment, rootComment)}
                             className="PlainLink"

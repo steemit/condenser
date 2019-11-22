@@ -114,6 +114,12 @@ class Author extends React.Component {
             title,
         } = this.props;
 
+        const warn = blacklists && (
+            <span className="account_warn" title={blacklists.join(', ')}>
+                ({blacklists.length})
+            </span>
+        );
+
         const userTitle = (
             <span>
                 {community && (
@@ -132,14 +138,6 @@ class Author extends React.Component {
                         {tt('g.affiliation_' + AffiliationMap[author])}
                     </span>
                 ) : null}
-                {blacklists && (
-                    <span
-                        style={{ fontWeight: 'bold', color: 'red' }}
-                        title={blacklists.join(', ')}
-                    >
-                        ({blacklists.length})
-                    </span>
-                )}
             </span>
         );
 
@@ -155,6 +153,7 @@ class Author extends React.Component {
                         <Link to={'/@' + author}>{author}</Link>
                     </strong>{' '}
                     <Reputation value={authorRep} />
+                    {warn}
                     {userTitle}
                 </span>
             );
@@ -178,6 +177,7 @@ class Author extends React.Component {
                             <Icon name="dropdown-arrow" />
                         </Link>
                     </strong>
+                    {warn}
                     {userTitle}
                 </span>
                 <Overlay

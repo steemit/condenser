@@ -198,7 +198,7 @@
 }
 
 
-.Voting .DropdownMenu.Voting__voters_list {
+.PostFull .Voting .DropdownMenu.Voting__voters_list {
     /* reserve enough space for dropdown (otherwise overflow) */
     min-width: 140px;
 }
@@ -239,8 +239,8 @@
 
 .Voting__inner {
   @include themify($themes) {
-    border-right: themed('borderLight'); 
-  } 
+    border-right: themed('borderLight');
+  }
   padding-right: .8rem;
   margin-right: .6rem;
   .DropdownMenu .Icon.dropdown-arrow {

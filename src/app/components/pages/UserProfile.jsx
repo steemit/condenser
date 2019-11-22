@@ -204,7 +204,7 @@ export default class UserProfile extends React.Component {
             );
         }
 
-        const _url = tab => `/@${accountname}${tab != 'blog' && '/' + tab}`;
+        const _url = tab => `/@${accountname}${tab == 'blog' ? '' : '/' + tab}`;
 
         const _tablink2 = (tab, label) => {
             const item =

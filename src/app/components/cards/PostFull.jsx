@@ -403,7 +403,7 @@ class PostFull extends React.Component {
         const canMute = username && Role.atLeast(viewer_role, 'mod');
         const canFlag =
             username && community && Role.atLeast(viewer_role, 'guest');
-        const canReply = username && allowReply && post.get('depth') < 255;
+        const canReply = allowReply && post.get('depth') < 255;
         const canEdit = username === author && !showEdit;
         const canDelete = username === author && allowDelete(post);
 

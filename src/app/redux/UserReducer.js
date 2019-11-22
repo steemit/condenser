@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import { DEFAULT_LANGUAGE } from 'app/client_config';
 
 // Action constants
@@ -38,7 +38,7 @@ const SHOW_ANNOUNCEMENT = 'user/SHOW_ANNOUNCEMENT';
 export const UPLOAD_IMAGE = 'user/UPLOAD_IMAGE';
 
 const defaultState = fromJS({
-    current: null,
+    current: {},
     show_login_modal: false,
     show_promote_post_modal: false,
     show_post_advanced_settings_modal: '', // formId

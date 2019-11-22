@@ -9,7 +9,8 @@ const GET_COMMUNITY_SUBSCRIBERS = 'community/GET_COMMUNITY_SUBSCRIBERS';
 const GET_COMMUNITY_SUBSCRIBERS_PENDING =
     'community/GET_COMMUNITY_SUBSCRIBERS_PENDING';
 const SET_COMMUNITY_SUBSCRIBERS = 'community/SET_COMMUNITY_SUBSCRIBERS';
-const GET_COMMUNITY_SUBSCRIBERS_ERROR = 'community/SET_COMMUNITY_SUBSCRIBERS';
+const GET_COMMUNITY_SUBSCRIBERS_ERROR =
+    'community/GET_COMMUNITY_SUBSCRIBERS_ERROR';
 
 const UPDATE_USER_ROLE = 'community/UPDATE_USER_ROLE';
 const SET_USER_ROLE_PENDING = 'community/SET_USER_ROLE_PENDING';
@@ -19,7 +20,7 @@ const defaultCommunityState = Map();
 
 export default function reducer(state = defaultCommunityState, action) {
     const payload = action.payload;
-
+    console.log(action.type);
     switch (action.type) {
         // Has Saga watcher.
         case GET_COMMUNITY_SUBSCRIBERS: {
@@ -38,8 +39,7 @@ export default function reducer(state = defaultCommunityState, action) {
 
         case SET_COMMUNITY_SUBSCRIBERS: {
             const { community, subscribers } = payload;
-            state.setIn([community, 'subscribers'], fromJS(subscribers));
-            return state.setIn([community, 'subscribers'], fromJS(subscribers));
+            return state.setIn([community, 'subscribers'], subscribers);
         }
 
         // Has Saga watcher.

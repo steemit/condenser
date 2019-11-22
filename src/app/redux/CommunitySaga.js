@@ -6,7 +6,7 @@ import * as transactionActions from './TransactionReducer';
 
 export const communityWatches = [
     takeEvery('community/GET_COMMUNITY_ROLES', getCommunityRoles),
-    takeEvery('community/GET_COMMUNITY_SUBSCRIBERS', getCommunityRoles),
+    takeEvery('community/GET_COMMUNITY_SUBSCRIBERS', getCommunitySubscribers),
     takeEvery('community/UPDATE_USER_ROLE', updateUserRole),
 ];
 
@@ -40,7 +40,7 @@ export function* getCommunitySubscribers(action) {
         yield put(reducer.getCommunitySubscribersError({ community, error }));
     }
     yield put(
-        reducer.setCommunitySubscribersPending({ community, pending: false })
+        reducer.getCommunitySubscribersPending({ community, pending: false })
     );
 }
 

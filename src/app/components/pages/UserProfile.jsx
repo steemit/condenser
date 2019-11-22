@@ -204,13 +204,7 @@ export default class UserProfile extends React.Component {
             );
         }
 
-        const _url = tab => {
-            const path =
-                tab === 'blog'
-                    ? ''
-                    : tab === 'replies' ? `/recent-replies` : `/${tab}`;
-            return `/@${accountname}${path}`;
-        };
+        const _url = tab => `/@${accountname}${tab != 'blog' && '/' + tab}`;
 
         const _tablink2 = (tab, label) => {
             const item =
@@ -309,7 +303,6 @@ module.exports = {
 
             let { section } = ownProps.routeParams;
             if (!section) section = 'blog';
-            if (section == 'recent-replies') section = 'replies';
             const order = [
                 'blog',
                 'posts',

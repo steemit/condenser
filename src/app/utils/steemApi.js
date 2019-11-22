@@ -138,7 +138,7 @@ function parsePath(url) {
         'feed',
         'posts',
         'comments',
-        'recent-replies',
+        'replies',
         'payout',
     ];
 
@@ -166,7 +166,7 @@ function parsePath(url) {
     } else if (parts == 2 && part[0][0] == '@') {
         if (acct_tabs.includes(part[1])) {
             page = 'account';
-            sort = part[1] == 'recent-replies' ? 'replies' : part[1];
+            sort = part[1];
         } else {
             // settings, followers, notifications, etc (no-op)
         }

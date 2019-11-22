@@ -11,14 +11,26 @@ class CommunitySubscriberList extends React.Component {
 
     constructor(props) {
         super(props);
-        const { community } = this.props;
+        const { community, loading } = this.props;
         this.editSubscriberName = () => {
             const { state: { showEditName } } = this;
             this.setState({ showEditName: !showEditName });
         };
     }
 
+    componentDidMount() {
+        if (this.props.subscribers.length === 0) {
+            this.props.fetchSubscribers(this.props.community.name);
+        }
+    }
+
     render() {
+        const { loading, subscribers, community } = this.props;
+        console.log('SUBS', subscribers);
+
+        const subs = this.props.subscribers.map(s => {
+            return <div>{s[0]}</div>;
+        });
         // Map over community Subscribers list
         /*
       return (
@@ -33,19 +45,38 @@ class CommunitySubscriberList extends React.Component {
                     />
                     )
                   */
-        // Display a table of community subscribers.
-        // If the user is a moderator, or some role, if they click on a user,
-        // They can edit the user Title ...
-        return <div>COMMUNITY SUBSCRIBER LIST</div>;
+        return (
+            <div>
+                <div>Community Subscribers</div>
+                {loading && <div>loading...</div>}
+                {subs}
+            </div>
+        );
     }
 }
 
 const ConnectedCommunitySubscriberList = connect(
     // mapStateToProps
     (state, ownProps) => {
-        // Get subscribers from state here.
+        let subscribers = [];
+        let loading = true;
+        if (
+            state.community.getIn([ownProps.community.name]) &&
+            state.community.getIn([ownProps.community.name, 'subscribers'])
+                .length > 0
+        ) {
+            subscribers = state.community.getIn([
+                ownProps.community.name,
+                'subscribers',
+            ]);
+            loading = state.community.getIn([
+                ownProps.community.name,
+                'listSubscribersPending',
+            ]);
+        }
         return {
-            subscribers: ['bill', 'ted'],
+            subscribers,
+            loading,
         };
     },
     // mapDispatchToProps

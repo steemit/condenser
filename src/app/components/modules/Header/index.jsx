@@ -189,7 +189,7 @@ class Header extends React.Component {
                     username: user_title,
                 });
             }
-            if (route.params[1] === 'recent-replies') {
+            if (route.params[1] === 'replies') {
                 page_title = tt('header_jsx.replies_to', {
                     username: user_title,
                 });
@@ -247,7 +247,7 @@ class Header extends React.Component {
             </Link>
         );
 
-        const replies_link = `/@${username}/recent-replies`;
+        const replies_link = `/@${username}/replies`;
         const account_link = `/@${username}`;
         const comments_link = `/@${username}/comments`;
         const settings_link = `/@${username}/settings`;
@@ -255,26 +255,24 @@ class Header extends React.Component {
         const wallet_link = `${walletUrl}/@${username}`;
 
         const user_menu = [
-            { link: account_link, icon: 'profile', value: tt('g.blog') },
             //{ link: comments_link, icon: 'replies', value: tt('g.posts') },
-            { link: replies_link, icon: 'reply', value: tt('g.replies') },
+            //{ link: replies_link, icon: 'reply', value: tt('g.replies') },
+            { link: account_link, icon: 'profile', value: tt('g.profile') },
             { link: notifs_link, icon: 'clock', value: tt('g.notifications') },
-            { link: wallet_link, icon: 'wallet', value: tt('g.wallet') },
+            //{ link: settings_link, icon: 'cog', value: tt('g.settings') },
             {
                 link: '#',
                 icon: 'eye',
                 onClick: toggleNightmode,
                 value: tt('g.toggle_nightmode'),
             },
-            { link: settings_link, icon: 'cog', value: tt('g.settings') },
-            loggedIn
-                ? {
-                      link: '#',
-                      icon: 'enter',
-                      onClick: logout,
-                      value: tt('g.logout'),
-                  }
-                : { link: '#', onClick: showLogin, value: tt('g.login') },
+            { link: wallet_link, icon: 'wallet', value: tt('g.wallet') },
+            {
+                link: '#',
+                icon: 'enter',
+                onClick: logout,
+                value: tt('g.logout'),
+            },
         ];
         showAd = true;
         return (

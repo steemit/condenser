@@ -475,7 +475,7 @@ class Voting extends React.Component {
         }
 
         const payoutEl = (
-            <DropdownMenu el="div" items={payoutItems}>
+            <DropdownMenu el="div" items={payoutItems} className="Voting__pane">
                 <span style={payout_limit_hit ? { opacity: '0.5' } : {}}>
                     <FormattedAsset
                         amount={shown_payout}

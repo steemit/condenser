@@ -596,6 +596,7 @@
         "curation_rewards_by": "Curation rewards by %(username)s",
         "author_rewards_by": "Author rewards by %(username)s",
         "replies_to": "Replies to %(username)s",
+        "posts_by": "Posts by %(username)s",
         "comments_by": "Comments by %(username)s"
     },
     "loginform_jsx": {

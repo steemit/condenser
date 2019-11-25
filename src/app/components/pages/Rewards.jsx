@@ -5,15 +5,29 @@ import { Map } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 
 class Rewards extends Component {
+    static propTypes = {
+        loading: PropTypes.bool.isRequired,
+        fetchRewardsData: PropTypes.func.isRequired,
+        rewards: PropTypes.shape({
+            total: PropTypes.number,
+            blogs: PropTypes.number,
+            items: PropTypes.arrayOf(PropTypes.array),
+        }).isRequired,
+    };
+    static defaultProps = {
+        loading: true,
+    };
     componentDidMount() {
         this.props.fetchRewardsData();
     }
     render() {
-        const { fetchRewardsData, rewards, loading } = this.props;
+        const { rewards, loading } = this.props;
         return (
             <div>
-                hello
+                Rewards:
+                <br />
                 {loading && 'loading...'}
+                {!loading && JSON.stringify(rewards)}
             </div>
         );
     }

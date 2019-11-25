@@ -81,7 +81,7 @@ class CommunityPane extends Component {
                     >
                         <div
                             onClick={handleSubscriberClick}
-                            className="column small-4"
+                            className="column small-4 pointer"
                         >
                             {community.get('subscribers')}
                             <br />

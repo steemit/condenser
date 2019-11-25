@@ -220,3 +220,9 @@ a[rel="nofollow noopener"]:after {
     color: gray;
     margin-left: 0.25em;
 }
+
+.pointer {
+  :hover {
+    cursor: pointer;
+  }
+}

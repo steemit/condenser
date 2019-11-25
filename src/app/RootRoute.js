@@ -11,7 +11,6 @@ export default {
     component: App,
     getChildRoutes(nextState, cb) {
         const route = resolveRoute(nextState.location.pathname);
-        console.log('route.page :', route.page);
         if (route.page === 'CommunityRoles') {
             cb(null, [require('app/components/pages/CommunityRoles')]);
         } else if (route.page === 'About') {

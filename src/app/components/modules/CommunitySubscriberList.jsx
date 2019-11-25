@@ -49,7 +49,6 @@ class CommunitySubscriberList extends React.Component {
 
         const isMod = Role.atLeast(viewerRole, 'mod');
         const subs = this.props.subscribers.map(s => {
-            console.log('S is: ', s);
             const subscriberTitle = isMod ? (
                 <UserTitleEditor
                     title={s[2]}

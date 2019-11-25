@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Map } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 
 class Rewards extends Component {
@@ -8,8 +9,13 @@ class Rewards extends Component {
         this.props.fetchRewardsData();
     }
     render() {
-        const { fetchRewardsData } = this.props;
-        return <div>Hello World</div>;
+        const { fetchRewardsData, rewards, loading } = this.props;
+        return (
+            <div>
+                hello
+                {loading && 'loading...'}
+            </div>
+        );
     }
 }
 module.exports = {
@@ -17,12 +23,13 @@ module.exports = {
     component: connect(
         // mapStateToProps
         (state, ownProps) => {
-            let rewards = {};
+            let rewards = Map({});
             if (state.global.hasIn(['rewards'])) {
                 rewards = state.global.getIn(['rewards'], null);
             }
             return {
-                rewards,
+                rewards: rewards.toJS(),
+                loading: state.app.get('loading'),
             };
         },
         // mapDispatchToProps

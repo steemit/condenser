@@ -130,8 +130,7 @@ export default function reducer(state = defaultState, action = {}) {
             return state.set('subscriptions', fromJS(payload));
         }
         case RECEIVE_REWARDS: {
-            debugger;
-            return state.set('rewards', fromJS(payload));
+            return state.set('rewards', fromJS(payload.rewards));
         }
 
         // Interleave special posts into the map of posts.

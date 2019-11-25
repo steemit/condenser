@@ -210,7 +210,9 @@ a[rel="nofollow noopener"]:after {
 
   .Icon {
     margin-left: 0.25em;
-    fill: white;
+    @include themify($themes) {
+      fill: themed('textColorSecondary');
+    }
   }
 }
 

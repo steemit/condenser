@@ -36,7 +36,7 @@ class Dialogs extends React.Component {
         const dialogs = active_dialogs.reduce((r, v, k) => {
             const cmp =
                 k === 'qr_reader' ? (
-                    <span key={idx++}>
+                    <span key={`dialog-${k}`}>
                         <Reveal
                             onHide={this['hide_' + k]}
                             show
@@ -50,7 +50,7 @@ class Dialogs extends React.Component {
                         </Reveal>
                     </span>
                 ) : k === 'promotePost' ? (
-                    <span key={idx++}>
+                    <span key={`dialog-${k}`}>
                         <Reveal onHide={this['hide_' + k]} show>
                             <CloseButton onClick={this['hide_' + k]} />
                             <PromotePost
@@ -60,7 +60,7 @@ class Dialogs extends React.Component {
                         </Reveal>
                     </span>
                 ) : k === 'explorePost' ? (
-                    <span key={idx++}>
+                    <span key={`dialog-${k}`}>
                         <Reveal onHide={this['hide_' + k]} show>
                             <CloseButton onClick={this['hide_' + k]} />
                             <ExplorePost
@@ -70,7 +70,7 @@ class Dialogs extends React.Component {
                         </Reveal>
                     </span>
                 ) : k === 'communitySubscribers' ? (
-                    <span>
+                    <span key={`dialog-${k}`}>
                         <Reveal onHide={this['hide_' + k]} show>
                             <CloseButton onClick={this['hide_' + k]} />
                             <CommunitySubscriberList

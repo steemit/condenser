@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Role } from 'app/utils/Community';
 import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
+import * as globalActions from 'app/redux/GlobalReducer';
 
 class CommunityPaneMobile extends Component {
     static propTypes = {
@@ -12,8 +13,10 @@ class CommunityPaneMobile extends Component {
     };
 
     render() {
-        const { community } = this.props;
-
+        const { community, showRecentSubscribers } = this.props;
+        const handleSubscriberClick = () => {
+            showRecentSubscribers(community);
+        };
         const category = community.get('name');
         const viewer_role = community.getIn(['context', 'role'], 'guest');
         const canPost = Role.canPost(category, viewer_role);
@@ -62,7 +65,10 @@ class CommunityPaneMobile extends Component {
                             </div>
                         </div>
 
-                        <div className="column large-1 medium-2 small-4">
+                        <div
+                            onClick={handleSubscriberClick}
+                            className="column large-1 medium-2 small-4 pointer"
+                        >
                             {community.get('subscribers')}
                             <br />
                             <small>
@@ -117,5 +123,18 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => ({
         community: ownProps.community,
-    })
+    }),
+    // mapDispatchToProps
+    dispatch => {
+        return {
+            showRecentSubscribers: community => {
+                dispatch(
+                    globalActions.showDialog({
+                        name: 'communitySubscribers',
+                        params: { community },
+                    })
+                );
+            },
+        };
+    }
 )(CommunityPaneMobile);

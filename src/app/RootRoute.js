@@ -11,6 +11,7 @@ export default {
     component: App,
     getChildRoutes(nextState, cb) {
         const route = resolveRoute(nextState.location.pathname);
+        console.log('route.page :', route.page);
         if (route.page === 'CommunityRoles') {
             cb(null, [require('app/components/pages/CommunityRoles')]);
         } else if (route.page === 'About') {
@@ -80,7 +81,7 @@ export default {
             //});
         } else if (route.page === 'Rewards') {
             //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/PostPage')]);
+            cb(null, [require('app/components/pages/Rewards')]);
             //});
         } else if (route.page === 'PostNoCategory') {
             cb(null, [require('app/components/pages/PostPageNoCategory')]);

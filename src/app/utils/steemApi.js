@@ -8,7 +8,7 @@ export async function callBridge(method, params) {
     console.log(
         'call bridge',
         method,
-        JSON.stringify(params).substring(0, 200)
+        params && JSON.stringify(params).substring(0, 200)
     );
     const call = (method, params, callback) => {
         return api.call('bridge.' + method, params, callback);

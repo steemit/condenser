@@ -353,7 +353,7 @@ function* fetchJson({
 export function* getRewardsDataSaga(action) {
     yield put(appActions.fetchDataBegin());
     try {
-        const rewards = yield call(callBridge, 'get_payout_stats');
+        const rewards = yield call(callBridge, 'get_payout_stats', {});
         if (rewards && rewards.error) {
             console.error(
                 '~~ Saga getRewardsDataSaga error ~~>',

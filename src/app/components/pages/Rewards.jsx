@@ -4,9 +4,12 @@ import { connect } from 'react-redux';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 
 class Rewards extends Component {
+    componentDidMount() {
+        this.props.fetchRewardsData();
+    }
     render() {
         const { fetchRewardsData } = this.props;
-        return <div>HelloWORLD</div>;
+        return <div>Hello World</div>;
     }
 }
 module.exports = {

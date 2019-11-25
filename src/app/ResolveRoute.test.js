@@ -7,7 +7,7 @@ describe('routeRegex', () => {
             ['UserFeed', /^\/(@[\w\.\d-]+)\/feed\/?$/],
             [
                 'UserProfile',
-                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|recent-replies|payout|feed|followed|followers|settings|notifications))?\/?$/,
+                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications))?\/?$/,
             ],
             [
                 'CategoryFilters',

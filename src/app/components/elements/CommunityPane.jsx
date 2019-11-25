@@ -8,6 +8,7 @@ import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
 import Icon from 'app/components/elements/Icon';
 import * as globalActions from 'app/redux/GlobalReducer';
+import { numberWithCommas } from 'app/utils/StateFunctions';
 
 const nl2br = text =>
     text.split('\n').map((item, key) => (
@@ -83,7 +84,7 @@ class CommunityPane extends Component {
                             onClick={handleSubscriberClick}
                             className="column small-4 pointer"
                         >
-                            {community.get('subscribers')}
+                            {numberWithCommas(community.get('subscribers'))}
                             <br />
                             <small>
                                 {community.get('subscribers') == 1
@@ -93,14 +94,18 @@ class CommunityPane extends Component {
                         </div>
                         <div className="column small-4">
                             {'$'}
-                            {community.get('sum_pending')}
+                            {numberWithCommas(community.get('sum_pending'))}
                             <br />
-                            <small>pending rewards</small>
+                            <small>
+                                pending<br />rewards
+                            </small>
                         </div>
                         <div className="column small-4">
-                            {community.get('num_pending')}
+                            {numberWithCommas(community.get('num_authors'))}
                             <br />
-                            <small>active posts</small>
+                            <small>
+                                active<br />posters
+                            </small>
                         </div>
                     </div>
 

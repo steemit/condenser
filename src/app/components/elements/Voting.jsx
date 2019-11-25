@@ -455,6 +455,24 @@ class Voting extends React.Component {
             });
         }
 
+        const dn_weight = post.getIn(['stats', 'flag_weight']);
+        const up_weight = Math.max(
+            String(parseInt(post.get('net_rshares') / 2)).length - 10,
+            0
+        );
+        if (up_weight > 0 || dn_weight > 0) {
+            const ups = up_weight > 0 ? '•'.repeat(up_weight) : null;
+            const dns = dn_weight > 0 ? '•'.repeat(dn_weight) : null;
+            payoutItems.push({
+                value: (
+                    <span style={{ opacity: 0.75 }}>
+                        {ups && <span style={{ color: 'green' }}>{ups}</span>}
+                        {dns && <span style={{ color: 'red' }}>{dns}</span>}
+                    </span>
+                ),
+            });
+        }
+
         // past payout stats
         if (post.get('is_paidout') && total_payout > 0) {
             payoutItems.push({

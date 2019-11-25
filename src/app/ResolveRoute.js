@@ -29,6 +29,7 @@ export default function resolveRoute(path) {
     if (path === '/submit.html') return { page: 'SubmitPost' };
     if (path === '/communities') return { page: 'Communities' };
     if (path === '/tags') return { page: 'Tags' };
+    if (path === '/rewards') return { page: 'Rewards' };
 
     // /roles/hive-123
     let match = path.match(routeRegex.CommunityRoles);

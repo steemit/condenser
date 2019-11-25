@@ -29,6 +29,7 @@ const FETCH_JSON = 'global/FETCH_JSON';
 const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT';
 const SHOW_DIALOG = 'global/SHOW_DIALOG';
 const HIDE_DIALOG = 'global/HIDE_DIALOG';
+const RECEIVE_REWARDS = 'global/RECEIVE_REWARDS';
 
 const postKey = (author, permlink) => {
     if ((author || '') === '' || (permlink || '') === '') return null;
@@ -127,6 +128,10 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_SUBSCRIPTIONS: {
             return state.set('subscriptions', fromJS(payload));
+        }
+        case RECEIVE_REWARDS: {
+            debugger;
+            return state.set('rewards', fromJS(payload));
         }
 
         // Interleave special posts into the map of posts.
@@ -332,6 +337,10 @@ export const receiveState = payload => ({
 
 export const receiveNotifications = payload => ({
     type: RECEIVE_NOTIFICATIONS,
+    payload,
+});
+export const receiveRewards = payload => ({
+    type: RECEIVE_REWARDS,
     payload,
 });
 

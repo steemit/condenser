@@ -198,19 +198,21 @@ a[rel="nofollow noopener"]:after {
 .affiliation {
   font-weight: 400;
   display: inline;
-  margin: 0 0.25rem;
-  padding: 0 0.4rem 0.1rem;
+  margin: 0 0.2rem;
+  padding: 0 0.2rem 0.05rem;
   border-radius: 0.3rem;
   text-shadow: none;
   font-size: 0.75rem;
   @include themify($themes) {
-    background-color: themed('colorAccent');
-    color: themed('buttonText');
+    border: 1px solid themed('colorAccent');
+    color: themed('textColorSecondary');
   }
 
   .Icon {
     margin-left: 0.25em;
-    fill: white;
+    @include themify($themes) {
+      fill: themed('textColorSecondary');
+    }
   }
 }
 
@@ -218,7 +220,12 @@ a[rel="nofollow noopener"]:after {
     font-size: 0.8em;
     text-transform: uppercase;
     color: gray;
-    margin-left: 0.25em;
+    margin: 0 0.2em;
+}
+
+.account_warn {
+    font-weight: bold;
+    color: red;
 }
 
 .pointer {

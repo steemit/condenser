@@ -40,7 +40,6 @@ class CommunitySubscriberList extends React.Component {
         newstate['content'][content_key] = { author_title: newTitle };
         this.props.pushState(newstate);
         */
-        debugger;
         saveTitle(username, subscriberName, community, newTitle);
     };
 
@@ -49,7 +48,7 @@ class CommunitySubscriberList extends React.Component {
 
         const isMod = Role.atLeast(viewerRole, 'mod');
         const subs = this.props.subscribers.map(s => {
-            const subscriberTitle = !isMod ? (
+            const subscriberTitle = isMod ? (
                 <UserTitleEditor
                     title={s[2]}
                     username={s[0]}

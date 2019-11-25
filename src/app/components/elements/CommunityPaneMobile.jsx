@@ -10,6 +10,7 @@ import * as globalActions from 'app/redux/GlobalReducer';
 class CommunityPaneMobile extends Component {
     static propTypes = {
         community: PropTypes.object.isRequired,
+        showRecentSubscribers: PropTypes.func.isRequired,
     };
 
     render() {

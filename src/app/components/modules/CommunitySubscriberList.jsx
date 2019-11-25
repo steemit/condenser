@@ -9,7 +9,7 @@ import UserTitleEditor from 'app/components/modules/UserTitleEditor';
 
 class CommunitySubscriberList extends React.Component {
     static propTypes = {
-        community: PropTypes.string.isRequired,
+        community: PropTypes.object.isRequired,
         username: PropTypes.string.isRequired,
         viewerRole: PropTypes.string.isRequired,
         fetchSubscribers: PropTypes.func.isRequired,
@@ -61,7 +61,7 @@ class CommunitySubscriberList extends React.Component {
                     key={s[0]}
                 />
             ) : (
-                <div>{s[0]}</div>
+                <div key={s[0]}>{s[0]}</div>
             );
             return subscriberTitle;
         });

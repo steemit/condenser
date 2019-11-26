@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import AutocompleteInput from 'app/components/elements/AutocompleteInput';
 
 import Unicode from 'app/utils/Unicode';
 import tt from 'counterpart';
 import { throws } from 'assert';
+
+const languageOptions = [
+    { abbr: 'en', name: 'English' },
+    { abbr: 'kr', name: 'Korean' },
+    { abbr: 'zh', name: 'Chinese' },
+    { abbr: 'ms', name: 'Malay' },
+    { abbr: 'pl', name: 'Polish' },
+    { abbr: 'pt', name: 'Portuguese' },
+    { abbr: 'ru', name: 'Russian' },
+    { abbr: 'it', name: 'Italian' },
+    { abbr: 'de', name: 'German' },
+    { abbr: 'es', name: 'Spanish' },
+    { abbr: 'sv', name: 'Swedish' },
+];
 
 class CommunitySettings extends Component {
     constructor(props) {
@@ -57,23 +72,6 @@ class CommunitySettings extends Component {
             flag_text,
             formError,
         } = this.state;
-
-        const langs = [
-            ['en', 'English'],
-            ['kr', 'Korean'],
-            ['zh', 'Chinese'],
-            ['ms', 'Malay'],
-            ['pl', 'Polish'],
-            ['pt', 'Portuguese'],
-            ['ru', 'Russian'],
-            ['it', 'Italian'],
-            ['de', 'German'],
-            ['es', 'Spanish'],
-            ['sv', 'Swedish'],
-        ];
-        const lang_options = langs.map(item => (
-            <option value={item[0]}>{item[1]}</option>
-        ));
         return (
             <span>
                 <div>
@@ -106,20 +104,20 @@ class CommunitySettings extends Component {
                             onChange={e => this.onInput(e)}
                         />
                     </label>
-                    {/*
-                    <label className="input-group">
-                        <span className="input-group-label">Language </span>
-                        <select
-                            className="input-group-field"
-                            name="lang"
-                            value={lang}
-                            onChange={e => this.onInput(e)}
-                        >
-                            {lang_options}
-                        </select>
-                    </label>
-                    */}
-
+                    <AutocompleteInput
+                        label={'Select a language'}
+                        values={languageOptions}
+                        initialValue="English"
+                        onSelect={v => {
+                            const selectedLanguage = languageOptions.filter(
+                                l => l.name === v
+                            )[0];
+                            debugger;
+                            this.setState({
+                                lang: selectedLanguage.abbr,
+                            });
+                        }}
+                    />
                     <label style={{ margin: '0 0 1rem' }}>
                         Description<br />
                         <textarea

@@ -1,10 +1,10 @@
 import React from 'react';
 import Autocomplete from 'react-autocomplete';
 
-function matchLanguageToTerm(state, value) {
+function matchInputToItem(item, input) {
     return (
-        state.name.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
-        state.abbr.toLowerCase().indexOf(value.toLowerCase()) !== -1
+        item.name.toLowerCase().indexOf(input.toLowerCase()) !== -1 ||
+        item.abbr.toLowerCase().indexOf(input.toLowerCase()) !== -1
     );
 }
 
@@ -16,7 +16,7 @@ function matchLanguageToTerm(state, value) {
  * location (or there is no match) will be sorted alphabetically - For example,
  * a search for "or" would return "North Carolina" above "North Dakota".
  */
-export function sortLanguages(a, b, value) {
+function sortInput(a, b, value) {
     const aLower = a.name.toLowerCase();
     const bLower = b.name.toLowerCase();
     const valueLower = value.toLowerCase();
@@ -50,8 +50,8 @@ class AutocompleteInput extends React.Component {
                     }}
                     items={this.props.values}
                     getItemValue={item => item.name}
-                    shouldItemRender={matchLanguageToTerm}
-                    sortItems={sortLanguages}
+                    shouldItemRender={matchInputToItem}
+                    sortItems={sortInput}
                     onChange={(event, value) => this.setState({ value })}
                     onSelect={value => {
                         this.setState({ value });

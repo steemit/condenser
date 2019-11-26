@@ -39,6 +39,7 @@ class AutocompleteInput extends React.Component {
                 abbr: PropTypes.string,
             })
         ).isRequired,
+        onSelect: PropTypes.func.isRequired,
     };
 
     constructor(props) {

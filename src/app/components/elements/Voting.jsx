@@ -55,13 +55,6 @@ function abs(value) {
     return Math.abs(parseInt(value));
 }
 
-function effectiveVests(account) {
-    const vests = account ? account.get('vesting_shares') : 0.0;
-    const delegated = account ? account.get('delegated_vesting_shares') : 0.0;
-    const received = account ? account.get('received_vesting_shares') : 0.0;
-    return vests - delegated + received;
-}
-
 class Voting extends React.Component {
     static propTypes = {
         // HTML properties
@@ -639,7 +632,7 @@ export default connect(
 
         const current = state.user.get('current');
         const username = current ? current.get('username') : null;
-        const net_vests = effectiveVests(current);
+        const net_vests = current ? current.get('effective_vests') : 0.0;
         const vote_status_key = `transaction_vote_active_${author}_${permlink}`;
         const voting = state.global.get(vote_status_key);
         const price_per_steem =

@@ -255,10 +255,10 @@ class Header extends React.Component {
         const wallet_link = `${walletUrl}/@${username}`;
 
         const user_menu = [
-            //{ link: comments_link, icon: 'replies', value: tt('g.posts') },
-            //{ link: replies_link, icon: 'reply', value: tt('g.replies') },
             { link: account_link, icon: 'profile', value: tt('g.profile') },
             { link: notifs_link, icon: 'clock', value: tt('g.notifications') },
+            //{ link: comments_link, icon: 'replies', value: tt('g.posts') },
+            { link: replies_link, icon: 'reply', value: tt('g.replies') },
             //{ link: settings_link, icon: 'cog', value: tt('g.settings') },
             {
                 link: '#',

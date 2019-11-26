@@ -234,14 +234,7 @@ export default function ServerHTML({
                     />
                 ) : null}
                 {videoAdsEnabled ? (
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-                            <!-- Steemit_S2S_1x1 -->
-                            <div id="bsa-zone_1572296522077-3_123456"></div>
-                        `,
-                        }}
-                    />
+                            <div id="bsa-zone_1572296522077-3_123456" />
                 ) : null}
             </body>
         </html>

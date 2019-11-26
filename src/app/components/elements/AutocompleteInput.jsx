@@ -52,10 +52,10 @@ class AutocompleteInput extends React.Component {
     render() {
         return (
             <div>
-                <label htmlFor="states-autocomplete">{this.props.label}</label>
+                <label htmlFor="input-autocomplete">{this.props.label}</label>
                 <Autocomplete
                     value={this.state.value}
-                    inputProps={{ id: 'states-autocomplete' }}
+                    inputProps={{ id: 'input-autocomplete' }}
                     wrapperStyle={{
                         position: 'relative',
                         display: 'inline-block',

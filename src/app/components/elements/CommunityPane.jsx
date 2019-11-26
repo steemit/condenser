@@ -102,13 +102,20 @@ class CommunityPane extends Component {
                     </div>
 
                     <div style={{ margin: '12px 0 0' }}>
+                        {community &&
+                            this.props.username && (
+                                <SubscribeButton
+                                    community={community.get('name')}
+                                    display="block"
+                                />
+                            )}
                         {canPost && (
                             <Link
                                 className="button primary"
                                 style={{
                                     minWidth: '6em',
                                     display: 'block',
-                                    marginBottom: '8px',
+                                    margin: '-6px 0 8px',
                                 }}
                                 to={`/submit.html?category=${category}`}
                             >
@@ -126,13 +133,6 @@ class CommunityPane extends Component {
                                 </small>
                             </div>
                         )}
-                        {community &&
-                            this.props.username && (
-                                <SubscribeButton
-                                    community={community.get('name')}
-                                    display="block"
-                                />
-                            )}
                     </div>
                     <div>
                         {Role.atLeast(viewer_role, 'mod') && (

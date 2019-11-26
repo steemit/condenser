@@ -1,5 +1,6 @@
 import React from 'react';
 import Autocomplete from 'react-autocomplete';
+import PropTypes from 'prop-types';
 
 function matchInputToItem(item, input) {
     return (
@@ -29,6 +30,17 @@ function sortInput(a, b, value) {
 }
 
 class AutocompleteInput extends React.Component {
+    static propTypes = {
+        initialValue: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+        values: PropTypes.arrayOf(
+            PropTypes.shape({
+                name: PropTypes.string,
+                abbr: PropTypes.string,
+            })
+        ).isRequired,
+    };
+
     constructor(props) {
         super(props);
     }

@@ -256,6 +256,11 @@ export default class UserProfile extends React.Component {
                 </div>
                 <div className="columns shrink">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
+                        <li>
+                            <a href={walletUrl} target="_blank">
+                                Wallet
+                            </a>
+                        </li>
                         {isMyAccount && (
                             <li>{_tablink('settings', tt('g.settings'))}</li>
                         )}
@@ -341,7 +346,7 @@ module.exports = {
                 ),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 profile: state.userProfiles.getIn(['profiles', accountname]),
-                walletUrl,
+                walletUrl: walletUrl + '/@' + accountname + '/transfers',
                 section,
                 order,
                 category: '@' + accountname,

@@ -72,6 +72,7 @@
       "every": 15
     }
   },
+  "video_ads_enabled": null,
   "gpt_enabled": null,
   "gpt_basic_slots": {
     "bottom-of-post": {

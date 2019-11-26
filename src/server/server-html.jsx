@@ -10,6 +10,7 @@ export default function ServerHTML({
     shouldSeeAds,
     adClient,
     gptEnabled,
+    videoAdsEnabled,
     gptBannedTags,
     gptBidding,
     shouldSeeCookieConsent,
@@ -228,6 +229,16 @@ export default function ServerHTML({
                                 _bsa.init('fancybar', 'CE7D653L', 'placement:steemitcom');
                               }
                             })();
+                        `,
+                        }}
+                    />
+                ) : null}
+                {videoAdsEnabled ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                            <!-- Steemit_S2S_1x1 -->
+                            <div id="bsa-zone_1572296522077-3_123456"></div>
                         `,
                         }}
                     />

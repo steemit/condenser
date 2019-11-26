@@ -112,7 +112,6 @@ class CommunitySettings extends Component {
                             const selectedLanguage = languageOptions.filter(
                                 l => l.name === v
                             )[0];
-                            debugger;
                             this.setState({
                                 lang: selectedLanguage.abbr,
                             });

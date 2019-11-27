@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import { DEFAULT_LANGUAGE } from 'app/client_config';
 
 // Action constants
@@ -38,7 +38,7 @@ const SHOW_ANNOUNCEMENT = 'user/SHOW_ANNOUNCEMENT';
 export const UPLOAD_IMAGE = 'user/UPLOAD_IMAGE';
 
 const defaultState = fromJS({
-    current: null,
+    current: {},
     show_login_modal: false,
     show_promote_post_modal: false,
     show_post_advanced_settings_modal: '', // formId
@@ -54,15 +54,16 @@ export default function reducer(state = defaultState, action) {
 
     switch (action.type) {
         case SHOW_LOGIN: {
-            let operation, loginDefault;
+            let operation, loginDefault, login_type;
             if (payload) {
                 operation = fromJS(payload.operation);
                 loginDefault = fromJS(payload.loginDefault);
+                login_type = payload.type;
             }
             return state.merge({
                 login_error: undefined,
                 show_login_modal: true,
-                login_type: payload.type,
+                login_type,
                 loginBroadcastOperation: operation,
                 loginDefault,
             });

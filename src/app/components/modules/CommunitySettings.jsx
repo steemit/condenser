@@ -13,6 +13,7 @@ class CommunitySettings extends Component {
             title: this.props.title,
             about: this.props.about,
             is_nsfw: this.props.is_nsfw,
+            lang: this.props.lang,
             description: this.props.description,
             flag_text: this.props.flag_text,
         };
@@ -51,10 +52,28 @@ class CommunitySettings extends Component {
             title,
             about,
             is_nsfw,
+            lang,
             description,
             flag_text,
             formError,
         } = this.state;
+
+        const langs = [
+            ['en', 'English'],
+            ['kr', 'Korean'],
+            ['zh', 'Chinese'],
+            ['ms', 'Malay'],
+            ['pl', 'Polish'],
+            ['pt', 'Portuguese'],
+            ['ru', 'Russian'],
+            ['it', 'Italian'],
+            ['de', 'German'],
+            ['es', 'Spanish'],
+            ['sv', 'Swedish'],
+        ];
+        const lang_options = langs.map(item => (
+            <option value={item[0]}>{item[1]}</option>
+        ));
         return (
             <span>
                 <div>
@@ -87,6 +106,20 @@ class CommunitySettings extends Component {
                             onChange={e => this.onInput(e)}
                         />
                     </label>
+                    {/*
+                    <label className="input-group">
+                        <span className="input-group-label">Language </span>
+                        <select
+                            className="input-group-field"
+                            name="lang"
+                            value={lang}
+                            onChange={e => this.onInput(e)}
+                        >
+                            {lang_options}
+                        </select>
+                    </label>
+                    */}
+
                     <label style={{ margin: '0 0 1rem' }}>
                         Description<br />
                         <textarea
@@ -134,6 +167,7 @@ CommunitySettings.propTypes = {
     title: PropTypes.string.isRequired,
     about: PropTypes.string.isRequired,
     is_nsfw: PropTypes.bool.isRequired,
+    lang: PropTypes.string,
     description: PropTypes.string.isRequired,
     flag_text: PropTypes.string.isRequired,
 };

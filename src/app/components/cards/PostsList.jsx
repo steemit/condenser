@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
+import { List } from 'immutable';
 import * as userActions from 'app/redux/UserReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import PostSummary from 'app/components/cards/PostSummary';
@@ -27,7 +28,6 @@ class PostsList extends React.Component {
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
-        showResteem: PropTypes.bool,
         pathname: PropTypes.string,
         nsfwPref: PropTypes.string.isRequired,
     };
@@ -115,14 +115,12 @@ class PostsList extends React.Component {
     render() {
         const {
             posts,
-            showResteem,
             loading,
             pathname,
             category,
             order,
             content,
-            ignore_result,
-            account,
+            mutes,
             username,
             nsfwPref,
             hideCategory,
@@ -137,9 +135,8 @@ class PostsList extends React.Component {
                 return;
             }
             const author = cont.get('author');
-            const ignore = ignore_result && ignore_result.has(author);
-            const hideResteem = !showResteem && account && author != account;
-            if (!(hideResteem || ignore)) postsInfo.push({ item, ignore });
+            const ignore = mutes.has(author);
+            if (!ignore) postsInfo.push({ item, ignore });
         });
 
         // Helper functions for determining whether to show special posts.
@@ -164,7 +161,6 @@ class PostsList extends React.Component {
                 return (
                     <li key={id}>
                         <PostSummary
-                            account={account}
                             post={id}
                             thumbSize={thumbSize}
                             ignore={false}
@@ -181,7 +177,6 @@ class PostsList extends React.Component {
             items.map((item, i) => {
                 const ps = (
                     <PostSummary
-                        account={account}
                         post={item.item}
                         thumbSize={thumbSize}
                         ignore={item.ignore}
@@ -244,12 +239,10 @@ export default connect(
             ? current.get('username')
             : state.offchain.get('account');
         const content = state.global.get('content');
-        const ignore_result = state.global.getIn([
-            'follow',
-            'getFollowingAsync',
-            username,
-            'ignore_result',
-        ]);
+        const mutes = state.global.getIn(
+            ['follow', 'getFollowingAsync', username, 'ignore_result'],
+            List()
+        );
         const userPreferences = state.app.get('user_preferences').toJS();
         const nsfwPref = userPreferences.nsfwPref || 'warn';
         const featured = state.offchain
@@ -264,7 +257,7 @@ export default connect(
             pathname,
             username,
             content,
-            ignore_result,
+            mutes,
             nsfwPref,
             featured,
             shouldSeeAds,

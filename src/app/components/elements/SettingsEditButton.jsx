@@ -90,6 +90,7 @@ export default connect(
             title: community.get('title'),
             about: community.get('about'),
             is_nsfw: community.get('is_nsfw'),
+            lang: community.get('lang'),
             description: community.get('description'),
             flag_text: community.get('flag_text', ''),
         };

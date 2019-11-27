@@ -102,7 +102,7 @@ class CommunityRoles extends React.Component {
             const name = tuple[0];
             const title = tuple[2];
             let role = tuple[1];
-            if (availableRoles.includes(tuple[1])) {
+            if (availableRoles && availableRoles.includes(tuple[1])) {
                 role = (
                     <a
                         className="community-user--role"

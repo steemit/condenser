@@ -81,6 +81,7 @@ const ConnectedCommunitySubscriberList = connect(
         let loading = true;
         if (
             state.community.getIn([ownProps.community.name]) &&
+            state.community.getIn([ownProps.community.name, 'subscribers']) &&
             state.community.getIn([ownProps.community.name, 'subscribers'])
                 .length > 0
         ) {

@@ -3,6 +3,7 @@ import {
     put,
     select,
     fork,
+    take,
     takeLatest,
     takeEvery,
 } from 'redux-saga/effects';
@@ -27,21 +28,29 @@ export const fetchDataWatches = [
     takeLatest('@@router/LOCATION_CHANGE', fetchState),
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
-    takeEvery(GET_ACCOUNTS, getAccountsCaller),
-    takeEvery(GET_REWARD_FUND, getRewardFund),
+    fork(getAccountsWatcher),
+    fork(getRewardFundWatcher),
 ];
 
 export function* getContentCaller(action) {
     yield getContent(action.payload);
 }
 
-export function* getAccountsCaller(action) {
-    yield getAccounts(action.payload);
+function* getAccountsWatcher() {
+    while (true) {
+        const action = yield take(GET_ACCOUNTS);
+        yield getAccounts(action.payload);
+    }
 }
 
-export function* getRewardFund(action) {
-    const rewardFund = yield call([api, api.getRewardFundAsync], 'post');
-    yield put(globalActions.set({ key: ['rewardFund'], value: rewardFund }));
+function* getRewardFundWatcher() {
+    while (true) {
+        const action = yield take(GET_REWARD_FUND);
+        const rewardFund = yield call([api, api.getRewardFundAsync], 'post');
+        yield put(
+            globalActions.set({ key: ['rewardFund'], value: rewardFund })
+        );
+    }
 }
 
 let is_initial_state = true;

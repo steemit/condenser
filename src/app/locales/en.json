@@ -331,7 +331,7 @@
     },
     "category_selector_jsx": {
         "tag_your_story":
-            "Tag (up to 5 tags), the first tag is your main category.",
+            "Tag (up to 8 tags), the first tag is your main category.",
         "select_a_tag": "Select a tag",
         "maximum_tag_length_is_24_characters":
             "Maximum tag length is 24 characters",

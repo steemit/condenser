@@ -10,7 +10,6 @@ export default function ServerHTML({
     shouldSeeAds,
     adClient,
     gptEnabled,
-    videoAdsEnabled,
     gptBannedTags,
     gptBidding,
     shouldSeeCookieConsent,
@@ -232,9 +231,6 @@ export default function ServerHTML({
                         `,
                         }}
                     />
-                ) : null}
-                {videoAdsEnabled ? (
-                            <div id="bsa-zone_1572296522077-3_123456" />
                 ) : null}
             </body>
         </html>

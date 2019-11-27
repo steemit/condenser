@@ -12,6 +12,7 @@
         "blog": "블로그",
         "browse": "Browse",
         "buy": "구매",
+        "buy_steem_power": "Buy Steem Power",
         "buy_or_sell": "구입/판매",
         "by": "by",
         "cancel": "취소",
@@ -28,6 +29,10 @@
         "dismiss": "확인",
         "edit": "수정",
         "email": "Email",
+        "external_link_message":
+            "This link will take you away from steemit.com",
+        "affiliation_steemit": "Steemit Team",
+        "affiliation_sm": "Steem Monsters Team",
         "feed": "피드",
         "follow": "팔로우",
         "for": " for ",
@@ -38,6 +43,7 @@
         "in_reply_to": "in reply to",
         "insufficient_balance": "잔고 부족",
         "invalid_amount": "잘못된 금액",
+        "links": "Links",
         "joined": "가입일",
         "loading": "로딩중..",
         "login": "로그인",
@@ -46,7 +52,9 @@
         "mute": "차단",
         "my_blog": "내 블로그",
         "my_comments": "내가 쓴 댓글",
+        "my_feed": "My feed",
         "my_replies": "받은 댓글",
+        "my_wallet": "My wallet",
         "new": "최신글",
         "newer": "최근",
         "next": "다음",
@@ -61,7 +69,7 @@
         "phishy_message":
             "Link expanded to plain text; beware of a potential phishing attempt",
         "post": "글쓰기",
-        "post_as": "Post as",
+        "post_as_user": "Post as %(username)s",
         "posts": "Posts",
         "powered_up_100": "Powered Up 100%%",
         "preview": "Preview",
@@ -72,6 +80,7 @@
         "promoted": "홍보글",
         "re": "RE",
         "re_to": "RE: %(topic)s",
+        "read_offical_blog": "Steemit Blog",
         "recent_password": "Recent Password",
         "receive": "Receive ",
         "remove": "Remove",
@@ -86,6 +95,7 @@
         },
         "reputation": "평판",
         "reveal_comment": "댓글 보이기",
+        "will_be_hidden_due_to_low_rating": "Will be hidden due to low rating",
         "request": "request",
         "required": "Required",
         "rewards": "보상",
@@ -107,8 +117,10 @@
         "topics": "Topics",
         "toggle_nightmode": "야간모드",
         "all_tags": "전체 태그",
+        "all_tags_mobile": "All content",
         "transfer": "송금 ",
         "trending_topics": "Trending Topics",
+        "try_again": "Try Again",
         "type": "Type",
         "unfollow": "언팔로우",
         "unmute": "차단 해제",
@@ -236,19 +248,22 @@
             "warning":
                 "Steemit Inc.의 직원을 포함한 합법적 인 사용자는 어떠한 경우에도 개인 키 또는 마스터 비밀번호를 요구하지 않습니다.",
             "checkbox": "네 이해합니다."
-        }
+        },
+        "post_as": "Post as"
     },
     "navigation": {
         "about": "스팀이란?",
         "explore": "태그별 현황",
         "APP_NAME_whitepaper": "%(APP_NAME)s 백서",
+        "third_party_exchanges": "Third-party exchanges:",
         "buy_LIQUID_TOKEN": "%(LIQUID_TOKEN)s 구매",
         "sell_LIQUID_TOKEN": "%(LIQUID_TOKEN)s 판매",
         "currency_market": "거래소",
         "stolen_account_recovery": "도난 계정 복구",
         "change_account_password": "비밀번호 변경",
-        "witnesses": "증인",
         "vote_for_witnesses": "증인 투표",
+        "advertise": "Advertise",
+        "media_kit": "Media Kit",
         "privacy_policy": "개인정보 방침",
         "terms_of_service": "이용 약관",
         "sign_up": "가입",
@@ -264,7 +279,10 @@
         "whitepaper": "스팀 화이트페이퍼",
         "intro_tagline": "생각의 가치",
         "intro_paragraph":
-            "당신의 생각과 글은 소중합니다. 스팀잇은 고급 컨텐츠 생산자들과 큐레이터들에게 투명한 금전적 보상을 지원합니다. 지금 참여하세요."
+            "당신의 생각과 글은 소중합니다. 스팀잇은 고급 컨텐츠 생산자들과 큐레이터들에게 투명한 금전적 보상을 지원합니다. 지금 참여하세요.",
+        "jobs": "Jobs at Steemit",
+        "steem_proposals": "Steem Proposals",
+        "witnesses": "증인"
     },
     "main_menu": {
         "hot": "인기글",
@@ -338,6 +356,7 @@
             "This post is not available due to a copyright claim.",
         "share_on_facebook": "Facebook에 공유",
         "share_on_twitter": "Twitter에 공유",
+        "share_on_reddit": "Share on Reddit",
         "share_on_linkedin": "Linkedin에 공유",
         "recent_password": "최근 비밀번호",
         "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
@@ -392,7 +411,13 @@
             "Now showing comments with low ratings",
         "sort_order": "정렬 순서",
         "comments_were_hidden_due_to_low_ratings":
-            "Comments were hidden due to low ratings"
+            "Comments were hidden due to low ratings",
+        "comment_sort_order": {
+            "trending": "Trending",
+            "votes": "Votes",
+            "age": "Age",
+            "reputation": "Reputation"
+        }
     },
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
@@ -410,17 +435,28 @@
         "past_payouts": "지급된 보상 $%(value)s",
         "past_payouts_author": " - 저자 $%(value)s",
         "past_payouts_curators": " - 큐레이터 $%(value)s",
-        "we_will_reset_curation_rewards_for_this_post":
-            "will reset your curation rewards for this post",
         "removing_your_vote": "보팅 취소",
+        "removing_your_vote_will_reset_curation_rewards_for_this_post":
+            "Removing your vote will reset your curation rewards for this post",
         "changing_to_an_upvote": "Changing to an Up-Vote",
+        "changing_to_an_upvote_will_reset_curation_rewards_for_this_post":
+            "Changing to an Up-Vote will reset your curation rewards for this post",
         "changing_to_a_downvote": "Changing to a Down-Vote",
+        "changing_to_a_downvote_will_reset_curation_rewards_for_this_post":
+            "Changing to a Down-Vote will reset your curation rewards for this post",
         "confirm_flag": "Confirm Flag",
         "and_more": "and %(count)s more",
         "votes_plural": {
             "one": "%(count)s 보팅",
             "other": "%(count)s 보팅"
-        }
+        },
+        "must_reached_minimum_payout": "(amount must reach $0.02 for payout)",
+        "payout": "Payout",
+        "breakdown": "Breakdown",
+        "voting_power": "보팅 파워",
+        "estimated_vote": "보팅 가치(추정치)",
+        "we_will_reset_curation_rewards_for_this_post":
+            "will reset your curation rewards for this post"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -519,7 +555,9 @@
             "If you recently added new users to follow, your personalized feed will populate once new content is available",
         "empty_feed_3": "Explore Trending Articles",
         "empty_feed_4": "Read The Quick Start Guide",
-        "empty_feed_5": "Browse The FAQ"
+        "empty_feed_5": "Browse The FAQ",
+        "my_feed": "My Feed",
+        "accountnames_feed": "%(account_name)s's Feed"
     },
     "explorepost_jsx": {
         "copied": "Copied!",
@@ -585,11 +623,38 @@
         "sign_up_get_steem":
             "계정을 만들고 가상화폐 STEEM 을 보상으로 받으세요.",
         "returning_users": "Returning Users: ",
+        "login_warning_title": "Logging in with non-posting key",
+        "login_warning_body":
+            "You are attempting to use a key with more permissions than required for everyday Steemit.com use. Since keys and passwords are more likely to get compromised the more they are used, it is strongly recommended to only use your Posting Key to log in.",
+        "continue_anyway": "Continue Anyway",
+        "login_warning_link_text":
+            "Open my Steemit Wallet to access and view my posting key",
         "join_our": "Join our",
         "sign_transfer": "Sign to complete transfer",
         "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
+        "account_name_should_not_be_empty": "Account name should not be empty.",
+        "account_name_should_be_longer": "Account name should be longer.",
+        "account_name_should_be_shorter": "Account name should be shorter.",
+        "each_account_segment_should_start_with_a_letter":
+            "Each account segment should start with a letter.",
+        "each_account_segment_should_have_only_letters_digits_or_dashes":
+            "Each account segment should have only letters, digits, or dashes.",
+        "each_account_segment_should_have_only_one_dash_in_a_row":
+            "Each account segment should have only one dash in a row.",
+        "each_account_segment_should_end_with_a_letter_or_digit":
+            "Each account segment should end with a letter or digit.",
+        "each_account_segment_should_be_longer":
+            "Each account segment should be longer.",
+        "verified_exchange_no_memo":
+            "You must include a memo for your exchange transfer.",
+        "badactor":
+            "Use caution sending to this account. Please double check your spelling for possible phishing.",
+        "memo_has_privatekey":
+            "Please do not include what appears to be a private key or password.",
+        "memo_is_privatekey": "Do not use private keys in memos.",
+        "memo_is_password": "Do not use passwords in memos.",
         "account_name_should": "Account name should ",
         "not_be_empty": "not be empty.",
         "be_longer": "be longer.",
@@ -599,9 +664,7 @@
         "have_only_letters_digits_or_dashes":
             "have only letters, digits, or dashes.",
         "have_only_one_dash_in_a_row": "have only one dash in a row.",
-        "end_with_a_letter_or_digit": "end with a letter or digit.",
-        "verified_exchange_no_memo":
-            "You must include a memo for your exchange transfer."
+        "end_with_a_letter_or_digit": "end with a letter or digit."
     },
     "settings_jsx": {
         "invalid_url": "잘못된 URL 입니다",
@@ -616,14 +679,19 @@
         "always_hide": "항상 숨기기",
         "always_warn": "항상 경고하기",
         "always_show": "항상 보이기",
+        "choose_default_blog_payout": "Blog post rewards",
+        "choose_default_comment_payout": "Comment post rewards",
         "muted_users": "내가 차단한 사용자",
         "update": "저장",
+        "upload_image": "Upload an image",
+        "uploading_image": "Uploading image",
         "profile_image_url": "프로파일 사진 경로",
         "cover_image_url": "커버이미지 사진 경로",
         "profile_name": "닉네임",
         "profile_about": "한 줄 소개",
         "profile_location": "지역",
-        "profile_website": "웹사이트"
+        "profile_website": "웹사이트",
+        "saved": "Saved!"
     },
     "transfer_jsx": {
         "amount_is_in_form": "Amount is in the form 99999.999",
@@ -646,9 +714,15 @@
         "asset_currently_collecting":
             "%(asset)s의 연이율은 현재 %(interest)s%% 입니다.",
         "beware_of_spam_and_phishing_links":
-            "메모에는 스팸과 피싱 링크가 포함 될 수 있으니 주의하십시오. 신뢰할 수없는 사용자의 링크를 열지 마십시오. 또한 다른 어떤 웹 사이트에도 개인키를 공개하지 마십시오."
+            "메모에는 스팸과 피싱 링크가 포함 될 수 있으니 주의하십시오. 신뢰할 수없는 사용자의 링크를 열지 마십시오. 또한 다른 어떤 웹 사이트에도 개인키를 공개하지 마십시오.",
+        "transactions_make_take_a_few_minutes":
+            "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
+        "autocomplete_previous_transfers": "previous transfers",
+        "autocomplete_user_following": "following",
+        "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
     },
     "userwallet_jsx": {
+        "transfer": "Transfer",
         "conversion_complete_tip": "Will complete on",
         "in_conversion": "%(amount)s in conversion",
         "transfer_to_savings": "금고로 전송",
@@ -660,6 +734,8 @@
         "withdraw_DEBT_TOKENS": "%(DEBT_TOKENS)s 출금",
         "tokens_worth_about_1_of_LIQUID_TICKER":
             "%(LIQUID_TICKER)s의 1달러 가치가 있는 토큰입니다. 현재 연이율은 %(sbdInterest)s%% 입니다.",
+        "tradeable_tokens_transferred":
+            "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "예금",
         "estimated_account_value": "추정 자산가치",
         "next_power_down_is_scheduled_to_happen": "다음 파워다운 예정:",
@@ -677,5 +753,36 @@
         "ownership_changed_on": "Ownership Changed On ",
         "deadline_for_recovery_is": "Deadline for recovery is",
         "i_understand_dont_show_again": "이 메시지를 다시 보지 않기"
+    },
+    "termsagree_jsx": {
+        "please_review": "Please review our terms to continue",
+        "hi_user": "Hi %(username)s,",
+        "blurb":
+            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Steemit and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Steemit better.",
+        "i_agree_to_steemits": "I agree to Steemit's",
+        "terms_of_service": "Terms of Service",
+        "privacy_policy": "Privacy Policy",
+        "continue": "Continue",
+        "cancel": "Cancel"
+    },
+    "confirmtransactionform_jsx": {
+        "confirm": "Confirm %(transactionType)s"
+    },
+    "modals_jsx": {
+        "your_transaction_failed": "Your transaction failed to process",
+        "out_of_bandwidth_title": "Why? You've run out of Resource Credits",
+        "out_of_bandwidth_reason":
+            "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Steem blockchain for everyone.",
+        "out_of_bandwidth_reason_2":
+            "To keep things free, Steem intelligently allocates Resource Credits to each user based on their Steem Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Steem Power. This system prioritizes actions by good community members while limiting spam.",
+        "out_of_bandwidth_option_title": "To keep interacting on Steemit:",
+        "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
+        "out_of_bandwidth_option_2":
+            "Wait until your Resource Credits recharge",
+        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+    },
+    "sanitizedlink_jsx": {
+        "phishylink_caution": "Link hidden; phishing attempt",
+        "phishylink_reveal": "show link"
     }
 }

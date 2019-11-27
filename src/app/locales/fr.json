@@ -12,6 +12,7 @@
         "blog": "Blog",
         "browse": "Naviguer",
         "buy": "Acheter",
+        "buy_steem_power": "Buy Steem Power",
         "buy_or_sell": "Acheter ou vendre",
         "by": "par",
         "cancel": "Annuler",
@@ -28,6 +29,10 @@
         "dismiss": "Ignorer",
         "edit": "Editer",
         "email": "Email",
+        "external_link_message":
+            "This link will take you away from steemit.com",
+        "affiliation_steemit": "Steemit Team",
+        "affiliation_sm": "Steem Monsters Team",
         "feed": "Flux",
         "follow": "S'abonner",
         "for": "pour",
@@ -38,8 +43,8 @@
         "in_reply_to": "en réponse à",
         "insufficient_balance": "Solde insuffisant",
         "invalid_amount": "Montant invalide",
-        "joined": "Inscrit en",
         "links": "Liens",
+        "joined": "Inscrit en",
         "loading": "Chargement en cours",
         "login": "Se connecter",
         "logout": "Déconnexion",
@@ -64,7 +69,7 @@
         "phishy_message":
             "Link expanded to plain text; beware of a potential phishing attempt",
         "post": "Poster",
-        "post_as": "Poster en tant que",
+        "post_as_user": "Post as %(username)s",
         "posts": "Articles",
         "powered_up_100": "Converti en influence à 100%%",
         "preview": "Prévisualiser",
@@ -75,6 +80,7 @@
         "promoted": "promu",
         "re": "RE",
         "re_to": "RE :%(topic)s",
+        "read_offical_blog": "Steemit Blog",
         "recent_password": "Mot de passe antérieur",
         "receive": "Recevoir",
         "remove": "Enlever",
@@ -89,6 +95,7 @@
         },
         "reputation": "Réputation",
         "reveal_comment": "Révéler le commentaire",
+        "will_be_hidden_due_to_low_rating": "Will be hidden due to low rating",
         "request": "requête",
         "required": "Requis",
         "rewards": "Gains",
@@ -107,9 +114,13 @@
         "submit_a_story": "Poster",
         "tag": "Mot clé",
         "to": "vers",
+        "topics": "Topics",
+        "toggle_nightmode": "Toggle Night Mode",
         "all_tags": "Tous les clés",
+        "all_tags_mobile": "All content",
         "transfer": "Transférer",
         "trending_topics": "Sujets en vogue",
+        "try_again": "Try Again",
         "type": "Genre",
         "unfollow": "Se désabonner",
         "unmute": "Ne plus ignorer",
@@ -247,19 +258,22 @@
             "warning":
                 "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
             "checkbox": "I understand"
-        }
+        },
+        "post_as": "Poster en tant que"
     },
     "navigation": {
         "about": "A propos",
         "explore": "Explorer",
         "APP_NAME_whitepaper": "%(APP_NAME)s livre blanc",
+        "third_party_exchanges": "Third-party exchanges:",
         "buy_LIQUID_TOKEN": "Acheter %(LIQUID_TOKEN)s",
         "sell_LIQUID_TOKEN": "Vendre %(LIQUID_TOKEN)s",
         "currency_market": "Marché des devises",
         "stolen_account_recovery": "Récupération de comptes dérobés",
         "change_account_password": "Changement de mot de passe",
-        "witnesses": "Témoins",
         "vote_for_witnesses": "Voter pour les témoins",
+        "advertise": "Advertise",
+        "media_kit": "Media Kit",
         "privacy_policy": "Politique de confidentialité",
         "terms_of_service": "Conditions d'utilisation",
         "sign_up": "Rejoindre",
@@ -270,12 +284,15 @@
         "app_center": "Centre d'applications Steemit",
         "business_center": "Businesses Accepting Steem",
         "api_docs": "Documentation API sur Steemit",
-        "whitepaper": "Livre blanc sur le Steem",
         "bluepaper": "Steem Bluepaper",
         "smt_whitepaper": "Livre blanc sur le SMT",
+        "whitepaper": "Livre blanc sur le Steem",
         "intro_tagline": "Présentations sur la monnaie",
         "intro_paragraph":
-            "Votre voix vaut quelque chose. Rejoignez la communauté qui vous rémunère pour vos articles et participez à la curation du contenu de qualité."
+            "Votre voix vaut quelque chose. Rejoignez la communauté qui vous rémunère pour vos articles et participez à la curation du contenu de qualité.",
+        "jobs": "Jobs at Steemit",
+        "steem_proposals": "Steem Proposals",
+        "witnesses": "Témoins"
     },
     "main_menu": {
         "hot": "chaud",
@@ -353,6 +370,7 @@
             "Cet article n'est pas disponible en raison d'une requête de droits d'auteur.",
         "share_on_facebook": "Partager sur Facebook",
         "share_on_twitter": "Partager sur Twitter",
+        "share_on_reddit": "Share on Reddit",
         "share_on_linkedin": "Partager sur Linkedin",
         "recent_password": "Mot de passe antérieur",
         "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
@@ -408,7 +426,13 @@
             "Affichant à présent les commentaires de faible évaluation",
         "sort_order": "Classer les ordres",
         "comments_were_hidden_due_to_low_ratings":
-            "Certains commentaires sont masqués en raison de leur faible évaluation"
+            "Certains commentaires sont masqués en raison de leur faible évaluation",
+        "comment_sort_order": {
+            "trending": "Trending",
+            "votes": "Votes",
+            "age": "Age",
+            "reputation": "Reputation"
+        }
     },
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
@@ -425,17 +449,28 @@
         "past_payouts": "Gains antérieurs: %(value)s$",
         "past_payouts_author": "- Auteur: %(value)s$",
         "past_payouts_curators": "Curateurs: %(value)s$",
-        "we_will_reset_curation_rewards_for_this_post":
-            "cela annulera vos potentiels gains de curation pour cet article",
         "removing_your_vote": "Enlever votre vote",
+        "removing_your_vote_will_reset_curation_rewards_for_this_post":
+            "Removing your vote will reset your curation rewards for this post",
         "changing_to_an_upvote": "Modifier pour un vote positif",
+        "changing_to_an_upvote_will_reset_curation_rewards_for_this_post":
+            "Changing to an Up-Vote will reset your curation rewards for this post",
         "changing_to_a_downvote": "Modifier pour un vote négatif",
+        "changing_to_a_downvote_will_reset_curation_rewards_for_this_post":
+            "Changing to a Down-Vote will reset your curation rewards for this post",
         "confirm_flag": "Confirmer la signalisation",
         "and_more": "et %(count)s en plus",
         "votes_plural": {
             "one": "%(count)s vote",
             "other": "%(count)s votes"
-        }
+        },
+        "must_reached_minimum_payout": "(amount must reach $0.02 for payout)",
+        "payout": "Payout",
+        "breakdown": "Breakdown",
+        "voting_power": "Voting Power",
+        "estimated_vote": "Estimated Vote Value",
+        "we_will_reset_curation_rewards_for_this_post":
+            "cela annulera vos potentiels gains de curation pour cet article"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -537,7 +572,8 @@
         "empty_feed_3": "Explorer les articles en vogue",
         "empty_feed_4": "Lire le guide de prise en main rapide",
         "empty_feed_5": "Parcourir la FAQ",
-        "my_feed": "Mon Flux"
+        "my_feed": "Mon Flux",
+        "accountnames_feed": "%(account_name)s's Feed"
     },
     "explorepost_jsx": {
         "copied": "Copié!",
@@ -599,15 +635,42 @@
         "amazing_community": "communauté extraordinaire",
         "to_comment_and_reward_others":
             " pour commenter et récompenser les autres.",
-        "sign_up_get_steem": "Sign up. Get STEEM",
         "signup_button": "Sign up now to earn ",
         "signup_button_emphasis": "FREE STEEM!",
+        "sign_up_get_steem": "Sign up. Get STEEM",
         "returning_users": "Utilisateurs de retour: ",
+        "login_warning_title": "Logging in with non-posting key",
+        "login_warning_body":
+            "You are attempting to use a key with more permissions than required for everyday Steemit.com use. Since keys and passwords are more likely to get compromised the more they are used, it is strongly recommended to only use your Posting Key to log in.",
+        "continue_anyway": "Continue Anyway",
+        "login_warning_link_text":
+            "Open my Steemit Wallet to access and view my posting key",
         "join_our": "Rejoignez notre",
         "sign_transfer": "Sign to complete transfer",
         "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
+        "account_name_should_not_be_empty": "Account name should not be empty.",
+        "account_name_should_be_longer": "Account name should be longer.",
+        "account_name_should_be_shorter": "Account name should be shorter.",
+        "each_account_segment_should_start_with_a_letter":
+            "Each account segment should start with a letter.",
+        "each_account_segment_should_have_only_letters_digits_or_dashes":
+            "Each account segment should have only letters, digits, or dashes.",
+        "each_account_segment_should_have_only_one_dash_in_a_row":
+            "Each account segment should have only one dash in a row.",
+        "each_account_segment_should_end_with_a_letter_or_digit":
+            "Each account segment should end with a letter or digit.",
+        "each_account_segment_should_be_longer":
+            "Each account segment should be longer.",
+        "verified_exchange_no_memo":
+            "Vous devez inclure un mémo pour votre transfert vers un marché d'échanges.",
+        "badactor":
+            "Use caution sending to this account. Please double check your spelling for possible phishing.",
+        "memo_has_privatekey":
+            "Please do not include what appears to be a private key or password.",
+        "memo_is_privatekey": "Do not use private keys in memos.",
+        "memo_is_password": "Do not use passwords in memos.",
         "account_name_should": "Le nom du compte doit ",
         "not_be_empty": "ne peut pas être vide.",
         "be_longer": "être plus long.",
@@ -617,9 +680,7 @@
         "have_only_letters_digits_or_dashes":
             "ne comporter que des lettres, des chiffres ou des traits d'union.",
         "have_only_one_dash_in_a_row": "n'avoir qu'un seul trait d'union.",
-        "end_with_a_letter_or_digit": "terminer par une lettre ou un chiffre.",
-        "verified_exchange_no_memo":
-            "Vous devez inclure un mémo pour votre transfert vers un marché d'échanges."
+        "end_with_a_letter_or_digit": "terminer par une lettre ou un chiffre."
     },
     "settings_jsx": {
         "invalid_url": "L'URL est invalide",
@@ -635,14 +696,19 @@
         "always_hide": "Toujours masquer",
         "always_warn": "Toujours avertir",
         "always_show": "Toujours montrer",
+        "choose_default_blog_payout": "Blog post rewards",
+        "choose_default_comment_payout": "Comment post rewards",
         "muted_users": "Utilisateurs ignorés",
         "update": "Mise à jour",
+        "upload_image": "Upload an image",
+        "uploading_image": "Uploading image",
         "profile_image_url": "URL de la photo de profil",
         "cover_image_url": "URL de l'image de couverture",
         "profile_name": "Nom à afficher",
         "profile_about": "A propos",
         "profile_location": "Lieu",
-        "profile_website": "Site internet"
+        "profile_website": "Site internet",
+        "saved": "Saved!"
     },
     "transfer_jsx": {
         "amount_is_in_form": "Montant dans le format 99999.999",
@@ -667,9 +733,15 @@
         "asset_currently_collecting":
             "%(asset)s collectant actuellement %(interest)s %% d'APR.",
         "beware_of_spam_and_phishing_links":
-            "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
+            "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
+        "transactions_make_take_a_few_minutes":
+            "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
+        "autocomplete_previous_transfers": "previous transfers",
+        "autocomplete_user_following": "following",
+        "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
     },
     "userwallet_jsx": {
+        "transfer": "Transfer",
         "conversion_complete_tip": "S'achèvera le",
         "in_conversion": "%(amount)s en conversion",
         "transfer_to_savings": "Transfert vers l'épargne",
@@ -681,6 +753,8 @@
         "withdraw_DEBT_TOKENS": "Retirer %(DEBT_TOKENS)s",
         "tokens_worth_about_1_of_LIQUID_TICKER":
             "Des jetons d'environ 1.00$ de %(LIQUID_TICKER)s, actuellement donnant lieu à %(sbdInterest)s %% d'APR.",
+        "tradeable_tokens_transferred":
+            "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "EPARGNE",
         "estimated_account_value": "Valeur estimée du compte",
         "next_power_down_is_scheduled_to_happen":
@@ -700,5 +774,36 @@
         "deadline_for_recovery_is": "La date limite de récupération est",
         "i_understand_dont_show_again":
             "J'ai compris, ne me le montrez plus jamais"
+    },
+    "termsagree_jsx": {
+        "please_review": "Please review our terms to continue",
+        "hi_user": "Hi %(username)s,",
+        "blurb":
+            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Steemit and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Steemit better.",
+        "i_agree_to_steemits": "I agree to Steemit's",
+        "terms_of_service": "Terms of Service",
+        "privacy_policy": "Privacy Policy",
+        "continue": "Continue",
+        "cancel": "Cancel"
+    },
+    "confirmtransactionform_jsx": {
+        "confirm": "Confirm %(transactionType)s"
+    },
+    "modals_jsx": {
+        "your_transaction_failed": "Your transaction failed to process",
+        "out_of_bandwidth_title": "Why? You've run out of Resource Credits",
+        "out_of_bandwidth_reason":
+            "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Steem blockchain for everyone.",
+        "out_of_bandwidth_reason_2":
+            "To keep things free, Steem intelligently allocates Resource Credits to each user based on their Steem Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Steem Power. This system prioritizes actions by good community members while limiting spam.",
+        "out_of_bandwidth_option_title": "To keep interacting on Steemit:",
+        "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
+        "out_of_bandwidth_option_2":
+            "Wait until your Resource Credits recharge",
+        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+    },
+    "sanitizedlink_jsx": {
+        "phishylink_caution": "Link hidden; phishing attempt",
+        "phishylink_reveal": "show link"
     }
 }

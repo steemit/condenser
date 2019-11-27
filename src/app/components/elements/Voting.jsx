@@ -5,6 +5,7 @@ import Slider from 'react-rangeslider';
 import tt from 'counterpart';
 import CloseButton from 'app/components/elements/CloseButton';
 import * as transactionActions from 'app/redux/TransactionReducer';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Icon from 'app/components/elements/Icon';
 import {
     DEBT_TOKEN_SHORT,
@@ -18,6 +19,11 @@ import {
     formatDecimal,
     parsePayoutAmount,
 } from 'app/utils/ParsersAndFormatters';
+import {
+    applyRewardsCurve,
+    computeVoteRshares,
+    computeVotingPower,
+} from 'app/utils/VoteValues';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Dropdown from 'app/components/elements/Dropdown';
@@ -195,6 +201,22 @@ class Voting extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting');
     }
 
+    componentDidMount() {
+        const {
+            username,
+            currentAccount,
+            getAccount,
+            rewardFund,
+            getRewardFund,
+        } = this.props;
+        if (!rewardFund) {
+            getRewardFund();
+        }
+        if (username && !currentAccount) {
+            getAccount(username);
+        }
+    }
+
     componentWillMount() {
         const { username, active_votes } = this.props;
         this._checkMyVote(username, active_votes);
@@ -227,6 +249,8 @@ class Voting extends React.Component {
             price_per_steem,
             sbd_print_rate,
             username,
+            currentAccount,
+            rewardFund,
         } = this.props;
 
         const {
@@ -240,11 +264,47 @@ class Voting extends React.Component {
         const votingUpActive = voting && votingUp;
         const votingDownActive = voting && votingDown;
 
+        const cashout_time = post_obj.get('cashout_time');
+        // There is an "active cashout" if: (a) there is a pending payout, OR (b) there is a valid cashout_time AND it's NOT a comment with 0 votes.
+        const cashout_active =
+            pending_payout > 0 ||
+            (cashout_time.indexOf('1969') !== 0 &&
+                !(is_comment && total_votes == 0));
+
+        const net_rshares = Math.max(post_obj.get('net_rshares'), 0);
+
+        // If reward fund is available, use that to compute pending payout.
+        // Load time may cause flips between cached and computed values.
+        const pending_payout = rewardFund
+            ? price_per_steem * applyRewardsCurve(rewardFund, net_rshares)
+            : parsePayoutAmount(post_obj.get('pending_payout_value'));
+
+        let currentVp = '';
+        const votingPower = currentAccount
+            ? computeVotingPower(currentAccount)
+            : null;
         const slider = up => {
             const b = up
                 ? this.state.sliderWeight.up
                 : this.state.sliderWeight.down;
             const s = up ? '' : '-';
+            let valueEst = '';
+            if (cashout_active && votingPower) {
+                currentVp = up ? votingPower.up : votingPower.down;
+                const rshares = computeVoteRshares(
+                    votingPower,
+                    up ? b : -b,
+                    cashout_time
+                );
+                const oldValue = applyRewardsCurve(rewardFund, net_rshares);
+                const oldValueSbd = oldValue * price_per_steem;
+                const newValue = applyRewardsCurve(
+                    rewardFund,
+                    net_rshares + rshares
+                );
+                const newValueSbd = newValue * price_per_steem;
+                valueEst = (newValueSbd - oldValueSbd).toFixed(2);
+            }
             return (
                 <span>
                     <div className="weight-display">{s + b / 100}%</div>
@@ -257,6 +317,21 @@ class Voting extends React.Component {
                         onChangeComplete={this.storeSliderWeight(up)}
                         tooltip={false}
                     />
+                    {currentVp ? (
+                        <div className="voting-power-display">
+                            {tt('voting_jsx.voting_power')}:{' '}
+                            {currentVp.toFixed(1)}%
+                        </div>
+                    ) : (
+                        ''
+                    )}
+                    {valueEst && valueEst !== 'NaN' ? (
+                        <div className="voting-est-display">
+                            {tt('voting_jsx.estimated_vote')}: {valueEst}
+                        </div>
+                    ) : (
+                        ''
+                    )}
                 </span>
             );
         };
@@ -347,13 +422,10 @@ class Voting extends React.Component {
 
         const total_votes = post_obj.getIn(['stats', 'total_votes']);
 
-        const cashout_time = post_obj.get('cashout_time');
         const max_payout = parsePayoutAmount(
             post_obj.get('max_accepted_payout')
         );
-        const pending_payout = parsePayoutAmount(
-            post_obj.get('pending_payout_value')
-        );
+
         const percent_steem_dollars =
             post_obj.get('percent_steem_dollars') / 20000;
         const pending_payout_sbd = pending_payout * percent_steem_dollars;
@@ -390,11 +462,6 @@ class Voting extends React.Component {
             (myVote > 0 ? ' Voting__button--upvoted' : '') +
             (votingUpActive ? ' votingUp' : '');
 
-        // There is an "active cashout" if: (a) there is a pending payout, OR (b) there is a valid cashout_time AND it's NOT a comment with 0 votes.
-        const cashout_active =
-            pending_payout > 0 ||
-            (cashout_time.indexOf('1969') !== 0 &&
-                !(is_comment && total_votes == 0));
         const payoutItems = [];
 
         const minimumAmountForPayout = 0.02;
@@ -665,7 +732,7 @@ export default connect(
             net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD;
 
         const currentAccountData = state.global.getIn(['accounts', username]);
-        const votingData = computeVotingData(currentAccountData);
+        const rewardFund = state.global.get('rewardFund');
         return {
             post: ownProps.post,
             showList: ownProps.showList,
@@ -680,12 +747,21 @@ export default connect(
             voting,
             price_per_steem,
             sbd_print_rate,
-            votingData,
+            currentAccount: currentAccountData
+                ? currentAccountData.toJS()
+                : null,
+            rewardFund: rewardFund ? rewardFund.toJS() : null,
         };
     },
 
     // mapDispatchToProps
     dispatch => ({
+        getAccount: username => {
+            dispatch(fetchDataSagaActions.getAccounts([username]));
+        },
+        getRewardFund: () => {
+            dispatch(fetchDataSagaActions.getRewardFund());
+        },
         vote: (weight, { author, permlink, username, myVote, isFlag }) => {
             const confirm = () => {
                 if (myVote == null) return null;

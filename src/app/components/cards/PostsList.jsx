@@ -188,10 +188,9 @@ class PostsList extends React.Component {
 
                 const every = this.props.adSlots.in_feed_1.every;
                 if (this.props.shouldSeeAds && i >= every && i % every === 0) {
-                    return (
-                        <div key={item.item}>
-                            <li>{ps}</li>
-
+                    return [
+                        <li key={item.item}>{ps}</li>,
+                        <div key={`ad-${item.item}`}>
                             <div className="articles__content-block--ad">
                                 <GptAd
                                     tags={[category]}
@@ -199,8 +198,8 @@ class PostsList extends React.Component {
                                     id="bsa-zone_1566495089502-1_123456"
                                 />
                             </div>
-                        </div>
-                    );
+                        </div>,
+                    ];
                 }
                 return <li key={item.item}>{ps}</li>;
             });

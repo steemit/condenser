@@ -191,12 +191,13 @@ class PostSummary extends React.Component {
                 return cnt > 0 ? '•'.repeat(cnt) : null;
             };
             const { up, dn } = vote_weights(content);
-            dots = (up || dn) && (
-                <span className="vote_weights">
-                    {_dots(up)}
-                    {<span>{_dots(dn)}</span>}
-                </span>
-            );
+            dots =
+                up || dn ? (
+                    <span className="vote_weights">
+                        {_dots(up)}
+                        {<span>{_dots(dn)}</span>}
+                    </span>
+                ) : null;
         }
 
         const summary_footer = (

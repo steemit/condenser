@@ -12,15 +12,18 @@ function normalizeRewards(rewards) {
 
     let remainder = total;
     const out = items.map(item => {
-        const [url, title, payout, posts, authors] = item;
+        let [url, title, payout, posts, authors] = item;
         remainder -= payout;
-        return { url, title, payout, posts, authors };
+        const is_blog = url.substring(0, 9) != 'trending/';
+        url = is_blog ? url + '/payout' : url.replace('trending/', 'payout/');
+        title = title[0] == '@' ? title.substring(1) : title;
+        return { url, title, payout, posts, authors, is_blog };
     });
 
     return { items: out, total, blogs, comms, remainder };
 }
 
-function generateTreemap(items, xscale) {
+function generateTreemap(items, total, xscale) {
     let data = items.map(item => {
         return { item, value: item.payout };
     });
@@ -30,8 +33,10 @@ function generateTreemap(items, xscale) {
 
     return squarify(data, container).map(box => {
         const { x0, y0, x1, y1, item } = box;
+        const pct = (100 * item.payout / total).toFixed(2);
         return {
             ...item,
+            pct,
             shape: {
                 left: x0 / xscale + '%',
                 top: y0 + '%',
@@ -81,7 +86,7 @@ class Rewards extends Component {
         if (!el) return;
         this.setState({
             width: el.offsetWidth,
-            height: window.innerHeight - el.offsetTop - 20,
+            height: window.innerHeight - el.offsetTop - 50,
         });
     }
 
@@ -111,45 +116,72 @@ class Rewards extends Component {
 
     renderChart(rewards, width, height) {
         const { items, total, blogs, comms, remainder } = rewards;
-        // TODO: UI handling of `remainder`
-        items.push({ url: '', title: 'other', payout: remainder });
+        //items.push({ url: 'payout', title: 'other', payout: remainder, is_blog: true });
 
         const xscale = 0.5 * (width / height); // 2:1 bias
-        const boxes = generateTreemap(items, xscale);
+        const boxes = generateTreemap(items, total, xscale);
 
+        const shown = (100 * (total - remainder) / total).toFixed(2);
         return (
-            <div id="reward_chart" style={{ height: height + 'px' }}>
-                {boxes.map(this.renderBox)}
+            <div id="reward_wrap">
+                <div className="head">
+                    Showing top {items.length} payout buckets, representing{' '}
+                    <strong>{shown}%</strong> of all pending payouts. This
+                    report does not account for burned rewards.
+                </div>
+                <div id="reward_chart" style={{ height: height + 'px' }}>
+                    {boxes.map(this.renderBox)}
+                </div>
             </div>
         );
     }
 
     renderBox(item) {
-        const { payout, posts, title, url, shape } = item;
-
-        const label = '$' + Math.round(payout) + ' in ' + posts + ' posts';
+        const {
+            payout,
+            posts,
+            title,
+            url,
+            authors,
+            is_blog,
+            shape,
+            pct,
+        } = item;
+        const summary = '$' + Math.round(payout) + ' in ' + posts + ' posts';
         const link = (
-            <Link to={`/${url}`} title={label}>
-                {title}
+            <Link to={`/${url}`} className="box-inner">
+                <span className="title">{title}</span>
+                <span className="detail">
+                    <strong>{title}</strong>
+                    <br />
+                    <i>{is_blog ? 'Blogger' : 'Community'}</i>
+                    <br />
+                    {summary}
+                    {authors && (
+                        <span>
+                            <br />
+                            {authors} authors
+                        </span>
+                    )}
+                    <br />
+                    {pct}% of all payouts
+                </span>
             </Link>
         );
 
         const bg = row => {
-            const { posts, payout, title } = row;
-            let a = posts ? payout / posts : 0;
-            a = Math.min(a / 10, 1);
-            if (title[0] == '@') {
-                return 'rgba(155,155,255,' + a + ')';
-            } else {
-                return 'rgba(200,70,255,' + a + ')';
-            }
+            const { posts, payout, is_blog } = row;
+            const per_post = posts ? payout / posts : null;
+            const alpha = per_post ? Math.min(per_post / 15, 1) : 0.5;
+            const color = is_blog ? '155,155,255' : '220,90,255';
+            return `rgba(${color},${alpha})`;
         };
 
-        const cls = title[0] == '@' ? 'box box-a' : 'box box-c';
+        const className = is_blog ? 'box box-a' : 'box box-c';
         const style = { ...shape, background: bg(item) };
         return (
-            <div key={url} style={style} className={cls}>
-                <div className="box-inner">{link}</div>
+            <div key={url} style={style} className={className}>
+                {link}
             </div>
         );
     }

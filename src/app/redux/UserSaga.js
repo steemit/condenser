@@ -111,6 +111,7 @@ function* usernamePasswordLogin(action) {
     const current = yield select(state => state.user.get('current'));
     if (current) {
         const username = current.get('username');
+        if (!username) console.error('usernamePasswordLogin blank username');
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'ignore');
     }

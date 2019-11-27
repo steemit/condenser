@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { List } from 'immutable';
 import { connect } from 'react-redux';
 import * as communityActions from 'app/redux/CommunityReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -10,15 +11,18 @@ import UserTitleEditor from 'app/components/modules/UserTitleEditor';
 class CommunitySubscriberList extends React.Component {
     static propTypes = {
         community: PropTypes.object.isRequired,
-        username: PropTypes.string.isRequired,
+        username: PropTypes.string,
         viewerRole: PropTypes.string.isRequired,
         fetchSubscribers: PropTypes.func.isRequired,
         saveTitle: PropTypes.func.isRequired,
     };
 
+    static defaultProps = {
+        username: undefined,
+    };
+
     constructor(props) {
         super(props);
-        const { community, loading } = this.props;
         this.editSubscriberName = () => {
             const { state: { showEditName } } = this;
             this.setState({ showEditName: !showEditName });
@@ -45,7 +49,6 @@ class CommunitySubscriberList extends React.Component {
 
     render() {
         const { loading, subscribers, community, viewerRole } = this.props;
-
         const isMod = Role.atLeast(viewerRole, 'mod');
         const subs = this.props.subscribers.map(s => {
             const subscriberTitle = isMod ? (
@@ -79,6 +82,16 @@ const ConnectedCommunitySubscriberList = connect(
     (state, ownProps) => {
         let subscribers = [];
         let loading = true;
+        let viewerRole = 'guest';
+        // viewerRole = state.global.getIn(['community', ownProps.community.name, 'context', 'role'], 'guest');
+        let username = state.user.getIn(['current', 'username'], false);
+        const communityMember = state.global
+            .getIn(['community', ownProps.community.name, 'team'], List([]))
+            .toJS()
+            .filter(member => member[0] === username);
+        if (username && communityMember.length > 0) {
+            viewerRole = communityMember[0][1];
+        }
         if (
             state.community.getIn([ownProps.community.name]) &&
             state.community.getIn([ownProps.community.name, 'subscribers']) &&
@@ -99,10 +112,7 @@ const ConnectedCommunitySubscriberList = connect(
             subscribers,
             loading,
             username: state.user.getIn(['current', 'username']),
-            viewerRole: state.community.getIn(
-                [ownProps.community.name, 'context', 'role'],
-                'guest'
-            ),
+            viewerRole,
         };
     },
     // mapDispatchToProps

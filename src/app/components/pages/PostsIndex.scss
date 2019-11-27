@@ -574,7 +574,7 @@
   &__name {
     display: inline;
     font-weight: bold;
-    padding-right: 4px;
+    padding-right: 2px;
     margin: 0;
     line-height: 1.2;
 
@@ -745,7 +745,7 @@ a#changeLayout:focus {
         transform:translateY(-50%)
       }
       &__summary-header {
-        padding: 2px 0 0;
+        padding: 2px 0;
         border: transparent;
       }
       &__summary-footer {

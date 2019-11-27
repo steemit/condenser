@@ -748,22 +748,28 @@ function* uploadImage({
     xhr.open('POST', postUrl);
     xhr.onload = function() {
         console.log(xhr.status, xhr.responseText);
+        if (xhr.status === 200) {
+            try {
+                const res = JSON.parse(xhr.responseText);
+                const { error } = res;
+                if (error) {
+                    console.error('upload_error', error, xhr.responseText);
+                    progress({ error: 'Error: ' + error });
+                    return;
+                }
 
-        let res = {};
-        try {
-            res = JSON.parse(xhr.responseText);
-        } catch (error) {
-            console.error('upload_resp', error, xhr.responseText);
-            res = { error: 'invalid server response' };
-        }
-
-        const { error } = res;
-        if (error) {
-            progress({ error: 'Error: ' + error });
+                const { url } = res;
+                progress({ url });
+            } catch (e) {
+                console.error('upload_error2', 'not json', e, xhr.responseText);
+                progress({ error: 'Error: response not JSON' });
+                return;
+            }
+        } else {
+            console.error('upload_error3', xhr.status, xhr.statusText);
+            progress({ error: `Error: ${xhr.status}: ${xhr.statusText}` });
             return;
         }
-        const { url } = res;
-        progress({ url });
     };
     xhr.onerror = function(error) {
         console.error('xhr', filename, error);

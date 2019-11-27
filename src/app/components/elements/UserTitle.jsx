@@ -53,7 +53,7 @@ class UserTitle extends React.Component {
             const { showDialog } = this.state;
             editor = (
                 <span>
-                    <a onClick={this.onToggleDialog}>
+                    <a onClick={this.onToggleDialog} title="Edit Title">
                         <Icon name="pencil2" size="0_8x" />
                     </a>
                     {showDialog && (

@@ -125,6 +125,7 @@
     "slate-insert-block-on-enter": "0.0.1",
     "slate-trailing-block": "^0.2.4",
     "speakingurl": "9.0.0",
+    "squarify": "^1.1.0",
     "statsd-client": "0.4.2",
     "steemscript": "1.1.1",
     "store": "1.3.20",

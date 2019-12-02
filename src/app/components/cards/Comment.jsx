@@ -241,7 +241,7 @@ class CommentImpl extends React.Component {
             );
             controls = (
                 <div>
-                    <Voting post={postref} />
+                    <Voting post_obj={post} />
                     <span className="Comment__footer__controls">
                         {canReply && (
                             <a onClick={onShowReply}>{tt('g.reply')}</a>
@@ -361,7 +361,7 @@ class CommentImpl extends React.Component {
                             updateDate={comment.updated}
                         />
                         {(this.state.collapsed || hide_body) && (
-                            <Voting post={postref} showList={false} />
+                            <Voting post_obj={post} showList={false} />
                         )}
                         {this.state.collapsed &&
                             comment.children > 0 && (

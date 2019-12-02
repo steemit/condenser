@@ -218,14 +218,10 @@ class PostsIndex extends React.Component {
                         ref="list"
                         posts={posts}
                         loading={fetching}
-                        anyPosts
                         order={order}
                         category={category}
                         hideCategory={!!community}
                         loadMore={this.loadMore}
-                        showFeatured
-                        showPromoted
-                        allowAdsOnContent={enableAds}
                     />
                 )}
             </PostsIndexLayout>

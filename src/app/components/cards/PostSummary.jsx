@@ -35,10 +35,7 @@ const vote_weights = content => {
 
 class PostSummary extends React.Component {
     static propTypes = {
-        post: PropTypes.string.isRequired,
         content: PropTypes.object.isRequired,
-        featured: PropTypes.bool,
-        promoted: PropTypes.bool,
         onClose: PropTypes.func,
         nsfwPref: PropTypes.string,
     };
@@ -65,7 +62,7 @@ class PostSummary extends React.Component {
 
     render() {
         const { ignore, hideCategory, net_vests } = this.props;
-        const { post, content, featured, promoted, onClose } = this.props;
+        const { content, onClose } = this.props;
         if (!content) return null;
 
         let reblogged_by;
@@ -114,8 +111,6 @@ class PostSummary extends React.Component {
                 {content.getIn(['stats', 'is_pinned'], false) && (
                     <span className="FeaturedTag">Pinned</span>
                 )}
-                {featured && <span className="FeaturedTag">Featured</span>}
-                {promoted && <span className="PromotedTag">Sponsored</span>}
             </h2>
         );
 
@@ -171,16 +166,6 @@ class PostSummary extends React.Component {
                             )}
                         </Link>
                     </div>
-
-                    {(featured || promoted) && (
-                        <a
-                            onClick={onClose}
-                            className="PostDismiss"
-                            title="Dismiss Post"
-                        >
-                            <Icon name="close" />
-                        </a>
-                    )}
                 </div>
             </div>
         );
@@ -203,9 +188,9 @@ class PostSummary extends React.Component {
         const summary_footer = (
             <div className="articles__summary-footer">
                 {dots}
-                <Voting post={post} showList={false} />
+                <Voting post_obj={content} showList={false} />
                 <VotesAndComments
-                    post={post}
+                    post={content}
                     commentsLink={post_url + '#comments'}
                 />
                 <span className="PostSummary__time_author_category">
@@ -340,15 +325,11 @@ class PostSummary extends React.Component {
 
 export default connect(
     (state, props) => {
-        const { post, hideCategory, nsfwPref, featured, promoted } = props;
-        const content = state.global.get('content').get(post);
+        const { content, hideCategory, nsfwPref } = props;
         const net_vests = state.user.getIn(['current', 'effective_vests'], 0.0);
         return {
-            post,
             content,
             hideCategory,
-            featured,
-            promoted,
             username:
                 state.user.getIn(['current', 'username']) ||
                 state.offchain.get('account'),

@@ -24,11 +24,10 @@ function topPosition(domElt) {
 
 class PostsList extends React.Component {
     static propTypes = {
-        posts: PropTypes.object.isRequired,
+        posts: PropTypes.object,
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
-        pathname: PropTypes.string,
         nsfwPref: PropTypes.string.isRequired,
     };
 
@@ -114,92 +113,42 @@ class PostsList extends React.Component {
 
     render() {
         const {
-            posts,
+            post_objects,
             loading,
-            pathname,
             category,
             order,
-            content,
-            mutes,
-            username,
             nsfwPref,
             hideCategory,
         } = this.props;
         const { thumbSize } = this.state;
-        const postsInfo = [];
-        posts.forEach(item => {
-            const cont = content.get(item);
-            if (!cont) {
-                // can occur when deleting a post
-                console.error('PostsList --> Missing cont key: ' + item);
-                return;
-            }
-            const author = cont.get('author');
-            const ignore = mutes.has(author);
-            if (!ignore) postsInfo.push({ item, ignore });
-        });
-
-        // Helper functions for determining whether to show special posts.
-        const showFeatured = username
-            ? order === 'feed'
-            : order === 'trending' && !category;
-
-        const featureds = this.props.featured;
-        const renderFeatured = featuredPosts => {
-            if (!process.env.BROWSER) return null;
-            return featuredPosts.map(featuredPost => {
-                const id = `${featuredPost.author}/${featuredPost.permlink}`;
-                if (localStorage.getItem(`hidden-featured-post-${id}`))
-                    return null;
-                const featuredPostContent = content.get(id);
-                const isSeen = featuredPostContent.get('seen');
-                const close = e => {
-                    e.preventDefault();
-                    localStorage.setItem(`hidden-featured-post-${id}`, true);
-                    this.forceUpdate();
-                };
-                return (
-                    <li key={id}>
-                        <PostSummary
-                            post={id}
-                            thumbSize={thumbSize}
-                            ignore={false}
-                            nsfwPref={nsfwPref}
-                            featured
-                            onClose={close}
-                        />
-                    </li>
-                );
-            });
-        };
 
         const renderSummary = items =>
-            items.map((item, i) => {
+            items.map((post, i) => {
                 const ps = (
                     <PostSummary
-                        post={item.item}
+                        content={post}
                         thumbSize={thumbSize}
-                        ignore={item.ignore}
                         nsfwPref={nsfwPref}
                         hideCategory={hideCategory}
                         order={order}
                     />
                 );
 
-                const every = this.props.adSlots.in_feed_1.every;
                 const summary = [];
-                summary.push(<li key={item.item}>{ps}</li>);
+                summary.push(<li key={i}>{ps}</li>);
 
+                const every = this.props.adSlots.in_feed_1.every;
                 if (this.props.shouldSeeAds && i >= every && i % every === 0) {
                     summary.push(
-                        <div key={`ad-${item.item}`}>
-                            <div className="articles__content-block--ad">
-                                <GptAd
-                                    tags={[category]}
-                                    type="Freestar"
-                                    id="bsa-zone_1566495089502-1_123456"
-                                />
-                            </div>
+                        <div
+                            key={`ad-${i}`}
+                            className="articles__content-block--ad"
+                        >
+                            <GptAd
+                                tags={[category]}
+                                type="Freestar"
+                                id="bsa-zone_1566495089502-1_123456"
+                            />
                         </div>
                     );
                 }
@@ -214,11 +163,7 @@ class PostsList extends React.Component {
                     itemScope
                     itemType="http://schema.org/blogPosts"
                 >
-                    {/* Only render featured when other posts are ready */}
-                    {showFeatured &&
-                        postsInfo.length > 0 &&
-                        renderFeatured(featureds)}
-                    {renderSummary(postsInfo)}
+                    {renderSummary(post_objects)}
                 </ul>
                 {loading && (
                     <center>
@@ -235,33 +180,40 @@ class PostsList extends React.Component {
 
 export default connect(
     (state, props) => {
-        const pathname = state.app.get('location').pathname;
+        const userPreferences = state.app.get('user_preferences').toJS();
+        const nsfwPref = userPreferences.nsfwPref || 'warn';
+        const shouldSeeAds = state.app.getIn(['googleAds', 'enabled']);
+        const adSlots = state.app.getIn(['googleAds', 'adSlots']).toJS();
+
         const current = state.user.get('current');
         const username = current
             ? current.get('username')
             : state.offchain.get('account');
-        const content = state.global.get('content');
         const mutes = state.global.getIn(
             ['follow', 'getFollowingAsync', username, 'ignore_result'],
             List()
         );
-        const userPreferences = state.app.get('user_preferences').toJS();
-        const nsfwPref = userPreferences.nsfwPref || 'warn';
-        const featured = state.offchain
-            .get('special_posts')
-            .get('featured_posts')
-            .toJS();
-        const shouldSeeAds = state.app.getIn(['googleAds', 'enabled']);
-        const adSlots = state.app.getIn(['googleAds', 'adSlots']).toJS();
+
+        let post_objects = props.post_objects;
+        if (!post_objects) {
+            post_objects = [];
+            const content = state.global.get('content');
+            props.posts.forEach(postref => {
+                const cont = state.global.getIn(['content', postref]);
+                if (!cont) {
+                    // can occur when deleting a post
+                    console.error('PostsList --> Missing cont key: ' + postref);
+                    return;
+                }
+                const muted = mutes.has(postref.split('/')[0]);
+                if (!muted) post_objects.push(cont);
+            });
+        }
 
         return {
-            ...props,
-            pathname,
-            username,
-            content,
-            mutes,
+            ...props, //loading,category,order,hideCategory,posts
+            post_objects,
             nsfwPref,
-            featured,
             shouldSeeAds,
             adSlots,
         };

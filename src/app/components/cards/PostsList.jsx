@@ -209,6 +209,7 @@ export default connect(
                     const muted = mutes.has(post.get('author'));
                     if (!muted) posts.push(post);
                 });
+                posts = List(posts);
             } else {
                 console.error('PostsList: no `posts` or `post_refs`');
             }

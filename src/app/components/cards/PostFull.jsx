@@ -461,7 +461,7 @@ class PostFull extends React.Component {
                 <div className="PostFull__footer row">
                     <div className="columns medium-12 large-8">
                         <TimeAuthorCategory post={post} />
-                        <Voting post_obj={post} />
+                        <Voting post={post} />
                     </div>
                     <div className="RightShare__Menu small-11 medium-12 large-4 columns">
                         {canReblog && (

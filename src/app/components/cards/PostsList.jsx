@@ -82,7 +82,7 @@ class PostsList extends React.Component {
             10
         ) {
             const { loadMore, posts } = this.props;
-            if (loadMore && posts && posts.size) loadMore(posts.last());
+            if (loadMore && posts.size > 0) loadMore();
         }
 
         // Detect if we're in mobile mode (renders larger preview imgs)
@@ -113,7 +113,7 @@ class PostsList extends React.Component {
 
     render() {
         const {
-            post_objects,
+            posts,
             loading,
             category,
             order,
@@ -126,7 +126,7 @@ class PostsList extends React.Component {
             items.map((post, i) => {
                 const ps = (
                     <PostSummary
-                        content={post}
+                        post={post}
                         thumbSize={thumbSize}
                         nsfwPref={nsfwPref}
                         hideCategory={hideCategory}
@@ -163,7 +163,7 @@ class PostsList extends React.Component {
                     itemScope
                     itemType="http://schema.org/blogPosts"
                 >
-                    {renderSummary(post_objects)}
+                    {renderSummary(posts)}
                 </ul>
                 {loading && (
                     <center>
@@ -194,25 +194,29 @@ export default connect(
             List()
         );
 
-        let post_objects = props.post_objects;
-        if (!post_objects) {
-            post_objects = [];
-            const content = state.global.get('content');
-            props.posts.forEach(postref => {
-                const cont = state.global.getIn(['content', postref]);
-                if (!cont) {
-                    // can occur when deleting a post
-                    console.error('PostsList --> Missing cont key: ' + postref);
-                    return;
-                }
-                const muted = mutes.has(postref.split('/')[0]);
-                if (!muted) post_objects.push(cont);
-            });
+        let { posts } = props;
+        if (typeof posts === 'undefined') {
+            const { post_refs, loading } = props;
+            if (post_refs) {
+                posts = [];
+                props.post_refs.forEach(ref => {
+                    const post = state.global.getIn(['content', ref]);
+                    if (!post) {
+                        // can occur when deleting a post
+                        console.error('PostsList --> Missing cont key: ' + ref);
+                        return;
+                    }
+                    const muted = mutes.has(post.get('author'));
+                    if (!muted) posts.push(post);
+                });
+            } else {
+                console.error('PostsList: no `posts` or `post_refs`');
+            }
         }
 
         return {
-            ...props, //loading,category,order,hideCategory,posts
-            post_objects,
+            ...props, //loading,category,order,hideCategory
+            posts,
             nsfwPref,
             shouldSeeAds,
             adSlots,

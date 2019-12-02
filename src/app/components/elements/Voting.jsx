@@ -611,10 +611,8 @@ class Voting extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const post = state.global.getIn(
-            ['content', ownProps.post_ref],
-            ownProps.post_obj
-        );
+        const post =
+            ownProps.post || state.global.getIn(['content', ownProps.post_ref]);
 
         if (!post) {
             console.error('post_not_found', ownProps);

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import reactForm from 'app/utils/ReactForm';
+import { Map } from 'immutable';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
@@ -69,7 +70,6 @@ class ReplyEditor extends React.Component {
         category: PropTypes.string, // initial value
         title: PropTypes.string, // initial value
         body: PropTypes.string, // initial value
-        richTextEditor: PropTypes.func,
         defaultPayoutType: PropTypes.string,
         payoutType: PropTypes.string,
     };
@@ -84,7 +84,7 @@ class ReplyEditor extends React.Component {
 
     constructor(props) {
         super();
-        this.state = { progress: {} };
+        this.state = { progress: {}, imagesUploadCount: 0 };
         this.initForm(props);
     }
 
@@ -358,24 +358,54 @@ class ReplyEditor extends React.Component {
     };
 
     upload = (file, name = '') => {
+        // Upon drop or file selection, insert a temporary MD image tag that will be replaced
+        const { body } = this.state;
+        // Cursor position
+        const { selectionStart } = this.refs.postRef;
+        let { imagesUploadCount } = this.state;
+        imagesUploadCount++;
+        this.setState({ imagesUploadCount: imagesUploadCount });
+
+        // Insert the temporary tag where the cursor currently is
+        body.props.onChange(
+            body.value.substring(0, selectionStart) +
+                `\n![Uploading image #${imagesUploadCount}...]()\n` +
+                body.value.substring(selectionStart, body.value.length)
+        );
+
         const { uploadImage } = this.props;
         this.setState({
             progress: { message: tt('reply_editor.uploading') },
         });
         uploadImage(file, progress => {
+            const { body } = this.state;
+
             if (progress.url) {
                 this.setState({ progress: {} });
                 const { url } = progress;
                 const image_md = `![${name}](${url})`;
-                const { body } = this.state;
-                const { selectionStart, selectionEnd } = this.refs.postRef;
+
+                // Replace temporary image MD tag with the real one
                 body.props.onChange(
-                    body.value.substring(0, selectionStart) +
-                        image_md +
-                        body.value.substring(selectionEnd, body.value.length)
+                    body.value.replace(
+                        `![Uploading image #${imagesUploadCount}...]()`,
+                        image_md
+                    )
                 );
             } else {
                 this.setState({ progress });
+                const { error, message } = progress;
+                if (error) {
+                    console.log('Image upload failed', progress);
+
+                    // Remove temporary image MD tag
+                    body.props.onChange(
+                        body.value.replace(
+                            `![Uploading image #${imagesUploadCount}...]()`,
+                            ''
+                        )
+                    );
+                }
             }
             setTimeout(() => {
                 this.setState({ progress: {} });
@@ -475,12 +505,12 @@ class ReplyEditor extends React.Component {
         const vframe_section_shrink_class = isStory
             ? 'vframe__section--shrink'
             : '';
-        const RichTextEditor = this.props.richTextEditor;
 
         return (
             <div className="ReplyEditor row">
                 {isStory &&
-                    !isEdit && (
+                    !isEdit &&
+                    username && (
                         <PostCategoryBanner
                             communityName={community}
                             disabledCommunity={disabledCommunity}
@@ -864,9 +894,6 @@ function stateFromMarkdown(markdown) {
 }
 
 import { connect } from 'react-redux';
-const richTextEditor = process.env.BROWSER
-    ? require('react-rte-image').default
-    : null;
 
 export default formId =>
     connect(
@@ -957,7 +984,6 @@ export default formId =>
                 beneficiaries,
                 initialValues: { title, body, tags },
                 formId,
-                richTextEditor,
             };
 
             return ret;

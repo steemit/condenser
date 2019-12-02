@@ -170,7 +170,8 @@ app.use(function*(next) {
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 302;
-        this.redirect(`/@${this.session.a}/feed`);
+        //this.redirect(`/@${this.session.a}/feed`);
+        this.redirect(`/trending/my`);
         return;
     }
 

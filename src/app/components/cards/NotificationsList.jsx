@@ -8,6 +8,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import ClaimBox from 'app/components/elements/ClaimBox';
+import Callout from 'app/components/elements/Callout';
 
 class NotificationsList extends React.Component {
     static propTypes = {
@@ -89,6 +90,13 @@ class NotificationsList extends React.Component {
                             .map(item => renderItem(item.toJS()))}
                     </div>
                 )}
+                {!notifications &&
+                    !loading && (
+                        <Callout>
+                            Welcome! You don't have any notifications yet.
+                        </Callout>
+                    )}
+
                 {loading && (
                     <center>
                         <LoadingIndicator

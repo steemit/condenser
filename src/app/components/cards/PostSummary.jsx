@@ -21,8 +21,17 @@ import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import { hasNsfwTag } from 'app/utils/StateFunctions';
 
+const CURATOR_VESTS_THRESHOLD = 1.0 * 1000.0 * 1000.0;
+
 // TODO: document why ` ` => `%20` is needed, and/or move to base fucntion
 const proxify = (url, size) => proxifyImageUrl(url, size).replace(/ /g, '%20');
+
+const vote_weights = content => {
+    const rshares = content.get('net_rshares');
+    const dn = content.getIn(['stats', 'flag_weight']);
+    const up = Math.max(String(parseInt(rshares / 2, 10)).length - 10, 0);
+    return { dn, up };
+};
 
 class PostSummary extends React.Component {
     static propTypes = {
@@ -55,7 +64,7 @@ class PostSummary extends React.Component {
     }
 
     render() {
-        const { ignore, hideCategory } = this.props;
+        const { ignore, hideCategory, net_vests } = this.props;
         const { post, content, featured, promoted, onClose } = this.props;
         if (!content) return null;
 
@@ -72,21 +81,6 @@ class PostSummary extends React.Component {
                             <Icon name="reblog" />
                         </span>
                         <UserNames names={reblogged_by} />{' '}
-                        {tt('postsummary_jsx.resteemed')}
-                    </p>
-                </div>
-            );
-        }
-
-        // 'account' is the current blog being viewed, if applicable.
-        const { account } = this.props;
-        if (account && account != content.get('author')) {
-            reblogged_by = (
-                <div className="articles__resteem">
-                    <p className="articles__resteem-text">
-                        <span className="articles__resteem-icon">
-                            <Icon name="reblog" />
-                        </span>
                         {tt('postsummary_jsx.resteemed')}
                     </p>
                 </div>
@@ -191,8 +185,24 @@ class PostSummary extends React.Component {
             </div>
         );
 
+        let dots;
+        if (net_vests >= CURATOR_VESTS_THRESHOLD) {
+            const _dots = cnt => {
+                return cnt > 0 ? '•'.repeat(cnt) : null;
+            };
+            const { up, dn } = vote_weights(content);
+            dots =
+                up || dn ? (
+                    <span className="vote_weights">
+                        {_dots(up)}
+                        {<span>{_dots(dn)}</span>}
+                    </span>
+                ) : null;
+        }
+
         const summary_footer = (
             <div className="articles__summary-footer">
+                {dots}
                 <Voting post={post} showList={false} />
                 <VotesAndComments
                     post={post}
@@ -332,6 +342,7 @@ export default connect(
     (state, props) => {
         const { post, hideCategory, nsfwPref, featured, promoted } = props;
         const content = state.global.get('content').get(post);
+        const net_vests = state.user.getIn(['current', 'effective_vests'], 0.0);
         return {
             post,
             content,
@@ -343,6 +354,7 @@ export default connect(
                 state.offchain.get('account'),
             blogmode: state.app.getIn(['user_preferences', 'blogmode']),
             nsfwPref,
+            net_vests,
         };
     },
 

@@ -7,7 +7,7 @@ describe('routeRegex', () => {
             ['UserFeed', /^\/(@[\w\.\d-]+)\/feed\/?$/],
             [
                 'UserProfile',
-                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|recent-replies|payout|feed|followed|followers|settings|notifications))?\/?$/,
+                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications))?\/?$/,
             ],
             [
                 'CategoryFilters',
@@ -58,6 +58,7 @@ describe('resolveRoute', () => {
             { page: 'CommunityRoles', params: ['hive-105677'] },
         ],
         ['/search', { page: 'SearchIndex' }],
+        ['/rewards', { page: 'Rewards' }],
     ];
     test_cases.forEach(r => {
         it(`should resolve the route for the ${r[1].page} page`, () => {

@@ -7,6 +7,7 @@ import { Role } from 'app/utils/Community';
 import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
 import Icon from 'app/components/elements/Icon';
+import { numberWithCommas } from 'app/utils/StateFunctions';
 
 const nl2br = text =>
     text.split('\n').map((item, key) => (
@@ -75,7 +76,7 @@ class CommunityPane extends Component {
                         style={{ textAlign: 'center', lineHeight: '1em' }}
                     >
                         <div className="column small-4">
-                            {community.get('subscribers')}
+                            {numberWithCommas(community.get('subscribers'))}
                             <br />
                             <small>
                                 {community.get('subscribers') == 1
@@ -85,25 +86,36 @@ class CommunityPane extends Component {
                         </div>
                         <div className="column small-4">
                             {'$'}
-                            {community.get('sum_pending')}
+                            {numberWithCommas(community.get('sum_pending'))}
                             <br />
-                            <small>pending rewards</small>
+                            <small>
+                                pending<br />rewards
+                            </small>
                         </div>
                         <div className="column small-4">
-                            {community.get('num_pending')}
+                            {numberWithCommas(community.get('num_authors'))}
                             <br />
-                            <small>active posts</small>
+                            <small>
+                                active<br />posters
+                            </small>
                         </div>
                     </div>
 
                     <div style={{ margin: '12px 0 0' }}>
+                        {community &&
+                            this.props.username && (
+                                <SubscribeButton
+                                    community={community.get('name')}
+                                    display="block"
+                                />
+                            )}
                         {canPost && (
                             <Link
                                 className="button primary"
                                 style={{
                                     minWidth: '6em',
                                     display: 'block',
-                                    marginBottom: '8px',
+                                    margin: '-6px 0 8px',
                                 }}
                                 to={`/submit.html?category=${category}`}
                             >
@@ -121,13 +133,6 @@ class CommunityPane extends Component {
                                 </small>
                             </div>
                         )}
-                        {community &&
-                            this.props.username && (
-                                <SubscribeButton
-                                    community={community.get('name')}
-                                    display="block"
-                                />
-                            )}
                     </div>
                     <div>
                         {Role.atLeast(viewer_role, 'mod') && (

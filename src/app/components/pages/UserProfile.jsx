@@ -20,10 +20,57 @@ import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector'
 import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
 import UserProfileHeader from 'app/components/cards/UserProfileHeader';
 
+const emptyPostsText = (section, account, isMyAccount) => {
+    const name = '@' + account;
+
+    if (section == 'posts') {
+        return tt('user_profile.user_hasnt_made_any_posts_yet', { name });
+    } else if (section == 'comments') {
+        return tt('user_profile.user_hasnt_made_any_posts_yet', { name });
+    } else if (section == 'replies') {
+        return (
+            tt('user_profile.user_hasnt_had_any_replies_yet', { name }) + '.'
+        );
+    } else if (section == 'payout') {
+        return 'No pending payouts.';
+    } else if (section == 'blog' && !isMyAccount) {
+        return tt('user_profile.user_hasnt_started_bloggin_yet', { name });
+    } else if (section == 'blog') {
+        return (
+            <div>
+                {tt('user_profile.looks_like_you_havent_posted_anything_yet')}
+                <br />
+                <br />
+                <Link to="/communities">
+                    <strong>Explore Communities</strong>
+                </Link>
+                <br />
+                <Link to="/submit.html">
+                    {tt('user_profile.create_a_post')}
+                </Link>
+                <br />
+                <Link to="/trending">Trending Articles</Link>
+                <br />
+                <Link to="/welcome">Welcome Guide</Link>
+                <br />
+                {/*
+                TODO: introduceyourself nudge, FUUX
+                tt('user_profile.read_the_quick_start_guide')
+                tt('user_profile.explore_trending_articles')
+                <Link to="/faq.html">
+                    {tt('user_profile.browse_the_faq')}
+                </Link>
+                <br />*/}
+            </div>
+        );
+    } else {
+        console.error('unhandled emptytext case', section, name, isMyAccount);
+    }
+};
+
 export default class UserProfile extends React.Component {
     constructor() {
         super();
-        this.state = { showResteem: true };
         this.loadMore = this.loadMore.bind(this);
     }
 
@@ -45,7 +92,7 @@ export default class UserProfile extends React.Component {
     shouldComponentUpdate(np, ns) {
         return (
             np.username !== this.props.username ||
-            np.global_status !== this.props.global_status ||
+            np.status !== this.props.status ||
             np.followers !== this.props.followers ||
             np.following !== this.props.following ||
             np.loading !== this.props.loading ||
@@ -53,29 +100,16 @@ export default class UserProfile extends React.Component {
             np.blogmode !== this.props.blogmode ||
             np.posts !== this.props.posts ||
             np.profile !== this.props.profile ||
-            np.notifications !== this.props.notifications ||
-            ns.showResteem !== this.state.showResteem
+            np.notifications !== this.props.notifications
         );
     }
 
     loadMore(last_post) {
         if (!last_post) return;
-        const {
-            accountname,
-            username,
-            global_status,
-            order,
-            category,
-        } = this.props;
+        //if (last_post == this.props.pending) return; // if last post is 'pending', its an invalid start token
+        const { username, status, order, category } = this.props;
 
-        if (isFetchingOrRecentlyUpdated(global_status, order, category)) {
-            return;
-        }
-
-        const postFilter =
-            order == 'blog' && !this.state.showResteem
-                ? value => value.author === accountname
-                : null;
+        if (isFetchingOrRecentlyUpdated(status, order, category)) return;
 
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
@@ -83,23 +117,15 @@ export default class UserProfile extends React.Component {
             permlink,
             order,
             category,
-            postFilter,
             observer: username,
         });
     }
 
-    toggleShowResteem = e => {
-        e.preventDefault();
-        const newShowResteem = !this.state.showResteem;
-        this.setState({ showResteem: newShowResteem });
-    };
-
     render() {
         const {
-            state: { showResteem },
             props: {
                 username,
-                global_status,
+                status,
                 following,
                 followers,
                 accountname,
@@ -114,10 +140,8 @@ export default class UserProfile extends React.Component {
         } = this;
 
         // Loading status
-        const status = global_status
-            ? global_status.getIn([category, order])
-            : null;
-        const fetching = (status && status.fetching) || this.props.loading;
+        const _state = status ? status.getIn([category, order]) : null;
+        const fetching = (_state && _state.fetching) || this.props.loading;
 
         if (profile) {
         } else if (fetching) {
@@ -135,240 +159,110 @@ export default class UserProfile extends React.Component {
         }
 
         const isMyAccount = username === accountname;
+
         let tab_content = null;
-
-        // users following this user
-        if (section === 'followers') {
-            if (followers && followers.has('blog_result')) {
-                tab_content = (
-                    <div>
-                        <UserList
-                            title={tt('user_profile.followers')}
-                            users={followers.get('blog_result')}
-                        />
-                    </div>
-                );
-            }
-
-            // users followed by this user
+        if (userIllegalContent.includes(accountname)) {
+            // invalid users
+            tab_content = <div>Unavailable For Legal Reasons.</div>;
+        } else if (section === 'followers') {
+            // users following this user
+            tab_content = <UserList title="Followers" users={followers} />;
         } else if (section === 'followed') {
-            if (following && following.has('blog_result')) {
-                tab_content = (
-                    <UserList
-                        title="Followed"
-                        users={following.get('blog_result')}
-                    />
-                );
-            }
-
-            // notifications
+            // users followed by this user
+            tab_content = <UserList title="Followed" users={following} />;
         } else if (section === 'notifications') {
-            if (!fetching && (notifications && !notifications.size)) {
-                tab_content = (
-                    <Callout>
-                        {tt(
-                            'user_profile.user_hasnt_had_any_notifications_yet',
-                            {
-                                name: accountname,
-                            }
-                        ) + '.'}
-                    </Callout>
-                );
-            } else {
-                tab_content = (
-                    <div>
-                        <NotificationsList
-                            username={accountname}
-                            notifications={notifications}
-                            loading={fetching}
-                        />
-                    </div>
-                );
-            }
-
-            // account display settings
+            // notifications
+            tab_content = (
+                <NotificationsList
+                    username={accountname}
+                    notifications={notifications}
+                    loading={fetching}
+                />
+            );
         } else if (section === 'settings') {
+            // account display settings
             tab_content = <Settings routeParams={this.props.routeParams} />;
-
-            // post lists -- not loaded
         } else if (!posts) {
+            // post lists -- not loaded
             tab_content = (
                 <center>
                     <LoadingIndicator type="circle" />
                 </center>
             );
-
-            // post lists -- empty
         } else if (!fetching && !posts.size) {
-            let emptyText;
-            if (section == 'blog') {
-                if (isMyAccount) {
-                    emptyText = (
-                        <div>
-                            {tt(
-                                'user_profile.looks_like_you_havent_posted_anything_yet'
-                            )}
-                            <br />
-                            <br />
-                            <Link to="/submit.html">
-                                {tt('user_profile.create_a_post')}
-                            </Link>
-                            <br />
-                            <Link to="/trending">
-                                {tt('user_profile.explore_trending_articles')}
-                            </Link>
-                            <br />
-                            <Link to="/welcome">
-                                {tt('user_profile.read_the_quick_start_guide')}
-                            </Link>
-                            <br />
-                            <Link to="/faq.html">
-                                {tt('user_profile.browse_the_faq')}
-                            </Link>
-                            <br />
-                        </div>
-                    );
-                } else {
-                    emptyText = tt(
-                        'user_profile.user_hasnt_started_bloggin_yet',
-                        {
-                            name: accountname,
-                        }
-                    );
-                }
-            } else if (section == 'comments') {
-                emptyText = tt('user_profile.user_hasnt_made_any_posts_yet', {
-                    name: accountname,
-                });
-            } else if (section == 'replies') {
-                emptyText =
-                    tt('user_profile.user_hasnt_had_any_replies_yet', {
-                        name: accountname,
-                    }) + '.';
-            } else if (section == 'payout') {
-                emptyText = 'No pending payouts.';
-            }
-
+            // post lists -- empty
+            const emptyText = emptyPostsText(section, accountname, isMyAccount);
             tab_content = <Callout>{emptyText}</Callout>;
-
-            // post lists -- loaded
         } else {
+            // post lists -- loaded
             tab_content = (
                 <PostsList
-                    account={section == 'blog' ? accountname : null} // 'blog' only
                     posts={posts}
                     loading={fetching}
                     loadMore={this.loadMore}
-                    showPinned={false}
-                    showResteem={showResteem} // 'blog' only
                 />
             );
+        }
 
-            if (section === 'blog') {
-                tab_content = (
-                    <div>
-                        <a
-                            href="#"
-                            onClick={this.toggleShowResteem}
-                            style={{
-                                float: 'left',
-                                margin: '-1rem 0 0.5rem',
-                                fontSize: '0.9rem',
-                            }}
-                        >
-                            {showResteem
-                                ? tt('user_profile.hide_resteems')
-                                : tt('user_profile.show_all')}
-                        </a>
-                        <div style={{ clear: 'both' }} />
-                        {tab_content}
-                    </div>
+        const _url = tab => `/@${accountname}${tab == 'blog' ? '' : '/' + tab}`;
+
+        const _tablink2 = (tab, label) => {
+            const item =
+                tab == section ? (
+                    <strong>{label}</strong>
+                ) : (
+                    <Link to={_url(tab)}>{label}</Link>
                 );
-            }
-        }
+            return <div key={tab}>{item}</div>;
+        };
 
-        // detect illegal users
-        if (userIllegalContent.includes(accountname)) {
-            tab_content = <div>Unavailable For Legal Reasons.</div>;
-        }
-
-        var page_title = '';
-        if (section === 'blog') {
-            page_title = isMyAccount ? tt('g.my_blog') : tt('g.blog');
-        } else if (section === 'comments') {
-            page_title = tt('g.posts');
-        } else if (section === 'replies') {
-            page_title = tt('g.replies');
-        } else if (section === 'settings') {
-            page_title = tt('g.settings');
-        } else if (section === 'payout') {
-            page_title = tt('voting_jsx.payout');
-        }
-
-        const layoutClass = this.props.blogmode
-            ? 'layout-block'
-            : 'layout-list';
-
-        const tab_header = page_title && (
-            <div>
-                <div className="articles__header">
-                    <div className="articles__header-col">
-                        <h1 className="articles__h1">{page_title}</h1>
-                    </div>
-                    <div className="articles__header-col articles__header-col--right">
-                        {order && <ArticleLayoutSelector />}
-                    </div>
+        let tab_header;
+        let top_active = section;
+        if (['posts', 'comments', 'payout'].includes(section)) {
+            top_active = 'posts';
+            tab_header = (
+                <div className="UserProfile__postmenu">
+                    {_tablink2('posts', tt('g.posts'))}
+                    {_tablink2('comments', tt('g.comments'))}
+                    {_tablink2('payout', tt('g.payouts'))}
                 </div>
-                <hr className="articles__hr" />
-            </div>
-        );
+            );
+        }
 
-        tab_content = (
-            <div className="row">
-                <div
-                    className={classnames(
-                        'UserProfile__tab_content',
-                        'column',
-                        layoutClass
-                    )}
-                >
-                    <article className="articles">
-                        {/*tab_header*/}
-                        {tab_content}
-                    </article>
-                </div>
-            </div>
-        );
-
-        const _tablink = (tab, label) => (
-            <Link to={`/@${accountname}${tab}`} activeClassName="active">
-                {label}
-            </Link>
-        );
-        const _walletlink = (url, label) => (
-            <a href={`${url}/@${accountname}`} target="_blank">
-                {label}
-            </a>
-        );
+        const _tablink = (tab, label) => {
+            const cls = tab === top_active ? 'active' : null;
+            return (
+                <Link to={_url(tab)} className={cls}>
+                    {label}
+                </Link>
+            );
+        };
 
         const top_menu = (
             <div className="row UserProfile__top-menu">
                 <div className="columns small-9 medium-12 medium-expand">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
-                        <li>{_tablink('', tt('g.blog'))}</li>
-                        <li>{_tablink('/comments', tt('g.posts'))}</li>
-                        <li>{_tablink('/recent-replies', tt('g.replies'))}</li>
-                        <li>{_tablink('/payout', tt('voting_jsx.payout'))}</li>
+                        <li>{_tablink('blog', tt('g.blog'))}</li>
+                        <li>{_tablink('posts', tt('g.posts'))}</li>
+                        <li>{_tablink('replies', tt('g.replies'))}</li>
                         <li>
-                            {_tablink('/notifications', tt('g.notifications'))}
+                            {_tablink('notifications', tt('g.notifications'))}
                         </li>
+                        {/*
+                        <li>{_tablink('comments', tt('g.comments'))}</li>
+                        <li>{_tablink('payout', tt('voting_jsx.payout'))}</li>
+                        */}
                     </ul>
                 </div>
                 <div className="columns shrink">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
-                        <li>{_walletlink(walletUrl, tt('g.wallet'))}</li>
+                        <li>
+                            <a href={walletUrl} target="_blank">
+                                Wallet
+                            </a>
+                        </li>
                         {isMyAccount && (
-                            <li>{_tablink('/settings', tt('g.settings'))}</li>
+                            <li>{_tablink('settings', tt('g.settings'))}</li>
                         )}
                     </ul>
                 </div>
@@ -385,7 +279,20 @@ export default class UserProfile extends React.Component {
                 <div className="UserProfile__top-nav row expanded">
                     {top_menu}
                 </div>
-                <div>{tab_content}</div>
+                <div className="row">
+                    <div
+                        className={classnames(
+                            'UserProfile__tab_content',
+                            'column',
+                            'layout-list'
+                        )}
+                    >
+                        <article className="articles">
+                            {tab_header}
+                            {tab_content}
+                        </article>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -401,10 +308,13 @@ module.exports = {
 
             let { section } = ownProps.routeParams;
             if (!section) section = 'blog';
-            if (section == 'recent-replies') section = 'replies';
-            const order = ['blog', 'comments', 'replies', 'payout'].includes(
-                section
-            )
+            const order = [
+                'blog',
+                'posts',
+                'comments',
+                'replies',
+                'payout',
+            ].includes(section)
                 ? section
                 : null;
 
@@ -416,17 +326,19 @@ module.exports = {
                 ]),
                 username,
                 loading: state.app.get('loading'),
-                global_status: state.global.get('status'),
+                status: state.global.get('status'),
                 accountname: accountname,
                 followers: state.global.getIn([
                     'follow',
                     'getFollowersAsync',
                     accountname,
+                    'blog_result',
                 ]),
                 following: state.global.getIn([
                     'follow',
                     'getFollowingAsync',
                     accountname,
+                    'blog_result',
                 ]),
                 notifications: state.global.getIn(
                     ['notifications', accountname],
@@ -434,7 +346,7 @@ module.exports = {
                 ),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 profile: state.userProfiles.getIn(['profiles', accountname]),
-                walletUrl,
+                walletUrl: walletUrl + '/@' + accountname + '/transfers',
                 section,
                 order,
                 category: '@' + accountname,

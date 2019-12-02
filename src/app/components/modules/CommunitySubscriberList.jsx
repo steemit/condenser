@@ -6,7 +6,7 @@ import * as communityActions from 'app/redux/CommunityReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import { Role } from 'app/utils/Community';
 import UserTitle from 'app/components/elements/UserTitle';
-import UserTitleEditor from 'app/components/modules/UserTitleEditor';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 class CommunitySubscriberList extends React.Component {
     static propTypes = {
@@ -14,7 +14,6 @@ class CommunitySubscriberList extends React.Component {
         username: PropTypes.string,
         viewerRole: PropTypes.string.isRequired,
         fetchSubscribers: PropTypes.func.isRequired,
-        saveTitle: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
@@ -23,10 +22,6 @@ class CommunitySubscriberList extends React.Component {
 
     constructor(props) {
         super(props);
-        this.editSubscriberName = () => {
-            const { state: { showEditName } } = this;
-            this.setState({ showEditName: !showEditName });
-        };
     }
 
     componentDidMount() {
@@ -35,43 +30,40 @@ class CommunitySubscriberList extends React.Component {
         }
     }
 
-    onSave = (newTitle, subscriberName) => {
-        const { community, loading, username, saveTitle } = this.props;
-        /*
-        //-- Simulate a "receiveState" action to feed new title into post state
-        let newstate = { content: {}, simulation: true };
-        let content_key = this.props.author + '/' + this.props.permlink;
-        newstate['content'][content_key] = { author_title: newTitle };
-        this.props.pushState(newstate);
-        */
-        saveTitle(username, subscriberName, community, newTitle);
-    };
-
     render() {
-        const { loading, subscribers, community, viewerRole } = this.props;
+        const {
+            loading,
+            subscribers,
+            community,
+            viewerRole,
+            username,
+            fetchSubscribers,
+        } = this.props;
         const isMod = Role.atLeast(viewerRole, 'mod');
-        const subs = this.props.subscribers.map(s => {
-            const subscriberTitle = isMod ? (
-                <UserTitleEditor
+        const subs = subscribers.map(s => (
+            <div>
+                <a href={`/@${s[0]}`}>@{s[0]} </a>
+                <UserTitle
+                    username={username}
+                    community={community.name}
+                    author={s[0]}
+                    permlink={'/'}
+                    role={s[1]}
                     title={s[2]}
-                    username={s[0]}
-                    community={community.title}
-                    onSubmit={newTitle => {
-                        this.onSave(newTitle, s[0]);
-                        return;
-                    }}
-                    key={s[0]}
+                    hideEdit={!isMod}
+                    onEditSubmit={() => fetchSubscribers(community.name)}
                 />
-            ) : (
-                <div key={s[0]}>{s[0]}</div>
-            );
-            return subscriberTitle;
-        });
+            </div>
+        ));
         return (
             <div>
-                <div>Community Subscribers</div>
-                {loading && <div>loading...</div>}
-                {subs}
+                <strong>Community Subscribers</strong>
+                {loading && (
+                    <center>
+                        <LoadingIndicator type="circle" />
+                    </center>
+                )}
+                <div>{subs}</div>
             </div>
         );
     }
@@ -83,6 +75,7 @@ const ConnectedCommunitySubscriberList = connect(
         let subscribers = [];
         let loading = true;
         let viewerRole = 'guest';
+        // TODO: re-fetch community upon user loging - currently when a user logs in, at a community page, the context is not updated.
         // viewerRole = state.global.getIn(['community', ownProps.community.name, 'context', 'role'], 'guest');
         let username = state.user.getIn(['current', 'username'], false);
         const communityMember = state.global
@@ -113,6 +106,7 @@ const ConnectedCommunitySubscriberList = connect(
             loading,
             username: state.user.getIn(['current', 'username']),
             viewerRole,
+            username,
         };
     },
     // mapDispatchToProps
@@ -122,38 +116,6 @@ const ConnectedCommunitySubscriberList = connect(
                 dispatch(
                     communityActions.getCommunitySubscribers(communityName)
                 ),
-            saveTitle: (
-                username,
-                account,
-                community,
-                title,
-                successCallback,
-                errorCallback
-            ) => {
-                const action = 'setUserTitle';
-
-                const payload = [
-                    action,
-                    {
-                        community,
-                        account,
-                        title,
-                    },
-                ];
-
-                return dispatch(
-                    transactionActions.broadcastOperation({
-                        type: 'custom_json',
-                        operation: {
-                            id: 'community',
-                            required_posting_auths: [username],
-                            json: JSON.stringify(payload),
-                        },
-                        successCallback,
-                        errorCallback,
-                    })
-                );
-            },
         };
     }
 )(CommunitySubscriberList);

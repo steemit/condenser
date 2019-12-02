@@ -228,6 +228,21 @@ class Voting extends React.Component {
             username,
         } = this.props;
 
+        // `lite` Voting component: e.g. search results
+        if (!post.get('pending_payout_value')) {
+            return (
+                <span className="Voting">
+                    <span className="Voting__inner">
+                        <FormattedAsset
+                            amount={post.get('payout')}
+                            asset="$"
+                            classname=""
+                        />
+                    </span>
+                </span>
+            );
+        }
+
         const { votingUp, votingDown, showWeight, showWeightDir } = this.state;
 
         const votingUpActive = voting && votingUp;
@@ -596,9 +611,8 @@ class Voting extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const postref = ownProps.post;
         const post = state.global.getIn(
-            ['content', postref],
+            ['content', ownProps.post_ref],
             ownProps.post_obj
         );
 

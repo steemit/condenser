@@ -64,7 +64,7 @@ describe('Voting', () => {
         });
         let wrapped = shallow(
             <Voting
-                post="test"
+                post_ref="test"
                 flag={true}
                 vote={(w, p) => {}}
                 post_obj={voteTestObj}
@@ -91,7 +91,7 @@ describe('Voting', () => {
         });
         let wrapped = shallow(
             <Voting
-                post="test"
+                post_ref="test"
                 flag={true}
                 myVote={-666}
                 vote={(w, p) => {}}
@@ -123,7 +123,7 @@ describe('Voting', () => {
         });
         let wrapped = shallow(
             <Voting
-                post="test"
+                post_ref="test"
                 flag={false}
                 vote={(w, p) => {}}
                 post_obj={voteTestObj}
@@ -148,7 +148,7 @@ describe('Voting', () => {
         });
         let wrapped = shallow(
             <Voting
-                post="test"
+                post_ref="test"
                 flag={false}
                 vote={(w, p) => {}}
                 post_obj={voteTestObj}
@@ -184,7 +184,7 @@ describe('Voting', () => {
             <Provider store={store}>
                 <IntlProvider locale="en">
                     <Voting
-                        post="Test post"
+                        post_ref="Test post"
                         vote={(w, p) => {}}
                         post_obj={post_obj}
                         price_per_steem={1}
@@ -213,7 +213,7 @@ describe('Voting', () => {
             <Provider store={store}>
                 <IntlProvider locale="en">
                     <Voting
-                        post="Test post"
+                        post_ref="Test post"
                         vote={(w, p) => {}}
                         post_obj={post_obj}
                         price_per_steem={1}
@@ -242,7 +242,7 @@ describe('Voting', () => {
             <Provider store={store}>
                 <IntlProvider locale="en">
                     <Voting
-                        post="Test post"
+                        post_ref="Test post"
                         vote={(w, p) => {}}
                         post_obj={post_obj}
                         price_per_steem={1}

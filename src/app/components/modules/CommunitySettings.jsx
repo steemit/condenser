@@ -72,6 +72,8 @@ class CommunitySettings extends Component {
             flag_text,
             formError,
         } = this.state;
+        const currentLanguage = languageOptions.filter(l => l.abbr === lang)[0]
+            .name;
         return (
             <span>
                 <div>
@@ -107,7 +109,7 @@ class CommunitySettings extends Component {
                     <AutocompleteInput
                         label={'Select a language'}
                         values={languageOptions}
-                        initialValue="English"
+                        initialValue={currentLanguage}
                         onSelect={v => {
                             const selectedLanguage = languageOptions.filter(
                                 l => l.name === v

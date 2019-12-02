@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
-import debounce from 'lodash.debounce';
 import { search } from 'app/redux/SearchReducer';
 import Callout from 'app/components/elements/Callout';
 import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
@@ -56,48 +55,27 @@ class SearchIndex extends React.Component {
         if (params.q) {
             performSearch(params);
         }
-        window.onscroll = debounce(() => {
-            if (
-                window.innerHeight + document.documentElement.scrollTop ===
-                document.documentElement.offsetHeight
-            ) {
-                this.fetchMoreResults();
-            }
-        }, 300);
     }
 
     componentDidUpdate(prevProps) {
         const { performSearch, params } = this.props;
-        if (prevProps.params !== params) {
-            performSearch(params);
-        }
+        if (prevProps.params !== params) performSearch(params);
     }
 
     fetchMoreResults() {
         const { params, performSearch, scrollId } = this.props;
-        const updatedParams = {
-            ...params,
-            scroll_id: scrollId,
-        };
-        performSearch(updatedParams);
+        performSearch({ ...params, scroll_id: scrollId });
     }
 
     render() {
         const { result, loading, params, performSearch } = this.props;
 
-        const normalize = post => {
-            post.created = post.created_at;
-            post.author_reputation = post.author_rep;
-            post.stats = { total_votes: post.total_votes };
-            return fromJS(post);
-        };
-
         const searchResults = (
             <PostsList
                 ref="list"
-                post_objects={result.map(normalize)}
+                posts={fromJS(result)}
                 loading={loading}
-                loadMore={null}
+                loadMore={this.fetchMoreResults}
             />
         );
 
@@ -115,7 +93,7 @@ class SearchIndex extends React.Component {
                             />
                         </div>
                     </div>
-                    {!loading && !result.length === 0 ? (
+                    {!loading && result.length === 0 ? (
                         <Callout>{'Nothing was found.'}</Callout>
                     ) : (
                         searchResults

@@ -15,7 +15,10 @@ import UserTitleEditor from 'app/components/modules/UserTitleEditor';
 class UserTitle extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { showDialog: false };
+        this.state = {
+            showDialog: false,
+            updatedTitle: '',
+        };
     }
 
     onToggleDialog = () => {
@@ -24,7 +27,6 @@ class UserTitle extends React.Component {
 
     onSave = newTitle => {
         const community = this.props.community.get('name');
-
         //-- Simulate a "receiveState" action to feed new title into post state
         let newstate = { content: {}, simulation: true };
         let content_key = this.props.author + '/' + this.props.permlink;
@@ -37,6 +39,10 @@ class UserTitle extends React.Component {
             community,
             newTitle
         );
+        this.props.onEditSubmit();
+        this.setState({
+            updatedTitle: newTitle,
+        });
     };
 
     render() {
@@ -81,7 +87,9 @@ class UserTitle extends React.Component {
                 {showRole && <span className="user_role">{role}</span>}
                 {showTitle && (
                     <span className="affiliation">
-                        {title}
+                        {this.state.updatedTitle.length > 0
+                            ? this.state.updatedTitle
+                            : title}
                         {editor}
                     </span>
                 )}
@@ -96,6 +104,11 @@ UserTitle.propTypes = {
     author: PropTypes.string.isRequired, // edit only
     permlink: PropTypes.string.isRequired, // edit only
     title: PropTypes.string,
+    onEditSubmit: PropTypes.func,
+};
+
+UserTitle.defaultProps = {
+    onEditSubmit: () => {},
 };
 
 export default connect(
@@ -104,9 +117,7 @@ export default connect(
             ['community', ownProps.community],
             Map()
         );
-
         const viewer_role = community.getIn(['context', 'role'], 'guest');
-
         const { author, permlink, title } = ownProps;
         return {
             author,

@@ -320,8 +320,8 @@ export default function useGeneralApi(app) {
                 Authorization: config.get('esteem_elastic_search_api_key'),
             },
             body: this.request.body,
-            // TODO: remove this, purely for testing, localhost vs SSL.
-            agentOptions: { checkServerIdentity: () => {} },
+            // NOTE: agentOptions purely for testing, localhost vs SSL.
+            //agentOptions: { checkServerIdentity: () => {} },
         };
         const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;

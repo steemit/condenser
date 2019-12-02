@@ -1,19 +1,20 @@
-import Promise from 'bluebird';
 import { api } from '@steemit/steem-js';
 import { ifHive } from 'app/utils/Community';
-
 import stateCleaner from 'app/redux/stateCleaner';
 
 export async function callBridge(method, params) {
     console.log(
         'call bridge',
         method,
-        JSON.stringify(params).substring(0, 200)
+        params && JSON.stringify(params).substring(0, 200)
     );
-    const call = (method, params, callback) => {
-        return api.call('bridge.' + method, params, callback);
-    };
-    return Promise.promisify(call)(method, params);
+
+    return new Promise(function(resolve, reject) {
+        api.call('bridge.' + method, params, function(err, data) {
+            if (err) reject(err);
+            else resolve(data);
+        });
+    });
 }
 
 export async function getStateAsync(url, observer, ssr = false) {
@@ -133,7 +134,14 @@ function parsePath(url) {
         'payout_comments',
         'muted',
     ];
-    const acct_tabs = ['blog', 'feed', 'comments', 'recent-replies', 'payout'];
+    const acct_tabs = [
+        'blog',
+        'feed',
+        'posts',
+        'comments',
+        'replies',
+        'payout',
+    ];
 
     let page = null;
     let tag = null;
@@ -159,9 +167,9 @@ function parsePath(url) {
     } else if (parts == 2 && part[0][0] == '@') {
         if (acct_tabs.includes(part[1])) {
             page = 'account';
-            sort = part[1] == 'recent-replies' ? 'replies' : part[1];
+            sort = part[1];
         } else {
-            // settings, followers, etc (no-op)
+            // settings, followers, notifications, etc (no-op)
         }
         tag = part[0];
     } else {

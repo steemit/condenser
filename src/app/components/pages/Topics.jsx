@@ -33,10 +33,10 @@ class Topics extends Component {
                 if (tag && tag[0] === '@')
                     return {
                         value: `/@${username}/feed`,
-                        label: 'My Friends' || `tt('g.my_feed')`,
+                        label: 'My friends' || `tt('g.my_feed')`,
                     };
                 if (tag === 'my')
-                    return { value: `/trending/my`, label: 'My Communities' };
+                    return { value: `/trending/my`, label: 'My communities' };
                 if (tag == 'explore')
                     return {
                         value: `/communities`,
@@ -109,7 +109,7 @@ class Topics extends Component {
                     <li>{link(`/@${username}/feed`, 'My friends')}</li>
                 )}
                 {username && <li>{link(`/trending/my`, 'My communities')}</li>}
-                <li>{commsHead}</li>
+                {(subscriptions || topics).size > 0 && <li>{commsHead}</li>}
                 {(subscriptions || topics)
                     .toJS()
                     .map(cat => (
@@ -117,7 +117,7 @@ class Topics extends Component {
                             {link(`/trending/${cat[0]}`, cat[1], '')}
                         </li>
                     ))}
-                <li style={{ marginTop: '1rem' }}>
+                <li>
                     {link(
                         `/communities`,
                         moreLabel,

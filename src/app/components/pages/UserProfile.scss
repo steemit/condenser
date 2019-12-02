@@ -8,6 +8,27 @@
     }
 }
 
+.UserProfile__blacklists {
+    .account_warn {font-size: 0.8em;}
+    .VerticalMenu {
+        font-size: 1rem;
+        text-shadow: none;
+          @include themify($themes) {
+            background-color: themed('backgroundColor');
+            color: themed('textColorPrimary');
+          }
+    }
+}
+
+.UserProfile__postmenu {
+    margin: -0.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    @include themify($themes) {
+        border-bottom: themed('border');
+    }
+    div {display: inline-block; padding: 0 0.5rem; margin: 0 0.5rem;}
+}
+
 .UserProfile__tab_content {
     margin-top: 1.5rem;
 }

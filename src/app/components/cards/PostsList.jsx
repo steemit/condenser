@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
+import { List } from 'immutable';
 import * as userActions from 'app/redux/UserReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import PostSummary from 'app/components/cards/PostSummary';
@@ -27,7 +28,6 @@ class PostsList extends React.Component {
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
-        showResteem: PropTypes.bool,
         pathname: PropTypes.string,
         nsfwPref: PropTypes.string.isRequired,
     };
@@ -115,16 +115,12 @@ class PostsList extends React.Component {
     render() {
         const {
             posts,
-            showFeatured,
-            showPromoted,
-            showResteem,
             loading,
             pathname,
             category,
             order,
             content,
-            ignore_result,
-            account,
+            mutes,
             username,
             nsfwPref,
             hideCategory,
@@ -139,24 +135,14 @@ class PostsList extends React.Component {
                 return;
             }
             const author = cont.get('author');
-            const ignore = ignore_result && ignore_result.has(author);
-            const hideResteem = !showResteem && account && author != account;
-            if (!(hideResteem || ignore)) postsInfo.push({ item, ignore });
+            const ignore = mutes.has(author);
+            if (!ignore) postsInfo.push({ item, ignore });
         });
 
         // Helper functions for determining whether to show special posts.
-        const isLoggedInOnFeed = username && pathname === `/@${username}/feed`;
-        const isLoggedOutOnTrending =
-            !username &&
-            (pathname === '/' ||
-                pathname === '/trending' ||
-                pathname === '/trending/');
-
-        const areFeaturedPostsVisible =
-            showFeatured && (isLoggedInOnFeed || isLoggedOutOnTrending);
-        const areFeaturedPostsReady = !isLoggedInOnFeed && postsInfo.length > 0;
-        const showFeaturedPosts =
-            areFeaturedPostsVisible && areFeaturedPostsReady;
+        const showFeatured = username
+            ? order === 'feed'
+            : order === 'trending' && !category;
 
         const featureds = this.props.featured;
         const renderFeatured = featuredPosts => {
@@ -175,7 +161,6 @@ class PostsList extends React.Component {
                 return (
                     <li key={id}>
                         <PostSummary
-                            account={account}
                             post={id}
                             thumbSize={thumbSize}
                             ignore={false}
@@ -188,47 +173,10 @@ class PostsList extends React.Component {
             });
         };
 
-        const arePromotedPostsVisible =
-            showPromoted && (isLoggedInOnFeed || isLoggedOutOnTrending);
-        const arePromotedPostsReady = !isLoggedInOnFeed && postsInfo.length > 0;
-        const showPromotedPosts =
-            arePromotedPostsVisible && arePromotedPostsReady;
-
-        const promoteds = this.props.promoted;
-        const renderPromoted = promotedPosts => {
-            if (!process.env.BROWSER) return null;
-            return promotedPosts.map(promotedPost => {
-                const id = `${promotedPost.author}/${promotedPost.permlink}`;
-                if (localStorage.getItem(`hidden-promoted-post-${id}`))
-                    return null;
-                const promotedPostContent = content.get(id);
-                const isSeen = promotedPostContent.get('seen');
-                const close = e => {
-                    e.preventDefault();
-                    localStorage.setItem(`hidden-promoted-post-${id}`, true);
-                    this.forceUpdate();
-                };
-                return (
-                    <li key={id}>
-                        <PostSummary
-                            account={account}
-                            post={id}
-                            thumbSize={thumbSize}
-                            ignore={false}
-                            nsfwPref={nsfwPref}
-                            promoted
-                            onClose={close}
-                        />
-                    </li>
-                );
-            });
-        };
-
         const renderSummary = items =>
             items.map((item, i) => {
                 const ps = (
                     <PostSummary
-                        account={account}
                         post={item.item}
                         thumbSize={thumbSize}
                         ignore={item.ignore}
@@ -239,11 +187,12 @@ class PostsList extends React.Component {
                 );
 
                 const every = this.props.adSlots.in_feed_1.every;
-                if (this.props.shouldSeeAds && i >= every && i % every === 0) {
-                    return (
-                        <div key={item.item}>
-                            <li>{ps}</li>
+                const summary = [];
+                summary.push(<li key={item.item}>{ps}</li>);
 
+                if (this.props.shouldSeeAds && i >= every && i % every === 0) {
+                    summary.push(
+                        <div key={`ad-${item.item}`}>
                             <div className="articles__content-block--ad">
                                 <GptAd
                                     tags={[category]}
@@ -254,7 +203,8 @@ class PostsList extends React.Component {
                         </div>
                     );
                 }
-                return <li key={item.item}>{ps}</li>;
+
+                return summary;
             });
 
         return (
@@ -264,9 +214,10 @@ class PostsList extends React.Component {
                     itemScope
                     itemType="http://schema.org/blogPosts"
                 >
-                    {/* Only render featured and promoted posts when other posts are ready */}
-                    {showFeaturedPosts && renderFeatured(featureds)}
-                    {showPromotedPosts && renderPromoted(promoteds)}
+                    {/* Only render featured when other posts are ready */}
+                    {showFeatured &&
+                        postsInfo.length > 0 &&
+                        renderFeatured(featureds)}
                     {renderSummary(postsInfo)}
                 </ul>
                 {loading && (
@@ -290,21 +241,15 @@ export default connect(
             ? current.get('username')
             : state.offchain.get('account');
         const content = state.global.get('content');
-        const ignore_result = state.global.getIn([
-            'follow',
-            'getFollowingAsync',
-            username,
-            'ignore_result',
-        ]);
+        const mutes = state.global.getIn(
+            ['follow', 'getFollowingAsync', username, 'ignore_result'],
+            List()
+        );
         const userPreferences = state.app.get('user_preferences').toJS();
         const nsfwPref = userPreferences.nsfwPref || 'warn';
         const featured = state.offchain
             .get('special_posts')
             .get('featured_posts')
-            .toJS();
-        const promoted = state.offchain
-            .get('special_posts')
-            .get('promoted_posts')
             .toJS();
         const shouldSeeAds = state.app.getIn(['googleAds', 'enabled']);
         const adSlots = state.app.getIn(['googleAds', 'adSlots']).toJS();
@@ -314,10 +259,9 @@ export default connect(
             pathname,
             username,
             content,
-            ignore_result,
+            mutes,
             nsfwPref,
             featured,
-            promoted,
             shouldSeeAds,
             adSlots,
         };

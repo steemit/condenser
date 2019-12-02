@@ -26,19 +26,16 @@ const CURATOR_VESTS_THRESHOLD = 1.0 * 1000.0 * 1000.0;
 // TODO: document why ` ` => `%20` is needed, and/or move to base fucntion
 const proxify = (url, size) => proxifyImageUrl(url, size).replace(/ /g, '%20');
 
-const vote_weights = content => {
-    const rshares = content.get('net_rshares');
-    const dn = content.getIn(['stats', 'flag_weight']);
+const vote_weights = post => {
+    const rshares = post.get('net_rshares');
+    const dn = post.getIn(['stats', 'flag_weight']);
     const up = Math.max(String(parseInt(rshares / 2, 10)).length - 10, 0);
     return { dn, up };
 };
 
 class PostSummary extends React.Component {
     static propTypes = {
-        post: PropTypes.string.isRequired,
-        content: PropTypes.object.isRequired,
-        featured: PropTypes.bool,
-        promoted: PropTypes.bool,
+        post: PropTypes.object.isRequired,
         onClose: PropTypes.func,
         nsfwPref: PropTypes.string,
     };
@@ -54,7 +51,8 @@ class PostSummary extends React.Component {
             props.username !== this.props.username ||
             props.nsfwPref !== this.props.nsfwPref ||
             props.blogmode !== this.props.blogmode ||
-            state.revealNsfw !== this.state.revealNsfw
+            state.revealNsfw !== this.state.revealNsfw ||
+            props.post != this.props.post
         );
     }
 
@@ -65,12 +63,12 @@ class PostSummary extends React.Component {
 
     render() {
         const { ignore, hideCategory, net_vests } = this.props;
-        const { post, content, featured, promoted, onClose } = this.props;
-        if (!content) return null;
+        const { post, onClose } = this.props;
+        if (!post) return null;
 
         let reblogged_by;
-        if (content.get('reblogged_by', List()).size > 0) {
-            reblogged_by = content.get('reblogged_by').toJS();
+        if (post.get('reblogged_by', List()).size > 0) {
+            reblogged_by = post.get('reblogged_by').toJS();
         }
 
         if (reblogged_by) {
@@ -87,18 +85,18 @@ class PostSummary extends React.Component {
             );
         }
 
-        const gray = content.getIn(['stats', 'gray']);
-        const isNsfw = hasNsfwTag(content);
-        const isReply = content.get('depth') > 0;
+        const gray = post.getIn(['stats', 'gray']);
+        const isNsfw = hasNsfwTag(post);
+        const isReply = post.get('depth') > 0;
         const showReblog = !isReply;
-        const full_power = content.get('percent_steem_dollars') === 0;
+        const full_power = post.get('percent_steem_dollars') === 0;
 
-        const author = content.get('author');
-        const permlink = content.get('permlink');
-        const category = content.get('category');
+        const author = post.get('author');
+        const permlink = post.get('permlink');
+        const category = post.get('category');
         const post_url = `/${category}/@${author}/${permlink}`;
 
-        const summary = extractBodySummary(content.get('body'), isReply);
+        const summary = extractBodySummary(post.get('body'), isReply);
         const content_body = (
             <div className="PostSummary__body entry-content">
                 <Link to={post_url}>{summary}</Link>
@@ -109,13 +107,11 @@ class PostSummary extends React.Component {
             <h2 className="articles__h2 entry-title">
                 <Link to={post_url}>
                     {isNsfw && <span className="nsfw-flag">nsfw</span>}
-                    {content.get('title')}
+                    {post.get('title')}
                 </Link>
-                {content.getIn(['stats', 'is_pinned'], false) && (
+                {post.getIn(['stats', 'is_pinned'], false) && (
                     <span className="FeaturedTag">Pinned</span>
                 )}
-                {featured && <span className="FeaturedTag">Featured</span>}
-                {promoted && <span className="PromotedTag">Sponsored</span>}
             </h2>
         );
 
@@ -133,7 +129,7 @@ class PostSummary extends React.Component {
                     <div className="user__col user__col--right">
                         <span className="user__name">
                             <Author
-                                post={content}
+                                post={post}
                                 follow={false}
                                 hideEditor={true}
                             />
@@ -142,7 +138,7 @@ class PostSummary extends React.Component {
                         {hideCategory || (
                             <span className="articles__tag-link">
                                 {tt('g.in')}&nbsp;
-                                <Tag post={content} />
+                                <Tag post={post} />
                                 &nbsp;•&nbsp;
                             </span>
                         )}
@@ -154,8 +150,8 @@ class PostSummary extends React.Component {
                                 <TimeAgoWrapper
                                     date={
                                         this.props.order == 'payout'
-                                            ? content.get('payout_at')
-                                            : content.get('created')
+                                            ? post.get('payout_at')
+                                            : post.get('created')
                                     }
                                     className="updated"
                                 />
@@ -171,16 +167,6 @@ class PostSummary extends React.Component {
                             )}
                         </Link>
                     </div>
-
-                    {(featured || promoted) && (
-                        <a
-                            onClick={onClose}
-                            className="PostDismiss"
-                            title="Dismiss Post"
-                        >
-                            <Icon name="close" />
-                        </a>
-                    )}
                 </div>
             </div>
         );
@@ -190,7 +176,7 @@ class PostSummary extends React.Component {
             const _dots = cnt => {
                 return cnt > 0 ? '•'.repeat(cnt) : null;
             };
-            const { up, dn } = vote_weights(content);
+            const { up, dn } = vote_weights(post);
             dots =
                 up || dn ? (
                     <span className="vote_weights">
@@ -211,8 +197,8 @@ class PostSummary extends React.Component {
                 <span className="PostSummary__time_author_category">
                     {showReblog && (
                         <Reblog
-                            author={content.get('author')}
-                            permlink={content.get('permlink')}
+                            author={post.get('author')}
+                            permlink={post.get('permlink')}
                         />
                     )}
                 </span>
@@ -274,8 +260,8 @@ class PostSummary extends React.Component {
         }
 
         const image_link = extractImageLink(
-            content.get('json_metadata'),
-            content.get('body')
+            post.get('json_metadata'),
+            post.get('body')
         );
         let thumb = null;
         if (!gray && image_link && !ImageUserBlockList.includes(author)) {
@@ -340,15 +326,11 @@ class PostSummary extends React.Component {
 
 export default connect(
     (state, props) => {
-        const { post, hideCategory, nsfwPref, featured, promoted } = props;
-        const content = state.global.get('content').get(post);
+        const { post, hideCategory, nsfwPref } = props;
         const net_vests = state.user.getIn(['current', 'effective_vests'], 0.0);
         return {
             post,
-            content,
             hideCategory,
-            featured,
-            promoted,
             username:
                 state.user.getIn(['current', 'username']) ||
                 state.offchain.get('account'),

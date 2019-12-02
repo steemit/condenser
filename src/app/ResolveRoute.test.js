@@ -57,6 +57,7 @@ describe('resolveRoute', () => {
             '/roles/hive-105677',
             { page: 'CommunityRoles', params: ['hive-105677'] },
         ],
+        ['/search', { page: 'SearchIndex' }],
         ['/rewards', { page: 'Rewards' }],
     ];
     test_cases.forEach(r => {

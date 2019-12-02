@@ -9,7 +9,7 @@ import tt from 'counterpart';
 class VotesAndComments extends React.Component {
     static propTypes = {
         // HTML properties
-        post: PropTypes.string.isRequired,
+        post: PropTypes.object.isRequired,
         commentsLink: PropTypes.string.isRequired,
 
         // Redux connect properties
@@ -66,11 +66,8 @@ class VotesAndComments extends React.Component {
 }
 
 export default connect((state, props) => {
-    const post = state.global.getIn(['content', props.post]);
-    if (!post) return props;
     return {
-        ...props,
-        totalVotes: post.getIn(['stats', 'total_votes']),
-        comments: post.get('children'),
+        totalVotes: props.post.getIn(['stats', 'total_votes']),
+        comments: props.post.get('children'),
     };
 })(VotesAndComments);

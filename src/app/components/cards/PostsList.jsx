@@ -268,27 +268,6 @@ class PostsList extends React.Component {
         const renderSummary = items =>
             items.map((item, i) => {
                 const every = this.props.adSlots.in_feed_1.every;
-                if (this.props.videoAdsEnabled && i === 4) {
-                    return (
-                        <div key={item.item}>
-                            <li>
-                                <PostSummary
-                                    account={account}
-                                    post={item.item}
-                                    thumbSize={thumbSize}
-                                    ignore={item.ignore}
-                                    nsfwPref={nsfwPref}
-                                />
-                            </li>
-
-                            <div className="articles__content-block--ad">
-                                <VideoAd
-                                    id="bsa-zone_1572296522077-3_123456"
-                                />
-                            </div>
-                        </div>
-                    ); 
-                }
                 if (this.props.shouldSeeAds && i >= every && i % every === 0) {
                     return (
                         <div key={item.item}>
@@ -311,6 +290,27 @@ class PostsList extends React.Component {
                             </div>
                         </div>
                     );
+                }
+                else if (this.props.videoAdsEnabled && i === 4) {
+                    return (
+                        <div key={item.item}>
+                            <li>
+                                <PostSummary
+                                    account={account}
+                                    post={item.item}
+                                    thumbSize={thumbSize}
+                                    ignore={item.ignore}
+                                    nsfwPref={nsfwPref}
+                                />
+                            </li>
+
+                            <div className="articles__content-block--ad">
+                                <VideoAd
+                                    id="bsa-zone_1572296522077-3_123456"
+                                />
+                            </div>
+                        </div>
+                    ); 
                 }
                 return (
                     <li key={item.item}>

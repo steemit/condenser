@@ -14,8 +14,8 @@ function normalizeRewards(rewards) {
     const out = items.map(item => {
         let [url, title, payout, posts, authors] = item;
         remainder -= payout;
-        const is_blog = url.substring(0, 9) != 'trending/';
-        url = is_blog ? url + '/payout' : url.replace('trending/', 'payout/');
+        const is_blog = url.substring(0, 5) != 'hive-';
+        url = '/' + (is_blog ? url + '/payout' : 'payout/' + url);
         title = title[0] == '@' ? title.substring(1) : title;
         return { url, title, payout, posts, authors, is_blog };
     });
@@ -149,7 +149,7 @@ class Rewards extends Component {
         } = item;
         const summary = '$' + Math.round(payout) + ' in ' + posts + ' posts';
         const link = (
-            <Link to={`/${url}`} className="box-inner">
+            <Link to={url} className="box-inner">
                 <span className="title">{title}</span>
                 <span className="detail">
                     <strong>{title}</strong>

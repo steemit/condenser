@@ -51,6 +51,7 @@ class SettingsEditButton extends React.Component {
         if (loading) {
             return <span>Saving...</span>;
         }
+
         return (
             <span>
                 <a href="#" onClick={this.onToggleDialog}>

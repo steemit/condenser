@@ -7282,9 +7282,10 @@ react-addons-test-utils@15.4.2:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
 
-react-autocomplete@1.7.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/react-autocomplete/-/react-autocomplete-1.7.2.tgz#c55a0a4b8a9f4cba911dfccb74ef74f2161c46e0"
+react-autocomplete@1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/react-autocomplete/-/react-autocomplete-1.8.1.tgz#ebbbc400006aa91ad538b2d14727b9e7e5d06310"
+  integrity sha1-67vEAABqqRrVOLLRRye55+XQYxA=
   dependencies:
     dom-scroll-into-view "1.0.1"
     prop-types "^15.5.10"

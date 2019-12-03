@@ -281,7 +281,7 @@ class PostsList extends React.Component {
                                 />
                             </li>
 
-                            <div className="articles__content-block--ad text-center">
+                            <div className="articles__content-block--ad video-ad">
                                 <VideoAd id="bsa-zone_1572296522077-3_123456" />
                             </div>
                         </div>

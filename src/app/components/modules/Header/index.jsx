@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { immutableAccessor } from 'app/utils/Accessors';
 import { parseJsonTags } from 'app/utils/StateFunctions';
 import Headroom from 'react-headroom';
-import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
@@ -15,6 +13,7 @@ import IconButton from 'app/components/elements/IconButton';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Userpic from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
@@ -30,6 +29,9 @@ class Header extends React.Component {
         category: PropTypes.string,
         order: PropTypes.string,
         pathname: PropTypes.string,
+        getUnreadAccountNotifications: PropTypes.func,
+        loggedIn: PropTypes.bool,
+        unreadNotificationCount: PropTypes.number,
     };
 
     constructor(props) {
@@ -40,6 +42,17 @@ class Header extends React.Component {
             showAd: false,
             showAnnouncement: this.props.showAnnouncement,
         };
+    }
+
+    componentWillMount() {
+        const {
+            loggedIn,
+            getUnreadAccountNotifications,
+            current_account_name,
+        } = this.props;
+        if (loggedIn) {
+            getUnreadAccountNotifications(current_account_name);
+        }
     }
 
     componentDidMount() {
@@ -121,6 +134,7 @@ class Header extends React.Component {
             display_name,
             content,
             walletUrl,
+            unreadNotificationCount,
         } = this.props;
 
         let { showAd, showAnnouncement } = this.state;
@@ -367,6 +381,17 @@ class Header extends React.Component {
                                         <li className={'Header__userpic '}>
                                             <Userpic account={username} />
                                         </li>
+                                        {unreadNotificationCount > 0 && (
+                                            <div
+                                                className={
+                                                    'Header__notification'
+                                                }
+                                            >
+                                                <span>
+                                                    {unreadNotificationCount}
+                                                </span>
+                                            </div>
+                                        )}
                                     </DropdownMenu>
                                 )}
                                 {/*HAMBURGER*/}
@@ -421,6 +446,22 @@ const mapStateToProps = (state, ownProps) => {
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
     const content = state.global.get('content'); // TODO: needed for SSR?
+    let unreadNotificationCount = 0;
+    if (
+        loggedIn &&
+        state.global.getIn([
+            'notifications',
+            current_account_name,
+            'unreadNotifications',
+        ])
+    ) {
+        unreadNotificationCount = state.global.getIn([
+            'notifications',
+            current_account_name,
+            'unreadNotifications',
+            'unread',
+        ]);
+    }
 
     return {
         username,
@@ -433,6 +474,7 @@ const mapStateToProps = (state, ownProps) => {
         walletUrl: state.app.get('walletUrl'),
         gptEnabled,
         content,
+        unreadNotificationCount,
         ...ownProps,
     };
 };
@@ -455,6 +497,14 @@ const mapDispatchToProps = dispatch => ({
     },
     hideSidePanel: () => {
         dispatch(userActions.hideSidePanel());
+    },
+    getUnreadAccountNotifications: username => {
+        const query = {
+            account: username,
+        };
+        return dispatch(
+            fetchDataSagaActions.getUnreadAccountNotifications(query)
+        );
     },
     hideAnnouncement: () => dispatch(userActions.hideAnnouncement()),
 });

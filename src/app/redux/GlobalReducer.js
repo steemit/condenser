@@ -9,6 +9,7 @@ export const defaultState = Map({
 const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_NOTIFICATIONS = 'global/RECEIVE_NOTIFICATIONS';
+const RECEIVE_UNREAD_NOTIFICATIONS = 'global/RECEIVE_UNREAD_NOTIFICATIONS';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
 const RECEIVE_POST_HEADER = 'global/RECEIVE_POST_HEADER';
@@ -93,6 +94,14 @@ export default function reducer(state = defaultState, action = {}) {
                         )
                         .set('isLastPage', payload.isLastPage)
                 )
+            );
+        }
+
+        case RECEIVE_UNREAD_NOTIFICATIONS: {
+            console.log('Receive unread notifications', payload);
+            return state.setIn(
+                ['notifications', payload.name, 'unreadNotifications'],
+                Map(payload.unreadNotifications)
             );
         }
 
@@ -338,6 +347,12 @@ export const receiveNotifications = payload => ({
     type: RECEIVE_NOTIFICATIONS,
     payload,
 });
+
+export const receiveUnreadNotifications = payload => ({
+    type: RECEIVE_UNREAD_NOTIFICATIONS,
+    payload,
+});
+
 export const receiveRewards = payload => ({
     type: RECEIVE_REWARDS,
     payload,

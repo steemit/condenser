@@ -46,6 +46,13 @@ export const userWatches = [
 
 const strCmp = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
 
+function effectiveVests(account) {
+    const vests = parseFloat(account.get('vesting_shares'));
+    const delegated = parseFloat(account.get('delegated_vesting_shares'));
+    const received = parseFloat(account.get('received_vesting_shares'));
+    return vests - delegated + received;
+}
+
 function* shouldShowLoginWarning({ username, password }) {
     // If it's a master key, show the warning.
     if (!auth.isWif(password)) {
@@ -102,8 +109,8 @@ function* usernamePasswordLogin(action) {
     // take a while on slow computers.
     yield call(usernamePasswordLogin2, action.payload);
     const current = yield select(state => state.user.get('current'));
-    if (current) {
-        const username = current.get('username');
+    const username = current ? current.get('username') : null;
+    if (username) {
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'ignore');
     }
@@ -199,11 +206,7 @@ function* usernamePasswordLogin2({
             userActions.setUser({
                 username,
                 login_with_keychain: true,
-                vesting_shares: account.get('vesting_shares'),
-                received_vesting_shares: account.get('received_vesting_shares'),
-                delegated_vesting_shares: account.get(
-                    'delegated_vesting_shares'
-                ),
+                effective_vests: effectiveVests(account),
             })
         );
         return;
@@ -361,26 +364,14 @@ function* usernamePasswordLogin2({
                     username,
                     private_keys,
                     login_owner_pubkey,
-                    vesting_shares: account.get('vesting_shares'),
-                    received_vesting_shares: account.get(
-                        'received_vesting_shares'
-                    ),
-                    delegated_vesting_shares: account.get(
-                        'delegated_vesting_shares'
-                    ),
+                    effective_vests: effectiveVests(account),
                 })
             );
         } else {
             yield put(
                 userActions.setUser({
                     username,
-                    vesting_shares: account.get('vesting_shares'),
-                    received_vesting_shares: account.get(
-                        'received_vesting_shares'
-                    ),
-                    delegated_vesting_shares: account.get(
-                        'delegated_vesting_shares'
-                    ),
+                    effective_vests: effectiveVests(account),
                 })
             );
         }
@@ -422,13 +413,7 @@ function* usernamePasswordLogin2({
                     userActions.setUser({
                         username,
                         login_with_keychain: true,
-                        vesting_shares: account.get('vesting_shares'),
-                        received_vesting_shares: account.get(
-                            'received_vesting_shares'
-                        ),
-                        delegated_vesting_shares: account.get(
-                            'delegated_vesting_shares'
-                        ),
+                        effective_vests: effectiveVests(account),
                     })
                 );
             } else {

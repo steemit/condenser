@@ -207,9 +207,16 @@ a[rel="nofollow noopener"]:after {
     border: 1px solid themed('colorAccent');
     color: themed('textColorSecondary');
   }
+  .affiliation-edit {
+    .Icon {
+      margin-right: 0;
+    }
+  }
+}
 
+.affiliation-edit {
   .Icon {
-    margin-left: 0.25em;
+    margin: 0 0.25em;
     @include themify($themes) {
       fill: themed('textColorSecondary');
     }
@@ -226,4 +233,8 @@ a[rel="nofollow noopener"]:after {
 .account_warn {
     font-weight: bold;
     color: red;
+}
+
+.pointer {
+    cursor: pointer;
 }

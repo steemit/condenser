@@ -8,7 +8,7 @@ class UserTitleEditor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: this.props.title,
+            title: this.props.title ? this.props.title : '',
         };
     }
 
@@ -69,9 +69,13 @@ class UserTitleEditor extends Component {
 
 UserTitleEditor.propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     username: PropTypes.string.isRequired,
     community: PropTypes.string.isRequired,
+};
+
+UserTitleEditor.defaultProps = {
+    title: '',
 };
 
 export default connect()(UserTitleEditor);

@@ -70,7 +70,6 @@ class ReplyEditor extends React.Component {
         category: PropTypes.string, // initial value
         title: PropTypes.string, // initial value
         body: PropTypes.string, // initial value
-        richTextEditor: PropTypes.func,
         defaultPayoutType: PropTypes.string,
         payoutType: PropTypes.string,
     };
@@ -506,7 +505,6 @@ class ReplyEditor extends React.Component {
         const vframe_section_shrink_class = isStory
             ? 'vframe__section--shrink'
             : '';
-        const RichTextEditor = this.props.richTextEditor;
 
         return (
             <div className="ReplyEditor row">
@@ -896,9 +894,6 @@ function stateFromMarkdown(markdown) {
 }
 
 import { connect } from 'react-redux';
-const richTextEditor = process.env.BROWSER
-    ? require('react-rte-image').default
-    : null;
 
 export default formId =>
     connect(
@@ -989,7 +984,6 @@ export default formId =>
                 beneficiaries,
                 initialValues: { title, body, tags },
                 formId,
-                richTextEditor,
             };
 
             return ret;

@@ -67,7 +67,10 @@ class CommunityPaneMobile extends Component {
                                     opacity: '0.65',
                                 }}
                             >
-                                <span onClick={handleSubscriberClick}>
+                                <span
+                                    onClick={handleSubscriberClick}
+                                    className="pointer"
+                                >
                                     {numberWithCommas(subs)}
                                     {subs == 1 ? ' subscriber' : ' subscribers'}
                                 </span>

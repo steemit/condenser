@@ -17,7 +17,7 @@ class UserTitle extends React.Component {
         super(props);
         this.state = {
             showDialog: false,
-            updatedTitle: '',
+            newTitle: '',
         };
     }
 
@@ -41,24 +41,27 @@ class UserTitle extends React.Component {
         );
         this.props.onEditSubmit();
         this.setState({
-            updatedTitle: newTitle,
+            newTitle: newTitle,
         });
     };
 
     render() {
-        const { title, role, viewer_role, hideEdit } = this.props;
+        const { role, viewer_role, hideEdit } = this.props;
+        const { newTitle } = this.state;
+        const title = newTitle.length > 0 ? newTitle : this.props.title || '';
         const isMod = Role.atLeast(viewer_role, 'mod');
         const showRole = role && role != 'guest';
-        const showTitle = title != '' || (isMod && !hideEdit);
+        const showEdit = isMod && !hideEdit;
+        const showTitle = title != '';
 
-        if (!showRole && !showTitle) return null;
+        if (!showRole && !showEdit && !showTitle) return null;
 
         let editor;
-        if (isMod && !hideEdit) {
+        if (showEdit) {
             const { author, community, username } = this.props;
             const { showDialog } = this.state;
             editor = (
-                <span>
+                <span className="affiliation-edit">
                     <a onClick={this.onToggleDialog} title="Edit Title">
                         <Icon name="pencil2" size="0_8x" />
                     </a>
@@ -87,12 +90,11 @@ class UserTitle extends React.Component {
                 {showRole && <span className="user_role">{role}</span>}
                 {showTitle && (
                     <span className="affiliation">
-                        {this.state.updatedTitle.length > 0
-                            ? this.state.updatedTitle
-                            : title}
+                        {title}
                         {editor}
                     </span>
                 )}
+                {!showTitle && showEdit && editor}
             </span>
         );
     }

@@ -80,7 +80,7 @@ class CommunityPane extends Component {
                         className="row"
                         style={{ textAlign: 'center', lineHeight: '1em' }}
                     >
-                        <a
+                        <div
                             onClick={handleSubscriberClick}
                             className="column small-4 pointer"
                         >
@@ -91,7 +91,7 @@ class CommunityPane extends Component {
                                     ? 'subscriber'
                                     : 'subscribers'}
                             </small>
-                        </a>
+                        </div>
                         <div className="column small-4">
                             {'$'}
                             {numberWithCommas(community.get('sum_pending'))}

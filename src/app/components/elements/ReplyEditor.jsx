@@ -29,6 +29,8 @@ const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
 const RTE_DEFAULT = false;
 const MAX_TAGS = 8;
+const MAX_FILE_TO_UPLOAD = 10;
+let imagesToUpload = [];
 
 function allTags(userInput, originalCategory, hashtags) {
     // take space-delimited user input
@@ -320,18 +322,36 @@ class ReplyEditor extends React.Component {
         this.props.showAdvancedSettings(this.props.formId);
     };
 
+    displayErrorMessage = message => {
+        this.setState({
+            progress: { error: message },
+        });
+
+        setTimeout(() => {
+            this.setState({ progress: {} });
+        }, 6000); // clear message
+    };
+
     onDrop = (acceptedFiles, rejectedFiles) => {
         if (!acceptedFiles.length) {
             if (rejectedFiles.length) {
-                this.setState({
-                    progress: { error: 'Please insert only image files.' },
-                });
+                this.displayErrorMessage('Please insert only image files.');
                 console.log('onDrop Rejected files: ', rejectedFiles);
             }
             return;
         }
-        const file = acceptedFiles[0];
-        this.upload(file, file.name);
+
+        if (acceptedFiles.length > MAX_FILE_TO_UPLOAD) {
+            this.displayErrorMessage(
+                `Please upload up to maximum ${MAX_FILE_TO_UPLOAD} images.`
+            );
+            console.log('onDrop too many files to upload');
+            return;
+        }
+
+        imagesToUpload = [...acceptedFiles];
+        this.insertPlaceHolders();
+        this.uploadNextImage();
     };
 
     onOpenClick = () => {
@@ -341,12 +361,16 @@ class ReplyEditor extends React.Component {
     onPasteCapture = e => {
         try {
             if (e.clipboardData) {
+                // @TODO: currently it seems to capture only one file, try to find a fix for multiple files
                 for (const item of e.clipboardData.items) {
                     if (item.kind === 'file' && /^image\//.test(item.type)) {
                         const blob = item.getAsFile();
-                        this.upload(blob);
+                        imagesToUpload.push(blob);
                     }
                 }
+
+                this.insertPlaceHolders();
+                this.uploadNextImage();
             } else {
                 // http://joelb.me/blog/2011/code-snippet-accessing-clipboard-images-with-javascript/
                 // contenteditable element that catches all pasted data
@@ -357,26 +381,42 @@ class ReplyEditor extends React.Component {
         }
     };
 
-    upload = (file, name = '') => {
-        // Upon drop or file selection, insert a temporary MD image tag that will be replaced
-        const { body } = this.state;
-        // Cursor position
-        const { selectionStart } = this.refs.postRef;
+    uploadNextImage = () => {
+        if (imagesToUpload.length > 0) {
+            const nextImage = imagesToUpload.pop();
+            this.upload(nextImage, nextImage.name);
+        }
+    };
+
+    insertPlaceHolders = () => {
         let { imagesUploadCount } = this.state;
-        imagesUploadCount++;
-        this.setState({ imagesUploadCount: imagesUploadCount });
+        const { body } = this.state;
+        const { selectionStart } = this.refs.postRef;
+        let placeholder = '';
+
+        for (let ii = 0; ii < imagesToUpload.length; ii += 1) {
+            imagesUploadCount++;
+            placeholder += `\n![Uploading image #${imagesUploadCount}...]()\n`;
+        }
 
         // Insert the temporary tag where the cursor currently is
         body.props.onChange(
             body.value.substring(0, selectionStart) +
-                `\n![Uploading image #${imagesUploadCount}...]()\n` +
+                placeholder +
                 body.value.substring(selectionStart, body.value.length)
         );
+    };
+
+    upload = (file, name = '') => {
+        let { imagesUploadCount } = this.state;
+        imagesUploadCount++;
+        this.setState({ imagesUploadCount: imagesUploadCount });
 
         const { uploadImage } = this.props;
         this.setState({
             progress: { message: tt('reply_editor.uploading') },
         });
+
         uploadImage(file, progress => {
             const { body } = this.state;
 
@@ -392,11 +432,11 @@ class ReplyEditor extends React.Component {
                         image_md
                     )
                 );
+
+                this.uploadNextImage();
             } else {
-                this.setState({ progress });
-                const { error, message } = progress;
-                if (error) {
-                    console.log('Image upload failed', progress);
+                if (progress.hasOwnProperty('error')) {
+                    this.displayErrorMessage(progress.error);
 
                     // Remove temporary image MD tag
                     body.props.onChange(
@@ -405,11 +445,10 @@ class ReplyEditor extends React.Component {
                             ''
                         )
                     );
+                } else {
+                    this.setState({ progress });
                 }
             }
-            setTimeout(() => {
-                this.setState({ progress: {} });
-            }, 4000); // clear message
         });
     };
 
@@ -616,7 +655,7 @@ class ReplyEditor extends React.Component {
                                                 : 'none'
                                         }
                                         disableClick
-                                        multiple={false}
+                                        multiple
                                         accept="image/*"
                                         ref={node => {
                                             this.dropzone = node;

@@ -104,7 +104,8 @@ export default class UserProfile extends React.Component {
         );
     }
 
-    loadMore(last_post) {
+    loadMore() {
+        const last_post = this.props.posts ? this.props.posts.last() : null;
         if (!last_post) return;
         //if (last_post == this.props.pending) return; // if last post is 'pending', its an invalid start token
         const { username, status, order, category } = this.props;
@@ -197,7 +198,7 @@ export default class UserProfile extends React.Component {
             // post lists -- loaded
             tab_content = (
                 <PostsList
-                    posts={posts}
+                    post_refs={posts}
                     loading={fetching}
                     loadMore={this.loadMore}
                 />
@@ -256,6 +257,11 @@ export default class UserProfile extends React.Component {
                 </div>
                 <div className="columns shrink">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
+                        <li>
+                            <a href={walletUrl} target="_blank">
+                                Wallet
+                            </a>
+                        </li>
                         {isMyAccount && (
                             <li>{_tablink('settings', tt('g.settings'))}</li>
                         )}
@@ -341,7 +347,7 @@ module.exports = {
                 ),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 profile: state.userProfiles.getIn(['profiles', accountname]),
-                walletUrl,
+                walletUrl: walletUrl + '/@' + accountname + '/transfers',
                 section,
                 order,
                 category: '@' + accountname,

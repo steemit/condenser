@@ -55,13 +55,6 @@ function abs(value) {
     return Math.abs(parseInt(value));
 }
 
-function effectiveVests(account) {
-    const vests = account ? account.get('vesting_shares') : 0.0;
-    const delegated = account ? account.get('delegated_vesting_shares') : 0.0;
-    const received = account ? account.get('received_vesting_shares') : 0.0;
-    return vests - delegated + received;
-}
-
 class Voting extends React.Component {
     static propTypes = {
         // HTML properties
@@ -234,6 +227,21 @@ class Voting extends React.Component {
             sbd_print_rate,
             username,
         } = this.props;
+
+        // `lite` Voting component: e.g. search results
+        if (!post.get('pending_payout_value')) {
+            return (
+                <span className="Voting">
+                    <span className="Voting__inner">
+                        <FormattedAsset
+                            amount={post.get('payout')}
+                            asset="$"
+                            classname=""
+                        />
+                    </span>
+                </span>
+            );
+        }
 
         const { votingUp, votingDown, showWeight, showWeightDir } = this.state;
 
@@ -455,24 +463,6 @@ class Voting extends React.Component {
             });
         }
 
-        const dn_weight = post.getIn(['stats', 'flag_weight']);
-        const up_weight = Math.max(
-            String(parseInt(post.get('net_rshares') / 2)).length - 10,
-            0
-        );
-        if (up_weight > 0 || dn_weight > 0) {
-            const ups = up_weight > 0 ? '•'.repeat(up_weight) : null;
-            const dns = dn_weight > 0 ? '•'.repeat(dn_weight) : null;
-            payoutItems.push({
-                value: (
-                    <span style={{ opacity: 0.75 }}>
-                        {ups && <span style={{ color: 'green' }}>{ups}</span>}
-                        {dns && <span style={{ color: 'red' }}>{dns}</span>}
-                    </span>
-                ),
-            });
-        }
-
         // past payout stats
         if (post.get('is_paidout') && total_payout > 0) {
             payoutItems.push({
@@ -621,11 +611,8 @@ class Voting extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const postref = ownProps.post;
-        const post = state.global.getIn(
-            ['content', postref],
-            ownProps.post_obj
-        );
+        const post =
+            ownProps.post || state.global.getIn(['content', ownProps.post_ref]);
 
         if (!post) {
             console.error('post_not_found', ownProps);
@@ -639,7 +626,7 @@ export default connect(
 
         const current = state.user.get('current');
         const username = current ? current.get('username') : null;
-        const net_vests = effectiveVests(current);
+        const net_vests = current ? current.get('effective_vests') : 0.0;
         const vote_status_key = `transaction_vote_active_${author}_${permlink}`;
         const voting = state.global.get(vote_status_key);
         const price_per_steem =

@@ -33,6 +33,8 @@ class CommunityPaneMobile extends Component {
             <Link to={`/roles/${category}`}>Roles</Link>
         );
 
+        const subs = community.get('subscribers');
+
         return (
             <div>
                 <div className="c-sidebar__module CommunityPaneMobile">
@@ -41,7 +43,7 @@ class CommunityPaneMobile extends Component {
                         style={{ textAlign: 'center', lineHeight: '1em' }}
                     >
                         <div
-                            className="column large-5 medium-12 small-12"
+                            className="column large-10 medium-8 small-12"
                             style={{ textAlign: 'left' }}
                         >
                             {roles && (
@@ -59,64 +61,57 @@ class CommunityPaneMobile extends Component {
                             <h3 className="c-sidebar__h3">
                                 {community.get('title')}
                             </h3>
+                            <div
+                                style={{
+                                    margin: '-14px 0 8px',
+                                    opacity: '0.65',
+                                }}
+                            >
+                                <span onClick={handleSubscriberClick}>
+                                    {numberWithCommas(subs)}
+                                    {subs == 1 ? ' subscriber' : ' subscribers'}
+                                </span>
+                                &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+                                {numberWithCommas(
+                                    community.get('num_authors')
+                                )}{' '}
+                                active
+                            </div>
                             {community.get('is_nsfw') && (
                                 <span className="affiliation">nsfw</span>
                             )}
-                            <div style={{ margin: '-6px 0 12px' }}>
+                            <div style={{ margin: '0 0 12px' }}>
                                 {community.get('about')}
                             </div>
                         </div>
 
-                        <div
-                            onClick={handleSubscriberClick}
-                            className="column large-1 medium-2 small-4 pointer"
-                        >
-                            {numberWithCommas(community.get('subscribers'))}
-                            <br />
-                            <small>
-                                {community.get('subscribers') == 1
-                                    ? 'subscriber'
-                                    : 'subscribers'}
-                            </small>
-                        </div>
-                        <div className="column large-1 medium-2 small-4">
-                            {'$'}
-                            {numberWithCommas(community.get('sum_pending'))}
-                            <br />
-                            <small>
-                                pending<br />rewards
-                            </small>
-                        </div>
-                        <div
-                            className="column large-1 medium-2 small-4"
-                            style={{ marginBottom: '8px' }}
-                        >
-                            {numberWithCommas(community.get('num_authors'))}
-                            <br />
-                            <small>
-                                active<br />posters
-                            </small>
-                        </div>
-
-                        <div className="column large-4 medium-6 small-12">
+                        <div className="column large-2 medium-4 small-12">
+                            <span
+                                style={{
+                                    display: 'inline-block',
+                                    margin: '0 4px',
+                                }}
+                            >
+                                <SubscribeButton
+                                    community={community.get('name')}
+                                />
+                            </span>
                             {canPost && (
-                                <Link
-                                    className="button primary"
+                                <span
                                     style={{
-                                        minWidth: '6em',
-                                        marginRight: '16px',
+                                        display: 'inline-block',
+                                        margin: '0 4px',
                                     }}
-                                    to={`/submit.html?category=${category}`}
                                 >
-                                    Post
-                                </Link>
+                                    <Link
+                                        className="button primary"
+                                        style={{ minWidth: '7em' }}
+                                        to={`/submit.html?category=${category}`}
+                                    >
+                                        Post
+                                    </Link>
+                                </span>
                             )}
-                            {community &&
-                                this.props.username && (
-                                    <SubscribeButton
-                                        community={community.get('name')}
-                                    />
-                                )}
                         </div>
                     </div>
                 </div>

@@ -109,6 +109,22 @@
   }
 }
 
+.Header__notification {
+    background: red;
+    width: 20px;
+    border-radius: 50%;
+    height: 20px;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    > span {
+    color: white;
+    position: absolute;
+    top: -3px;
+    left: 2px;
+    }
+}
+
 span.Header__hamburger.toggle-menu {
     width: 1rem;
     height: 1rem;

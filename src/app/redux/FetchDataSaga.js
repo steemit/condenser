@@ -21,6 +21,8 @@ const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 const LIST_COMMUNITIES = 'fetchDataSaga/LIST_COMMUNITIES';
 const GET_SUBSCRIPTIONS = 'fetchDataSaga/GET_SUBSCRIPTIONS';
 const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
+const GET_UNREAD_ACCOUNT_NOTIFICATIONS =
+    'fetchDataSaga/GET_UNREAD_ACCOUNT_NOTIFICATIONS';
 const GET_REWARDS_DATA = 'fetchDataSaga/GET_REWARDS_DATA';
 
 export const fetchDataWatches = [
@@ -33,6 +35,7 @@ export const fetchDataWatches = [
     takeLatest(GET_SUBSCRIPTIONS, getSubscriptions),
     takeEvery(LIST_COMMUNITIES, listCommunities),
     takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
+    takeEvery(GET_UNREAD_ACCOUNT_NOTIFICATIONS, getUnreadAccountNotifications),
     takeEvery(GET_REWARDS_DATA, getRewardsDataSaga),
 ];
 
@@ -242,6 +245,44 @@ export function* getAccountNotifications(action) {
     yield put(appActions.fetchDataEnd());
 }
 
+/**
+ * Request unread notifications for given account
+ * @param {object} payload containing:
+ *   - account (string)
+ */
+
+export function* getUnreadAccountNotifications(action) {
+    if (!action.payload) throw 'no account specified';
+    yield put(appActions.fetchDataBegin());
+    try {
+        const unreadNotifications = yield call(
+            callBridge,
+            'unread_notifications',
+            action.payload
+        );
+        if (unreadNotifications && unreadNotifications.error) {
+            console.error(
+                '~~ Saga getUnreadAccountNotifications error ~~>',
+                unreadNotifications.error
+            );
+            yield put(
+                appActions.steemApiError(unreadNotifications.error.message)
+            );
+        } else {
+            yield put(
+                globalActions.receiveUnreadNotifications({
+                    name: action.payload.account,
+                    unreadNotifications,
+                })
+            );
+        }
+    } catch (error) {
+        console.error('~~ Saga getUnreadAccountNotifications error ~~>', error);
+        yield put(appActions.steemApiError(error.message));
+    }
+    yield put(appActions.fetchDataEnd());
+}
+
 export function* fetchData(action) {
     // TODO: postFilter unused
     const { order, author, permlink, postFilter, observer } = action.payload;
@@ -391,6 +432,11 @@ export const actions = {
 
     getAccountNotifications: payload => ({
         type: GET_ACCOUNT_NOTIFICATIONS,
+        payload,
+    }),
+
+    getUnreadAccountNotifications: payload => ({
+        type: GET_UNREAD_ACCOUNT_NOTIFICATIONS,
         payload,
     }),
 

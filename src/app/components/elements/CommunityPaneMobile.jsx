@@ -5,16 +5,20 @@ import PropTypes from 'prop-types';
 import { Role } from 'app/utils/Community';
 import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
+import * as globalActions from 'app/redux/GlobalReducer';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 
 class CommunityPaneMobile extends Component {
     static propTypes = {
         community: PropTypes.object.isRequired,
+        showRecentSubscribers: PropTypes.func.isRequired,
     };
 
     render() {
-        const { community } = this.props;
-
+        const { community, showRecentSubscribers } = this.props;
+        const handleSubscriberClick = () => {
+            showRecentSubscribers(community);
+        };
         const category = community.get('name');
         const viewer_role = community.getIn(['context', 'role'], 'guest');
         const canPost = Role.canPost(category, viewer_role);
@@ -63,8 +67,13 @@ class CommunityPaneMobile extends Component {
                                     opacity: '0.65',
                                 }}
                             >
-                                {numberWithCommas(subs)}
-                                {subs == 1 ? ' subscriber' : ' subscribers'}
+                                <span
+                                    onClick={handleSubscriberClick}
+                                    className="pointer"
+                                >
+                                    {numberWithCommas(subs)}
+                                    {subs == 1 ? ' subscriber' : ' subscribers'}
+                                </span>
                                 &nbsp;&nbsp;&bull;&nbsp;&nbsp;
                                 {numberWithCommas(
                                     community.get('num_authors')
@@ -118,5 +127,18 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => ({
         community: ownProps.community,
-    })
+    }),
+    // mapDispatchToProps
+    dispatch => {
+        return {
+            showRecentSubscribers: community => {
+                dispatch(
+                    globalActions.showDialog({
+                        name: 'communitySubscribers',
+                        params: { community },
+                    })
+                );
+            },
+        };
+    }
 )(CommunityPaneMobile);

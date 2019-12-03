@@ -7,6 +7,7 @@ import { Role } from 'app/utils/Community';
 import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
 import Icon from 'app/components/elements/Icon';
+import * as globalActions from 'app/redux/GlobalReducer';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 
 const nl2br = text =>
@@ -22,10 +23,14 @@ const nl2li = text =>
 class CommunityPane extends Component {
     static propTypes = {
         community: PropTypes.object.isRequired,
+        showRecentSubscribers: PropTypes.func.isRequired,
     };
 
     render() {
-        const { community } = this.props;
+        const { community, showRecentSubscribers } = this.props;
+        const handleSubscriberClick = () => {
+            showRecentSubscribers(community);
+        };
 
         function teamMembers(members) {
             return members.map((row, idx) => {
@@ -75,7 +80,10 @@ class CommunityPane extends Component {
                         className="row"
                         style={{ textAlign: 'center', lineHeight: '1em' }}
                     >
-                        <div className="column small-4">
+                        <div
+                            onClick={handleSubscriberClick}
+                            className="column small-4 pointer"
+                        >
                             {numberWithCommas(community.get('subscribers'))}
                             <br />
                             <small>
@@ -178,5 +186,18 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => ({
         community: ownProps.community,
-    })
+    }),
+    // mapDispatchToProps
+    dispatch => {
+        return {
+            showRecentSubscribers: community => {
+                dispatch(
+                    globalActions.showDialog({
+                        name: 'communitySubscribers',
+                        params: { community },
+                    })
+                );
+            },
+        };
+    }
 )(CommunityPane);

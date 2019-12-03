@@ -109,9 +109,8 @@ function* usernamePasswordLogin(action) {
     // take a while on slow computers.
     yield call(usernamePasswordLogin2, action.payload);
     const current = yield select(state => state.user.get('current'));
-    if (current) {
-        const username = current.get('username');
-        if (!username) console.error('usernamePasswordLogin blank username');
+    const username = current ? current.get('username') : null;
+    if (username) {
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'ignore');
     }

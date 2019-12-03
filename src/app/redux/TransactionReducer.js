@@ -92,11 +92,12 @@ export default function reducer(state = defaultState, action) {
             } else if (/missing required posting authority/.test(key)) {
                 // missing required posting authority:Missing Posting Authority test-safari
                 msg = last_part(key, ':');
-            } else if (
-                /Cannot delete a comment with net positive votes/.test(key)
-            ) {
+            } else if (/Cannot delete a comment with net positive/.test(key)) {
                 // Assert Exception:comment.net_rshares <= 0: Cannot delete a comment with net positive votes.
                 msg = last_part(key, ':');
+            } else if (/current vote on this comment is identical/.test(key)) {
+                // Assert Exception:itr->vote_percent != o.weight: Your current vote on this comment is identical to this vote.
+                msg = 'You already voted on this post.';
             } else {
                 msg = 'Transaction broadcast error: ' + last_part(key, ':');
                 console.error('unhandled error:', key, 'msg:', error.message);

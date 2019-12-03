@@ -31,7 +31,7 @@ class CommunityRoles extends React.Component {
     }
 
     componentDidMount() {
-        this.props.loadCommunityRoles(this.props.community);
+        this.props.getCommunityRoles(this.props.community);
     }
 
     toggleUpdateRoleModal(showModal) {
@@ -102,7 +102,7 @@ class CommunityRoles extends React.Component {
             const name = tuple[0];
             const title = tuple[2];
             let role = tuple[1];
-            if (availableRoles.includes(tuple[1])) {
+            if (availableRoles && availableRoles.includes(tuple[1])) {
                 role = (
                     <a
                         className="community-user--role"
@@ -251,7 +251,6 @@ class CommunityRoles extends React.Component {
 const CommunityRolesWrapped = connect(
     (state, ownProps) => {
         const { community } = ownProps.params;
-        //console.log('COMMUNITY IS: ', state.community.toJS())
         const tree = state.community.get(community, Map());
         const roles = tree.get('roles', List());
         const loading = roles.size == 0;
@@ -267,8 +266,8 @@ const CommunityRolesWrapped = connect(
     },
 
     dispatch => ({
-        loadCommunityRoles: community => {
-            dispatch(communityActions.loadCommunityRoles(community));
+        getCommunityRoles: community => {
+            dispatch(communityActions.getCommunityRoles(community));
         },
         updateUser: params => {
             dispatch(communityActions.updateUserRole(params));

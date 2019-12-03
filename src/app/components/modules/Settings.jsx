@@ -461,6 +461,7 @@ class Settings extends React.Component {
                                 </option>
                             </select>
                             <br />
+                            <br />
 
                             <label>
                                 {tt('settings_jsx.choose_default_blog_payout')}

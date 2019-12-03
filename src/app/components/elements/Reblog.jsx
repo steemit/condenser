@@ -96,7 +96,8 @@ module.exports = connect(
             dispatch(
                 transactionActions.broadcastOperation({
                     type: 'custom_json',
-                    confirm: tt('g.are_you_sure'),
+                    confirm:
+                        'This post will be added to your blog and shared with your followers.',
                     operation: {
                         id: 'follow',
                         required_posting_auths: [account],

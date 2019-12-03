@@ -197,9 +197,20 @@
   fill: $color-red;
 }
 
-.Voting .DropdownMenu ul {
+
+.PostFull .Voting .DropdownMenu.Voting__voters_list {
+    /* reserve enough space for dropdown (otherwise overflow) */
+    min-width: 140px;
+}
+
+.Voting .DropdownMenu.Voting__pane ul {
   width: auto;
   min-width: 260px;
+}
+
+.Voting .DropdownMenu ul {
+  width: auto;
+  min-width: 140px;
   max-width: 360px;
 
   li > a {
@@ -214,24 +225,22 @@
 }
 
 .DropdownMenu.Voting__voters_list ul {
-  li > a {
-    //font-weight: 200;
-  }
+  min-width: 140px;
 
   li > span {
     padding: 0.25rem 0.5rem;
     font-size: 82.5%;
     display: block;
     @include themify($themes) {
-      color: themed('textColorSecondary');  
-    }  
+      color: themed('textColorSecondary');
+    }
   }
 }
 
 .Voting__inner {
   @include themify($themes) {
-    border-right: themed('borderLight'); 
-  } 
+    border-right: themed('borderLight');
+  }
   padding-right: .8rem;
   margin-right: .6rem;
   .DropdownMenu .Icon.dropdown-arrow {

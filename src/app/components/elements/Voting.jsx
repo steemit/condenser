@@ -55,13 +55,6 @@ function abs(value) {
     return Math.abs(parseInt(value));
 }
 
-function effectiveVests(account) {
-    const vests = account ? account.get('vesting_shares') : 0.0;
-    const delegated = account ? account.get('delegated_vesting_shares') : 0.0;
-    const received = account ? account.get('received_vesting_shares') : 0.0;
-    return vests - delegated + received;
-}
-
 class Voting extends React.Component {
     static propTypes = {
         // HTML properties
@@ -235,6 +228,21 @@ class Voting extends React.Component {
             username,
         } = this.props;
 
+        // `lite` Voting component: e.g. search results
+        if (!post.get('pending_payout_value')) {
+            return (
+                <span className="Voting">
+                    <span className="Voting__inner">
+                        <FormattedAsset
+                            amount={post.get('payout')}
+                            asset="$"
+                            classname=""
+                        />
+                    </span>
+                </span>
+            );
+        }
+
         const { votingUp, votingDown, showWeight, showWeightDir } = this.state;
 
         const votingUpActive = voting && votingUp;
@@ -276,15 +284,17 @@ class Voting extends React.Component {
             // myVote === current vote
 
             const invokeFlag = (
-                <span
+                <a
                     href="#"
-                    onClick={this.toggleWeightDown}
+                    onClick={
+                        enable_slider ? this.toggleWeightDown : this.voteDown
+                    }
                     title="Downvote"
                     id="downvote_button"
                     className="flag"
                 >
                     {down}
-                </span>
+                </a>
             );
 
             const revokeFlag = (
@@ -299,43 +309,47 @@ class Voting extends React.Component {
                 </a>
             );
 
-            const dropdown = (
-                <Dropdown
-                    show={showWeight && showWeightDir == 'down'}
-                    onHide={() => this.setState({ showWeight: false })}
-                    onShow={() => {
-                        this.setState({ showWeight: true });
-                        this.readSliderWeight();
-                    }}
-                    title={invokeFlag}
-                    position={'right'}
-                >
-                    <div className="Voting__adjust_weight_down">
-                        {(myVote == null || myVote === 0) &&
-                            enable_slider && (
-                                <div className="weight-container">
-                                    {slider(false)}
-                                </div>
-                            )}
-                        <CloseButton
-                            onClick={() => this.setState({ showWeight: false })}
-                        />
-                        <div className="clear Voting__about-flag">
-                            {ABOUT_FLAG}
-                            <br />
-                            <span
-                                href="#"
-                                onClick={this.voteDown}
-                                className="button outline"
-                                title="Downvote"
-                            >
-                                Submit
-                            </span>
+            let dropdown = invokeFlag;
+            if (enable_slider) {
+                dropdown = (
+                    <Dropdown
+                        show={showWeight && showWeightDir == 'down'}
+                        onHide={() => this.setState({ showWeight: false })}
+                        onShow={() => {
+                            this.setState({ showWeight: true });
+                            this.readSliderWeight();
+                        }}
+                        title={invokeFlag}
+                        position={'right'}
+                    >
+                        <div className="Voting__adjust_weight_down">
+                            {(myVote == null || myVote === 0) &&
+                                enable_slider && (
+                                    <div className="weight-container">
+                                        {slider(false)}
+                                    </div>
+                                )}
+                            <CloseButton
+                                onClick={() =>
+                                    this.setState({ showWeight: false })
+                                }
+                            />
+                            <div className="clear Voting__about-flag">
+                                {ABOUT_FLAG}
+                                <br />
+                                <span
+                                    href="#"
+                                    onClick={this.voteDown}
+                                    className="button outline"
+                                    title="Downvote"
+                                >
+                                    Submit
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </Dropdown>
-            );
-
+                    </Dropdown>
+                );
+            }
             downVote = (
                 <span className={classDown}>
                     {myVote === null || myVote === 0 ? dropdown : revokeFlag}
@@ -469,7 +483,7 @@ class Voting extends React.Component {
         }
 
         const payoutEl = (
-            <DropdownMenu el="div" items={payoutItems}>
+            <DropdownMenu el="div" items={payoutItems} className="Voting__pane">
                 <span style={payout_limit_hit ? { opacity: '0.5' } : {}}>
                     <FormattedAsset
                         amount={shown_payout}
@@ -597,11 +611,8 @@ class Voting extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const postref = ownProps.post;
-        const post = state.global.getIn(
-            ['content', postref],
-            ownProps.post_obj
-        );
+        const post =
+            ownProps.post || state.global.getIn(['content', ownProps.post_ref]);
 
         if (!post) {
             console.error('post_not_found', ownProps);
@@ -615,7 +626,7 @@ export default connect(
 
         const current = state.user.get('current');
         const username = current ? current.get('username') : null;
-        const net_vests = effectiveVests(current);
+        const net_vests = current ? current.get('effective_vests') : 0.0;
         const vote_status_key = `transaction_vote_active_${author}_${permlink}`;
         const voting = state.global.get(vote_status_key);
         const price_per_steem =

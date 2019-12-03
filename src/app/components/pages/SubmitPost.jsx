@@ -1,7 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import { SUBMIT_FORM_ID } from 'shared/constants';
+import Callout from 'app/components/elements/Callout';
 
 const formId = SUBMIT_FORM_ID;
 const SubmitReplyEditor = ReplyEditor(formId);
@@ -25,6 +27,10 @@ class SubmitPost extends React.Component {
         };
     }
     render() {
+        if (!this.props.username) {
+            return <Callout>Log in to make a post.</Callout>;
+        }
+
         return (
             <SubmitReplyEditor
                 type="submit_story"
@@ -36,5 +42,7 @@ class SubmitPost extends React.Component {
 
 module.exports = {
     path: 'submit.html',
-    component: SubmitPost,
+    component: connect((state, ownProps) => ({
+        username: state.user.getIn(['current', 'username']),
+    }))(SubmitPost),
 };

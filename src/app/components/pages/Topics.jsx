@@ -36,7 +36,7 @@ class Topics extends Component {
                         label: 'My friends' || `tt('g.my_feed')`,
                     };
                 if (tag === 'my')
-                    return { value: `/trending/my`, label: 'My subscriptions' };
+                    return { value: `/trending/my`, label: 'My communities' };
                 if (tag == 'explore')
                     return {
                         value: `/communities`,
@@ -47,7 +47,7 @@ class Topics extends Component {
                         value: `/trending/${tag}`,
                         label: label || '#' + tag,
                     };
-                return { value: `/trending`, label: tt('g.all_tags') };
+                return { value: `/`, label: tt('g.all_tags') };
             };
 
             let options = [];
@@ -104,12 +104,12 @@ class Topics extends Component {
 
         const list = (
             <ul className="c-sidebar__list">
-                {/*<li>{link('/trending', tt('g.all_tags'))}</li>*/}
+                <li>{link('/', tt('g.all_tags'))}</li>
                 {username && (
                     <li>{link(`/@${username}/feed`, 'My friends')}</li>
                 )}
                 {username && <li>{link(`/trending/my`, 'My communities')}</li>}
-                <li>{commsHead}</li>
+                {(subscriptions || topics).size > 0 && <li>{commsHead}</li>}
                 {(subscriptions || topics)
                     .toJS()
                     .map(cat => (

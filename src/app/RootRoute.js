@@ -1,6 +1,7 @@
 import App from 'app/components/App';
 import Benchmark from 'app/components/pages/Benchmark';
 import PostsIndex from 'app/components/pages/PostsIndex';
+import SearchIndex from 'app/components/pages/SearchIndex';
 import resolveRoute from './ResolveRoute';
 
 // polyfill webpack require.ensure
@@ -78,8 +79,16 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/PostPage')]);
             //});
+        } else if (route.page === 'Rewards') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Rewards')]);
+            //});
         } else if (route.page === 'PostNoCategory') {
             cb(null, [require('app/components/pages/PostPageNoCategory')]);
+        } else if (route.page === 'SearchIndex') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/SearchIndex')]);
+            //});
         } else if (route.page === 'PostsIndex') {
             //require.ensure([], (require) => {
             //cb(null, [require('app/components/pages/PostsIndex')]);

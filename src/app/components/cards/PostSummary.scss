@@ -1,3 +1,11 @@
+.vote_weights {
+    opacity: 0.75;
+    position: absolute;
+    right: 0.5rem;
+    color: green;
+    span {color: red;}
+}
+
 ul.PostsList__summaries {
   margin-left: 0;
 }

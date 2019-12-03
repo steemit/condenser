@@ -269,9 +269,9 @@ class Settings extends React.Component {
                                 onSubmit={this.handleSubmitForm}
                                 className="small-12 medium-6 large-4 columns"
                             >
-                                <div className="preferences__header">
+                                <h4>
                                     {tt('settings_jsx.public_profile_settings')}
-                                </div>
+                                </h4>
                                 {progress.message && (
                                     <div className="info">
                                         {progress.message}
@@ -385,9 +385,9 @@ class Settings extends React.Component {
                                         website.touched &&
                                         website.error}
                                 </div>
-                                <br />
                                 {state.loading && (
                                     <span>
+                                        <br />
                                         <LoadingIndicator type="circle" />
                                         <br />
                                     </span>
@@ -395,7 +395,7 @@ class Settings extends React.Component {
                                 {!state.loading && (
                                     <input
                                         type="submit"
-                                        className="button"
+                                        className="button slim"
                                         value={tt('settings_jsx.update')}
                                         disabled={disabled}
                                     />
@@ -416,11 +416,9 @@ class Settings extends React.Component {
                 {isOwnAccount && (
                     <div className="row">
                         <div className="small-12 medium-4 large-4 columns">
-                            <div className="articles__header">
-                                <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
-                                    {tt('settings_jsx.preferences')}
-                                </h1>
-                            </div>
+                            <br />
+                            <br />
+                            <h4>{tt('settings_jsx.preferences')}</h4>
 
                             <label>
                                 {tt('g.choose_language')}

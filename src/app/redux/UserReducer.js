@@ -146,16 +146,6 @@ export default function reducer(state = defaultState, action) {
             return state; // saga
 
         case SET_USER:
-            if (payload.vesting_shares)
-                payload.vesting_shares = parseFloat(payload.vesting_shares);
-            if (payload.delegated_vesting_shares)
-                payload.delegated_vesting_shares = parseFloat(
-                    payload.delegated_vesting_shares
-                );
-            if (payload.received_vesting_shares)
-                payload.received_vesting_shares = parseFloat(
-                    payload.received_vesting_shares
-                );
             return state.mergeDeep({
                 current: payload,
                 show_login_modal: false,

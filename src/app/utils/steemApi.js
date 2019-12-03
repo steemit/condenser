@@ -1,19 +1,20 @@
-import Promise from 'bluebird';
 import { api } from '@steemit/steem-js';
 import { ifHive } from 'app/utils/Community';
-
 import stateCleaner from 'app/redux/stateCleaner';
 
 export async function callBridge(method, params) {
     console.log(
         'call bridge',
         method,
-        JSON.stringify(params).substring(0, 200)
+        params && JSON.stringify(params).substring(0, 200)
     );
-    const call = (method, params, callback) => {
-        return api.call('bridge.' + method, params, callback);
-    };
-    return Promise.promisify(call)(method, params);
+
+    return new Promise(function(resolve, reject) {
+        api.call('bridge.' + method, params, function(err, data) {
+            if (err) reject(err);
+            else resolve(data);
+        });
+    });
 }
 
 export async function getStateAsync(url, observer, ssr = false) {

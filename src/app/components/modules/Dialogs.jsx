@@ -10,6 +10,7 @@ import QrReader from 'app/components/elements/QrReader';
 import CheckLoginOwner from 'app/components/elements/CheckLoginOwner';
 import PromotePost from 'app/components/modules/PromotePost';
 import ExplorePost from 'app/components/modules/ExplorePost';
+import CommunitySubscriberList from './CommunitySubscriberList';
 
 class Dialogs extends React.Component {
     static propTypes = {
@@ -35,7 +36,7 @@ class Dialogs extends React.Component {
         const dialogs = active_dialogs.reduce((r, v, k) => {
             const cmp =
                 k === 'qr_reader' ? (
-                    <span key={idx++}>
+                    <span key={`dialog-${k}`}>
                         <Reveal
                             onHide={this['hide_' + k]}
                             show
@@ -49,7 +50,7 @@ class Dialogs extends React.Component {
                         </Reveal>
                     </span>
                 ) : k === 'promotePost' ? (
-                    <span key={idx++}>
+                    <span key={`dialog-${k}`}>
                         <Reveal onHide={this['hide_' + k]} show>
                             <CloseButton onClick={this['hide_' + k]} />
                             <PromotePost
@@ -59,10 +60,20 @@ class Dialogs extends React.Component {
                         </Reveal>
                     </span>
                 ) : k === 'explorePost' ? (
-                    <span key={idx++}>
+                    <span key={`dialog-${k}`}>
                         <Reveal onHide={this['hide_' + k]} show>
                             <CloseButton onClick={this['hide_' + k]} />
                             <ExplorePost
+                                onClick={this['hide_' + k]}
+                                {...v.get('params').toJS()}
+                            />
+                        </Reveal>
+                    </span>
+                ) : k === 'communitySubscribers' ? (
+                    <span key={`dialog-${k}`}>
+                        <Reveal onHide={this['hide_' + k]} show>
+                            <CloseButton onClick={this['hide_' + k]} />
+                            <CommunitySubscriberList
                                 onClick={this['hide_' + k]}
                                 {...v.get('params').toJS()}
                             />

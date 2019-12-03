@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
-import * as userActions from 'app/redux/UserReducer';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import { immutableAccessor } from 'app/utils/Accessors';
@@ -324,28 +323,17 @@ class PostSummary extends React.Component {
     }
 }
 
-export default connect(
-    (state, props) => {
-        const { post, hideCategory, nsfwPref } = props;
-        const net_vests = state.user.getIn(['current', 'effective_vests'], 0.0);
-        return {
-            post,
-            hideCategory,
-            username:
-                state.user.getIn(['current', 'username']) ||
-                state.offchain.get('account'),
-            blogmode: state.app.getIn(['user_preferences', 'blogmode']),
-            nsfwPref,
-            net_vests,
-        };
-    },
-
-    dispatch => ({
-        dispatchSubmit: data => {
-            dispatch(userActions.usernamePasswordLogin({ ...data }));
-        },
-        clearError: () => {
-            dispatch(userActions.loginError({ error: null }));
-        },
-    })
-)(PostSummary);
+export default connect((state, props) => {
+    const { post, hideCategory, nsfwPref } = props;
+    const net_vests = state.user.getIn(['current', 'effective_vests'], 0.0);
+    return {
+        post,
+        hideCategory,
+        username:
+            state.user.getIn(['current', 'username']) ||
+            state.offchain.get('account'),
+        blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+        nsfwPref,
+        net_vests,
+    };
+})(PostSummary);

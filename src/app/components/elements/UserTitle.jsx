@@ -15,7 +15,10 @@ import UserTitleEditor from 'app/components/modules/UserTitleEditor';
 class UserTitle extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { showDialog: false };
+        this.state = {
+            showDialog: false,
+            newTitle: '',
+        };
     }
 
     onToggleDialog = () => {
@@ -24,7 +27,6 @@ class UserTitle extends React.Component {
 
     onSave = newTitle => {
         const community = this.props.community.get('name');
-
         //-- Simulate a "receiveState" action to feed new title into post state
         let newstate = { content: {}, simulation: true };
         let content_key = this.props.author + '/' + this.props.permlink;
@@ -37,22 +39,29 @@ class UserTitle extends React.Component {
             community,
             newTitle
         );
+        this.props.onEditSubmit();
+        this.setState({
+            newTitle: newTitle,
+        });
     };
 
     render() {
-        const { title, role, viewer_role, hideEdit } = this.props;
+        const { role, viewer_role, hideEdit } = this.props;
+        const { newTitle } = this.state;
+        const title = newTitle.length > 0 ? newTitle : this.props.title || '';
         const isMod = Role.atLeast(viewer_role, 'mod');
         const showRole = role && role != 'guest';
-        const showTitle = title != '' || (isMod && !hideEdit);
+        const showEdit = isMod && !hideEdit;
+        const showTitle = title != '';
 
-        if (!showRole && !showTitle) return null;
+        if (!showRole && !showEdit && !showTitle) return null;
 
         let editor;
-        if (isMod && !hideEdit) {
+        if (showEdit) {
             const { author, community, username } = this.props;
             const { showDialog } = this.state;
             editor = (
-                <span>
+                <span className="affiliation-edit">
                     <a onClick={this.onToggleDialog} title="Edit Title">
                         <Icon name="pencil2" size="0_8x" />
                     </a>
@@ -85,6 +94,7 @@ class UserTitle extends React.Component {
                         {editor}
                     </span>
                 )}
+                {!showTitle && showEdit && editor}
             </span>
         );
     }
@@ -96,6 +106,11 @@ UserTitle.propTypes = {
     author: PropTypes.string.isRequired, // edit only
     permlink: PropTypes.string.isRequired, // edit only
     title: PropTypes.string,
+    onEditSubmit: PropTypes.func,
+};
+
+UserTitle.defaultProps = {
+    onEditSubmit: () => {},
 };
 
 export default connect(
@@ -104,9 +119,7 @@ export default connect(
             ['community', ownProps.community],
             Map()
         );
-
         const viewer_role = community.getIn(['context', 'role'], 'guest');
-
         const { author, permlink, title } = ownProps;
         return {
             author,

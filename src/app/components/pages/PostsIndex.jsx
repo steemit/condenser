@@ -78,7 +78,8 @@ class PostsIndex extends React.Component {
         }
     }
 
-    loadMore(last_post) {
+    loadMore() {
+        const last_post = this.props.posts ? this.props.posts.last() : null;
         if (!last_post) return;
         if (last_post == this.props.pending) return; // if last post is 'pending', its an invalid start token
         const { username, status, order, category } = this.props;
@@ -216,16 +217,12 @@ class PostsIndex extends React.Component {
                 ) : (
                     <PostsList
                         ref="list"
-                        posts={posts}
+                        post_refs={posts}
                         loading={fetching}
-                        anyPosts
                         order={order}
                         category={category}
                         hideCategory={!!community}
                         loadMore={this.loadMore}
-                        showFeatured
-                        showPromoted
-                        allowAdsOnContent={enableAds}
                     />
                 )}
             </PostsIndexLayout>

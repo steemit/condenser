@@ -25,12 +25,7 @@ class VideoAd extends Component {
             return <div id="disabled_video_ad" style={{ display: 'none' }} />;
         }
 
-        return (
-            <div
-                className="video-ad"
-                id={this.ad_identifier}
-            />
-        );
+        return <div id={this.ad_identifier} />;
     }
 }
 
@@ -54,4 +49,4 @@ export default connect(
         };
     },
     dispatch => ({})
-)(VideoAd); 
+)(VideoAd);

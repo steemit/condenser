@@ -5,17 +5,43 @@ import { callBridge } from 'app/utils/steemApi';
 import * as transactionActions from './TransactionReducer';
 
 export const communityWatches = [
-    takeEvery('community/LOAD_COMMUNITY_ROLES', loadCommunityRoles),
+    takeEvery('community/GET_COMMUNITY_ROLES', getCommunityRoles),
+    takeEvery('community/GET_COMMUNITY_SUBSCRIBERS', getCommunitySubscribers),
     takeEvery('community/UPDATE_USER_ROLE', updateUserRole),
 ];
 
-export function* loadCommunityRoles(action) {
+export function* getCommunityRoles(action) {
     const community = action.payload;
-    yield put(reducer.setCommunityRolesPending({ community, pending: true }));
-    const roles = yield call(callBridge, 'list_community_roles', { community });
-    yield call(getCommunity, action);
-    yield put(reducer.receiveCommunityRoles({ community, roles }));
-    yield put(reducer.setCommunityRolesPending({ community, pending: false }));
+    yield put(reducer.getCommunityRolesPending({ community, pending: true }));
+    try {
+        const roles = yield call(callBridge, 'list_community_roles', {
+            community,
+        });
+        yield call(getCommunity, action);
+        yield put(reducer.setCommunityRoles({ community, roles }));
+    } catch (error) {
+        yield put(reducer.getCommunityRolesError({ community, error }));
+    }
+    yield put(reducer.getCommunityRolesPending({ community, pending: false }));
+}
+
+export function* getCommunitySubscribers(action) {
+    const community = action.payload;
+    yield put(
+        reducer.getCommunitySubscribersPending({ community, pending: true })
+    );
+    try {
+        const subscribers = yield call(callBridge, 'list_subscribers', {
+            community,
+        });
+        yield call(getCommunity, action);
+        yield put(reducer.setCommunitySubscribers({ community, subscribers }));
+    } catch (error) {
+        yield put(reducer.getCommunitySubscribersError({ community, error }));
+    }
+    yield put(
+        reducer.getCommunitySubscribersPending({ community, pending: false })
+    );
 }
 
 export function* updateUserRole(action) {

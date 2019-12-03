@@ -21,6 +21,7 @@ const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 const LIST_COMMUNITIES = 'fetchDataSaga/LIST_COMMUNITIES';
 const GET_SUBSCRIPTIONS = 'fetchDataSaga/GET_SUBSCRIPTIONS';
 const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
+const GET_REWARDS_DATA = 'fetchDataSaga/GET_REWARDS_DATA';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
@@ -32,6 +33,7 @@ export const fetchDataWatches = [
     takeLatest(GET_SUBSCRIPTIONS, getSubscriptions),
     takeEvery(LIST_COMMUNITIES, listCommunities),
     takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
+    takeEvery(GET_REWARDS_DATA, getRewardsDataSaga),
 ];
 
 export function* getPostHeader(action) {
@@ -241,6 +243,7 @@ export function* getAccountNotifications(action) {
 }
 
 export function* fetchData(action) {
+    // TODO: postFilter unused
     const { order, author, permlink, postFilter, observer } = action.payload;
     let { category } = action.payload;
     if (!category) category = '';
@@ -347,6 +350,25 @@ function* fetchJson({
         yield put(globalActions.fetchJsonResult({ id, error }));
     }
 }
+export function* getRewardsDataSaga(action) {
+    yield put(appActions.fetchDataBegin());
+    try {
+        const rewards = yield call(callBridge, 'get_payout_stats', {});
+        if (rewards && rewards.error) {
+            console.error(
+                '~~ Saga getRewardsDataSaga error ~~>',
+                rewards.error
+            );
+            yield put(appActions.steemApiError(rewards.error.message));
+        } else {
+            yield put(globalActions.receiveRewards({ rewards }));
+        }
+    } catch (error) {
+        console.error('~~ Saga getRewardsDataSaga error ~~>', error);
+        yield put(appActions.steemApiError(error.message));
+    }
+    yield put(appActions.fetchDataEnd());
+}
 
 // Action creators
 export const actions = {
@@ -384,6 +406,11 @@ export const actions = {
 
     fetchState: payload => ({
         type: FETCH_STATE,
+        payload,
+    }),
+
+    getRewardsData: payload => ({
+        type: GET_REWARDS_DATA,
         payload,
     }),
 };

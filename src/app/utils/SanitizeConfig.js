@@ -155,7 +155,6 @@ export default ({
             if (alt && alt !== '') atts.alt = alt;
             if (isDefaultImageSize(src)) {
                 atts['srcset'] = defaultSrcSet(src);
-                atts['class'] = 'normal-size';
             }
             return { tagName, attribs: atts };
         },

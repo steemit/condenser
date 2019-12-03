@@ -10,6 +10,7 @@
         "beneficiaries": "Beneficiaries",
         "bid": "Bid",
         "blog": "Blog",
+        "profile": "Profile",
         "browse": "Browse",
         "buy": "Buy",
         "buy_steem_power": "Buy Steem Power",
@@ -138,7 +139,7 @@
         "tag": "Tag",
         "to": " to ",
         "topics": "Topics",
-        "toggle_nightmode": "Toggle Night Mode",
+        "toggle_nightmode": "Night Mode",
         "all_tags": "All posts",
         "all_tags_mobile": "All posts",
         "transfer": "Transfer ",
@@ -298,7 +299,7 @@
         "chat": "Steem Chat",
         "app_center": "Apps Built on Steem",
         "business_center": "Businesses Accepting Steem",
-        "api_docs": "Steemit API Docs",
+        "api_docs": "Developer Portal",
         "bluepaper": "Steem Bluepaper",
         "smt_whitepaper": "SMT Whitepaper",
         "whitepaper": "Steem Whitepaper",
@@ -596,6 +597,7 @@
         "curation_rewards_by": "Curation rewards by %(username)s",
         "author_rewards_by": "Author rewards by %(username)s",
         "replies_to": "Replies to %(username)s",
+        "posts_by": "Posts by %(username)s",
         "comments_by": "Comments by %(username)s"
     },
     "loginform_jsx": {

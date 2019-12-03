@@ -107,7 +107,7 @@ class CommunitySettings extends Component {
                         />
                     </label>
                     <AutocompleteInput
-                        label={'Select a language'}
+                        label={'Language'}
                         values={languageOptions}
                         initialValue={currentLanguage}
                         onSelect={v => {
@@ -119,7 +119,7 @@ class CommunitySettings extends Component {
                             });
                         }}
                     />
-                    <label style={{ margin: '0 0 1rem' }}>
+                    <label style={{ margin: '1em 0 1rem' }}>
                         Description<br />
                         <textarea
                             style={{ whiteSpace: 'normal' }}

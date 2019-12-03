@@ -1,20 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import tt from 'counterpart';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import * as transactionActions from 'app/redux/TransactionReducer';
 import ClaimBox from 'app/components/elements/ClaimBox';
 import Callout from 'app/components/elements/Callout';
 
 class NotificationsList extends React.Component {
     static propTypes = {
-        notifications: PropTypes.object,
+        notifications: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.number,
+                type: PropTypes.string,
+                score: PropTypes.number,
+                date: PropTypes.date,
+                msg: PropTypes.string,
+                url: PropTypes.url,
+            })
+        ),
+        isLastPage: PropTypes.bool,
         username: PropTypes.string.isRequired,
         loading: PropTypes.bool.isRequired,
+        markAsRead: PropTypes.func.isRequired,
+    };
+
+    static defaultProps = {
+        notifications: [],
+        isLastPage: false,
     };
 
     static defaultProps = {
@@ -23,10 +37,6 @@ class NotificationsList extends React.Component {
 
     constructor() {
         super();
-        this.shouldComponentUpdate = shouldComponentUpdate(
-            this,
-            'NotificationsList'
-        );
     }
 
     componentWillMount() {
@@ -37,8 +47,8 @@ class NotificationsList extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { username, notifications, getAccountNotifications } = this.props;
-        if (prevProps.username !== username && !notifications) {
+        const { username, getAccountNotifications, isLastPage } = this.props;
+        if (prevProps.username !== username) {
             getAccountNotifications(username);
         }
     }
@@ -46,8 +56,16 @@ class NotificationsList extends React.Component {
     onClickLoadMore = e => {
         e.preventDefault();
         const { username, notifications, getAccountNotifications } = this.props;
-        const lastId = notifications.getIn(['notifications', -1, 'id']);
+        const lastId = notifications.slice(-1)[0].id;
         getAccountNotifications(username, lastId);
+    };
+
+    onClickMarkAsRead = e => {
+        e.preventDefault();
+        const { username, markAsRead } = this.props;
+        let dateNow = new Date();
+        dateNow.setMinutes(dateNow.getMinutes() - dateNow.getTimezoneOffset());
+        markAsRead(username, dateNow.toISOString().slice(0, 10));
     };
 
     render() {
@@ -56,6 +74,7 @@ class NotificationsList extends React.Component {
             loading,
             isOwnAccount,
             accountName,
+            isLastpage,
         } = this.props;
 
         const renderItem = item => (
@@ -83,13 +102,22 @@ class NotificationsList extends React.Component {
         return (
             <div className="">
                 {isOwnAccount && <ClaimBox accountName={accountName} />}
-                {notifications && (
-                    <div style={{ lineHeight: '1rem' }}>
-                        {notifications
-                            .get('notifications')
-                            .map(item => renderItem(item.toJS()))}
-                    </div>
-                )}
+                {!loading &&
+                    notifications &&
+                    notifications.length > 0 && (
+                        <center>
+                            <br />
+                            <a href="#" onClick={this.onClickMarkAsRead}>
+                                <strong>Mark as read</strong>
+                            </a>
+                        </center>
+                    )}
+                {notifications &&
+                    notifications.length > 0 && (
+                        <div style={{ lineHeight: '1rem' }}>
+                            {notifications.map(item => renderItem(item))}
+                        </div>
+                    )}
                 {!notifications &&
                     !loading && (
                         <Callout>
@@ -106,8 +134,17 @@ class NotificationsList extends React.Component {
                     </center>
                 )}
                 {!loading &&
+                    notifications && (
+                        <center>
+                            <br />
+                            <a href="#" onClick={this.onClickMarkAsRead}>
+                                <strong>Mark as read</strong>
+                            </a>
+                        </center>
+                    )}
+                {!loading &&
                     notifications &&
-                    !notifications.get('isLastPage', false) && (
+                    !isLastpage && (
                         <center>
                             <br />
                             <a href="#" onClick={this.onClickLoadMore}>
@@ -142,6 +179,22 @@ export default connect(
             }
             return dispatch(
                 fetchDataSagaActions.getAccountNotifications(query)
+            );
+        },
+        markAsRead: (username, timeNow) => {
+            const ops = ['setLastRead', { date: timeNow }];
+            debugger;
+            return dispatch(
+                transactionActions.broadcastOperation({
+                    type: 'custom_json',
+                    operation: {
+                        id: 'community',
+                        required_posting_auths: [username],
+                        json: JSON.stringify(ops),
+                    },
+                    successCallback: () => {},
+                    errorCallback: () => {},
+                })
             );
         },
     })

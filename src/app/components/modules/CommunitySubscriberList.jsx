@@ -40,8 +40,8 @@ class CommunitySubscriberList extends React.Component {
             fetchSubscribers,
         } = this.props;
         const isMod = Role.atLeast(viewerRole, 'mod');
-        const subs = subscribers.map(s => (
-            <div>
+        const subs = subscribers.map((s, idx) => (
+            <div key={idx}>
                 <a href={`/@${s[0]}`}>@{s[0]} </a>
                 <UserTitle
                     username={username}
@@ -57,7 +57,8 @@ class CommunitySubscriberList extends React.Component {
         ));
         return (
             <div>
-                <strong>Community Subscribers</strong>
+                <strong>Latest {community.title} Subscribers</strong>
+                <hr />
                 {loading && (
                     <center>
                         <LoadingIndicator type="circle" />
@@ -77,7 +78,7 @@ const ConnectedCommunitySubscriberList = connect(
         let viewerRole = 'guest';
         // TODO: re-fetch community upon user loging - currently when a user logs in, at a community page, the context is not updated.
         // viewerRole = state.global.getIn(['community', ownProps.community.name, 'context', 'role'], 'guest');
-        let username = state.user.getIn(['current', 'username'], false);
+        const username = state.user.getIn(['current', 'username'], null);
         const communityMember = state.global
             .getIn(['community', ownProps.community.name, 'team'], List([]))
             .toJS()
@@ -104,7 +105,6 @@ const ConnectedCommunitySubscriberList = connect(
         return {
             subscribers,
             loading,
-            username: state.user.getIn(['current', 'username']),
             viewerRole,
             username,
         };

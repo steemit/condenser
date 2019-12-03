@@ -20,7 +20,6 @@ const defaultCommunityState = Map();
 
 export default function reducer(state = defaultCommunityState, action) {
     const payload = action.payload;
-    console.log(action.type);
     switch (action.type) {
         // Has Saga watcher.
         case GET_COMMUNITY_SUBSCRIBERS: {

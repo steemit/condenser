@@ -192,8 +192,13 @@ export default connect(
                         required_posting_auths: [username],
                         json: JSON.stringify(ops),
                     },
-                    successCallback: () => {},
-                    errorCallback: () => {},
+                    successCallback: () => {
+                        debugger;
+                        // TODO: dispatch action to refetch unread notification count.
+                    },
+                    errorCallback: () => {
+                        debugger;
+                    },
                 })
             );
         },

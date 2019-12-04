@@ -276,9 +276,12 @@ class Header extends React.Component {
             },
         ];
         showAd = false; // TODO: fix header ad overlap bug
-        const headerMutated = mutation => {
+        const headerMutated = (mutation, discconnectObserver) => {
             if (mutation.target.id.indexOf('google_ads_iframe_') !== -1) {
                 this.gptAdRendered();
+                if (typeof discconnectObserver === 'function') {
+                    discconnectObserver();
+                }
             }
         };
         return (

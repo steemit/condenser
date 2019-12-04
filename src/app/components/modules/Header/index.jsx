@@ -293,9 +293,12 @@ class Header extends React.Component {
                 : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
         showAd = true;
-        const headerMutated = mutation => {
+        const headerMutated = (mutation, discconnectObserver) => {
             if (mutation.target.id.indexOf('google_ads_iframe_') !== -1) {
                 this.gptAdRendered();
+                if (typeof discconnectObserver === 'function') {
+                    discconnectObserver();
+                }
             }
         };
         return (

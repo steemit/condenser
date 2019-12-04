@@ -27,6 +27,9 @@ class ReactMutationObserver extends React.Component {
         } = props;
         const me = this;
 
+        this.initObserver = this.initObserver.bind(this);
+        this.disconnect = this.disconnect.bind(this);
+
         me.onChildListChanged = onChildListChanged;
         me.onAttributesChanged = onAttributesChanged;
         me.onSubtreeChanged = onSubtreeChanged;
@@ -49,42 +52,51 @@ class ReactMutationObserver extends React.Component {
             me.observerConfig.characterData = true;
         }
 
-        this.observer = new MutationObserver(mutations => {
-            mutations.forEach(function(mutation) {
-                if (
-                    mutation.type === 'childList' &&
-                    typeof me.onChildListChanged === 'function'
-                ) {
-                    me.onChildListChanged(mutation);
-                }
+        if (typeof MutationObserver !== 'undefined') {
+            this.observer = new MutationObserver(mutations => {
+                mutations.forEach(function(mutation) {
+                    if (
+                        mutation.type === 'childList' &&
+                        typeof me.onChildListChanged === 'function'
+                    ) {
+                        me.onChildListChanged(mutation, me.disconnect);
+                    }
 
-                if (
-                    mutation.type === 'attributes' &&
-                    typeof me.onAttributesChanged === 'function'
-                ) {
-                    me.onAttributesChanged(mutation);
-                }
+                    if (
+                        mutation.type === 'attributes' &&
+                        typeof me.onAttributesChanged === 'function'
+                    ) {
+                        me.onAttributesChanged(mutation, me.disconnect);
+                    }
 
-                if (
-                    mutation.type === 'subtree' &&
-                    typeof me.onSubtreeChanged === 'function'
-                ) {
-                    me.onSubtreeChanged(mutation);
-                }
+                    if (
+                        mutation.type === 'subtree' &&
+                        typeof me.onSubtreeChanged === 'function'
+                    ) {
+                        me.onSubtreeChanged(mutation, me.disconnect);
+                    }
 
-                if (
-                    mutation.type === 'characterData' &&
-                    typeof me.onCharacterDataChanged === 'function'
-                ) {
-                    me.onCharacterDataChanged(mutation);
-                }
+                    if (
+                        mutation.type === 'characterData' &&
+                        typeof me.onCharacterDataChanged === 'function'
+                    ) {
+                        me.onCharacterDataChanged(mutation, me.disconnect);
+                    }
+                });
             });
-        });
-        this.initObserver = this.initObserver.bind(this);
+        }
+    }
+
+    disconnect() {
+        if (typeof MutationObserver !== 'undefined') {
+            this.observer.disconnect();
+        }
     }
 
     initObserver(componentElement) {
-        this.observer.observe(componentElement, this.observerConfig);
+        if (typeof MutationObserver !== 'undefined') {
+            this.observer.observe(componentElement, this.observerConfig);
+        }
     }
 
     render() {

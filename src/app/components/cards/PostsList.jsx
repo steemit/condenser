@@ -195,7 +195,7 @@ export default connect(
     (state, props) => {
         const userPreferences = state.app.get('user_preferences').toJS();
         const nsfwPref = userPreferences.nsfwPref || 'warn';
-        const shouldSeeAds = state.app.getIn(['googleAds', 'enabled']);
+        const shouldSeeAds = false && state.app.getIn(['googleAds', 'enabled']); //TODO: reenable
         const videoAdsEnabled = state.app.getIn([
             'googleAds',
             'videoAdsEnabled',

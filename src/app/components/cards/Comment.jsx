@@ -219,7 +219,7 @@ class CommentImpl extends React.Component {
         const allowReply = Role.canComment(community, viewer_role);
         const canEdit = username && username === author;
         const canDelete = username && username === author && allowDelete(post);
-        const canReply = username && allowReply && comment.depth < 255;
+        const canReply = allowReply && comment.depth < 255;
         const canMute = username && Role.atLeast(viewer_role, 'mod');
         const canFlag =
             username && community && Role.atLeast(viewer_role, 'guest');
@@ -241,7 +241,7 @@ class CommentImpl extends React.Component {
             );
             controls = (
                 <div>
-                    <Voting post={postref} />
+                    <Voting post={post} />
                     <span className="Comment__footer__controls">
                         {canReply && (
                             <a onClick={onShowReply}>{tt('g.reply')}</a>
@@ -348,7 +348,7 @@ class CommentImpl extends React.Component {
                             </div>
                             <Author post={post} showAffiliation />
                         </span>
-                        &nbsp; &middot; &nbsp;
+                        &nbsp;{/* &middot; &nbsp;*/}
                         <Link
                             to={commentUrl(comment, rootComment)}
                             className="PlainLink"
@@ -361,7 +361,7 @@ class CommentImpl extends React.Component {
                             updateDate={comment.updated}
                         />
                         {(this.state.collapsed || hide_body) && (
-                            <Voting post={postref} showList={false} />
+                            <Voting post={post} showList={false} />
                         )}
                         {this.state.collapsed &&
                             comment.children > 0 && (

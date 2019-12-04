@@ -55,13 +55,6 @@ function abs(value) {
     return Math.abs(parseInt(value));
 }
 
-function effectiveVests(account) {
-    const vests = account ? account.get('vesting_shares') : 0.0;
-    const delegated = account ? account.get('delegated_vesting_shares') : 0.0;
-    const received = account ? account.get('received_vesting_shares') : 0.0;
-    return vests - delegated + received;
-}
-
 class Voting extends React.Component {
     static propTypes = {
         // HTML properties
@@ -234,6 +227,21 @@ class Voting extends React.Component {
             sbd_print_rate,
             username,
         } = this.props;
+
+        // `lite` Voting component: e.g. search results
+        if (!post.get('pending_payout_value')) {
+            return (
+                <span className="Voting">
+                    <span className="Voting__inner">
+                        <FormattedAsset
+                            amount={post.get('payout')}
+                            asset="$"
+                            classname=""
+                        />
+                    </span>
+                </span>
+            );
+        }
 
         const { votingUp, votingDown, showWeight, showWeightDir } = this.state;
 
@@ -475,7 +483,7 @@ class Voting extends React.Component {
         }
 
         const payoutEl = (
-            <DropdownMenu el="div" items={payoutItems}>
+            <DropdownMenu el="div" items={payoutItems} className="Voting__pane">
                 <span style={payout_limit_hit ? { opacity: '0.5' } : {}}>
                     <FormattedAsset
                         amount={shown_payout}
@@ -603,11 +611,8 @@ class Voting extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const postref = ownProps.post;
-        const post = state.global.getIn(
-            ['content', postref],
-            ownProps.post_obj
-        );
+        const post =
+            ownProps.post || state.global.getIn(['content', ownProps.post_ref]);
 
         if (!post) {
             console.error('post_not_found', ownProps);
@@ -621,7 +626,7 @@ export default connect(
 
         const current = state.user.get('current');
         const username = current ? current.get('username') : null;
-        const net_vests = effectiveVests(current);
+        const net_vests = current ? current.get('effective_vests') : 0.0;
         const vote_status_key = `transaction_vote_active_${author}_${permlink}`;
         const voting = state.global.get(vote_status_key);
         const price_per_steem =

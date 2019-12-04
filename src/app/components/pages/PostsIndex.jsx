@@ -78,18 +78,21 @@ class PostsIndex extends React.Component {
         }
     }
 
-    loadMore(last_post) {
+    loadMore() {
+        const last_post = this.props.posts ? this.props.posts.last() : null;
         if (!last_post) return;
         if (last_post == this.props.pending) return; // if last post is 'pending', its an invalid start token
-        const { category, order, status } = this.props;
-        if (isFetchingOrRecentlyUpdated(status, order, category || '')) return;
+        const { username, status, order, category } = this.props;
+
+        if (isFetchingOrRecentlyUpdated(status, order, category)) return;
+
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
             author,
             permlink,
             order,
             category,
-            observer: this.props.username,
+            observer: username,
         });
     }
 
@@ -112,9 +115,12 @@ class PostsIndex extends React.Component {
             emptyText = noCommunitiesText;
         } else if (posts.size === 0) {
             const cat = community
-                ? community.get('title')
+                ? 'community' //community.get('title')
                 : category ? ' #' + category : '';
-            emptyText = <div>{`No ${order} ${cat} posts found`}</div>;
+
+            if (order == 'payout') emptyText = `No pending ${cat} posts found.`;
+            else if (order == 'created') emptyText = `No posts in ${cat} yet!`;
+            else emptyText = `No ${order} ${cat} posts found.`;
         } else {
             emptyText = 'Nothing here to see...';
         }
@@ -211,16 +217,12 @@ class PostsIndex extends React.Component {
                 ) : (
                     <PostsList
                         ref="list"
-                        posts={posts}
+                        post_refs={posts}
                         loading={fetching}
-                        anyPosts
                         order={order}
                         category={category}
                         hideCategory={!!community}
                         loadMore={this.loadMore}
-                        showFeatured
-                        showPromoted
-                        allowAdsOnContent={enableAds}
                     />
                 )}
             </PostsIndexLayout>

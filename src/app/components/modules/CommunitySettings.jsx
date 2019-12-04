@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import AutocompleteInput from 'app/components/elements/AutocompleteInput';
 
 import Unicode from 'app/utils/Unicode';
 import tt from 'counterpart';
 import { throws } from 'assert';
+
+const languageOptions = [
+    { abbr: 'en', name: 'English' },
+    { abbr: 'kr', name: 'Korean' },
+    { abbr: 'zh', name: 'Chinese' },
+    { abbr: 'ms', name: 'Malay' },
+    { abbr: 'pl', name: 'Polish' },
+    { abbr: 'pt', name: 'Portuguese' },
+    { abbr: 'ru', name: 'Russian' },
+    { abbr: 'it', name: 'Italian' },
+    { abbr: 'de', name: 'German' },
+    { abbr: 'es', name: 'Spanish' },
+    { abbr: 'sv', name: 'Swedish' },
+];
 
 class CommunitySettings extends Component {
     constructor(props) {
@@ -13,6 +28,7 @@ class CommunitySettings extends Component {
             title: this.props.title,
             about: this.props.about,
             is_nsfw: this.props.is_nsfw,
+            lang: this.props.lang,
             description: this.props.description,
             flag_text: this.props.flag_text,
         };
@@ -51,10 +67,13 @@ class CommunitySettings extends Component {
             title,
             about,
             is_nsfw,
+            lang,
             description,
             flag_text,
             formError,
         } = this.state;
+        const currentLanguage = languageOptions.filter(l => l.abbr === lang)[0]
+            .name;
         return (
             <span>
                 <div>
@@ -87,7 +106,20 @@ class CommunitySettings extends Component {
                             onChange={e => this.onInput(e)}
                         />
                     </label>
-                    <label style={{ margin: '0 0 1rem' }}>
+                    <AutocompleteInput
+                        label={'Language'}
+                        values={languageOptions}
+                        initialValue={currentLanguage}
+                        onSelect={v => {
+                            const selectedLanguage = languageOptions.filter(
+                                l => l.name === v
+                            )[0];
+                            this.setState({
+                                lang: selectedLanguage.abbr,
+                            });
+                        }}
+                    />
+                    <label style={{ margin: '1em 0 1rem' }}>
                         Description<br />
                         <textarea
                             style={{ whiteSpace: 'normal' }}
@@ -134,6 +166,7 @@ CommunitySettings.propTypes = {
     title: PropTypes.string.isRequired,
     about: PropTypes.string.isRequired,
     is_nsfw: PropTypes.bool.isRequired,
+    lang: PropTypes.string,
     description: PropTypes.string.isRequired,
     flag_text: PropTypes.string.isRequired,
 };

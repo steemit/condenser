@@ -13,6 +13,7 @@ import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import SanitizedLink from 'app/components/elements/SanitizedLink';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import DropdownMenu from 'app/components/elements/DropdownMenu';
 
 class UserProfileHeader extends React.Component {
     render() {
@@ -33,6 +34,20 @@ class UserProfileHeader extends React.Component {
                     'url(' + proxifyImageUrl(cover_image, '2048x512') + ')',
             };
         }
+
+        const _lists = profile.get('blacklists').toJS();
+        const blacklists = _lists.length > 0 && (
+            <DropdownMenu
+                title="Blacklisted on:"
+                className="UserProfile__blacklists"
+                items={_lists.map(list => {
+                    return { value: list };
+                })}
+                el="div"
+            >
+                <span className="account_warn">({_lists.length})</span>
+            </DropdownMenu>
+        );
 
         return (
             <div className="UserProfile__banner row expanded">
@@ -58,6 +73,7 @@ class UserProfileHeader extends React.Component {
                                 ({Math.floor(profile.get('reputation'))})
                             </span>
                         </Tooltip>
+                        {blacklists}
                         {AffiliationMap[accountname] ? (
                             <span className="affiliation">
                                 {tt(

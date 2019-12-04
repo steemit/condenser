@@ -99,3 +99,13 @@ export function acceptTos() {
     });
     return fetch('/api/v1/acceptTos', request);
 }
+export function conductSearch(req) {
+    const bodyWithCSRF = {
+        ...req.body,
+        csrf: window.$STM_csrf,
+    };
+    const request = Object.assign({}, request_base, {
+        body: JSON.stringify(bodyWithCSRF),
+    });
+    return fetch('/api/v1/search', request);
+}

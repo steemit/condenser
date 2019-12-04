@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
-import * as userActions from 'app/redux/UserReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import Voting from 'app/components/elements/Voting';
@@ -36,7 +35,8 @@ function TimeAuthorCategory({ post }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
-            <TimeAgoWrapper date={post.get('created')} /> {tt('g.by')}{' '}
+            <TimeAgoWrapper date={post.get('created')} /> {tt('g.in')}{' '}
+            <Tag post={post} /> {tt('g.by')}{' '}
             <Author post={post} showAffiliation />
         </span>
     );
@@ -69,7 +69,6 @@ class PostFull extends React.Component {
 
         // connector props
         username: PropTypes.string,
-        unlock: PropTypes.func.isRequired,
         deletePost: PropTypes.func.isRequired,
         showPromotePost: PropTypes.func.isRequired,
         showExplorePost: PropTypes.func.isRequired,
@@ -218,8 +217,7 @@ class PostFull extends React.Component {
 
     onTogglePin = isPinned => {
         const { community, username, post, postref } = this.props;
-        if (!community) return false; // Fail Fast
-        if (!username) return this.props.unlock();
+        if (!community || !username) console.error('pin fail', this.props);
 
         const key = ['content', postref, 'stats', 'is_pinned'];
         this.props.stateSet(key, !isPinned);
@@ -237,7 +235,7 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, post, postref, community, viewer_role },
+            props: { username, post, community, viewer_role },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
@@ -402,7 +400,7 @@ class PostFull extends React.Component {
         const canMute = username && Role.atLeast(viewer_role, 'mod');
         const canFlag =
             username && community && Role.atLeast(viewer_role, 'guest');
-        const canReply = username && allowReply && post.get('depth') < 255;
+        const canReply = allowReply && post.get('depth') < 255;
         const canEdit = username === author && !showEdit;
         const canDelete = username === author && allowDelete(post);
 
@@ -458,11 +456,11 @@ class PostFull extends React.Component {
                     )}
                 {!isReply && <TagList post={post} />}
                 <div className="PostFull__footer row">
-                    <div className="columns medium-12 large-6">
+                    <div className="columns medium-12 large-8">
                         <TimeAuthorCategory post={post} />
-                        <Voting post={postref} />
+                        <Voting post={post} />
                     </div>
-                    <div className="RightShare__Menu small-11 medium-12 large-6 columns">
+                    <div className="RightShare__Menu small-11 medium-12 large-4 columns">
                         {canReblog && (
                             <Reblog author={author} permlink={permlink} />
                         )}
@@ -540,15 +538,6 @@ export default connect(
         };
     },
     dispatch => ({
-        dispatchSubmit: data => {
-            dispatch(userActions.usernamePasswordLogin({ ...data }));
-        },
-        clearError: () => {
-            dispatch(userActions.loginError({ error: null }));
-        },
-        unlock: () => {
-            dispatch(userActions.showLogin());
-        },
         deletePost: (author, permlink) => {
             dispatch(
                 transactionActions.broadcastOperation({

@@ -64,10 +64,9 @@ describe('Voting', () => {
         });
         let wrapped = shallow(
             <Voting
-                post="test"
                 flag={true}
                 vote={(w, p) => {}}
-                post_obj={voteTestObj}
+                post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
                 store={mockStore}
@@ -91,11 +90,10 @@ describe('Voting', () => {
         });
         let wrapped = shallow(
             <Voting
-                post="test"
                 flag={true}
                 myVote={-666}
                 vote={(w, p) => {}}
-                post_obj={voteTestObj}
+                post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
                 store={mockStore}
@@ -123,10 +121,9 @@ describe('Voting', () => {
         });
         let wrapped = shallow(
             <Voting
-                post="test"
                 flag={false}
                 vote={(w, p) => {}}
-                post_obj={voteTestObj}
+                post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
                 store={mockStore}
@@ -148,10 +145,9 @@ describe('Voting', () => {
         });
         let wrapped = shallow(
             <Voting
-                post="test"
                 flag={false}
                 vote={(w, p) => {}}
-                post_obj={voteTestObj}
+                post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
                 store={mockStore}
@@ -184,9 +180,8 @@ describe('Voting', () => {
             <Provider store={store}>
                 <IntlProvider locale="en">
                     <Voting
-                        post="Test post"
                         vote={(w, p) => {}}
-                        post_obj={post_obj}
+                        post={post_obj}
                         price_per_steem={1}
                         sbd_print_rate={10000}
                     />
@@ -213,9 +208,8 @@ describe('Voting', () => {
             <Provider store={store}>
                 <IntlProvider locale="en">
                     <Voting
-                        post="Test post"
                         vote={(w, p) => {}}
-                        post_obj={post_obj}
+                        post={post_obj}
                         price_per_steem={1}
                         sbd_print_rate={10000}
                     />
@@ -242,9 +236,8 @@ describe('Voting', () => {
             <Provider store={store}>
                 <IntlProvider locale="en">
                     <Voting
-                        post="Test post"
                         vote={(w, p) => {}}
-                        post_obj={post_obj}
+                        post={post_obj}
                         price_per_steem={1}
                         sbd_print_rate={5000}
                     />

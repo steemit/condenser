@@ -12,9 +12,6 @@ import Modals from 'app/components/modules/Modals';
 import WelcomePanel from 'app/components/elements/WelcomePanel';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
-import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
-import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
-import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
 
 class App extends React.Component {

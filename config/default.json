@@ -5,7 +5,7 @@
     "directives": {
       "childSrc": "'self' emb.d.tube player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
       "connectSrc": "https://steemitimages.com securepubads.g.doubleclick.net 'self' steemit.com https://api.steemit.com api.blocktrades.us",
-      "defaultSrc": "tpc.googlesyndication.com 'self' emb.d.tube www.youtube.com staticxx.facebook.com player.vimeo.com",
+      "defaultSrc": "tpc.googlesyndication.com 'self' emb.d.tube www.youtube.com staticxx.facebook.com player.vimeo.com *.streamrail.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
       "frameSrc": "'self' googleads.g.doubleclick.net https:",
@@ -58,6 +58,7 @@
       "every": 15
     }
   },
+  "video_ads_enabled": null,
   "gpt_enabled": null,
   "gpt_basic_slots": {
     "bottom-of-post": {
@@ -223,5 +224,6 @@
   "steem_market_cache": {
     "ttl": 7200,
     "key": "steem-market"
-  }
+  },
+  "esteem_elastic_search_api_key": null
 }

@@ -10,7 +10,7 @@ import resolveRoute from 'app/ResolveRoute';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 import SortOrder from 'app/components/elements/SortOrder';
-import SearchInput from 'app/components/elements/SearchInput';
+import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
 import IconButton from 'app/components/elements/IconButton';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import * as userActions from 'app/redux/UserReducer';
@@ -119,6 +119,7 @@ class Header extends React.Component {
             navigate,
             display_name,
             content,
+            walletUrl,
         } = this.props;
 
         let { showAd, showAnnouncement } = this.state;
@@ -188,8 +189,13 @@ class Header extends React.Component {
                     username: user_title,
                 });
             }
-            if (route.params[1] === 'recent-replies') {
+            if (route.params[1] === 'replies') {
                 page_title = tt('header_jsx.replies_to', {
+                    username: user_title,
+                });
+            }
+            if (route.params[1] === 'posts') {
+                page_title = tt('header_jsx.posts_by', {
                     username: user_title,
                 });
             }
@@ -241,34 +247,34 @@ class Header extends React.Component {
             </Link>
         );
 
-        const replies_link = `/@${username}/recent-replies`;
+        const replies_link = `/@${username}/replies`;
         const account_link = `/@${username}`;
         const comments_link = `/@${username}/comments`;
         const settings_link = `/@${username}/settings`;
         const notifs_link = `/@${username}/notifications`;
+        const wallet_link = `${walletUrl}/@${username}`;
 
         const user_menu = [
-            { link: account_link, icon: 'profile', value: tt('g.blog') },
-            { link: comments_link, icon: 'replies', value: tt('g.posts') },
-            { link: replies_link, icon: 'reply', value: tt('g.replies') },
+            { link: account_link, icon: 'profile', value: tt('g.profile') },
             { link: notifs_link, icon: 'clock', value: tt('g.notifications') },
+            //{ link: comments_link, icon: 'replies', value: tt('g.posts') },
+            { link: replies_link, icon: 'reply', value: tt('g.replies') },
+            //{ link: settings_link, icon: 'cog', value: tt('g.settings') },
             {
                 link: '#',
                 icon: 'eye',
                 onClick: toggleNightmode,
                 value: tt('g.toggle_nightmode'),
             },
-            { link: settings_link, icon: 'cog', value: tt('g.settings') },
-            loggedIn
-                ? {
-                      link: '#',
-                      icon: 'enter',
-                      onClick: logout,
-                      value: tt('g.logout'),
-                  }
-                : { link: '#', onClick: showLogin, value: tt('g.login') },
+            { link: wallet_link, icon: 'wallet', value: tt('g.wallet') },
+            {
+                link: '#',
+                icon: 'enter',
+                onClick: logout,
+                value: tt('g.logout'),
+            },
         ];
-        showAd = true;
+        showAd = false; // TODO: fix header ad overlap bug
         return (
             <Headroom
                 onUnpin={e => this.headroomOnUnpin(e)}
@@ -327,10 +333,10 @@ class Header extends React.Component {
 
                             {/*CUSTOM SEARCH*/}
                             <span className="Header__search--desktop">
-                                <SearchInput />
+                                <ElasticSearchInput />
                             </span>
                             <span className="Header__search">
-                                <a href="/static/search.html">
+                                <a href="/search">
                                     <IconButton icon="magnifyingGlass" />
                                 </a>
                             </span>
@@ -411,6 +417,7 @@ const mapStateToProps = (state, ownProps) => {
         display_name,
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
+        walletUrl: state.app.get('walletUrl'),
         gptEnabled,
         content,
         ...ownProps,

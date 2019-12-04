@@ -274,7 +274,7 @@ class Header extends React.Component {
                 value: tt('g.logout'),
             },
         ];
-        showAd = true;
+        showAd = false; // TODO: fix header ad overlap bug
         return (
             <Headroom
                 onUnpin={e => this.headroomOnUnpin(e)}

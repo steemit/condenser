@@ -183,22 +183,18 @@ export default connect(
         },
         markAsRead: (username, timeNow) => {
             const ops = ['setLastRead', { date: timeNow }];
-            debugger;
             return dispatch(
                 transactionActions.broadcastOperation({
                     type: 'custom_json',
                     operation: {
-                        id: 'community',
+                        id: 'notify',
                         required_posting_auths: [username],
                         json: JSON.stringify(ops),
                     },
                     successCallback: () => {
-                        debugger;
                         // TODO: dispatch action to refetch unread notification count.
                     },
-                    errorCallback: () => {
-                        debugger;
-                    },
+                    errorCallback: () => {},
                 })
             );
         },

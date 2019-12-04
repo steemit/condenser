@@ -63,9 +63,7 @@ class NotificationsList extends React.Component {
     onClickMarkAsRead = e => {
         e.preventDefault();
         const { username, markAsRead } = this.props;
-        let dateNow = new Date();
-        dateNow.setMinutes(dateNow.getMinutes() - dateNow.getTimezoneOffset());
-        markAsRead(username, dateNow.toISOString().slice(0, 10));
+        markAsRead(username, new Date().toISOString());
     };
 
     render() {

@@ -51,19 +51,31 @@ class ReactMutationObserver extends React.Component {
 
         this.observer = new MutationObserver(mutations => {
             mutations.forEach(function(mutation) {
-                if (typeof me.onChildListChanged === 'function') {
+                if (
+                    mutation.type === 'childList' &&
+                    typeof me.onChildListChanged === 'function'
+                ) {
                     me.onChildListChanged(mutation);
                 }
 
-                if (typeof me.onAttributesChanged === 'function') {
+                if (
+                    mutation.type === 'attributes' &&
+                    typeof me.onAttributesChanged === 'function'
+                ) {
                     me.onAttributesChanged(mutation);
                 }
 
-                if (typeof me.onSubtreeChanged === 'function') {
+                if (
+                    mutation.type === 'subtree' &&
+                    typeof me.onSubtreeChanged === 'function'
+                ) {
                     me.onSubtreeChanged(mutation);
                 }
 
-                if (typeof me.onCharacterDataChanged === 'function') {
+                if (
+                    mutation.type === 'characterData' &&
+                    typeof me.onCharacterDataChanged === 'function'
+                ) {
                     me.onCharacterDataChanged(mutation);
                 }
             });

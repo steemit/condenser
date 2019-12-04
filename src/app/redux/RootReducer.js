@@ -9,6 +9,7 @@ import transactionReducer from './TransactionReducer';
 import offchainReducer from './OffchainReducer';
 import communityReducer from './CommunityReducer';
 import userProfilesReducer from './UserProfilesReducer';
+import searchReducer from './SearchReducer';
 
 function initReducer(reducer, type) {
     return (state, action) => {
@@ -42,4 +43,5 @@ export default combineReducers({
     app: initReducer(appReducer),
     form: formReducer,
     userProfiles: initReducer(userProfilesReducer),
+    search: initReducer(searchReducer),
 });

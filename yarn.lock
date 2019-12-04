@@ -2104,10 +2104,6 @@ clap@^1.0.9:
   dependencies:
     chalk "^1.1.3"
 
-class-autobind@^0.1.2:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/class-autobind/-/class-autobind-0.1.4.tgz#34516c49167cf8d3f639ddc186bcfa2268afff34"
-
 classnames@2.2.5, classnames@^2.2.3, classnames@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
@@ -2941,49 +2937,6 @@ dotenv@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
-draft-js-export-html@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/draft-js-export-html/-/draft-js-export-html-0.2.2.tgz#9a945eb7753945134f4b8978f03d322a4b0e640e"
-  dependencies:
-    draft-js-utils "^0.1.5"
-
-draft-js-export-markdown@^0.2.0:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/draft-js-export-markdown/-/draft-js-export-markdown-0.2.2.tgz#5b0a1a10591d8b96199dcb70b04b1ab7deb72a33"
-  dependencies:
-    draft-js-utils "^0.1.5"
-
-draft-js-import-element@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/draft-js-import-element/-/draft-js-import-element-0.2.0.tgz#de507359a38284ad48f4f5b03e35d2ab062cbf9e"
-  dependencies:
-    draft-js-utils "^0.1.5"
-    synthetic-dom "^0.1.4"
-
-draft-js-import-html@^0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/draft-js-import-html/-/draft-js-import-html-0.1.10.tgz#9264b99dafa489f8fd737bcd7538b0f03b82664c"
-  dependencies:
-    draft-js-import-element "^0.2.0"
-
-draft-js-import-markdown@^0.1.6:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/draft-js-import-markdown/-/draft-js-import-markdown-0.1.7.tgz#7c961fd13e515940a9df7cf7a3c3762bf114923d"
-  dependencies:
-    draft-js-import-element "^0.2.0"
-    synthetic-dom "^0.1.4"
-
-draft-js-utils@^0.1.5:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/draft-js-utils/-/draft-js-utils-0.1.7.tgz#e2b6927ca620edf1855a4bfc1cf1d21080a70f16"
-
-draft-js@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/draft-js/-/draft-js-0.7.0.tgz#29506980d2cb96db2697054fae619e6f5b5d4101"
-  dependencies:
-    fbjs "^0.8.1"
-    immutable "^3.7.4"
-
 duplexer@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
@@ -3604,7 +3557,7 @@ fbemitter@^2.0.2:
   dependencies:
     fbjs "^0.8.4"
 
-fbjs@^0.8.1, fbjs@^0.8.12, fbjs@^0.8.16, fbjs@^0.8.4, fbjs@^0.8.9, fbjs@~0:
+fbjs@^0.8.12, fbjs@^0.8.16, fbjs@^0.8.4, fbjs@^0.8.9, fbjs@~0:
   version "0.8.16"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.16.tgz#5e67432f550dc41b572bf55847b8aca64e5337db"
   dependencies:
@@ -4381,7 +4334,7 @@ image-to-data-uri@^1.0.0:
   resolved "https://registry.yarnpkg.com/image-to-data-uri/-/image-to-data-uri-1.1.0.tgz#23f9d7f17b6562ca6a8145e9779c9a166b829f6e"
   integrity sha1-I/nX8XtlYspqgUXpd5yaFmuCn24=
 
-immutable@^3.7.4, immutable@^3.8.1:
+immutable@^3.8.1:
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
 
@@ -7329,9 +7282,10 @@ react-addons-test-utils@15.4.2:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
 
-react-autocomplete@1.7.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/react-autocomplete/-/react-autocomplete-1.7.2.tgz#c55a0a4b8a9f4cba911dfccb74ef74f2161c46e0"
+react-autocomplete@1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/react-autocomplete/-/react-autocomplete-1.8.1.tgz#ebbbc400006aa91ad538b2d14727b9e7e5d06310"
+  integrity sha1-67vEAABqqRrVOLLRRye55+XQYxA=
   dependencies:
     dom-scroll-into-view "1.0.1"
     prop-types "^15.5.10"
@@ -7550,20 +7504,6 @@ react-router@3.2.0:
     loose-envify "^1.2.0"
     prop-types "^15.5.6"
     warning "^3.0.0"
-
-react-rte-image@0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/react-rte-image/-/react-rte-image-0.3.1.tgz#311d48d0de252fd77a45c2e0107c5fb5c6a116e4"
-  dependencies:
-    class-autobind "^0.1.2"
-    classnames "^2.2.5"
-    draft-js "^0.7.0"
-    draft-js-export-html "^0.2.2"
-    draft-js-export-markdown "^0.2.0"
-    draft-js-import-html "^0.1.10"
-    draft-js-import-markdown "^0.1.6"
-    draft-js-utils "^0.1.5"
-    immutable "^3.8.1"
 
 react-sparklines@^1.7.0:
   version "1.7.0"
@@ -8464,6 +8404,11 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
 
+squarify@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/squarify/-/squarify-1.1.0.tgz#3eb946f4575bb21f90c4e8f1b65991f2bd4ce4f4"
+  integrity sha512-0nD8UD4FPOfWHdaVYACbr1SmBF5XQeTbDcRfVs8NHVtueRC0OPo4DN/TJVjAJZ0fLwrgDhEI3XrhUicglD9npw==
+
 sshpk@^1.7.0:
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/sshpk/-/sshpk-1.13.1.tgz#512df6da6287144316dc4c18fe1cf1d940739be3"
@@ -8766,10 +8711,6 @@ sync-request@^3.0.1:
     concat-stream "^1.4.7"
     http-response-object "^1.0.1"
     then-request "^2.0.1"
-
-synthetic-dom@^0.1.4:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/synthetic-dom/-/synthetic-dom-0.1.5.tgz#d4ccde4a6ac78b8a9677cf31617da8df541106b4"
 
 table@^4.0.1:
   version "4.0.2"

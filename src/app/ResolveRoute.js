@@ -3,13 +3,14 @@ import GDPRUserList from './utils/GDPRUserList';
 export const routeRegex = {
     CommunityRoles: /^\/(roles)+\/([\w\.\d-]+)/gi,
     UserFeed: /^\/(@[\w\.\d-]+)\/feed\/?$/,
-    UserProfile: /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|recent-replies|payout|feed|followed|followers|settings|notifications))?\/?$/,
+    UserProfile: /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications))?\/?$/,
     CategoryFilters: /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(?:\/([\w\d-]+))?\/?$/i,
     PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,
     Post: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
     PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
     UserJson: /^\/(@[\w\.\d-]+)(\.json)$/,
     UserNameJson: /^.*(?=(\.json))/,
+    Search: /^\/(search)/,
 };
 
 export default function resolveRoute(path) {
@@ -29,6 +30,7 @@ export default function resolveRoute(path) {
     if (path === '/submit.html') return { page: 'SubmitPost' };
     if (path === '/communities') return { page: 'Communities' };
     if (path === '/tags') return { page: 'Tags' };
+    if (path === '/rewards') return { page: 'Rewards' };
 
     // /roles/hive-123
     let match = path.match(routeRegex.CommunityRoles);
@@ -66,6 +68,10 @@ export default function resolveRoute(path) {
     // /trending, /trending/category
     match = path.match(routeRegex.CategoryFilters);
     if (match) return { page: 'PostsIndex', params: match.slice(1) };
+
+    // /search, /search?q=searchTerm&s=searchOrder
+    match = path.match(routeRegex.Search);
+    if (match) return { page: 'SearchIndex' };
 
     // -----------
 

@@ -118,6 +118,7 @@ tbody tr:nth-child(even) {
   border-radius: 0 30px;
   border: transparent;
   transition: 0.2s all ease-in-out;
+  outline: none;
   @include themify($themes) {
     background-color: themed('modalBackgroundColor');
     color: themed('modalTextColorPrimary');

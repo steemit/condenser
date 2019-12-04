@@ -75,9 +75,13 @@ class SettingsEditButton extends React.Component {
 }
 
 SettingsEditButton.propTypes = {
-    username: PropTypes.string.isRequired,
+    username: PropTypes.string,
     community: PropTypes.object.isRequired, //TODO: Define this shape
     settings: PropTypes.object.isRequired, //TODO: Define this shape
+};
+
+SettingsEditButton.defaultProps = {
+    username: undefined,
 };
 
 export default connect(
@@ -90,6 +94,7 @@ export default connect(
             title: community.get('title'),
             about: community.get('about'),
             is_nsfw: community.get('is_nsfw'),
+            lang: community.get('lang'),
             description: community.get('description'),
             flag_text: community.get('flag_text', ''),
         };

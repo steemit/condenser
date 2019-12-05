@@ -286,7 +286,7 @@ export function* getUnreadAccountNotifications(action) {
 }
 
 export function* markNotificationsAsReadSaga(action) {
-    const { timeNow, username } = action.payload;
+    const { timeNow, username, successCallback } = action.payload;
     const ops = ['setLastRead', { date: timeNow }];
     debugger;
     yield put(globalActions.notificationsLoading(true));
@@ -299,29 +299,20 @@ export function* markNotificationsAsReadSaga(action) {
                     required_posting_auths: [username],
                     json: JSON.stringify(ops),
                 },
-                /*
-                      successCallback: () => {
-                      },
-                      errorCallback: () => {
-                      }
-                      */
-            })
-        );
-        // Dispatch action to optimistically update unread notification state.
-        yield put(
-            globalActions.receiveUnreadNotifications({
-                name: username,
-                unreadNotifications: {
-                    lastread: timeNow,
-                    unread: 0,
+                successCallback: () => {
+                    successCallback(username, timeNow);
+                },
+                errorCallback: () => {
+                    globalActions.notificationsLoading(false);
                 },
             })
         );
         debugger;
     } catch (error) {
         debugger;
+        yield put(globalActions.notificationsLoading(false));
     }
-    yield put(globalActions.notificationsLoading(false));
+    debugger;
 }
 
 export function* fetchData(action) {

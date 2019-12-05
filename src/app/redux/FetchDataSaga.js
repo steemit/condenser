@@ -288,7 +288,6 @@ export function* getUnreadAccountNotifications(action) {
 export function* markNotificationsAsReadSaga(action) {
     const { timeNow, username, successCallback } = action.payload;
     const ops = ['setLastRead', { date: timeNow }];
-    debugger;
     yield put(globalActions.notificationsLoading(true));
     try {
         yield put(
@@ -307,12 +306,9 @@ export function* markNotificationsAsReadSaga(action) {
                 },
             })
         );
-        debugger;
     } catch (error) {
-        debugger;
         yield put(globalActions.notificationsLoading(false));
     }
-    debugger;
 }
 
 export function* fetchData(action) {

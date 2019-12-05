@@ -13,6 +13,7 @@ import IconButton from 'app/components/elements/IconButton';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
+import { startPolling } from 'app/redux/PollingSaga';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Userpic from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
@@ -30,6 +31,7 @@ class Header extends React.Component {
         order: PropTypes.string,
         pathname: PropTypes.string,
         getUnreadAccountNotifications: PropTypes.func,
+        startNotificationsPolling: PropTypes.func,
         loggedIn: PropTypes.bool,
         unreadNotificationCount: PropTypes.number,
     };
@@ -49,9 +51,11 @@ class Header extends React.Component {
             loggedIn,
             getUnreadAccountNotifications,
             current_account_name,
+            startNotificationsPolling,
         } = this.props;
         if (loggedIn) {
             getUnreadAccountNotifications(current_account_name);
+            startNotificationsPolling(current_account_name);
         }
     }
 
@@ -507,6 +511,34 @@ const mapDispatchToProps = dispatch => ({
         );
     },
     hideAnnouncement: () => dispatch(userActions.hideAnnouncement()),
+    startNotificationsPolling: username => {
+        const query = {
+            account: username,
+        };
+        const params = {
+            asyncFetch: () => {
+                // Call the API and return a promise
+                // Ex: return axios.get('<url>');
+                fetchDataSagaActions.getUnreadAccountNotifications(query);
+            },
+            callback: (response, stats) => {
+                // Called on every successful poll.
+                // This is expected to return a truthy value if the
+                // API call was successful and falsy otherwise
+            },
+            onStatsChange: stats => {
+                // Called every time certain events occur
+                // Ex: You can get the time remaining for the next poll
+                //     every second
+            },
+            delay: 10, // The delay between successive polls
+            retryOnFailure: true, // Retry if API call fails
+            retryAfter: 5, // Retry after x seconds
+            stopAfterRetries: 2, // Give up after x retries
+        };
+        debugger;
+        return dispatch(startPolling(params));
+    },
 });
 
 const connectedHeader = connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -7,6 +7,7 @@ import { transactionWatches } from 'app/redux/TransactionSaga';
 import { communityWatches } from 'app/redux/CommunitySaga';
 import { userProfilesWatches } from 'app/redux/UserProfilesSaga';
 import { searchWatches } from 'app/redux/SearchSaga';
+import { watchPollingTasks } from 'app/redux/PollingSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -18,5 +19,6 @@ export default function* rootSaga() {
         ...communityWatches,
         ...userProfilesWatches,
         ...searchWatches,
+        watchPollingTasks(),
     ]);
 }

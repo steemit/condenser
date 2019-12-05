@@ -27,6 +27,7 @@ class NotificationsList extends React.Component {
         markAsRead: PropTypes.func.isRequired,
         unreadNotifications: PropTypes.number,
         notificationActionPending: PropTypes.bool,
+        lastRead: PropTypes.string.isRequired,
     };
 
     static defaultProps = {
@@ -77,29 +78,36 @@ class NotificationsList extends React.Component {
             accountName,
             isLastpage,
             notificationActionPending,
+            lastRead,
         } = this.props;
 
-        const renderItem = item => (
-            <div
-                key={item.id}
-                style={{
-                    padding: '0.5em 1em',
-                    background: 'rgba(225,255,225,' + item.score + '%)',
-                }}
-            >
-                <span style={{ opacity: '0.5' }}>
-                    {item.type}
-                    {' / '}
-                </span>
-                <strong>
-                    <a href={`/${item.url}`}>{item.msg}</a>
-                </strong>
-                <br />
-                <small>
-                    <TimeAgoWrapper date={item.date + 'Z'} />
-                </small>
-            </div>
-        );
+        const renderItem = item => {
+            const unRead =
+                Date.parse(`${lastRead}Z`) <= Date.parse(`${item.date}Z`);
+            console.log(unRead);
+            return (
+                <div
+                    key={item.id}
+                    style={{
+                        padding: '0.5em 1em',
+                        background: 'rgba(225,255,225,' + item.score + '%)',
+                    }}
+                >
+                    <span style={{ opacity: '0.5' }}>
+                        {item.type}
+                        {' / '}
+                    </span>
+                    <strong>
+                        <a href={`/${item.url}`}>{item.msg}</a>
+                    </strong>
+                    <br />
+                    <small>
+                        <TimeAgoWrapper date={item.date + 'Z'} />
+                    </small>
+                    {unRead && <small className="affiliation">unread</small>}
+                </div>
+            );
+        };
 
         return (
             <div className="">
@@ -168,7 +176,7 @@ export default connect(
         );
         const lastRead = state.global.getIn(
             ['notifications', accountName, 'unreadNotifications', 'lastread'],
-            []
+            ''
         );
         return {
             ...props,

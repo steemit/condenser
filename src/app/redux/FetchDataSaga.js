@@ -10,10 +10,10 @@ import { api } from '@steemit/steem-js';
 import { loadFollows } from 'app/redux/FollowSaga';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
+import * as transactionActions from './TransactionReducer';
 import constants from './constants';
 import { fromJS, Map, Set } from 'immutable';
 import { getStateAsync, callBridge } from 'app/utils/steemApi';
-
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 const GET_POST_HEADER = 'fetchDataSaga/GET_POST_HEADER';
@@ -23,6 +23,7 @@ const GET_SUBSCRIPTIONS = 'fetchDataSaga/GET_SUBSCRIPTIONS';
 const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
 const GET_UNREAD_ACCOUNT_NOTIFICATIONS =
     'fetchDataSaga/GET_UNREAD_ACCOUNT_NOTIFICATIONS';
+const MARK_NOTIFICATIONS_AS_READ = 'fetchDataSaga/MARK_NOTIFICATIONS_AS_READ';
 const GET_REWARDS_DATA = 'fetchDataSaga/GET_REWARDS_DATA';
 
 export const fetchDataWatches = [
@@ -37,6 +38,7 @@ export const fetchDataWatches = [
     takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
     takeEvery(GET_UNREAD_ACCOUNT_NOTIFICATIONS, getUnreadAccountNotifications),
     takeEvery(GET_REWARDS_DATA, getRewardsDataSaga),
+    takeEvery(MARK_NOTIFICATIONS_AS_READ, markNotificationsAsReadSaga),
 ];
 
 export function* getPostHeader(action) {
@@ -214,7 +216,7 @@ export function* getSubscriptions(action) {
  */
 export function* getAccountNotifications(action) {
     if (!action.payload) throw 'no account specified';
-    yield put(appActions.fetchDataBegin());
+    yield put(globalActions.notificationsLoading(true));
     try {
         const notifications = yield call(
             callBridge,
@@ -242,7 +244,7 @@ export function* getAccountNotifications(action) {
         console.error('~~ Saga getAccountNotifications error ~~>', error);
         yield put(appActions.steemApiError(error.message));
     }
-    yield put(appActions.fetchDataEnd());
+    yield put(globalActions.notificationsLoading(false));
 }
 
 /**
@@ -253,7 +255,7 @@ export function* getAccountNotifications(action) {
 
 export function* getUnreadAccountNotifications(action) {
     if (!action.payload) throw 'no account specified';
-    yield put(appActions.fetchDataBegin());
+    yield put(globalActions.notificationsLoading(true));
     try {
         const unreadNotifications = yield call(
             callBridge,
@@ -280,7 +282,46 @@ export function* getUnreadAccountNotifications(action) {
         console.error('~~ Saga getUnreadAccountNotifications error ~~>', error);
         yield put(appActions.steemApiError(error.message));
     }
-    yield put(appActions.fetchDataEnd());
+    yield put(globalActions.notificationsLoading(false));
+}
+
+export function* markNotificationsAsReadSaga(action) {
+    const { timeNow, username } = action.payload;
+    const ops = ['setLastRead', { date: timeNow }];
+    debugger;
+    yield put(globalActions.notificationsLoading(true));
+    try {
+        yield put(
+            transactionActions.broadcastOperation({
+                type: 'custom_json',
+                operation: {
+                    id: 'notify',
+                    required_posting_auths: [username],
+                    json: JSON.stringify(ops),
+                },
+                /*
+                      successCallback: () => {
+                      },
+                      errorCallback: () => {
+                      }
+                      */
+            })
+        );
+        // Dispatch action to optimistically update unread notification state.
+        yield put(
+            globalActions.receiveUnreadNotifications({
+                name: username,
+                unreadNotifications: {
+                    lastread: timeNow,
+                    unread: 0,
+                },
+            })
+        );
+        debugger;
+    } catch (error) {
+        debugger;
+    }
+    yield put(globalActions.notificationsLoading(false));
 }
 
 export function* fetchData(action) {
@@ -437,6 +478,11 @@ export const actions = {
 
     getUnreadAccountNotifications: payload => ({
         type: GET_UNREAD_ACCOUNT_NOTIFICATIONS,
+        payload,
+    }),
+
+    markNotificationsAsRead: payload => ({
+        type: MARK_NOTIFICATIONS_AS_READ,
         payload,
     }),
 

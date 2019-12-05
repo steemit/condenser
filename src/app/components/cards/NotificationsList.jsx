@@ -24,14 +24,15 @@ class NotificationsList extends React.Component {
         username: PropTypes.string.isRequired,
         loading: PropTypes.bool.isRequired,
         markAsRead: PropTypes.func.isRequired,
+        unreadNotifications: PropTypes.number,
+        notificationActionPending: PropTypes.bool,
     };
 
     static defaultProps = {
         notifications: [],
+        unreadNotifications: 0,
+        notificationActionPending: false,
         isLastPage: false,
-    };
-
-    static defaultProps = {
         loading: false,
     };
 
@@ -63,16 +64,18 @@ class NotificationsList extends React.Component {
     onClickMarkAsRead = e => {
         e.preventDefault();
         const { username, markAsRead } = this.props;
-        markAsRead(username, new Date().toISOString());
+        markAsRead(username, new Date().toISOString().slice(0, 19));
     };
 
     render() {
         const {
             notifications,
+            unreadNotifications,
             loading,
             isOwnAccount,
             accountName,
             isLastpage,
+            notificationActionPending,
         } = this.props;
 
         const renderItem = item => (
@@ -102,7 +105,9 @@ class NotificationsList extends React.Component {
                 {isOwnAccount && <ClaimBox accountName={accountName} />}
                 {!loading &&
                     notifications &&
-                    notifications.length > 0 && (
+                    notifications.length > 0 &&
+                    unreadNotifications !== 0 &&
+                    !notificationActionPending && (
                         <center>
                             <br />
                             <a href="#" onClick={this.onClickMarkAsRead}>
@@ -110,6 +115,11 @@ class NotificationsList extends React.Component {
                             </a>
                         </center>
                     )}
+                {notificationActionPending && (
+                    <center>
+                        <LoadingIndicator type="circle" />
+                    </center>
+                )}
                 {notifications &&
                     notifications.length > 0 && (
                         <div style={{ lineHeight: '1rem' }}>
@@ -132,15 +142,6 @@ class NotificationsList extends React.Component {
                     </center>
                 )}
                 {!loading &&
-                    notifications && (
-                        <center>
-                            <br />
-                            <a href="#" onClick={this.onClickMarkAsRead}>
-                                <strong>Mark as read</strong>
-                            </a>
-                        </center>
-                    )}
-                {!loading &&
                     notifications &&
                     !isLastpage && (
                         <center>
@@ -160,10 +161,24 @@ export default connect(
         const accountName = props.username;
         const isOwnAccount =
             state.user.getIn(['current', 'username'], '') == accountName;
+        const unreadNotifications = state.global.getIn(
+            ['notifications', accountName, 'unreadNotifications', 'unread'],
+            0
+        );
+        const lastRead = state.global.getIn(
+            ['notifications', accountName, 'unreadNotifications', 'lastread'],
+            []
+        );
         return {
             ...props,
             isOwnAccount,
             accountName,
+            unreadNotifications,
+            notificationActionPending: state.global.getIn([
+                'notifications',
+                'loading',
+            ]),
+            lastRead,
         };
     },
     dispatch => ({
@@ -180,20 +195,35 @@ export default connect(
             );
         },
         markAsRead: (username, timeNow) => {
-            const ops = ['setLastRead', { date: timeNow }];
             return dispatch(
-                transactionActions.broadcastOperation({
-                    type: 'custom_json',
-                    operation: {
-                        id: 'notify',
-                        required_posting_auths: [username],
-                        json: JSON.stringify(ops),
-                    },
-                    successCallback: () => {
-                        // TODO: dispatch action to refetch unread notification count.
-                    },
-                    errorCallback: () => {},
+                fetchDataSagaActions.markNotificationsAsRead({
+                    username,
+                    timeNow,
                 })
+                /*
+                  transactionActions.broadcastOperation({
+                      type: 'custom_json',
+                      operation: {
+                          id: 'notify',
+                          required_posting_auths: [username],
+                          json: JSON.stringify(ops),
+                      },
+                      successCallback: () => {
+                          // Dispatch action to optimistically update unread notification state.
+                          dispatch(
+                              receiveUnreadNotifications({
+                                name: username,
+                                unreadNotifications: {
+                                  lastread: timeNow, unread: 0
+                                }
+                          }))
+                      },
+                      errorCallback: () => {
+                          dispatch(
+                          )
+                      }
+                  })
+                  */
             );
         },
     })

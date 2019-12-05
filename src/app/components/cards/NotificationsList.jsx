@@ -5,6 +5,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import * as transactionActions from 'app/redux/TransactionReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
 import ClaimBox from 'app/components/elements/ClaimBox';
 import Callout from 'app/components/elements/Callout';
 
@@ -195,35 +196,25 @@ export default connect(
             );
         },
         markAsRead: (username, timeNow) => {
+            const successCallback = (user, time) => {
+                dispatch(
+                    globalActions.receiveUnreadNotifications({
+                        name: user,
+                        unreadNotifications: {
+                            lastread: time,
+                            unread: 0,
+                        },
+                    })
+                );
+                dispatch(globalActions.notificationsLoading(false));
+            };
+
             return dispatch(
                 fetchDataSagaActions.markNotificationsAsRead({
                     username,
                     timeNow,
+                    successCallback,
                 })
-                /*
-                  transactionActions.broadcastOperation({
-                      type: 'custom_json',
-                      operation: {
-                          id: 'notify',
-                          required_posting_auths: [username],
-                          json: JSON.stringify(ops),
-                      },
-                      successCallback: () => {
-                          // Dispatch action to optimistically update unread notification state.
-                          dispatch(
-                              receiveUnreadNotifications({
-                                name: username,
-                                unreadNotifications: {
-                                  lastread: timeNow, unread: 0
-                                }
-                          }))
-                      },
-                      errorCallback: () => {
-                          dispatch(
-                          )
-                      }
-                  })
-                  */
             );
         },
     })

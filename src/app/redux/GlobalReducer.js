@@ -100,6 +100,7 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_UNREAD_NOTIFICATIONS: {
             console.log('Receive unread notifications', payload);
+            debugger;
             return state.setIn(
                 ['notifications', payload.name, 'unreadNotifications'],
                 Map(payload.unreadNotifications)

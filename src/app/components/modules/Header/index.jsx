@@ -49,13 +49,10 @@ class Header extends React.Component {
     componentWillMount() {
         const {
             loggedIn,
-            getUnreadAccountNotifications,
             current_account_name,
             startNotificationsPolling,
         } = this.props;
         if (loggedIn) {
-            //getUnreadAccountNotifications(current_account_name);
-            debugger;
             startNotificationsPolling(current_account_name);
         }
     }

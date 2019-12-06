@@ -54,7 +54,8 @@ class Header extends React.Component {
             startNotificationsPolling,
         } = this.props;
         if (loggedIn) {
-            getUnreadAccountNotifications(current_account_name);
+            //getUnreadAccountNotifications(current_account_name);
+            debugger;
             startNotificationsPolling(current_account_name);
         }
     }
@@ -516,27 +517,10 @@ const mapDispatchToProps = dispatch => ({
             account: username,
         };
         const params = {
-            asyncFetch: () => {
-                // Call the API and return a promise
-                // Ex: return axios.get('<url>');
-                fetchDataSagaActions.getUnreadAccountNotifications(query);
-            },
-            callback: (response, stats) => {
-                // Called on every successful poll.
-                // This is expected to return a truthy value if the
-                // API call was successful and falsy otherwise
-            },
-            onStatsChange: stats => {
-                // Called every time certain events occur
-                // Ex: You can get the time remaining for the next poll
-                //     every second
-            },
-            delay: 10, // The delay between successive polls
-            retryOnFailure: true, // Retry if API call fails
-            retryAfter: 5, // Retry after x seconds
-            stopAfterRetries: 2, // Give up after x retries
+            pollAction: fetchDataSagaActions.getUnreadAccountNotifications,
+            pollPayload: query,
+            delay: 600000, // The delay between successive polls
         };
-        debugger;
         return dispatch(startPolling(params));
     },
 });

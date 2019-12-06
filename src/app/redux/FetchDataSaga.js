@@ -36,7 +36,10 @@ export const fetchDataWatches = [
     takeLatest(GET_SUBSCRIPTIONS, getSubscriptions),
     takeEvery(LIST_COMMUNITIES, listCommunities),
     takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
-    takeEvery(GET_UNREAD_ACCOUNT_NOTIFICATIONS, getUnreadAccountNotifications),
+    takeEvery(
+        GET_UNREAD_ACCOUNT_NOTIFICATIONS,
+        getUnreadAccountNotificationsSaga
+    ),
     takeEvery(GET_REWARDS_DATA, getRewardsDataSaga),
     takeEvery(MARK_NOTIFICATIONS_AS_READ, markNotificationsAsReadSaga),
 ];
@@ -253,7 +256,7 @@ export function* getAccountNotifications(action) {
  *   - account (string)
  */
 
-export function* getUnreadAccountNotifications(action) {
+export function* getUnreadAccountNotificationsSaga(action) {
     debugger;
     if (!action.payload) throw 'no account specified';
     yield put(globalActions.notificationsLoading(true));

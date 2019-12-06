@@ -257,7 +257,6 @@ export function* getAccountNotifications(action) {
  */
 
 export function* getUnreadAccountNotificationsSaga(action) {
-    debugger;
     if (!action.payload) throw 'no account specified';
     yield put(globalActions.notificationsLoading(true));
     try {
@@ -313,7 +312,6 @@ export function* markNotificationsAsReadSaga(action) {
     } catch (error) {
         yield put(globalActions.notificationsLoading(false));
     }
-    debugger;
 }
 
 export function* fetchData(action) {

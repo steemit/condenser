@@ -39,7 +39,6 @@ class CommunityPane extends Component {
 
         const handleModerationLogCLick = e => {
             e.preventDefault();
-            debugger;
             showModerationLog(community);
         };
 

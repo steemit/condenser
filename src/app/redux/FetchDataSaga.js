@@ -239,7 +239,7 @@ export function* getAccountNotifications(action) {
             'account_notifications',
             action.payload
         );
-        debugger;
+
         if (notifications && notifications.error) {
             console.error(
                 '~~ Saga getAccountNotifications error ~~>',

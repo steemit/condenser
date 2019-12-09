@@ -124,7 +124,6 @@ class NotificationsList extends React.Component {
             notificationActionPending,
             lastRead,
         } = this.props;
-        debugger;
 
         const renderItem = item => {
             const unRead =

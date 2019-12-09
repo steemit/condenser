@@ -24,12 +24,23 @@ class CommunityPane extends Component {
     static propTypes = {
         community: PropTypes.object.isRequired,
         showRecentSubscribers: PropTypes.func.isRequired,
+        showModerationLog: PropTypes.func.isRequired,
     };
 
     render() {
-        const { community, showRecentSubscribers } = this.props;
+        const {
+            community,
+            showRecentSubscribers,
+            showModerationLog,
+        } = this.props;
         const handleSubscriberClick = () => {
             showRecentSubscribers(community);
+        };
+
+        const handleModerationLogCLick = e => {
+            e.preventDefault();
+            debugger;
+            showModerationLog(community);
         };
 
         function teamMembers(members) {
@@ -156,6 +167,11 @@ class CommunityPane extends Component {
                         )}
                         <strong>Leadership</strong>
                         {teamMembers(community.get('team', List()))}
+                        <div style={{ float: 'right', fontSize: '0.8em' }}>
+                            <a onClick={handleModerationLogCLick}>
+                                Moderation Log
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div className="c-sidebar__module">
@@ -198,6 +214,14 @@ export default connect(
                 dispatch(
                     globalActions.showDialog({
                         name: 'communitySubscribers',
+                        params: { community },
+                    })
+                );
+            },
+            showModerationLog: community => {
+                dispatch(
+                    globalActions.showDialog({
+                        name: 'communityModerationLog',
                         params: { community },
                     })
                 );

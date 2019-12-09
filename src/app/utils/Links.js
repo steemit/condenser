@@ -51,6 +51,7 @@ export default {
     twitch: /https?:\/\/(?:www.)?twitch.tv\/(?:(videos)\/)?([a-zA-Z0-9][\w]{3,24})/i,
     dtube: /https:\/\/(?:emb\.)?(?:d.tube\/\#\!\/(?:v\/)?)([a-zA-Z0-9\-\.\/]*)/,
     dtubeId: /(?:d\.tube\/#!\/(?:v\/)?([a-zA-Z0-9\-\.\/]*))+/,
+    threespeak: /(?:https?:\/\/(?:3speak.online\/watch\?v=)|(?:3speak.online\/embed\?v=))([A-Za-z0-9\_\-\/]+)/i,
 };
 
 //TODO: possible this should go somewhere else.

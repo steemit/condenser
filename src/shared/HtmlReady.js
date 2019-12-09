@@ -143,7 +143,9 @@ function link(state, child) {
         state.links.add(url);
         if (state.mutate) {
             // If this link is not relative, http, https, steem or esteem -- add https.
-            if (!/^((#)|(\/(?!\/))|(((steem|esteem|https?):)?\/\/))/.test(url)) {
+            if (
+                !/^((#)|(\/(?!\/))|(((steem|esteem|https?):)?\/\/))/.test(url)
+            ) {
                 child.setAttribute('href', 'https://' + url);
             }
 
@@ -237,6 +239,7 @@ function linkifyNode(child, state) {
         child = embedVimeoNode(child, state.links, state.images);
         child = embedTwitchNode(child, state.links, state.images);
         child = embedDTubeNode(child, state.links, state.images);
+        child = embedThreeSpeakNode(child, state.links, state.images);
 
         const data = XMLSerializer.serializeToString(child);
         const content = linkify(
@@ -355,6 +358,45 @@ function youTubeId(data) {
         startTime: startTime ? startTime[1] : 0,
         thumbnail: 'https://img.youtube.com/vi/' + id + '/0.jpg',
     };
+}
+
+/** @return {id, url} or <b>null</b> */
+function threeSpeakId(data) {
+    if (!data) return null;
+
+    const match = data.match(linksRe.threespeak);
+    const url = match ? match[0] : null;
+    if (!url) return null;
+    const fullId = match[1];
+    const id = fullId.split('/').pop();
+
+    console.log(url);
+
+    return {
+        id,
+        fullId,
+        url,
+        thumbnail: `https://img.3speakcontent.online/${id}/post.png`,
+    };
+}
+
+function embedThreeSpeakNode(child, links, images) {
+    try {
+        const data = child.data;
+        const threespeakId = threeSpeakId(data);
+        if (!threespeakId) return child;
+
+        child.data = data.replace(
+            threespeakId.url,
+            `~~~ embed:${threespeakId.fullId} threespeak ~~~`
+        );
+
+        if (links) links.add(threespeakId.url);
+        if (images) images.add(threespeakId.thumbnail);
+    } catch (error) {
+        console.log(error);
+    }
+    return child;
 }
 
 function embedVimeoNode(child, links /*images*/) {

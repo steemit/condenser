@@ -11,6 +11,7 @@ import CheckLoginOwner from 'app/components/elements/CheckLoginOwner';
 import PromotePost from 'app/components/modules/PromotePost';
 import ExplorePost from 'app/components/modules/ExplorePost';
 import CommunitySubscriberList from './CommunitySubscriberList';
+import NotificationsList from '../cards/NotificationsList';
 
 class Dialogs extends React.Component {
     static propTypes = {
@@ -34,6 +35,7 @@ class Dialogs extends React.Component {
         const { active_dialogs } = this.props;
         let idx = 0;
         const dialogs = active_dialogs.reduce((r, v, k) => {
+            console.log('r:', r.toJS(), 'v', v.toJS(), 'k:', k);
             const cmp =
                 k === 'qr_reader' ? (
                     <span key={`dialog-${k}`}>
@@ -76,6 +78,19 @@ class Dialogs extends React.Component {
                             <CommunitySubscriberList
                                 onClick={this['hide_' + k]}
                                 {...v.get('params').toJS()}
+                            />
+                        </Reveal>
+                    </span>
+                ) : k === 'communityModerationLog' ? (
+                    <span key={`dialog-${k}`}>
+                        <Reveal onHide={this['hide_' + k]} show>
+                            <NotificationsList
+                                username={v.getIn([
+                                    'params',
+                                    'community',
+                                    'name',
+                                ])}
+                                isLastpage={true}
                             />
                         </Reveal>
                     </span>

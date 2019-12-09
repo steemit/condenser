@@ -70,7 +70,6 @@ class NotificationsList extends React.Component {
         ),
         isLastPage: PropTypes.bool,
         username: PropTypes.string.isRequired,
-        loading: PropTypes.bool.isRequired,
         markAsRead: PropTypes.func.isRequired,
         unreadNotifications: PropTypes.number,
         notificationActionPending: PropTypes.bool,
@@ -82,7 +81,6 @@ class NotificationsList extends React.Component {
         unreadNotifications: 0,
         notificationActionPending: false,
         isLastPage: false,
-        loading: false,
     };
 
     constructor() {
@@ -91,7 +89,7 @@ class NotificationsList extends React.Component {
 
     componentWillMount() {
         const { username, notifications, getAccountNotifications } = this.props;
-        if (username && !notifications) {
+        if (username && notifications.length === 0) {
             getAccountNotifications(username);
         }
     }
@@ -120,13 +118,13 @@ class NotificationsList extends React.Component {
         const {
             notifications,
             unreadNotifications,
-            loading,
             isOwnAccount,
             accountName,
             isLastpage,
             notificationActionPending,
             lastRead,
         } = this.props;
+        debugger;
 
         const renderItem = item => {
             const unRead =
@@ -179,8 +177,7 @@ class NotificationsList extends React.Component {
         return (
             <div className="">
                 {isOwnAccount && <ClaimBox accountName={accountName} />}
-                {!loading &&
-                    notifications &&
+                {notifications &&
                     notifications.length > 0 &&
                     unreadNotifications !== 0 &&
                     !notificationActionPending && (
@@ -212,15 +209,7 @@ class NotificationsList extends React.Component {
                         </Callout>
                     )}
 
-                {loading && (
-                    <center>
-                        <LoadingIndicator
-                            style={{ marginBottom: '2rem' }}
-                            type="circle"
-                        />
-                    </center>
-                )}
-                {!loading &&
+                {!notificationActionPending &&
                     notifications &&
                     !isLastpage && (
                         <center>

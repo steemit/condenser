@@ -343,6 +343,7 @@ export default `
 /dsj/@dsj/mv8793z1
 /community/@dsj/yqu2sh7d
 /nature/@nikapelex/ap-the-best-videos
+/ielts/@davidbushey/buy-original-ielts-certificates-without-exam
 `
     .trim()
     .split('\n');

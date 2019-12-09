@@ -88,8 +88,8 @@ class NotificationsList extends React.Component {
     }
 
     componentWillMount() {
-        const { username, notifications, getAccountNotifications } = this.props;
-        if (username && notifications.length === 0) {
+        const { username, getAccountNotifications } = this.props;
+        if (username) {
             getAccountNotifications(username);
         }
     }

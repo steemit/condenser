@@ -199,3 +199,17 @@
 }
 
 
+.beta-disclaimer {
+    @include themify($themes) {
+        padding: 8px 24px;
+        font-size: 0.8em;
+        color: themed('textColorPrimary');
+        background: repeating-linear-gradient(
+          45deg,
+          themed('backgroundColor'),
+          themed('backgroundColor') 10px,
+          themed('moduleBackgroundColor') 10px,
+          themed('moduleBackgroundColor') 20px
+        );
+    }
+}

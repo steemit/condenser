@@ -971,7 +971,6 @@ export default formId =>
                 category,
                 'is_nsfw',
             ]);
-            console.log('IS NSFW,', isNSFWCommunity);
             if (isNSFWCommunity) {
                 tags = `${tags} nsfw`;
             }

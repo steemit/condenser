@@ -1,0 +1,13 @@
+.Notification__item {
+        @include themify($themes) {
+            border-bottom: themed('border');
+        }
+
+    .notif-unread {
+        float: right;
+        font-size: 2em;
+        @include themify($themes) {
+            color: themed('textColorAccent');
+        }
+    }
+}

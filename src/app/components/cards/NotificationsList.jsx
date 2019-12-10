@@ -88,11 +88,13 @@ class NotificationsList extends React.Component {
             return (
                 <div
                     key={item.id}
+                    className="Notification__item"
                     style={{
                         padding: '0.5em 1em',
                         background: 'rgba(225,255,225,' + item.score + '%)',
                     }}
                 >
+                    {unRead && <span className="notif-unread">&bull;</span>}
                     <span style={{ opacity: '0.5' }}>
                         {item.type}
                         {' / '}
@@ -104,7 +106,6 @@ class NotificationsList extends React.Component {
                     <small>
                         <TimeAgoWrapper date={item.date + 'Z'} />
                     </small>
-                    {unRead && <small className="affiliation">unread</small>}
                 </div>
             );
         };

@@ -312,6 +312,11 @@ class Header extends React.Component {
                                 onClose={e => this.hideAnnouncement(e)}
                             />
                         )}
+                        <div className="beta-disclaimer">
+                            Viewing <strong>Steemit.com beta</strong>. Note that
+                            availability of features or service may change at
+                            any time.
+                        </div>
                         {/* If announcement is shown, ad will not render unless it's in a parent div! */}
                         <div style={showAd ? {} : { display: 'none' }}>
                             <GptAd

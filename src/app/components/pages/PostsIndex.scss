@@ -199,7 +199,7 @@
 
 .articles {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding: 0.25em 1em;
+  padding: 0em 1em;
   transition: all 0.2s ease-out;
   border: transparent;
   min-width: 300px;
@@ -212,7 +212,7 @@
     font-family: sans-serif;
   }
   @include MQ(M) {
-    padding: 0.25em 1em;
+    padding: 0em 1em;
     min-width: 500px;
     max-width: 664px;
     order: 2;

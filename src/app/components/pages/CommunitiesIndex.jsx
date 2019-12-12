@@ -38,7 +38,7 @@ export default class CommunitiesIndex extends React.Component {
 
         const row = comm => (
             <tr key={comm.name}>
-                <th width="600">
+                <th>
                     <Link to={`/trending/${comm.name}`}>{comm.title}</Link>
                     {role(comm)}
                     <br />
@@ -48,7 +48,7 @@ export default class CommunitiesIndex extends React.Component {
                         posters &bull; {comm.num_pending} posts
                     </small>
                 </th>
-                <td width="40">
+                <td>
                     <SubscribeButton community={comm.name} />
                 </td>
             </tr>

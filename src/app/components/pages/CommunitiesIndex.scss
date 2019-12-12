@@ -7,4 +7,24 @@
     table td {vertical-align: middle; color: #666; text-align: center;}
     table small {color: #999; display: block;}
     table .button {margin: 0}
+
+    &.c-sidebar__module {
+        /* Larger than Medium */
+        @media screen and (min-width: 64.0625em) {
+            padding: 1.5em 4em;
+        }
+    }
+
+    table th {
+        width: 600px;
+
+        /* Larger than Small */
+        @media screen and (min-width: 40.0625em) {
+            padding-right: 6%;
+        }
+    }
+
+    table td {
+        width: 40px;
+    }
 }

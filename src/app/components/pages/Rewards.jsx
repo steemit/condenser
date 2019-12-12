@@ -172,7 +172,7 @@ class Rewards extends Component {
         const bg = row => {
             const { posts, payout, is_blog } = row;
             const per_post = posts ? payout / posts : null;
-            const alpha = per_post ? Math.min(per_post / 15, 1) : 0.5;
+            const alpha = per_post ? Math.min(per_post / 15 + 0.1, 1) : 0.5;
             const color = is_blog ? '155,155,255' : '220,90,255';
             return `rgba(${color},${alpha})`;
         };

@@ -1,32 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import tt from 'counterpart';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
 import ClaimBox from 'app/components/elements/ClaimBox';
 import Callout from 'app/components/elements/Callout';
 
 class NotificationsList extends React.Component {
     static propTypes = {
-        notifications: PropTypes.object,
+        notifications: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.number,
+                type: PropTypes.string,
+                score: PropTypes.number,
+                date: PropTypes.date,
+                msg: PropTypes.string,
+                url: PropTypes.url,
+            })
+        ),
+        isLastPage: PropTypes.bool,
         username: PropTypes.string.isRequired,
         loading: PropTypes.bool.isRequired,
+        markAsRead: PropTypes.func.isRequired,
+        unreadNotifications: PropTypes.number,
+        notificationActionPending: PropTypes.bool,
+        lastRead: PropTypes.string.isRequired,
     };
 
     static defaultProps = {
+        notifications: [],
+        unreadNotifications: 0,
+        notificationActionPending: false,
+        isLastPage: false,
         loading: false,
     };
 
     constructor() {
         super();
-        this.shouldComponentUpdate = shouldComponentUpdate(
-            this,
-            'NotificationsList'
-        );
     }
 
     componentWillMount() {
@@ -37,8 +50,8 @@ class NotificationsList extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { username, notifications, getAccountNotifications } = this.props;
-        if (prevProps.username !== username && !notifications) {
+        const { username, getAccountNotifications, isLastPage } = this.props;
+        if (prevProps.username !== username) {
             getAccountNotifications(username);
         }
     }
@@ -46,50 +59,83 @@ class NotificationsList extends React.Component {
     onClickLoadMore = e => {
         e.preventDefault();
         const { username, notifications, getAccountNotifications } = this.props;
-        const lastId = notifications.getIn(['notifications', -1, 'id']);
+        const lastId = notifications.slice(-1)[0].id;
         getAccountNotifications(username, lastId);
+    };
+
+    onClickMarkAsRead = e => {
+        e.preventDefault();
+        const { username, markAsRead } = this.props;
+        markAsRead(username, new Date().toISOString().slice(0, 19));
     };
 
     render() {
         const {
             notifications,
+            unreadNotifications,
             loading,
             isOwnAccount,
             accountName,
+            isLastpage,
+            notificationActionPending,
+            lastRead,
         } = this.props;
 
-        const renderItem = item => (
-            <div
-                key={item.id}
-                style={{
-                    padding: '0.5em 1em',
-                    background: 'rgba(225,255,225,' + item.score + '%)',
-                }}
-            >
-                <span style={{ opacity: '0.5' }}>
-                    {item.type}
-                    {' / '}
-                </span>
-                <strong>
-                    <a href={`/${item.url}`}>{item.msg}</a>
-                </strong>
-                <br />
-                <small>
-                    <TimeAgoWrapper date={item.date + 'Z'} />
-                </small>
-            </div>
-        );
+        const renderItem = item => {
+            const unRead =
+                Date.parse(`${lastRead}Z`) <= Date.parse(`${item.date}Z`);
+            console.log(unRead);
+            return (
+                <div
+                    key={item.id}
+                    className="Notification__item"
+                    style={{
+                        padding: '0.5em 1em',
+                        background: 'rgba(225,255,225,' + item.score + '%)',
+                    }}
+                >
+                    {unRead && <span className="notif-unread">&bull;</span>}
+                    <span style={{ opacity: '0.5' }}>
+                        {item.type}
+                        {' / '}
+                    </span>
+                    <strong>
+                        <a href={`/${item.url}`}>{item.msg}</a>
+                    </strong>
+                    <br />
+                    <small>
+                        <TimeAgoWrapper date={item.date + 'Z'} />
+                    </small>
+                </div>
+            );
+        };
 
         return (
             <div className="">
                 {isOwnAccount && <ClaimBox accountName={accountName} />}
-                {notifications && (
-                    <div style={{ lineHeight: '1rem' }}>
-                        {notifications
-                            .get('notifications')
-                            .map(item => renderItem(item.toJS()))}
-                    </div>
+                {!loading &&
+                    notifications &&
+                    notifications.length > 0 &&
+                    unreadNotifications !== 0 &&
+                    !notificationActionPending && (
+                        <center>
+                            <br />
+                            <a href="#" onClick={this.onClickMarkAsRead}>
+                                <strong>Mark as read</strong>
+                            </a>
+                        </center>
+                    )}
+                {notificationActionPending && (
+                    <center>
+                        <LoadingIndicator type="circle" />
+                    </center>
                 )}
+                {notifications &&
+                    notifications.length > 0 && (
+                        <div style={{ lineHeight: '1rem' }}>
+                            {notifications.map(item => renderItem(item))}
+                        </div>
+                    )}
                 {!notifications &&
                     !loading && (
                         <Callout>
@@ -107,7 +153,7 @@ class NotificationsList extends React.Component {
                 )}
                 {!loading &&
                     notifications &&
-                    !notifications.get('isLastPage', false) && (
+                    !isLastpage && (
                         <center>
                             <br />
                             <a href="#" onClick={this.onClickLoadMore}>
@@ -125,10 +171,24 @@ export default connect(
         const accountName = props.username;
         const isOwnAccount =
             state.user.getIn(['current', 'username'], '') == accountName;
+        const unreadNotifications = state.global.getIn(
+            ['notifications', accountName, 'unreadNotifications', 'unread'],
+            0
+        );
+        const lastRead = state.global.getIn(
+            ['notifications', accountName, 'unreadNotifications', 'lastread'],
+            ''
+        );
         return {
             ...props,
             isOwnAccount,
             accountName,
+            unreadNotifications,
+            notificationActionPending: state.global.getIn([
+                'notifications',
+                'loading',
+            ]),
+            lastRead,
         };
     },
     dispatch => ({
@@ -142,6 +202,28 @@ export default connect(
             }
             return dispatch(
                 fetchDataSagaActions.getAccountNotifications(query)
+            );
+        },
+        markAsRead: (username, timeNow) => {
+            const successCallback = (user, time) => {
+                dispatch(
+                    globalActions.receiveUnreadNotifications({
+                        name: user,
+                        unreadNotifications: {
+                            lastread: time,
+                            unread: 0,
+                        },
+                    })
+                );
+                dispatch(globalActions.notificationsLoading(false));
+            };
+
+            return dispatch(
+                fetchDataSagaActions.markNotificationsAsRead({
+                    username,
+                    timeNow,
+                    successCallback,
+                })
             );
         },
     })

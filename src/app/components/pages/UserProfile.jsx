@@ -137,6 +137,7 @@ export default class UserProfile extends React.Component {
                 posts,
                 profile,
                 notifications,
+                isNotificationsLastPage,
             },
         } = this;
 
@@ -176,8 +177,9 @@ export default class UserProfile extends React.Component {
             tab_content = (
                 <NotificationsList
                     username={accountname}
-                    notifications={notifications}
+                    notifications={notifications && notifications.toJS()}
                     loading={fetching}
+                    isLastpage={isNotificationsLastPage}
                 />
             );
         } else if (section === 'settings') {
@@ -342,7 +344,11 @@ module.exports = {
                     'blog_result',
                 ]),
                 notifications: state.global.getIn(
-                    ['notifications', accountname],
+                    ['notifications', accountname, 'notifications'],
+                    null
+                ),
+                isNotificationsLastPage: state.global.getIn(
+                    ['notifications', accountname, 'isLastPage'],
                     null
                 ),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),

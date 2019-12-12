@@ -168,9 +168,8 @@ class MarkdownViewer extends Component {
                 } else if (type === 'threespeak') {
                     const url = `https://3speak.online/embed?v=${id}`;
                     sections.push(
-                        <div className="videoWrapper">
+                        <div className="videoWrapper" key={idx++}>
                             <iframe
-                                key={idx++}
                                 src={url}
                                 width={w}
                                 height={h}
@@ -186,9 +185,8 @@ class MarkdownViewer extends Component {
                         startTime
                     }s`;
                     sections.push(
-                        <div className="videoWrapper">
+                        <div className="videoWrapper" key={idx++}>
                             <iframe
-                                key={idx++}
                                 src={url}
                                 width={w}
                                 height={h}
@@ -202,9 +200,8 @@ class MarkdownViewer extends Component {
                 } else if (type === 'twitch') {
                     const url = `https://player.twitch.tv/${id}`;
                     sections.push(
-                        <div className="videoWrapper">
+                        <div className="videoWrapper" key={idx++}>
                             <iframe
-                                key={idx++}
                                 src={url}
                                 width={w}
                                 height={h}
@@ -216,9 +213,8 @@ class MarkdownViewer extends Component {
                 } else if (type === 'dtube') {
                     const url = `https://emb.d.tube/#!/${id}`;
                     sections.push(
-                        <div className="videoWrapper">
+                        <div className="videoWrapper" key={idx++}>
                             <iframe
-                                key={idx++}
                                 src={url}
                                 width={w}
                                 height={h}

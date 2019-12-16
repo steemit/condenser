@@ -118,7 +118,10 @@ class PostsIndex extends React.Component {
                 ? 'community' //community.get('title')
                 : category ? ' #' + category : '';
 
-            if (order == 'payout') emptyText = `No pending ${cat} posts found.`;
+            if (order == 'payout')
+                emptyText = `No pending ${
+                    cat
+                } posts found. This view only shows posts within 12 - 36 hours of payout.`;
             else if (order == 'created') emptyText = `No posts in ${cat} yet!`;
             else emptyText = `No ${order} ${cat} posts found.`;
         } else {

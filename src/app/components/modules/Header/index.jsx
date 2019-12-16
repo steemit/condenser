@@ -250,7 +250,9 @@ class Header extends React.Component {
 
         const replies_link = `/@${username}/replies`;
         const account_link = `/@${username}`;
+        const posts_link = `/@${username}/posts`;
         const comments_link = `/@${username}/comments`;
+        const payout_link = `/@${username}/payout`;
         const settings_link = `/@${username}/settings`;
         const notifs_link = `/@${username}/notifications`;
         const wallet_link = `${walletUrl}/@${username}`;
@@ -258,8 +260,10 @@ class Header extends React.Component {
         const user_menu = [
             { link: account_link, icon: 'profile', value: tt('g.profile') },
             { link: notifs_link, icon: 'clock', value: tt('g.notifications') },
-            //{ link: comments_link, icon: 'replies', value: tt('g.posts') },
+            { link: posts_link, icon: 'pencil2', value: tt('g.posts') },
+            { link: comments_link, icon: 'chatbox', value: tt('g.comments') },
             { link: replies_link, icon: 'reply', value: tt('g.replies') },
+            { link: payout_link, icon: 'steem', value: tt('g.payouts') },
             //{ link: settings_link, icon: 'cog', value: tt('g.settings') },
             {
                 link: '#',

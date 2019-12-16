@@ -270,10 +270,15 @@ class Header extends React.Component {
         const settings_link = `/@${username}/settings`;
         const notifs_link = `/@${username}/notifications`;
         const wallet_link = `${walletUrl}/@${username}`;
+        const notif_label =
+            tt('g.notifications') +
+            (unreadNotificationCount > 0
+                ? ` (${unreadNotificationCount})`
+                : '');
 
         const user_menu = [
             { link: account_link, icon: 'profile', value: tt('g.profile') },
-            { link: notifs_link, icon: 'clock', value: tt('g.notifications') },
+            { link: notifs_link, icon: 'clock', value: notif_label },
             //{ link: comments_link, icon: 'replies', value: tt('g.posts') },
             { link: replies_link, icon: 'reply', value: tt('g.replies') },
             //{ link: settings_link, icon: 'cog', value: tt('g.settings') },

@@ -279,7 +279,7 @@ class Header extends React.Component {
         const user_menu = [
             { link: account_link, icon: 'profile', value: tt('g.profile') },
             { link: notifs_link, icon: 'clock', value: notif_label },
-            //{ link: comments_link, icon: 'replies', value: tt('g.posts') },
+            { link: comments_link, icon: 'chatbox', value: tt('g.comments') },
             { link: replies_link, icon: 'reply', value: tt('g.replies') },
             //{ link: settings_link, icon: 'cog', value: tt('g.settings') },
             {

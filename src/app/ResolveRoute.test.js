@@ -11,20 +11,19 @@ describe('routeRegex', () => {
             ],
             [
                 'CategoryFilters',
-                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(?:\/([\w\d-]+))?\/?$/i,
+                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(?:\/([\w\W\d-]{2,32}))?\/?$/,
             ],
-            ['PostNoCategory', /^\/(@[\w\.\d-]+)\/([\w\d-]+)/],
-            ['Post', /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/],
+            ['PostNoCategory', /^\/(@[\w\.\d-]+)\/([\w\d-]+)$/],
+            ['Post', /^\/([\w\W\d-]{2,32})\/(@[\w\.\d-]+)\/([\w\d-]+)\/?$/],
             [
                 'PostJson',
-                /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
+                /^\/([\w\W\d-]{2,32})\/(@[\w\.\d-]+)\/([\w\d-]+)(\.json)$/,
             ],
             ['UserJson', /^\/(@[\w\.\d-]+)(\.json)$/],
-            ['UserNameJson', /^.*(?=(\.json))/],
         ];
 
         test_cases.forEach(r => {
-            expect(routeRegex[r[0]]).toEqual(r[1]);
+            expect(String(routeRegex[r[0]])).toEqual(String(r[1]));
         });
     });
 });
@@ -34,6 +33,7 @@ describe('resolveRoute', () => {
         ['/', { page: 'PostsIndex', params: ['trending'] }],
         ['/trending', { page: 'PostsIndex', params: ['trending', undefined] }],
         ['/trending/cat', { page: 'PostsIndex', params: ['trending', 'cat'] }],
+        ['/trending/Dog', { page: 'PostsIndex', params: ['trending', 'Dog'] }],
         ['/about.html', { page: 'About' }],
         ['/faq.html', { page: 'Faq' }],
         ['/login.html', { page: 'Login' }],
@@ -51,7 +51,7 @@ describe('resolveRoute', () => {
         ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
         [
             '/ceasar/@salad/circa90',
-            { page: 'Post', params: ['ceasar', '@salad', 'circa90', ''] },
+            { page: 'Post', params: ['ceasar', '@salad', 'circa90'] },
         ],
         [
             '/roles/hive-105677',

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import reactForm from 'app/utils/ReactForm';
 import { Map } from 'immutable';
+import { connect } from 'react-redux';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
@@ -932,8 +933,6 @@ function stateFromMarkdown(markdown) {
     return stateFromHtml(html);
 }
 
-import { connect } from 'react-redux';
-
 export default formId =>
     connect(
         // mapStateToProps
@@ -966,7 +965,15 @@ export default formId =>
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 tags = OrderedSet([category, ...jsonMetadata.tags]).join(' ');
             }
-
+            let isNSFWCommunity = false;
+            isNSFWCommunity = state.global.getIn([
+                'community',
+                category,
+                'is_nsfw',
+            ]);
+            if (isNSFWCommunity) {
+                tags = `${tags} nsfw`;
+            }
             const defaultPayoutType = state.app.getIn(
                 [
                     'user_preferences',
@@ -1010,7 +1017,7 @@ export default formId =>
             //  parent_author, parent_permlink,
             //  type, successCallback,
             //  successCallBack, onCancel
-            const ret = {
+            return {
                 ...ownProps,
                 type, //XX
                 jsonMetadata, //XX (if not reply)
@@ -1024,8 +1031,6 @@ export default formId =>
                 initialValues: { title, body, tags },
                 formId,
             };
-
-            return ret;
         },
 
         // mapDispatchToProps

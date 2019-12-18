@@ -7,7 +7,7 @@ describe('routeRegex', () => {
             ['UserFeed', /^\/(@[\w\.\d-]+)\/feed\/?$/],
             [
                 'UserProfile',
-                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications))?\/?$/,
+                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications|communities))?\/?$/,
             ],
             [
                 'CategoryFilters',
@@ -44,6 +44,10 @@ describe('resolveRoute', () => {
         ['/@steem/feed', { page: 'PostsIndex', params: ['home', '@steem'] }],
         ['/@gdpr/feed', { page: 'NotFound' }],
         ['/@steem', { page: 'UserProfile', params: ['@steem', undefined] }],
+        [
+            '/@steem/communities',
+            { page: 'UserProfile', params: ['@steem', 'communities'] },
+        ],
         ['/@steem/blog', { page: 'UserProfile', params: ['@steem', 'blog'] }],
         ['/@gdpr/blog', { page: 'NotFound' }],
         ['/@foo/bar34', { page: 'PostNoCategory', params: ['@foo', 'bar34'] }],

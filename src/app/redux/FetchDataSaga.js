@@ -54,7 +54,9 @@ export function* getPostHeader(action) {
 let is_initial_state = true;
 export function* fetchState(location_change_action) {
     const { pathname } = location_change_action.payload;
-    const m = pathname.match(/^\/@([a-z0-9\.-]+)(\/notifications)?/);
+    const m = pathname.match(
+        /^\/@([a-z0-9\.-]+)(\/notifications|communities)?/
+    );
     if (m && m.length >= 2) {
         const username = m[1];
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
@@ -204,10 +206,16 @@ export function* getCommunity(action) {
  */
 export function* getSubscriptions(action) {
     if (!action.payload) throw 'no account specified';
-    const subscriptions = yield call(callBridge, 'list_all_subscriptions', {
-        account: action.payload,
-    });
-    yield put(globalActions.receiveSubscriptions(subscriptions));
+    yield put(globalActions.loadingSubscriptions(true));
+    try {
+        const subscriptions = yield call(callBridge, 'list_all_subscriptions', {
+            account: action.payload,
+        });
+        yield put(globalActions.receiveSubscriptions(subscriptions));
+    } catch (error) {
+        console.log('Error Fetching Account Subscriptions: ', error);
+    }
+    yield put(globalActions.loadingSubscriptions(false));
 }
 
 /**

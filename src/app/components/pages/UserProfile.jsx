@@ -19,6 +19,7 @@ import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
 import UserProfileHeader from 'app/components/cards/UserProfileHeader';
+import SubscriptionsList from '../cards/SubscriptionsList';
 
 const emptyPostsText = (section, account, isMyAccount) => {
     const name = '@' + account;
@@ -178,10 +179,12 @@ export default class UserProfile extends React.Component {
                 <NotificationsList
                     username={accountname}
                     notifications={notifications && notifications.toJS()}
-                    loading={fetching}
                     isLastpage={isNotificationsLastPage}
                 />
             );
+        } else if (section === 'communities') {
+            // notifications
+            tab_content = <SubscriptionsList username={accountname} />;
         } else if (section === 'settings') {
             // account display settings
             tab_content = <Settings routeParams={this.props.routeParams} />;
@@ -227,6 +230,8 @@ export default class UserProfile extends React.Component {
                 <div className="UserProfile__postmenu">
                     {_tablink2('posts', tt('g.posts'))}
                     {_tablink2('comments', tt('g.comments'))}
+                    {_tablink2('communities', tt('g.communities'))}
+                    {_tablink2('notifications', tt('g.notifications'))}
                     {_tablink2('payout', tt('g.payouts'))}
                 </div>
             );
@@ -248,6 +253,7 @@ export default class UserProfile extends React.Component {
                         <li>{_tablink('blog', tt('g.blog'))}</li>
                         <li>{_tablink('posts', tt('g.posts'))}</li>
                         <li>{_tablink('replies', tt('g.replies'))}</li>
+                        <li>{_tablink('communites', tt('g.communities'))}</li>
                         <li>
                             {_tablink('notifications', tt('g.notifications'))}
                         </li>

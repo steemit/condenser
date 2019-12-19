@@ -253,7 +253,9 @@ export default class UserProfile extends React.Component {
                         <li>{_tablink('blog', tt('g.blog'))}</li>
                         <li>{_tablink('posts', tt('g.posts'))}</li>
                         <li>{_tablink('replies', tt('g.replies'))}</li>
-                        <li>{_tablink('subscriptions', 'subscriptions')}</li>
+                        <li>
+                            {_tablink('subscriptions', tt('g.subscriptions'))}
+                        </li>
                         <li>
                             {_tablink('notifications', tt('g.notifications'))}
                         </li>

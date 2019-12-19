@@ -30,16 +30,14 @@ class SubscriptionsList extends React.Component {
     }
 
     componentWillMount() {
-        const { username, subscriptions, getAccountSubscriptions } = this.props;
-        console.log('!!!%%%%!!!');
+        const { username, getAccountSubscriptions } = this.props;
         if (username) {
-            console.log('HHYYUUINNININ');
             getAccountSubscriptions(username);
         }
     }
 
     componentDidUpdate(prevProps) {
-        const { username, getAccountSubscriptions, isLastPage } = this.props;
+        const { username, getAccountSubscriptions } = this.props;
         if (prevProps.username !== username) {
             getAccountSubscriptions(username);
         }
@@ -59,17 +57,7 @@ class SubscriptionsList extends React.Component {
     };
 
     render() {
-        const {
-            subscriptions,
-            unreadSubscriptions,
-            loading,
-            isOwnAccount,
-            accountName,
-            isLastpage,
-            subscriptionActionPending,
-            lastRead,
-        } = this.props;
-        debugger;
+        const { subscriptions, loading } = this.props;
 
         const renderItem = item => {
             return <div>hello</div>;
@@ -77,18 +65,13 @@ class SubscriptionsList extends React.Component {
 
         return (
             <div className="">
-                {subscriptionActionPending && (
-                    <center>
-                        <LoadingIndicator type="circle" />
-                    </center>
-                )}
                 {subscriptions &&
                     subscriptions.length > 0 && (
                         <div style={{ lineHeight: '1rem' }}>
                             {subscriptions.map(item => renderItem(item))}
                         </div>
                     )}
-                {!subscriptions &&
+                {subscriptions.length === 0 &&
                     !loading && (
                         <Callout>
                             Welcome! You don't have any subscriptions yet.
@@ -103,7 +86,6 @@ class SubscriptionsList extends React.Component {
                         />
                     </center>
                 )}
-                <h1>hi</h1>
             </div>
         );
     }
@@ -113,13 +95,10 @@ export default connect(
     (state, props) => {
         const isOwnAccount =
             state.user.getIn(['current', 'username'], '') == props.username;
-        const subscriptions = state.global.get('subscriptions');
         const loading = state.global.getIn(['subscriptions', 'loading']);
-        console.log(state.global.toJS());
         return {
             ...props,
             isOwnAccount,
-            subscriptions,
             loading,
         };
     },

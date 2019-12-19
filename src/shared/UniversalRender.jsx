@@ -281,11 +281,13 @@ export async function serverRender(
             }
         }
         // Are we loading an un-category-aliased post?
+
+        console.log('URL!', url);
+        console.log('XXX', !url.match(routeRegex.UserProfile));
         if (
             !url.match(routeRegex.UserProfile) &&
             url.match(routeRegex.PostNoCategory)
         ) {
-            console.log('URL!', url);
             console.log(routeRegex.UserProfile);
             let header;
             if (process.env.OFFLINE_SSR_TEST) {

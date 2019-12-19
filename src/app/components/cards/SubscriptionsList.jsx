@@ -32,7 +32,7 @@ class SubscriptionsList extends React.Component {
     componentWillMount() {
         const { username, subscriptions, getAccountSubscriptions } = this.props;
         console.log('!!!%%%%!!!');
-        if (username && subscriptions) {
+        if (username) {
             console.log('HHYYUUINNININ');
             getAccountSubscriptions(username);
         }
@@ -69,6 +69,7 @@ class SubscriptionsList extends React.Component {
             subscriptionActionPending,
             lastRead,
         } = this.props;
+        debugger;
 
         const renderItem = item => {
             return <div>hello</div>;

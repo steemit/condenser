@@ -269,7 +269,7 @@ class Header extends React.Component {
         const comments_link = `/@${username}/comments`;
         const settings_link = `/@${username}/settings`;
         const notifs_link = `/@${username}/notifications`;
-        const communities_link = `/@${username}/communities`;
+        const communities_link = `/@${username}/subscriptions`;
         const wallet_link = `${walletUrl}/@${username}`;
         const notif_label =
             tt('g.notifications') +

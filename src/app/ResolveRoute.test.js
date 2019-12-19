@@ -7,7 +7,7 @@ describe('routeRegex', () => {
             ['UserFeed', /^\/(@[\w\.\d-]+)\/feed\/?$/],
             [
                 'UserProfile',
-                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications|communities))?\/?$/,
+                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications|subscriptions))?\/?$/,
             ],
             [
                 'CategoryFilters',
@@ -45,8 +45,8 @@ describe('resolveRoute', () => {
         ['/@gdpr/feed', { page: 'NotFound' }],
         ['/@steem', { page: 'UserProfile', params: ['@steem', undefined] }],
         [
-            '/@steem/communities',
-            { page: 'UserProfile', params: ['@steem', 'communities'] },
+            '/@steem/subscriptions',
+            { page: 'UserProfile', params: ['@steem', 'subscriptions'] },
         ],
         ['/@steem/blog', { page: 'UserProfile', params: ['@steem', 'blog'] }],
         ['/@gdpr/blog', { page: 'NotFound' }],

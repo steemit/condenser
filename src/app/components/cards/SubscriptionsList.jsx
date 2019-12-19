@@ -11,7 +11,6 @@ import Callout from 'app/components/elements/Callout';
 class SubscriptionsList extends React.Component {
     static propTypes = {
         username: PropTypes.string.isRequired,
-        isOwnAccount: PropTypes.bool.isRequired,
         subscriptions: PropTypes.arrayOf(
             PropTypes.shape({
                 name: PropTypes.string,
@@ -42,19 +41,6 @@ class SubscriptionsList extends React.Component {
             getAccountSubscriptions(username);
         }
     }
-
-    onClickLoadMore = e => {
-        e.preventDefault();
-        const { username, subscriptions, getAccountSubscriptions } = this.props;
-        const lastId = subscriptions.slice(-1)[0].id;
-        getAccountSubscriptions(username, lastId);
-    };
-
-    onClickMarkAsRead = e => {
-        e.preventDefault();
-        const { username, markAsRead } = this.props;
-        markAsRead(username, new Date().toISOString().slice(0, 19));
-    };
 
     render() {
         const { subscriptions, loading } = this.props;

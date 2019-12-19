@@ -141,12 +141,10 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case LOADING_SUBSCRIPTIONS: {
-            debugger;
             return state.setIn(['subscriptions', 'loading'], payload);
         }
 
         case RECEIVE_SUBSCRIPTIONS: {
-            debugger;
             return state.setIn(
                 ['subscriptions', payload.username],
                 fromJS(payload.subscriptions)

@@ -204,13 +204,11 @@ export function* getCommunity(action) {
  */
 export function* getSubscriptions(action) {
     if (!action.payload) throw 'no account specified';
-    console.log('GETTING THINGS');
     yield put(globalActions.loadingSubscriptions(true));
     try {
         const subscriptions = yield call(callBridge, 'list_all_subscriptions', {
             account: action.payload,
         });
-        debugger;
         yield put(
             globalActions.receiveSubscriptions({
                 subscriptions,

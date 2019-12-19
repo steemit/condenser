@@ -182,8 +182,8 @@ export default class UserProfile extends React.Component {
                     isLastpage={isNotificationsLastPage}
                 />
             );
-        } else if (section === 'communities') {
-            // notifications
+        } else if (section === 'subscriptions') {
+            debugger;
             tab_content = <SubscriptionsList username={accountname} />;
         } else if (section === 'settings') {
             // account display settings
@@ -253,7 +253,7 @@ export default class UserProfile extends React.Component {
                         <li>{_tablink('blog', tt('g.blog'))}</li>
                         <li>{_tablink('posts', tt('g.posts'))}</li>
                         <li>{_tablink('replies', tt('g.replies'))}</li>
-                        <li>{_tablink('communites', tt('g.communities'))}</li>
+                        <li>{_tablink('subscriptions', 'subscriptions')}</li>
                         <li>
                             {_tablink('notifications', tt('g.notifications'))}
                         </li>
@@ -336,7 +336,7 @@ module.exports = {
                 username,
                 loading: state.app.get('loading'),
                 status: state.global.get('status'),
-                accountname: accountname,
+                accountname,
                 followers: state.global.getIn([
                     'follow',
                     'getFollowersAsync',
@@ -363,6 +363,7 @@ module.exports = {
                 section,
                 order,
                 category: '@' + accountname,
+                subscriptions: state.global.get('subscriptions'),
             };
         },
         dispatch => ({

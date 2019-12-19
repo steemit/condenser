@@ -54,9 +54,7 @@ export function* getPostHeader(action) {
 let is_initial_state = true;
 export function* fetchState(location_change_action) {
     const { pathname } = location_change_action.payload;
-    const m = pathname.match(
-        /^\/@([a-z0-9\.-]+)(\/notifications|communities)?/
-    );
+    const m = pathname.match(/^\/@([a-z0-9\.-]+)(\/notifications)?/);
     if (m && m.length >= 2) {
         const username = m[1];
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');

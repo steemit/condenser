@@ -12,11 +12,8 @@ import NotificationsList from 'app/components/cards/NotificationsList';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
-import { List } from 'immutable';
 import Callout from 'app/components/elements/Callout';
 import userIllegalContent from 'app/utils/userIllegalContent';
-import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
-import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
 import UserProfileHeader from 'app/components/cards/UserProfileHeader';
 import SubscriptionsList from '../cards/SubscriptionsList';
@@ -138,6 +135,7 @@ export default class UserProfile extends React.Component {
                 posts,
                 profile,
                 notifications,
+                subscriptions,
                 isNotificationsLastPage,
             },
         } = this;
@@ -183,8 +181,12 @@ export default class UserProfile extends React.Component {
                 />
             );
         } else if (section === 'subscriptions') {
-            debugger;
-            tab_content = <SubscriptionsList username={accountname} />;
+            tab_content = (
+                <SubscriptionsList
+                    username={accountname}
+                    subscriptions={subscriptions}
+                />
+            );
         } else if (section === 'settings') {
             // account display settings
             tab_content = <Settings routeParams={this.props.routeParams} />;
@@ -363,7 +365,12 @@ module.exports = {
                 section,
                 order,
                 category: '@' + accountname,
-                subscriptions: state.global.get('subscriptions'),
+                subscriptions: state.global.getIn([
+                    'subscriptions',
+                    accountname,
+                ])
+                    ? state.global.getIn(['subscriptions', accountname]).toJS()
+                    : [],
             };
         },
         dispatch => ({

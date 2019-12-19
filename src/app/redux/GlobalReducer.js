@@ -146,7 +146,11 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_SUBSCRIPTIONS: {
-            return state.set('subscriptions', fromJS(payload));
+            debugger;
+            return state.setIn(
+                ['subscriptions', payload.username],
+                fromJS(payload.subscriptions)
+            );
         }
         case RECEIVE_REWARDS: {
             return state.set('rewards', fromJS(payload.rewards));

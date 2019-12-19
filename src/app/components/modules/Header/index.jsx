@@ -269,7 +269,6 @@ class Header extends React.Component {
         const comments_link = `/@${username}/comments`;
         const settings_link = `/@${username}/settings`;
         const notifs_link = `/@${username}/notifications`;
-        const communities_link = `/@${username}/subscriptions`;
         const wallet_link = `${walletUrl}/@${username}`;
         const notif_label =
             tt('g.notifications') +
@@ -282,8 +281,8 @@ class Header extends React.Component {
             { link: notifs_link, icon: 'clock', value: notif_label },
             {
                 link: comments_link,
-                icon: 'communities',
-                value: tt('g.communities'),
+                icon: 'chatbox',
+                value: tt('g.comments'),
             },
             { link: replies_link, icon: 'reply', value: tt('g.replies') },
             { link: settings_link, icon: 'cog', value: tt('g.settings') },

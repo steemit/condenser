@@ -232,8 +232,6 @@ export default class UserProfile extends React.Component {
                 <div className="UserProfile__postmenu">
                     {_tablink2('posts', tt('g.posts'))}
                     {_tablink2('comments', tt('g.comments'))}
-                    {_tablink2('communities', tt('g.communities'))}
-                    {_tablink2('notifications', tt('g.notifications'))}
                     {_tablink2('payout', tt('g.payouts'))}
                 </div>
             );

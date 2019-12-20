@@ -16,6 +16,8 @@ import useRedirects from './redirects';
 import useGeneralApi from './api/general';
 import useUserJson from './json/user_json';
 import usePostJson from './json/post_json';
+import useUserRss from './rss/user_rss';
+import useFeedsRss from './rss/feeds_rss';
 import isBot from 'koa-isbot';
 import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
@@ -285,7 +287,8 @@ app.use(function*(next) {
 useRedirects(app);
 useUserJson(app);
 usePostJson(app);
-
+useUserRss(app);
+useFeedsRss(app);
 useGeneralApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.

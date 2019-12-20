@@ -63,6 +63,7 @@
     "intl": "1.2.5",
     "iso": "5.2.0",
     "json-loader": "0.5.7",
+    "jsonfeed-to-rss": "^1.1.1",
     "koa": "1.4.1",
     "koa-body": "1.6.0",
     "koa-compressor": "1.0.3",

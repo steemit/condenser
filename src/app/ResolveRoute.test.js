@@ -20,6 +20,11 @@ describe('routeRegex', () => {
                 /^\/([\w\W\d-]{2,32})\/(@[\w\.\d-]+)\/([\w\d-]+)(\.json)$/,
             ],
             ['UserJson', /^\/(@[\w\.\d-]+)(\.json)$/],
+            ['UserRss', /^\/(@[\w\.\d-]+)(\.rss)$/],
+            [
+                'CategoryFiltersRss',
+                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(\/([\w\W\d-]{2,32}))?(\.rss)$/,
+            ],
         ];
 
         test_cases.forEach(r => {

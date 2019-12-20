@@ -12,12 +12,18 @@ export default function useFeedsRss(app) {
         let feed = '';
         let status = '';
 
+        const matches = this.url.match(routeRegex.CategoryFiltersRss);
+        const filter =
+            matches[1].charAt(0).toUpperCase() + matches[1].substring(1);
+        const category =
+            matches[2].charAt(0).toUpperCase() + matches[2].substring(1);
+
         const onchain = yield api.getStateAsync(this.url.replace('.rss', ''));
 
         if (onchain) {
             feed = {
                 version: 'https://jsonfeed.org/version/1',
-                title: `Steemit Trending Posts`,
+                title: `Steemit ${filter} ${category} Posts`,
                 home_page_url: `https://steemit.com${this.url}`,
                 feed_url: `https://steemit.com${this.url}`,
                 icon:
@@ -32,6 +38,7 @@ export default function useFeedsRss(app) {
             };
 
             feed = PostList2Rss(feed, onchain.content);
+            // feed = JSON.stringify(onchain);
             status = 200;
         } else {
             feed = 'No account found';

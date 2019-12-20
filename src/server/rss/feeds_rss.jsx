@@ -14,9 +14,13 @@ export default function useFeedsRss(app) {
 
         const matches = this.url.match(routeRegex.CategoryFiltersRss);
         const filter =
-            matches[1].charAt(0).toUpperCase() + matches[1].substring(1);
+            typeof matches[1] !== 'undefined'
+                ? matches[1].charAt(0).toUpperCase() + matches[1].substring(1)
+                : '';
         const category =
-            matches[2].charAt(0).toUpperCase() + matches[2].substring(1);
+            typeof matches[3] !== 'undefined'
+                ? matches[3].charAt(0).toUpperCase() + matches[3].substring(1)
+                : '';
 
         const onchain = yield api.getStateAsync(this.url.replace('.rss', ''));
 

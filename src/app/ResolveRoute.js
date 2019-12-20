@@ -27,7 +27,7 @@ export const routeRegex = {
     PostJson: reg('<tag>/<account>/<permlink>(\\.json)'),
     UserJson: reg('<account>(\\.json)'),
     UserRss: reg('<account>(\\.rss)'),
-    CategoryFiltersRss: reg('<sort>/<tag>?(\\.rss)'),
+    CategoryFiltersRss: reg('<sort>(/<tag>)?(\\.rss)'),
     Search: reg('search'),
 };
 

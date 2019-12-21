@@ -37,17 +37,38 @@ export default function postList2Rss(baseFeed, postList) {
             </Provider>
         );
 
+        const rssHtmlBody = renderToString(bodyHtml)
+            // No data attributes
+            .replace(/ data-.*?=".*?"/gm, '')
+
+            // No iframes
+            .replace(/<iframe.*?src="(.*?)".*<\/iframe>/gm, '$1')
+
+            // Convert videoWrapper into img
+            .replace(
+                /<div class="videoWrapper.*?style="background-image:url\((.*?)\);"><div.*?><\/div><\/div>/gm,
+                '<img src="$1"/>'
+            )
+
+            // Absolute URLs
+            .replace(
+                /<a href="(\/.*?)"/gm,
+                `<a href="https://${$STM_Config.site_domain}$1"`
+            );
+
         const item = {
             title: post.title,
             date_published: moment.utc(post.created).toISOString(),
             content_text: post.body.replace(/(<([^>]+)>)/gi, ''),
-            content_html: renderToString(bodyHtml),
-            url: `https://steemit.com/@${userPermlink}`,
-            id: `https://steemit.com/${post.category}/@${userPermlink}`,
+            content_html: rssHtmlBody,
+            url: `https://${$STM_Config.site_domain}/@${userPermlink}`,
+            id: `https://${$STM_Config.site_domain}/${post.category}/@${
+                userPermlink
+            }`,
             image: image ? image[0] : null,
             author: {
                 name: post.author,
-                url: `https://steemit.com/@${post.author}`,
+                url: `https://${$STM_Config.site_domain}/@${post.author}`,
             },
         };
 

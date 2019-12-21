@@ -5,7 +5,7 @@ import { makeCanonicalLink } from 'app/utils/CanonicalLinker.js';
 const site_desc =
     'Communities without borders. A social network owned and operated by its users, powered by Steem.';
 
-function addSiteMeta(metas) {
+function addSiteMeta(metas, pathname, enableRss = false) {
     metas.push({ title: 'Steemit' });
     metas.push({ name: 'description', content: site_desc });
     metas.push({ property: 'og:type', content: 'website' });
@@ -25,6 +25,11 @@ function addSiteMeta(metas) {
         name: 'twitter:image',
         content: 'https://steemit.com/images/steemit.png',
     });
+    if (enableRss === true) {
+        metas.push({
+            rss: `${pathname}.rss`,
+        });
+    }
 }
 
 function addPostMeta(metas, content, profile) {
@@ -74,6 +79,9 @@ function addPostMeta(metas, content, profile) {
         name: 'twitter:image',
         content: image || 'https://steemit.com/images/steemit-twshare-2.png',
     });
+    metas.push({
+        rss: `@${content.author}.rss`,
+    });
 }
 
 function addAccountMeta(metas, accountname, profile) {
@@ -99,6 +107,9 @@ function addAccountMeta(metas, accountname, profile) {
     metas.push({ name: 'twitter:title', content: title });
     metas.push({ name: 'twitter:description', content: desc });
     metas.push({ name: 'twitter:image', content: profile_image });
+    metas.push({
+        rss: `${accountname}.rss`,
+    });
 }
 
 function readProfile(chain_data, account) {
@@ -107,9 +118,12 @@ function readProfile(chain_data, account) {
     return chain_data.profiles[account]['metadata']['profile'];
 }
 
-export default function extractMeta(chain_data, rp) {
+export default function extractMeta(chain_data, renderProps) {
+    const { params: rp, location } = renderProps;
+
     let username;
     let content;
+    let enableRss = false;
     if (rp.username && rp.slug) {
         // post
         const obj = chain_data.content[`${rp.username}/${rp.slug}`];
@@ -118,6 +132,8 @@ export default function extractMeta(chain_data, rp) {
     } else if (rp.accountname) {
         // user profile root
         username = rp.accountname;
+    } else if (Object.prototype.hasOwnProperty.call(chain_data, 'content')) {
+        enableRss = true;
     }
 
     const profile = username ? readProfile(chain_data, username) : null;
@@ -128,7 +144,7 @@ export default function extractMeta(chain_data, rp) {
     } else if (username) {
         addAccountMeta(metas, username, profile);
     } else {
-        addSiteMeta(metas);
+        addSiteMeta(metas, location.pathname, enableRss);
     }
 
     return metas;

@@ -48,13 +48,15 @@ export default function useUserRss(app) {
             feed = {
                 version: 'https://jsonfeed.org/version/1',
                 title: `${userFullName}'s blog posts`,
-                home_page_url: `https://steemit.com/@${username}`,
-                feed_url: `https://steemit.com/@${username}.rss`,
+                home_page_url: `https://${$STM_Config.site_domain}/@${
+                    username
+                }`,
+                feed_url: `https://${$STM_Config.site_domain}/@${username}.rss`,
                 description: userAbout,
                 icon: userProfileImage,
                 author: {
                     name: userFullName,
-                    url: `https://steemit.com/@${username}`,
+                    url: `https://${$STM_Config.site_domain}/@${username}`,
                     avatar: userProfileImage,
                 },
                 items: [],

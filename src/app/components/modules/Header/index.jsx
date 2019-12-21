@@ -148,6 +148,7 @@ class Header extends React.Component {
         let sort_order = '';
         let topic = '';
         let page_name = null;
+        let rssTitle = '';
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
@@ -173,6 +174,7 @@ class Header extends React.Component {
                     page_title += ' posts';
                 }
             }
+            rssTitle = `${page_title} feed`;
         } else if (route.page === 'Post') {
             if (content) {
                 const user = `${route.params[1]}`.replace('@', '');
@@ -182,6 +184,7 @@ class Header extends React.Component {
             }
             sort_order = '';
             topic = route.params[0];
+            rssTitle = `${route.params[1]}'s feed`;
         } else if (route.page == 'SubmitPost') {
             page_title = tt('header_jsx.create_a_post');
         } else if (route.page == 'Privacy') {
@@ -221,6 +224,7 @@ class Header extends React.Component {
                     username: user_title,
                 });
             }
+            rssTitle = `${route.params[0]}'s feed`;
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
@@ -234,8 +238,23 @@ class Header extends React.Component {
         if (
             process.env.BROWSER &&
             (route.page !== 'Post' && route.page !== 'PostNoCategory')
-        )
+        ) {
             document.title = page_title + ' — ' + APP_NAME;
+            let rssLink = document.querySelector('[data-type="rss"]');
+            const rssHref = `https://${
+                $STM_Config.site_domain
+            }/${route.params.join('/').replace(/\/$/, '')}.rss`;
+
+            if (rssLink) {
+                rssLink.title = rssTitle;
+                rssLink.href = rssHref;
+            } else {
+                rssLink = document.createElement('link');
+                rssLink.title = rssTitle;
+                rssLink.href = rssHref;
+                document.head.appendChild(rssLink);
+            }
+        }
 
         //const _feed = current_account_name && `/@${current_account_name}/feed`;
         //const logo_link = _feed && pathname != _feed ? _feed : '/';

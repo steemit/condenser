@@ -362,7 +362,7 @@ export async function serverRender(
             </Provider>
         );
         requestTimer.stopTimer('ssr_ms');
-        meta = extractMeta(onchain, renderProps.params);
+        meta = extractMeta(onchain, renderProps);
         status = 200;
     } catch (re) {
         console.error('Rendering error: ', re, re.stack);

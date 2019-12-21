@@ -54,6 +54,19 @@ export default function ServerHTML({
                                     content={m.content}
                                 />
                             );
+                        if (m.rss) {
+                            return (
+                                <link
+                                    rel="alternate"
+                                    data-type="rss"
+                                    type="application/rss+xml"
+                                    title={`${page_title} RSS Feed`}
+                                    href={`https://${$STM_Config.site_domain}/${
+                                        m.rss
+                                    }`}
+                                />
+                            );
+                        }
                         return null;
                     })}
                 <link rel="manifest" href="/static/manifest.json" />
@@ -210,7 +223,7 @@ export default function ServerHTML({
                 {process.env.NODE_ENV === 'production' && (
                     <script src="//cdn.catchjs.com/catch.js" />
                 )}
-                <title>{page_title}</title>
+                <title>...{page_title}</title>
             </head>
             <body>
                 {

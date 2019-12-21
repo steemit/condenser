@@ -27,16 +27,21 @@ export default function useFeedsRss(app) {
         if (onchain) {
             feed = {
                 version: 'https://jsonfeed.org/version/1',
-                title: `Steemit ${filter} ${category} Posts`,
-                home_page_url: `https://steemit.com${this.url}`,
-                feed_url: `https://steemit.com${this.url}`,
-                icon:
-                    'https://steemit.com/images/favicons/apple-touch-icon-57x57.png',
+                title: `Steemit ${filter} ${category} Blog Posts`,
+                description: `${filter} ${
+                    category
+                } blog posts powered and monetized by the Steem blockchain.`,
+                home_page_url: `https://${$STM_Config.site_domain}${this.url}`,
+                feed_url: `https://${$STM_Config.site_domain}${this.url}`,
+                icon: `https://${
+                    $STM_Config.site_domain
+                }/images/favicons/apple-touch-icon-57x57.png`,
                 author: {
                     name: 'Steemit',
-                    url: 'https://steemit.com/',
-                    avatar:
-                        'https://steemit.com/images/favicons/apple-touch-icon-57x57.png',
+                    url: `https://${$STM_Config.site_domain}/`,
+                    avatar: `https://${
+                        $STM_Config.site_domain
+                    }/images/favicons/apple-touch-icon-57x57.png`,
                 },
                 items: [],
             };

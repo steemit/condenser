@@ -26,8 +26,9 @@ function addSiteMeta(metas, pathname, enableRss = false) {
         content: 'https://steemit.com/images/steemit.png',
     });
     if (enableRss === true) {
+        // If path is / then default the RSS feed to trending content
         metas.push({
-            rss: `${pathname}.rss`,
+            rss: `${pathname === '/' ? '/trending' : pathname}.rss`,
         });
     }
 }
@@ -80,7 +81,7 @@ function addPostMeta(metas, content, profile) {
         content: image || 'https://steemit.com/images/steemit-twshare-2.png',
     });
     metas.push({
-        rss: `@${content.author}.rss`,
+        rss: `/@${content.author}.rss`,
     });
 }
 
@@ -108,7 +109,7 @@ function addAccountMeta(metas, accountname, profile) {
     metas.push({ name: 'twitter:description', content: desc });
     metas.push({ name: 'twitter:image', content: profile_image });
     metas.push({
-        rss: `${accountname}.rss`,
+        rss: `/${accountname}.rss`,
     });
 }
 

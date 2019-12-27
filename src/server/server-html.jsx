@@ -61,7 +61,7 @@ export default function ServerHTML({
                                     data-type="rss"
                                     type="application/rss+xml"
                                     title={`${page_title} RSS Feed`}
-                                    href={`https://${$STM_Config.site_domain}/${
+                                    href={`https://${$STM_Config.site_domain}${
                                         m.rss
                                     }`}
                                 />

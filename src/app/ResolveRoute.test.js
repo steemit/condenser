@@ -25,6 +25,8 @@ describe('routeRegex', () => {
                 'CategoryFiltersRss',
                 /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(\/([\w\W\d-]{2,32}))?(\.rss)$/,
             ],
+            ['UserRepliesRss', /^\/(@[\w\.\d-]+)(replies\.rss)$/],
+            ['UserCommentsRss', /^\/(@[\w\.\d-]+)(comment\.rss)$/],
         ];
 
         test_cases.forEach(r => {

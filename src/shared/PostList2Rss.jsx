@@ -8,12 +8,13 @@ import moment from 'moment';
 import _ from 'lodash';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 
+// TODO: not include posts with negative rshares
 export default function postList2Rss(baseFeed, postList) {
     const feed = { ...baseFeed };
-    const userPermlinks = Object.keys(postList);
+    const postKeys = Object.keys(postList);
 
-    for (let ui = 0; ui < userPermlinks.length; ui += 1) {
-        const userPermlink = userPermlinks[ui];
+    for (let ui = 0; ui < postKeys.length; ui += 1) {
+        const userPermlink = postKeys[ui];
         const post = postList[userPermlink];
 
         try {
@@ -61,10 +62,8 @@ export default function postList2Rss(baseFeed, postList) {
             date_published: moment.utc(post.created).toISOString(),
             content_text: post.body.replace(/(<([^>]+)>)/gi, ''),
             content_html: rssHtmlBody,
-            url: `https://${$STM_Config.site_domain}/@${userPermlink}`,
-            id: `https://${$STM_Config.site_domain}/${post.category}/@${
-                userPermlink
-            }`,
+            url: `https://${$STM_Config.site_domain}${post.url}`,
+            id: `https://${$STM_Config.site_domain}${post.url}`,
             image: image ? image[0] : null,
             author: {
                 name: post.author,

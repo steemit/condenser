@@ -28,6 +28,8 @@ export const routeRegex = {
     UserJson: reg('<account>(\\.json)'),
     UserRss: reg('<account>(\\.rss)'),
     CategoryFiltersRss: reg('<sort>(/<tag>)?(\\.rss)'),
+    UserRepliesRss: reg('<account>(/replies\\.rss)'),
+    UserCommentsRss: reg('<account>(/comments\\.rss)'),
     Search: reg('search'),
 };
 

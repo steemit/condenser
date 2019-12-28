@@ -7,7 +7,7 @@ import sanitizeConfig, { noImageText } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
 import tt from 'counterpart';
-import { generateMd as EmbeddedPlayerGenerateMd } from 'app/components/modules/EmbeddedPlayers';
+import { generateMd as EmbeddedPlayerGenerateMd } from 'app/components/elements/EmbeddedPlayers';
 
 const remarkable = new Remarkable({
     html: true, // remarkable renders first then sanitize runs...

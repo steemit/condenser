@@ -4,7 +4,7 @@ import linksRe, { any as linksAny } from 'app/utils/Links';
 import { validate_account_name } from 'app/utils/ChainValidation';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import * as Phishing from 'app/utils/Phishing';
-import { embedNode as EmbeddedPlayerEmbedNode } from 'app/components/modules/EmbeddedPlayers';
+import { embedNode as EmbeddedPlayerEmbedNode } from 'app/components/elements/EmbeddedPlayers';
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
 export const getExternalLinkWarningMessage = () =>

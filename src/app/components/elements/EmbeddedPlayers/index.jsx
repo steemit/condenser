@@ -1,34 +1,32 @@
-import React from 'react';
-
 import {
     genIframeMd as genDtubeIframeMd,
     validateIframeUrl as validateDtubeIframeUrl,
     normalizeEmbedUrl as normalizeDtubeEmbedUrl,
     embedNode as embedDtubeNode,
-} from 'app/components/modules/EmbeddedPlayers/dtube';
+} from 'app/components/elements/EmbeddedPlayers/dtube';
 
 import {
     genIframeMd as genTwitchIframeMd,
     validateIframeUrl as validateTwitchIframeUrl,
     normalizeEmbedUrl as normalizeTwitchEmbedUrl,
     embedNode as embedTwitchNode,
-} from 'app/components/modules/EmbeddedPlayers/twitch';
+} from 'app/components/elements/EmbeddedPlayers/twitch';
 
-import { validateIframeUrl as validateSoundcloudIframeUrl } from 'app/components/modules/EmbeddedPlayers/soundcloud';
+import { validateIframeUrl as validateSoundcloudIframeUrl } from 'app/components/elements/EmbeddedPlayers/soundcloud';
 
 import {
     genIframeMd as genYoutubeIframeMd,
     validateIframeUrl as validateYoutubeIframeUrl,
     normalizeEmbedUrl as normalizeYoutubeEmbedUrl,
     embedNode as embedYoutubeNode,
-} from 'app/components/modules/EmbeddedPlayers/youtube';
+} from 'app/components/elements/EmbeddedPlayers/youtube';
 
 import {
     genIframeMd as genVimeoIframeMd,
     validateIframeUrl as validateVimeoIframeUrl,
     normalizeEmbedUrl as normalizeVimeoEmbedUrl,
     embedNode as embedVimeoNode,
-} from 'app/components/modules/EmbeddedPlayers/vimeo';
+} from 'app/components/elements/EmbeddedPlayers/vimeo';
 
 const supportedProviders = [
     {
@@ -43,7 +41,7 @@ const supportedProviders = [
         validateIframeUrlFn: validateTwitchIframeUrl,
         normalizeEmbedUrlFn: normalizeTwitchEmbedUrl,
         embedNodeFn: embedTwitchNode,
-        genIframeMdFn: embedTwitchNode,
+        genIframeMdFn: genTwitchIframeMd,
     },
     {
         id: 'soundcloud',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { normalizeEmbedUrl as normalizeEmbbeddedPlayerEmbedUrl } from 'app/components/modules/EmbeddedPlayers';
+import { normalizeEmbedUrl as normalizeEmbbeddedPlayerEmbedUrl } from 'app/components/elements/EmbeddedPlayers';
 
 export default class Iframe extends React.Component {
     normalizeEmbedUrl = url => {

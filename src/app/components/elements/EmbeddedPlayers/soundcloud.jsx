@@ -1,5 +1,3 @@
-import React from 'react';
-
 const regex = {
     sanitize: /^https:\/\/w.soundcloud.com\/player\/.*?url=(.+?)&.*/i,
 };

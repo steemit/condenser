@@ -3,7 +3,7 @@ import {
     getExternalLinkWarningMessage,
 } from 'shared/HtmlReady'; // the only allowable title attributes for div and a tags
 
-import { validateIframeUrl as validateEmbbeddedPlayerIframeUrl } from 'app/components/modules/EmbeddedPlayers';
+import { validateIframeUrl as validateEmbbeddedPlayerIframeUrl } from 'app/components/elements/EmbeddedPlayers';
 
 export const noImageText = '(Image not shown due to low ratings)';
 export const allowedTags = `

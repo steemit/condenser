@@ -374,7 +374,12 @@
         "payout_option_description":
             "What type of tokens do you want as rewards from this post?",
         "current_default": "Default",
-        "update_default_in_settings": "Update"
+        "update_default_in_settings": "Update",
+        "max_accepted_payout": "Maximum Accepted Payout",
+        "max_accepted_payout_description":
+            "SBD value of the maximum payout this post will receive.",
+        "unlimited": "No limit",
+        "custom_value": "Custom value"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":

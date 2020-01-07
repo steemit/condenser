@@ -75,6 +75,7 @@ class ReplyEditor extends React.Component {
         body: PropTypes.string, // initial value
         defaultPayoutType: PropTypes.string,
         payoutType: PropTypes.string,
+        maxAcceptedPayout: PropTypes.number,
     };
 
     static defaultProps = {
@@ -83,6 +84,7 @@ class ReplyEditor extends React.Component {
         parent_author: '',
         parent_permlink: '',
         type: 'submit_comment',
+        maxAcceptedPayout: null,
     };
 
     constructor(props) {
@@ -123,6 +125,11 @@ class ReplyEditor extends React.Component {
                 if (title) title.props.onChange(draft.title);
                 if (draft.payoutType)
                     this.props.setPayoutType(formId, draft.payoutType);
+                if (draft.maxAcceptedPayout)
+                    this.props.setMaxAcceptedPayout(
+                        formId,
+                        draft.maxAcceptedPayout
+                    );
                 if (draft.beneficiaries)
                     this.props.setBeneficiaries(formId, draft.beneficiaries);
                 raw = draft.body;
@@ -197,10 +204,16 @@ class ReplyEditor extends React.Component {
                 (ns.tags && ts.tags.value !== ns.tags.value) ||
                 (ns.title && ts.title.value !== ns.title.value) ||
                 np.payoutType !== tp.payoutType ||
-                np.beneficiaries !== tp.beneficiaries
+                np.beneficiaries !== tp.beneficiaries ||
+                np.maxAcceptedPayout !== tp.maxAcceptedPayout
             ) {
                 // also prevents saving after parent deletes this information
-                const { formId, payoutType, beneficiaries } = np;
+                const {
+                    formId,
+                    payoutType,
+                    beneficiaries,
+                    maxAcceptedPayout,
+                } = np;
                 const { tags, title, body } = ns;
                 const data = {
                     formId,
@@ -209,6 +222,7 @@ class ReplyEditor extends React.Component {
                     body: body.value,
                     payoutType,
                     beneficiaries,
+                    maxAcceptedPayout,
                 };
 
                 clearTimeout(saveEditorTimeout);
@@ -284,6 +298,7 @@ class ReplyEditor extends React.Component {
             this.setState({ progress: {} });
             this.props.setPayoutType(formId, defaultPayoutType);
             this.props.setBeneficiaries(formId, []);
+            this.props.setMaxAcceptedPayout(formId, null);
             if (onCancel) onCancel(e);
         }
     };
@@ -319,7 +334,18 @@ class ReplyEditor extends React.Component {
 
     showAdvancedSettings = e => {
         e.preventDefault();
+
         this.props.setPayoutType(this.props.formId, this.props.payoutType);
+
+        if (this.props.payoutType === '0%') {
+            this.props.setMaxAcceptedPayout(this.props.formId, 0);
+        } else {
+            this.props.setMaxAcceptedPayout(
+                this.props.formId,
+                this.props.maxAcceptedPayout
+            );
+        }
+
         this.props.showAdvancedSettings(this.props.formId);
     };
 
@@ -475,6 +501,7 @@ class ReplyEditor extends React.Component {
             defaultPayoutType,
             payoutType,
             beneficiaries,
+            maxAcceptedPayout,
         } = this.props;
         const {
             submitting,
@@ -498,6 +525,7 @@ class ReplyEditor extends React.Component {
             this.setState({ loading: false });
             this.props.setPayoutType(formId, defaultPayoutType);
             this.props.setBeneficiaries(formId, []);
+            this.props.setMaxAcceptedPayout(formId, null);
             if (successCallback) successCallback(args);
         };
         const isHtml = rte || isHtmlTest(body.value);
@@ -514,6 +542,7 @@ class ReplyEditor extends React.Component {
             jsonMetadata,
             payoutType,
             beneficiaries,
+            maxAcceptedPayout,
             successCallback: successCallbackWrapper,
             errorCallback,
         };
@@ -744,20 +773,36 @@ class ReplyEditor extends React.Component {
                                 !isEdit && (
                                     <div className="ReplyEditor__options">
                                         <div>
+                                            {this.props.maxAcceptedPayout !==
+                                                null &&
+                                                this.props.maxAcceptedPayout !==
+                                                    0 && (
+                                                    <div>
+                                                        {tt(
+                                                            'post_advanced_settings_jsx.max_accepted_payout'
+                                                        )}
+                                                        {': '}
+                                                        {
+                                                            this.props
+                                                                .maxAcceptedPayout
+                                                        }{' '}
+                                                        SBD
+                                                    </div>
+                                                )}
                                             <div>
                                                 {tt('g.rewards')}
                                                 {': '}
-                                                {this.props.payoutType ==
+                                                {this.props.payoutType ===
                                                     '0%' &&
                                                     tt(
                                                         'reply_editor.decline_payout'
                                                     )}
-                                                {this.props.payoutType ==
+                                                {this.props.payoutType ===
                                                     '50%' &&
                                                     tt(
                                                         'reply_editor.default_50_50'
                                                     )}
-                                                {this.props.payoutType ==
+                                                {this.props.payoutType ===
                                                     '100%' &&
                                                     tt(
                                                         'reply_editor.power_up_100'
@@ -987,6 +1032,12 @@ export default formId =>
                 formId,
                 'payoutType',
             ]);
+            const maxAcceptedPayout = state.user.getIn([
+                'current',
+                'post',
+                formId,
+                'maxAcceptedPayout',
+            ]);
             if (!payoutType) {
                 payoutType = defaultPayoutType;
             }
@@ -1028,6 +1079,7 @@ export default formId =>
                 defaultPayoutType,
                 payoutType,
                 beneficiaries,
+                maxAcceptedPayout,
                 initialValues: { title, body, tags },
                 formId,
             };
@@ -1044,6 +1096,13 @@ export default formId =>
                     userActions.set({
                         key: ['current', 'post', formId, 'payoutType'],
                         value: payoutType,
+                    })
+                ),
+            setMaxAcceptedPayout: (formId, maxAcceptedPayout) =>
+                dispatch(
+                    userActions.set({
+                        key: ['current', 'post', formId, 'maxAcceptedPayout'],
+                        value: maxAcceptedPayout,
                     })
                 ),
             setBeneficiaries: (formId, beneficiaries) =>
@@ -1066,6 +1125,7 @@ export default formId =>
                 type,
                 originalPost,
                 payoutType = '50%',
+                maxAcceptedPayout = null,
                 beneficiaries = [],
                 username,
                 jsonMetadata,
@@ -1170,26 +1230,28 @@ export default formId =>
                 startLoadingIndicator();
 
                 const originalBody = isEdit ? originalPost.body : null;
-                const __config = { originalBody };
+                const __config = {
+                    originalBody,
+                    comment_options: {},
+                };
                 // Avoid changing payout option during edits #735
                 if (!isEdit) {
                     switch (payoutType) {
                         case '0%': // decline payout
-                            __config.comment_options = {
-                                max_accepted_payout: '0.000 SBD',
-                            };
+                            __config.comment_options.max_accepted_payout =
+                                '0.000 SBD';
                             break;
                         case '100%': // 100% steem power payout
-                            __config.comment_options = {
-                                percent_steem_dollars: 0, // 10000 === 100% (of 50%)
-                            };
+                            __config.comment_options.percent_steem_dollars = 0; // 10000 === 100% (of 50%)
                             break;
                         default: // 50% steem power, 50% sd+steem
                     }
+                    if (maxAcceptedPayout !== null && maxAcceptedPayout !== 0) {
+                        __config.comment_options.max_accepted_payout = `${maxAcceptedPayout.toFixed(
+                            3
+                        )} SBD`;
+                    }
                     if (beneficiaries && beneficiaries.length > 0) {
-                        if (!__config.comment_options) {
-                            __config.comment_options = {};
-                        }
                         __config.comment_options.extensions = [
                             [
                                 0,

@@ -346,7 +346,12 @@
         "payout_option_description":
             "Quel type de jeton voulez-vous comme récompense pour cet article?",
         "current_default": "Défaut",
-        "update_default_in_settings": "Mettre à jour"
+        "update_default_in_settings": "Mettre à jour",
+        "max_accepted_payout": "Gains maximum acceptés",
+        "max_accepted_payout_description":
+            "Valeur max (en SBD) de gains que ce post pourra recevoir.",
+        "unlimited": "Sans limite",
+        "custom_value": "Valeur specifiée"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":

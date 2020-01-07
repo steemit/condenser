@@ -21,6 +21,7 @@ import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
 import GptAd from 'app/components/elements/GptAd';
+import ReactMutationObserver from '../../utils/ReactMutationObserver';
 
 class Header extends React.Component {
     static propTypes = {
@@ -292,101 +293,113 @@ class Header extends React.Component {
                 : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
         showAd = true;
+        const headerMutated = (mutation, discconnectObserver) => {
+            if (mutation.target.id.indexOf('google_ads_iframe_') !== -1) {
+                this.gptAdRendered();
+                if (typeof discconnectObserver === 'function') {
+                    discconnectObserver();
+                }
+            }
+        };
         return (
-            <Headroom
-                onUnpin={e => this.headroomOnUnpin(e)}
-                onUnfix={e => this.headroomOnUnfix(e)}
-            >
-                <header className="Header">
-                    {showAnnouncement && (
-                        <Announcement onClose={e => this.hideAnnouncement(e)} />
-                    )}
-                    {/* If announcement is shown, ad will not render unless it's in a parent div! */}
-                    <div style={showAd ? {} : { display: 'none' }}>
-                        <GptAd
-                            tags={tags}
-                            type="Freestar"
-                            id="bsa-zone_1566493796250-1_123456"
-                        />
-                    </div>
-
-                    <nav className="row Header__nav">
-                        <div className="small-5 large-4 columns Header__logotype">
-                            {/*LOGO*/}
-                            <Link to={logo_link}>
-                                <SteemLogo />
-                            </Link>
-                        </div>
-
-                        <div className="large-4 columns show-for-large large-centered Header__sort">
-                            {/*SORT*/}
-                            <SortOrder
-                                sortOrder={order}
-                                topic={category === 'feed' ? '' : category}
-                                horizontal
-                                pathname={pathname}
+            <ReactMutationObserver onChildListChanged={headerMutated}>
+                <Headroom
+                    onUnpin={e => this.headroomOnUnpin(e)}
+                    onUnfix={e => this.headroomOnUnfix(e)}
+                >
+                    <header className="Header">
+                        {showAnnouncement && (
+                            <Announcement
+                                onClose={e => this.hideAnnouncement(e)}
+                            />
+                        )}
+                        {/* If announcement is shown, ad will not render unless it's in a parent div! */}
+                        <div style={showAd ? {} : { display: 'none' }}>
+                            <GptAd
+                                tags={tags}
+                                type="Freestar"
+                                id="bsa-zone_1566493796250-1_123456"
                             />
                         </div>
-                        <div className="small-7 large-4 columns Header__buttons">
-                            {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
-                            {!loggedIn && (
-                                <span className="Header__user-signup show-for-medium">
-                                    <a
-                                        className="Header__login-link"
-                                        href="/login.html"
-                                        onClick={showLogin}
-                                    >
-                                        {tt('g.login')}
-                                    </a>
-                                    <a
-                                        className="Header__signup-link"
-                                        href={SIGNUP_URL}
-                                    >
-                                        {tt('g.sign_up')}
+
+                        <nav className="row Header__nav">
+                            <div className="small-5 large-4 columns Header__logotype">
+                                {/*LOGO*/}
+                                <Link to={logo_link}>
+                                    <SteemLogo />
+                                </Link>
+                            </div>
+
+                            <div className="large-4 columns show-for-large large-centered Header__sort">
+                                {/*SORT*/}
+                                <SortOrder
+                                    sortOrder={order}
+                                    topic={category === 'feed' ? '' : category}
+                                    horizontal
+                                    pathname={pathname}
+                                />
+                            </div>
+                            <div className="small-7 large-4 columns Header__buttons">
+                                {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
+                                {!loggedIn && (
+                                    <span className="Header__user-signup show-for-medium">
+                                        <a
+                                            className="Header__login-link"
+                                            href="/login.html"
+                                            onClick={showLogin}
+                                        >
+                                            {tt('g.login')}
+                                        </a>
+                                        <a
+                                            className="Header__signup-link"
+                                            href={SIGNUP_URL}
+                                        >
+                                            {tt('g.sign_up')}
+                                        </a>
+                                    </span>
+                                )}
+
+                                {/*CUSTOM SEARCH*/}
+                                <span className="Header__search--desktop">
+                                    <SearchInput />
+                                </span>
+                                <span className="Header__search">
+                                    <a href="/static/search.html">
+                                        <IconButton icon="magnifyingGlass" />
                                     </a>
                                 </span>
-                            )}
 
-                            {/*CUSTOM SEARCH*/}
-                            <span className="Header__search--desktop">
-                                <SearchInput />
-                            </span>
-                            <span className="Header__search">
-                                <a href="/static/search.html">
-                                    <IconButton icon="magnifyingGlass" />
-                                </a>
-                            </span>
-
-                            {/*SUBMIT STORY*/}
-                            {submit_story}
-                            {/*USER AVATAR */}
-                            {loggedIn && (
-                                <DropdownMenu
-                                    className={'Header__usermenu'}
-                                    items={user_menu}
-                                    title={username}
-                                    el="span"
-                                    selected={tt('g.rewards')}
-                                    position="left"
+                                {/*SUBMIT STORY*/}
+                                {submit_story}
+                                {/*USER AVATAR */}
+                                {loggedIn && (
+                                    <DropdownMenu
+                                        className={'Header__usermenu'}
+                                        items={user_menu}
+                                        title={username}
+                                        el="span"
+                                        selected={tt('g.rewards')}
+                                        position="left"
+                                    >
+                                        <li className={'Header__userpic '}>
+                                            <span title={username}>
+                                                <Userpic account={username} />
+                                            </span>
+                                        </li>
+                                    </DropdownMenu>
+                                )}
+                                {/*HAMBURGER*/}
+                                <span
+                                    onClick={showSidePanel}
+                                    className="toggle-menu Header__hamburger"
                                 >
-                                    <li className={'Header__userpic '}>
-                                        <span title={username}>
-                                            <Userpic account={username} />
-                                        </span>
-                                    </li>
-                                </DropdownMenu>
-                            )}
-                            {/*HAMBURGER*/}
-                            <span
-                                onClick={showSidePanel}
-                                className="toggle-menu Header__hamburger"
-                            >
-                                <span className="hamburger" />
-                            </span>
-                        </div>
-                    </nav>
-                </header>
-            </Headroom>
+                                    <span className="hamburger" />
+                                </span>
+                            </div>
+                        </nav>
+                    </header>
+                </Headroom>
+            </ReactMutationObserver>
         );
     }
 }

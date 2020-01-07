@@ -343,6 +343,8 @@ export default `
 /dsj/@dsj/mv8793z1
 /community/@dsj/yqu2sh7d
 /nature/@nikapelex/ap-the-best-videos
+/ielts/@davidbushey/buy-original-ielts-certificates-without-exam
+/beauty/@benziman/ill-5-year-old-marries-best-friend-before-undergoing-heart-surgery
 `
     .trim()
     .split('\n');

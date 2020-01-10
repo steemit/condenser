@@ -33,7 +33,7 @@ const noFriendsText = (
 
 const noCommunitiesText = (
     <div>
-        You haven't joined any communities yet!<br />
+        You haven't joined any active communities yet!<br />
         <br />
         <span style={{ fontSize: '1.1rem' }}>
             <Link to="/communities">Explore Communities</Link>

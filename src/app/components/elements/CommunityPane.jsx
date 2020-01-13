@@ -38,9 +38,14 @@ class CommunityPane extends Component {
                 const title = row.get(2);
                 const sep = title ? '/ ' : '';
                 const role = row.get(1);
-
+                if (role === 'owner') {
+                    return null;
+                }
                 return (
-                    <div key={idx} style={{ fontSize: '80%' }}>
+                    <div
+                        key={`${account}__${role}`}
+                        style={{ fontSize: '80%' }}
+                    >
                         <Link to={`/${account}`}>{account}</Link>
                         {role && <span className="user_role"> {role} </span>}
                         {title && <span className="affiliation">{title}</span>}

@@ -65,7 +65,6 @@ class NotificationsList extends React.Component {
     onClickMarkAsRead = e => {
         e.preventDefault();
         const { username, markAsRead } = this.props;
-        debugger;
         markAsRead(username, new Date().toISOString().slice(0, 19));
     };
 
@@ -84,7 +83,6 @@ class NotificationsList extends React.Component {
         const renderItem = item => {
             const unRead =
                 Date.parse(`${lastRead}Z`) <= Date.parse(`${item.date}Z`);
-            console.log(unRead);
             return (
                 <div
                     key={item.id}
@@ -206,9 +204,7 @@ export default connect(
         },
         markAsRead: (username, timeNow) => {
             const successCallback = (user, time) => {
-                console.log(
-                    'mark as read success callback...wait 10 seconds...'
-                );
+                console.log('...waiting 10 seconds...');
                 setTimeout(() => {
                     dispatch(
                         globalActions.receiveUnreadNotifications({
@@ -220,7 +216,6 @@ export default connect(
                         })
                     );
                     dispatch(globalActions.notificationsLoading(false));
-                    console.log('mark as read 10 seconds over');
                 }, 10000);
             };
 

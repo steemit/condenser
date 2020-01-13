@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
-import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import ClaimBox from 'app/components/elements/ClaimBox';
 import Callout from 'app/components/elements/Callout';
@@ -66,6 +65,7 @@ class NotificationsList extends React.Component {
     onClickMarkAsRead = e => {
         e.preventDefault();
         const { username, markAsRead } = this.props;
+        debugger;
         markAsRead(username, new Date().toISOString().slice(0, 19));
     };
 
@@ -206,16 +206,22 @@ export default connect(
         },
         markAsRead: (username, timeNow) => {
             const successCallback = (user, time) => {
-                dispatch(
-                    globalActions.receiveUnreadNotifications({
-                        name: user,
-                        unreadNotifications: {
-                            lastread: time,
-                            unread: 0,
-                        },
-                    })
+                console.log(
+                    'mark as read success callback...wait 10 seconds...'
                 );
-                dispatch(globalActions.notificationsLoading(false));
+                setTimeout(() => {
+                    dispatch(
+                        globalActions.receiveUnreadNotifications({
+                            name: user,
+                            unreadNotifications: {
+                                lastread: time,
+                                unread: 0,
+                            },
+                        })
+                    );
+                    dispatch(globalActions.notificationsLoading(false));
+                    console.log('mark as read 10 seconds over');
+                }, 10000);
             };
 
             return dispatch(

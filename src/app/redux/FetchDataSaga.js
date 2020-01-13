@@ -305,6 +305,9 @@ export function* markNotificationsAsReadSaga(action) {
                     successCallback(username, timeNow);
                 },
                 errorCallback: () => {
+                    console.log(
+                        'There was an error marking notifications as read!'
+                    );
                     globalActions.notificationsLoading(false);
                 },
             })

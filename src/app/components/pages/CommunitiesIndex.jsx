@@ -39,23 +39,26 @@ export default class CommunitiesIndex extends React.Component {
                 <span className="user_role">{comm.context.role}</span>
             );
 
-        const row = comm => (
-            <tr key={comm.name}>
-                <th>
-                    <Link to={`/trending/${comm.name}`}>{comm.title}</Link>
-                    {role(comm)}
-                    <br />
-                    {comm.about}
-                    <small>
-                        {comm.subscribers} subscribers &bull; {comm.num_authors}{' '}
-                        posters &bull; {comm.num_pending} posts
-                    </small>
-                </th>
-                <td>
-                    <SubscribeButton community={comm.name} />
-                </td>
-            </tr>
-        );
+        const row = comm => {
+            return (
+                <tr key={comm.name}>
+                    <th>
+                        <Link to={`/trending/${comm.name}`}>{comm.title}</Link>
+                        {role(comm)}
+                        <br />
+                        {comm.about}
+                        <small>
+                            {comm.subscribers} subscribers &bull;{' '}
+                            {comm.num_authors} posters &bull; {comm.num_pending}{' '}
+                            posts
+                        </small>
+                    </th>
+                    <td>
+                        <SubscribeButton community={comm.name} />
+                    </td>
+                </tr>
+            );
+        };
 
         return (
             <PostsIndexLayout

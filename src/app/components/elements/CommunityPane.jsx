@@ -36,7 +36,6 @@ class CommunityPane extends Component {
             return members.map((row, idx) => {
                 const account = `@${row.get(0)}`;
                 const title = row.get(2);
-                const sep = title ? '/ ' : '';
                 const role = row.get(1);
                 if (role === 'owner') {
                     return null;

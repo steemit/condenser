@@ -7,7 +7,6 @@ import Headroom from 'react-headroom';
 import resolveRoute from 'app/ResolveRoute';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
-import SortOrder from 'app/components/elements/SortOrder';
 import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
 import IconButton from 'app/components/elements/IconButton';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
@@ -22,6 +21,7 @@ import Announcement from 'app/components/elements/Announcement';
 import GptAd from 'app/components/elements/GptAd';
 import { Map } from 'immutable';
 import ReactMutationObserver from '../../utils/ReactMutationObserver';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 class Header extends React.Component {
     static propTypes = {
@@ -120,16 +120,11 @@ class Header extends React.Component {
 
     render() {
         const {
-            category,
-            order,
             pathname,
-            current_account_name,
             username,
             showLogin,
             logout,
             loggedIn,
-            vertical,
-            nightmodeEnabled,
             toggleNightmode,
             showSidePanel,
             navigate,
@@ -137,6 +132,7 @@ class Header extends React.Component {
             content,
             walletUrl,
             unreadNotificationCount,
+            notificationActionPending,
         } = this.props;
 
         let { showAd, showAnnouncement } = this.state;
@@ -267,7 +263,6 @@ class Header extends React.Component {
         const replies_link = `/@${username}/replies`;
         const account_link = `/@${username}`;
         const comments_link = `/@${username}/comments`;
-        const settings_link = `/@${username}/settings`;
         const notifs_link = `/@${username}/notifications`;
         const wallet_link = `${walletUrl}/@${username}`;
         const notif_label =
@@ -393,17 +388,20 @@ class Header extends React.Component {
                                         <li className={'Header__userpic '}>
                                             <Userpic account={username} />
                                         </li>
-                                        {unreadNotificationCount > 0 && (
-                                            <div
-                                                className={
-                                                    'Header__notification'
-                                                }
-                                            >
-                                                <span>
-                                                    {unreadNotificationCount}
-                                                </span>
-                                            </div>
-                                        )}
+                                        {!notificationActionPending &&
+                                            unreadNotificationCount > 0 && (
+                                                <div
+                                                    className={
+                                                        'Header__notification'
+                                                    }
+                                                >
+                                                    <span>
+                                                        {
+                                                            unreadNotificationCount
+                                                        }
+                                                    </span>
+                                                </div>
+                                            )}
                                     </DropdownMenu>
                                 )}
                                 {/*HAMBURGER*/}
@@ -487,6 +485,10 @@ const mapStateToProps = (state, ownProps) => {
         gptEnabled,
         content,
         unreadNotificationCount,
+        notificationActionPending: state.global.getIn([
+            'notifications',
+            'loading',
+        ]),
         ...ownProps,
     };
 };

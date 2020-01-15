@@ -123,6 +123,9 @@
     > span {
         color: white;
     }
+    &--loading {
+     background: transparent; 
+    }
 }
 
 span.Header__hamburger.toggle-menu {

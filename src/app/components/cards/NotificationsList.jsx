@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
-import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import ClaimBox from 'app/components/elements/ClaimBox';
 import Callout from 'app/components/elements/Callout';
@@ -84,7 +83,6 @@ class NotificationsList extends React.Component {
         const renderItem = item => {
             const unRead =
                 Date.parse(`${lastRead}Z`) <= Date.parse(`${item.date}Z`);
-            console.log(unRead);
             return (
                 <div
                     key={item.id}
@@ -206,16 +204,18 @@ export default connect(
         },
         markAsRead: (username, timeNow) => {
             const successCallback = (user, time) => {
-                dispatch(
-                    globalActions.receiveUnreadNotifications({
-                        name: user,
-                        unreadNotifications: {
-                            lastread: time,
-                            unread: 0,
-                        },
-                    })
-                );
-                dispatch(globalActions.notificationsLoading(false));
+                setTimeout(() => {
+                    dispatch(
+                        globalActions.receiveUnreadNotifications({
+                            name: user,
+                            unreadNotifications: {
+                                lastread: time,
+                                unread: 0,
+                            },
+                        })
+                    );
+                    dispatch(globalActions.notificationsLoading(false));
+                }, 6000);
             };
 
             return dispatch(

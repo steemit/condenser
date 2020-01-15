@@ -402,18 +402,6 @@ class Header extends React.Component {
                                                     </span>
                                                 </div>
                                             )}
-                                        {unreadNotificationCount > 0 &&
-                                            notificationActionPending && (
-                                                <div
-                                                    className={
-                                                        'Header__notification Header__notification--loading'
-                                                    }
-                                                >
-                                                    <span>
-                                                        <LoadingIndicator type="circle" />
-                                                    </span>
-                                                </div>
-                                            )}
                                     </DropdownMenu>
                                 )}
                                 {/*HAMBURGER*/}

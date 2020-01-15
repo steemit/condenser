@@ -204,7 +204,6 @@ export default connect(
         },
         markAsRead: (username, timeNow) => {
             const successCallback = (user, time) => {
-                console.log('...waiting 10 seconds...');
                 setTimeout(() => {
                     dispatch(
                         globalActions.receiveUnreadNotifications({
@@ -216,7 +215,7 @@ export default connect(
                         })
                     );
                     dispatch(globalActions.notificationsLoading(false));
-                }, 10000);
+                }, 6000);
             };
 
             return dispatch(

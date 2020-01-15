@@ -354,6 +354,15 @@
         "beneficiary_percent_total_invalid":
             "Beneficiary total percentage must be less than 100"
     },
+    "post_template_selector_jsx": {
+        "templates": "Post templates",
+        "templates_description":
+            "You can create post templates locally and load them to create a new blog post. All advanced settings will also be saved and loaded.",
+        "choose_template": "-- Choose a template to load --",
+        "create_template_first": "Please create a template first",
+        "new_template_name": "Name of a new template",
+        "template_saved": "Template saved successfully"
+    },
     "category_selector_jsx": {
         "tag_your_story":
             "Tag (up to 8 tags), the first tag is your main category.",

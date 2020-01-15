@@ -4,8 +4,10 @@ import reactForm from 'app/utils/ReactForm';
 import { SUBMIT_FORM_ID } from 'shared/constants';
 import tt from 'counterpart';
 import { fromJS } from 'immutable';
-import BeneficiarySelector from 'app/components/cards/BeneficiarySelector';
-import { validateBeneficiaries } from 'app/components/cards/BeneficiarySelector';
+import BeneficiarySelector, {
+    validateBeneficiaries,
+} from 'app/components/cards/BeneficiarySelector';
+import PostTemplateSelector from 'app/components/cards/PostTemplateSelector';
 
 import * as userActions from 'app/redux/UserReducer';
 
@@ -16,7 +18,10 @@ class PostAdvancedSettings extends Component {
 
     constructor(props) {
         super();
-        this.state = { payoutType: props.initialPayoutType };
+        this.state = {
+            payoutType: props.initialPayoutType,
+            postTemplateName: null,
+        };
         this.initForm(props);
     }
 
@@ -43,6 +48,43 @@ class PostAdvancedSettings extends Component {
         this.setState({ payoutType: event.target.value });
     };
 
+    handleTemplateSelected = postTemplateName => {
+        const { username } = this.props;
+
+        this.setState({ postTemplateName });
+
+        const lsEntryName = `steemPostTemplates-${username}`;
+        let userTemplates = window.localStorage.getItem(lsEntryName);
+        if (userTemplates) {
+            userTemplates = JSON.parse(userTemplates);
+        } else {
+            userTemplates = [];
+        }
+
+        if (postTemplateName !== null) {
+            for (let ti = 0; ti < userTemplates.length; ti += 1) {
+                const template = userTemplates[ti];
+                const { beneficiaries } = this.state;
+                const newBeneficiaries = {
+                    ...beneficiaries,
+                };
+
+                if (template.name === postTemplateName) {
+                    if (template.hasOwnProperty('payoutType')) {
+                        this.setState({ payoutType: template.payoutType });
+                    }
+
+                    if (template.hasOwnProperty('beneficiaries')) {
+                        newBeneficiaries.props.value = template.beneficiaries;
+                        this.setState({ beneficiaries: newBeneficiaries });
+                    }
+
+                    break;
+                }
+            }
+        }
+    };
+
     render() {
         const {
             formId,
@@ -50,10 +92,15 @@ class PostAdvancedSettings extends Component {
             defaultPayoutType,
             initialPayoutType,
         } = this.props;
-        const { beneficiaries, payoutType } = this.state;
+        const { beneficiaries, payoutType, postTemplateName } = this.state;
         const { submitting, valid, handleSubmit } = this.state.advancedSettings;
         const disabled =
-            submitting || !(valid || payoutType !== initialPayoutType);
+            submitting ||
+            !(
+                valid ||
+                payoutType !== initialPayoutType ||
+                postTemplateName !== null
+            );
 
         const form = (
             <form
@@ -66,6 +113,10 @@ class PostAdvancedSettings extends Component {
                     if (!err) {
                         this.props.setPayoutType(formId, payoutType);
                         this.props.setBeneficiaries(formId, data.beneficiaries);
+                        this.props.setPostTemplateName(
+                            formId,
+                            postTemplateName
+                        );
                         this.props.hideAdvancedSettings();
                     }
                 })}
@@ -88,6 +139,7 @@ class PostAdvancedSettings extends Component {
                     <div className="small-12 medium-6 large-12 columns">
                         <select
                             defaultValue={payoutType}
+                            value={payoutType}
                             onChange={this.handlePayoutChange}
                         >
                             <option value="0%">
@@ -129,6 +181,10 @@ class PostAdvancedSettings extends Component {
                     </h4>
                 </div>
                 <BeneficiarySelector {...beneficiaries.props} tabIndex={1} />
+                <PostTemplateSelector
+                    username={username}
+                    onChange={this.handleTemplateSelected}
+                />
                 <div className="error">
                     {(beneficiaries.touched || beneficiaries.value) &&
                         beneficiaries.error}&nbsp;
@@ -217,6 +273,15 @@ export default connect(
                 userActions.set({
                     key: ['current', 'post', formId, 'beneficiaries'],
                     value: fromJS(beneficiaries),
+                })
+            ),
+        setPostTemplateName: (formId, postTemplateName, create = false) =>
+            dispatch(
+                userActions.set({
+                    key: ['current', 'post', formId, 'postTemplateName'],
+                    value: create
+                        ? `create_${postTemplateName}`
+                        : postTemplateName,
                 })
             ),
     })

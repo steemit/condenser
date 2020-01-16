@@ -271,6 +271,46 @@ describe('Performance', () => {
             1
         );
     });
+    it('threespeak', () => {
+        match(
+            links.threespeak,
+            'https://3speak.online/watch?v=artemislives/tvxkobat'
+        );
+        match(
+            links.threespeak,
+            'https://3speak.online/watch?v=artemislives/tvxkobat&jwsource=cl'
+        );
+        match(
+            links.threespeak,
+            'https://3speak.online/embed?v=artemislives/tvxkobat'
+        );
+    });
+    it('threespeakId', () => {
+        match(
+            links.threespeak,
+            'https://3speak.online/watch?v=artemislives/tvxkobat',
+            'artemislives/tvxkobat',
+            1
+        );
+        match(
+            links.threespeak,
+            'https://3speak.online/watch?v=artemislives/tvxkobat&jwsource=cl',
+            'artemislives/tvxkobat',
+            1
+        );
+        match(
+            links.threespeak,
+            'https://3speak.online/embed?v=artemislives/tvxkobat',
+            'artemislives/tvxkobat',
+            1
+        );
+    });
+    it('threespeakImageLink', () => {
+        match(
+            links.threespeakImageLink,
+            '<a href="https://3speak.online/watch?v=artemislives/tvxkobat" rel="noopener" title="This link will take you away from steemit.com" class="steem-keychain-checked"><img src="https://steemitimages.com/640x0/https://img.3speakcontent.online/tvxkobat/post.png"></a>'
+        );
+    });
 });
 
 const match = (...args) => compare(true, ...args);

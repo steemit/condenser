@@ -275,8 +275,8 @@ class PostFull extends React.Component {
             ? postNotifications.toJS().map(p => {
                   return (
                       <li>
-                          <span>{p.type} -</span>
-                          <span>{p.msg}</span>
+                          <p>type: {p.type}</p>
+                          <p>message: {p.msg}</p>
                       </li>
                   );
               })
@@ -568,7 +568,6 @@ class PostFull extends React.Component {
                         <ul>{postNotificationsList}</ul>
                     </Reveal>
                 )}
-                {!postNotificationsLoading && postNotifications && <h1>HI!</h1>}
             </article>
         );
     }

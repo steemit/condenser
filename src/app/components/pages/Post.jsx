@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
-import { immutableAccessor } from 'app/utils/Accessors';
 import { connect } from 'react-redux';
 
 import { parseJsonTags } from 'app/utils/StateFunctions';
@@ -11,7 +10,6 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import { Set } from 'immutable';
 import tt from 'counterpart';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
-import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
 import GptAd from 'app/components/elements/GptAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
@@ -279,6 +277,7 @@ export default connect((state, ownProps) => {
     const post = username + '/' + slug;
     const content = state.global.get('content');
     const dis = content.get(post);
+    // Get Post Discussions.
 
     return {
         post,

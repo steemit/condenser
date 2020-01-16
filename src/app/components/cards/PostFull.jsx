@@ -6,16 +6,17 @@ import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
+import { actions as fetchDataActions } from 'app/redux/FetchDataSaga';
 import Voting from 'app/components/elements/Voting';
 import Reblog from 'app/components/elements/Reblog';
+import Reveal from 'app/components/elements/Reveal';
+import CloseButton from 'app/components/elements/CloseButton';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
-import { immutableAccessor } from 'app/utils/Accessors';
 import { extractBodySummary } from 'app/utils/ExtractContent';
 import Tag from 'app/components/elements/Tag';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
-import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import MuteButton from 'app/components/elements/MuteButton';
@@ -28,8 +29,8 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { allowDelete } from 'app/utils/StateFunctions';
-import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { Role } from 'app/utils/Community';
+import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 
 function TimeAuthorCategory({ post }) {
     return (
@@ -66,6 +67,8 @@ class PostFull extends React.Component {
         /* Show extra options (component is being viewed alone) */
         postref: PropTypes.string.isRequired,
         post: PropTypes.object.isRequired,
+        postNotifications: PropTypes.object,
+        postNotificationsLoading: PropTypes.bool,
 
         // connector props
         username: PropTypes.string,
@@ -73,17 +76,28 @@ class PostFull extends React.Component {
         showPromotePost: PropTypes.func.isRequired,
         showExplorePost: PropTypes.func.isRequired,
         togglePinnedPost: PropTypes.func.isRequired,
+        fetchPostNotifications: PropTypes.func.isRequired,
     };
 
     constructor(props) {
         super(props);
-        const { post } = this.props;
 
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
         this.redditShare = this.redditShare.bind(this);
         this.linkedInShare = this.linkedInShare.bind(this);
         this.showExplorePost = this.showExplorePost.bind(this);
+
+        this.onShowPostNotifications = () => {
+            const {
+                state: { postNotificationsVisible },
+                props: { post, fetchPostNotifications },
+            } = this;
+            this.setState({
+                postNotificationsVisible: !postNotificationsVisible,
+            });
+            fetchPostNotifications(post.get('author'), post.get('permlink'));
+        };
 
         this.onShowReply = () => {
             const { state: { showReply, formId } } = this;
@@ -235,7 +249,14 @@ class PostFull extends React.Component {
 
     render() {
         const {
-            props: { username, post, community, viewer_role },
+            props: {
+                username,
+                post,
+                community,
+                viewer_role,
+                postNotifications,
+                postNotificationsLoading,
+            },
             state: {
                 PostFullReplyEditor,
                 PostFullEditEditor,
@@ -246,9 +267,21 @@ class PostFull extends React.Component {
             onShowReply,
             onShowEdit,
             onDeletePost,
+            onShowPostNotifications,
         } = this;
         if (!post) return null;
         const content = post.toJS();
+        const postNotificationsList = postNotifications
+            ? postNotifications.toJS().map(p => {
+                  return (
+                      <li>
+                          <span>{p.type} -</span>
+                          <span>{p.msg}</span>
+                      </li>
+                  );
+              })
+            : null;
+
         const { author, permlink, parent_author, parent_permlink } = content;
         const { category, title } = content;
         const link = `/${category}/@${author}/${permlink}`;
@@ -483,6 +516,11 @@ class PostFull extends React.Component {
                             {canDelete && (
                                 <a onClick={onDeletePost}>{tt('g.delete')}</a>
                             )}
+                            {
+                                <a onClick={onShowPostNotifications}>
+                                    {tt('g.activity')}
+                                </a>
+                            }{' '}
                         </span>
                         <span className="PostFull__responses">
                             <Link
@@ -513,6 +551,24 @@ class PostFull extends React.Component {
                         {showReply && renderedEditor}
                     </div>
                 </div>
+                {this.state.postNotificationsVisible && (
+                    <Reveal onHide={() => null} show>
+                        <CloseButton
+                            onClick={() =>
+                                this.setState({
+                                    postNotificationsVisible: false,
+                                })
+                            }
+                        />
+                        {postNotificationsLoading && (
+                            <center>
+                                <LoadingIndicator type="circle-strong" />
+                            </center>
+                        )}
+                        <ul>{postNotificationsList}</ul>
+                    </Reveal>
+                )}
+                {!postNotificationsLoading && postNotifications && <h1>HI!</h1>}
             </article>
         );
     }
@@ -526,6 +582,17 @@ export default connect(
         const category = post.get('category');
         const community = state.global.getIn(['community', category, 'name']);
 
+        const postNotifications = state.global.getIn([
+            'content',
+            `${post.get('author')}/${post.get('permlink')}`,
+            'post_notifications',
+        ]);
+        const postNotificationsLoading = state.global.getIn([
+            'content',
+            `${post.get('author')}/${post.get('permlink')}`,
+            'post_notifications_loading',
+        ]);
+
         return {
             post,
             postref,
@@ -535,9 +602,16 @@ export default connect(
                 ['community', community, 'context', 'role'],
                 'guest'
             ),
+            postNotifications,
+            postNotificationsLoading,
         };
     },
     dispatch => ({
+        fetchPostNotifications: (author, permlink) => {
+            dispatch(
+                fetchDataActions.getPostNotifications({ author, permlink })
+            );
+        },
         deletePost: (author, permlink) => {
             dispatch(
                 transactionActions.broadcastOperation({

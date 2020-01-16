@@ -21,7 +21,6 @@ export async function getStateAsync(url, observer, ssr = false) {
     if (observer === undefined) observer = null;
 
     const { page, tag, sort, key } = parsePath(url);
-
     console.log('GSA', url, observer, ssr);
     let state = {
         accounts: {},

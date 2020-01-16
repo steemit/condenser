@@ -10,6 +10,8 @@ const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_NOTIFICATIONS = 'global/RECEIVE_NOTIFICATIONS';
 const RECEIVE_UNREAD_NOTIFICATIONS = 'global/RECEIVE_UNREAD_NOTIFICATIONS';
 const NOTIFICATIONS_LOADING = 'global/NOTIFICATIONS_LOADING';
+const POST_NOTIFICATIONS_LOADING = 'global/POST_NOTIFICATIONS_LOADING';
+const RECEIVE_POST_NOTIFICATIONS = 'global/RECEIVE_POST_NOTIFICATIONS';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
 const RECEIVE_POST_HEADER = 'global/RECEIVE_POST_HEADER';
@@ -85,6 +87,15 @@ export default function reducer(state = defaultState, action = {}) {
             return state.mergeDeep(fromJS(payload));
         }
 
+        case RECEIVE_POST_NOTIFICATIONS: {
+            console.log('RECEIVE_POST_NOTIFICATIONS');
+            const { author, permlink, postNotifications } = payload;
+            return state.setIn(
+                ['content', `${author}/${permlink}`, 'post_notifications'],
+                List(postNotifications)
+            );
+        }
+
         case RECEIVE_NOTIFICATIONS: {
             console.log('Receive notifications', payload);
             return state.updateIn(['notifications', payload.name], Map(), n =>
@@ -107,6 +118,18 @@ export default function reducer(state = defaultState, action = {}) {
 
         case NOTIFICATIONS_LOADING: {
             return state.setIn(['notifications', 'loading'], payload);
+        }
+
+        case POST_NOTIFICATIONS_LOADING: {
+            const { author, permlink, loading } = payload;
+            return state.setIn(
+                [
+                    'content',
+                    `${author}/${permlink}`,
+                    'post_notifications_loading',
+                ],
+                loading
+            );
         }
 
         case RECEIVE_ACCOUNT: {
@@ -369,6 +392,16 @@ export const receiveUnreadNotifications = payload => ({
 
 export const notificationsLoading = payload => ({
     type: NOTIFICATIONS_LOADING,
+    payload,
+});
+
+export const receivePostNotifications = payload => ({
+    type: RECEIVE_POST_NOTIFICATIONS,
+    payload,
+});
+
+export const postNotificationsLoading = payload => ({
+    type: POST_NOTIFICATIONS_LOADING,
     payload,
 });
 

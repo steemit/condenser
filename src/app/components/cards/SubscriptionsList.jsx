@@ -11,17 +11,13 @@ import Callout from 'app/components/elements/Callout';
 class SubscriptionsList extends React.Component {
     static propTypes = {
         username: PropTypes.string.isRequired,
-        subscriptions: PropTypes.arrayOf(
-            PropTypes.shape({
-                name: PropTypes.string,
-            })
-        ),
+        subscriptions: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         loading: PropTypes.bool,
     };
 
     static defaultProps = {
         subscriptions: [],
-        loading: false,
+        loading: true,
     };
 
     constructor() {
@@ -45,8 +41,17 @@ class SubscriptionsList extends React.Component {
     render() {
         const { subscriptions, loading } = this.props;
 
-        const renderItem = item => {
-            return <div>hello</div>;
+        const renderItem = tuple => {
+            const communityHiveName = tuple[0];
+            const communityName = tuple[1];
+            const communityRole = tuple[2];
+            const communityUserTitle = tuple[3];
+            return (
+                <div key={communityHiveName}>
+                    {communityHiveName} | {communityName} | {communityRole} |{' '}
+                    {communityUserTitle}
+                </div>
+            );
         };
 
         return (
@@ -80,10 +85,15 @@ class SubscriptionsList extends React.Component {
 export default connect(
     (state, props) => {
         const isOwnAccount =
-            state.user.getIn(['current', 'username'], '') == props.username;
+            state.user.getIn(['current', 'username'], '') === props.username;
         const loading = state.global.getIn(['subscriptions', 'loading']);
+        const subscriptions = state.global.getIn([
+            'subscriptions',
+            props.username,
+        ]);
         return {
             ...props,
+            subscriptions: subscriptions ? subscriptions.toJS() : [],
             isOwnAccount,
             loading,
         };

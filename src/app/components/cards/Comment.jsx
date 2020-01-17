@@ -6,8 +6,10 @@ import ReplyEditor from 'app/components/elements/ReplyEditor';
 import MuteButton from 'app/components/elements/MuteButton';
 import FlagButton from 'app/components/elements/FlagButton';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Voting from 'app/components/elements/Voting';
+import Reveal from 'app/components/elements/Reveal';
+import CloseButton from 'app/components/elements/CloseButton';
+import PostNotificationsList from 'app/components/cards/PostNotificationsList';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import * as userActions from 'app/redux/UserReducer';
@@ -15,7 +17,6 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import tt from 'counterpart';
-import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
@@ -65,7 +66,6 @@ class CommentImpl extends React.Component {
         showNegativeComments: PropTypes.bool,
         onHide: PropTypes.func,
         viewer_role: PropTypes.string,
-
         // component props (for recursion)
         depth: PropTypes.number,
 
@@ -78,7 +78,12 @@ class CommentImpl extends React.Component {
 
     constructor() {
         super();
-        this.state = { collapsed: false, hide_body: false, highlight: false };
+        this.state = {
+            collapsed: false,
+            hide_body: false,
+            highlight: false,
+            postNotificationsVisible: false,
+        };
         this.revealBody = this.revealBody.bind(this);
         //this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment');
         this.onShowReply = () => {
@@ -113,6 +118,12 @@ class CommentImpl extends React.Component {
             deletePost(post.get('author'), post.get('permlink'));
         };
         this.toggleCollapsed = this.toggleCollapsed.bind(this);
+        this.onShowPostNotifications = () => {
+            const { state: { postNotificationsVisible } } = this;
+            this.setState({
+                postNotificationsVisible: !postNotificationsVisible,
+            });
+        };
     }
 
     componentWillMount() {
@@ -176,7 +187,29 @@ class CommentImpl extends React.Component {
         this.setState({ PostReplyEditor, PostEditEditor });
     }
     render() {
-        const { cont, post, postref, viewer_role } = this.props;
+        const {
+            username,
+            depth,
+            anchor_link,
+            showNegativeComments,
+            ignored,
+            rootComment,
+            community,
+            cont,
+            post,
+            postref,
+            viewer_role,
+        } = this.props;
+
+        const {
+            PostReplyEditor,
+            PostEditEditor,
+            showReply,
+            showEdit,
+            hide,
+            hide_body,
+            postNotificationsVisible,
+        } = this.state;
 
         // Don't server-side render the comment if it has a certain number of newlines
         if (
@@ -187,32 +220,19 @@ class CommentImpl extends React.Component {
             return <div>{tt('g.loading')}...</div>;
         }
 
-        const { onShowReply, onShowEdit, onDeletePost } = this;
-
         const {
-            username,
-            depth,
-            anchor_link,
-            showNegativeComments,
-            ignored,
-            rootComment,
-            community,
-        } = this.props;
-
-        const {
-            PostReplyEditor,
-            PostEditEditor,
-            showReply,
-            showEdit,
-            hide,
-            hide_body,
-        } = this.state;
+            onShowReply,
+            onShowEdit,
+            onDeletePost,
+            onShowPostNotifications,
+        } = this;
 
         if (!showNegativeComments && (hide || ignored)) return null;
 
         const Editor = showReply ? PostReplyEditor : PostEditEditor;
 
         const author = post.get('author');
+        const permlink = post.get('permlink');
         const comment = post.toJS();
         const gray = comment.stats.gray || ImageUserBlockList.includes(author);
 
@@ -244,13 +264,32 @@ class CommentImpl extends React.Component {
                     <Voting post={post} />
                     <span className="Comment__footer__controls">
                         {canReply && (
-                            <a onClick={onShowReply}>{tt('g.reply')}</a>
+                            <a role="button" onClick={onShowReply}>
+                                {tt('g.reply')}
+                            </a>
                         )}{' '}
                         {canMute && <MuteButton post={post} />}{' '}
-                        {canEdit && <a onClick={onShowEdit}>{tt('g.edit')}</a>}{' '}
+                        {canEdit && (
+                            <a role="button" tabIndex={0} onClick={onShowEdit}>
+                                {tt('g.edit')}
+                            </a>
+                        )}{' '}
                         {canDelete && (
-                            <a onClick={onDeletePost}>{tt('g.delete')}</a>
-                        )}
+                            <a
+                                role="button"
+                                tabIndex={0}
+                                onClick={onDeletePost}
+                            >
+                                {tt('g.delete')}
+                            </a>
+                        )}{' '}
+                        <a
+                            role="button"
+                            tabIndex={0}
+                            onClick={onShowPostNotifications}
+                        >
+                            {tt('g.activity')}
+                        </a>
                     </span>
                 </div>
             );
@@ -395,6 +434,21 @@ class CommentImpl extends React.Component {
                     {showReply && renderedEditor}
                     {replies}
                 </div>
+                {this.state.postNotificationsVisible && (
+                    <Reveal onHide={() => null} show>
+                        <CloseButton
+                            onClick={() =>
+                                this.setState({
+                                    postNotificationsVisible: false,
+                                })
+                            }
+                        />
+                        <PostNotificationsList
+                            author={author}
+                            permlink={permlink}
+                        />
+                    </Reveal>
+                )}
             </div>
         );
     }

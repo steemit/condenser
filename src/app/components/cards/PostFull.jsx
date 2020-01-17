@@ -30,6 +30,7 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { allowDelete } from 'app/utils/StateFunctions';
 import { Role } from 'app/utils/Community';
+import PostNotificationsList from 'app/components/cards/PostNotificationsList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 
 function TimeAuthorCategory({ post }) {
@@ -67,8 +68,6 @@ class PostFull extends React.Component {
         /* Show extra options (component is being viewed alone) */
         postref: PropTypes.string.isRequired,
         post: PropTypes.object.isRequired,
-        postNotifications: PropTypes.object,
-        postNotificationsLoading: PropTypes.bool,
 
         // connector props
         username: PropTypes.string,
@@ -76,7 +75,6 @@ class PostFull extends React.Component {
         showPromotePost: PropTypes.func.isRequired,
         showExplorePost: PropTypes.func.isRequired,
         togglePinnedPost: PropTypes.func.isRequired,
-        fetchPostNotifications: PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -89,14 +87,10 @@ class PostFull extends React.Component {
         this.showExplorePost = this.showExplorePost.bind(this);
 
         this.onShowPostNotifications = () => {
-            const {
-                state: { postNotificationsVisible },
-                props: { post, fetchPostNotifications },
-            } = this;
+            const { state: { postNotificationsVisible } } = this;
             this.setState({
                 postNotificationsVisible: !postNotificationsVisible,
             });
-            fetchPostNotifications(post.get('author'), post.get('permlink'));
         };
 
         this.onShowReply = () => {
@@ -255,7 +249,6 @@ class PostFull extends React.Component {
                 community,
                 viewer_role,
                 postNotifications,
-                postNotificationsLoading,
             },
             state: {
                 PostFullReplyEditor,
@@ -271,16 +264,6 @@ class PostFull extends React.Component {
         } = this;
         if (!post) return null;
         const content = post.toJS();
-        const postNotificationsList = postNotifications
-            ? postNotifications.toJS().map(p => {
-                  return (
-                      <li>
-                          <p>type: {p.type}</p>
-                          <p>message: {p.msg}</p>
-                      </li>
-                  );
-              })
-            : null;
 
         const { author, permlink, parent_author, parent_permlink } = content;
         const { category, title } = content;
@@ -560,12 +543,10 @@ class PostFull extends React.Component {
                                 })
                             }
                         />
-                        {postNotificationsLoading && (
-                            <center>
-                                <LoadingIndicator type="circle-strong" />
-                            </center>
-                        )}
-                        <ul>{postNotificationsList}</ul>
+                        <PostNotificationsList
+                            author={author}
+                            permlink={permlink}
+                        />
                     </Reveal>
                 )}
             </article>
@@ -606,11 +587,6 @@ export default connect(
         };
     },
     dispatch => ({
-        fetchPostNotifications: (author, permlink) => {
-            dispatch(
-                fetchDataActions.getPostNotifications({ author, permlink })
-            );
-        },
         deletePost: (author, permlink) => {
             dispatch(
                 transactionActions.broadcastOperation({

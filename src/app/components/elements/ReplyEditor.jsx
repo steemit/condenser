@@ -217,9 +217,9 @@ class ReplyEditor extends React.Component {
                         name: nextProps.postTemplateName.replace('create_', ''),
                         beneficiaries,
                         payoutType,
-                        markdown: body.value,
-                        title: title.value,
-                        tags: tags.value,
+                        markdown: body !== undefined ? body.value : '',
+                        title: title !== undefined ? title.value : '',
+                        tags: tags !== undefined ? tags.value : '',
                     });
 
                     window.localStorage.setItem(

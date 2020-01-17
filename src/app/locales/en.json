@@ -1,5 +1,7 @@
 {
     "g": {
+        "administrator": "administrator",
+        "administrators": "administrators",
         "age": "age",
         "amount": "Amount",
         "and": "and",

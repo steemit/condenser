@@ -39,7 +39,31 @@ export default class CommunitiesIndex extends React.Component {
                 <span className="user_role">{comm.context.role}</span>
             );
 
+        const communityAdmins = admins => {
+            return admins.map((name, idx, src) => {
+                const account = `@${name}`;
+                if (src.length === 1) {
+                    return (
+                        <span
+                            key={`${name}__admin`}
+                            style={{ fontSize: '80%' }}
+                        >
+                            <Link to={`/${account}`}>{name}</Link>
+                        </span>
+                    );
+                } else {
+                    return (
+                        <div key={`${name}__admin`} style={{ fontSize: '80%' }}>
+                            <Link to={`/${account}`}>{name}</Link>
+                        </div>
+                    );
+                }
+            });
+        };
+
         const row = comm => {
+            console.log(comm);
+            const admins = communityAdmins(comm.admins);
             return (
                 <tr key={comm.name}>
                     <th>
@@ -51,6 +75,11 @@ export default class CommunitiesIndex extends React.Component {
                             {comm.subscribers} subscribers &bull;{' '}
                             {comm.num_authors} posters &bull; {comm.num_pending}{' '}
                             posts
+                            <br />
+                            {comm.admins.length === 1
+                                ? `${tt('g.administrator')}: `
+                                : `${tt('g.administrators')}:`}
+                            {admins}
                         </small>
                     </th>
                     <td>

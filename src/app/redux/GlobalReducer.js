@@ -88,7 +88,6 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_POST_NOTIFICATIONS: {
-            console.log('RECEIVE_POST_NOTIFICATIONS');
             const { author, permlink, postNotifications } = payload;
             return state.setIn(
                 ['content', `${author}/${permlink}`, 'post_notifications'],

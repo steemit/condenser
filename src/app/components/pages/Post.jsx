@@ -277,7 +277,6 @@ export default connect((state, ownProps) => {
     const post = username + '/' + slug;
     const content = state.global.get('content');
     const dis = content.get(post);
-    // Get Post Discussions.
 
     return {
         post,

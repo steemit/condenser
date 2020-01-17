@@ -264,7 +264,7 @@ class CommentImpl extends React.Component {
                     <Voting post={post} />
                     <span className="Comment__footer__controls">
                         {canReply && (
-                            <a role="button" onClick={onShowReply}>
+                            <a role="button" tabIndex={0} onClick={onShowReply}>
                                 {tt('g.reply')}
                             </a>
                         )}{' '}

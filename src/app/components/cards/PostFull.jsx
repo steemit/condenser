@@ -562,17 +562,6 @@ export default connect(
         const category = post.get('category');
         const community = state.global.getIn(['community', category, 'name']);
 
-        const postNotifications = state.global.getIn([
-            'content',
-            `${post.get('author')}/${post.get('permlink')}`,
-            'post_notifications',
-        ]);
-        const postNotificationsLoading = state.global.getIn([
-            'content',
-            `${post.get('author')}/${post.get('permlink')}`,
-            'post_notifications_loading',
-        ]);
-
         return {
             post,
             postref,
@@ -582,8 +571,6 @@ export default connect(
                 ['community', community, 'context', 'role'],
                 'guest'
             ),
-            postNotifications,
-            postNotificationsLoading,
         };
     },
     dispatch => ({

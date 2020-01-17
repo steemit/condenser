@@ -15,7 +15,7 @@ const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
 const RECEIVE_POST_HEADER = 'global/RECEIVE_POST_HEADER';
 const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
 const RECEIVE_COMMUNITIES = 'global/RECEIVE_COMMUNITIES';
-const LOADING_SUBSCRIPTIONS = 'global/NOTIFICATIONS_LOADING';
+const LOADING_SUBSCRIPTIONS = 'global/LOADING_SUBSCRIPTIONS';
 const RECEIVE_SUBSCRIPTIONS = 'global/RECEIVE_SUBSCRIPTIONS';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
@@ -146,7 +146,7 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_SUBSCRIPTIONS: {
             return state.setIn(
-                ['subscriptions', payload.username],
+                ['subscriptions', payload.username.account],
                 fromJS(payload.subscriptions)
             );
         }

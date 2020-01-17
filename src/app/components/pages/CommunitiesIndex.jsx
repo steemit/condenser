@@ -62,7 +62,6 @@ export default class CommunitiesIndex extends React.Component {
         };
 
         const row = comm => {
-            console.log(comm);
             const admins = communityAdmins(comm.admins);
             return (
                 <tr key={comm.name}>

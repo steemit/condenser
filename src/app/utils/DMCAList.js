@@ -345,6 +345,7 @@ export default `
 /nature/@nikapelex/ap-the-best-videos
 /ielts/@davidbushey/buy-original-ielts-certificates-without-exam
 /beauty/@benziman/ill-5-year-old-marries-best-friend-before-undergoing-heart-surgery
+/foto/@tonyj28/cae-preso-en-ee-uu-hermano-de-viviana-gibelli-por-lavado-de-dinero
 `
     .trim()
     .split('\n');

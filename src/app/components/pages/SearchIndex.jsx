@@ -90,6 +90,7 @@ class SearchIndex extends React.Component {
                                 handleSubmit={q => {
                                     performSearch({ q, s: undefined });
                                 }}
+                                redirect={true}
                             />
                         </div>
                     </div>

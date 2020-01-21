@@ -7,6 +7,7 @@ import SubscribeButton from 'app/components/elements/SubscribeButton';
 import { Link } from 'react-router';
 import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
 
 export default class CommunitiesIndex extends React.Component {
     componentWillMount = () => {
@@ -71,10 +72,20 @@ export default class CommunitiesIndex extends React.Component {
                             </a>
                         </div>
                     )}
+
                     <h4>
                         {/* {<Link to={`/`}>Home</Link>} &gt;{' '} */}
                         {tt('g.community_list_header')}
                     </h4>
+                    <div>
+                        <ElasticSearchInput
+                            initValue={'HELLO'}
+                            expanded={true}
+                            handleSubmit={q => {
+                                console.log('SEARCH TERM: ', q);
+                            }}
+                        />
+                    </div>
                     <hr />
                     <table>
                         <tbody>{ordered.map(comm => row(comm.toJS()))}</tbody>
@@ -100,6 +111,7 @@ module.exports = {
                     dispatch(
                         fetchDataSagaActions.listCommunities({ observer })
                     ),
+                performSearch: args => dispatch(search(args)),
             };
         }
     )(CommunitiesIndex),

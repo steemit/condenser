@@ -366,7 +366,7 @@ class Header extends React.Component {
 
                                 {/*CUSTOM SEARCH*/}
                                 <span className="Header__search--desktop">
-                                    <ElasticSearchInput />
+                                    <ElasticSearchInput redirect />
                                 </span>
                                 <span className="Header__search">
                                     <a href="/search">

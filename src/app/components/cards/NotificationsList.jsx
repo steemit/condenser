@@ -8,6 +8,7 @@ import * as globalActions from 'app/redux/GlobalReducer';
 import ClaimBox from 'app/components/elements/ClaimBox';
 import Callout from 'app/components/elements/Callout';
 import Icon from 'app/components/elements/Icon';
+import Userpic from 'app/components/elements/Userpic';
 
 const notificationsIcons = type => {
     switch (type) {
@@ -152,6 +153,15 @@ class NotificationsList extends React.Component {
         const renderItem = item => {
             const unRead =
                 Date.parse(`${lastRead}Z`) <= Date.parse(`${item.date}Z`);
+            const usernamePattern = /\B@[a-z0-9_-]+/gi;
+            const mentions = item.msg.match(usernamePattern);
+            const participants = mentions
+                ? mentions.map(m => (
+                      <a className="user__link" href={'/' + m}>
+                          <Userpic account={m.substring(1)} />
+                      </a>
+                  ))
+                : null;
             return (
                 <div
                     key={item.id}
@@ -165,9 +175,6 @@ class NotificationsList extends React.Component {
                             {notificationsIcons(item.type)}
                         </div>
                     </div>
-                    {unRead && (
-                        <span className="notification__unread">&bull;</span>
-                    )}
                     <div className="flex-column">
                         <div className="notification__message">
                             <a href={`/${item.url}`}>{item.msg}</a>
@@ -176,11 +183,19 @@ class NotificationsList extends React.Component {
                             <div className="notification__type">
                                 {notificationsTypes(item.type)}
                             </div>
+                            <span className="notification__dot">·</span>
                             <div className="notification__date">
                                 <TimeAgoWrapper date={item.date + 'Z'} />
                             </div>
                         </div>
                     </div>
+                    {unRead && (
+                        <div className="flex-column">
+                            <span className="notification__unread">&bull;</span>
+                        </div>
+                    )}
+
+                    {mentions && participants}
                 </div>
             );
         };

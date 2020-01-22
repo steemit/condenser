@@ -157,9 +157,7 @@ class NotificationsList extends React.Component {
             const mentions = item.msg.match(usernamePattern);
             const participants = mentions
                 ? mentions.map(m => {
-                      const mentionAccount = m.substring(1);
-                      console.log(m, accountName);
-                      return mentionAccount !== accountName ? (
+                      return m.substring(1) !== accountName ? (
                           <a
                               key={`notification_${m}`}
                               className="notification__participant user__link"

@@ -1,15 +1,51 @@
-.otification__item {
-        @include themify($themes) {
-            border-bottom: themed('border');
-        }
 
-    .notif-unread {
+.flex-row {
+    flex-direction: row;
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+    display: flex;
+}
+
+.flex-body {
+    display: flex;
+}
+
+.flex-body div:not([class*="flex"]) {
+    border: 1px solid white;
+    flex: 1 1 200px;
+    width: 300px;
+}
+
+
+
+
+.notification__item {
+
+  @include themify($themes) {
+    border-bottom: themed('border');
+  }
+}
+
+    .notification__unread {
         float: right;
         font-size: 2em;
         @include themify($themes) {
             color: themed('textColorAccent');
         }
     }
+
+.notifcation__type {
+
+}
+
+.notification__icon{
+}
+
+.notification__message {
+  flex-grow: 1;
 }
 
 .notification {

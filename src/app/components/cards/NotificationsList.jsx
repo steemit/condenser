@@ -156,11 +156,19 @@ class NotificationsList extends React.Component {
             const usernamePattern = /\B@[a-z0-9_-]+/gi;
             const mentions = item.msg.match(usernamePattern);
             const participants = mentions
-                ? mentions.map(m => (
-                      <a className="user__link" href={'/' + m}>
-                          <Userpic account={m.substring(1)} />
-                      </a>
-                  ))
+                ? mentions.map(m => {
+                      const mentionAccount = m.substring(1);
+                      console.log(m, accountName);
+                      return mentionAccount !== accountName ? (
+                          <a
+                              key={`notification_${m}`}
+                              className="notification__participant user__link"
+                              href={'/' + m}
+                          >
+                              <Userpic account={m.substring(1)} />
+                          </a>
+                      ) : null;
+                  })
                 : null;
             return (
                 <div
@@ -189,13 +197,12 @@ class NotificationsList extends React.Component {
                             </div>
                         </div>
                     </div>
+                    {mentions && participants}
                     {unRead && (
                         <div className="flex-column">
                             <span className="notification__unread">&bull;</span>
                         </div>
                     )}
-
-                    {mentions && participants}
                 </div>
             );
         };

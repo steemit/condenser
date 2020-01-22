@@ -13,12 +13,6 @@
     display: flex;
 }
 
-.flex-body div:not([class*="flex"]) {
-}
-
-
-
-
 .notification__item {
   align-items: center;
   padding: 1rem;
@@ -44,10 +38,15 @@
 
 .notification__message {
   padding-bottom: 0.5em;
+  padding-right: 0.5em;
 
 }
 
 .notification__dot {
+  padding: 0 0.5em;
+}
+
+.notification__participant {
   padding: 0 0.5em;
 }
 

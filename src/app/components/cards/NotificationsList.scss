@@ -14,21 +14,18 @@
 }
 
 .flex-body div:not([class*="flex"]) {
-    border: 1px solid white;
-    flex: 1 1 200px;
-    width: 300px;
 }
 
 
 
 
 .notification__item {
-
+  align-items: center;
+  padding: 1rem;
   @include themify($themes) {
     border-bottom: themed('border');
   }
 }
-
     .notification__unread {
         float: right;
         font-size: 2em;
@@ -42,10 +39,16 @@
 }
 
 .notification__icon{
+  padding-right: 1rem;
 }
 
 .notification__message {
-  flex-grow: 1;
+  padding-bottom: 0.5em;
+
+}
+
+.notification__dot {
+  padding: 0 0.5em;
 }
 
 .notification {

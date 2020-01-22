@@ -12,17 +12,47 @@ import Icon from 'app/components/elements/Icon';
 const notificationsIcons = type => {
     switch (type) {
         case 'reply':
-            return <Icon className="notification__reply" name="reply" />;
+            return (
+                <Icon
+                    className="notification__icon notification__reply"
+                    name="reply"
+                />
+            );
         case 'follow':
-            return <Icon className="notification__follow" name="voters" />;
+            return (
+                <Icon
+                    className="notification__icon notification__follow"
+                    name="voters"
+                />
+            );
         case 'set_label':
-            return <Icon className="notification__label" name="quill" />;
+            return (
+                <Icon
+                    className="notification__icon notification__label"
+                    name="quill"
+                />
+            );
         case 'vote':
-            return <Icon className="notification__vote" name="voter" />;
+            return (
+                <Icon
+                    className="notification__icon notification__vote"
+                    name="voter"
+                />
+            );
         case 'error':
-            return <Icon className="notification__error" name="close" />;
+            return (
+                <Icon
+                    className="notification__icon notification__error"
+                    name="close"
+                />
+            );
         case 'reblog':
-            return <Icon className="notification__reblog" name="reblog" />;
+            return (
+                <Icon
+                    className="notification__icon notification__reblog"
+                    name="reblog"
+                />
+            );
         default:
             return <Icon name="chain" />;
     }
@@ -31,54 +61,19 @@ const notificationsIcons = type => {
 const notificationsTypes = type => {
     switch (type) {
         case 'reply':
-            return (
-                <span style={{ opacity: '0.5' }}>
-                    {type}
-                    {' / '}
-                </span>
-            );
+            return <span className="notification__type">{type}</span>;
         case 'follow':
-            return (
-                <span style={{ opacity: '0.5' }}>
-                    {type}
-                    {' / '}
-                </span>
-            );
+            return <span className="notification__type">{type}</span>;
         case 'set_label':
-            return (
-                <span style={{ opacity: '0.5' }}>
-                    {type}
-                    {' / '}
-                </span>
-            );
+            return <span className="notification__type">{type}</span>;
         case 'vote':
-            return (
-                <span style={{ opacity: '0.5' }}>
-                    {type}
-                    {' / '}
-                </span>
-            );
+            return <span className="notification__type">{type}</span>;
         case 'error':
-            return (
-                <span style={{ opacity: '0.5' }}>
-                    {type}
-                    {' / '}
-                </span>
-            );
+            return <span className="notification__type">{type}</span>;
         case 'reblog':
-            return (
-                <span style={{ opacity: '0.5' }}>
-                    {type}
-                    {' / '}
-                </span>
-            );
+            return <span className="notification__type">{type}</span>;
         default:
-            return (
-                <span style={{ opacity: '0.5' }}>
-                    {type}
-                    {' / '}
-                </span>
-            );
+            return <span className="notification__type">{type}</span>;
     }
 };
 
@@ -160,24 +155,31 @@ class NotificationsList extends React.Component {
             return (
                 <div
                     key={item.id}
-                    className="Notification__item"
+                    className="notification__item flex-body"
                     style={{
-                        padding: '0.5em 1em',
                         background: 'rgba(225,255,225,' + item.score + '%)',
                     }}
                 >
-                    <div className="notification__icon">
-                        {notificationsIcons(item.type)}
+                    <div className="flex-row">
+                        <div className="notification__icon">
+                            {notificationsIcons(item.type)}
+                        </div>
                     </div>
-                    {unRead && <span className="notif-unread">&bull;</span>}
-                    <div className="notification__type">
-                        {notificationsTypes(item.type)}
-                    </div>
-                    <div className="notification__message">
-                        <a href={`/${item.url}`}>{item.msg}</a>
-                    </div>
-                    <div className="notification__date">
-                        <TimeAgoWrapper date={item.date + 'Z'} />
+                    {unRead && (
+                        <span className="notification__unread">&bull;</span>
+                    )}
+                    <div className="flex-column">
+                        <div className="notification__message">
+                            <a href={`/${item.url}`}>{item.msg}</a>
+                        </div>
+                        <div className="flex-row">
+                            <div className="notification__type">
+                                {notificationsTypes(item.type)}
+                            </div>
+                            <div className="notification__date">
+                                <TimeAgoWrapper date={item.date + 'Z'} />
+                            </div>
+                        </div>
                     </div>
                 </div>
             );

@@ -1,4 +1,4 @@
-.Notification__item {
+.otification__item {
         @include themify($themes) {
             border-bottom: themed('border');
         }
@@ -11,3 +11,25 @@
         }
     }
 }
+
+.notification {
+  &__reply{
+  fill: brown;
+  }
+  &__follow{
+    fill: orange;
+  }
+  &__label{
+    fill: green;
+  }
+  &__vote{
+    fill: blue;
+  }
+  &__error{
+    fill: red
+  }
+  &__reblog{
+    fill: purple
+  }
+}
+

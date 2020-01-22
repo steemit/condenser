@@ -12,20 +12,73 @@ import Icon from 'app/components/elements/Icon';
 const notificationsIcons = type => {
     switch (type) {
         case 'reply':
-            return <Icon name="reply" />;
+            return <Icon className="notification__reply" name="reply" />;
         case 'follow':
-            return <Icon name="voters" />;
-            return;
+            return <Icon className="notification__follow" name="voters" />;
         case 'set_label':
-            return <Icon name="quill" />;
+            return <Icon className="notification__label" name="quill" />;
         case 'vote':
-            return <Icon name="voter" />;
+            return <Icon className="notification__vote" name="voter" />;
         case 'error':
-            return <Icon name="close" />;
+            return <Icon className="notification__error" name="close" />;
         case 'reblog':
-            return <Icon name="reblog" />;
+            return <Icon className="notification__reblog" name="reblog" />;
         default:
             return <Icon name="chain" />;
+    }
+};
+
+const notificationsTypes = type => {
+    switch (type) {
+        case 'reply':
+            return (
+                <span style={{ opacity: '0.5' }}>
+                    {type}
+                    {' / '}
+                </span>
+            );
+        case 'follow':
+            return (
+                <span style={{ opacity: '0.5' }}>
+                    {type}
+                    {' / '}
+                </span>
+            );
+        case 'set_label':
+            return (
+                <span style={{ opacity: '0.5' }}>
+                    {type}
+                    {' / '}
+                </span>
+            );
+        case 'vote':
+            return (
+                <span style={{ opacity: '0.5' }}>
+                    {type}
+                    {' / '}
+                </span>
+            );
+        case 'error':
+            return (
+                <span style={{ opacity: '0.5' }}>
+                    {type}
+                    {' / '}
+                </span>
+            );
+        case 'reblog':
+            return (
+                <span style={{ opacity: '0.5' }}>
+                    {type}
+                    {' / '}
+                </span>
+            );
+        default:
+            return (
+                <span style={{ opacity: '0.5' }}>
+                    {type}
+                    {' / '}
+                </span>
+            );
     }
 };
 
@@ -104,8 +157,6 @@ class NotificationsList extends React.Component {
         const renderItem = item => {
             const unRead =
                 Date.parse(`${lastRead}Z`) <= Date.parse(`${item.date}Z`);
-            const notifIcon = notificationsIcons(item.type);
-            console.log(item.type);
             return (
                 <div
                     key={item.id}
@@ -115,12 +166,9 @@ class NotificationsList extends React.Component {
                         background: 'rgba(225,255,225,' + item.score + '%)',
                     }}
                 >
-                    {notifIcon}
+                    {notificationsIcons(item.type)}
                     {unRead && <span className="notif-unread">&bull;</span>}
-                    <span style={{ opacity: '0.5' }}>
-                        {item.type}
-                        {' / '}
-                    </span>
+
                     <strong>
                         <a href={`/${item.url}`}>{item.msg}</a>
                     </strong>

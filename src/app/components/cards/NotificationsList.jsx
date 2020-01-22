@@ -166,16 +166,19 @@ class NotificationsList extends React.Component {
                         background: 'rgba(225,255,225,' + item.score + '%)',
                     }}
                 >
-                    {notificationsIcons(item.type)}
+                    <div className="notification__icon">
+                        {notificationsIcons(item.type)}
+                    </div>
                     {unRead && <span className="notif-unread">&bull;</span>}
-
-                    <strong>
+                    <div className="notification__type">
+                        {notificationsTypes(item.type)}
+                    </div>
+                    <div className="notification__message">
                         <a href={`/${item.url}`}>{item.msg}</a>
-                    </strong>
-                    <br />
-                    <small>
+                    </div>
+                    <div className="notification__date">
                         <TimeAgoWrapper date={item.date + 'Z'} />
-                    </small>
+                    </div>
                 </div>
             );
         };
@@ -195,11 +198,12 @@ class NotificationsList extends React.Component {
                             </a>
                         </center>
                     )}
-                {notificationActionPending && (
+                {(notificationActionPending || !process.env.BROWSER) && (
                     <center>
                         <LoadingIndicator type="circle" />
                     </center>
                 )}
+
                 {notifications &&
                     notifications.length > 0 && (
                         <div style={{ lineHeight: '1rem' }}>
@@ -207,7 +211,9 @@ class NotificationsList extends React.Component {
                         </div>
                     )}
                 {!notifications &&
-                    !loading && (
+                    !notificationActionPending &&
+                    !loading &&
+                    process.env.BROWSER && (
                         <Callout>
                             Welcome! You don't have any notifications yet.
                         </Callout>

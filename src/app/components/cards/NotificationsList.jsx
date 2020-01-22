@@ -7,6 +7,27 @@ import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import * as globalActions from 'app/redux/GlobalReducer';
 import ClaimBox from 'app/components/elements/ClaimBox';
 import Callout from 'app/components/elements/Callout';
+import Icon from 'app/components/elements/Icon';
+
+const notificationsIcons = type => {
+    switch (type) {
+        case 'reply':
+            return <Icon name="reply" />;
+        case 'follow':
+            return <Icon name="voters" />;
+            return;
+        case 'set_label':
+            return <Icon name="quill" />;
+        case 'vote':
+            return <Icon name="voter" />;
+        case 'error':
+            return <Icon name="close" />;
+        case 'reblog':
+            return <Icon name="reblog" />;
+        default:
+            return <Icon name="chain" />;
+    }
+};
 
 class NotificationsList extends React.Component {
     static propTypes = {
@@ -83,6 +104,8 @@ class NotificationsList extends React.Component {
         const renderItem = item => {
             const unRead =
                 Date.parse(`${lastRead}Z`) <= Date.parse(`${item.date}Z`);
+            const notifIcon = notificationsIcons(item.type);
+            console.log(item.type);
             return (
                 <div
                     key={item.id}
@@ -92,6 +115,7 @@ class NotificationsList extends React.Component {
                         background: 'rgba(225,255,225,' + item.score + '%)',
                     }}
                 >
+                    {notifIcon}
                     {unRead && <span className="notif-unread">&bull;</span>}
                     <span style={{ opacity: '0.5' }}>
                         {item.type}

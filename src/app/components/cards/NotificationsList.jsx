@@ -10,72 +10,28 @@ import Callout from 'app/components/elements/Callout';
 import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
 
-const notificationsIcons = type => {
-    switch (type) {
-        case 'reply':
-            return (
-                <Icon
-                    className="notification__icon notification__reply"
-                    name="reply"
-                />
-            );
-        case 'follow':
-            return (
-                <Icon
-                    className="notification__icon notification__follow"
-                    name="voters"
-                />
-            );
-        case 'set_label':
-            return (
-                <Icon
-                    className="notification__icon notification__label"
-                    name="quill"
-                />
-            );
-        case 'vote':
-            return (
-                <Icon
-                    className="notification__icon notification__vote"
-                    name="voter"
-                />
-            );
-        case 'error':
-            return (
-                <Icon
-                    className="notification__icon notification__error"
-                    name="close"
-                />
-            );
-        case 'reblog':
-            return (
-                <Icon
-                    className="notification__icon notification__reblog"
-                    name="reblog"
-                />
-            );
-        default:
-            return <Icon name="chain" />;
-    }
-};
+const notificationsIcon = type => {
+    const types = {
+        reply: 'chatbox',
+        reply_post: 'chatbox',
+        reply_comment: 'chatbox',
+        follow: 'voters',
+        set_label: 'pencil2',
+        set_role: 'pencil2',
+        vote: 'chevron-up-circle',
+        error: 'cog',
+        reblog: 'reblog',
+        mention: 'chatboxes',
+    };
 
-const notificationsTypes = type => {
-    switch (type) {
-        case 'reply':
-            return <span className="notification__type">{type}</span>;
-        case 'follow':
-            return <span className="notification__type">{type}</span>;
-        case 'set_label':
-            return <span className="notification__type">{type}</span>;
-        case 'vote':
-            return <span className="notification__type">{type}</span>;
-        case 'error':
-            return <span className="notification__type">{type}</span>;
-        case 'reblog':
-            return <span className="notification__type">{type}</span>;
-        default:
-            return <span className="notification__type">{type}</span>;
+    let icon = 'chain';
+    if (type in types) {
+        icon = types[type];
+    } else {
+        console.error('no icon for type: ', type);
     }
+
+    return <Icon size="0_8x" name={icon} />;
 };
 
 class NotificationsList extends React.Component {
@@ -156,17 +112,11 @@ class NotificationsList extends React.Component {
             const usernamePattern = /\B@[a-z0-9_-]+/gi;
             const mentions = item.msg.match(usernamePattern);
             const participants = mentions
-                ? mentions.map(m => {
-                      return m.substring(1) !== accountName ? (
-                          <a
-                              key={`notification_${m}`}
-                              className="notification__participant user__link"
-                              href={'/' + m}
-                          >
-                              <Userpic account={m.substring(1)} />
-                          </a>
-                      ) : null;
-                  })
+                ? mentions.map(m => (
+                      <a href={'/' + m}>
+                          <Userpic account={m.substring(1)} />
+                      </a>
+                  ))
                 : null;
             return (
                 <div
@@ -177,29 +127,23 @@ class NotificationsList extends React.Component {
                     }}
                 >
                     <div className="flex-row">
-                        <div className="notification__icon">
-                            {notificationsIcons(item.type)}
-                        </div>
+                        {mentions && participants && participants[0]}
                     </div>
                     <div className="flex-column">
                         <div className="notification__message">
                             <a href={`/${item.url}`}>{item.msg}</a>
                         </div>
                         <div className="flex-row">
-                            <div className="notification__type">
-                                {notificationsTypes(item.type)}
+                            <div className="notification__icon">
+                                {notificationsIcon(item.type)}
                             </div>
-                            <span className="notification__dot">·</span>
                             <div className="notification__date">
                                 <TimeAgoWrapper date={item.date + 'Z'} />
                             </div>
                         </div>
                     </div>
-                    {mentions && participants}
                     {unRead && (
-                        <div className="flex-column">
-                            <span className="notification__unread">&bull;</span>
-                        </div>
+                        <span className="notification__unread">&bull;</span>
                     )}
                 </div>
             );

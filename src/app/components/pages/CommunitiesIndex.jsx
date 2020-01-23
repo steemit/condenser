@@ -7,6 +7,7 @@ import SubscribeButton from 'app/components/elements/SubscribeButton';
 import { Link } from 'react-router';
 import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import UserNames from 'app/components/elements/UserNames';
 
 export default class CommunitiesIndex extends React.Component {
     componentWillMount = () => {
@@ -39,23 +40,43 @@ export default class CommunitiesIndex extends React.Component {
                 <span className="user_role">{comm.context.role}</span>
             );
 
-        const row = comm => (
-            <tr key={comm.name}>
-                <th>
-                    <Link to={`/trending/${comm.name}`}>{comm.title}</Link>
-                    {role(comm)}
-                    <br />
-                    {comm.about}
-                    <small>
-                        {comm.subscribers} subscribers &bull; {comm.num_authors}{' '}
-                        posters &bull; {comm.num_pending} posts
-                    </small>
-                </th>
-                <td>
-                    <SubscribeButton community={comm.name} />
-                </td>
-            </tr>
-        );
+        const communityAdmins = admins => {
+            if (!admins || admins.length === 0) return;
+
+            return (
+                <div>
+                    {admins.length === 1
+                        ? `${tt('g.administrator')}: `
+                        : `${tt('g.administrators')}: `}
+                    <UserNames names={admins} />
+                </div>
+            );
+        };
+
+        const row = comm => {
+            const admins = communityAdmins(comm.admins);
+            return (
+                <tr key={comm.name}>
+                    <th>
+                        <Link className="title" to={`/trending/${comm.name}`}>
+                            {comm.title}
+                        </Link>
+                        {role(comm)}
+                        <br />
+                        {comm.about}
+                        <small>
+                            {comm.subscribers} subscribers &bull;{' '}
+                            {comm.num_authors} posters &bull; {comm.num_pending}{' '}
+                            posts
+                            {admins}
+                        </small>
+                    </th>
+                    <td>
+                        <SubscribeButton community={comm.name} />
+                    </td>
+                </tr>
+            );
+        };
 
         return (
             <PostsIndexLayout

@@ -131,7 +131,7 @@ class NotificationsList extends React.Component {
         const renderItem = item => {
             const unRead =
                 Date.parse(`${lastRead}Z`) <= Date.parse(`${item.date}Z`);
-            const usernamePattern = /\B@[a-z0-9_-]+/gi;
+            const usernamePattern = /\B@[a-z0-9\.-]+/gi;
             const mentions = item.msg.match(usernamePattern);
             const participants = mentions
                 ? mentions.map(m => (

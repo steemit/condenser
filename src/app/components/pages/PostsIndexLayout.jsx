@@ -2,9 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import tt from 'counterpart';
-import { List, Map } from 'immutable';
+import { List } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
@@ -12,7 +10,6 @@ import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
 import GptAd from 'app/components/elements/GptAd';
 import Topics from './Topics';
-import { ifHive } from 'app/utils/Community';
 import CommunityPane from 'app/components/elements/CommunityPane';
 import CommunityPaneMobile from 'app/components/elements/CommunityPaneMobile';
 
@@ -126,16 +123,20 @@ class PostsIndexLayout extends React.Component {
 
 export default connect(
     (state, props) => {
+        const username =
+            state.user.getIn(['current', 'username']) ||
+            state.offchain.get('account');
         return {
             blogmode: props.blogmode,
             enableAds: props.enableAds,
             community: state.global.getIn(['community', props.category], null),
-            subscriptions: state.global.get('subscriptions', null),
+            subscriptions: state.global.getIn(
+                ['subscriptions', username],
+                null
+            ),
             topics: state.global.getIn(['topics'], List()),
             isBrowser: process.env.BROWSER,
-            username:
-                state.user.getIn(['current', 'username']) ||
-                state.offchain.get('account'),
+            username,
         };
     },
     dispatch => ({

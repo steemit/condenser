@@ -1,5 +1,4 @@
-import { Map, Set, List, fromJS, Iterable } from 'immutable';
-import resolveRoute from 'app/ResolveRoute';
+import { Map, List, fromJS, Iterable } from 'immutable';
 
 export const defaultState = Map({
     status: {},
@@ -16,6 +15,7 @@ const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
 const RECEIVE_POST_HEADER = 'global/RECEIVE_POST_HEADER';
 const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
 const RECEIVE_COMMUNITIES = 'global/RECEIVE_COMMUNITIES';
+const LOADING_SUBSCRIPTIONS = 'global/LOADING_SUBSCRIPTIONS';
 const RECEIVE_SUBSCRIPTIONS = 'global/RECEIVE_SUBSCRIPTIONS';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
@@ -99,7 +99,6 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_UNREAD_NOTIFICATIONS: {
-            console.log('Receive unread notifications', payload);
             return state.setIn(
                 ['notifications', payload.name, 'unreadNotifications'],
                 Map(payload.unreadNotifications)
@@ -140,8 +139,15 @@ export default function reducer(state = defaultState, action = {}) {
             return state.update('community', Map(), a => a.mergeDeep(payload));
         }
 
+        case LOADING_SUBSCRIPTIONS: {
+            return state.setIn(['subscriptions', 'loading'], payload);
+        }
+
         case RECEIVE_SUBSCRIPTIONS: {
-            return state.set('subscriptions', fromJS(payload));
+            return state.setIn(
+                ['subscriptions', payload.username.account],
+                fromJS(payload.subscriptions)
+            );
         }
         case RECEIVE_REWARDS: {
             return state.set('rewards', fromJS(payload.rewards));
@@ -395,6 +401,10 @@ export const receiveCommunity = payload => ({
 
 export const receiveSubscriptions = payload => ({
     type: RECEIVE_SUBSCRIPTIONS,
+    payload,
+});
+export const loadingSubscriptions = payload => ({
+    type: LOADING_SUBSCRIPTIONS,
     payload,
 });
 

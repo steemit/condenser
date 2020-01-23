@@ -273,7 +273,10 @@ module.exports = {
             }
 
             return {
-                subscriptions: state.global.get('subscriptions'),
+                subscriptions: state.global.getIn([
+                    'subscriptions',
+                    account_name,
+                ]),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 account_name,

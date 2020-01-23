@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
@@ -42,14 +43,12 @@ class SubscriptionsList extends React.Component {
         const { subscriptions, loading } = this.props;
 
         const renderItem = tuple => {
-            const communityHiveName = tuple[0];
-            const communityName = tuple[1];
-            const communityRole = tuple[2];
-            const communityUserTitle = tuple[3];
+            const [hive, name, role, title] = tuple;
             return (
-                <div key={communityHiveName}>
-                    {communityHiveName} | {communityName} | {communityRole} |{' '}
-                    {communityUserTitle}
+                <div key={hive}>
+                    <Link to={'/trending/' + hive}>{name || hive}</Link>
+                    <span className="user_role">{role}</span>
+                    {title && <span className="affiliation">{title}</span>}
                 </div>
             );
         };

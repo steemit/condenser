@@ -7,6 +7,7 @@ import SubscribeButton from 'app/components/elements/SubscribeButton';
 import { Link } from 'react-router';
 import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import UserNames from 'app/components/elements/UserNames';
 
 export default class CommunitiesIndex extends React.Component {
     componentWillMount = () => {
@@ -40,25 +41,16 @@ export default class CommunitiesIndex extends React.Component {
             );
 
         const communityAdmins = admins => {
-            return admins.map((name, idx, src) => {
-                const account = `@${name}`;
-                if (src.length === 1) {
-                    return (
-                        <span
-                            key={`${name}__admin`}
-                            style={{ fontSize: '80%' }}
-                        >
-                            <Link to={`/${account}`}>{name}</Link>
-                        </span>
-                    );
-                } else {
-                    return (
-                        <div key={`${name}__admin`} style={{ fontSize: '80%' }}>
-                            <Link to={`/${account}`}>{name}</Link>
-                        </div>
-                    );
-                }
-            });
+            if (!admins || admins.length === 0) return;
+
+            return (
+                <div>
+                    {admins.length === 1
+                        ? `${tt('g.administrator')}: `
+                        : `${tt('g.administrators')}: `}
+                    <UserNames names={admins} />
+                </div>
+            );
         };
 
         const row = comm => {
@@ -66,7 +58,9 @@ export default class CommunitiesIndex extends React.Component {
             return (
                 <tr key={comm.name}>
                     <th>
-                        <Link to={`/trending/${comm.name}`}>{comm.title}</Link>
+                        <Link className="title" to={`/trending/${comm.name}`}>
+                            {comm.title}
+                        </Link>
                         {role(comm)}
                         <br />
                         {comm.about}
@@ -74,10 +68,6 @@ export default class CommunitiesIndex extends React.Component {
                             {comm.subscribers} subscribers &bull;{' '}
                             {comm.num_authors} posters &bull; {comm.num_pending}{' '}
                             posts
-                            <br />
-                            {comm.admins.length === 1
-                                ? `${tt('g.administrator')}: `
-                                : `${tt('g.administrators')}:`}
                             {admins}
                         </small>
                     </th>

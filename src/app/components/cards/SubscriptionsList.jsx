@@ -8,6 +8,7 @@ import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import * as globalActions from 'app/redux/GlobalReducer';
 import ClaimBox from 'app/components/elements/ClaimBox';
 import Callout from 'app/components/elements/Callout';
+import tt from 'counterpart';
 
 class SubscriptionsList extends React.Component {
     static propTypes = {
@@ -45,21 +46,20 @@ class SubscriptionsList extends React.Component {
         const renderItem = tuple => {
             const [hive, name, role, title] = tuple;
             return (
-                <div key={hive}>
+                <li key={hive}>
                     <Link to={'/trending/' + hive}>{name || hive}</Link>
                     <span className="user_role">{role}</span>
                     {title && <span className="affiliation">{title}</span>}
-                </div>
+                </li>
             );
         };
 
         return (
             <div className="">
+                <h4>{tt('g.subscriptions')}</h4>
                 {subscriptions &&
                     subscriptions.length > 0 && (
-                        <div style={{ lineHeight: '1rem' }}>
-                            {subscriptions.map(item => renderItem(item))}
-                        </div>
+                        <ul>{subscriptions.map(item => renderItem(item))}</ul>
                     )}
                 {subscriptions.length === 0 &&
                     !loading && (

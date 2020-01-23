@@ -4,14 +4,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import tt from 'counterpart';
-import { List, Map } from 'immutable';
+import { List } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import Callout from 'app/components/elements/Callout';
 import { GptUtils } from 'app/utils/GptUtils';
-import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import { ifHive } from 'app/utils/Community';
@@ -106,6 +105,7 @@ class PostsIndex extends React.Component {
             account_name, // TODO: for feed
             order,
             posts,
+            username,
         } = this.props;
 
         const status = this.props.status
@@ -152,6 +152,24 @@ class PostsIndex extends React.Component {
             page_title = community.get('title');
         } else if (category) {
             page_title = '#' + category;
+        }
+
+        let postsIndexDisplay = <Callout>{emptyText}</Callout>;
+        console.log('USERNAME:', username);
+        console.log('POSTS:', posts);
+        if (username && posts.size) {
+            debugger;
+            postsIndexDisplay = (
+                <PostsList
+                    ref="list"
+                    post_refs={posts}
+                    loading={fetching}
+                    order={order}
+                    category={category}
+                    hideCategory={!!community}
+                    loadMore={this.loadMore}
+                />
+            );
         }
 
         return (
@@ -216,20 +234,7 @@ class PostsIndex extends React.Component {
                     </div>*/}
                 </div>
                 <hr className="articles__hr" />
-
-                {!fetching && !posts.size ? (
-                    <Callout>{emptyText}</Callout>
-                ) : (
-                    <PostsList
-                        ref="list"
-                        post_refs={posts}
-                        loading={fetching}
-                        order={order}
-                        category={category}
-                        hideCategory={!!community}
-                        loadMore={this.loadMore}
-                    />
-                )}
+                {postsIndexDisplay}
             </PostsIndexLayout>
         );
     }

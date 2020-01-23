@@ -154,7 +154,10 @@ class NotificationsList extends React.Component {
                     <div className="flex-column">
                         <div className="notification__message">
                             <a href={`/${item.url}`}>
-                                {highlightText(item.msg, mentions[0])}
+                                {highlightText(
+                                    item.msg,
+                                    mentions ? mentions[0] : null
+                                )}
                             </a>
                         </div>
                         <div className="flex-row">

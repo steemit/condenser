@@ -180,7 +180,7 @@ export default class UserProfile extends React.Component {
                     isLastpage={isNotificationsLastPage}
                 />
             );
-        } else if (section === 'subscriptions') {
+        } else if (section === 'communities') {
             tab_content = (
                 <SubscriptionsList
                     username={accountname}
@@ -253,9 +253,7 @@ export default class UserProfile extends React.Component {
                         <li>{_tablink('blog', tt('g.blog'))}</li>
                         <li>{_tablink('posts', tt('g.posts'))}</li>
                         <li>{_tablink('replies', tt('g.replies'))}</li>
-                        <li>
-                            {_tablink('subscriptions', tt('g.subscriptions'))}
-                        </li>
+                        <li>{_tablink('communities', tt('g.communities'))}</li>
                         <li>
                             {_tablink('notifications', tt('g.notifications'))}
                         </li>

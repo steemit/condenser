@@ -34,6 +34,28 @@ const notificationsIcon = type => {
     return <Icon size="0_8x" name={icon} />;
 };
 
+const highlightText = (text, highlight) => {
+    if (!highlight) return text;
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+    return (
+        <span>
+            {' '}
+            {parts.map((part, i) => (
+                <span
+                    key={i}
+                    style={
+                        part.toLowerCase() === highlight.toLowerCase()
+                            ? { fontWeight: 'bold' }
+                            : {}
+                    }
+                >
+                    {part}
+                </span>
+            ))}{' '}
+        </span>
+    );
+};
+
 class NotificationsList extends React.Component {
     static propTypes = {
         notifications: PropTypes.arrayOf(
@@ -131,7 +153,9 @@ class NotificationsList extends React.Component {
                     </div>
                     <div className="flex-column">
                         <div className="notification__message">
-                            <a href={`/${item.url}`}>{item.msg}</a>
+                            <a href={`/${item.url}`}>
+                                {highlightText(item.msg, mentions[0])}
+                            </a>
                         </div>
                         <div className="flex-row">
                             <div className="notification__icon">

@@ -156,7 +156,7 @@ class MarkdownViewer extends Component {
                 if (type === 'youtube') {
                     sections.push(
                         <YoutubePreview
-                            key={idx++}
+                            key={id}
                             width={w}
                             height={h}
                             youTubeId={id}
@@ -168,15 +168,16 @@ class MarkdownViewer extends Component {
                 } else if (type === 'threespeak') {
                     const url = `https://3speak.online/embed?v=${id}`;
                     sections.push(
-                        <div className="videoWrapper" key={idx++}>
+                        <div className="videoWrapper" key={id}>
                             <iframe
                                 src={url}
                                 width={w}
                                 height={h}
                                 frameBorder="0"
-                                webkitallowfullscreen
-                                mozallowfullscreen
+                                webkitallowfullscreen="true"
+                                mozallowfullscreen="true"
                                 allowFullScreen
+                                title={`ThreeSpeak video ${id}`}
                             />
                         </div>
                     );
@@ -185,41 +186,48 @@ class MarkdownViewer extends Component {
                         startTime
                     }s`;
                     sections.push(
-                        <div className="videoWrapper" key={idx++}>
+                        <div className="videoWrapper" key={id}>
                             <iframe
                                 src={url}
                                 width={w}
                                 height={h}
                                 frameBorder="0"
-                                webkitallowfullscreen
-                                mozallowfullscreen
+                                webkitallowfullscreen="true"
+                                mozallowfullscreen="true"
                                 allowFullScreen
+                                title={`Vimeo video ${id}`}
                             />
                         </div>
                     );
                 } else if (type === 'twitch') {
                     const url = `https://player.twitch.tv/${id}`;
                     sections.push(
-                        <div className="videoWrapper" key={idx++}>
+                        <div className="videoWrapper" key={id}>
                             <iframe
                                 src={url}
                                 width={w}
                                 height={h}
                                 frameBorder="0"
+                                webkitallowfullscreen="true"
+                                mozallowfullscreen="true"
                                 allowFullScreen
+                                title={`Twitch video ${id}`}
                             />
                         </div>
                     );
                 } else if (type === 'dtube') {
                     const url = `https://emb.d.tube/#!/${id}`;
                     sections.push(
-                        <div className="videoWrapper" key={idx++}>
+                        <div className="videoWrapper" key={id}>
                             <iframe
                                 src={url}
                                 width={w}
                                 height={h}
                                 frameBorder="0"
+                                webkitallowfullscreen="true"
+                                mozallowfullscreen="true"
                                 allowFullScreen
+                                title={`DTube video ${id}`}
                             />
                         </div>
                     );

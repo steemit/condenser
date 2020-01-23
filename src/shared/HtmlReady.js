@@ -394,10 +394,12 @@ function embedThreeSpeakNode(child, links, images) {
             // If typeof child is a string, this means we are trying to process the HTML
             // to replace the image/anchor tag created by 3Speak dApp
             const threespeakId = getThreeSpeakId(child);
-            child = child.replace(
-                linksRe.threespeakImageLink,
-                `~~~ embed:${threespeakId.fullId} threespeak ~~~`
-            );
+            if (threespeakId) {
+                child = child.replace(
+                    linksRe.threespeakImageLink,
+                    `~~~ embed:${threespeakId.fullId} threespeak ~~~`
+                );
+            }
         } else {
             // If child is not a string, we are processing plain text
             // to replace a bare URL

@@ -154,22 +154,27 @@ class PostsIndex extends React.Component {
             page_title = '#' + category;
         }
 
-        let postsIndexDisplay = <Callout>{emptyText}</Callout>;
-        console.log('USERNAME:', username);
-        console.log('POSTS:', posts);
-        if (username && posts.size) {
+        let postsIndexDisplay = (
+            <PostsList
+                ref="list"
+                post_refs={posts}
+                loading={fetching}
+                order={order}
+                category={category}
+                hideCategory={!!community}
+                loadMore={this.loadMore}
+            />
+        );
+
+        if (!fetching && !posts.size) {
+            postsIndexDisplay = <Callout>{emptyText}</Callout>;
+        }
+        if (!username && posts.size && category === 'my') {
+            postsIndexDisplay = <Callout>{emptyText}</Callout>;
+        }
+        if (order === 'feed' && !username) {
             debugger;
-            postsIndexDisplay = (
-                <PostsList
-                    ref="list"
-                    post_refs={posts}
-                    loading={fetching}
-                    order={order}
-                    category={category}
-                    hideCategory={!!community}
-                    loadMore={this.loadMore}
-                />
-            );
+            postsIndexDisplay = <Callout>{emptyText}</Callout>;
         }
 
         return (

@@ -123,16 +123,20 @@ class PostsIndexLayout extends React.Component {
 
 export default connect(
     (state, props) => {
+        const username =
+            state.user.getIn(['current', 'username']) ||
+            state.offchain.get('account');
         return {
             blogmode: props.blogmode,
             enableAds: props.enableAds,
             community: state.global.getIn(['community', props.category], null),
-            subscriptions: state.global.get('subscriptions', null),
+            subscriptions: state.global.getIn(
+                ['subscriptions', username],
+                null
+            ),
             topics: state.global.getIn(['topics'], List()),
             isBrowser: process.env.BROWSER,
-            username:
-                state.user.getIn(['current', 'username']) ||
-                state.offchain.get('account'),
+            username,
         };
     },
     dispatch => ({

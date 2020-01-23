@@ -7,6 +7,32 @@ import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import * as globalActions from 'app/redux/GlobalReducer';
 import ClaimBox from 'app/components/elements/ClaimBox';
 import Callout from 'app/components/elements/Callout';
+import Icon from 'app/components/elements/Icon';
+import Userpic from 'app/components/elements/Userpic';
+
+const notificationsIcon = type => {
+    const types = {
+        reply: 'chatbox',
+        reply_post: 'chatbox',
+        reply_comment: 'chatbox',
+        follow: 'voters',
+        set_label: 'pencil2',
+        set_role: 'pencil2',
+        vote: 'chevron-up-circle',
+        error: 'cog',
+        reblog: 'reblog',
+        mention: 'chatboxes',
+    };
+
+    let icon = 'chain';
+    if (type in types) {
+        icon = types[type];
+    } else {
+        console.error('no icon for type: ', type);
+    }
+
+    return <Icon size="0_8x" name={icon} />;
+};
 
 class NotificationsList extends React.Component {
     static propTypes = {
@@ -83,27 +109,42 @@ class NotificationsList extends React.Component {
         const renderItem = item => {
             const unRead =
                 Date.parse(`${lastRead}Z`) <= Date.parse(`${item.date}Z`);
+            const usernamePattern = /\B@[a-z0-9_-]+/gi;
+            const mentions = item.msg.match(usernamePattern);
+            const participants = mentions
+                ? mentions.map(m => (
+                      <a href={'/' + m}>
+                          <Userpic account={m.substring(1)} />
+                      </a>
+                  ))
+                : null;
             return (
                 <div
                     key={item.id}
-                    className="Notification__item"
+                    className="notification__item flex-body"
                     style={{
-                        padding: '0.5em 1em',
                         background: 'rgba(225,255,225,' + item.score + '%)',
                     }}
                 >
-                    {unRead && <span className="notif-unread">&bull;</span>}
-                    <span style={{ opacity: '0.5' }}>
-                        {item.type}
-                        {' / '}
-                    </span>
-                    <strong>
-                        <a href={`/${item.url}`}>{item.msg}</a>
-                    </strong>
-                    <br />
-                    <small>
-                        <TimeAgoWrapper date={item.date + 'Z'} />
-                    </small>
+                    <div className="flex-row">
+                        {mentions && participants && participants[0]}
+                    </div>
+                    <div className="flex-column">
+                        <div className="notification__message">
+                            <a href={`/${item.url}`}>{item.msg}</a>
+                        </div>
+                        <div className="flex-row">
+                            <div className="notification__icon">
+                                {notificationsIcon(item.type)}
+                            </div>
+                            <div className="notification__date">
+                                <TimeAgoWrapper date={item.date + 'Z'} />
+                            </div>
+                        </div>
+                    </div>
+                    {unRead && (
+                        <span className="notification__unread">&bull;</span>
+                    )}
                 </div>
             );
         };
@@ -123,11 +164,12 @@ class NotificationsList extends React.Component {
                             </a>
                         </center>
                     )}
-                {notificationActionPending && (
+                {(notificationActionPending || !process.env.BROWSER) && (
                     <center>
                         <LoadingIndicator type="circle" />
                     </center>
                 )}
+
                 {notifications &&
                     notifications.length > 0 && (
                         <div style={{ lineHeight: '1rem' }}>
@@ -135,7 +177,9 @@ class NotificationsList extends React.Component {
                         </div>
                     )}
                 {!notifications &&
-                    !loading && (
+                    !notificationActionPending &&
+                    !loading &&
+                    process.env.BROWSER && (
                         <Callout>
                             Welcome! You don't have any notifications yet.
                         </Callout>

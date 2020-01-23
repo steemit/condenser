@@ -73,6 +73,7 @@ export function validateTagInput(value, required = true) {
         .trim()
         .replace(/#/g, '')
         .split(/ +/);
+
     return (
         // !value || value.trim() === '' ? 'Required' :
         cats.length > MAX_TAGS
@@ -95,7 +96,17 @@ export function validateTagInput(value, required = true) {
                           ? tt(
                                 'category_selector_jsx.must_end_with_a_letter_or_number'
                             )
-                          : null
+                          : cats.filter(c => c.substring(0, 5) === 'hive-')
+                                .length > 1
+                            ? tt(
+                                  'category_selector_jsx.must_not_include_hivemind_community_owner',
+                                  {
+                                      hive: cats.filter(
+                                          c => c.substring(0, 5) === 'hive-'
+                                      )[0],
+                                  }
+                              )
+                            : null
     );
 }
 export default connect((state, ownProps) => {

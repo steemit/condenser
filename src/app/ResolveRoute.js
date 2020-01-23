@@ -5,7 +5,7 @@ const reg = pattern => {
         .replace('<account>', '(@[\\w\\.\\d-]+)')
         .replace(
             '<account-tab>',
-            '(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications)'
+            '(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications|communities)'
         )
         .replace(
             '<sort>',

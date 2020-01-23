@@ -204,10 +204,23 @@ export function* getCommunity(action) {
  */
 export function* getSubscriptions(action) {
     if (!action.payload) throw 'no account specified';
-    const subscriptions = yield call(callBridge, 'list_all_subscriptions', {
-        account: action.payload,
-    });
-    yield put(globalActions.receiveSubscriptions(subscriptions));
+    yield put(globalActions.loadingSubscriptions(true));
+    try {
+        const subscriptions = yield call(
+            callBridge,
+            'list_all_subscriptions',
+            action.payload
+        );
+        yield put(
+            globalActions.receiveSubscriptions({
+                subscriptions,
+                username: action.payload,
+            })
+        );
+    } catch (error) {
+        console.log('Error Fetching Account Subscriptions: ', error);
+    }
+    yield put(globalActions.loadingSubscriptions(false));
 }
 
 /**

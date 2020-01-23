@@ -108,8 +108,15 @@ class PostsIndex extends React.Component {
             posts,
         } = this.props;
 
+        const status = this.props.status
+            ? this.props.status.getIn([category || '', order])
+            : null;
+        let fetching = (status && status.fetching) || this.props.loading;
+
         let emptyText = '';
-        if (order === 'feed') {
+        if (!process.env.BROWSER) {
+            fetching = true;
+        } else if (order === 'feed') {
             emptyText = noFriendsText;
         } else if (category === 'my') {
             emptyText = noCommunitiesText;
@@ -127,11 +134,6 @@ class PostsIndex extends React.Component {
         } else {
             emptyText = 'Nothing here to see...';
         }
-
-        const status = this.props.status
-            ? this.props.status.getIn([category || '', order])
-            : null;
-        const fetching = (status && status.fetching) || this.props.loading;
 
         // page title
         let page_title = tt('g.all_tags');

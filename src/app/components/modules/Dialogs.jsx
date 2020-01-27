@@ -35,7 +35,6 @@ class Dialogs extends React.Component {
         const { active_dialogs } = this.props;
         let idx = 0;
         const dialogs = active_dialogs.reduce((r, v, k) => {
-            console.log('r:', r.toJS(), 'v', v.toJS(), 'k:', k);
             const cmp =
                 k === 'qr_reader' ? (
                     <span key={`dialog-${k}`}>

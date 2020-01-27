@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
@@ -228,6 +229,10 @@ export default connect(
         const accountName = props.username;
         const isOwnAccount =
             state.user.getIn(['current', 'username'], '') == accountName;
+        const notifications = state.global
+            .getIn(['notifications', accountName, 'notifications'], List())
+            .toJS();
+        console.log(notifications);
         const unreadNotifications = state.global.getIn(
             ['notifications', accountName, 'unreadNotifications', 'unread'],
             0
@@ -246,6 +251,7 @@ export default connect(
                 'loading',
             ]),
             lastRead,
+            notifications,
         };
     },
     dispatch => ({

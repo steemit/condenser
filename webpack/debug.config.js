@@ -4,7 +4,7 @@ const baseConfig = require('./base.config');
 
 module.exports = {
     ...baseConfig,
-    devtool: 'source-map',
+    devtool: "source-map",
     output: {
         ...baseConfig.output,
         publicPath: '/assets/',

@@ -8,7 +8,7 @@ const startKoa = require('./utils/start-koa');
 
 module.exports = {
     ...baseConfig,
-    devtool: 'source-map', // https://webpack.js.org/configuration/devtool/#development
+    devtool: 'cheap-eval-source-map',
     output: {
         ...baseConfig.output,
         publicPath: '/assets/',

@@ -145,6 +145,23 @@ export function* broadcastOperation({
                 }
             }
         }
+        // if the customJsonPayload has a 'required_posting_auths' key, that has value undefined, and the user is logged in. Update it.
+        const updatedOps = payload.operations.map((op, idx, src) => {
+            if (op[0] === 'custom_json') {
+                if (
+                    op[1].required_posting_auths &&
+                    op[1].required_posting_auths.filter(u => u === undefined)
+                        .length > 0 &&
+                    username
+                ) {
+                    op[1].required_posting_auths = [username];
+                }
+            }
+            return op;
+        });
+
+        payload.operations = updatedOps;
+
         yield call(broadcastPayload, { payload });
         let eventType = type
             .replace(/^([a-z])/, g => g.toUpperCase())

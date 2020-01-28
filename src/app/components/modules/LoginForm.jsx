@@ -406,7 +406,7 @@ class LoginForm extends Component {
                         </button>
                     )}
                 </div>
-                {/*signupLink*/}
+                {signupLink}
             </form>
         );
 

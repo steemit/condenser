@@ -98,7 +98,6 @@ export default connect(
                     community,
                 },
             ];
-
             return dispatch(
                 transactionActions.broadcastOperation({
                     type: 'custom_json',

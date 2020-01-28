@@ -173,7 +173,6 @@ class PostsIndex extends React.Component {
             postsIndexDisplay = <Callout>{emptyText}</Callout>;
         }
         if (order === 'feed' && !username) {
-            debugger;
             postsIndexDisplay = <Callout>{emptyText}</Callout>;
         }
 

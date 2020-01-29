@@ -131,8 +131,8 @@ export default function reducer(state = defaultState, action = {}) {
             const map = Map(payload.map(c => [c.name, fromJS(c)]));
             const idx = List(payload.map(c => c.name));
             return state
-                .update('community', Map(), a => a.mergeDeep(map))
-                .update('community_idx', List(), a => a.mergeDeep(idx));
+                .setIn(['community'], map)
+                .setIn(['community_idx'], idx);
         }
 
         case RECEIVE_COMMUNITY: {

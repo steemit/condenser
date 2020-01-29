@@ -173,7 +173,11 @@ export default connect(
         // get the onErrorCB and call it on cancel
         const show_login_modal = state.user.get('show_login_modal');
         let loginBroadcastOperation = {};
-        if (show_login_modal) {
+        if (
+            show_login_modal &&
+            state.user &&
+            state.user.getIn(['loginBroadcastOperation'])
+        ) {
             loginBroadcastOperation = state.user
                 .getIn(['loginBroadcastOperation'])
                 .toJS();

@@ -1,16 +1,32 @@
 import GDPRUserList from './utils/GDPRUserList';
 
+const reg = pattern => {
+    pattern = pattern
+        .replace('<account>', '(@[\\w\\.\\d-]+)')
+        .replace(
+            '<account-tab>',
+            '(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications|communities)'
+        )
+        .replace(
+            '<sort>',
+            '(hot|trending|promoted|payout|payout_comments|muted|created)'
+        )
+        .replace('<tag>', '([\\w\\W\\d-]{2,32})')
+        .replace('<permlink>', '([\\w\\d-]+)')
+        .replace('/', '\\/');
+    return new RegExp('^\\/' + pattern + '$');
+};
+
 export const routeRegex = {
-    CommunityRoles: /^\/(roles)+\/([\w\.\d-]+)/gi,
-    UserFeed: /^\/(@[\w\.\d-]+)\/feed\/?$/,
-    UserProfile: /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications))?\/?$/,
-    CategoryFilters: /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(?:\/([\w\d-]+))?\/?$/i,
-    PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,
-    Post: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
-    PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
-    UserJson: /^\/(@[\w\.\d-]+)(\.json)$/,
-    UserNameJson: /^.*(?=(\.json))/,
-    Search: /^\/(search)/,
+    CommunityRoles: reg('roles/<tag>'),
+    UserFeed: reg('<account>/feed/?'),
+    UserProfile: reg('<account>(?:/<account-tab>)?/?'),
+    CategoryFilters: reg('<sort>(?:/<tag>)?/?'),
+    PostNoCategory: reg('<account>/<permlink>'),
+    Post: reg('<tag>/<account>/<permlink>/?'),
+    PostJson: reg('<tag>/<account>/<permlink>(\\.json)'),
+    UserJson: reg('<account>(\\.json)'),
+    Search: reg('search'),
 };
 
 export default function resolveRoute(path) {
@@ -34,8 +50,7 @@ export default function resolveRoute(path) {
 
     // /roles/hive-123
     let match = path.match(routeRegex.CommunityRoles);
-    if (match)
-        return { page: 'CommunityRoles', params: [match[0].split('/')[2]] };
+    if (match) return { page: 'CommunityRoles', params: [match[1]] };
 
     // /@user/feed
     match = path.match(routeRegex.UserFeed);

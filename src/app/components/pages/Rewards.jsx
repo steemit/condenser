@@ -11,13 +11,14 @@ function normalizeRewards(rewards) {
     const comms = total - blogs;
 
     let remainder = total;
-    const out = items.map(item => {
+    const out = items.map((item, idx) => {
         let [url, title, payout, posts, authors] = item;
+        const rank = idx + 1;
         remainder -= payout;
         const is_blog = url.substring(0, 5) != 'hive-';
         url = '/' + (is_blog ? url + '/payout' : 'payout/' + url);
         title = title[0] == '@' ? title.substring(1) : title;
-        return { url, title, payout, posts, authors, is_blog };
+        return { url, title, payout, posts, authors, is_blog, rank };
     });
 
     return { items: out, total, blogs, comms, remainder };
@@ -146,6 +147,7 @@ class Rewards extends Component {
             is_blog,
             shape,
             pct,
+            rank,
         } = item;
         const summary = '$' + Math.round(payout) + ' in ' + posts + ' posts';
         const link = (
@@ -157,6 +159,8 @@ class Rewards extends Component {
                     <i>{is_blog ? 'Blogger' : 'Community'}</i>
                     <br />
                     {summary}
+                    <br />
+                    Rank: {rank ? '#' + rank : 'unknown'}
                     {authors && (
                         <span>
                             <br />
@@ -172,7 +176,7 @@ class Rewards extends Component {
         const bg = row => {
             const { posts, payout, is_blog } = row;
             const per_post = posts ? payout / posts : null;
-            const alpha = per_post ? Math.min(per_post / 15, 1) : 0.5;
+            const alpha = per_post ? Math.min(per_post / 15 + 0.1, 1) : 0.5;
             const color = is_blog ? '155,155,255' : '220,90,255';
             return `rgba(${color},${alpha})`;
         };

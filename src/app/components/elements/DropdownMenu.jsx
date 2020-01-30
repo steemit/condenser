@@ -9,7 +9,11 @@ export default class DropdownMenu extends React.Component {
     static propTypes = {
         items: PropTypes.arrayOf(PropTypes.object).isRequired,
         selected: PropTypes.string,
-        children: PropTypes.object,
+        children: PropTypes.oneOfType([
+            PropTypes.object,
+            PropTypes.array,
+            PropTypes.element,
+        ]),
         className: PropTypes.string,
         title: PropTypes.string,
         href: PropTypes.string,

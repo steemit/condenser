@@ -251,7 +251,7 @@ class PostFull extends React.Component {
         const content = post.toJS();
         const { author, permlink, parent_author, parent_permlink } = content;
         const { category, title } = content;
-        const link = `${category}/@${author}/${permlink}`;
+        const link = `/${category}/@${author}/${permlink}`;
 
         if (process.env.BROWSER && title)
             document.title = title + ' — ' + APP_NAME;

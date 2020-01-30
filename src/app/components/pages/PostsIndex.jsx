@@ -33,7 +33,7 @@ const noFriendsText = (
 
 const noCommunitiesText = (
     <div>
-        You haven't joined any communities yet!<br />
+        You haven't joined any active communities yet!<br />
         <br />
         <span style={{ fontSize: '1.1rem' }}>
             <Link to="/communities">Explore Communities</Link>
@@ -118,7 +118,10 @@ class PostsIndex extends React.Component {
                 ? 'community' //community.get('title')
                 : category ? ' #' + category : '';
 
-            if (order == 'payout') emptyText = `No pending ${cat} posts found.`;
+            if (order == 'payout')
+                emptyText = `No pending ${
+                    cat
+                } posts found. This view only shows posts within 12 - 36 hours of payout.`;
             else if (order == 'created') emptyText = `No posts in ${cat} yet!`;
             else emptyText = `No ${order} ${cat} posts found.`;
         } else {
@@ -270,7 +273,10 @@ module.exports = {
             }
 
             return {
-                subscriptions: state.global.get('subscriptions'),
+                subscriptions: state.global.getIn([
+                    'subscriptions',
+                    account_name,
+                ]),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 account_name,

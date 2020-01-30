@@ -280,7 +280,6 @@ export async function serverRender(
                 onchain.content[key]['active_votes'] = null;
             }
         }
-
         // Are we loading an un-category-aliased post?
         if (
             !url.match(routeRegex.UserProfile) &&
@@ -294,8 +293,7 @@ export async function serverRender(
                 const params = { author: postref[0], permlink: postref[1] };
                 header = await callBridge('get_post_header', params);
             }
-
-            if (header.author && header.permlink && header.category) {
+            if (header && header.author && header.permlink && header.category) {
                 const { author, permlink, category } = header;
                 return { redirectUrl: `/${category}/@${author}/${permlink}` };
             } else {

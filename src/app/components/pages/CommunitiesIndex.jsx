@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
 import { Map, List } from 'immutable';
@@ -7,6 +6,8 @@ import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
 import { Link } from 'react-router';
 import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import UserNames from 'app/components/elements/UserNames';
 
 export default class CommunitiesIndex extends React.Component {
     componentWillMount = () => {
@@ -22,37 +23,60 @@ export default class CommunitiesIndex extends React.Component {
         } = this.props;
         const ordered = communities_idx.map(name => communities.get(name));
 
-        if (communities_idx.length == 0) {
+        if (communities_idx.size === 0) {
             return (
                 <center>
-                    <h5>Loading...</h5>
+                    <LoadingIndicator
+                        style={{ marginBottom: '2rem' }}
+                        type="circle"
+                    />
                 </center>
             );
         }
 
         const role = comm =>
             comm.context &&
-            comm.context.role != 'guest' && (
+            comm.context.role !== 'guest' && (
                 <span className="user_role">{comm.context.role}</span>
             );
 
-        const row = comm => (
-            <tr key={comm.name}>
-                <th width="600">
-                    <Link to={`/trending/${comm.name}`}>{comm.title}</Link>
-                    {role(comm)}
-                    <br />
-                    {comm.about}
-                    <small>
-                        {comm.subscribers} subscribers &bull; {comm.num_authors}{' '}
-                        posters &bull; {comm.num_pending} posts
-                    </small>
-                </th>
-                <td width="40">
-                    <SubscribeButton community={comm.name} />
-                </td>
-            </tr>
-        );
+        const communityAdmins = admins => {
+            if (!admins || admins.length === 0) return;
+
+            return (
+                <div>
+                    {admins.length === 1
+                        ? `${tt('g.administrator')}: `
+                        : `${tt('g.administrators')}: `}
+                    <UserNames names={admins} />
+                </div>
+            );
+        };
+
+        const row = comm => {
+            const admins = communityAdmins(comm.admins);
+            return (
+                <tr key={comm.name}>
+                    <th>
+                        <Link className="title" to={`/trending/${comm.name}`}>
+                            {comm.title}
+                        </Link>
+                        {role(comm)}
+                        <br />
+                        {comm.about}
+                        <small>
+                            {comm.subscribers} subscribers &bull;{' '}
+                            {comm.num_authors} posters &bull; {comm.num_pending}{' '}
+                            posts
+                            {admins}
+                        </small>
+                    </th>
+                    <td>
+                        <SubscribeButton community={comm.name} />
+                    </td>
+                </tr>
+            );
+        };
 
         return (
             <PostsIndexLayout

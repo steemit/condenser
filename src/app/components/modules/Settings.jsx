@@ -159,6 +159,7 @@ class Settings extends React.Component {
         metaData.profile.about = about.value;
         metaData.profile.location = location.value;
         metaData.profile.website = website.value;
+        metaData.profile.version = 2; // signal upgrade to posting_json_metadata
 
         // Remove empty keys
         if (!metaData.profile.profile_image)
@@ -531,6 +532,19 @@ class Settings extends React.Component {
     }
 }
 
+function read_profile_v2(account) {
+    if (!account) return {};
+
+    // use new `posting_json_md` if {version: 2} is present
+    let md = o2j.ifStringParseJSON(account.get('posting_json_metadata'));
+    if (md && md.profile && md.profile.version) return md;
+
+    // otherwise, fall back to `json_metadata`
+    md = o2j.ifStringParseJSON(account.get('json_metadata'));
+    if (typeof md === 'string') md = o2j.ifStringParseJSON(md); // issue #1237, double-encoded
+    return md;
+}
+
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
@@ -550,11 +564,7 @@ export default connect(
         const current_user = state.user.get('current');
         const username = current_user ? current_user.get('username') : '';
 
-        let metaData = account
-            ? o2j.ifStringParseJSON(account.get('posting_json_metadata'))
-            : {};
-        if (typeof metaData === 'string')
-            metaData = o2j.ifStringParseJSON(metaData); // issue #1237
+        const metaData = read_profile_v2(account);
         const profile = metaData && metaData.profile ? metaData.profile : {};
         const user_preferences = state.app.get('user_preferences').toJS();
 

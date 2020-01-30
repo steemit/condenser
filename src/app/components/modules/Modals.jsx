@@ -96,7 +96,6 @@ class Modals extends React.Component {
                     <Reveal
                         onHide={() => {
                             hideLogin();
-                            loginBroadcastOperation.errorCallback();
                         }}
                         show={show_login_modal}
                     >

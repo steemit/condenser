@@ -114,12 +114,14 @@ class PostsIndex extends React.Component {
         let fetching = (status && status.fetching) || this.props.loading;
 
         let emptyText = '';
-        if (!process.env.BROWSER) {
-            fetching = true;
-        } else if (order === 'feed') {
+        if (order === 'feed') {
             emptyText = noFriendsText;
         } else if (category === 'my') {
-            emptyText = noCommunitiesText;
+            if (!process.env.BROWSER) {
+                fetching = true;
+            } else {
+                emptyText = noCommunitiesText;
+            }
         } else if (posts.size === 0) {
             const cat = community
                 ? 'community' //community.get('title')

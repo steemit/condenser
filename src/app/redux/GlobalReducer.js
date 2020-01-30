@@ -145,7 +145,7 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_SUBSCRIPTIONS: {
             return state.setIn(
-                ['subscriptions', payload.username.account],
+                ['subscriptions', payload.username],
                 fromJS(payload.subscriptions)
             );
         }

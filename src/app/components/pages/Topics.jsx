@@ -105,7 +105,6 @@ class Topics extends Component {
         const commsHead = (
             <div style={{ color: '#aaa', paddingTop: '0em' }}>{title}</div>
         );
-
         const list = (
             <ul className="c-sidebar__list">
                 <li>{link('/', tt('g.all_tags'))}</li>

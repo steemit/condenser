@@ -12,6 +12,7 @@ import debounce from 'lodash.debounce';
 import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import GptAd from 'app/components/elements/GptAd';
+import VideoAd from 'app/components/elements/VideoAd';
 
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
@@ -138,7 +139,19 @@ class PostsList extends React.Component {
                 summary.push(<li key={i}>{ps}</li>);
 
                 const every = this.props.adSlots.in_feed_1.every;
-                if (this.props.shouldSeeAds && i >= every && i % every === 0) {
+                if (false && this.props.videoAdsEnabled && i === 4) {
+                    summary.push(
+                        <div key={`id-${i}`}>
+                            <div className="articles__content-block--ad video-ad">
+                                <VideoAd id="bsa-zone_1572296522077-3_123456" />
+                            </div>
+                        </div>
+                    );
+                } else if (
+                    this.props.shouldSeeAds &&
+                    i >= every &&
+                    i % every === 0
+                ) {
                     summary.push(
                         <div
                             key={`ad-${i}`}
@@ -182,7 +195,11 @@ export default connect(
     (state, props) => {
         const userPreferences = state.app.get('user_preferences').toJS();
         const nsfwPref = userPreferences.nsfwPref || 'warn';
-        const shouldSeeAds = state.app.getIn(['googleAds', 'enabled']);
+        const shouldSeeAds = false && state.app.getIn(['googleAds', 'enabled']); //TODO: reenable
+        const videoAdsEnabled = state.app.getIn([
+            'googleAds',
+            'videoAdsEnabled',
+        ]);
         const adSlots = state.app.getIn(['googleAds', 'adSlots']).toJS();
 
         const current = state.user.get('current');
@@ -220,6 +237,7 @@ export default connect(
             posts,
             nsfwPref,
             shouldSeeAds,
+            videoAdsEnabled,
             adSlots,
         };
     },

@@ -2,25 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { immutableAccessor } from 'app/utils/Accessors';
 import { parseJsonTags } from 'app/utils/StateFunctions';
 import Headroom from 'react-headroom';
-import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
-import SortOrder from 'app/components/elements/SortOrder';
 import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
 import IconButton from 'app/components/elements/IconButton';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
+import { startPolling } from 'app/redux/PollingSaga';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Userpic from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import Announcement from 'app/components/elements/Announcement';
 import GptAd from 'app/components/elements/GptAd';
 import { Map } from 'immutable';
+import ReactMutationObserver from '../../utils/ReactMutationObserver';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 class Header extends React.Component {
     static propTypes = {
@@ -29,6 +30,10 @@ class Header extends React.Component {
         category: PropTypes.string,
         order: PropTypes.string,
         pathname: PropTypes.string,
+        getUnreadAccountNotifications: PropTypes.func,
+        startNotificationsPolling: PropTypes.func,
+        loggedIn: PropTypes.bool,
+        unreadNotificationCount: PropTypes.number,
     };
 
     constructor(props) {
@@ -39,6 +44,17 @@ class Header extends React.Component {
             showAd: false,
             showAnnouncement: this.props.showAnnouncement,
         };
+    }
+
+    componentWillMount() {
+        const {
+            loggedIn,
+            current_account_name,
+            startNotificationsPolling,
+        } = this.props;
+        if (loggedIn) {
+            startNotificationsPolling(current_account_name);
+        }
     }
 
     componentDidMount() {
@@ -104,22 +120,19 @@ class Header extends React.Component {
 
     render() {
         const {
-            category,
-            order,
             pathname,
-            current_account_name,
             username,
             showLogin,
             logout,
             loggedIn,
-            vertical,
-            nightmodeEnabled,
             toggleNightmode,
             showSidePanel,
             navigate,
             display_name,
             content,
             walletUrl,
+            unreadNotificationCount,
+            notificationActionPending,
         } = this.props;
 
         let { showAd, showAnnouncement } = this.state;
@@ -250,14 +263,18 @@ class Header extends React.Component {
         const replies_link = `/@${username}/replies`;
         const account_link = `/@${username}`;
         const comments_link = `/@${username}/comments`;
-        const settings_link = `/@${username}/settings`;
         const notifs_link = `/@${username}/notifications`;
         const wallet_link = `${walletUrl}/@${username}`;
+        const notif_label =
+            tt('g.notifications') +
+            (unreadNotificationCount > 0
+                ? ` (${unreadNotificationCount})`
+                : '');
 
         const user_menu = [
             { link: account_link, icon: 'profile', value: tt('g.profile') },
-            { link: notifs_link, icon: 'clock', value: tt('g.notifications') },
-            //{ link: comments_link, icon: 'replies', value: tt('g.posts') },
+            { link: notifs_link, icon: 'clock', value: notif_label },
+            { link: comments_link, icon: 'chatbox', value: tt('g.comments') },
             { link: replies_link, icon: 'reply', value: tt('g.replies') },
             //{ link: settings_link, icon: 'cog', value: tt('g.settings') },
             {
@@ -274,100 +291,131 @@ class Header extends React.Component {
                 value: tt('g.logout'),
             },
         ];
-        showAd = true;
+        showAd = false; // TODO: fix header ad overlap bug
+        const headerMutated = (mutation, discconnectObserver) => {
+            if (mutation.target.id.indexOf('google_ads_iframe_') !== -1) {
+                this.gptAdRendered();
+                if (typeof discconnectObserver === 'function') {
+                    discconnectObserver();
+                }
+            }
+        };
         return (
-            <Headroom
-                onUnpin={e => this.headroomOnUnpin(e)}
-                onUnfix={e => this.headroomOnUnfix(e)}
-            >
-                <header className="Header">
-                    {showAnnouncement && (
-                        <Announcement onClose={e => this.hideAnnouncement(e)} />
-                    )}
-                    {/* If announcement is shown, ad will not render unless it's in a parent div! */}
-                    <div style={showAd ? {} : { display: 'none' }}>
-                        <GptAd
-                            tags={gptTags}
-                            type="Freestar"
-                            id="bsa-zone_1566493796250-1_123456"
-                        />
-                    </div>
-
-                    <nav className="row Header__nav">
-                        <div className="small-6 medium-4 large-4 columns Header__logotype">
-                            <Link to={logo_link}>
-                                <SteemLogo />
-                            </Link>
-                        </div>
-
-                        <div className="large-4 columns show-for-large large-centered Header__sort">
-                            {/*
-                            <SortOrder
-                                sortOrder={order}
-                                topic={category === 'feed' ? '' : category}
-                                horizontal
-                                pathname={pathname}
+            <ReactMutationObserver onChildListChanged={headerMutated}>
+                <Headroom
+                    onUnpin={e => this.headroomOnUnpin(e)}
+                    onUnfix={e => this.headroomOnUnfix(e)}
+                >
+                    <header className="Header">
+                        {showAnnouncement && (
+                            <Announcement
+                                onClose={e => this.hideAnnouncement(e)}
                             />
-                            */}
+                        )}
+                        <div className="beta-disclaimer">
+                            Viewing <strong>Steemit.com beta</strong>. Note that
+                            availability of features or service may change at
+                            any time.
+                        </div>
+                        {/* If announcement is shown, ad will not render unless it's in a parent div! */}
+                        <div style={showAd ? {} : { display: 'none' }}>
+                            <GptAd
+                                tags={gptTags}
+                                type="Freestar"
+                                id="bsa-zone_1566493796250-1_123456"
+                            />
                         </div>
 
-                        <div className="small-6 medium-8 large-4 columns Header__buttons">
-                            {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
-                            {!loggedIn && (
-                                <span className="Header__user-signup show-for-medium">
-                                    <a
-                                        className="Header__login-link"
-                                        href="/login.html"
-                                        onClick={showLogin}
-                                    >
-                                        {tt('g.login')}
-                                    </a>
-                                    <a
-                                        className="Header__signup-link"
-                                        href={SIGNUP_URL}
-                                    >
-                                        {tt('g.sign_up')}
+                        <nav className="row Header__nav">
+                            <div className="small-6 medium-4 large-4 columns Header__logotype">
+                                <Link to={logo_link}>
+                                    <SteemLogo />
+                                </Link>
+                            </div>
+
+                            <div className="large-4 columns show-for-large large-centered Header__sort">
+                                {/*
+                                <SortOrder
+                                    sortOrder={order}
+                                    topic={category === 'feed' ? '' : category}
+                                    horizontal
+                                    pathname={pathname}
+                                />
+                                */}
+                            </div>
+
+                            <div className="small-6 medium-8 large-4 columns Header__buttons">
+                                {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
+                                {!loggedIn && (
+                                    <span className="Header__user-signup show-for-medium">
+                                        <a
+                                            className="Header__login-link"
+                                            href="/login.html"
+                                            onClick={showLogin}
+                                        >
+                                            {tt('g.login')}
+                                        </a>
+                                        <a
+                                            className="Header__signup-link"
+                                            href={SIGNUP_URL}
+                                        >
+                                            {tt('g.sign_up')}
+                                        </a>
+                                    </span>
+                                )}
+
+                                {/*CUSTOM SEARCH*/}
+                                <span className="Header__search--desktop">
+                                    <ElasticSearchInput />
+                                </span>
+                                <span className="Header__search">
+                                    <a href="/search">
+                                        <IconButton icon="magnifyingGlass" />
                                     </a>
                                 </span>
-                            )}
 
-                            {/*CUSTOM SEARCH*/}
-                            <span className="Header__search--desktop">
-                                <ElasticSearchInput />
-                            </span>
-                            <span className="Header__search">
-                                <a href="/search">
-                                    <IconButton icon="magnifyingGlass" />
-                                </a>
-                            </span>
-
-                            {/*SUBMIT STORY*/}
-                            {submit_story}
-                            {/*USER AVATAR */}
-                            {loggedIn && (
-                                <DropdownMenu
-                                    className={'Header__usermenu'}
-                                    items={user_menu}
-                                    title={username}
-                                    el="span"
-                                    position="left"
+                                {/*SUBMIT STORY*/}
+                                {submit_story}
+                                {/*USER AVATAR */}
+                                {loggedIn && (
+                                    <DropdownMenu
+                                        className={'Header__usermenu'}
+                                        items={user_menu}
+                                        title={username}
+                                        el="span"
+                                        position="left"
+                                    >
+                                        <li className={'Header__userpic '}>
+                                            <Userpic account={username} />
+                                        </li>
+                                        {!notificationActionPending &&
+                                            unreadNotificationCount > 0 && (
+                                                <div
+                                                    className={
+                                                        'Header__notification'
+                                                    }
+                                                >
+                                                    <span>
+                                                        {
+                                                            unreadNotificationCount
+                                                        }
+                                                    </span>
+                                                </div>
+                                            )}
+                                    </DropdownMenu>
+                                )}
+                                {/*HAMBURGER*/}
+                                <span
+                                    onClick={showSidePanel}
+                                    className="toggle-menu Header__hamburger"
                                 >
-                                    <li className={'Header__userpic '}>
-                                        <Userpic account={username} />
-                                    </li>
-                                </DropdownMenu>
-                            )}
-                            {/*HAMBURGER*/}
-                            <span
-                                onClick={showSidePanel}
-                                className="toggle-menu Header__hamburger"
-                            >
-                                <span className="hamburger" />
-                            </span>
-                        </div>
-                    </nav>
-                </header>
-            </Headroom>
+                                    <span className="hamburger" />
+                                </span>
+                            </div>
+                        </nav>
+                    </header>
+                </Headroom>
+            </ReactMutationObserver>
         );
     }
 }
@@ -408,6 +456,22 @@ const mapStateToProps = (state, ownProps) => {
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
     const content = state.global.get('content'); // TODO: needed for SSR?
+    let unreadNotificationCount = 0;
+    if (
+        loggedIn &&
+        state.global.getIn([
+            'notifications',
+            current_account_name,
+            'unreadNotifications',
+        ])
+    ) {
+        unreadNotificationCount = state.global.getIn([
+            'notifications',
+            current_account_name,
+            'unreadNotifications',
+            'unread',
+        ]);
+    }
 
     return {
         username,
@@ -420,6 +484,11 @@ const mapStateToProps = (state, ownProps) => {
         walletUrl: state.app.get('walletUrl'),
         gptEnabled,
         content,
+        unreadNotificationCount,
+        notificationActionPending: state.global.getIn([
+            'notifications',
+            'loading',
+        ]),
         ...ownProps,
     };
 };
@@ -443,7 +512,26 @@ const mapDispatchToProps = dispatch => ({
     hideSidePanel: () => {
         dispatch(userActions.hideSidePanel());
     },
+    getUnreadAccountNotifications: username => {
+        const query = {
+            account: username,
+        };
+        return dispatch(
+            fetchDataSagaActions.getUnreadAccountNotifications(query)
+        );
+    },
     hideAnnouncement: () => dispatch(userActions.hideAnnouncement()),
+    startNotificationsPolling: username => {
+        const query = {
+            account: username,
+        };
+        const params = {
+            pollAction: fetchDataSagaActions.getUnreadAccountNotifications,
+            pollPayload: query,
+            delay: 600000, // The delay between successive polls
+        };
+        return dispatch(startPolling(params));
+    },
 });
 
 const connectedHeader = connect(mapStateToProps, mapDispatchToProps)(Header);

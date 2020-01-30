@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import reactForm from 'app/utils/ReactForm';
 import { Map } from 'immutable';
+import { connect } from 'react-redux';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
@@ -349,7 +350,15 @@ class ReplyEditor extends React.Component {
             return;
         }
 
-        imagesToUpload = [...acceptedFiles];
+        for (let fi = 0; fi < acceptedFiles.length; fi += 1) {
+            const acceptedFile = acceptedFiles[fi];
+            const imageToUpload = {
+                file: acceptedFile,
+                temporaryTag: '',
+            };
+            imagesToUpload.push(imageToUpload);
+        }
+
         this.insertPlaceHolders();
         this.uploadNextImage();
     };
@@ -365,7 +374,10 @@ class ReplyEditor extends React.Component {
                 for (const item of e.clipboardData.items) {
                     if (item.kind === 'file' && /^image\//.test(item.type)) {
                         const blob = item.getAsFile();
-                        imagesToUpload.push(blob);
+                        imagesToUpload.push({
+                            file: blob,
+                            temporaryTag: '',
+                        });
                     }
                 }
 
@@ -384,7 +396,7 @@ class ReplyEditor extends React.Component {
     uploadNextImage = () => {
         if (imagesToUpload.length > 0) {
             const nextImage = imagesToUpload.pop();
-            this.upload(nextImage, nextImage.name);
+            this.upload(nextImage);
         }
     };
 
@@ -395,9 +407,18 @@ class ReplyEditor extends React.Component {
         let placeholder = '';
 
         for (let ii = 0; ii < imagesToUpload.length; ii += 1) {
-            imagesUploadCount++;
-            placeholder += `\n![Uploading image #${imagesUploadCount}...]()\n`;
+            const imageToUpload = imagesToUpload[ii];
+
+            if (imageToUpload.temporaryTag === '') {
+                imagesUploadCount++;
+                imageToUpload.temporaryTag = `![Uploading image #${
+                    imagesUploadCount
+                }...]()`;
+                placeholder += `\n${imageToUpload.temporaryTag}\n`;
+            }
         }
+
+        this.setState({ imagesUploadCount: imagesUploadCount });
 
         // Insert the temporary tag where the cursor currently is
         body.props.onChange(
@@ -407,43 +428,34 @@ class ReplyEditor extends React.Component {
         );
     };
 
-    upload = (file, name = '') => {
-        let { imagesUploadCount } = this.state;
-        imagesUploadCount++;
-        this.setState({ imagesUploadCount: imagesUploadCount });
-
+    upload = image => {
         const { uploadImage } = this.props;
         this.setState({
             progress: { message: tt('reply_editor.uploading') },
         });
 
-        uploadImage(file, progress => {
+        uploadImage(image.file, progress => {
             const { body } = this.state;
 
             if (progress.url) {
                 this.setState({ progress: {} });
                 const { url } = progress;
-                const image_md = `![${name}](${url})`;
+                const imageMd = `![${image.file.name}](${url})`;
 
                 // Replace temporary image MD tag with the real one
                 body.props.onChange(
-                    body.value.replace(
-                        `![Uploading image #${imagesUploadCount}...]()`,
-                        image_md
-                    )
+                    body.value.replace(image.temporaryTag, imageMd)
                 );
 
                 this.uploadNextImage();
             } else {
                 if (progress.hasOwnProperty('error')) {
                     this.displayErrorMessage(progress.error);
+                    const imageMd = `![${image.file.name}](UPLOAD FAILED)`;
 
                     // Remove temporary image MD tag
                     body.props.onChange(
-                        body.value.replace(
-                            `![Uploading image #${imagesUploadCount}...]()`,
-                            ''
-                        )
+                        body.value.replace(image.temporaryTag, imageMd)
                     );
                 } else {
                     this.setState({ progress });
@@ -932,8 +944,6 @@ function stateFromMarkdown(markdown) {
     return stateFromHtml(html);
 }
 
-import { connect } from 'react-redux';
-
 export default formId =>
     connect(
         // mapStateToProps
@@ -966,7 +976,15 @@ export default formId =>
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 tags = OrderedSet([category, ...jsonMetadata.tags]).join(' ');
             }
-
+            let isNSFWCommunity = false;
+            isNSFWCommunity = state.global.getIn([
+                'community',
+                category,
+                'is_nsfw',
+            ]);
+            if (isNSFWCommunity) {
+                tags = `${tags} nsfw`;
+            }
             const defaultPayoutType = state.app.getIn(
                 [
                     'user_preferences',
@@ -1010,7 +1028,7 @@ export default formId =>
             //  parent_author, parent_permlink,
             //  type, successCallback,
             //  successCallBack, onCancel
-            const ret = {
+            return {
                 ...ownProps,
                 type, //XX
                 jsonMetadata, //XX (if not reply)
@@ -1024,8 +1042,6 @@ export default formId =>
                 initialValues: { title, body, tags },
                 formId,
             };
-
-            return ret;
         },
 
         // mapDispatchToProps

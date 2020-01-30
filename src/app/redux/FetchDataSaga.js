@@ -206,11 +206,9 @@ export function* getSubscriptions(action) {
     if (!action.payload) throw 'no account specified';
     yield put(globalActions.loadingSubscriptions(true));
     try {
-        const subscriptions = yield call(
-            callBridge,
-            'list_all_subscriptions',
-            action.payload
-        );
+        const subscriptions = yield call(callBridge, 'list_all_subscriptions', {
+            account: action.payload,
+        });
         yield put(
             globalActions.receiveSubscriptions({
                 subscriptions,

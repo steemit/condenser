@@ -96,7 +96,7 @@ class NotificationsList extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { username, getAccountNotifications, isLastPage } = this.props;
+        const { username, getAccountNotifications } = this.props;
         if (prevProps.username !== username) {
             getAccountNotifications(username);
         }
@@ -121,7 +121,7 @@ class NotificationsList extends React.Component {
             unreadNotifications,
             isOwnAccount,
             accountName,
-            isLastpage,
+            isLastPage,
             notificationActionPending,
             lastRead,
         } = this.props;
@@ -211,7 +211,7 @@ class NotificationsList extends React.Component {
 
                 {!notificationActionPending &&
                     notifications &&
-                    !isLastpage && (
+                    !isLastPage && (
                         <center>
                             <br />
                             <a href="#" onClick={this.onClickLoadMore}>
@@ -241,6 +241,10 @@ export default connect(
             ['notifications', accountName, 'unreadNotifications', 'lastread'],
             ''
         );
+        const isNotificationsLastPage = state.global.getIn(
+            ['notifications', accountName, 'isLastPage'],
+            null
+        );
         return {
             ...props,
             isOwnAccount,
@@ -252,6 +256,7 @@ export default connect(
             ]),
             lastRead,
             notifications,
+            isLastPage: isNotificationsLastPage,
         };
     },
     dispatch => ({

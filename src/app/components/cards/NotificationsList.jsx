@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
@@ -70,7 +71,6 @@ class NotificationsList extends React.Component {
         ),
         isLastPage: PropTypes.bool,
         username: PropTypes.string.isRequired,
-        loading: PropTypes.bool.isRequired,
         markAsRead: PropTypes.func.isRequired,
         unreadNotifications: PropTypes.number,
         notificationActionPending: PropTypes.bool,
@@ -82,7 +82,6 @@ class NotificationsList extends React.Component {
         unreadNotifications: 0,
         notificationActionPending: false,
         isLastPage: false,
-        loading: false,
     };
 
     constructor() {
@@ -90,14 +89,14 @@ class NotificationsList extends React.Component {
     }
 
     componentWillMount() {
-        const { username, notifications, getAccountNotifications } = this.props;
-        if (username && !notifications) {
+        const { username, getAccountNotifications } = this.props;
+        if (username) {
             getAccountNotifications(username);
         }
     }
 
     componentDidUpdate(prevProps) {
-        const { username, getAccountNotifications, isLastPage } = this.props;
+        const { username, getAccountNotifications } = this.props;
         if (prevProps.username !== username) {
             getAccountNotifications(username);
         }
@@ -120,10 +119,9 @@ class NotificationsList extends React.Component {
         const {
             notifications,
             unreadNotifications,
-            loading,
             isOwnAccount,
             accountName,
-            isLastpage,
+            isLastPage,
             notificationActionPending,
             lastRead,
         } = this.props;
@@ -179,8 +177,7 @@ class NotificationsList extends React.Component {
         return (
             <div className="">
                 {isOwnAccount && <ClaimBox accountName={accountName} />}
-                {!loading &&
-                    notifications &&
+                {notifications &&
                     notifications.length > 0 &&
                     unreadNotifications !== 0 &&
                     !notificationActionPending && (
@@ -205,24 +202,15 @@ class NotificationsList extends React.Component {
                     )}
                 {!notifications &&
                     !notificationActionPending &&
-                    !loading &&
                     process.env.BROWSER && (
                         <Callout>
                             Welcome! You don't have any notifications yet.
                         </Callout>
                     )}
 
-                {loading && (
-                    <center>
-                        <LoadingIndicator
-                            style={{ marginBottom: '2rem' }}
-                            type="circle"
-                        />
-                    </center>
-                )}
-                {!loading &&
+                {!notificationActionPending &&
                     notifications &&
-                    !isLastpage && (
+                    !isLastPage && (
                         <center>
                             <br />
                             <a href="#" onClick={this.onClickLoadMore}>
@@ -240,6 +228,9 @@ export default connect(
         const accountName = props.username;
         const isOwnAccount =
             state.user.getIn(['current', 'username'], '') == accountName;
+        const notifications = state.global
+            .getIn(['notifications', accountName, 'notifications'], List())
+            .toJS();
         const unreadNotifications = state.global.getIn(
             ['notifications', accountName, 'unreadNotifications', 'unread'],
             0
@@ -247,6 +238,10 @@ export default connect(
         const lastRead = state.global.getIn(
             ['notifications', accountName, 'unreadNotifications', 'lastread'],
             ''
+        );
+        const isNotificationsLastPage = state.global.getIn(
+            ['notifications', accountName, 'isLastPage'],
+            null
         );
         return {
             ...props,
@@ -258,6 +253,8 @@ export default connect(
                 'loading',
             ]),
             lastRead,
+            notifications,
+            isLastPage: isNotificationsLastPage,
         };
     },
     dispatch => ({

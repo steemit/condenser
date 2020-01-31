@@ -89,7 +89,7 @@ class Dialogs extends React.Component {
                                     'community',
                                     'name',
                                 ])}
-                                isLastpage={true}
+                                isLastPage={false}
                             />
                         </Reveal>
                     </span>

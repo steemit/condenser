@@ -202,7 +202,6 @@ class NotificationsList extends React.Component {
                     )}
                 {!notifications &&
                     !notificationActionPending &&
-                    !loading &&
                     process.env.BROWSER && (
                         <Callout>
                             Welcome! You don't have any notifications yet.
@@ -232,7 +231,6 @@ export default connect(
         const notifications = state.global
             .getIn(['notifications', accountName, 'notifications'], List())
             .toJS();
-        console.log(notifications);
         const unreadNotifications = state.global.getIn(
             ['notifications', accountName, 'unreadNotifications', 'unread'],
             0

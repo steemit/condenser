@@ -168,7 +168,7 @@ class CommunityPane extends Component {
                         {teamMembers(community.get('team', List()))}
                         <div style={{ float: 'right', fontSize: '0.8em' }}>
                             <a onClick={handleModerationLogCLick}>
-                                Moderation Log
+                                Activity Log
                             </a>
                         </div>
                     </div>

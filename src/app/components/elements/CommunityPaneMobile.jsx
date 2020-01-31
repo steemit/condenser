@@ -12,12 +12,21 @@ class CommunityPaneMobile extends Component {
     static propTypes = {
         community: PropTypes.object.isRequired,
         showRecentSubscribers: PropTypes.func.isRequired,
+        showModerationLog: PropTypes.func.isRequired,
     };
 
     render() {
-        const { community, showRecentSubscribers } = this.props;
+        const {
+            community,
+            showRecentSubscribers,
+            showModerationLog,
+        } = this.props;
         const handleSubscriberClick = () => {
             showRecentSubscribers(community);
+        };
+        const handleModerationLogCLick = e => {
+            e.preventDefault();
+            showModerationLog(community);
         };
         const category = community.get('name');
         const viewer_role = community.getIn(['context', 'role'], 'guest');
@@ -74,6 +83,16 @@ class CommunityPaneMobile extends Component {
                                     {numberWithCommas(subs)}
                                     {subs == 1 ? ' subscriber' : ' subscribers'}
                                 </span>
+                                <div
+                                    style={{
+                                        float: 'right',
+                                        fontSize: '0.8em',
+                                    }}
+                                >
+                                    <a onClick={handleModerationLogCLick}>
+                                        Activity Log
+                                    </a>
+                                </div>
                                 &nbsp;&nbsp;&bull;&nbsp;&nbsp;
                                 {numberWithCommas(
                                     community.get('num_authors')
@@ -135,6 +154,14 @@ export default connect(
                 dispatch(
                     globalActions.showDialog({
                         name: 'communitySubscribers',
+                        params: { community },
+                    })
+                );
+            },
+            showModerationLog: community => {
+                dispatch(
+                    globalActions.showDialog({
+                        name: 'communityModerationLog',
                         params: { community },
                     })
                 );

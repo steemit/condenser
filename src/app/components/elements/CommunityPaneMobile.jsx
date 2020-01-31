@@ -90,7 +90,7 @@ class CommunityPaneMobile extends Component {
                                     }}
                                 >
                                     <a onClick={handleModerationLogCLick}>
-                                        Moderation Log
+                                        Activity Log
                                     </a>
                                 </div>
                                 &nbsp;&nbsp;&bull;&nbsp;&nbsp;

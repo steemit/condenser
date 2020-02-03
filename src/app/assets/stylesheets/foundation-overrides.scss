@@ -121,7 +121,7 @@ tbody tr:nth-child(even) {
   outline: none;
   @include themify($themes) {
     background-color: themed('modalBackgroundColor');
-    color: themed('modalTextColorPrimary');
+    color: themed('textColorPrimary');  
   }
   label {
     @include themify($themes) {

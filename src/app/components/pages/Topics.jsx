@@ -53,14 +53,17 @@ class Topics extends Component {
             let options = [];
             options.push(opt(null));
 
-            if (username) {
+            if (username && subscriptions) {
                 options.push(opt('@' + username));
                 options.push(opt('my'));
+                options.concat(
+                    subscriptions.toJS().map(cat => opt(cat[0], cat[1]))
+                );
+            } else {
+                options = options.concat(
+                    topics.toJS().map(cat => opt(cat[0], cat[1]))
+                );
             }
-
-            options = options.concat(
-                (subscriptions || topics).toJS().map(cat => opt(cat[0], cat[1]))
-            );
 
             options.push(opt('explore'));
 
@@ -95,9 +98,10 @@ class Topics extends Component {
         );
 
         const moreLabel = <span>{tt('g.show_more_topics')}&hellip;</span>;
-        const title = subscriptions
-            ? 'My Subscriptions'
-            : 'Trending Communities';
+        const title =
+            subscriptions && username
+                ? 'My subscriptions'
+                : 'Trending Communities';
         const commsHead = (
             <div style={{ color: '#aaa', paddingTop: '0em' }}>{title}</div>
         );
@@ -109,13 +113,23 @@ class Topics extends Component {
                 )}
                 {username && <li>{link(`/trending/my`, 'My communities')}</li>}
                 {(subscriptions || topics).size > 0 && <li>{commsHead}</li>}
-                {(subscriptions || topics)
-                    .toJS()
-                    .map(cat => (
-                        <li key={cat[0]}>
-                            {link(`/trending/${cat[0]}`, cat[1], '')}
-                        </li>
-                    ))}
+                {username &&
+                    subscriptions &&
+                    subscriptions
+                        .toJS()
+                        .map(cat => (
+                            <li key={cat[0]}>
+                                {link(`/trending/${cat[0]}`, cat[1], '')}
+                            </li>
+                        ))}
+                {(!username || !subscriptions) &&
+                    topics
+                        .toJS()
+                        .map(cat => (
+                            <li key={cat[0]}>
+                                {link(`/trending/${cat[0]}`, cat[1], '')}
+                            </li>
+                        ))}
                 <li>
                     {link(
                         `/communities`,

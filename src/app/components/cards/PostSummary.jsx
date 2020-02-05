@@ -108,9 +108,6 @@ class PostSummary extends React.Component {
                     {isNsfw && <span className="nsfw-flag">nsfw</span>}
                     {post.get('title')}
                 </Link>
-                {post.getIn(['stats', 'is_pinned'], false) && (
-                    <span className="FeaturedTag">Pinned</span>
-                )}
             </h2>
         );
 
@@ -155,7 +152,6 @@ class PostSummary extends React.Component {
                                     className="updated"
                                 />
                             </span>
-
                             {full_power && (
                                 <span
                                     className="articles__icon-100"
@@ -163,6 +159,9 @@ class PostSummary extends React.Component {
                                 >
                                     <Icon name="steempower" />
                                 </span>
+                            )}
+                            {post.getIn(['stats', 'is_pinned'], false) && (
+                                <span className="FeaturedTag">Pinned</span>
                             )}
                         </Link>
                     </div>

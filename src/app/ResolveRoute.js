@@ -11,7 +11,7 @@ const reg = pattern => {
             '<sort>',
             '(hot|trending|promoted|payout|payout_comments|muted|created)'
         )
-        .replace('<tag>', '([\\w\\W\\d-]{2,32})')
+        .replace('<tag>', '([\\w\\W\\d-]{1,32})')
         .replace('<permlink>', '([\\w\\d-]+)')
         .replace('/', '\\/');
     return new RegExp('^\\/' + pattern + '$');

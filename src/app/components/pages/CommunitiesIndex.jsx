@@ -13,6 +13,11 @@ export default class CommunitiesIndex extends React.Component {
     componentWillMount = () => {
         this.props.listCommunities(this.props.username);
     };
+    componentDidUpdate = (prevProps, prevState) => {
+        if (prevProps.username !== this.props.username) {
+            this.props.listCommunities(this.props.username);
+        }
+    };
 
     render() {
         const {
@@ -109,18 +114,21 @@ export default class CommunitiesIndex extends React.Component {
 module.exports = {
     path: 'communities(/:username)',
     component: connect(
-        state => ({
-            walletUrl: state.app.get('walletUrl'),
-            username: state.user.getIn(['current', 'username']),
-            communities: state.global.get('community', Map()),
-            communities_idx: state.global.get('community_idx', List()),
-        }),
+        state => {
+            return {
+                walletUrl: state.app.get('walletUrl'),
+                username: state.user.getIn(['current', 'username']),
+                communities: state.global.get('community', Map()),
+                communities_idx: state.global.get('community_idx', List()),
+            };
+        },
         dispatch => {
             return {
-                listCommunities: observer =>
+                listCommunities: observer => {
                     dispatch(
                         fetchDataSagaActions.listCommunities({ observer })
-                    ),
+                    );
+                },
             };
         }
     )(CommunitiesIndex),

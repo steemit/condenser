@@ -26,6 +26,7 @@ class Modals extends React.Component {
         show_confirm_modal: false,
         show_login_modal: false,
         show_post_advanced_settings_modal: '',
+        loginBroadcastOperation: undefined,
     };
     static propTypes = {
         show_login_modal: PropTypes.bool,
@@ -42,6 +43,12 @@ class Modals extends React.Component {
         notifications: PropTypes.object,
         show_terms_modal: PropTypes.bool,
         removeNotification: PropTypes.func,
+        loginBroadcastOperation: PropTypes.shape({
+            type: PropTypes.string,
+            username: PropTypes.string,
+            successCallback: PropTypes.func,
+            errorCallback: PropTypes.func,
+        }),
     };
 
     constructor() {
@@ -65,6 +72,7 @@ class Modals extends React.Component {
             hideBandwidthError,
             hidePostAdvancedSettings,
             username,
+            loginBroadcastOperation,
         } = this.props;
 
         const notifications_array = notifications
@@ -82,11 +90,15 @@ class Modals extends React.Component {
                 'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=' +
                 username;
         };
-
         return (
             <div>
                 {show_login_modal && (
-                    <Reveal onHide={hideLogin} show={show_login_modal}>
+                    <Reveal
+                        onHide={() => {
+                            hideLogin();
+                        }}
+                        show={show_login_modal}
+                    >
                         <LoginForm onCancel={hideLogin} />
                     </Reveal>
                 )}
@@ -157,10 +169,21 @@ class Modals extends React.Component {
 export default connect(
     state => {
         const rcErr = state.transaction.getIn(['errors', 'bandwidthError']);
-
+        // get the onErrorCB and call it on cancel
+        const show_login_modal = state.user.get('show_login_modal');
+        let loginBroadcastOperation = {};
+        if (
+            show_login_modal &&
+            state.user &&
+            state.user.getIn(['loginBroadcastOperation'])
+        ) {
+            loginBroadcastOperation = state.user
+                .getIn(['loginBroadcastOperation'])
+                .toJS();
+        }
         return {
             username: state.user.getIn(['current', 'username']),
-            show_login_modal: state.user.get('show_login_modal'),
+            show_login_modal,
             show_confirm_modal: state.transaction.get('show_confirm_modal'),
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
             notifications: state.app.get('notifications'),
@@ -174,6 +197,7 @@ export default connect(
             show_post_advanced_settings_modal: state.user.get(
                 'show_post_advanced_settings_modal'
             ),
+            loginBroadcastOperation,
         };
     },
     dispatch => ({

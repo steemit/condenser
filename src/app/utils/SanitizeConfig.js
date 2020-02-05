@@ -28,6 +28,12 @@ const iframeWhitelist = [
         },
     },
     {
+        re: /^(https?:)?\/\/3speak.online\/embed\?v=.*/i,
+        fn: src => {
+            return src;
+        },
+    },
+    {
         re: /^https:\/\/w.soundcloud.com\/player\/.*/i,
         fn: src => {
             if (!src) return null;

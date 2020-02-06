@@ -99,10 +99,7 @@ export default connect(
     },
     dispatch => ({
         getAccountSubscriptions: username => {
-            const query = {
-                account: username,
-            };
-            return dispatch(fetchDataSagaActions.getSubscriptions(query));
+            return dispatch(fetchDataSagaActions.getSubscriptions(username));
         },
     })
 )(SubscriptionsList);

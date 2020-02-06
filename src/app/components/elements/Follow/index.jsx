@@ -116,7 +116,6 @@ export default class Follow extends React.Component {
         return (
             <span>
                 {showFollow &&
-                    followingWhat !== null &&
                     followingWhat !== 'blog' && (
                         <label className={cnInactive} onClick={this.follow}>
                             {tt('g.follow')}

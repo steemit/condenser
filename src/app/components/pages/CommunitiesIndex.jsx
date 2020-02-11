@@ -26,6 +26,7 @@ export default class CommunitiesIndex extends React.Component {
             communities_idx,
             username,
             walletUrl,
+            performSearch,
         } = this.props;
         const ordered = communities_idx.map(name => communities.get(name));
 
@@ -105,11 +106,11 @@ export default class CommunitiesIndex extends React.Component {
                     </h4>
                     <div>
                         <ElasticSearchInput
-                            initValue={'HELLO'}
                             expanded={true}
                             handleSubmit={q => {
-                                console.log('SEARCH TERM: ', q);
+                                performSearch(username, q);
                             }}
+                            redirect={false}
                         />
                     </div>
                     <hr />
@@ -140,7 +141,15 @@ module.exports = {
                         fetchDataSagaActions.listCommunities({ observer })
                     );
                 },
-                performSearch: args => dispatch(search(args)),
+                performSearch: (observer, query, sort = 'rank') => {
+                    dispatch(
+                        fetchDataSagaActions.listCommunities({
+                            observer,
+                            query,
+                            sort,
+                        })
+                    );
+                },
             };
         }
     )(CommunitiesIndex),

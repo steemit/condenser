@@ -35,11 +35,25 @@ class PostNotificationsList extends React.Component {
 
     componentWillMount() {
         const { author, permlink, fetchPostNotifications } = this.props;
+        // get last ID.
         fetchPostNotifications(author, permlink);
     }
 
     render() {
-        const { notifications, loading } = this.props;
+        const {
+            author,
+            permlink,
+            fetchPostNotifications,
+            notifications,
+            loading,
+            isLastPage,
+        } = this.props;
+
+        const loadMore = e => {
+            e.preventDefault();
+            const lastId = notifications.slice(-1)[0].id;
+            fetchPostNotifications(author, permlink, lastId);
+        };
 
         const renderItem = item => {
             return (
@@ -86,6 +100,16 @@ class PostNotificationsList extends React.Component {
                         />
                     </center>
                 )}
+                {!loading &&
+                    notifications &&
+                    !isLastPage && (
+                        <center>
+                            <br />
+                            <a href="#" onClick={loadMore}>
+                                <strong>Load more...</strong>
+                            </a>
+                        </center>
+                    )}
             </div>
         );
     }
@@ -104,17 +128,28 @@ export default connect(
             `${author}/${permlink}`,
             'post_notifications_loading',
         ]);
+        const isLastPage = state.global.getIn([
+            'content',
+            `${author}/${permlink}`,
+            'allNotificationsReceived',
+        ]);
         return {
             ...props,
             notifications: postNotifications ? postNotifications.toJS() : [],
             loading: postNotificationsLoading,
+            isLastPage,
         };
     },
     dispatch => ({
-        fetchPostNotifications: (author, permlink) => {
-            dispatch(
-                fetchDataActions.getPostNotifications({ author, permlink })
-            );
+        fetchPostNotifications: (author, permlink, last_id) => {
+            const query = {
+                author,
+                permlink,
+            };
+            if (last_id) {
+                query.last_id = last_id;
+            }
+            dispatch(fetchDataActions.getPostNotifications(query));
         },
     })
 )(PostNotificationsList);

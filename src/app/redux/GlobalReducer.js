@@ -88,10 +88,33 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_POST_NOTIFICATIONS: {
-            const { author, permlink, postNotifications } = payload;
+            const { author, permlink, postNotifications, last_id } = payload;
+            if (!last_id) {
+                return state.setIn(
+                    ['content', `${author}/${permlink}`, 'post_notifications'],
+                    List(postNotifications)
+                );
+            }
+            // If payload has last_id and notifications were received, append them to the list of existing post notifications.
+            if (postNotifications.length > 0) {
+                const existingNotifications = state.getIn([
+                    'content',
+                    `${author}/${permlink}`,
+                    'post_notifications',
+                ]);
+                return state.setIn(
+                    ['content', `${author}/${permlink}`, 'post_notifications'],
+                    existingNotifications.concat(List(postNotifications))
+                );
+            }
+            // If payload has last_id and no notifications were received, indicate that we have received all the available notiffications.
             return state.setIn(
-                ['content', `${author}/${permlink}`, 'post_notifications'],
-                List(postNotifications)
+                [
+                    'content',
+                    `${author}/${permlink}`,
+                    'allNotificationsReceived',
+                ],
+                true
             );
         }
 

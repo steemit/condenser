@@ -32,6 +32,7 @@ import { allowDelete } from 'app/utils/StateFunctions';
 import { Role } from 'app/utils/Community';
 import PostNotificationsList from 'app/components/cards/PostNotificationsList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
+import NotificationsList from './NotificationsList';
 
 function TimeAuthorCategory({ post }) {
     return (

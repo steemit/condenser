@@ -98,6 +98,9 @@ export default function reducer(state = defaultState, action) {
             } else if (/current vote on this comment is identical/.test(key)) {
                 // Assert Exception:itr->vote_percent != o.weight: Your current vote on this comment is identical to this vote.
                 msg = 'You already voted on this post.';
+            } else if (/transaction tapos exception/.test(key)) {
+                // TODO: document full error string, simplify `msg`
+                msg = 'Unable to complete transaction.  Try again later. (Cause: ' + key + ')';
             } else {
                 msg = 'Transaction broadcast error: ' + last_part(key, ':');
                 console.error('unhandled error:', key, 'msg:', error.message);
@@ -108,7 +111,7 @@ export default function reducer(state = defaultState, action) {
                 return errors ? errors.set(key, msg) : Map({ [key]: msg });
             });
 
-            if (msg.includes('RC')) {
+            if (msg.includes('RC') || msg.includes('Bandwidth')) {
                 state = state.setIn(['errors', 'bandwidthError'], true); //show_bandwidth_error_modal
             }
 

@@ -136,36 +136,40 @@ export default class CommunitiesIndex extends React.Component {
                         {/* {<Link to={`/`}>Home</Link>} &gt;{' '} */}
                         {tt('g.community_list_header')}
                     </h4>
-                    <div>
-                        <ElasticSearchInput
-                            expanded={true}
-                            handleSubmit={q => {
-                                this.setState({
-                                    searchQuery: q,
-                                });
-                                performSearch(
-                                    username,
-                                    q,
-                                    this.state.searchOrder
-                                );
-                            }}
-                            redirect={false}
-                        />
+                    <div className="articles__header row">
+                        <div className="small-8 medium-7 large-8 column">
+                            <ElasticSearchInput
+                                expanded={true}
+                                handleSubmit={q => {
+                                    this.setState({
+                                        searchQuery: q,
+                                    });
+                                    performSearch(
+                                        username,
+                                        q,
+                                        this.state.searchOrder
+                                    );
+                                }}
+                                redirect={false}
+                            />
+                        </div>
+                        <div className="small-4 medium-3 large-4 column">
+                            <NativeSelect
+                                options={sortOptions}
+                                currentlySelected={this.state.searchOrder}
+                                onChange={opt => {
+                                    this.setState({
+                                        searchOrder: opt.value,
+                                    });
+                                    performSearch(
+                                        username,
+                                        this.state.searchQuery,
+                                        opt.value
+                                    );
+                                }}
+                            />
+                        </div>
                     </div>
-                    <NativeSelect
-                        options={sortOptions}
-                        currentlySelected={this.state.searchOrder}
-                        onChange={opt => {
-                            this.setState({
-                                searchOrder: opt.value,
-                            });
-                            performSearch(
-                                username,
-                                this.state.searchQuery,
-                                opt.value
-                            );
-                        }}
-                    />
                     <hr />
                     <table>
                         <tbody>{ordered.map(comm => row(comm.toJS()))}</tbody>

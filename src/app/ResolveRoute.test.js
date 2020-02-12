@@ -11,13 +11,13 @@ describe('routeRegex', () => {
             ],
             [
                 'CategoryFilters',
-                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(?:\/([\w\W\d-]{2,32}))?\/?$/,
+                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(?:\/([\w\W\d-]{1,32}))?\/?$/,
             ],
             ['PostNoCategory', /^\/(@[\w\.\d-]+)\/([\w\d-]+)$/],
-            ['Post', /^\/([\w\W\d-]{2,32})\/(@[\w\.\d-]+)\/([\w\d-]+)\/?$/],
+            ['Post', /^\/([\w\W\d-]{1,32})\/(@[\w\.\d-]+)\/([\w\d-]+)\/?$/],
             [
                 'PostJson',
-                /^\/([\w\W\d-]{2,32})\/(@[\w\.\d-]+)\/([\w\d-]+)(\.json)$/,
+                /^\/([\w\W\d-]{1,32})\/(@[\w\.\d-]+)\/([\w\d-]+)(\.json)$/,
             ],
             ['UserJson', /^\/(@[\w\.\d-]+)(\.json)$/],
         ];

@@ -124,13 +124,12 @@ class CommunityPane extends Component {
                     </div>
 
                     <div style={{ margin: '12px 0 0' }}>
-                        {community &&
-                            this.props.username && (
-                                <SubscribeButton
-                                    community={community.get('name')}
-                                    display="block"
-                                />
-                            )}
+                        {community && (
+                            <SubscribeButton
+                                community={community.get('name')}
+                                display="block"
+                            />
+                        )}
                         {canPost && (
                             <Link
                                 className="button primary"

@@ -14,11 +14,11 @@ class SubscribeButton extends React.Component {
 
     onClick = e => {
         e.preventDefault();
-        const { subscribed } = this.props;
+        const { subscribed, username } = this.props;
         const community = this.props.community.get('name');
-
-        this.setState({ loading: true });
-
+        if (username) {
+            this.setState({ loading: true });
+        }
         this.props.toggleSubscribe(
             !subscribed,
             community,
@@ -91,14 +91,12 @@ export default connect(
         ) => {
             let action = 'unsubscribe';
             if (subscribeToCommunity) action = 'subscribe';
-
             const payload = [
                 action,
                 {
                     community,
                 },
             ];
-
             return dispatch(
                 transactionActions.broadcastOperation({
                     type: 'custom_json',

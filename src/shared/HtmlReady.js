@@ -87,7 +87,10 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
     state.images = new Set();
     state.links = new Set();
     try {
-        const doc = DOMParser.parseFromString(html, 'text/html');
+        const doc = DOMParser.parseFromString(
+            preprocessHtml(html),
+            'text/html'
+        );
         traverse(doc, state);
         if (mutate) {
             if (hideImages) {
@@ -119,6 +122,13 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
         );
         return { html: '' };
     }
+}
+
+function preprocessHtml(html) {
+    // Replacing 3Speak Image/Anchor tag with an embedded player
+    html = embedThreeSpeakNode(html);
+
+    return html;
 }
 
 function traverse(node, state, depth = 0) {
@@ -239,6 +249,7 @@ function linkifyNode(child, state) {
         child = embedVimeoNode(child, state.links, state.images);
         child = embedTwitchNode(child, state.links, state.images);
         child = embedDTubeNode(child, state.links, state.images);
+        child = embedThreeSpeakNode(child, state.links, state.images);
 
         const data = XMLSerializer.serializeToString(child);
         const content = linkify(
@@ -357,6 +368,58 @@ function youTubeId(data) {
         startTime: startTime ? startTime[1] : 0,
         thumbnail: 'https://img.youtube.com/vi/' + id + '/0.jpg',
     };
+}
+
+/** @return {id, url} or <b>null</b> */
+function getThreeSpeakId(data) {
+    if (!data) return null;
+
+    const match = data.match(linksRe.threespeak);
+    const url = match ? match[0] : null;
+    if (!url) return null;
+    const fullId = match[1];
+    const id = fullId.split('/').pop();
+
+    return {
+        id,
+        fullId,
+        url,
+        thumbnail: `https://img.3speakcontent.online/${id}/post.png`,
+    };
+}
+
+function embedThreeSpeakNode(child, links, images) {
+    try {
+        if (typeof child === 'string') {
+            // If typeof child is a string, this means we are trying to process the HTML
+            // to replace the image/anchor tag created by 3Speak dApp
+            const threespeakId = getThreeSpeakId(child);
+            if (threespeakId) {
+                child = child.replace(
+                    linksRe.threespeakImageLink,
+                    `~~~ embed:${threespeakId.fullId} threespeak ~~~`
+                );
+            }
+        } else {
+            // If child is not a string, we are processing plain text
+            // to replace a bare URL
+            const data = child.data;
+            const threespeakId = getThreeSpeakId(data);
+            if (!threespeakId) return child;
+
+            child.data = data.replace(
+                threespeakId.url,
+                `~~~ embed:${threespeakId.fullId} threespeak ~~~`
+            );
+
+            if (links) links.add(threespeakId.url);
+            if (images) images.add(threespeakId.thumbnail);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+    return child;
 }
 
 function embedVimeoNode(child, links /*images*/) {

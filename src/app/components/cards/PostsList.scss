@@ -10,7 +10,6 @@
         margin: 0 1rem 0 0.5rem;
         border-radius: 0.3rem;
         font-size: 0.75rem;
-        vertical-align: 15%;
         @include themify($themes) {
             background-color: themed('colorAccent');
             color: themed('buttonText');

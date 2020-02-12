@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import tt from 'counterpart';
+import * as appActions from 'app/redux/AppReducer';
 import CloseButton from 'app/components/elements/CloseButton';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
@@ -12,6 +13,7 @@ const SidePanel = ({
     hideSidePanel,
     username,
     walletUrl,
+    toggleNightmode,
 }) => {
     if (process.env.BROWSER) {
         visible && document.addEventListener('click', hideSidePanel);
@@ -33,6 +35,13 @@ const SidePanel = ({
                     <a href={i.link} target="_blank" rel="noopener noreferrer">
                         {i.label}&nbsp;<Icon name="extlink" />
                     </a>
+                </li>
+            );
+        }
+        if (i.onClick) {
+            return (
+                <li key={ix} className={cn}>
+                    <a onClick={i.onClick}>{i.label}</a>
                 </li>
             );
         }
@@ -59,6 +68,11 @@ const SidePanel = ({
                 link: `/communities`,
             },
             */
+            {
+                label: tt('g.toggle_nightmode'),
+                link: '/',
+                onClick: toggleNightmode,
+            },
         ],
 
         wallet: [
@@ -181,6 +195,7 @@ SidePanel.propTypes = {
     visible: PropTypes.bool.isRequired,
     hideSidePanel: PropTypes.func.isRequired,
     username: PropTypes.string,
+    toggleNightmode: PropTypes.func.isRequired,
 };
 
 SidePanel.defaultProps = {
@@ -195,5 +210,10 @@ export default connect(
             ...ownProps,
         };
     },
-    dispatch => ({})
+    dispatch => ({
+        toggleNightmode: e => {
+            if (e) e.preventDefault();
+            dispatch(appActions.toggleNightmode());
+        },
+    })
 )(SidePanel);

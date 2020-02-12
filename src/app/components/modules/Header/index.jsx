@@ -477,7 +477,7 @@ const mapStateToProps = (state, ownProps) => {
         username,
         loggedIn,
         community: state.global.get('community', Map({})),
-        nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
+        nightmodeEnabled: state.app.getIn(['user_preferences', 'nightmode']),
         display_name,
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),

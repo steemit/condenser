@@ -21,11 +21,19 @@ export default class CommunitiesIndex extends React.Component {
     }
 
     componentWillMount = () => {
-        this.props.listCommunities(this.props.username);
+        this.props.performSearch(
+            this.props.username,
+            this.state.searchQuery,
+            this.state.searchOrder
+        );
     };
     componentDidUpdate = (prevProps, prevState) => {
         if (prevProps.username !== this.props.username) {
-            this.props.listCommunities(this.props.username);
+            this.props.performSearch(
+                this.props.username,
+                this.state.searchQuery,
+                this.state.searchOrder
+            );
         }
     };
 
@@ -182,15 +190,6 @@ module.exports = {
         },
         dispatch => {
             return {
-                listCommunities: (observer, query, sort = 'rank') => {
-                    dispatch(
-                        fetchDataSagaActions.listCommunities({
-                            observer,
-                            query,
-                            sort,
-                        })
-                    );
-                },
                 performSearch: (observer, query, sort = 'rank') => {
                     dispatch(
                         fetchDataSagaActions.listCommunities({

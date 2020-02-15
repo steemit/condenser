@@ -9,6 +9,7 @@ const map = {
     roadscape: 'steemit',
     steemitblog: 'steemit',
     steemitdev: 'steemit',
+    justinsunsteemit: 'steemit',
 
     /*
     //steem monsters

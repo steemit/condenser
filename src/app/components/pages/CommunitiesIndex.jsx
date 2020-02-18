@@ -8,14 +8,32 @@ import { Link } from 'react-router';
 import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import UserNames from 'app/components/elements/UserNames';
+import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
+import NativeSelect from 'app/components/elements/NativeSelect';
 
 export default class CommunitiesIndex extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            searchQuery: undefined,
+            searchOrder: 'rank',
+        };
+    }
+
     componentWillMount = () => {
-        this.props.listCommunities(this.props.username);
+        this.props.performSearch(
+            this.props.username,
+            this.state.searchQuery,
+            this.state.searchOrder
+        );
     };
     componentDidUpdate = (prevProps, prevState) => {
         if (prevProps.username !== this.props.username) {
-            this.props.listCommunities(this.props.username);
+            this.props.performSearch(
+                this.props.username,
+                this.state.searchQuery,
+                this.state.searchOrder
+            );
         }
     };
 
@@ -25,8 +43,24 @@ export default class CommunitiesIndex extends React.Component {
             communities_idx,
             username,
             walletUrl,
+            performSearch,
         } = this.props;
         const ordered = communities_idx.map(name => communities.get(name));
+
+        const sortOptions = [
+            {
+                value: 'rank',
+                label: 'Rank',
+            },
+            {
+                value: 'subs',
+                label: 'Subscribers',
+            },
+            {
+                value: 'new',
+                label: 'New',
+            },
+        ];
 
         if (communities_idx.size === 0) {
             return (
@@ -97,10 +131,45 @@ export default class CommunitiesIndex extends React.Component {
                             </a>
                         </div>
                     )}
+
                     <h4>
                         {/* {<Link to={`/`}>Home</Link>} &gt;{' '} */}
                         {tt('g.community_list_header')}
                     </h4>
+                    <div className="articles__header row">
+                        <div className="small-8 medium-7 large-8 column">
+                            <ElasticSearchInput
+                                expanded={true}
+                                handleSubmit={q => {
+                                    this.setState({
+                                        searchQuery: q,
+                                    });
+                                    performSearch(
+                                        username,
+                                        q,
+                                        this.state.searchOrder
+                                    );
+                                }}
+                                redirect={false}
+                            />
+                        </div>
+                        <div className="small-4 medium-3 large-4 column">
+                            <NativeSelect
+                                options={sortOptions}
+                                currentlySelected={this.state.searchOrder}
+                                onChange={opt => {
+                                    this.setState({
+                                        searchOrder: opt.value,
+                                    });
+                                    performSearch(
+                                        username,
+                                        this.state.searchQuery,
+                                        opt.value
+                                    );
+                                }}
+                            />
+                        </div>
+                    </div>
                     <hr />
                     <table>
                         <tbody>{ordered.map(comm => row(comm.toJS()))}</tbody>
@@ -115,6 +184,7 @@ module.exports = {
     path: 'communities(/:username)',
     component: connect(
         state => {
+            // Get current sort and query from the url.
             return {
                 walletUrl: state.app.get('walletUrl'),
                 username: state.user.getIn(['current', 'username']),
@@ -124,9 +194,13 @@ module.exports = {
         },
         dispatch => {
             return {
-                listCommunities: observer => {
+                performSearch: (observer, query, sort = 'rank') => {
                     dispatch(
-                        fetchDataSagaActions.listCommunities({ observer })
+                        fetchDataSagaActions.listCommunities({
+                            observer,
+                            query,
+                            sort,
+                        })
                     );
                 },
             };

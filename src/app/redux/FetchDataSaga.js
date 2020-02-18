@@ -166,11 +166,19 @@ function* getAccounts(usernames) {
  * @param {}
  */
 export function* listCommunities(action) {
-    const communities = yield call(callBridge, 'list_communities', {
-        observer: action.payload.observer,
-    });
-    // TODO: Handle error state
-    yield put(globalActions.receiveCommunities(communities));
+    const { observer, query, sort } = action.payload;
+    try {
+        const communities = yield call(callBridge, 'list_communities', {
+            observer,
+            query,
+            sort,
+        });
+        if (communities.length > 0) {
+            yield put(globalActions.receiveCommunities(communities));
+        }
+    } catch (error) {
+        console.log('Error requesting communities:', error);
+    }
 }
 
 /**

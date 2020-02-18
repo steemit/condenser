@@ -40,6 +40,8 @@ export default {
     remote: remote(),
     image: image(),
     imageFile: imageFile(),
+    threespeak: /(?:https?:\/\/(?:(?:3speak.online\/watch\?v=)|(?:3speak.online\/embed\?v=)))([A-Za-z0-9\_\-\/]+)(&.*)?/i,
+    threespeakImageLink: /<a href="(https?:\/\/3speak.online\/watch\?v=([A-Za-z0-9\_\-\/]+))".*<img.*?><\/a>/i,
 };
 
 //TODO: possible this should go somewhere else.

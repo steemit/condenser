@@ -652,7 +652,7 @@ export default connect(
             username,
             myVote,
             active_votes,
-            enable_slider: true,
+            enable_slider,
             is_comment,
             voting,
             price_per_steem,

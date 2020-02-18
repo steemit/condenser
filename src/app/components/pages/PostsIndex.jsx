@@ -284,12 +284,12 @@ module.exports = {
             if (pending && !posts.includes(pending)) {
                 posts = posts.unshift(pending);
             }
+            const username =
+                state.user.getIn(['current', 'username']) ||
+                state.offchain.get('account');
 
             return {
-                subscriptions: state.global.getIn([
-                    'subscriptions',
-                    account_name,
-                ]),
+                subscriptions: state.global.getIn(['subscriptions', username]),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 account_name,
@@ -298,9 +298,7 @@ module.exports = {
                 posts,
                 pending,
                 community,
-                username:
-                    state.user.getIn(['current', 'username']) ||
-                    state.offchain.get('account'),
+                username,
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 topics: state.global.getIn(['topics'], List()),
                 isBrowser: process.env.BROWSER,

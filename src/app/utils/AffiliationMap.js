@@ -1,6 +1,5 @@
 const map = {
     //steemit
-    ned: 'steemit',
     justinw: 'steemit',
     elipowell: 'steemit',
     vandeberg: 'steemit',

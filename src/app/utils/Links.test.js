@@ -2,6 +2,8 @@ import assert from 'assert';
 import secureRandom from 'secure-random';
 import links, * as linksRe from 'app/utils/Links';
 import { PARAM_VIEW_MODE, VIEW_MODE_WHISTLE } from '../../shared/constants';
+import youtubeRegex from 'app/components/elements/EmbeddedPlayers/youtube';
+import threespeakRegex from 'app/components/elements/EmbeddedPlayers/threespeak';
 
 describe('Links', () => {
     it('all', () => {
@@ -241,31 +243,31 @@ describe('Performance', () => {
         }
     });
     it('youTube', () => {
-        match(linksRe.youTube(), 'https://youtu.be/xG7ajrbj4zs?t=7s');
+        match(youtubeRegex.main, 'https://youtu.be/xG7ajrbj4zs?t=7s');
         match(
-            linksRe.youTube(),
+            youtubeRegex.main,
             'https://www.youtube.com/watch?v=xG7ajrbj4zs&t=14s'
         );
         match(
-            linksRe.youTube(),
+            youtubeRegex.main,
             'https://www.youtube.com/watch?v=xG7ajrbj4zs&feature=youtu.be&t=14s'
         );
     });
     it('youTubeId', () => {
         match(
-            links.youTubeId,
+            youtubeRegex.contentId,
             'https://youtu.be/xG7ajrbj4zs?t=7s',
             'xG7ajrbj4zs',
             1
         );
         match(
-            links.youTubeId,
+            youtubeRegex.contentId,
             'https://www.youtube.com/watch?v=xG7ajrbj4zs&t=14s',
             'xG7ajrbj4zs',
             1
         );
         match(
-            links.youTubeId,
+            youtubeRegex.contentId,
             'https://www.youtube.com/watch?v=xG7ajrbj4zs&feature=youtu.be&t=14s',
             'xG7ajrbj4zs',
             1
@@ -273,33 +275,33 @@ describe('Performance', () => {
     });
     it('threespeak', () => {
         match(
-            links.threespeak,
+            threespeakRegex.main,
             'https://3speak.online/watch?v=artemislives/tvxkobat'
         );
         match(
-            links.threespeak,
+            threespeakRegex.main,
             'https://3speak.online/watch?v=artemislives/tvxkobat&jwsource=cl'
         );
         match(
-            links.threespeak,
+            threespeakRegex.main,
             'https://3speak.online/embed?v=artemislives/tvxkobat'
         );
     });
     it('threespeakId', () => {
         match(
-            links.threespeak,
+            threespeakRegex.main,
             'https://3speak.online/watch?v=artemislives/tvxkobat',
             'artemislives/tvxkobat',
             1
         );
         match(
-            links.threespeak,
+            threespeakRegex.main,
             'https://3speak.online/watch?v=artemislives/tvxkobat&jwsource=cl',
             'artemislives/tvxkobat',
             1
         );
         match(
-            links.threespeak,
+            threespeakRegex.main,
             'https://3speak.online/embed?v=artemislives/tvxkobat',
             'artemislives/tvxkobat',
             1
@@ -307,7 +309,7 @@ describe('Performance', () => {
     });
     it('threespeakImageLink', () => {
         match(
-            links.threespeakImageLink,
+            threespeakRegex.htmlReplacement,
             '<a href="https://3speak.online/watch?v=artemislives/tvxkobat" rel="noopener" title="This link will take you away from steemit.com" class="steem-keychain-checked"><img src="https://steemitimages.com/640x0/https://img.3speakcontent.online/tvxkobat/post.png"></a>'
         );
     });

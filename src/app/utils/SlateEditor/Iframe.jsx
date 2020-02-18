@@ -8,12 +8,6 @@ export default class Iframe extends React.Component {
             return validEmbedUrl;
         }
 
-        // Detect 3Speak
-        match = url.match(linksRe.threespeak);
-        if (match && match.length >= 2) {
-            return 'https://3speak.online/embed?v=' + match[1];
-        }
-
         console.log('unable to auto-detect embed url', url);
         return null;
     };

@@ -11,7 +11,7 @@ export default regex;
 export function genIframeMd(idx, dtubeId, w, h) {
     const url = `https://emb.d.tube/#!/${dtubeId}`;
     return (
-        <div className="videoWrapper">
+        <div key={`dtube-${dtubeId}-${idx}`} className="videoWrapper">
             <iframe
                 title="DTube embedded player"
                 key={idx}

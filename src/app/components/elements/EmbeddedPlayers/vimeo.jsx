@@ -75,7 +75,7 @@ export function embedNode(child, links /*images*/) {
 export function genIframeMd(idx, id, w, h, startTime) {
     const url = `https://player.vimeo.com/video/${id}#t=${startTime}s`;
     return (
-        <div className="videoWrapper" key={idx}>
+        <div key={`vimeo-${id}-${idx}`} className="videoWrapper">
             <iframe
                 title="Vimeo embedded player"
                 src={url}

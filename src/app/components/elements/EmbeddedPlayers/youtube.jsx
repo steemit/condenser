@@ -4,7 +4,7 @@ import YoutubePreview from 'app/components/elements/YoutubePreview';
 const regex = {
     sanitize: /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
     //main: new RegExp(urlSet({ domain: '(?:(?:.*.)?youtube.com|youtu.be)' }), flags),
-    main: /(?:(?:.*.)?youtube.com|youtu.be)\/watch\?v=.*/i,
+    main: /(?:https?:\/\/)(?:www\.)?(?:(?:youtube.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube.com\/embed\/))([A-Za-z0-9\_\-]+)[^ ]*/i,
     contentId: /(?:(?:youtube.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube.com\/embed\/))([A-Za-z0-9\_\-]+)/i,
 };
 
@@ -26,13 +26,13 @@ export function normalizeEmbedUrl(url) {
     const match = url.match(regex.contentId);
 
     if (match && match.length >= 2) {
-        return `https://www.youtube.com/embed/${match[1]}`;
+        return `https://youtube.com/embed/${match[1]}`;
     }
 
     return false;
 }
 
-function extractContentId(data) {
+export function extractContentId(data) {
     if (!data) return null;
 
     const m1 = data.match(regex.main);
@@ -85,7 +85,7 @@ export function embedNode(child, links, images) {
 export function genIframeMd(idx, id, w, h, startTime) {
     return (
         <YoutubePreview
-            key={idx}
+            key={`youtube-${id}-${idx}`}
             width={w}
             height={h}
             youTubeId={id}

@@ -4,7 +4,11 @@ import linksRe, { any as linksAny } from 'app/utils/Links';
 import { validate_account_name } from 'app/utils/ChainValidation';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import * as Phishing from 'app/utils/Phishing';
-import { embedNode as EmbeddedPlayerEmbedNode } from 'app/components/elements/EmbeddedPlayers';
+import {
+    embedNode as EmbeddedPlayerEmbedNode,
+    preprocessHtml,
+} from 'app/components/elements/EmbeddedPlayers';
+import { extractContentId as youTubeId } from 'app/components/elements/EmbeddedPlayers/youtube';
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
 export const getExternalLinkWarningMessage = () =>
@@ -125,13 +129,6 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
     }
 }
 
-function preprocessHtml(html) {
-    // Replacing 3Speak Image/Anchor tag with an embedded player
-    html = embedThreeSpeakNode(html);
-
-    return html;
-}
-
 function traverse(node, state, depth = 0) {
     if (!node || !node.childNodes) return;
     Array(...node.childNodes).forEach(child => {
@@ -182,6 +179,8 @@ function link(state, child) {
 // wrap iframes in div.videoWrapper to control size/aspect ratio
 function iframe(state, child) {
     const url = child.getAttribute('src');
+
+    // @TODO move this into the centralized EmbeddedPlayer code
     if (url) {
         const { images, links } = state;
         const yt = youTubeId(url);
@@ -321,58 +320,6 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         return `<a href="${ipfsPrefix(ln)}">${ln}</a>`;
     });
     return content;
-}
-
-/** @return {id, url} or <b>null</b> */
-function getThreeSpeakId(data) {
-    if (!data) return null;
-
-    const match = data.match(linksRe.threespeak);
-    const url = match ? match[0] : null;
-    if (!url) return null;
-    const fullId = match[1];
-    const id = fullId.split('/').pop();
-
-    return {
-        id,
-        fullId,
-        url,
-        thumbnail: `https://img.3speakcontent.online/${id}/post.png`,
-    };
-}
-
-function embedThreeSpeakNode(child, links, images) {
-    try {
-        if (typeof child === 'string') {
-            // If typeof child is a string, this means we are trying to process the HTML
-            // to replace the image/anchor tag created by 3Speak dApp
-            const threespeakId = getThreeSpeakId(child);
-            if (threespeakId) {
-                child = child.replace(
-                    linksRe.threespeakImageLink,
-                    `~~~ embed:${threespeakId.fullId} threespeak ~~~`
-                );
-            }
-        } else {
-            // If child is not a string, we are processing plain text
-            // to replace a bare URL
-            const data = child.data;
-            const threespeakId = getThreeSpeakId(data);
-            if (!threespeakId) return child;
-
-            child.data = data.replace(
-                threespeakId.url,
-                `~~~ embed:${threespeakId.fullId} threespeak ~~~`
-            );
-
-            if (links) links.add(threespeakId.url);
-            if (images) images.add(threespeakId.thumbnail);
-        }
-    } catch (error) {
-        console.log(error);
-    }
-
-    return child;
 }
 
 function ipfsPrefix(url) {

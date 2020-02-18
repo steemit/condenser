@@ -210,7 +210,7 @@ describe('htmlready', () => {
         expect(res).toEqual(htmlified);
     });
 
-    it('should handle short youtube link start time', () => {
+    it('should handle short youtu.be link start time', () => {
         const testString =
             '<html><p>https://youtu.be/ToQfmnj7FR8?t=4572s</p></html>';
         const htmlified =

@@ -73,7 +73,7 @@ export function embedNode(child, links /*images*/) {
 export function genIframeMd(idx, id, w, h) {
     const url = `https://player.twitch.tv/${id}`;
     return (
-        <div className="videoWrapper" key={idx}>
+        <div key={`twitch-${id}-${idx}`} className="videoWrapper">
             <iframe
                 title="Twitch embedded player"
                 src={url}

@@ -28,6 +28,14 @@ import {
     embedNode as embedVimeoNode,
 } from 'app/components/elements/EmbeddedPlayers/vimeo';
 
+import {
+    genIframeMd as genThreespeakIframeMd,
+    validateIframeUrl as validateThreespeakIframeUrl,
+    normalizeEmbedUrl as normalizeThreespeakEmbedUrl,
+    embedNode as embedThreeSpeakNode,
+    preprocessHtml as preprocess3SpeakHtml,
+} from 'app/components/elements/EmbeddedPlayers/threespeak';
+
 const supportedProviders = [
     {
         id: 'dtube',
@@ -63,6 +71,13 @@ const supportedProviders = [
         normalizeEmbedUrlFn: normalizeVimeoEmbedUrl,
         embedNodeFn: embedVimeoNode,
         genIframeMdFn: genVimeoIframeMd,
+    },
+    {
+        id: 'threespeak',
+        validateIframeUrlFn: validateThreespeakIframeUrl,
+        normalizeEmbedUrlFn: normalizeThreespeakEmbedUrl,
+        embedNodeFn: embedThreeSpeakNode,
+        genIframeMdFn: genThreespeakIframeMd,
     },
 ];
 
@@ -169,4 +184,9 @@ export function generateMd(section, idx, large) {
     }
 
     return null;
+}
+
+export function preprocessHtml(html) {
+    html = preprocess3SpeakHtml(html);
+    return html;
 }

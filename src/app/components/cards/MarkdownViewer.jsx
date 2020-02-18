@@ -141,9 +141,19 @@ class MarkdownViewer extends Component {
         let idx = 0;
         const sections = [];
 
+        function checksum(s) {
+            let chk = 0x12345678;
+            const len = s.length;
+            for (let i = 0; i < len; i += 1) {
+                chk += s.charCodeAt(i) * (i + 1);
+            }
+
+            return (chk & 0xffffffff).toString(16);
+        }
+
         // HtmlReady inserts ~~~ embed:${id} type ~~~
         for (let section of cleanText.split('~~~ embed:')) {
-            const embedMd = EmbeddedPlayerGenerateMd(section, idx++, large);
+            const embedMd = EmbeddedPlayerGenerateMd(section, idx, large);
             if (embedMd) {
                 const { section: newSection, markdown } = embedMd;
                 section = newSection;
@@ -156,10 +166,12 @@ class MarkdownViewer extends Component {
 
             sections.push(
                 <div
-                    key={idx++}
+                    key={checksum(section)}
                     dangerouslySetInnerHTML={{ __html: section }}
                 />
             );
+
+            idx += 1;
         }
 
         const cn =
@@ -167,12 +179,14 @@ class MarkdownViewer extends Component {
             (this.props.className ? ` ${this.props.className}` : '') +
             (html ? ' html' : '') +
             (large ? '' : ' MarkdownViewer--small');
+
         return (
             <div className={'MarkdownViewer ' + cn}>
                 {sections}
                 {noImageActive &&
                     allowNoImage && (
                         <div
+                            key={'hidden-content'}
                             onClick={this.onAllowNoImage}
                             className="MarkdownViewer__negative_group"
                         >

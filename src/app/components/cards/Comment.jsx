@@ -9,7 +9,7 @@ import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import Voting from 'app/components/elements/Voting';
 import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
-import PostNotificationsList from 'app/components/cards/PostNotificationsList';
+import NotificationsList from 'app/components/cards/NotificationsList';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import * as userActions from 'app/redux/UserReducer';
@@ -443,9 +443,10 @@ class CommentImpl extends React.Component {
                                 })
                             }
                         />
-                        <PostNotificationsList
+                        <NotificationsList
                             author={author}
                             permlink={permlink}
+                            postNotifications={true}
                         />
                     </Reveal>
                 )}

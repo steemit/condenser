@@ -176,6 +176,7 @@ export default class UserProfile extends React.Component {
                 <NotificationsList
                     username={accountname}
                     notifications={notifications && notifications.toJS()}
+                    postNotifications={false}
                 />
             );
         } else if (section === 'communities') {

@@ -30,9 +30,8 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { allowDelete } from 'app/utils/StateFunctions';
 import { Role } from 'app/utils/Community';
-import PostNotificationsList from 'app/components/cards/PostNotificationsList';
+import NotificationsList from 'app/components/cards/NotificationsList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
-import NotificationsList from './NotificationsList';
 
 function TimeAuthorCategory({ post }) {
     return (
@@ -544,9 +543,10 @@ class PostFull extends React.Component {
                                 })
                             }
                         />
-                        <PostNotificationsList
+                        <NotificationsList
                             author={author}
                             permlink={permlink}
+                            postNotifications={true}
                         />
                     </Reveal>
                 )}

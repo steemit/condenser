@@ -70,18 +70,25 @@ class NotificationsList extends React.Component {
             })
         ),
         isLastPage: PropTypes.bool,
-        username: PropTypes.string.isRequired,
+        username: PropTypes.string,
         markAsRead: PropTypes.func.isRequired,
         unreadNotifications: PropTypes.number,
         notificationActionPending: PropTypes.bool,
         lastRead: PropTypes.string.isRequired,
+        postNotifications: PropTypes.bool.isRequired,
+        postNotificationsLoading: PropTypes.bool,
+        isPostNotificationsLastPage: PropTypes.bool,
+        fetchPostNotifications: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
+        username: false,
         notifications: [],
         unreadNotifications: 0,
         notificationActionPending: false,
         isLastPage: false,
+        postNotificationsLoading: false,
+        isPostNotificationsLastPage: false,
     };
 
     constructor() {
@@ -89,9 +96,19 @@ class NotificationsList extends React.Component {
     }
 
     componentWillMount() {
-        const { username, getAccountNotifications } = this.props;
+        const {
+            username,
+            getAccountNotifications,
+            postNotifications,
+            author,
+            permlink,
+            fetchPostNotifications,
+        } = this.props;
         if (username) {
             getAccountNotifications(username);
+        }
+        if (postNotifications) {
+            fetchPostNotifications(author, permlink);
         }
     }
 
@@ -109,6 +126,18 @@ class NotificationsList extends React.Component {
         getAccountNotifications(username, lastId);
     };
 
+    onClickLoadMorePostNotifications = e => {
+        e.preventDefault();
+        const {
+            author,
+            permlink,
+            fetchPostNotifications,
+            notifications,
+        } = this.props;
+        const lastId = notifications.slice(-1)[0].id;
+        fetchPostNotifications(author, permlink, lastId);
+    };
+
     onClickMarkAsRead = e => {
         e.preventDefault();
         const { username, markAsRead } = this.props;
@@ -124,8 +153,10 @@ class NotificationsList extends React.Component {
             isLastPage,
             notificationActionPending,
             lastRead,
+            postNotifications,
+            postNotificationsLoading,
+            isPostNotificationsLastPage,
         } = this.props;
-
         const renderItem = item => {
             const unRead =
                 Date.parse(`${lastRead}Z`) <= Date.parse(`${item.date}Z`);
@@ -177,7 +208,8 @@ class NotificationsList extends React.Component {
         return (
             <div className="">
                 {isOwnAccount && <ClaimBox accountName={accountName} />}
-                {notifications &&
+                {!postNotifications &&
+                    notifications &&
                     notifications.length > 0 &&
                     unreadNotifications !== 0 &&
                     !notificationActionPending && (
@@ -188,11 +220,41 @@ class NotificationsList extends React.Component {
                             </a>
                         </center>
                     )}
+
                 {(notificationActionPending || !process.env.BROWSER) && (
                     <center>
                         <LoadingIndicator type="circle" />
                     </center>
                 )}
+
+                {postNotifications &&
+                    notifications.length === 0 &&
+                    !postNotificationsLoading && (
+                        <Callout>No activity on this post.</Callout>
+                    )}
+                {postNotifications &&
+                    postNotificationsLoading && (
+                        <center>
+                            <LoadingIndicator
+                                style={{ marginBottom: '2rem' }}
+                                type="circle"
+                            />
+                        </center>
+                    )}
+                {postNotifications &&
+                    !isPostNotificationsLastPage &&
+                    !postNotificationsLoading &&
+                    notifications && (
+                        <center>
+                            <br />
+                            <a
+                                href="#"
+                                onClick={this.onClickLoadMorePostNotifications}
+                            >
+                                <strong>Load more...</strong>
+                            </a>
+                        </center>
+                    )}
 
                 {notifications &&
                     notifications.length > 0 && (
@@ -200,7 +262,8 @@ class NotificationsList extends React.Component {
                             {notifications.map(item => renderItem(item))}
                         </div>
                     )}
-                {!notifications &&
+                {!postNotifications &&
+                    !notifications &&
                     !notificationActionPending &&
                     process.env.BROWSER && (
                         <Callout>
@@ -208,7 +271,8 @@ class NotificationsList extends React.Component {
                         </Callout>
                     )}
 
-                {!notificationActionPending &&
+                {!postNotifications &&
+                    !notificationActionPending &&
                     notifications &&
                     !isLastPage && (
                         <center>
@@ -225,12 +289,33 @@ class NotificationsList extends React.Component {
 
 export default connect(
     (state, props) => {
+        const { postNotifications, author, permlink } = props;
         const accountName = props.username;
         const isOwnAccount =
             state.user.getIn(['current', 'username'], '') == accountName;
-        const notifications = state.global
-            .getIn(['notifications', accountName, 'notifications'], List())
-            .toJS();
+        const xPostNotifications = state.global.getIn([
+            'content',
+            `${author}/${permlink}`,
+            'post_notifications',
+        ])
+            ? state.global
+                  .getIn([
+                      'content',
+                      `${author}/${permlink}`,
+                      'post_notifications',
+                  ])
+                  .toJS()
+            : [];
+
+        const notifications = !postNotifications
+            ? state.global
+                  .getIn(
+                      ['notifications', accountName, 'notifications'],
+                      List()
+                  )
+                  .toJS()
+            : xPostNotifications;
+
         const unreadNotifications = state.global.getIn(
             ['notifications', accountName, 'unreadNotifications', 'unread'],
             0
@@ -243,6 +328,21 @@ export default connect(
             ['notifications', accountName, 'isLastPage'],
             null
         );
+
+        const postNotificationsLoading = postNotifications
+            ? state.global.getIn([
+                  'content',
+                  `${author}/${permlink}`,
+                  'post_notifications_loading',
+              ])
+            : false;
+
+        const isPostNotificationsLastPage = state.global.getIn([
+            'content',
+            `${author}/${permlink}`,
+            'allNotificationsReceived',
+        ]);
+
         return {
             ...props,
             isOwnAccount,
@@ -255,6 +355,8 @@ export default connect(
             lastRead,
             notifications,
             isLastPage: isNotificationsLastPage,
+            postNotificationsLoading,
+            isPostNotificationsLastPage,
         };
     },
     dispatch => ({
@@ -293,6 +395,16 @@ export default connect(
                     successCallback,
                 })
             );
+        },
+        fetchPostNotifications: (author, permlink, last_id) => {
+            const query = {
+                author,
+                permlink,
+            };
+            if (last_id) {
+                query.last_id = last_id;
+            }
+            dispatch(fetchDataSagaActions.getPostNotifications(query));
         },
     })
 )(NotificationsList);

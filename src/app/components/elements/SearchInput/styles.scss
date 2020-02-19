@@ -14,7 +14,7 @@ form.search-input {
 
     input.search-input__inner {
         outline: none;
-        padding: 9px 10px 9px 32px;
+        padding: 9px 10px 11px 32px;
         border-radius: 25pc;
         transition: all 0.3s ease-in-out;
         font-size: 16px;
@@ -76,9 +76,15 @@ form.search-input--expanded {
         fill: none;
     }
 
+    &:hover {
+        svg.search-input__icon {
+            stroke: $color-white;
+        }
+    }
+
     input.search-input__inner {
         outline: none;
-        padding: 9px 10px 9px 32px;
+        padding: 9px 10px 11px 32px;
         border-radius: 25pc;
         transition: all 0.3s ease-in-out;
         font-size: 16px;
@@ -102,11 +108,15 @@ form.search-input--expanded {
         }
         &:hover {
             background-color: $color-teal;
+            color: $color-white;
         }
         &::placeholder {
             @include themify($themes) {
                 color: themed('textColorSecondary');
             }
+        }
+        &:hover::placeholder {
+            color: $color-text-white;
         }
     }
 

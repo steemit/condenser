@@ -1,5 +1,9 @@
 import React from 'react';
 
+/**
+ * Regular expressions for detecting and validating provider URLs
+ * @type {{htmlReplacement: RegExp, main: RegExp, sanitize: RegExp}}
+ */
 const regex = {
     sanitize: /^(https?:)?\/\/player.vimeo.com\/video\/([0-9]*)/i,
     main: /https?:\/\/(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)\/?(#t=((\d+)s?))?\/?/,
@@ -8,7 +12,12 @@ const regex = {
 
 export default regex;
 
-// <iframe src="https://player.vimeo.com/video/179213493" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+/**
+ * Check if the iframe code in the post editor is to an allowed URL
+ * <iframe src="https://player.vimeo.com/video/179213493" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+ * @param url
+ * @returns {boolean|*}
+ */
 export function validateIframeUrl(url) {
     const match = url.match(regex.sanitize);
 
@@ -19,6 +28,11 @@ export function validateIframeUrl(url) {
     return 'https://player.vimeo.com/video/' + match[2];
 }
 
+/**
+ * Rewrites the embedded URL to a normalized format
+ * @param url
+ * @returns {string|boolean}
+ */
 export function normalizeEmbedUrl(url) {
     const match = url.match(regex.contentId);
 
@@ -29,6 +43,11 @@ export function normalizeEmbedUrl(url) {
     return false;
 }
 
+/**
+ * Extract the content ID and other metadata from the URL
+ * @param data
+ * @returns {null|{id: *, canonical: string, url: *}}
+ */
 function extractContentId(data) {
     if (!data) return null;
     const m = data.match(regex.main);
@@ -45,6 +64,12 @@ function extractContentId(data) {
     };
 }
 
+/**
+ * Replaces the URL with a custom Markdown for embedded players
+ * @param child
+ * @param links
+ * @returns {*}
+ */
 export function embedNode(child, links /*images*/) {
     try {
         const data = child.data;
@@ -72,6 +97,14 @@ export function embedNode(child, links /*images*/) {
     return child;
 }
 
+/**
+ * Generates the Markdown/HTML code to override the detected URL with an iFrame
+ * @param idx
+ * @param threespeakId
+ * @param w
+ * @param h
+ * @returns {*}
+ */
 export function genIframeMd(idx, id, w, h, startTime) {
     const url = `https://player.vimeo.com/video/${id}#t=${startTime}s`;
     return (

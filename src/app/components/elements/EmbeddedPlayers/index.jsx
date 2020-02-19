@@ -83,6 +83,11 @@ const supportedProviders = [
 
 export default supportedProviders;
 
+/**
+ * Allow iFrame in the Markdown if the source URL is allowed
+ * @param url
+ * @returns {boolean|*}
+ */
 export function validateIframeUrl(url) {
     for (let pi = 0; pi < supportedProviders.length; pi += 1) {
         const provider = supportedProviders[pi];
@@ -98,6 +103,11 @@ export function validateIframeUrl(url) {
     return false;
 }
 
+/**
+ * Rewrites the embedded URL to a normalized format
+ * @param url
+ * @returns {boolean|*}
+ */
 export function normalizeEmbedUrl(url) {
     for (let pi = 0; pi < supportedProviders.length; pi += 1) {
         const provider = supportedProviders[pi];
@@ -115,6 +125,13 @@ export function normalizeEmbedUrl(url) {
     return false;
 }
 
+/**
+ * Replaces the URL with a custom Markdown for embedded players
+ * @param child
+ * @param links
+ * @param images
+ * @returns {*}
+ */
 export function embedNode(child, links, images) {
     for (let pi = 0; pi < supportedProviders.length; pi += 1) {
         const provider = supportedProviders[pi];
@@ -127,6 +144,11 @@ export function embedNode(child, links, images) {
     return child;
 }
 
+/**
+ * Returns the provider config by ID
+ * @param id
+ * @returns {null|{normalizeEmbedUrlFn, validateIframeUrlFn, id: string, genIframeMdFn, embedNodeFn}|{normalizeEmbedUrlFn, validateIframeUrlFn, id: string, genIframeMdFn, embedNodeFn}|{normalizeEmbedUrlFn: null, validateIframeUrlFn, id: string, genIframeMdFn: null, embedNodeFn: null}|{normalizeEmbedUrlFn, validateIframeUrlFn, id: string, genIframeMdFn, embedNodeFn}|{normalizeEmbedUrlFn, validateIframeUrlFn, id: string, genIframeMdFn, embedNodeFn}}
+ */
 function getProviderById(id) {
     for (let pi = 0; pi < supportedProviders.length; pi += 1) {
         const provider = supportedProviders[pi];
@@ -139,12 +161,23 @@ function getProviderById(id) {
     return null;
 }
 
+/**
+ * Returns all providers IDs
+ * @returns {(string)[]}
+ */
 function getProviderIds() {
     return supportedProviders.map(o => {
         return o.id;
     });
 }
 
+/**
+ * Replaces ~~~ embed: Markdown code to an iframe MD
+ * @param section
+ * @param idx
+ * @param large
+ * @returns {null|{markdown: null, section: string}}
+ */
 export function generateMd(section, idx, large) {
     let markdown = null;
     const supportedProvidersIds = getProviderIds();
@@ -186,6 +219,11 @@ export function generateMd(section, idx, large) {
     return null;
 }
 
+/**
+ * Pre-process HTML codes from the Markdown before it gets transformed
+ * @param html
+ * @returns {*}
+ */
 export function preprocessHtml(html) {
     html = preprocess3SpeakHtml(html);
     return html;

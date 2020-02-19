@@ -1,5 +1,9 @@
 import React from 'react';
 
+/**
+ * Regular expressions for detecting and validating provider URLs
+ * @type {{htmlReplacement: RegExp, main: RegExp, sanitize: RegExp}}
+ */
 const regex = {
     sanitize: /^(https?:)?\/\/player.twitch.tv\/.*/i,
     main: /https?:\/\/(?:www.)?twitch.tv\/(?:(videos)\/)?([a-zA-Z0-9][\w]{3,24})/i,
@@ -7,7 +11,12 @@ const regex = {
 
 export default regex;
 
-// <iframe src="https://player.twitch.tv/?channel=tfue" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+/**
+ * Check if the iframe code in the post editor is to an allowed URL
+ * <iframe src="https://player.twitch.tv/?channel=tfue" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+ * @param url
+ * @returns {boolean|*}
+ */
 export function validateIframeUrl(url) {
     const match = url.match(regex.sanitize);
 
@@ -18,6 +27,11 @@ export function validateIframeUrl(url) {
     return false;
 }
 
+/**
+ * Rewrites the embedded URL to a normalized format
+ * @param url
+ * @returns {string|boolean}
+ */
 export function normalizeEmbedUrl(url) {
     const match = url.match(regex.main);
 
@@ -34,6 +48,11 @@ export function normalizeEmbedUrl(url) {
     return false;
 }
 
+/**
+ * Extract the content ID and other metadata from the URL
+ * @param data
+ * @returns {null|{id: *, canonical: string, url: *}}
+ */
 function extractContentId(data) {
     if (!data) return null;
 
@@ -70,6 +89,14 @@ export function embedNode(child, links /*images*/) {
     return child;
 }
 
+/**
+ * Generates the Markdown/HTML code to override the detected URL with an iFrame
+ * @param idx
+ * @param threespeakId
+ * @param w
+ * @param h
+ * @returns {*}
+ */
 export function genIframeMd(idx, id, w, h) {
     const url = `https://player.twitch.tv/${id}`;
     return (

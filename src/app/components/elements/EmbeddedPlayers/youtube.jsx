@@ -1,6 +1,10 @@
 import React from 'react';
 import YoutubePreview from 'app/components/elements/YoutubePreview';
 
+/**
+ * Regular expressions for detecting and validating provider URLs
+ * @type {{htmlReplacement: RegExp, main: RegExp, sanitize: RegExp}}
+ */
 const regex = {
     sanitize: /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
     //main: new RegExp(urlSet({ domain: '(?:(?:.*.)?youtube.com|youtu.be)' }), flags),
@@ -10,7 +14,12 @@ const regex = {
 
 export default regex;
 
-// <iframe width="560" height="315" src="https://www.youtube.com/embed/KOnk7Nbqkhs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+/**
+ * Check if the iframe code in the post editor is to an allowed URL
+ * <iframe width="560" height="315" src="https://www.youtube.com/embed/KOnk7Nbqkhs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+ * @param url
+ * @returns {boolean|*}
+ */
 export function validateIframeUrl(url) {
     const match = url.match(regex.sanitize);
 
@@ -22,6 +31,11 @@ export function validateIframeUrl(url) {
     return false;
 }
 
+/**
+ * Rewrites the embedded URL to a normalized format
+ * @param url
+ * @returns {string|boolean}
+ */
 export function normalizeEmbedUrl(url) {
     const match = url.match(regex.contentId);
 
@@ -32,6 +46,11 @@ export function normalizeEmbedUrl(url) {
     return false;
 }
 
+/**
+ * Extract the content ID and other metadata from the URL
+ * @param data
+ * @returns {null|{id: *, canonical: string, url: *}}
+ */
 export function extractContentId(data) {
     if (!data) return null;
 
@@ -55,6 +74,12 @@ export function extractContentId(data) {
     };
 }
 
+/**
+ * Replaces the URL with a custom Markdown for embedded players
+ * @param child
+ * @param links
+ * @returns {*}
+ */
 export function embedNode(child, links, images) {
     try {
         const yt = extractContentId(child.data);
@@ -82,6 +107,14 @@ export function embedNode(child, links, images) {
     return child;
 }
 
+/**
+ * Generates the Markdown/HTML code to override the detected URL with an iFrame
+ * @param idx
+ * @param threespeakId
+ * @param w
+ * @param h
+ * @returns {*}
+ */
 export function genIframeMd(idx, id, w, h, startTime) {
     return (
         <YoutubePreview

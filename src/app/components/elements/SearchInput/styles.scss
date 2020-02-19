@@ -10,7 +10,6 @@ form.search-input {
         }
         stroke-width: 1.2;
         fill: none;
-
     }
 
     input.search-input__inner {
@@ -101,14 +100,10 @@ form.search-input--expanded {
         @include themify($themes) {
             color: themed('textColorPrimary');
         }
-        &::placeholder {
-            color: transparent
-        }
         &:hover {
             background-color: $color-teal;
         }
         &::placeholder {
-            color: $color-blue-dark;
             @include themify($themes) {
                 color: themed('textColorSecondary');
             }

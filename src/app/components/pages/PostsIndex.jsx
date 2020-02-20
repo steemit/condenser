@@ -218,7 +218,8 @@ class PostsIndex extends React.Component {
                             <Topics
                                 username={this.props.username}
                                 current={category}
-                                topics={subscriptions || topics}
+                                topics={topics}
+                                subscriptions={subscriptions}
                                 compact
                             />
                         </span>

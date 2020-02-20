@@ -51,10 +51,13 @@ class Topics extends Component {
             };
 
             let options = [];
+            // Add 'All Posts' link.
             options.push(opt(null));
 
             if (username && subscriptions) {
+                // Add 'My Friends' Link
                 options.push(opt('@' + username));
+                // Add 'My Communities' Link
                 options.push(opt('my'));
                 options.concat(
                     subscriptions.toJS().map(cat => opt(cat[0], cat[1]))

@@ -50,26 +50,37 @@ class Topics extends Component {
                 return { value: `/`, label: tt('g.all_tags') };
             };
 
-            let options = [];
+            const options = [];
             // Add 'All Posts' link.
             options.push(opt(null));
-
             if (username && subscriptions) {
                 // Add 'My Friends' Link
                 options.push(opt('@' + username));
                 // Add 'My Communities' Link
                 options.push(opt('my'));
-                options.concat(
-                    subscriptions.toJS().map(cat => opt(cat[0], cat[1]))
-                );
-            } else {
-                options = options.concat(
-                    topics.toJS().map(cat => opt(cat[0], cat[1]))
-                );
+                const subscriptionOptions = subscriptions
+                    .toJS()
+                    .map(cat => opt(cat[0], cat[1]));
+                options.push({
+                    value: 'Subscriptions',
+                    label: 'Community Subscriptions',
+                    disabled: true,
+                });
+                options.push(...subscriptionOptions);
+            }
+            if (topics) {
+                const topicsOptions = topics
+                    .toJS()
+                    .map(cat => opt(cat[0], cat[1]));
+                options.push({
+                    value: 'Topics',
+                    label: 'Trending Communities',
+                    disabled: true,
+                });
+                options.push(...topicsOptions);
             }
 
             options.push(opt('explore'));
-
             const currOpt = opt(current);
             if (!options.find(opt => opt.value == currOpt.value)) {
                 options.push(

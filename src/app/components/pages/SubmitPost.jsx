@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import { SUBMIT_FORM_ID } from 'shared/constants';
 import Callout from 'app/components/elements/Callout';
+import { AccessLocalStorage } from 'app/utils/AccessLocalStorage';
 
 const formId = SUBMIT_FORM_ID;
 const SubmitReplyEditor = ReplyEditor(formId);
@@ -22,7 +23,9 @@ class SubmitPost extends React.Component {
     constructor() {
         super();
         this.success = operations => {
-            localStorage.removeItem('replyEditorData-' + formId);
+            AccessLocalStorage(() => {
+                localStorage.removeItem('replyEditorData-' + formId);
+            });
             browserHistory.push(_redirect_url(operations));
         };
     }

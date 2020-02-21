@@ -21,6 +21,7 @@ import ShareMenu from 'app/components/elements/ShareMenu';
 import MuteButton from 'app/components/elements/MuteButton';
 import FlagButton from 'app/components/elements/FlagButton';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
+import { AccessLocalStorage } from 'app/utils/AccessLocalStorage';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
 import tt from 'counterpart';
@@ -606,14 +607,18 @@ export default connect(
 const saveOnShow = (formId, type) => {
     if (process.env.BROWSER) {
         if (type)
-            localStorage.setItem(
-                'showEditor-' + formId,
-                JSON.stringify({ type }, null, 0)
-            );
+            AccessLocalStorage(() => {
+                localStorage.setItem(
+                    'showEditor-' + formId,
+                    JSON.stringify({ type }, null, 0)
+                );
+            });
         else {
-            localStorage.removeItem('showEditor-' + formId);
-            localStorage.removeItem('replyEditorData-' + formId + '-reply');
-            localStorage.removeItem('replyEditorData-' + formId + '-edit');
+            AccessLocalStorage(() => {
+                localStorage.removeItem('showEditor-' + formId);
+                localStorage.removeItem('replyEditorData-' + formId + '-reply');
+                localStorage.removeItem('replyEditorData-' + formId + '-edit');
+            });
         }
     }
 };

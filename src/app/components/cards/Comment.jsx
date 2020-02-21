@@ -21,6 +21,7 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
 import { Role } from 'app/utils/Community';
+import { AccessLocalStorage } from 'app/utils/AccessLocalStorage';
 
 export function sortComments(cont, comments, sort_order) {
     const rshares = post => Long.fromString(String(post.get('net_rshares')));
@@ -96,14 +97,22 @@ class CommentImpl extends React.Component {
                 const { postref } = this.props;
                 const formId = postref;
                 if (type)
-                    localStorage.setItem(
-                        'showEditor-' + formId,
-                        JSON.stringify({ type }, null, 0)
-                    );
+                    AccessLocalStorage(() => {
+                        localStorage.setItem(
+                            'showEditor-' + formId,
+                            JSON.stringify({ type }, null, 0)
+                        );
+                    });
                 else {
-                    localStorage.removeItem('showEditor-' + formId);
-                    localStorage.removeItem(`replyEditorData-${formId}-reply`);
-                    localStorage.removeItem(`replyEditorData-${formId}-edit`);
+                    AccessLocalStorage(() => {
+                        localStorage.removeItem('showEditor-' + formId);
+                        localStorage.removeItem(
+                            `replyEditorData-${formId}-reply`
+                        );
+                        localStorage.removeItem(
+                            `replyEditorData-${formId}-edit`
+                        );
+                    });
                 }
             }
         };

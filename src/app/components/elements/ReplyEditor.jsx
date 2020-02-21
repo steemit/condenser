@@ -231,27 +231,36 @@ class ReplyEditor extends React.Component {
     initForm(props) {
         const { isStory, type, fields } = props;
         const isEdit = type === 'edit';
-        const maxKb = isStory ? 65 : 16;
+        const maxKb = isStory ? 64 : 16;
         reactForm({
             fields,
             instance: this,
             name: 'replyForm',
             initialValues: props.initialValues,
-            validation: values => ({
-                title:
-                    isStory &&
-                    (!values.title || values.title.trim() === ''
-                        ? tt('g.required')
-                        : values.title.length > 255
-                          ? tt('reply_editor.shorten_title')
-                          : null),
-                tags: isStory && validateTagInput(values.tags, !isEdit),
-                body: !values.body
-                    ? tt('g.required')
-                    : values.body.length > maxKb * 1024
-                      ? tt('reply_editor.exceeds_maximum_length', { maxKb })
-                      : null,
-            }),
+            validation: values => {
+                let bodyValidation = null;
+                if (!values.body) {
+                    bodyValidation = tt('g.required');
+                }
+                if (
+                    values.body &&
+                    new Blob([values.body]).size >= maxKb * 1024 - 256
+                ) {
+                    bodyValidation = `Post body exceeds ${maxKb * 1024 -
+                        256} bytes.`;
+                }
+                return {
+                    title:
+                        isStory &&
+                        (!values.title || values.title.trim() === ''
+                            ? tt('g.required')
+                            : values.title.length > 255
+                              ? tt('reply_editor.shorten_title')
+                              : null),
+                    tags: isStory && validateTagInput(values.tags, !isEdit),
+                    body: bodyValidation,
+                };
+            },
         });
     }
 

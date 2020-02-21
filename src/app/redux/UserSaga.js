@@ -57,6 +57,10 @@ function* shouldShowLoginWarning({ username, password }) {
     // If it's a master key, show the warning.
     if (!auth.isWif(password)) {
         const account = (yield api.getAccountsAsync([username]))[0];
+        if (!account) {
+            console.error("shouldShowLoginWarning - account not found");
+            return false;
+        }
         const pubKey = PrivateKey.fromSeed(username + 'posting' + password)
             .toPublicKey()
             .toString();

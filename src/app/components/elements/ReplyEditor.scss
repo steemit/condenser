@@ -44,8 +44,17 @@
 
 @media screen and (max-width: 63.9375em) {
   .ReplyEditor .side-by-side {
-      height: auto;
+    height: auto;
   }
+}
+
+.comment-editor .ReplyEditor .column {
+  flex: 100%;
+  max-width: 100%;
+}
+
+.comment-editor .ReplyEditor .side-by-side {
+  height: auto;
 }
 
 .upload-enabled {

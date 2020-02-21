@@ -58,6 +58,7 @@ function* shouldShowLoginWarning({ username, password }) {
     if (!auth.isWif(password)) {
         const account = (yield api.getAccountsAsync([username]))[0];
         if (!account) {
+            console.error("shouldShowLoginWarning - account not found");
             return false;
         }
         const pubKey = PrivateKey.fromSeed(username + 'posting' + password)

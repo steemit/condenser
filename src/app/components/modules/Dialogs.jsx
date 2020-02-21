@@ -83,6 +83,7 @@ class Dialogs extends React.Component {
                 ) : k === 'communityModerationLog' ? (
                     <span key={`dialog-${k}`}>
                         <Reveal onHide={this['hide_' + k]} show>
+                            <CloseButton onClick={this['hide_' + k]} />
                             <NotificationsList
                                 username={v.getIn([
                                     'params',

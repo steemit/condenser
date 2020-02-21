@@ -63,6 +63,7 @@ button, .button {
 
 .close-button {
   position: absolute;
+  z-index: 999;
   cursor: pointer;
   transition: color 0.2s ease-in-out;
   top: 0.5rem;

@@ -267,7 +267,7 @@ class NotificationsList extends React.Component {
                             <br />
                             <div className="notification__filter_select">
                                 <a
-                                    className="notification__filter"
+                                    className="notification__filter selected"
                                     role="link"
                                     data-type="all"
                                     tabIndex={0}

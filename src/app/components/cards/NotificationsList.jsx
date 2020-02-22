@@ -169,8 +169,22 @@ class NotificationsList extends React.Component {
     onClickFilter = e => {
         e.preventDefault();
         const target = e.target;
+
+        const filterElements = document.getElementsByClassName(
+            'notification__filter'
+        );
+
+        // reset
+        for (let fi = 0; fi < filterElements.length; fi += 1) {
+            const filterElement = filterElements[fi];
+            filterElement.classList.remove('selected');
+        }
+
+        target.classList.add('selected');
         notificationFilter = target.dataset.type;
         this.applyFilter();
+
+        target.blur();
     };
 
     render() {

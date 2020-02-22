@@ -802,5 +802,14 @@
     "sanitizedlink_jsx": {
         "phishylink_caution": "Link hidden; phishing attempt",
         "phishylink_reveal": "show link"
+    },
+    "notificationslist_jsx": {
+        "mark_all_as_read": "Mark all as read",
+        "load_more": "Load more...",
+        "all": "All",
+        "replies": "Replies",
+        "follows": "Follows",
+        "resteems": "Resteems",
+        "upvotes": "Upvotes"
     }
 }

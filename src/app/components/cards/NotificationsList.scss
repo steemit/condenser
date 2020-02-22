@@ -12,6 +12,19 @@
     display: flex;
 }
 
+.notification__filter {
+    padding: 0 5px 0 5px;
+    border-right: 1px solid #ababab;
+}
+
+.notification__filter:last-child {
+    border-right: 0;
+}
+
+.notification__filter.hide {
+    display: none;
+}
+
 .notification__item {
     align-items: center;
     padding: 0.5em 1rem;

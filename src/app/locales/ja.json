@@ -12,6 +12,7 @@
         "blog": "ブログ",
         "browse": "ブラウズ",
         "buy": "買う",
+        "buy_steem_power": "Buy Steem Power",
         "buy_or_sell": "購入または売却",
         "by": "by",
         "cancel": "キャンセル",
@@ -28,6 +29,10 @@
         "dismiss": "閉じる",
         "edit": "編集",
         "email": "メールアドレス",
+        "external_link_message":
+            "This link will take you away from steemit.com",
+        "affiliation_steemit": "Steemit Team",
+        "affiliation_sm": "Steem Monsters Team",
         "feed": "フィード",
         "follow": "フォロー",
         "for": " : ",
@@ -38,12 +43,18 @@
         "in_reply_to": "in reply to",
         "insufficient_balance": "残高が不足しています",
         "invalid_amount": "入力が不正です",
+        "links": "Links",
         "joined": "登録年月：",
         "loading": "ロード中",
         "login": "ログイン",
         "logout": "ログアウト",
         "memo": "メモ",
         "mute": "ミュート",
+        "my_blog": "My blog",
+        "my_comments": "My comments",
+        "my_feed": "My feed",
+        "my_replies": "Replies to me",
+        "my_wallet": "My wallet",
         "new": "新着",
         "newer": "新しい",
         "next": "次へ",
@@ -58,7 +69,7 @@
         "phishy_message":
             "リンクをプレーンテキストに拡張しました。潜在的なフィッシングに注意してください。",
         "post": "投稿",
-        "post_as": "投稿します:",
+        "post_as_user": "Post as %(username)s",
         "posts": "投稿数",
         "powered_up_100": "パワーアップ 100%%",
         "preview": "プレビュー",
@@ -69,6 +80,7 @@
         "promoted": "プロモート",
         "re": "RE",
         "re_to": "RE: %(topic)s",
+        "read_offical_blog": "Steemit Blog",
         "recent_password": "直近のパスワード",
         "receive": "受信 ",
         "remove": "削除",
@@ -83,6 +95,7 @@
         },
         "reputation": "評価",
         "reveal_comment": "コメントを表示する",
+        "will_be_hidden_due_to_low_rating": "Will be hidden due to low rating",
         "request": "リクエスト",
         "required": "必須です",
         "rewards": "報酬",
@@ -104,8 +117,10 @@
         "topics": "トピック",
         "toggle_nightmode": "ナイトモード切替",
         "all_tags": "すべてのタグ",
+        "all_tags_mobile": "All content",
         "transfer": "送信 ",
         "trending_topics": "トレンドトピック",
+        "try_again": "Try Again",
         "type": "売買",
         "unfollow": "フォロー解除",
         "unmute": "ミュート解除",
@@ -237,19 +252,22 @@
             "warning":
                 "Steemit Inc.の従業員を含む正当なユーザーは秘密キーまたはマスターパスワードを要求することはありません。",
             "checkbox": "理解しました。"
-        }
+        },
+        "post_as": "投稿します:"
     },
     "navigation": {
         "about": "Steemについて",
         "explore": "投稿を探す",
         "APP_NAME_whitepaper": "%(APP_NAME)sホワイトペーパー",
+        "third_party_exchanges": "Third-party exchanges:",
         "buy_LIQUID_TOKEN": "%(LIQUID_TOKEN)sを買う",
         "sell_LIQUID_TOKEN": "%(LIQUID_TOKEN)sを売る",
         "currency_market": "内部取引所",
         "stolen_account_recovery": "盗難アカウントの回復",
         "change_account_password": "パスワードの変更",
-        "witnesses": "証人",
         "vote_for_witnesses": "証人に投票する",
+        "advertise": "Advertise",
+        "media_kit": "Media Kit",
         "privacy_policy": "プライバシーポリシー",
         "terms_of_service": "利用規約",
         "sign_up": "登録",
@@ -261,10 +279,14 @@
         "business_center": "Businesses Accepting Steem",
         "api_docs": "Steemit API資料",
         "bluepaper": "Steemブルーペーパー",
+        "smt_whitepaper": "SMT Whitepaper",
         "whitepaper": "Steemホワイトペーパー",
         "intro_tagline": "金がものを言う",
         "intro_paragraph":
-            "あなたの声には価値があります。あなたのハイクオリティな投稿やキュレーションに報酬を出すコミュニティに参加しましょう。"
+            "あなたの声には価値があります。あなたのハイクオリティな投稿やキュレーションに報酬を出すコミュニティに参加しましょう。",
+        "jobs": "Jobs at Steemit",
+        "steem_proposals": "Steem Proposals",
+        "witnesses": "証人"
     },
     "main_menu": {
         "hot": "ホット",
@@ -340,6 +362,7 @@
             "この投稿は著作権上の問題により表示されません。",
         "share_on_facebook": "Facebookでシェア",
         "share_on_twitter": "Twitterでシェア",
+        "share_on_reddit": "Share on Reddit",
         "share_on_linkedin": "Linkedinでシェア",
         "recent_password": "直近のパスワード",
         "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
@@ -394,7 +417,13 @@
             "評価の低いコメントを表示しています。",
         "sort_order": "並べ替え",
         "comments_were_hidden_due_to_low_ratings":
-            "コメントは評価が低いため表示されません。"
+            "コメントは評価が低いため表示されません。",
+        "comment_sort_order": {
+            "trending": "Trending",
+            "votes": "Votes",
+            "age": "Age",
+            "reputation": "Reputation"
+        }
     },
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
@@ -411,17 +440,28 @@
         "past_payouts": "支払い済み $%(value)s",
         "past_payouts_author": " - 投稿者 $%(value)s",
         "past_payouts_curators": " - キュレーター $%(value)s",
-        "we_will_reset_curation_rewards_for_this_post":
-            "ことにより、この投稿へのキュレーション報酬はリセットされます",
         "removing_your_vote": "投票を削除する",
+        "removing_your_vote_will_reset_curation_rewards_for_this_post":
+            "Removing your vote will reset your curation rewards for this post",
         "changing_to_an_upvote": "Upvoteに変更する",
+        "changing_to_an_upvote_will_reset_curation_rewards_for_this_post":
+            "Changing to an Up-Vote will reset your curation rewards for this post",
         "changing_to_a_downvote": "Downvoteに変更する",
+        "changing_to_a_downvote_will_reset_curation_rewards_for_this_post":
+            "Changing to a Down-Vote will reset your curation rewards for this post",
         "confirm_flag": "フラグの確認",
         "and_more": "他%(count)s人",
         "votes_plural": {
             "one": "%(count)s件の投票",
             "other": "%(count)s件の投票"
-        }
+        },
+        "must_reached_minimum_payout": "(amount must reach $0.02 for payout)",
+        "payout": "Payout",
+        "breakdown": "Breakdown",
+        "voting_power": "Voting Power",
+        "estimated_vote": "Estimated Vote Value",
+        "we_will_reset_curation_rewards_for_this_post":
+            "ことにより、この投稿へのキュレーション報酬はリセットされます"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -508,13 +548,13 @@
     "postsummary_jsx": {
         "resteemed": "Resteemしました",
         "resteemed_by": "Resteemed by",
-        "this_post_is": "この投稿は",
-        "you_can": "You can",
         "reveal_it": "この投稿を表示する、",
         "adjust_your": "を変更してください。",
         "display_preferences": "表示設定",
         "create_an_account": "アカウントを作成して",
-        "to_save_your_preferences": "表示設定を行ってください。"
+        "to_save_your_preferences": "表示設定を行ってください。",
+        "this_post_is": "この投稿は",
+        "you_can": "You can"
     },
     "posts_index": {
         "empty_feed_1": "あなたはまだ誰もフォローしていないようです。",
@@ -522,7 +562,9 @@
             "最近新しいユーザーをフォローした場合、新しいコンテンツが有効になると個々のフィードに追加されます。",
         "empty_feed_3": "トレンド記事を検索する",
         "empty_feed_4": "クイックスタートガイドを読む",
-        "empty_feed_5": "FAQを参照する"
+        "empty_feed_5": "FAQを参照する",
+        "my_feed": "My Feed",
+        "accountnames_feed": "%(account_name)s's Feed"
     },
     "explorepost_jsx": {
         "copied": "コピーしました！",
@@ -587,11 +629,37 @@
         "signup_button_emphasis": "STEEMを手に入れよう！",
         "sign_up_get_steem": "登録してSTEEMを手に入れよう！",
         "returning_users": "再",
+        "login_warning_title": "Logging in with non-posting key",
+        "login_warning_body":
+            "You are attempting to use a key with more permissions than required for everyday Steemit.com use. Since keys and passwords are more likely to get compromised the more they are used, it is strongly recommended to only use your Posting Key to log in.",
+        "continue_anyway": "Continue Anyway",
+        "login_warning_link_text":
+            "Open my Steemit Wallet to access and view my posting key",
         "join_our": "",
         "sign_transfer": "Sign to complete transfer",
         "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
+        "account_name_should_not_be_empty": "Account name should not be empty.",
+        "account_name_should_be_longer": "Account name should be longer.",
+        "account_name_should_be_shorter": "Account name should be shorter.",
+        "each_account_segment_should_start_with_a_letter":
+            "Each account segment should start with a letter.",
+        "each_account_segment_should_have_only_letters_digits_or_dashes":
+            "Each account segment should have only letters, digits, or dashes.",
+        "each_account_segment_should_have_only_one_dash_in_a_row":
+            "Each account segment should have only one dash in a row.",
+        "each_account_segment_should_end_with_a_letter_or_digit":
+            "Each account segment should end with a letter or digit.",
+        "each_account_segment_should_be_longer":
+            "Each account segment should be longer.",
+        "verified_exchange_no_memo": "取引所へ送信するときはメモが必要です。",
+        "badactor":
+            "Use caution sending to this account. Please double check your spelling for possible phishing.",
+        "memo_has_privatekey":
+            "Please do not include what appears to be a private key or password.",
+        "memo_is_privatekey": "Do not use private keys in memos.",
+        "memo_is_password": "Do not use passwords in memos.",
         "account_name_should": "アカウント名",
         "not_be_empty": "が入力されていません。",
         "be_longer": "が短すぎます。",
@@ -601,8 +669,7 @@
         "have_only_letters_digits_or_dashes":
             "には英数字またはダッシュのみが使用できます。",
         "have_only_one_dash_in_a_row": "にはダッシュを1つだけ使用可能です。",
-        "end_with_a_letter_or_digit": "は英数字で終わります。",
-        "verified_exchange_no_memo": "取引所へ送信するときはメモが必要です。"
+        "end_with_a_letter_or_digit": "は英数字で終わります。"
     },
     "settings_jsx": {
         "invalid_url": "無効なURL",
@@ -612,19 +679,25 @@
         "location_is_too_long": "場所が長すぎます",
         "website_url_is_too_long": "URLが長すぎます",
         "public_profile_settings": "公開プロフィール設定",
-        "private_post_display_settings": "ローカル表示設定",
+        "preferences": "Preferences",
         "not_safe_for_work_nsfw_content": "閲覧注意 (NSFW) コンテンツ",
         "always_hide": "常に非表示",
         "always_warn": "常に警告する",
         "always_show": "常に表示",
+        "choose_default_blog_payout": "Blog post rewards",
+        "choose_default_comment_payout": "Comment post rewards",
         "muted_users": "ミュートユーザー",
         "update": "更新",
+        "upload_image": "Upload an image",
+        "uploading_image": "Uploading image",
         "profile_image_url": "プロフィール画像URL",
         "cover_image_url": "カバー画像URL",
         "profile_name": "表示名",
         "profile_about": "概要",
         "profile_location": "場所",
-        "profile_website": "ウェブサイト"
+        "profile_website": "ウェブサイト",
+        "saved": "Saved!",
+        "private_post_display_settings": "ローカル表示設定"
     },
     "transfer_jsx": {
         "amount_is_in_form": "金額は99999.999の形式です",
@@ -648,9 +721,15 @@
         "asset_currently_collecting":
             "%(asset)sの現在の利子は年間%(interest)s%%です。",
         "beware_of_spam_and_phishing_links":
-            "送金メモのスパムやフィッシングに注意してください。信用していないユーザーからのリンクを開かないでください。第三者のウェブサイトに秘密キーを提供しないでください。"
+            "送金メモのスパムやフィッシングに注意してください。信用していないユーザーからのリンクを開かないでください。第三者のウェブサイトに秘密キーを提供しないでください。",
+        "transactions_make_take_a_few_minutes":
+            "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
+        "autocomplete_previous_transfers": "previous transfers",
+        "autocomplete_user_following": "following",
+        "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
     },
     "userwallet_jsx": {
+        "transfer": "Transfer",
         "conversion_complete_tip": "変換完了予定",
         "in_conversion": "%(amount)sが変換中です",
         "transfer_to_savings": "貯蓄口座に送る",
@@ -662,6 +741,8 @@
         "withdraw_DEBT_TOKENS": "%(DEBT_TOKENS)sを引き出す",
         "tokens_worth_about_1_of_LIQUID_TICKER":
             "約$1.00の%(LIQUID_TICKER)sと同じ価値のトークンです。現在、利子が年間%(sbdInterest)s%%つきます。",
+        "tradeable_tokens_transferred":
+            "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "貯蓄口座",
         "estimated_account_value": "推定アカウント価格",
         "next_power_down_is_scheduled_to_happen":
@@ -680,5 +761,36 @@
         "ownership_changed_on": "所有権変更：",
         "deadline_for_recovery_is": "アカウント回復の期限は",
         "i_understand_dont_show_again": "理解しました。再表示は不要です。"
+    },
+    "termsagree_jsx": {
+        "please_review": "Please review our terms to continue",
+        "hi_user": "Hi %(username)s,",
+        "blurb":
+            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Steemit and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Steemit better.",
+        "i_agree_to_steemits": "I agree to Steemit's",
+        "terms_of_service": "Terms of Service",
+        "privacy_policy": "Privacy Policy",
+        "continue": "Continue",
+        "cancel": "Cancel"
+    },
+    "confirmtransactionform_jsx": {
+        "confirm": "Confirm %(transactionType)s"
+    },
+    "modals_jsx": {
+        "your_transaction_failed": "Your transaction failed to process",
+        "out_of_bandwidth_title": "Why? You've run out of Resource Credits",
+        "out_of_bandwidth_reason":
+            "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Steem blockchain for everyone.",
+        "out_of_bandwidth_reason_2":
+            "To keep things free, Steem intelligently allocates Resource Credits to each user based on their Steem Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Steem Power. This system prioritizes actions by good community members while limiting spam.",
+        "out_of_bandwidth_option_title": "To keep interacting on Steemit:",
+        "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
+        "out_of_bandwidth_option_2":
+            "Wait until your Resource Credits recharge",
+        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+    },
+    "sanitizedlink_jsx": {
+        "phishylink_caution": "Link hidden; phishing attempt",
+        "phishylink_reveal": "show link"
     }
 }

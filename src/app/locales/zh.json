@@ -12,6 +12,7 @@
         "blog": "博客",
         "browse": "浏览",
         "buy": "购买",
+        "buy_steem_power": "Buy Steem Power",
         "buy_or_sell": "买或卖",
         "by": "by",
         "cancel": "取消",
@@ -28,6 +29,10 @@
         "dismiss": "关闭",
         "edit": "编辑",
         "email": "邮件",
+        "external_link_message":
+            "This link will take you away from steemit.com",
+        "affiliation_steemit": "Steemit Team",
+        "affiliation_sm": "Steem Monsters Team",
         "feed": "动态",
         "follow": "关注",
         "for": "对于",
@@ -38,12 +43,18 @@
         "in_reply_to": "回复",
         "insufficient_balance": "余额不足",
         "invalid_amount": "金额无效",
+        "links": "Links",
         "joined": "加入",
         "loading": "正在载入",
         "login": "登录",
         "logout": "登出",
         "memo": "备注",
         "mute": "屏蔽",
+        "my_blog": "My blog",
+        "my_comments": "My comments",
+        "my_feed": "My feed",
+        "my_replies": "Replies to me",
+        "my_wallet": "My wallet",
         "new": "最新",
         "newer": "较新的",
         "next": "下一个",
@@ -55,8 +66,10 @@
         "password": "密码",
         "payouts": "赏金",
         "permissions": "权限",
+        "phishy_message":
+            "Link expanded to plain text; beware of a potential phishing attempt",
         "post": "发布",
-        "post_as": "发布为",
+        "post_as_user": "Post as %(username)s",
         "posts": "文章",
         "powered_up_100": "Power Up 100%%",
         "preview": "预览",
@@ -67,6 +80,7 @@
         "promoted": "推广",
         "re": "回复",
         "re_to": "回复%(topic)s",
+        "read_offical_blog": "Steemit Blog",
         "recent_password": "最近的密码",
         "receive": "收到",
         "remove": "取消",
@@ -81,6 +95,7 @@
         },
         "reputation": "声誉",
         "reveal_comment": "显示评论",
+        "will_be_hidden_due_to_low_rating": "Will be hidden due to low rating",
         "request": "请求",
         "required": "需要",
         "rewards": "奖励",
@@ -101,10 +116,11 @@
         "to": "至",
         "topics": "主题",
         "toggle_nightmode": "切换夜间模式",
-
         "all_tags": "所有标签",
+        "all_tags_mobile": "All content",
         "transfer": "转账",
         "trending_topics": "热门话题",
+        "try_again": "Try Again",
         "type": "类型",
         "unfollow": "取消关注",
         "unmute": "取消屏蔽",
@@ -218,19 +234,29 @@
             "zero": "没有回复",
             "one": "%(count)s回复",
             "other": "%(count)s个回复"
-        }
+        },
+        "post_key_warning": {
+            "confirm":
+                "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+            "warning":
+                "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
+            "checkbox": "I understand"
+        },
+        "post_as": "发布为"
     },
     "navigation": {
         "about": "关于",
         "explore": "探索",
         "APP_NAME_whitepaper": "%(APP_NAME)s的白皮书",
+        "third_party_exchanges": "Third-party exchanges:",
         "buy_LIQUID_TOKEN": "购买%(LIQUID_TOKEN)s",
         "sell_LIQUID_TOKEN": "出售%(LIQUID_TOKEN)s",
         "currency_market": "货币市场",
         "stolen_account_recovery": "被盗账户恢复",
         "change_account_password": "更改帐户密码",
-        "witnesses": "见证人",
         "vote_for_witnesses": "投票给见证人",
+        "advertise": "Advertise",
+        "media_kit": "Media Kit",
         "privacy_policy": "隐私政策",
         "terms_of_service": "服务条款",
         "sign_up": "注册",
@@ -241,10 +267,15 @@
         "app_center": "Steemit应用中心",
         "business_center": "Businesses Accepting Steem",
         "api_docs": "Steemit API文档",
+        "bluepaper": "Steem Bluepaper",
+        "smt_whitepaper": "SMT Whitepaper",
         "whitepaper": "Steem白皮书",
         "intro_tagline": "妙笔生金",
         "intro_paragraph":
-            "你的思想是有有价值的。赶快加入发表文章获得赏金的社区。"
+            "你的思想是有有价值的。赶快加入发表文章获得赏金的社区。",
+        "jobs": "Jobs at Steemit",
+        "steem_proposals": "Steem Proposals",
+        "witnesses": "见证人"
     },
     "main_menu": {
         "hot": "热门",
@@ -311,6 +342,7 @@
             "由于版权限制，暂不能显示这篇文章。",
         "share_on_facebook": "分享到脸书",
         "share_on_twitter": "分享到推特",
+        "share_on_reddit": "Share on Reddit",
         "share_on_linkedin": "分享到Linkedin",
         "recent_password": "最近的密码",
         "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
@@ -331,6 +363,12 @@
         "user_hasnt_followed_anything_yet":
             "看起来%(name)s还没有关注任何人!如果%(name)s最近添加关注了新的用户，他们的个性化主页上将会有显示。",
         "user_hasnt_had_any_replies_yet": "%(name)s目前还没有回复",
+        "looks_like_you_havent_posted_anything_yet":
+            "Looks like you haven't posted anything yet.",
+        "create_a_post": "Create a Post",
+        "explore_trending_articles": "Explore Trending Articles",
+        "read_the_quick_start_guide": "Read The Quick Start Guide",
+        "browse_the_faq": "Browse The FAQ",
         "followers": "关注者",
         "this_is_users_reputations_score_it_is_based_on_history_of_votes":
             "这是%(name)s的声誉分数。声誉分数取决于账户收到的历史投票记录, 用于隐藏低质量的内容。",
@@ -355,7 +393,13 @@
     "post_jsx": {
         "now_showing_comments_with_low_ratings": "正在显示低评级的评论",
         "sort_order": "排序",
-        "comments_were_hidden_due_to_low_ratings": "评论由于评级不足而被隐藏"
+        "comments_were_hidden_due_to_low_ratings": "评论由于评级不足而被隐藏",
+        "comment_sort_order": {
+            "trending": "Trending",
+            "votes": "Votes",
+            "age": "Age",
+            "reputation": "Reputation"
+        }
     },
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
@@ -372,17 +416,28 @@
         "past_payouts": "累计赏金$%(value)s",
         "past_payouts_author": "- 作者收入 $%(value)s",
         "past_payouts_curators": " - 审查收入 $%(value)s",
-        "we_will_reset_curation_rewards_for_this_post":
-            "将重置你对这篇帖子的审查奖励",
         "removing_your_vote": "取消你的投票",
+        "removing_your_vote_will_reset_curation_rewards_for_this_post":
+            "Removing your vote will reset your curation rewards for this post",
         "changing_to_an_upvote": "改为投票",
+        "changing_to_an_upvote_will_reset_curation_rewards_for_this_post":
+            "Changing to an Up-Vote will reset your curation rewards for this post",
         "changing_to_a_downvote": "改为差评",
+        "changing_to_a_downvote_will_reset_curation_rewards_for_this_post":
+            "Changing to a Down-Vote will reset your curation rewards for this post",
         "confirm_flag": "确认差评",
         "and_more": "还有%(count)s次",
         "votes_plural": {
             "one": "%(count)s个投票",
             "other": "%(count)s个投票"
-        }
+        },
+        "must_reached_minimum_payout": "(amount must reach $0.02 for payout)",
+        "payout": "Payout",
+        "breakdown": "Breakdown",
+        "voting_power": "Voting Power",
+        "estimated_vote": "Estimated Vote Value",
+        "we_will_reset_curation_rewards_for_this_post":
+            "将重置你对这篇帖子的审查奖励"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond": "暂无回复。点击回复。",
@@ -462,13 +517,13 @@
     "postsummary_jsx": {
         "resteemed": "已转发的",
         "resteemed_by": "被转发的",
-        "this_post_is": "这篇帖子是",
-        "you_can": "你可以",
         "reveal_it": "显示它",
         "adjust_your": "调整你的",
         "display_preferences": "显示偏好",
         "create_an_account": "创建帐户",
-        "to_save_your_preferences": "保存你的偏好"
+        "to_save_your_preferences": "保存你的偏好",
+        "this_post_is": "这篇帖子是",
+        "you_can": "你可以"
     },
     "posts_index": {
         "empty_feed_1": "看起来你还没有关注任何人",
@@ -476,7 +531,9 @@
             "如果你最近关注了新的用户，更新内容将会显示在你的个性化主页",
         "empty_feed_3": "浏览流行文章",
         "empty_feed_4": "阅读快速入门指南",
-        "empty_feed_5": "浏览常见问题解答"
+        "empty_feed_5": "浏览常见问题解答",
+        "my_feed": "My Feed",
+        "accountnames_feed": "%(account_name)s's Feed"
     },
     "explorepost_jsx": {
         "copied": "已复制！",
@@ -532,14 +589,43 @@
         "keep_me_logged_in": "保持登录状态",
         "amazing_community": "神奇的社区",
         "to_comment_and_reward_others": "评论和奖励他人。",
-        "sign_up_now_to_earn": "现在就来注册赚取",
-        "free_money": "免费的钱！",
+        "signup_button": "Sign up now to earn ",
+        "signup_button_emphasis": "FREE STEEM!",
+        "sign_up_get_steem": "Sign up. Get STEEM!",
         "returning_users": "返回用户:",
+        "login_warning_title": "Logging in with non-posting key",
+        "login_warning_body":
+            "You are attempting to use a key with more permissions than required for everyday Steemit.com use. Since keys and passwords are more likely to get compromised the more they are used, it is strongly recommended to only use your Posting Key to log in.",
+        "continue_anyway": "Continue Anyway",
+        "login_warning_link_text":
+            "Open my Steemit Wallet to access and view my posting key",
         "join_our": "加入我们",
         "sign_transfer": "Sign to complete transfer",
-        "use_keychain": "Use keychain extension"
+        "use_keychain": "Use keychain extension",
+        "sign_up_now_to_earn": "现在就来注册赚取",
+        "free_money": "免费的钱！"
     },
     "chainvalidation_js": {
+        "account_name_should_not_be_empty": "Account name should not be empty.",
+        "account_name_should_be_longer": "Account name should be longer.",
+        "account_name_should_be_shorter": "Account name should be shorter.",
+        "each_account_segment_should_start_with_a_letter":
+            "Each account segment should start with a letter.",
+        "each_account_segment_should_have_only_letters_digits_or_dashes":
+            "Each account segment should have only letters, digits, or dashes.",
+        "each_account_segment_should_have_only_one_dash_in_a_row":
+            "Each account segment should have only one dash in a row.",
+        "each_account_segment_should_end_with_a_letter_or_digit":
+            "Each account segment should end with a letter or digit.",
+        "each_account_segment_should_be_longer":
+            "Each account segment should be longer.",
+        "verified_exchange_no_memo": "如果你要转账到交易所，你必须填写备注。",
+        "badactor":
+            "Use caution sending to this account. Please double check your spelling for possible phishing.",
+        "memo_has_privatekey":
+            "Please do not include what appears to be a private key or password.",
+        "memo_is_privatekey": "Do not use private keys in memos.",
+        "memo_is_password": "Do not use passwords in memos.",
         "account_name_should": "帐户名称应该",
         "not_be_empty": "不是空的。",
         "be_longer": "更长。",
@@ -548,8 +634,7 @@
         "start_with_a_letter": "从一个字母开始。",
         "have_only_letters_digits_or_dashes": "只有字母、数字或破折号",
         "have_only_one_dash_in_a_row": "一行只有一个破折号",
-        "end_with_a_letter_or_digit": "字母或数字结尾",
-        "verified_exchange_no_memo": "如果你要转账到交易所，你必须填写备注。"
+        "end_with_a_letter_or_digit": "字母或数字结尾"
     },
     "settings_jsx": {
         "invalid_url": "无效的URL",
@@ -564,14 +649,19 @@
         "always_hide": "总是隐藏",
         "always_warn": "总是警告",
         "always_show": "总是显示",
+        "choose_default_blog_payout": "Blog post rewards",
+        "choose_default_comment_payout": "Comment post rewards",
         "muted_users": "屏蔽的用户",
         "update": "更新",
+        "upload_image": "Upload an image",
+        "uploading_image": "Uploading image",
         "profile_image_url": "个人头像的网址",
         "cover_image_url": "封面图片的网址",
         "profile_name": "显示名称",
         "profile_about": "关于",
         "profile_location": "位置",
-        "profile_website": "网站"
+        "profile_website": "网站",
+        "saved": "Saved!"
     },
     "transfer_jsx": {
         "amount_is_in_form": "金额以99999.999的形式出现",
@@ -591,9 +681,17 @@
             "需要在3天的等待期后提取资金。",
         "from": "从",
         "to": "到",
-        "asset_currently_collecting": "%(asset)s目前获得%(interest)s%%利息"
+        "asset_currently_collecting": "%(asset)s目前获得%(interest)s%%利息",
+        "beware_of_spam_and_phishing_links":
+            "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
+        "transactions_make_take_a_few_minutes":
+            "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
+        "autocomplete_previous_transfers": "previous transfers",
+        "autocomplete_user_following": "following",
+        "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
     },
     "userwallet_jsx": {
+        "transfer": "Transfer",
         "conversion_complete_tip": "将完成在",
         "in_conversion": "%(amount)s在转换",
         "transfer_to_savings": "转移到储蓄",
@@ -605,6 +703,8 @@
         "withdraw_DEBT_TOKENS": "取出%(DEBT_TOKENS)s",
         "tokens_worth_about_1_of_LIQUID_TICKER":
             "价值约为1.00美金的%(LIQUID_TICKER)s，目前正在获得%(sbdInterest)s%%的利息。",
+        "tradeable_tokens_transferred":
+            "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "储蓄",
         "estimated_account_value": "账户估值",
         "next_power_down_is_scheduled_to_happen":
@@ -620,5 +720,36 @@
         "ownership_changed_on": "所有权变更",
         "deadline_for_recovery_is": "恢复的截止日期是",
         "i_understand_dont_show_again": "我明白，不要再显示"
+    },
+    "termsagree_jsx": {
+        "please_review": "Please review our terms to continue",
+        "hi_user": "Hi %(username)s,",
+        "blurb":
+            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Steemit and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Steemit better.",
+        "i_agree_to_steemits": "I agree to Steemit's",
+        "terms_of_service": "Terms of Service",
+        "privacy_policy": "Privacy Policy",
+        "continue": "Continue",
+        "cancel": "Cancel"
+    },
+    "confirmtransactionform_jsx": {
+        "confirm": "Confirm %(transactionType)s"
+    },
+    "modals_jsx": {
+        "your_transaction_failed": "Your transaction failed to process",
+        "out_of_bandwidth_title": "Why? You've run out of Resource Credits",
+        "out_of_bandwidth_reason":
+            "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Steem blockchain for everyone.",
+        "out_of_bandwidth_reason_2":
+            "To keep things free, Steem intelligently allocates Resource Credits to each user based on their Steem Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Steem Power. This system prioritizes actions by good community members while limiting spam.",
+        "out_of_bandwidth_option_title": "To keep interacting on Steemit:",
+        "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
+        "out_of_bandwidth_option_2":
+            "Wait until your Resource Credits recharge",
+        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+    },
+    "sanitizedlink_jsx": {
+        "phishylink_caution": "Link hidden; phishing attempt",
+        "phishylink_reveal": "show link"
     }
 }

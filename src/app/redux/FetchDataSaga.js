@@ -3,6 +3,7 @@ import {
     put,
     select,
     fork,
+    take,
     takeLatest,
     takeEvery,
 } from 'redux-saga/effects';
@@ -18,6 +19,8 @@ import { getStateAsync } from 'app/utils/steemApi';
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
+const GET_ACCOUNTS = 'fetchDataSaga/GET_ACCOUNTS';
+const GET_REWARD_FUND = 'fetchDataSaga/GET_REWARD_FUND';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
@@ -25,10 +28,29 @@ export const fetchDataWatches = [
     takeLatest('@@router/LOCATION_CHANGE', fetchState),
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
+    fork(getAccountsWatcher),
+    fork(getRewardFundWatcher),
 ];
 
 export function* getContentCaller(action) {
     yield getContent(action.payload);
+}
+
+function* getAccountsWatcher() {
+    while (true) {
+        const action = yield take(GET_ACCOUNTS);
+        yield getAccounts(action.payload);
+    }
+}
+
+function* getRewardFundWatcher() {
+    while (true) {
+        const action = yield take(GET_REWARD_FUND);
+        const rewardFund = yield call([api, api.getRewardFundAsync], 'post');
+        yield put(
+            globalActions.set({ key: ['rewardFund'], value: rewardFund })
+        );
+    }
 }
 
 let is_initial_state = true;
@@ -339,6 +361,16 @@ export const actions = {
 
     fetchState: payload => ({
         type: FETCH_STATE,
+        payload,
+    }),
+
+    getAccounts: payload => ({
+        type: GET_ACCOUNTS,
+        payload,
+    }),
+
+    getRewardFund: payload => ({
+        type: GET_REWARD_FUND,
         payload,
     }),
 };

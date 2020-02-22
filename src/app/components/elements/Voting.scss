@@ -293,6 +293,20 @@
     color: $dark-gray;
     line-height: 2.6rem;
   }
+  .voting-power-display {
+    float: left;
+    margin-right: 0.5rem;
+    text-align: right;
+    color: $dark-gray;
+    line-height: 2.6rem;
+  }
+  .voting-est-display {
+    float: left;
+    margin-right: 0.5rem;
+    text-align: right;
+    color: $dark-gray;
+    line-height: 2.6rem;
+  }
   a.confirm_weight {
     float: left;
     width: 2rem;

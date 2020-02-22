@@ -452,7 +452,9 @@
         },
         "must_reached_minimum_payout": "(amount must reach $0.02 for payout)",
         "payout": "Payout",
-        "breakdown": "Breakdown"
+        "breakdown": "Breakdown",
+        "voting_power": "Voting Power",
+        "estimated_vote": "Estimated Vote Value"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

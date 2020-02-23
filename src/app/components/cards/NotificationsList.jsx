@@ -11,6 +11,7 @@ import Callout from 'app/components/elements/Callout';
 import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
 import tt from 'counterpart';
+import classNames from 'classnames';
 
 const notificationsIcon = type => {
     const types = {
@@ -92,6 +93,7 @@ class NotificationsList extends React.Component {
         follows: ['follow'],
         upvotes: ['vote'],
         resteems: ['reblog'],
+        mentions: ['mention'],
     };
 
     constructor() {
@@ -267,7 +269,13 @@ class NotificationsList extends React.Component {
                             <br />
                             <div className="notification__filter_select">
                                 <a
-                                    className="notification__filter selected"
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter === 'all',
+                                        }
+                                    )}
                                     role="link"
                                     data-type="all"
                                     tabIndex={0}
@@ -276,7 +284,14 @@ class NotificationsList extends React.Component {
                                     {tt('notificationslist_jsx.all')}
                                 </a>
                                 <a
-                                    className="notification__filter"
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter ===
+                                                'replies',
+                                        }
+                                    )}
                                     role="link"
                                     data-type="replies"
                                     tabIndex={0}
@@ -285,7 +300,30 @@ class NotificationsList extends React.Component {
                                     {tt('notificationslist_jsx.replies')}
                                 </a>
                                 <a
-                                    className="notification__filter"
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter ===
+                                                'mentions',
+                                        }
+                                    )}
+                                    role="link"
+                                    data-type="mentions"
+                                    tabIndex={0}
+                                    onClick={this.onClickFilter}
+                                >
+                                    {tt('notificationslist_jsx.mentions')}
+                                </a>
+                                <a
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter ===
+                                                'follows',
+                                        }
+                                    )}
                                     role="link"
                                     data-type="follows"
                                     tabIndex={0}
@@ -294,7 +332,14 @@ class NotificationsList extends React.Component {
                                     {tt('notificationslist_jsx.follows')}
                                 </a>
                                 <a
-                                    className="notification__filter"
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter ===
+                                                'upvotes',
+                                        }
+                                    )}
                                     role="link"
                                     data-type="upvotes"
                                     tabIndex={0}
@@ -303,7 +348,14 @@ class NotificationsList extends React.Component {
                                     {tt('notificationslist_jsx.upvotes')}
                                 </a>
                                 <a
-                                    className="notification__filter"
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter ===
+                                                'resteems',
+                                        }
+                                    )}
                                     role="link"
                                     data-type="resteems"
                                     tabIndex={0}

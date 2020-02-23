@@ -810,6 +810,7 @@
         "replies": "Replies",
         "follows": "Follows",
         "resteems": "Resteems",
-        "upvotes": "Upvotes"
+        "upvotes": "Upvotes",
+        "mentions": "Mentions"
     }
 }

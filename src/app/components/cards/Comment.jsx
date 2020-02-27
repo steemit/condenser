@@ -391,7 +391,7 @@ class CommentImpl extends React.Component {
                     </div>
                     <div className="Comment__footer">{controls}</div>
                 </div>
-                <div className="Comment__replies hfeed">
+                <div className="Comment__replies hfeed comment-editor">
                     {showReply && renderedEditor}
                     {replies}
                 </div>

@@ -317,7 +317,8 @@ class Settings extends React.Component {
                                         profile_image.error}
                                 </div>
                                 <label>
-                                    {tt('settings_jsx.cover_image_url')}
+                                    {tt('settings_jsx.cover_image_url')}{' '}
+                                    <small>(Optimal: 2048 x 512 pixels)</small>
                                     <input
                                         type="url"
                                         {...cover_image.props}

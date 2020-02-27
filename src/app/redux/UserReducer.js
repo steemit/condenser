@@ -46,7 +46,7 @@ const defaultState = fromJS({
     locale: DEFAULT_LANGUAGE,
     show_side_panel: false,
     maybeLoggedIn: false,
-    showAnnouncement: true,
+    showAnnouncement: false,
 });
 
 export default function reducer(state = defaultState, action) {

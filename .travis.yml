@@ -1,0 +1,28 @@
+language: node_js
+
+services:
+  - docker
+
+before_install:
+  #install heroku CLI
+  - wget -qO- https://toolbelt.heroku.com/install.sh | sh
+
+install: true
+
+script:
+  - bash docker_build
+
+after_success:
+  - bash docker_push_staging
+
+deploy:
+  provider: script
+  script:
+    bash docker_push
+  on:
+    branch: master
+
+# safelist
+branches:
+  only:
+  - master

@@ -20,9 +20,9 @@ deploy:
   script:
     bash docker_push
   on:
-    branch: master
+    branch: production
 
 # safelist
 branches:
   only:
-  - master
+  - production

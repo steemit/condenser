@@ -23,7 +23,7 @@ describe('routeRegex', () => {
             ['UserRss', /^\/(@[\w\.\d-]+)(\.rss)$/],
             [
                 'CategoryFiltersRss',
-                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(\/([\w\W\d-]{2,32}))?(\.rss)$/,
+                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(\/([\w\W\d-]{1,32}))?(\.rss)$/,
             ],
             ['UserRepliesRss', /^\/(@[\w\.\d-]+)(\/replies\.rss)$/],
             ['UserCommentsRss', /^\/(@[\w\.\d-]+)(\/comments\.rss)$/],

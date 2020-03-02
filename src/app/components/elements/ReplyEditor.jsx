@@ -231,27 +231,36 @@ class ReplyEditor extends React.Component {
     initForm(props) {
         const { isStory, type, fields } = props;
         const isEdit = type === 'edit';
-        const maxKb = isStory ? 65 : 16;
+        const maxKb = isStory ? 64 : 16;
         reactForm({
             fields,
             instance: this,
             name: 'replyForm',
             initialValues: props.initialValues,
-            validation: values => ({
-                title:
-                    isStory &&
-                    (!values.title || values.title.trim() === ''
-                        ? tt('g.required')
-                        : values.title.length > 255
-                          ? tt('reply_editor.shorten_title')
-                          : null),
-                tags: isStory && validateTagInput(values.tags, !isEdit),
-                body: !values.body
-                    ? tt('g.required')
-                    : values.body.length > maxKb * 1024
-                      ? tt('reply_editor.exceeds_maximum_length', { maxKb })
-                      : null,
-            }),
+            validation: values => {
+                let bodyValidation = null;
+                if (!values.body) {
+                    bodyValidation = tt('g.required');
+                }
+                if (
+                    values.body &&
+                    new Blob([values.body]).size >= maxKb * 1024 - 256
+                ) {
+                    bodyValidation = `Post body exceeds ${maxKb * 1024 -
+                        256} bytes.`;
+                }
+                return {
+                    title:
+                        isStory &&
+                        (!values.title || values.title.trim() === ''
+                            ? tt('g.required')
+                            : values.title.length > 255
+                              ? tt('reply_editor.shorten_title')
+                              : null),
+                    tags: isStory && validateTagInput(values.tags, !isEdit),
+                    body: bodyValidation,
+                };
+            },
         });
     }
 
@@ -350,7 +359,15 @@ class ReplyEditor extends React.Component {
             return;
         }
 
-        imagesToUpload = [...acceptedFiles];
+        for (let fi = 0; fi < acceptedFiles.length; fi += 1) {
+            const acceptedFile = acceptedFiles[fi];
+            const imageToUpload = {
+                file: acceptedFile,
+                temporaryTag: '',
+            };
+            imagesToUpload.push(imageToUpload);
+        }
+
         this.insertPlaceHolders();
         this.uploadNextImage();
     };
@@ -366,7 +383,10 @@ class ReplyEditor extends React.Component {
                 for (const item of e.clipboardData.items) {
                     if (item.kind === 'file' && /^image\//.test(item.type)) {
                         const blob = item.getAsFile();
-                        imagesToUpload.push(blob);
+                        imagesToUpload.push({
+                            file: blob,
+                            temporaryTag: '',
+                        });
                     }
                 }
 
@@ -385,7 +405,7 @@ class ReplyEditor extends React.Component {
     uploadNextImage = () => {
         if (imagesToUpload.length > 0) {
             const nextImage = imagesToUpload.pop();
-            this.upload(nextImage, nextImage.name);
+            this.upload(nextImage);
         }
     };
 
@@ -396,9 +416,18 @@ class ReplyEditor extends React.Component {
         let placeholder = '';
 
         for (let ii = 0; ii < imagesToUpload.length; ii += 1) {
-            imagesUploadCount++;
-            placeholder += `\n![Uploading image #${imagesUploadCount}...]()\n`;
+            const imageToUpload = imagesToUpload[ii];
+
+            if (imageToUpload.temporaryTag === '') {
+                imagesUploadCount++;
+                imageToUpload.temporaryTag = `![Uploading image #${
+                    imagesUploadCount
+                }...]()`;
+                placeholder += `\n${imageToUpload.temporaryTag}\n`;
+            }
         }
+
+        this.setState({ imagesUploadCount: imagesUploadCount });
 
         // Insert the temporary tag where the cursor currently is
         body.props.onChange(
@@ -408,43 +437,34 @@ class ReplyEditor extends React.Component {
         );
     };
 
-    upload = (file, name = '') => {
-        let { imagesUploadCount } = this.state;
-        imagesUploadCount++;
-        this.setState({ imagesUploadCount: imagesUploadCount });
-
+    upload = image => {
         const { uploadImage } = this.props;
         this.setState({
             progress: { message: tt('reply_editor.uploading') },
         });
 
-        uploadImage(file, progress => {
+        uploadImage(image.file, progress => {
             const { body } = this.state;
 
             if (progress.url) {
                 this.setState({ progress: {} });
                 const { url } = progress;
-                const image_md = `![${name}](${url})`;
+                const imageMd = `![${image.file.name}](${url})`;
 
                 // Replace temporary image MD tag with the real one
                 body.props.onChange(
-                    body.value.replace(
-                        `![Uploading image #${imagesUploadCount}...]()`,
-                        image_md
-                    )
+                    body.value.replace(image.temporaryTag, imageMd)
                 );
 
                 this.uploadNextImage();
             } else {
                 if (progress.hasOwnProperty('error')) {
                     this.displayErrorMessage(progress.error);
+                    const imageMd = `![${image.file.name}](UPLOAD FAILED)`;
 
                     // Remove temporary image MD tag
                     body.props.onChange(
-                        body.value.replace(
-                            `![Uploading image #${imagesUploadCount}...]()`,
-                            ''
-                        )
+                        body.value.replace(image.temporaryTag, imageMd)
                     );
                 } else {
                     this.setState({ progress });

@@ -57,6 +57,10 @@ function* shouldShowLoginWarning({ username, password }) {
     // If it's a master key, show the warning.
     if (!auth.isWif(password)) {
         const account = (yield api.getAccountsAsync([username]))[0];
+        if (!account) {
+            console.error("shouldShowLoginWarning - account not found");
+            return false;
+        }
         const pubKey = PrivateKey.fromSeed(username + 'posting' + password)
             .toPublicKey()
             .toString();
@@ -102,7 +106,7 @@ function* usernamePasswordLogin(action) {
     ) {
         // Uncomment to re-enable announcment
         // TODO: use config to enable/disable
-        // yield put(userActions.showAnnouncement());
+        //yield put(userActions.showAnnouncement());
     }
 
     // Sets 'loading' while the login is taking place. The key generation can

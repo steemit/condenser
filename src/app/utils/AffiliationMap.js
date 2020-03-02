@@ -1,6 +1,5 @@
 const map = {
     //steemit
-    ned: 'steemit',
     justinw: 'steemit',
     elipowell: 'steemit',
     vandeberg: 'steemit',
@@ -9,6 +8,7 @@ const map = {
     roadscape: 'steemit',
     steemitblog: 'steemit',
     steemitdev: 'steemit',
+    justinsunsteemit: 'steemit',
 
     /*
     //steem monsters

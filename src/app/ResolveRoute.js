@@ -5,13 +5,13 @@ const reg = pattern => {
         .replace('<account>', '(@[\\w\\.\\d-]+)')
         .replace(
             '<account-tab>',
-            '(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications)'
+            '(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications|communities)'
         )
         .replace(
             '<sort>',
             '(hot|trending|promoted|payout|payout_comments|muted|created)'
         )
-        .replace('<tag>', '([\\w\\W\\d-]{2,32})')
+        .replace('<tag>', '([\\w\\W\\d-]{1,32})')
         .replace('<permlink>', '([\\w\\d-]+)')
         .replace('/', '\\/');
     return new RegExp('^\\/' + pattern + '$');

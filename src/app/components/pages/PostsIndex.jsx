@@ -4,14 +4,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import tt from 'counterpart';
-import { List, Map } from 'immutable';
+import { List } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import Callout from 'app/components/elements/Callout';
 import { GptUtils } from 'app/utils/GptUtils';
-import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import { ifHive } from 'app/utils/Community';
@@ -33,7 +32,7 @@ const noFriendsText = (
 
 const noCommunitiesText = (
     <div>
-        You haven't joined any communities yet!<br />
+        You haven't joined any active communities yet!<br />
         <br />
         <span style={{ fontSize: '1.1rem' }}>
             <Link to="/communities">Explore Communities</Link>
@@ -106,13 +105,23 @@ class PostsIndex extends React.Component {
             account_name, // TODO: for feed
             order,
             posts,
+            username,
         } = this.props;
+
+        const status = this.props.status
+            ? this.props.status.getIn([category || '', order])
+            : null;
+        let fetching = (status && status.fetching) || this.props.loading;
 
         let emptyText = '';
         if (order === 'feed') {
             emptyText = noFriendsText;
         } else if (category === 'my') {
-            emptyText = noCommunitiesText;
+            if (!process.env.BROWSER) {
+                fetching = true;
+            } else {
+                emptyText = noCommunitiesText;
+            }
         } else if (posts.size === 0) {
             const cat = community
                 ? 'community' //community.get('title')
@@ -127,11 +136,6 @@ class PostsIndex extends React.Component {
         } else {
             emptyText = 'Nothing here to see...';
         }
-
-        const status = this.props.status
-            ? this.props.status.getIn([category || '', order])
-            : null;
-        const fetching = (status && status.fetching) || this.props.loading;
 
         // page title
         let page_title = tt('g.all_tags');
@@ -150,6 +154,28 @@ class PostsIndex extends React.Component {
             page_title = community.get('title');
         } else if (category) {
             page_title = '#' + category;
+        }
+
+        let postsIndexDisplay = (
+            <PostsList
+                ref="list"
+                post_refs={posts}
+                loading={fetching}
+                order={order}
+                category={category}
+                hideCategory={!!community}
+                loadMore={this.loadMore}
+            />
+        );
+
+        if (!fetching && !posts.size) {
+            postsIndexDisplay = <Callout>{emptyText}</Callout>;
+        }
+        if (!username && posts.size && category === 'my') {
+            postsIndexDisplay = <Callout>{emptyText}</Callout>;
+        }
+        if (order === 'feed' && !username) {
+            postsIndexDisplay = <Callout>{emptyText}</Callout>;
         }
 
         return (
@@ -192,7 +218,8 @@ class PostsIndex extends React.Component {
                             <Topics
                                 username={this.props.username}
                                 current={category}
-                                topics={subscriptions || topics}
+                                topics={topics}
+                                subscriptions={subscriptions}
                                 compact
                             />
                         </span>
@@ -214,20 +241,7 @@ class PostsIndex extends React.Component {
                     </div>*/}
                 </div>
                 <hr className="articles__hr" />
-
-                {!fetching && !posts.size ? (
-                    <Callout>{emptyText}</Callout>
-                ) : (
-                    <PostsList
-                        ref="list"
-                        post_refs={posts}
-                        loading={fetching}
-                        order={order}
-                        category={category}
-                        hideCategory={!!community}
-                        loadMore={this.loadMore}
-                    />
-                )}
+                {postsIndexDisplay}
             </PostsIndexLayout>
         );
     }
@@ -271,9 +285,12 @@ module.exports = {
             if (pending && !posts.includes(pending)) {
                 posts = posts.unshift(pending);
             }
+            const username =
+                state.user.getIn(['current', 'username']) ||
+                state.offchain.get('account');
 
             return {
-                subscriptions: state.global.get('subscriptions'),
+                subscriptions: state.global.getIn(['subscriptions', username]),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 account_name,
@@ -282,9 +299,7 @@ module.exports = {
                 posts,
                 pending,
                 community,
-                username:
-                    state.user.getIn(['current', 'username']) ||
-                    state.offchain.get('account'),
+                username,
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 topics: state.global.getIn(['topics'], List()),
                 isBrowser: process.env.BROWSER,

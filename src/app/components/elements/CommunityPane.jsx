@@ -24,23 +24,37 @@ class CommunityPane extends Component {
     static propTypes = {
         community: PropTypes.object.isRequired,
         showRecentSubscribers: PropTypes.func.isRequired,
+        showModerationLog: PropTypes.func.isRequired,
     };
 
     render() {
-        const { community, showRecentSubscribers } = this.props;
+        const {
+            community,
+            showRecentSubscribers,
+            showModerationLog,
+        } = this.props;
         const handleSubscriberClick = () => {
             showRecentSubscribers(community);
+        };
+
+        const handleModerationLogCLick = e => {
+            e.preventDefault();
+            showModerationLog(community);
         };
 
         function teamMembers(members) {
             return members.map((row, idx) => {
                 const account = `@${row.get(0)}`;
                 const title = row.get(2);
-                const sep = title ? '/ ' : '';
                 const role = row.get(1);
-
+                if (role === 'owner') {
+                    return null;
+                }
                 return (
-                    <div key={idx} style={{ fontSize: '80%' }}>
+                    <div
+                        key={`${account}__${role}`}
+                        style={{ fontSize: '80%' }}
+                    >
                         <Link to={`/${account}`}>{account}</Link>
                         {role && <span className="user_role"> {role} </span>}
                         {title && <span className="affiliation">{title}</span>}
@@ -110,13 +124,12 @@ class CommunityPane extends Component {
                     </div>
 
                     <div style={{ margin: '12px 0 0' }}>
-                        {community &&
-                            this.props.username && (
-                                <SubscribeButton
-                                    community={community.get('name')}
-                                    display="block"
-                                />
-                            )}
+                        {community && (
+                            <SubscribeButton
+                                community={community.get('name')}
+                                display="block"
+                            />
+                        )}
                         {canPost && (
                             <Link
                                 className="button primary"
@@ -152,6 +165,11 @@ class CommunityPane extends Component {
                         )}
                         <strong>Leadership</strong>
                         {teamMembers(community.get('team', List()))}
+                        <div style={{ float: 'right', fontSize: '0.8em' }}>
+                            <a onClick={handleModerationLogCLick}>
+                                Activity Log
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div className="c-sidebar__module">
@@ -194,6 +212,14 @@ export default connect(
                 dispatch(
                     globalActions.showDialog({
                         name: 'communitySubscribers',
+                        params: { community },
+                    })
+                );
+            },
+            showModerationLog: community => {
+                dispatch(
+                    globalActions.showDialog({
+                        name: 'communityModerationLog',
                         params: { community },
                     })
                 );

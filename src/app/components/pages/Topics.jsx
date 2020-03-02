@@ -50,20 +50,37 @@ class Topics extends Component {
                 return { value: `/`, label: tt('g.all_tags') };
             };
 
-            let options = [];
+            const options = [];
+            // Add 'All Posts' link.
             options.push(opt(null));
-
-            if (username) {
+            if (username && subscriptions) {
+                // Add 'My Friends' Link
                 options.push(opt('@' + username));
+                // Add 'My Communities' Link
                 options.push(opt('my'));
+                const subscriptionOptions = subscriptions
+                    .toJS()
+                    .map(cat => opt(cat[0], cat[1]));
+                options.push({
+                    value: 'Subscriptions',
+                    label: 'Community Subscriptions',
+                    disabled: true,
+                });
+                options.push(...subscriptionOptions);
+            }
+            if (topics) {
+                const topicsOptions = topics
+                    .toJS()
+                    .map(cat => opt(cat[0], cat[1]));
+                options.push({
+                    value: 'Topics',
+                    label: 'Trending Communities',
+                    disabled: true,
+                });
+                options.push(...topicsOptions);
             }
 
-            options = options.concat(
-                (subscriptions || topics).toJS().map(cat => opt(cat[0], cat[1]))
-            );
-
             options.push(opt('explore'));
-
             const currOpt = opt(current);
             if (!options.find(opt => opt.value == currOpt.value)) {
                 options.push(
@@ -95,13 +112,13 @@ class Topics extends Component {
         );
 
         const moreLabel = <span>{tt('g.show_more_topics')}&hellip;</span>;
-        const title = subscriptions
-            ? 'My Subscriptions'
-            : 'Trending Communities';
+        const title =
+            subscriptions && username
+                ? 'My subscriptions'
+                : 'Trending Communities';
         const commsHead = (
             <div style={{ color: '#aaa', paddingTop: '0em' }}>{title}</div>
         );
-
         const list = (
             <ul className="c-sidebar__list">
                 <li>{link('/', tt('g.all_tags'))}</li>
@@ -110,13 +127,23 @@ class Topics extends Component {
                 )}
                 {username && <li>{link(`/trending/my`, 'My communities')}</li>}
                 {(subscriptions || topics).size > 0 && <li>{commsHead}</li>}
-                {(subscriptions || topics)
-                    .toJS()
-                    .map(cat => (
-                        <li key={cat[0]}>
-                            {link(`/trending/${cat[0]}`, cat[1], '')}
-                        </li>
-                    ))}
+                {username &&
+                    subscriptions &&
+                    subscriptions
+                        .toJS()
+                        .map(cat => (
+                            <li key={cat[0]}>
+                                {link(`/trending/${cat[0]}`, cat[1], '')}
+                            </li>
+                        ))}
+                {(!username || !subscriptions) &&
+                    topics
+                        .toJS()
+                        .map(cat => (
+                            <li key={cat[0]}>
+                                {link(`/trending/${cat[0]}`, cat[1], '')}
+                            </li>
+                        ))}
                 <li>
                     {link(
                         `/communities`,

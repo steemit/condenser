@@ -119,8 +119,8 @@ $themes: (
     buttonBoxShadow: $color-teal,
     buttonBoxShadowHover: $color-white,
     inputPriceWarning: rgba(255, 153, 0, 0.83),
-    modalBackgroundColor: $color-white,
-    modalTextColorPrimary: $color-text-dark,
+    modalBackgroundColor: $color-background-dark,
+    modalTextColorPrimary: $color-text-white,
   ),
 );
 

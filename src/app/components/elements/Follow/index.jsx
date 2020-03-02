@@ -85,7 +85,12 @@ export default class Follow extends React.Component {
         }
 
         const { follower, following } = this.props; // html
+
         // Show follow preview for new users
+        if (typeof window === 'undefined') {
+            return null;
+        }
+
         if (!follower || !following)
             return (
                 <span>
@@ -107,6 +112,7 @@ export default class Follow extends React.Component {
         const cnBusy = busy ? 'disabled' : '';
         const cnActive = 'button' + (fat ? '' : ' slim');
         const cnInactive = cnActive + ' hollow secondary ' + cnBusy;
+
         return (
             <span>
                 {showFollow &&

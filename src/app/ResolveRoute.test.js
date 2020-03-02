@@ -7,17 +7,17 @@ describe('routeRegex', () => {
             ['UserFeed', /^\/(@[\w\.\d-]+)\/feed\/?$/],
             [
                 'UserProfile',
-                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications))?\/?$/,
+                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications|communities))?\/?$/,
             ],
             [
                 'CategoryFilters',
-                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(?:\/([\w\W\d-]{2,32}))?\/?$/,
+                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(?:\/([\w\W\d-]{1,32}))?\/?$/,
             ],
             ['PostNoCategory', /^\/(@[\w\.\d-]+)\/([\w\d-]+)$/],
-            ['Post', /^\/([\w\W\d-]{2,32})\/(@[\w\.\d-]+)\/([\w\d-]+)\/?$/],
+            ['Post', /^\/([\w\W\d-]{1,32})\/(@[\w\.\d-]+)\/([\w\d-]+)\/?$/],
             [
                 'PostJson',
-                /^\/([\w\W\d-]{2,32})\/(@[\w\.\d-]+)\/([\w\d-]+)(\.json)$/,
+                /^\/([\w\W\d-]{1,32})\/(@[\w\.\d-]+)\/([\w\d-]+)(\.json)$/,
             ],
             ['UserJson', /^\/(@[\w\.\d-]+)(\.json)$/],
             ['UserRss', /^\/(@[\w\.\d-]+)(\.rss)$/],
@@ -51,6 +51,10 @@ describe('resolveRoute', () => {
         ['/@steem/feed', { page: 'PostsIndex', params: ['home', '@steem'] }],
         ['/@gdpr/feed', { page: 'NotFound' }],
         ['/@steem', { page: 'UserProfile', params: ['@steem', undefined] }],
+        [
+            '/@steem/communities',
+            { page: 'UserProfile', params: ['@steem', 'communities'] },
+        ],
         ['/@steem/blog', { page: 'UserProfile', params: ['@steem', 'blog'] }],
         ['/@gdpr/blog', { page: 'NotFound' }],
         ['/@foo/bar34', { page: 'PostNoCategory', params: ['@foo', 'bar34'] }],

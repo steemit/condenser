@@ -1,13 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
-import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import ClaimBox from 'app/components/elements/ClaimBox';
 import Callout from 'app/components/elements/Callout';
+import Icon from 'app/components/elements/Icon';
+import Userpic from 'app/components/elements/Userpic';
+
+const notificationsIcon = type => {
+    const types = {
+        reply: 'chatbox',
+        reply_post: 'chatbox',
+        reply_comment: 'chatbox',
+        follow: 'voters',
+        set_label: 'pencil2',
+        set_role: 'pencil2',
+        vote: 'chevron-up-circle',
+        error: 'cog',
+        reblog: 'reblog',
+        mention: 'chatboxes',
+    };
+
+    let icon = 'chain';
+    if (type in types) {
+        icon = types[type];
+    } else {
+        console.error('no icon for type: ', type);
+    }
+
+    return <Icon size="0_8x" name={icon} />;
+};
+
+const highlightText = (text, highlight) => {
+    if (!highlight) return text;
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+    return (
+        <span>
+            {' '}
+            {parts.map((part, i) => (
+                <span
+                    key={i}
+                    style={
+                        part.toLowerCase() === highlight.toLowerCase()
+                            ? { fontWeight: 'bold' }
+                            : {}
+                    }
+                >
+                    {part}
+                </span>
+            ))}{' '}
+        </span>
+    );
+};
 
 class NotificationsList extends React.Component {
     static propTypes = {
@@ -23,7 +71,6 @@ class NotificationsList extends React.Component {
         ),
         isLastPage: PropTypes.bool,
         username: PropTypes.string.isRequired,
-        loading: PropTypes.bool.isRequired,
         markAsRead: PropTypes.func.isRequired,
         unreadNotifications: PropTypes.number,
         notificationActionPending: PropTypes.bool,
@@ -35,7 +82,6 @@ class NotificationsList extends React.Component {
         unreadNotifications: 0,
         notificationActionPending: false,
         isLastPage: false,
-        loading: false,
     };
 
     constructor() {
@@ -43,14 +89,14 @@ class NotificationsList extends React.Component {
     }
 
     componentWillMount() {
-        const { username, notifications, getAccountNotifications } = this.props;
-        if (username && !notifications) {
+        const { username, getAccountNotifications } = this.props;
+        if (username) {
             getAccountNotifications(username);
         }
     }
 
     componentDidUpdate(prevProps) {
-        const { username, getAccountNotifications, isLastPage } = this.props;
+        const { username, getAccountNotifications } = this.props;
         if (prevProps.username !== username) {
             getAccountNotifications(username);
         }
@@ -73,10 +119,9 @@ class NotificationsList extends React.Component {
         const {
             notifications,
             unreadNotifications,
-            loading,
             isOwnAccount,
             accountName,
-            isLastpage,
+            isLastPage,
             notificationActionPending,
             lastRead,
         } = this.props;
@@ -84,28 +129,47 @@ class NotificationsList extends React.Component {
         const renderItem = item => {
             const unRead =
                 Date.parse(`${lastRead}Z`) <= Date.parse(`${item.date}Z`);
-            console.log(unRead);
+            const usernamePattern = /\B@[a-z0-9\.-]+/gi;
+            const mentions = item.msg.match(usernamePattern);
+            const participants = mentions
+                ? mentions.map(m => (
+                      <a href={'/' + m}>
+                          <Userpic account={m.substring(1)} />
+                      </a>
+                  ))
+                : null;
             return (
                 <div
                     key={item.id}
-                    className="Notification__item"
+                    className="notification__item flex-body"
                     style={{
-                        padding: '0.5em 1em',
                         background: 'rgba(225,255,225,' + item.score + '%)',
                     }}
                 >
-                    {unRead && <span className="notif-unread">&bull;</span>}
-                    <span style={{ opacity: '0.5' }}>
-                        {item.type}
-                        {' / '}
-                    </span>
-                    <strong>
-                        <a href={`/${item.url}`}>{item.msg}</a>
-                    </strong>
-                    <br />
-                    <small>
-                        <TimeAgoWrapper date={item.date + 'Z'} />
-                    </small>
+                    <div className="flex-row">
+                        {mentions && participants && participants[0]}
+                    </div>
+                    <div className="flex-column">
+                        <div className="notification__message">
+                            <a href={`/${item.url}`}>
+                                {highlightText(
+                                    item.msg,
+                                    mentions ? mentions[0] : null
+                                )}
+                            </a>
+                        </div>
+                        <div className="flex-row">
+                            <div className="notification__icon">
+                                {notificationsIcon(item.type)}
+                            </div>
+                            <div className="notification__date">
+                                <TimeAgoWrapper date={item.date + 'Z'} />
+                            </div>
+                        </div>
+                    </div>
+                    {unRead && (
+                        <span className="notification__unread">&bull;</span>
+                    )}
                 </div>
             );
         };
@@ -113,8 +177,7 @@ class NotificationsList extends React.Component {
         return (
             <div className="">
                 {isOwnAccount && <ClaimBox accountName={accountName} />}
-                {!loading &&
-                    notifications &&
+                {notifications &&
                     notifications.length > 0 &&
                     unreadNotifications !== 0 &&
                     !notificationActionPending && (
@@ -125,11 +188,12 @@ class NotificationsList extends React.Component {
                             </a>
                         </center>
                     )}
-                {notificationActionPending && (
+                {(notificationActionPending || !process.env.BROWSER) && (
                     <center>
                         <LoadingIndicator type="circle" />
                     </center>
                 )}
+
                 {notifications &&
                     notifications.length > 0 && (
                         <div style={{ lineHeight: '1rem' }}>
@@ -137,23 +201,16 @@ class NotificationsList extends React.Component {
                         </div>
                     )}
                 {!notifications &&
-                    !loading && (
+                    !notificationActionPending &&
+                    process.env.BROWSER && (
                         <Callout>
                             Welcome! You don't have any notifications yet.
                         </Callout>
                     )}
 
-                {loading && (
-                    <center>
-                        <LoadingIndicator
-                            style={{ marginBottom: '2rem' }}
-                            type="circle"
-                        />
-                    </center>
-                )}
-                {!loading &&
+                {!notificationActionPending &&
                     notifications &&
-                    !isLastpage && (
+                    !isLastPage && (
                         <center>
                             <br />
                             <a href="#" onClick={this.onClickLoadMore}>
@@ -171,6 +228,9 @@ export default connect(
         const accountName = props.username;
         const isOwnAccount =
             state.user.getIn(['current', 'username'], '') == accountName;
+        const notifications = state.global
+            .getIn(['notifications', accountName, 'notifications'], List())
+            .toJS();
         const unreadNotifications = state.global.getIn(
             ['notifications', accountName, 'unreadNotifications', 'unread'],
             0
@@ -178,6 +238,10 @@ export default connect(
         const lastRead = state.global.getIn(
             ['notifications', accountName, 'unreadNotifications', 'lastread'],
             ''
+        );
+        const isNotificationsLastPage = state.global.getIn(
+            ['notifications', accountName, 'isLastPage'],
+            null
         );
         return {
             ...props,
@@ -189,6 +253,8 @@ export default connect(
                 'loading',
             ]),
             lastRead,
+            notifications,
+            isLastPage: isNotificationsLastPage,
         };
     },
     dispatch => ({
@@ -206,16 +272,18 @@ export default connect(
         },
         markAsRead: (username, timeNow) => {
             const successCallback = (user, time) => {
-                dispatch(
-                    globalActions.receiveUnreadNotifications({
-                        name: user,
-                        unreadNotifications: {
-                            lastread: time,
-                            unread: 0,
-                        },
-                    })
-                );
-                dispatch(globalActions.notificationsLoading(false));
+                setTimeout(() => {
+                    dispatch(
+                        globalActions.receiveUnreadNotifications({
+                            name: user,
+                            unreadNotifications: {
+                                lastread: time,
+                                unread: 0,
+                            },
+                        })
+                    );
+                    dispatch(globalActions.notificationsLoading(false));
+                }, 6000);
             };
 
             return dispatch(

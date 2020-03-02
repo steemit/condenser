@@ -4,27 +4,36 @@ import { browserHistory } from 'react-router';
 import tt from 'counterpart';
 
 class ElasticSearchInput extends React.Component {
+    static propTypes = {
+        redirect: PropTypes.bool.isRequired,
+        handleSubmit: PropTypes.func,
+        expanded: PropTypes.bool,
+        initValue: PropTypes.string,
+    };
+    static defaultProps = {
+        handleSubmit: null,
+        expanded: true,
+        initValue: '',
+    };
+
     constructor(props) {
         super(props);
         this.state = {
             value: this.props.initValue ? this.props.initValue : '',
         };
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.onSearchSubmit = this.onSearchSubmit.bind(this);
     }
 
     handleChange(event) {
         this.setState({ value: event.target.value });
     }
 
-    handleSubmit = e => {
+    onSearchSubmit = e => {
         e.preventDefault();
-        if (this.props.handleSubmit) {
-            this.props.handleSubmit(this.state.value);
-            browserHistory.push(`/search?q=${this.state.value}`);
-        } else {
-            browserHistory.push(`/search?q=${this.state.value}`);
-        }
+        const { handleSubmit, redirect } = this.props;
+        handleSubmit && handleSubmit(this.state.value);
+        redirect && browserHistory.push(`/search?q=${this.state.value}`);
     };
 
     render() {
@@ -33,7 +42,7 @@ class ElasticSearchInput extends React.Component {
             : 'search-input';
         return (
             <span>
-                <form className={formClass} onSubmit={this.handleSubmit}>
+                <form className={formClass} onSubmit={this.onSearchSubmit}>
                     <svg
                         className="search-input__icon"
                         width="42"

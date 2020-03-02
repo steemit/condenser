@@ -343,6 +343,10 @@ export default `
 /dsj/@dsj/mv8793z1
 /community/@dsj/yqu2sh7d
 /nature/@nikapelex/ap-the-best-videos
+/ielts/@davidbushey/buy-original-ielts-certificates-without-exam
+/beauty/@benziman/ill-5-year-old-marries-best-friend-before-undergoing-heart-surgery
+/foto/@tonyj28/cae-preso-en-ee-uu-hermano-de-viviana-gibelli-por-lavado-de-dinero
+/coins/@manojsharma/cashman-casino-free-coins-get-100-bonus-coins-android-ios-2018
 `
     .trim()
     .split('\n');

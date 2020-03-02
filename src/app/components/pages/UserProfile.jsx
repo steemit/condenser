@@ -12,13 +12,11 @@ import NotificationsList from 'app/components/cards/NotificationsList';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
-import { List } from 'immutable';
 import Callout from 'app/components/elements/Callout';
 import userIllegalContent from 'app/utils/userIllegalContent';
-import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
-import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
 import UserProfileHeader from 'app/components/cards/UserProfileHeader';
+import SubscriptionsList from '../cards/SubscriptionsList';
 
 const emptyPostsText = (section, account, isMyAccount) => {
     const name = '@' + account;
@@ -137,7 +135,7 @@ export default class UserProfile extends React.Component {
                 posts,
                 profile,
                 notifications,
-                isNotificationsLastPage,
+                subscriptions,
             },
         } = this;
 
@@ -178,8 +176,13 @@ export default class UserProfile extends React.Component {
                 <NotificationsList
                     username={accountname}
                     notifications={notifications && notifications.toJS()}
-                    loading={fetching}
-                    isLastpage={isNotificationsLastPage}
+                />
+            );
+        } else if (section === 'communities') {
+            tab_content = (
+                <SubscriptionsList
+                    username={accountname}
+                    subscriptions={subscriptions}
                 />
             );
         } else if (section === 'settings') {
@@ -248,6 +251,7 @@ export default class UserProfile extends React.Component {
                         <li>{_tablink('blog', tt('g.blog'))}</li>
                         <li>{_tablink('posts', tt('g.posts'))}</li>
                         <li>{_tablink('replies', tt('g.replies'))}</li>
+                        <li>{_tablink('communities', tt('g.communities'))}</li>
                         <li>
                             {_tablink('notifications', tt('g.notifications'))}
                         </li>
@@ -330,7 +334,7 @@ module.exports = {
                 username,
                 loading: state.app.get('loading'),
                 status: state.global.get('status'),
-                accountname: accountname,
+                accountname,
                 followers: state.global.getIn([
                     'follow',
                     'getFollowersAsync',
@@ -347,16 +351,18 @@ module.exports = {
                     ['notifications', accountname, 'notifications'],
                     null
                 ),
-                isNotificationsLastPage: state.global.getIn(
-                    ['notifications', accountname, 'isLastPage'],
-                    null
-                ),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 profile: state.userProfiles.getIn(['profiles', accountname]),
                 walletUrl: walletUrl + '/@' + accountname + '/transfers',
                 section,
                 order,
                 category: '@' + accountname,
+                subscriptions: state.global.getIn([
+                    'subscriptions',
+                    accountname,
+                ])
+                    ? state.global.getIn(['subscriptions', accountname]).toJS()
+                    : [],
             };
         },
         dispatch => ({

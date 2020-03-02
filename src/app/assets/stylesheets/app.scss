@@ -89,24 +89,6 @@ a, path, circle {
   }
 }
 
-.ptc,
-a.ptc {
-    cursor:pointer;
-  text-decoration: none;
-  transition: 0.2s all ease-in-out;
-  @include themify($themes) {
-    color: themed('textColorPrimary');
-  }
-
-  &:hover, &:focus {
-    color: $dark-gray;
-    text-decoration: none;
-    @include themify($themes) {
-        color: themed('textColorAccent');
-    }
-  }
-}
-
 .button.hollow.no-border {
   border: none;
   text-decoration: underline;
@@ -216,14 +198,43 @@ a[rel="nofollow noopener"]:after {
 .affiliation {
   font-weight: 400;
   display: inline;
-  margin: 0 0.3rem;
-  padding: 0 0.4rem 0.1rem;
+  margin: 0 0.2rem;
+  padding: 0 0.2rem 0.05rem;
   border-radius: 0.3rem;
   text-shadow: none;
   font-size: 0.75rem;
-  vertical-align: middle;
   @include themify($themes) {
-    background-color: themed('colorAccent');
-    color: themed('buttonText');
+    border: 1px solid themed('colorAccent');
+    color: themed('textColorSecondary');
   }
+  .affiliation-edit {
+    .Icon {
+      margin-right: 0;
+    }
+  }
+}
+
+.affiliation-edit {
+  .Icon {
+    margin: 0 0.25em;
+    @include themify($themes) {
+      fill: themed('textColorSecondary');
+    }
+  }
+}
+
+.user_role {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    color: gray;
+    margin: 0 0.2em;
+}
+
+.account_warn {
+    font-weight: bold;
+    color: red;
+}
+
+.pointer {
+    cursor: pointer;
 }

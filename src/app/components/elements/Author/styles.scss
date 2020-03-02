@@ -1,5 +1,4 @@
 .Author {
-  cursor: pointer;
   display: inline-block;
 
   .dropdown-arrow {
@@ -7,19 +6,18 @@
   	top: 3px;
   	left: -2px;
   }
-  .Icon.dropdown-arrow polygon {
-	transition: 0.3s all ease-in-out;
-  }
-  &:hover {
-	.Reputation, .dropdown-arrow {
-	    @include themify($themes) {
-	      color: themed('textColorAccent');
-	    } 		
-	}
-	.Icon.dropdown-arrow polygon {
-	    @include themify($themes) {
-	      fill: themed('textColorAccent');
-	    } 		
-	}
+
+  /* coax footer link to behave similarly */
+  > span > strong > a {
+      transition: 0.2s all ease-in-out;
+      @include themify($themes) {
+        color: themed('textColorPrimary');
+      }
+
+      &:hover, &:focus {
+        @include themify($themes) {
+            color: themed('textColorAccent');
+        }
+     }
   }
 }

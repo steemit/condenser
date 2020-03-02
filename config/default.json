@@ -30,24 +30,10 @@
     "secret_key": false,
     "site_key": false
   },
-  "sendgrid": {
-    "from": "noreply@example.com",
-    "key": "SG.xxx_yyyy",
-    "templates": {
-    }
-  },
   "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",
   "session_cookie_key": "stm-dev",
   "session_key": "steemses",
   "site_domain": "steemitdev.com",
-  "telesign": {
-    "customer_id": false,
-    "rest_api_key": false
-  },
-  "twilio": {
-    "account_sid": false,
-    "auth_token": false
-  },
   "upload_image": false,
   "steemd_connection_client": "https://api.steemit.com",
   "steemd_connection_server": "https://api.steemit.com",
@@ -238,5 +224,6 @@
   "steem_market_cache": {
     "ttl": 7200,
     "key": "steem-market"
-  }
+  },
+  "esteem_elastic_search_api_key": null
 }

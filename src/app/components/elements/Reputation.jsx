@@ -8,7 +8,7 @@ export default ({ value }) => {
     }
     return (
         <span className="Reputation" title={tt('g.reputation')}>
-            ({value})
+            ({Math.floor(value)})
         </span>
     );
 };

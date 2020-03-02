@@ -8,7 +8,7 @@ import * as userActions from 'app/redux/UserReducer';
 
 // operations that require only posting authority
 export const postingOps = Set(
-    `vote, comment, delete_comment, custom_json, claim_reward_balance`
+    `vote, comment, delete_comment, custom_json, claim_reward_balance, account_update2`
         .trim()
         .split(/,\s*/)
 );

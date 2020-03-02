@@ -11,27 +11,27 @@ const SidebarNewUsers = () => (
             <ul className="c-sidebar__list">
                 <li className="c-sidebar__list-item">
                     <a className="c-sidebar__link" href="/welcome">
-                        Quick start guide
+                        Welcome Guide
                     </a>
                 </li>
-                <li className="c-sidebar__list-item">
-                    <a className="c-sidebar__link" href="https://steem.io">
-                        The blockchain
-                    </a>
-                </li>
+                {/*
                 <li className="c-sidebar__list-item">
                     <a className="c-sidebar__link" href="/faq.html">
                         FAQs
                     </a>
                 </li>
                 <li className="c-sidebar__list-item">
-                    <a className="c-sidebar__link" href={SIGNUP_URL}>
-                        Sign up
-                    </a>
-                </li>
-                <li className="c-sidebar__list-item">
                     <a className="c-sidebar__link" href="/@steemitblog">
                         {tt('g.read_offical_blog')}
+                    </a>
+                </li>
+                */}
+                <li className="c-sidebar__list-item">
+                    <a
+                        className="c-sidebar__link"
+                        href="https://steem.com/SteemWhitePaper.pdf"
+                    >
+                        Whitepaper
                     </a>
                 </li>
             </ul>

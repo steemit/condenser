@@ -1,5 +1,7 @@
 {
     "g": {
+        "administrator": "admin",
+        "administrators": "admins",
         "age": "age",
         "amount": "Amount",
         "and": "and",
@@ -10,6 +12,7 @@
         "beneficiaries": "Beneficiaries",
         "bid": "Bid",
         "blog": "Blog",
+        "profile": "Profile",
         "browse": "Browse",
         "buy": "Buy",
         "buy_steem_power": "Buy Steem Power",
@@ -21,6 +24,18 @@
         "clear": "Clear",
         "close": "Close",
         "collapse_or_expand": "Collapse/Expand",
+        "communities": "Communities",
+        "community_settings_header": "Community Settings",
+        "community_settings_description": "What does your community stand for?",
+        "community_list_header": "Communities",
+        "community_user_role_add_description":
+            "Set the role of a user in this community.",
+        "community_user_role_edit_description":
+            "Changing @%(username)s's role.",
+        "community_user_role_add_header": "Add User Role",
+        "community_user_role_edit_header": "Change User Role",
+        "community_user_title_edit_header": "Change User Title",
+        "community_user_title_edit_description": "Set Title for @%(username)s",
         "comments": "Comments",
         "confirm": "Confirm",
         "convert": "Convert",
@@ -34,6 +49,10 @@
         "affiliation_steemit": "Steemit Team",
         "affiliation_sm": "Steem Monsters Team",
         "feed": "Feed",
+        "flag": "Flag",
+        "flag_this_post": "Flag this %(type)s",
+        "flag_this_post_description":
+            "Please provide a note regarding your decision to flag this %(type)s, it will be reviewed by community moderators.",
         "follow": "Follow",
         "for": " for ",
         "from": " from ",
@@ -59,6 +78,7 @@
         "newer": "Newer",
         "next": "Next",
         "no": "No",
+        "notifications": "Notifications",
         "ok": "Ok",
         "older": "Older",
         "or": "or",
@@ -68,6 +88,7 @@
         "permissions": "Permissions",
         "phishy_message":
             "Link expanded to plain text; beware of a potential phishing attempt",
+        "pin": "Pin",
         "post": "Post",
         "post_as_user": "Post as %(username)s",
         "posts": "Posts",
@@ -105,25 +126,33 @@
         "sell": "Sell",
         "settings": "Settings",
         "share_this_post": "Share this post",
+        "mute_this_post": "Mute post/comment",
+        "mute_this_post_description":
+            "Please provide a note regarding your decision to mute this content.",
+        "unmute_this_post": "Unmute this post/comment",
+        "unmute_this_post_description":
+            "Please provide a note regarding your decision to unmute this content.",
         "show": "Show",
         "sign_in": "Sign in",
         "sign_up": "Sign up",
         "since": "since %(date)s",
         "submit": "Submit",
+        "subscriptions": "Subscriptions",
         "power_up": "Power Up",
         "submit_a_story": "Post",
         "tag": "Tag",
         "to": " to ",
         "topics": "Topics",
-        "toggle_nightmode": "Toggle Night Mode",
-        "all_tags": "All tags",
-        "all_tags_mobile": "All content",
+        "toggle_nightmode": "Night Mode",
+        "all_tags": "All posts",
+        "all_tags_mobile": "All posts",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",
         "try_again": "Try Again",
         "type": "Type",
         "unfollow": "Unfollow",
         "unmute": "Unmute",
+        "unpin": "Unpin",
         "unknown": "Unknown",
         "upvote": "Upvote",
         "upvote_post": "Upvote post",
@@ -231,7 +260,7 @@
         "read_only_mode":
             "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
         "tags_and_topics": "Tags",
-        "show_more_topics": "View all tags",
+        "show_more_topics": "Explore communities",
         "basic": "Basic",
         "advanced": "Advanced",
         "views": {
@@ -274,7 +303,7 @@
         "chat": "Steem Chat",
         "app_center": "Apps Built on Steem",
         "business_center": "Businesses Accepting Steem",
-        "api_docs": "Steemit API Docs",
+        "api_docs": "Developer Portal",
         "bluepaper": "Steem Bluepaper",
         "smt_whitepaper": "SMT Whitepaper",
         "whitepaper": "Steem Whitepaper",
@@ -335,15 +364,16 @@
         "select_a_tag": "Select a tag",
         "maximum_tag_length_is_24_characters":
             "Maximum tag length is 24 characters",
-        "use_limited_amount_of_categories":
-            "Please use only %(amount)s categories",
+        "use_limited_amount_of_categories": "Please use only %(amount)s tags",
         "use_only_lowercase_letters": "Use only lowercase letters",
         "use_one_dash": "Use only one dash",
         "use_spaces_to_separate_tags": "Use spaces to separate tags",
         "use_only_allowed_characters":
             "Use only lowercase letters, digits and one dash",
         "must_start_with_a_letter": "Must start with a letter",
-        "must_end_with_a_letter_or_number": "Must end with a letter or number"
+        "must_end_with_a_letter_or_number": "Must end with a letter or number",
+        "must_not_include_hivemind_community_owner":
+            "Post already has %(hive)s tag by default, please do not include another 'hive-' tag."
     },
     "post_advanced_settings_jsx": {
         "payout_option_header": "Author rewards",
@@ -380,6 +410,8 @@
         "user_hasnt_followed_anything_yet":
             "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
         "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+        "user_hasnt_had_any_notifications_yet":
+            "%(name)s hasn't had any notifications yet",
         "looks_like_you_havent_posted_anything_yet":
             "Looks like you haven't posted anything yet.",
         "create_a_post": "Create a Post",
@@ -410,7 +442,7 @@
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Now showing comments with low ratings",
-        "sort_order": "Sort Order",
+        "sort_order": "Sort",
         "comments_were_hidden_due_to_low_ratings":
             "Comments were hidden due to low ratings",
         "comment_sort_order": {
@@ -571,6 +603,7 @@
         "curation_rewards_by": "Curation rewards by %(username)s",
         "author_rewards_by": "Author rewards by %(username)s",
         "replies_to": "Replies to %(username)s",
+        "posts_by": "Posts by %(username)s",
         "comments_by": "Comments by %(username)s"
     },
     "loginform_jsx": {

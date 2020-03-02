@@ -8,6 +8,27 @@
     }
 }
 
+.UserProfile__blacklists {
+    .account_warn {font-size: 0.8em;}
+    .VerticalMenu {
+        font-size: 1rem;
+        text-shadow: none;
+          @include themify($themes) {
+            background-color: themed('backgroundColor');
+            color: themed('textColorPrimary');
+          }
+    }
+}
+
+.UserProfile__postmenu {
+    margin: -0.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    @include themify($themes) {
+        border-bottom: themed('border');
+    }
+    div {display: inline-block; padding: 0 0.5rem; margin: 0 0.5rem;}
+}
+
 .UserProfile__tab_content {
     margin-top: 1.5rem;
 }
@@ -65,11 +86,11 @@
         color: $white;
     }
     > div.column {
-        background: $color-blue-black;
+        background: $color-background-less-dark;
         background-size: cover;
         background-repeat: no-repeat;
         background-position: 50% 50%;
-        text-shadow: 1px 1px 4px black;
+        text-shadow: 1px 1px 2px black;
         .button {text-shadow: none;}
 
         min-height: 155px;
@@ -137,12 +158,6 @@
     }
 }
 
-.UserWallet__balance {
-    > div:nth-child(2) {
-        text-align: right;
-    }
-}
-
 @media screen and (max-width: 39.9375em) {
 
     div.UserProfile__top-nav .menu li>a {
@@ -173,18 +188,6 @@
         .button {
             background-color: $white;
             color: $black;
-        }
-    }
-
-    .UserWallet__balance {
-        > div:last-of-type {
-            text-align: left;
-        }
-    }
-
-    .UserReward__row {
-        > div:last-of-type {
-            padding-left: 20px;
         }
     }
 }

@@ -170,13 +170,15 @@ app.use(function*(next) {
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 302;
-        this.redirect(`/@${this.session.a}/feed`);
+        //this.redirect(`/@${this.session.a}/feed`);
+        this.redirect(`/trending/my`);
         return;
     }
+
     // normalize user name url from cased params
     if (
         this.method === 'GET' &&
-        (routeRegex.UserProfile1.test(this.url) ||
+        (routeRegex.UserProfile.test(this.url) ||
             routeRegex.PostNoCategory.test(this.url) ||
             routeRegex.Post.test(this.url))
     ) {
@@ -198,6 +200,7 @@ app.use(function*(next) {
             return;
         }
     }
+
     // normalize top category filtering from cased params
     if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
         const p = this.originalUrl.toLowerCase();
@@ -207,6 +210,7 @@ app.use(function*(next) {
             return;
         }
     }
+
     // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {

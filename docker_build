@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ "${TRAVIS_PULL_REQUEST}" = false ]
+then
+  APP_NAME="steemcn"
+else
+  APP_NAME="steemcn-staging"
+fi
+
+echo "Docker Build ${APP_NAME}"
+docker build -t registry.heroku.com/${APP_NAME}/web .

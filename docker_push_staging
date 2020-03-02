@@ -1,0 +1,10 @@
+#!/bin/sh
+[ "${TRAVIS_BRANCH}" != "master" ] && exit 0
+[ "${TRAVIS_PULL_REQUEST}" = false ] && exit 0
+
+echo "Docker Login"
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin registry.heroku.com
+echo "Docker Push to Staging"
+docker push registry.heroku.com/steemcn-staging/web:latest
+echo "Heroku Release to Staging"
+heroku container:release web --app steemcn-staging

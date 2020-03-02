@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Docker Login"
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin registry.heroku.com
+echo "Docker Push"
+docker push registry.heroku.com/steemcn/web:latest
+echo "Heroku Release"
+heroku container:release web --app steemcn

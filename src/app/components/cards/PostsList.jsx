@@ -10,7 +10,9 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import debounce from 'lodash.debounce';
 import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
-import GoogleAd from 'app/components/elements/GoogleAd';
+import GptAd from 'app/components/elements/GptAd';
+import VideoAd from 'app/components/elements/VideoAd';
+
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 function topPosition(domElt) {
@@ -147,7 +149,8 @@ class PostsList extends React.Component {
     render() {
         const {
             posts,
-            showPinned,
+            showFeatured,
+            showPromoted,
             showResteem,
             showSpam,
             loading,
@@ -178,29 +181,34 @@ class PostsList extends React.Component {
                 postsInfo.push({ item, ignore });
         });
 
-        // Helper functions for determining whether to show pinned posts.
+        // Helper functions for determining whether to show special posts.
         const isLoggedInOnFeed = username && pathname === `/@${username}/feed`;
         const isLoggedOutOnTrending =
-            !username && (pathname === '/' || pathname === '/trending');
-        const arePinnedPostsVisible =
-            showPinned && (isLoggedInOnFeed || isLoggedOutOnTrending);
-        const arePinnedPostsReady = isLoggedInOnFeed
+            !username &&
+            (pathname === '/' ||
+                pathname === '/trending' ||
+                pathname === '/trending/');
+
+        const areFeaturedPostsVisible =
+            showFeatured && (isLoggedInOnFeed || isLoggedOutOnTrending);
+        const areFeaturedPostsReady = isLoggedInOnFeed
             ? anyPosts
             : postsInfo.length > 0;
-        const showPinnedPosts = arePinnedPostsVisible && arePinnedPostsReady;
+        const showFeaturedPosts =
+            areFeaturedPostsVisible && areFeaturedPostsReady;
 
-        const pinned = this.props.pinned;
-        const renderPinned = pinnedPosts => {
+        const featureds = this.props.featured;
+        const renderFeatured = featuredPosts => {
             if (!process.env.BROWSER) return null;
-            return pinnedPosts.map(pinnedPost => {
-                const id = `${pinnedPost.author}/${pinnedPost.permlink}`;
-                if (localStorage.getItem(`hidden-pinned-post-${id}`))
+            return featuredPosts.map(featuredPost => {
+                const id = `${featuredPost.author}/${featuredPost.permlink}`;
+                if (localStorage.getItem(`hidden-featured-post-${id}`))
                     return null;
-                const pinnedPostContent = content.get(id);
-                const isSeen = pinnedPostContent.get('seen');
+                const featuredPostContent = content.get(id);
+                const isSeen = featuredPostContent.get('seen');
                 const close = e => {
                     e.preventDefault();
-                    localStorage.setItem(`hidden-pinned-post-${id}`, true);
+                    localStorage.setItem(`hidden-featured-post-${id}`, true);
                     this.forceUpdate();
                 };
                 return (
@@ -212,16 +220,77 @@ class PostsList extends React.Component {
                             ignore={false}
                             nsfwPref={nsfwPref}
                             featured
-                            featuredOnClose={close}
+                            onClose={close}
                         />
                     </li>
                 );
             });
         };
+
+        const arePromotedPostsVisible =
+            showPromoted && (isLoggedInOnFeed || isLoggedOutOnTrending);
+        const arePromotedPostsReady = isLoggedInOnFeed
+            ? anyPosts
+            : postsInfo.length > 0;
+        const showPromotedPosts =
+            arePromotedPostsVisible && arePromotedPostsReady;
+
+        const promoteds = this.props.promoted;
+        const renderPromoted = promotedPosts => {
+            if (!process.env.BROWSER) return null;
+            return promotedPosts.map(promotedPost => {
+                const id = `${promotedPost.author}/${promotedPost.permlink}`;
+                if (localStorage.getItem(`hidden-promoted-post-${id}`))
+                    return null;
+                const promotedPostContent = content.get(id);
+                const isSeen = promotedPostContent.get('seen');
+                const close = e => {
+                    e.preventDefault();
+                    localStorage.setItem(`hidden-promoted-post-${id}`, true);
+                    this.forceUpdate();
+                };
+                return (
+                    <li key={id}>
+                        <PostSummary
+                            account={account}
+                            post={id}
+                            thumbSize={thumbSize}
+                            ignore={false}
+                            nsfwPref={nsfwPref}
+                            promoted
+                            onClose={close}
+                        />
+                    </li>
+                );
+            });
+        };
+
         const renderSummary = items =>
             items.map((item, i) => {
                 const every = this.props.adSlots.in_feed_1.every;
-                if (this.props.shouldSeeAds && i >= every && i % every === 0) {
+                if (this.props.videoAdsEnabled && i === 4) {
+                    return (
+                        <div key={item.item}>
+                            <li>
+                                <PostSummary
+                                    account={account}
+                                    post={item.item}
+                                    thumbSize={thumbSize}
+                                    ignore={item.ignore}
+                                    nsfwPref={nsfwPref}
+                                />
+                            </li>
+
+                            <div className="articles__content-block--ad video-ad">
+                                <VideoAd id="bsa-zone_1572296522077-3_123456" />
+                            </div>
+                        </div>
+                    );
+                } else if (
+                    this.props.shouldSeeAds &&
+                    i >= every &&
+                    i % every === 0
+                ) {
                     return (
                         <div key={item.item}>
                             <li>
@@ -235,14 +304,10 @@ class PostsList extends React.Component {
                             </li>
 
                             <div className="articles__content-block--ad">
-                                <GoogleAd
-                                    name="in-feed-1"
-                                    format="fluid"
-                                    slot={this.props.adSlots.in_feed_1.slot_id}
-                                    layoutKey={
-                                        this.props.adSlots.in_feed_1.layout_key
-                                    }
-                                    style={{ display: 'block' }}
+                                <GptAd
+                                    tags={[category]}
+                                    type="Freestar"
+                                    id="bsa-zone_1566495089502-1_123456"
                                 />
                             </div>
                         </div>
@@ -268,8 +333,9 @@ class PostsList extends React.Component {
                     itemScope
                     itemType="http://schema.org/blogPosts"
                 >
-                    {/* Only render pinned posts when other posts are ready */}
-                    {showPinnedPosts && renderPinned(pinned)}
+                    {/* Only render featured and promoted posts when other posts are ready */}
+                    {showFeaturedPosts && renderFeatured(featureds)}
+                    {showPromotedPosts && renderPromoted(promoteds)}
                     {renderSummary(postsInfo)}
                 </ul>
                 {loading && (
@@ -301,11 +367,19 @@ export default connect(
         ]);
         const userPreferences = state.app.get('user_preferences').toJS();
         const nsfwPref = userPreferences.nsfwPref || 'warn';
-        const pinned = state.offchain
-            .get('pinned_posts')
-            .get('pinned_posts')
+        const featured = state.offchain
+            .get('special_posts')
+            .get('featured_posts')
+            .toJS();
+        const promoted = state.offchain
+            .get('special_posts')
+            .get('promoted_posts')
             .toJS();
         const shouldSeeAds = state.app.getIn(['googleAds', 'enabled']);
+        const videoAdsEnabled = state.app.getIn([
+            'googleAds',
+            'videoAdsEnabled',
+        ]);
         const adSlots = state.app.getIn(['googleAds', 'adSlots']).toJS();
 
         return {
@@ -314,10 +388,11 @@ export default connect(
             username,
             content,
             ignore_result,
-            pathname,
             nsfwPref,
-            pinned,
+            featured,
+            promoted,
             shouldSeeAds,
+            videoAdsEnabled,
             adSlots,
         };
     },

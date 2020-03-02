@@ -2,49 +2,23 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 class GptAd extends Component {
-    componentDidMount() {
-        if (!this.ad.path || !this.enabled) return;
-
-        googletag.cmd.push(() => {
-            const slot = googletag.defineSlot(
-                this.ad.path,
-                this.ad.dimensions,
-                this.ad.path
-            );
-
-            if (slot) {
-                slot.addService(googletag.pubads());
-                googletag.pubads().enableSingleRequest();
-                googletag.enableServices();
-
-                googletag.cmd.push(() => {
-                    googletag.display(this.ad.path);
-                    googletag.pubads().refresh([slot]);
-                    googletag
-                        .pubads()
-                        .addEventListener('slotRenderEnded', e => {
-                            window.dispatchEvent(new Event('gptadshown', e));
-                        });
-                });
-            }
-        });
-    }
-
     constructor(props) {
         super(props);
-        const { ad, enabled, type } = props;
+        const { ad_identifier, enabled, type, tags, bannedTags } = props;
 
-        this.ad = {};
+        this.ad_identifier = '';
         this.type = type;
         this.enabled = false;
+        this.tags = tags;
+        this.bannedTags = bannedTags;
 
-        if (ad) {
+        if (ad_identifier != '') {
             // console.info(
-            //     `Slot named '${props.slotName}' will render with given data:`,
-            //     ad
+            //     `ad_identifier of '${ad_identifier}' will render.`,
+            //     ad_identifier
             // );
             this.enabled = enabled;
-            this.ad = ad.toJS();
+            this.ad_identifier = ad_identifier;
         } else {
             // console.info(
             //     `Slot named '${
@@ -52,10 +26,29 @@ class GptAd extends Component {
             //     }' will be disabled because we were unable to find the ad details.`
             // );
         }
+        this.unique_slot_id = `${this.ad_identifier}_${Date.now()}`;
+    }
+
+    componentDidMount() {
+        if (!this.ad_identifier || !this.enabled) return;
+        const ad_identifier = this.ad_identifier;
+        const unique_slot_id = this.unique_slot_id;
+
+        window.optimize.queue.push(() => {
+            window.optimize.push(unique_slot_id);
+
+            googletag.pubads().addEventListener('impressionViewable', e => {
+                window.dispatchEvent(new Event('gptadshown', e));
+            });
+
+            googletag.pubads().addEventListener('slotRenderEnded', e => {
+                window.dispatchEvent(new Event('gptadshown', e));
+            });
+        });
     }
 
     render() {
-        if (!this.ad || !this.enabled) {
+        if (!this.ad_identifier || !this.enabled) {
             return <div id="disabled_ad" style={{ display: 'none' }} />;
         }
 
@@ -63,27 +56,31 @@ class GptAd extends Component {
             <div
                 className="gpt-ad"
                 style={{ width: '100%' }}
-                id={this.ad.path}
+                id={this.unique_slot_id}
             />
         );
     }
 }
 
 GptAd.propTypes = {
-    ad: PropTypes.shape({
-        path: PropTypes.string,
-        dimensions: PropTypes.array,
-    }).isRequired,
+    ad_identifier: PropTypes.string.isRequired,
     enabled: PropTypes.bool.isRequired,
-    type: PropTypes.oneOf(['Bidding', 'Category', 'Basic']),
+    type: PropTypes.oneOf(['Bidding', 'Category', 'Basic', 'Freestar']),
+    tags: PropTypes.arrayOf(PropTypes.string),
+    bannedTags: PropTypes.arrayOf(PropTypes.string),
+};
+
+GptAd.defaultProps = {
+    type: 'Freestar',
+    tags: [],
+    bannedTags: [],
 };
 
 export default connect(
     (state, props) => {
         const enabled =
             !!state.app.getIn(['googleAds', 'gptEnabled']) &&
-            !!process.env.BROWSER &&
-            !!window.googletag;
+            !!process.env.BROWSER;
         const postCategory = state.global.get('postCategory');
         const basicSlots = state.app.getIn(['googleAds', `gptBasicSlots`]);
         const biddingSlots = state.app.getIn(['googleAds', `gptBiddingSlots`]);
@@ -91,14 +88,24 @@ export default connect(
             'googleAds',
             `gptCategorySlots`,
         ]);
+        const bannedTags = state.app.getIn(['googleAds', 'gptBannedTags']);
+        const bannedTagsJS = bannedTags ? bannedTags.toJS() : [];
 
-        const slotName = props.slotName;
-        let type = props.type;
-        let slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
+        let slotName = props.slotName;
+        if (!slotName) {
+            slotName = props.id;
+        }
+        const type = props.type;
+        let slot = slotName; // in case it's Freestar
+        if (type != 'Freestar') {
+            slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
+        }
 
         return {
             enabled,
-            ad: slot,
+            ad: slot, //TODO: Clean this up. This is from old GPT/Coinzilla stuffs
+            ad_identifier: slotName,
+            bannedTagsJS,
             ...props,
         };
     },

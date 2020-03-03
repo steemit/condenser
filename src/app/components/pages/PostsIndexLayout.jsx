@@ -77,7 +77,7 @@ class PostsIndexLayout extends React.Component {
                         username && (
                             <SidebarLinks username={username} topics={topics} />
                         )}
-                    {false && !community && <Notices />}
+                    {!community && <Notices />}
                     {!community && <SteemMarket />}
                     {enableAds && (
                         <div className="sidebar-ad">

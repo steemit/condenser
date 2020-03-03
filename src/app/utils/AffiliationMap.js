@@ -2,9 +2,6 @@ const map = {
     //steemit
     justinw: 'steemit',
     elipowell: 'steemit',
-    vandeberg: 'steemit',
-    gerbino: 'steemit',
-    andrarchy: 'steemit',
     roadscape: 'steemit',
     steemitblog: 'steemit',
     steemitdev: 'steemit',

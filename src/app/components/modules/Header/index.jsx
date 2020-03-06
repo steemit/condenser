@@ -236,19 +236,22 @@ class Header extends React.Component {
             (route.page !== 'Post' && route.page !== 'PostNoCategory')
         ) {
             document.title = page_title + ' — ' + APP_NAME;
-            let rssLink = document.querySelector('[data-type="rss"]');
-            const rssHref = `https://${
-                $STM_Config.site_domain
-            }/${route.params.join('/').replace(/\/$/, '')}.rss`;
 
-            if (rssLink) {
-                rssLink.title = rssTitle;
-                rssLink.href = rssHref;
-            } else {
-                rssLink = document.createElement('link');
-                rssLink.title = rssTitle;
-                rssLink.href = rssHref;
-                document.head.appendChild(rssLink);
+            if (route.page !== 'SubmitPost') {
+                let rssLink = document.querySelector('[data-type="rss"]');
+                const rssHref =
+                    `https://${$STM_Config.site_domain}` +
+                    `/${route.params.join('/').replace(/\/$/, '')}.rss`;
+
+                if (rssLink) {
+                    rssLink.title = rssTitle;
+                    rssLink.href = rssHref;
+                } else {
+                    rssLink = document.createElement('link');
+                    rssLink.title = rssTitle;
+                    rssLink.href = rssHref;
+                    document.head.appendChild(rssLink);
+                }
             }
         }
 

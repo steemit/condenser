@@ -528,6 +528,7 @@
   &__content-block--text {
     -webkit-box-flex: 1;
     box-flex: 1;
+    flex: 1;
   }
 
   &__content-block--img + &__content-block--text {
@@ -771,6 +772,7 @@ a#changeLayout:focus {
       }
       &__content {
         display: -webkit-box;
+        display: flex;
         align-items: top;
       }
       &__footer {

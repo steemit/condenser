@@ -42,7 +42,6 @@ class PostsList extends React.Component {
         this.state = {
             thumbSize: 'desktop',
             showNegativeComments: false,
-            blackList: [],
         };
         this.scrollListener = this.scrollListener.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
@@ -50,7 +49,7 @@ class PostsList extends React.Component {
     }
 
     async componentWillMount() {
-        await this.getBlackList();
+        // await this.getBlackList();
     }
 
     componentDidMount() {
@@ -69,7 +68,7 @@ class PostsList extends React.Component {
         );
         // return res;
         this.setState({
-            blackList: (res && res.data && res.data.data) || [],
+            // blackList: (res && res.data && res.data.data) || [],
         });
     }
 
@@ -136,12 +135,13 @@ class PostsList extends React.Component {
             order,
             nsfwPref,
             hideCategory,
+            blacklist,
         } = this.props;
-        const { thumbSize, blackList } = this.state;
+        const { thumbSize } = this.state;
 
         const renderSummary = items =>
             items.map((post, i) => {
-                if (blackList.indexOf(post.get('post_id')) > -1) {
+                if (blacklist.indexOf(post.get('post_id')) > -1) {
                     return;
                 }
                 const ps = (
@@ -250,6 +250,7 @@ export default connect(
                 console.error('PostsList: no `posts` or `post_refs`');
             }
         }
+        const blacklist = state.global.get('blacklist');
 
         return {
             ...props, //loading,category,order,hideCategory
@@ -258,6 +259,7 @@ export default connect(
             shouldSeeAds,
             videoAdsEnabled,
             adSlots,
+            blacklist,
         };
     },
     dispatch => ({

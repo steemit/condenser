@@ -1,6 +1,7 @@
 import { api } from '@steemit/steem-js';
 import { ifHive } from 'app/utils/Community';
 import stateCleaner from 'app/redux/stateCleaner';
+import xhr from 'axios/index';
 
 export async function callBridge(method, params) {
     console.log(
@@ -30,11 +31,14 @@ export async function getStateAsync(url, observer, ssr = false) {
         discussion_idx: {},
         profiles: {},
     };
+    const _blist = await getBlackList();
+    state['blacklist'] = _blist;
 
     // load `content` and `discussion_idx`
     if (page == 'posts' || page == 'account') {
-        const posts = await loadPosts(sort, tag, observer);
-        state['content'] = posts['content'];
+        let posts = await loadPosts(sort, tag, observer);
+        let _content = filter(posts['content'], _blist);
+        state['content'] = _content;
         state['discussion_idx'] = posts['discussion_idx'];
     } else if (page == 'thread') {
         const posts = await loadThread(key[0], key[1]);
@@ -75,6 +79,21 @@ export async function getStateAsync(url, observer, ssr = false) {
 
     const cleansed = stateCleaner(state);
     return cleansed;
+}
+
+async function getBlackList() {
+    const res = await xhr.get('http://39.105.221.87:8081/steemit/blacklist');
+    return (res && res.data && res.data.data) || [];
+}
+
+function filter(posts, blacklist) {
+    let content = {};
+    for (var key in posts) {
+        if (blacklist.indexOf(posts[key].post_id) === -1) {
+            content[key] = posts[key];
+        }
+    }
+    return content;
 }
 
 async function loadThread(account, permlink) {

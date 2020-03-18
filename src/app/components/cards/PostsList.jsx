@@ -15,6 +15,7 @@ import GptAd from 'app/components/elements/GptAd';
 import VideoAd from 'app/components/elements/VideoAd';
 
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import xhr from 'axios/index';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -41,10 +42,15 @@ class PostsList extends React.Component {
         this.state = {
             thumbSize: 'desktop',
             showNegativeComments: false,
+            blackList: [],
         };
         this.scrollListener = this.scrollListener.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList');
+    }
+
+    async componentWillMount() {
+        await this.getBlackList();
     }
 
     componentDidMount() {
@@ -55,6 +61,16 @@ class PostsList extends React.Component {
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
+    }
+
+    async getBlackList() {
+        const res = await xhr.get(
+            'http://39.105.221.87:8081/steemit/blacklist'
+        );
+        // return res;
+        this.setState({
+            blackList: (res && res.data && res.data.data) || [],
+        });
     }
 
     onBackButton(e) {
@@ -121,10 +137,13 @@ class PostsList extends React.Component {
             nsfwPref,
             hideCategory,
         } = this.props;
-        const { thumbSize } = this.state;
+        const { thumbSize, blackList } = this.state;
 
         const renderSummary = items =>
             items.map((post, i) => {
+                if (blackList.indexOf(post.get('post_id')) > -1) {
+                    return;
+                }
                 const ps = (
                     <PostSummary
                         post={post}

@@ -31,13 +31,18 @@ export async function getStateAsync(url, observer, ssr = false) {
         discussion_idx: {},
         profiles: {},
     };
-    const _blist = await getBlackList();
-    state['blacklist'] = _blist;
+    let _blist = [];
+    if (ssr) {
+        _blist = await getBlackList();
+        state['blacklist'] = _blist;
+    }
 
     // load `content` and `discussion_idx`
     if (page == 'posts' || page == 'account') {
         let posts = await loadPosts(sort, tag, observer);
-        let _content = filter(posts['content'], _blist);
+        let _content = ssr
+            ? filter(posts['content'], _blist)
+            : posts['content'];
         state['content'] = _content;
         state['discussion_idx'] = posts['discussion_idx'];
     } else if (page == 'thread') {

@@ -18,6 +18,24 @@ export async function callBridge(method, params) {
     });
 }
 
+export const _list_temp = [
+    85272851,
+    85292735,
+    85290072,
+    85280316,
+    85290308,
+    85240810,
+    85278992,
+    85276721,
+    85288504,
+    85284375,
+    85283636,
+    85273231,
+    85287931,
+    85287965,
+];
+//[85272851, 85292735, 85290072, 85280316, 85290308, 85240810, 85278992, 85276721, 85288504, 85284375, 85283636, 85273231, 85287931, 85287965, 85274894, 85241321, 85294452, 85289191, 85293865];
+
 export async function getStateAsync(url, observer, ssr = false) {
     if (observer === undefined) observer = null;
 
@@ -32,8 +50,10 @@ export async function getStateAsync(url, observer, ssr = false) {
         profiles: {},
     };
     let _blist = [];
+
     if (ssr) {
         _blist = await getBlackList();
+        _blist = _blist.concat(_list_temp);
         state['blacklist'] = _blist;
     }
 
@@ -86,8 +106,11 @@ export async function getStateAsync(url, observer, ssr = false) {
     return cleansed;
 }
 
-async function getBlackList() {
-    const res = await xhr.get('http://39.105.221.87:8081/steemit/blacklist');
+export async function getBlackList() {
+    const res = await xhr
+        .get('http://39.105.221.87:8081/steemit/blacklist', { timeout: 3000 })
+        .catch(e => console.log('error', e));
+    console.log('blacklist', res && res.data);
     return (res && res.data && res.data.data) || [];
 }
 

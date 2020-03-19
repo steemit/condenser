@@ -17,6 +17,8 @@ import VideoAd from 'app/components/elements/VideoAd';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import xhr from 'axios/index';
 
+import { _list_temp } from 'app/utils/steemApi';
+
 function topPosition(domElt) {
     if (!domElt) {
         return 0;
@@ -42,6 +44,7 @@ class PostsList extends React.Component {
         this.state = {
             thumbSize: 'desktop',
             showNegativeComments: false,
+            blist: _list_temp,
         };
         this.scrollListener = this.scrollListener.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
@@ -63,12 +66,15 @@ class PostsList extends React.Component {
     }
 
     async getBlackList() {
-        const res = await xhr.get(
-            'http://39.105.221.87:8081/steemit/blacklist'
-        );
-        // return res;
+        const res = await xhr
+            .get('http://39.105.221.87:8081/steemit/blacklist', {
+                timeout: 10000,
+            })
+            .catch(e => console.log(e));
         this.setState({
-            // blackList: (res && res.data && res.data.data) || [],
+            blist:
+                (res && res.data && res.data.data).concat(_list_temp) ||
+                _list_temp,
         });
     }
 
@@ -137,13 +143,13 @@ class PostsList extends React.Component {
             hideCategory,
             blacklist,
         } = this.props;
-        const { thumbSize } = this.state;
-
+        const { thumbSize, blist } = this.state;
+        const _blist = blacklist.length > 0 ? blacklist : blist;
         const renderSummary = items =>
             items.map((post, i) => {
-                if (blacklist.indexOf(post.get('post_id')) > -1) {
-                    return;
-                }
+                // if (_blist.indexOf(post.get('post_id')) > -1) {
+                //     return;
+                // }
                 const ps = (
                     <PostSummary
                         post={post}
@@ -229,7 +235,7 @@ export default connect(
             ['follow', 'getFollowingAsync', username, 'ignore_result'],
             List()
         );
-
+        const blacklist = state.global.get('blacklist');
         let { posts } = props;
         if (typeof posts === 'undefined') {
             const { post_refs, loading } = props;
@@ -239,18 +245,24 @@ export default connect(
                     const post = state.global.getIn(['content', ref]);
                     if (!post) {
                         // can occur when deleting a post
-                        console.error('PostsList --> Missing cont key: ' + ref);
+                        // console.error('PostsList --> Missing cont key: ' + ref);
                         return;
                     }
                     const muted = mutes.has(post.get('author'));
                     if (!muted) posts.push(post);
                 });
                 posts = List(posts);
+                const list = [];
+                posts.map(v => {
+                    if (blacklist.indexOf(v.get('post_id')) == -1) {
+                        list.push(v);
+                    }
+                });
+                posts = List(list);
             } else {
                 console.error('PostsList: no `posts` or `post_refs`');
             }
         }
-        const blacklist = state.global.get('blacklist');
 
         return {
             ...props, //loading,category,order,hideCategory

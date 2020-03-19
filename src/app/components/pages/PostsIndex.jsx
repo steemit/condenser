@@ -15,7 +15,7 @@ import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import { ifHive } from 'app/utils/Community';
 import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
-
+import { _list_temp } from 'app/utils/steemApi';
 // posts_index.empty_feed_1 [-5]
 const noFriendsText = (
     <div>

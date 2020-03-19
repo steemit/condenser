@@ -52,7 +52,7 @@ class PostsList extends React.Component {
     }
 
     async componentWillMount() {
-        // await this.getBlackList();
+        await this.getBlackList();
     }
 
     componentDidMount() {
@@ -144,12 +144,15 @@ class PostsList extends React.Component {
             blacklist,
         } = this.props;
         const { thumbSize, blist } = this.state;
-        const _blist = blacklist.length > 0 ? blacklist : blist;
+        const _blist = blacklist.length != blist.length ? blist : blacklist;
         const renderSummary = items =>
             items.map((post, i) => {
-                // if (_blist.indexOf(post.get('post_id')) > -1) {
-                //     return;
-                // }
+                if (blacklist.length != blist.length) {
+                    if (_blist.indexOf(post.get('post_id')) > -1) {
+                        return;
+                    }
+                }
+
                 const ps = (
                     <PostSummary
                         post={post}

@@ -73,7 +73,7 @@ export async function getStateAsync(url, observer, ssr = false) {
     let _blist = [];
 
     if (ssr) {
-        _blist = await getBlackList();
+        // _blist = await getBlackList();
         _blist = _blist.concat(_list_temp);
         state['blacklist'] = _blist;
     }

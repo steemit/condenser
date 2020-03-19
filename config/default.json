@@ -4,7 +4,7 @@
   "helmet": {
     "directives": {
       "childSrc": "'self' 3speak.online emb.d.tube player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "https://steemitimages.com securepubads.g.doubleclick.net 'self' steemit.com https://api.steemit.com api.blocktrades.us http://39.105.221.87:8081/",
+      "connectSrc": "https://steemitimages.com securepubads.g.doubleclick.net 'self' steemit.com https://api.steemit.com api.blocktrades.us",
       "defaultSrc": "tpc.googlesyndication.com 'self' img.3speakcontent.online emb.d.tube www.youtube.com staticxx.facebook.com player.vimeo.com *.streamrail.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
@@ -12,14 +12,14 @@
       "imgSrc": "* data:",
       "objectSrc": "'none'",
       "pluginTypes": "application/pdf",
-      "scriptSrc": "'unsafe-inline' 'unsafe-eval' data: https: 'self' www.google-analytics.com connect.facebook.net cdn.catchjs.com",
+      "scriptSrc": "'unsafe-inline' 'unsafe-eval' data: https: 'self' www.google-analytics.com connect.facebook.net",
       "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com",
       "reportUri": "/api/v1/csp_violation"
     },
     "reportOnly": false,
     "setAllHeaders": true
   },
-  "img_proxy_prefix": "https://steemitimages.com/",
+  "img_proxy_prefix": "https://steemitdevimages.com/",
   "ipfs_prefix": false,
   "mixpanel": false,
   "notify": {
@@ -43,7 +43,7 @@
   "conveyor_posting_wif": false,
   "conveyor_username": false,
   "special_posts_url": false,
-  "wallet_url": "https://steemitwallet.com",
+  "wallet_url": "https://wallet.steemitdev.com",
   "gpt_banned_tags": ["nsfw", "tante"],
   "google_ad_enabled": null,
   "google_ad_test": null,

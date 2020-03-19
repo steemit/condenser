@@ -52,7 +52,7 @@ class PostsList extends React.Component {
     }
 
     async componentWillMount() {
-        await this.getBlackList();
+        // await this.getBlackList();
     }
 
     componentDidMount() {

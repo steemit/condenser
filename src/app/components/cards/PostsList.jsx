@@ -18,6 +18,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import xhr from 'axios/index';
 
 import { _list_temp } from 'app/utils/steemApi';
+import { demo } from 'app/utils/demo';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -255,6 +256,7 @@ export default connect(
                     if (!muted) posts.push(post);
                 });
                 posts = List(posts);
+
                 const list = [];
                 posts.map(v => {
                     if (blacklist.indexOf(v.get('post_id')) == -1) {

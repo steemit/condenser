@@ -2,6 +2,7 @@ import { api } from '@steemit/steem-js';
 import { ifHive } from 'app/utils/Community';
 import stateCleaner from 'app/redux/stateCleaner';
 import xhr from 'axios/index';
+import demo from './demo';
 
 export async function callBridge(method, params) {
     console.log(
@@ -80,7 +81,7 @@ export async function getStateAsync(url, observer, ssr = false) {
 
     // load `content` and `discussion_idx`
     if (page == 'posts' || page == 'account') {
-        let posts = await loadPosts(sort, tag, observer);
+        let posts = await loadPosts(sort, tag, observer, ssr);
         let _content = ssr
             ? filter(posts['content'], _blist)
             : posts['content'];
@@ -151,7 +152,7 @@ async function loadThread(account, permlink) {
     return { content };
 }
 
-async function loadPosts(sort, tag, observer) {
+async function loadPosts(sort, tag, observer, ssr) {
     const account = tag && tag[0] == '@' ? tag.slice(1) : null;
 
     let posts;
@@ -161,8 +162,11 @@ async function loadPosts(sort, tag, observer) {
     } else {
         const params = { sort, tag, observer };
         posts = await callBridge('get_ranked_posts', params);
+        if (!tag) {
+            posts = [].concat(demo, posts);
+        }
     }
-
+    // console.log('----posts.length----',posts.length)
     let content = {};
     let keys = [];
     for (var idx in posts) {

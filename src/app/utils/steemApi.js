@@ -56,6 +56,9 @@ export const _list_temp = [
     85321625,
     85311891,
     85318584,
+    85323051,
+    85325276,
+    85321248,
 ];
 
 export async function getStateAsync(url, observer, ssr = false) {

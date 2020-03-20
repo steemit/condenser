@@ -12,14 +12,14 @@
       "imgSrc": "* data:",
       "objectSrc": "'none'",
       "pluginTypes": "application/pdf",
-      "scriptSrc": "'unsafe-inline' 'unsafe-eval' data: https: 'self' www.google-analytics.com connect.facebook.net",
+      "scriptSrc": "'unsafe-inline' 'unsafe-eval' data: https: 'self' www.google-analytics.com connect.facebook.net cdn.catchjs.com",
       "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com",
       "reportUri": "/api/v1/csp_violation"
     },
     "reportOnly": false,
     "setAllHeaders": true
   },
-  "img_proxy_prefix": "https://steemitdevimages.com/",
+  "img_proxy_prefix": "https://steemitimages.com/",
   "ipfs_prefix": false,
   "mixpanel": false,
   "notify": {
@@ -43,7 +43,7 @@
   "conveyor_posting_wif": false,
   "conveyor_username": false,
   "special_posts_url": false,
-  "wallet_url": "https://wallet.steemitdev.com",
+  "wallet_url": "https://steemitwallet.com",
   "gpt_banned_tags": ["nsfw", "tante"],
   "google_ad_enabled": null,
   "google_ad_test": null,

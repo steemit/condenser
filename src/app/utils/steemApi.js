@@ -2,6 +2,7 @@ import { api } from '@steemit/steem-js';
 import { ifHive } from 'app/utils/Community';
 import stateCleaner from 'app/redux/stateCleaner';
 import xhr from 'axios/index';
+import demo from './demo';
 
 export async function callBridge(method, params) {
     console.log(
@@ -38,24 +39,24 @@ export const _list_temp = [
     85294452,
     85289191,
     85293865,
+    85303662,
+    85306764,
+    85299660,
+    85290948,
+    85293459,
+    85293772,
+    85276833,
+    85293901,
+    85289063,
+    85305460,
+    85295587,
+    85312343,
+    85308672,
+    85311375,
+    85321625,
+    85311891,
+    85318584,
 ];
-// [
-//     85272851,
-//     85292735,
-//     85290072,
-//     85280316,
-//     85290308,
-//     85240810,
-//     85278992,
-//     85276721,
-//     85288504,
-//     85284375,
-//     85283636,
-//     85273231,
-//     85287931,
-//     85287965,
-// ];
-//
 
 export async function getStateAsync(url, observer, ssr = false) {
     if (observer === undefined) observer = null;
@@ -80,7 +81,7 @@ export async function getStateAsync(url, observer, ssr = false) {
 
     // load `content` and `discussion_idx`
     if (page == 'posts' || page == 'account') {
-        let posts = await loadPosts(sort, tag, observer);
+        let posts = await loadPosts(sort, tag, observer, ssr);
         let _content = ssr
             ? filter(posts['content'], _blist)
             : posts['content'];
@@ -151,7 +152,7 @@ async function loadThread(account, permlink) {
     return { content };
 }
 
-async function loadPosts(sort, tag, observer) {
+async function loadPosts(sort, tag, observer, ssr) {
     const account = tag && tag[0] == '@' ? tag.slice(1) : null;
 
     let posts;
@@ -161,8 +162,11 @@ async function loadPosts(sort, tag, observer) {
     } else {
         const params = { sort, tag, observer };
         posts = await callBridge('get_ranked_posts', params);
+        if (!tag) {
+            posts = [].concat(demo, posts);
+        }
     }
-
+    // console.log('----posts.length----',posts.length)
     let content = {};
     let keys = [];
     for (var idx in posts) {

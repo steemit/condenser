@@ -17,6 +17,7 @@ import GptAd from 'app/components/elements/GptAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
 
 import Icon from 'app/components/elements/Icon';
+import { _user_list } from 'app/utils/steemApi';
 
 function isEmptyPost(post) {
     // check if the post doesn't exist
@@ -141,7 +142,10 @@ class Post extends React.Component {
                 commentCount % 5 === 0 &&
                 commentCount !== replies.length &&
                 commentCount !== commentLimit;
-
+            // const author = reply && reply.split('/')[0];
+            // if(author && _user_list.indexOf(author) > -1) {
+            //     return ''
+            // }
             return (
                 <div key={post + reply}>
                     <Comment

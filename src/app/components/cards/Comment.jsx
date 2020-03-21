@@ -21,6 +21,7 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
 import { Role } from 'app/utils/Community';
+import { _user_list } from 'app/utils/steemApi';
 
 export function sortComments(cont, comments, sort_order) {
     const rshares = post => Long.fromString(String(post.get('net_rshares')));
@@ -268,18 +269,24 @@ class CommentImpl extends React.Component {
             } else {
                 replies = comment.replies;
                 sortComments(cont, replies, this.props.sort_order);
-                replies = replies.map((reply, idx) => (
-                    <Comment
-                        key={idx}
-                        postref={reply}
-                        cont={cont}
-                        sort_order={this.props.sort_order}
-                        depth={depth + 1}
-                        rootComment={rootComment}
-                        showNegativeComments={showNegativeComments}
-                        onHide={this.props.onHide}
-                    />
-                ));
+                replies = replies.map((reply, idx) => {
+                    // const author = reply && reply.split('/')[0];
+                    // if(author && _user_list.indexOf(author) > -1) {
+                    //     return ''
+                    // }
+                    return (
+                        <Comment
+                            key={idx}
+                            postref={reply}
+                            cont={cont}
+                            sort_order={this.props.sort_order}
+                            depth={depth + 1}
+                            rootComment={rootComment}
+                            showNegativeComments={showNegativeComments}
+                            onHide={this.props.onHide}
+                        />
+                    );
+                });
             }
         }
 
@@ -335,9 +342,7 @@ class CommentImpl extends React.Component {
                     </div>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
-                            {canFlag && (
-                                <FlagButton post={post} isComment={true} />
-                            )}
+                            {canFlag && <FlagButton post={post} isComment />}
                             <a onClick={this.toggleCollapsed}>
                                 {this.state.collapsed ? '[+]' : '[-]'}
                             </a>

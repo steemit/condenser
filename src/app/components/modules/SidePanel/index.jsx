@@ -105,13 +105,9 @@ const SidePanel = ({
         ],
         exchanges: [
             {
-                value: 'blocktrades',
-                label: 'Blocktrades',
-                link: username
-                    ? `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=${
-                          username
-                      }`
-                    : `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem`,
+                value: 'poloniex',
+                label: 'Poloniex',
+                link: 'https://poloniex.com/exchange#btc_steem',
             },
             {
                 value: 'gopax',

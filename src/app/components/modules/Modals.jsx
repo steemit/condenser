@@ -79,8 +79,7 @@ class Modals extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=' +
-                username;
+                'https://poloniex.com/exchange#btc_steem';
         };
 
         return (

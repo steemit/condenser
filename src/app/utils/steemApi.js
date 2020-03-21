@@ -29,25 +29,22 @@ export const _list_temp = [
     85278992,
     85276721,
     85288504,
-    85284375,
+    85303662,
+    85287965,
     85283636,
     85273231,
-    85287931,
-    85287965,
-    85274894,
-    85241321,
-    85294452,
-    85289191,
-    85293865,
-    85303662,
     85306764,
+    85287931,
     85299660,
     85290948,
     85293459,
     85293772,
+    85276721,
     85276833,
     85293901,
     85289063,
+    85294452,
+    85293865,
     85305460,
     85295587,
     85312343,
@@ -56,9 +53,37 @@ export const _list_temp = [
     85321625,
     85311891,
     85318584,
-    85323051,
-    85325276,
+    85308914,
     85321248,
+    85325744,
+    85325042,
+    85323948,
+    85325276,
+    85326597,
+    85321023,
+    85324738,
+    85334812,
+    85316255,
+    85336207,
+    85337563,
+    85323051,
+    85209019,
+    85343852,
+    85335737,
+    85341505,
+];
+
+export const _user_list = [
+    'roelandp',
+    'blocktrades',
+    'anyx',
+    'ausbitbank',
+    'gtg',
+    'themarkymark',
+    'lukestokes.mhth',
+    'therealwolf',
+    'netuoso',
+    'innerhive',
 ];
 
 export async function getStateAsync(url, observer, ssr = false) {
@@ -86,7 +111,7 @@ export async function getStateAsync(url, observer, ssr = false) {
     if (page == 'posts' || page == 'account') {
         let posts = await loadPosts(sort, tag, observer, ssr);
         let _content = ssr
-            ? filter(posts['content'], _blist)
+            ? filter(posts['content'], _blist, _user_list)
             : posts['content'];
         state['content'] = _content;
         state['discussion_idx'] = posts['discussion_idx'];
@@ -139,10 +164,13 @@ export async function getBlackList() {
     return (res && res.data && res.data.data) || [];
 }
 
-function filter(posts, blacklist) {
+function filter(posts, blacklist, userlist) {
     let content = {};
     for (var key in posts) {
-        if (blacklist.indexOf(posts[key].post_id) === -1) {
+        if (
+            blacklist.indexOf(posts[key].post_id) === -1 &&
+            userlist.indexOf(posts[key].author) === -1
+        ) {
             content[key] = posts[key];
         }
     }

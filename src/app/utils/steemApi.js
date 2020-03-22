@@ -71,6 +71,20 @@ export const _list_temp = [
     85335737,
     85341505,
     85315644,
+    85357437,
+    85330639,
+    85359441,
+    85357235,
+    85354823,
+    85360899,
+    85358726,
+    85354772,
+    85362926,
+    85359018,
+    85364554,
+    85365012,
+    85354766,
+    85359759,
 ];
 
 export const _user_list = [
@@ -84,6 +98,8 @@ export const _user_list = [
     'therealwolf',
     'netuoso',
     'innerhive',
+    'z8teyb289qav9z',
+    'ngc',
 ];
 
 export async function getStateAsync(url, observer, ssr = false) {
@@ -204,7 +220,7 @@ async function loadPosts(sort, tag, observer, ssr) {
         const post = posts[idx];
         const key = post['author'] + '/' + post['permlink'];
         content[key] = post;
-        keys.push(key);
+        keys.indexOf(key) == -1 && keys.push(key);
     }
 
     let discussion_idx = {};

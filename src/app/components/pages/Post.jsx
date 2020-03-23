@@ -142,10 +142,10 @@ class Post extends React.Component {
                 commentCount % 5 === 0 &&
                 commentCount !== replies.length &&
                 commentCount !== commentLimit;
-            // const author = reply && reply.split('/')[0];
-            // if(author && _user_list.indexOf(author) > -1) {
-            //     return ''
-            // }
+            const author = reply && reply.split('/')[0];
+            if (author && _user_list.indexOf(author) > -1) {
+                return '';
+            }
             return (
                 <div key={post + reply}>
                     <Comment

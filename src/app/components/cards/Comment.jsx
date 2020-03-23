@@ -270,10 +270,10 @@ class CommentImpl extends React.Component {
                 replies = comment.replies;
                 sortComments(cont, replies, this.props.sort_order);
                 replies = replies.map((reply, idx) => {
-                    // const author = reply && reply.split('/')[0];
-                    // if(author && _user_list.indexOf(author) > -1) {
-                    //     return ''
-                    // }
+                    const author = reply && reply.split('/')[0];
+                    if (author && _user_list.indexOf(author) > -1) {
+                        return '';
+                    }
                     return (
                         <Comment
                             key={idx}

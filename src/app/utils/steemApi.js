@@ -85,6 +85,14 @@ export const _list_temp = [
     85365012,
     85354766,
     85359759,
+    85373516,
+    85372593,
+    85369615,
+    85376101,
+    85375555,
+    85374894,
+    85373035,
+    85372824,
 ];
 
 export const _user_list = [
@@ -100,6 +108,10 @@ export const _user_list = [
     'innerhive',
     'z8teyb289qav9z',
     'ngc',
+    'sirvotesalot',
+    'cheetah',
+    'xx0xx',
+    'phusionphil',
 ];
 
 export async function getStateAsync(url, observer, ssr = false) {
@@ -157,6 +169,9 @@ export async function getStateAsync(url, observer, ssr = false) {
         // TODO: move to global reducer?
         const profile = await callBridge('get_profile', { account });
         if (profile && profile['name']) {
+            if (_user_list.indexOf(account) > -1) {
+                profile['post_count'] = 0;
+            }
             state['profiles'][account] = profile;
         }
     }
@@ -206,6 +221,9 @@ async function loadPosts(sort, tag, observer, ssr) {
     if (account) {
         const params = { sort, account, observer };
         posts = await callBridge('get_account_posts', params);
+        if (_user_list.indexOf(account) > -1) {
+            posts = [];
+        }
     } else {
         const params = { sort, tag, observer };
         posts = await callBridge('get_ranked_posts', params);

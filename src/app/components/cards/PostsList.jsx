@@ -148,11 +148,11 @@ class PostsList extends React.Component {
         const _blist = blacklist.length != blist.length ? blist : blacklist;
         const renderSummary = items =>
             items.map((post, i) => {
-                if (blacklist.length != blist.length) {
-                    if (_blist.indexOf(post.get('post_id')) > -1) {
-                        return;
-                    }
-                }
+                // if (blacklist.length != blist.length) {
+                //     if (_blist.indexOf(post.get('post_id')) > -1) {
+                //         return;
+                //     }
+                // }
 
                 const ps = (
                     <PostSummary

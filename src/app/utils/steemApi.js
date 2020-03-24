@@ -146,7 +146,18 @@ export async function getStateAsync(url, observer, ssr = false) {
         state['discussion_idx'] = posts['discussion_idx'];
     } else if (page == 'thread') {
         const posts = await loadThread(key[0], key[1]);
-        state['content'] = posts['content'];
+        const post_id =
+            posts &&
+            posts['content'] &&
+            posts['content'][`${key[0].slice(1)}/${key[1]}`] &&
+            posts['content'][`${key[0].slice(1)}/${key[1]}`]['post_id'];
+        // console.log('----posts----',post_id)
+        if (
+            _user_list.indexOf(key[0].slice(1)) == -1 &&
+            (post_id && _list_temp.indexOf(post_id) == -1)
+        ) {
+            state['content'] = posts['content'];
+        }
     } else {
         // no-op
     }

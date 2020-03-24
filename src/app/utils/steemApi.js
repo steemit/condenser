@@ -160,7 +160,9 @@ export async function getStateAsync(url, observer, ssr = false) {
             posts['content'] &&
             posts['content'][`${key[0].slice(1)}/${key[1]}`] &&
             posts['content'][`${key[0].slice(1)}/${key[1]}`]['post_id'];
+
         // console.log('----posts----',post_id)
+
         if (
             _user_list.indexOf(key[0].slice(1)) == -1 &&
             (post_id && _list_temp.indexOf(post_id) == -1)

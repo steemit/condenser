@@ -93,6 +93,14 @@ export const _list_temp = [
     85374894,
     85373035,
     85372824,
+    85384412,
+    85379917,
+    85380730,
+    85386878,
+    85387066,
+    85387144,
+    85379011,
+    85383898,
 ];
 
 export const _user_list = [
@@ -113,6 +121,7 @@ export const _user_list = [
     'mapxv',
     'xx0xx',
     'phusionphil',
+    'cryptobrewmaster',
 ];
 
 export async function getStateAsync(url, observer, ssr = false) {

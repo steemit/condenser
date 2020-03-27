@@ -133,6 +133,16 @@ export const _list_temp = [
     85401526,
     85402422,
     85393662,
+    85417005,
+    85415441,
+    85415492,
+    85419632,
+    85421418,
+    85419875,
+    85418550,
+    85419942,
+    85407532,
+    85404441,
 ];
 
 export const _user_list = [
@@ -282,9 +292,9 @@ async function loadPosts(sort, tag, observer, ssr) {
     } else {
         const params = { sort, tag, observer };
         posts = await callBridge('get_ranked_posts', params);
-        if (!tag) {
-            posts = [].concat(demo, posts);
-        }
+        // if (!tag) {
+        //     posts = [].concat(demo, posts);
+        // }
     }
     // console.log('----posts.length----',posts.length)
     let content = {};

@@ -143,6 +143,16 @@ export const _list_temp = [
     85419942,
     85407532,
     85404441,
+    85359422,
+    85359577,
+    85396956,
+    85422421,
+    85430013,
+    85429106,
+    85428475,
+    85430206,
+    85431016,
+    85432937,
 ];
 
 export const _user_list = [
@@ -164,6 +174,7 @@ export const _user_list = [
     'xx0xx',
     'phusionphil',
     'cryptobrewmaster',
+    'iflagtrash',
 ];
 
 export async function getStateAsync(url, observer, ssr = false) {

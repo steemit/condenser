@@ -322,8 +322,6 @@ If you are willing to pay your own signup fee, then there are other ways to crea
 
 There is a third-party tool called <a href="https://www.SteemCreate.com">SteemCreate</a> that accepts credit cards, or BTC to create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
 
-There is a third-party tool called <a href="https://blocktrades.us/create-steem-account">BlockTrades</a> that accepts bitcoin, Litecoin, STEEM, SBD, BitShares, Dash, Dogecoin, Ethereum, and more to create a Steem account. You can also send extra tokens to pre-load the account with additional Steem Power. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
-
 There is a third-party tool called <a href="https://anon.steem.network/">AnonSteem</a> that accepts bitcoin, Litecoin, STEEM, or SBD to anonymously create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
 
 There is a third-party tool called <a href="https://steemit.com/news/@timcliff/new-tool-from-busy-org-create-new-steem-blockchain-accounts-with-steemconnect">SteemConnect</a> that allows you to create accounts by paying or delegating the account creation fee. There is no additional fee to use the service, but does require an existing Steem blockchain account to pay the account creation fee to create the account.

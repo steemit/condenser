@@ -41,11 +41,23 @@ const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
 const SBD_PRINT_RATE_MAX = 10000;
 const MAX_WEIGHT = 10000;
+const MIN_PAYOUT = 0.02;
+
+function amt(string_amount) {
+    return parsePayoutAmount(string_amount);
+}
+
+function fmt(decimal_amount, asset = null) {
+    return formatDecimal(decimal_amount).join('') + (asset ? ' ' + asset : '');
+}
+
+function abs(value) {
+    return Math.abs(parseInt(value));
+}
 
 class Voting extends React.Component {
     static propTypes = {
         // HTML properties
-        post: PropTypes.string.isRequired,
         showList: PropTypes.bool,
 
         // Redux connect properties
@@ -55,8 +67,7 @@ class Voting extends React.Component {
         username: PropTypes.string,
         is_comment: PropTypes.bool,
         active_votes: PropTypes.object,
-        loggedin: PropTypes.bool,
-        post_obj: PropTypes.object,
+        post: PropTypes.object,
         enable_slider: PropTypes.bool,
         voting: PropTypes.bool,
         price_per_steem: PropTypes.number,
@@ -71,7 +82,6 @@ class Voting extends React.Component {
         super(props);
         this.state = {
             showWeight: false,
-            myVote: null,
             sliderWeight: {
                 up: MAX_WEIGHT,
                 down: MAX_WEIGHT,
@@ -90,8 +100,13 @@ class Voting extends React.Component {
             if (this.props.voting) return;
             this.setState({ votingUp: up, votingDown: !up });
             if (this.state.showWeight) this.setState({ showWeight: false });
-            const { myVote } = this.state;
-            const { author, permlink, username, is_comment } = this.props;
+            const {
+                myVote,
+                author,
+                permlink,
+                username,
+                is_comment,
+            } = this.props;
 
             let weight;
             if (myVote > 0 || myVote < 0) {
@@ -107,6 +122,9 @@ class Voting extends React.Component {
                 weight = up ? MAX_WEIGHT : -MAX_WEIGHT;
             }
 
+            const rshares = Math.floor(
+                0.05 * this.props.net_vests * 1e6 * (weight / 10000.0)
+            );
             const isFlag = up ? null : true;
             this.props.vote(weight, {
                 author,
@@ -114,6 +132,7 @@ class Voting extends React.Component {
                 username,
                 myVote,
                 isFlag,
+                rshares,
             });
         };
 
@@ -195,47 +214,36 @@ class Voting extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting');
     }
 
-    componentWillMount() {
-        const { username, active_votes } = this.props;
-        this._checkMyVote(username, active_votes);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { username, active_votes } = nextProps;
-        this._checkMyVote(username, active_votes);
-    }
-
-    _checkMyVote(username, active_votes) {
-        if (username && active_votes) {
-            const vote = active_votes.find(el => el.get('voter') === username);
-            // weight warning, the API may send a string or a number (when zero)
-            if (vote)
-                this.setState({
-                    myVote: parseInt(vote.get('percent') || 0, 10),
-                });
-        }
-    }
-
     render() {
         const {
+            myVote,
             active_votes,
             showList,
             voting,
             enable_slider,
             is_comment,
-            post_obj,
+            post,
             price_per_steem,
             sbd_print_rate,
             username,
         } = this.props;
 
-        const {
-            votingUp,
-            votingDown,
-            showWeight,
-            showWeightDir,
-            myVote,
-        } = this.state;
+        // `lite` Voting component: e.g. search results
+        if (!post.get('pending_payout_value')) {
+            return (
+                <span className="Voting">
+                    <span className="Voting__inner">
+                        <FormattedAsset
+                            amount={post.get('payout')}
+                            asset="$"
+                            classname=""
+                        />
+                    </span>
+                </span>
+            );
+        }
+
+        const { votingUp, votingDown, showWeight, showWeightDir } = this.state;
 
         const votingUpActive = voting && votingUp;
         const votingDownActive = voting && votingDown;
@@ -276,15 +284,17 @@ class Voting extends React.Component {
             // myVote === current vote
 
             const invokeFlag = (
-                <span
+                <a
                     href="#"
-                    onClick={this.toggleWeightDown}
+                    onClick={
+                        enable_slider ? this.toggleWeightDown : this.voteDown
+                    }
                     title="Downvote"
                     id="downvote_button"
                     className="flag"
                 >
                     {down}
-                </span>
+                </a>
             );
 
             const revokeFlag = (
@@ -299,45 +309,47 @@ class Voting extends React.Component {
                 </a>
             );
 
-            const dropdown = (
-                <Dropdown
-                    show={showWeight && showWeightDir == 'down'}
-                    onHide={() => this.setState({ showWeight: false })}
-                    onShow={() => {
-                        this.setState({ showWeight: true });
-                        this.readSliderWeight();
-                    }}
-                    title={invokeFlag}
-                    position={'right'}
-                >
-                    <div className="Voting__adjust_weight_down">
-                        {(myVote == null || myVote === 0) &&
-                            enable_slider && (
-                                <div className="weight-container">
-                                    {slider(false)}
-                                </div>
-                            )}
-                        <CloseButton
-                            onClick={() => this.setState({ showWeight: false })}
-                        />
-                        <div className="clear Voting__about-flag">
-                            {ABOUT_FLAG}
-                            <br />
-                            <span
-                                href="#"
-                                onClick={this.voteDown}
-                                className="button outline"
-                                title="Downvote"
-                            >
-                                Submit
-                            </span>
+            let dropdown = invokeFlag;
+            if (enable_slider) {
+                dropdown = (
+                    <Dropdown
+                        show={showWeight && showWeightDir == 'down'}
+                        onHide={() => this.setState({ showWeight: false })}
+                        onShow={() => {
+                            this.setState({ showWeight: true });
+                            this.readSliderWeight();
+                        }}
+                        title={invokeFlag}
+                        position={'right'}
+                    >
+                        <div className="Voting__adjust_weight_down">
+                            {(myVote == null || myVote === 0) &&
+                                enable_slider && (
+                                    <div className="weight-container">
+                                        {slider(false)}
+                                    </div>
+                                )}
+                            <CloseButton
+                                onClick={() =>
+                                    this.setState({ showWeight: false })
+                                }
+                            />
+                            <div className="clear Voting__about-flag">
+                                {ABOUT_FLAG}
+                                <br />
+                                <span
+                                    href="#"
+                                    onClick={this.voteDown}
+                                    className="button outline"
+                                    title="Downvote"
+                                >
+                                    Submit
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </Dropdown>
-            );
-
-            //const flag =
-            //    myVote === null || myVote === 0 ? dropdown : revokeFlag;
+                    </Dropdown>
+                );
+            }
             downVote = (
                 <span className={classDown}>
                     {myVote === null || myVote === 0 ? dropdown : revokeFlag}
@@ -345,40 +357,29 @@ class Voting extends React.Component {
             );
         }
 
-        const total_votes = post_obj.getIn(['stats', 'total_votes']);
+        // payout meta
+        const total_votes = post.getIn(['stats', 'total_votes']);
+        const payout_at = post.get('payout_at');
+        const promoted = amt(post.get('promoted'));
+        const max_payout = amt(post.get('max_accepted_payout'));
+        const percent_sbd = post.get('percent_steem_dollars') / 20000;
 
-        const cashout_time = post_obj.get('cashout_time');
-        const max_payout = parsePayoutAmount(
-            post_obj.get('max_accepted_payout')
-        );
-        const pending_payout = parsePayoutAmount(
-            post_obj.get('pending_payout_value')
-        );
-        const percent_steem_dollars =
-            post_obj.get('percent_steem_dollars') / 20000;
-        const pending_payout_sbd = pending_payout * percent_steem_dollars;
-        const pending_payout_sp =
-            (pending_payout - pending_payout_sbd) / price_per_steem;
-        const pending_payout_printed_sbd =
-            pending_payout_sbd * (sbd_print_rate / SBD_PRINT_RATE_MAX);
-        const pending_payout_printed_steem =
-            (pending_payout_sbd - pending_payout_printed_sbd) / price_per_steem;
+        // pending payout, and completed author/curator payout
+        const pending_payout = amt(post.get('pending_payout_value'));
+        const author_payout = amt(post.get('author_payout_value'));
+        const curator_payout = amt(post.get('curator_payout_value'));
+        const total_payout = pending_payout + author_payout + curator_payout;
 
-        const promoted = parsePayoutAmount(post_obj.get('promoted'));
-        const total_author_payout = parsePayoutAmount(
-            post_obj.get('total_payout_value')
-        );
-        const total_curator_payout = parsePayoutAmount(
-            post_obj.get('curator_payout_value')
-        );
+        // estimated pending payout breakdowns
+        const _sbd = pending_payout * percent_sbd;
+        const pending_sp = (pending_payout - _sbd) / price_per_steem;
+        const pending_sbd = _sbd * (sbd_print_rate / SBD_PRINT_RATE_MAX);
+        const pending_steem = (_sbd - pending_sbd) / price_per_steem;
 
-        let payout =
-            pending_payout + total_author_payout + total_curator_payout;
-        if (payout < 0.0) payout = 0.0;
-        if (payout > max_payout) payout = max_payout;
-        const payout_limit_hit = payout >= max_payout;
-        // Show pending payout amount for declined payment posts
-        if (max_payout === 0) payout = pending_payout;
+        const payout_limit_hit = total_payout >= max_payout;
+        const shown_payout =
+            payout_limit_hit && max_payout > 0 ? max_payout : total_payout;
+
         const up = (
             <Icon
                 name={votingUpActive ? 'empty' : 'chevron-up-circle'}
@@ -390,115 +391,102 @@ class Voting extends React.Component {
             (myVote > 0 ? ' Voting__button--upvoted' : '') +
             (votingUpActive ? ' votingUp' : '');
 
-        // There is an "active cashout" if: (a) there is a pending payout, OR (b) there is a valid cashout_time AND it's NOT a comment with 0 votes.
-        const cashout_active =
-            pending_payout > 0 ||
-            (cashout_time.indexOf('1969') !== 0 &&
-                !(is_comment && total_votes == 0));
         const payoutItems = [];
 
-        const minimumAmountForPayout = 0.02;
-        let warnZeroPayout = '';
-        if (pending_payout > 0 && pending_payout < minimumAmountForPayout) {
-            warnZeroPayout = tt('voting_jsx.must_reached_minimum_payout');
-        }
-
-        if (cashout_active) {
-            const payoutDate = (
-                <span>
-                    {tt('voting_jsx.payout')}{' '}
-                    <TimeAgoWrapper date={cashout_time} />
-                </span>
-            );
+        // pending payout info
+        if (!post.get('is_paidout') && pending_payout > 0) {
             payoutItems.push({
                 value: tt('voting_jsx.pending_payout', {
-                    value: formatDecimal(pending_payout).join(''),
+                    value: fmt(pending_payout),
                 }),
             });
+
+            // pending breakdown
             if (max_payout > 0) {
                 payoutItems.push({
                     value:
                         tt('voting_jsx.breakdown') +
                         ': ' +
-                        formatDecimal(pending_payout_printed_sbd).join('') +
-                        ' ' +
-                        DEBT_TOKEN_SHORT +
-                        ', ' +
+                        (fmt(pending_sbd, DEBT_TOKEN_SHORT) + ', ') +
                         (sbd_print_rate != SBD_PRINT_RATE_MAX
-                            ? formatDecimal(pending_payout_printed_steem).join(
-                                  ''
-                              ) +
-                              ' ' +
-                              LIQUID_TOKEN_UPPERCASE +
-                              ', '
+                            ? fmt(pending_steem, LIQUID_TOKEN_UPPERCASE) + ', '
                             : '') +
-                        formatDecimal(pending_payout_sp).join('') +
-                        ' ' +
-                        INVEST_TOKEN_SHORT,
+                        fmt(pending_sp, INVEST_TOKEN_SHORT),
                 });
             }
-            // add beneficiary info. use toFixed due to a bug of formatDecimal (5.00 is shown as 5,.00)
-            const beneficiaries = post_obj.get('beneficiaries');
+
+            const beneficiaries = post.get('beneficiaries');
             if (beneficiaries) {
                 beneficiaries.forEach(function(key) {
                     payoutItems.push({
                         value:
                             key.get('account') +
                             ': ' +
-                            (parseFloat(key.get('weight')) / 100).toFixed(2) +
-                            '%',
+                            (fmt(parseFloat(key.get('weight')) / 100) + '%'),
                         link: '/@' + key.get('account'),
                     });
                 });
             }
+
+            const payoutDate = (
+                <span>
+                    {tt('voting_jsx.payout')}{' '}
+                    <TimeAgoWrapper date={payout_at} />
+                </span>
+            );
             payoutItems.push({ value: payoutDate });
-            if (warnZeroPayout !== '') {
-                payoutItems.push({ value: warnZeroPayout });
+
+            if (pending_payout > 0 && pending_payout < MIN_PAYOUT) {
+                payoutItems.push({
+                    value: tt('voting_jsx.must_reached_minimum_payout'),
+                });
             }
         }
 
+        // max payout / payout declined
         if (max_payout == 0) {
             payoutItems.push({ value: tt('voting_jsx.payout_declined') });
         } else if (max_payout < 1000000) {
             payoutItems.push({
                 value: tt('voting_jsx.max_accepted_payout', {
-                    value: formatDecimal(max_payout).join(''),
+                    value: fmt(max_payout),
                 }),
             });
         }
+
+        // promoted balance
         if (promoted > 0) {
             payoutItems.push({
                 value: tt('voting_jsx.promotion_cost', {
-                    value: formatDecimal(promoted).join(''),
+                    value: fmt(promoted),
                 }),
             });
         }
-        // - payout instead of total_author_payout: total_author_payout can be zero with 100% beneficiary
-        // - !cashout_active is needed to avoid the info is also shown for pending posts.
-        if (!cashout_active && payout > 0) {
+
+        // past payout stats
+        if (post.get('is_paidout') && total_payout > 0) {
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts', {
-                    value: formatDecimal(
-                        total_author_payout + total_curator_payout
-                    ).join(''),
+                    value: fmt(total_payout),
                 }),
             });
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts_author', {
-                    value: formatDecimal(total_author_payout).join(''),
+                    value: fmt(author_payout),
                 }),
             });
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts_curators', {
-                    value: formatDecimal(total_curator_payout).join(''),
+                    value: fmt(curator_payout),
                 }),
             });
         }
+
         const payoutEl = (
-            <DropdownMenu el="div" items={payoutItems}>
+            <DropdownMenu el="div" items={payoutItems} className="Voting__pane">
                 <span style={payout_limit_hit ? { opacity: '0.5' } : {}}>
                     <FormattedAsset
-                        amount={payout}
+                        amount={shown_payout}
                         asset="$"
                         classname={max_payout === 0 ? 'strikethrough' : ''}
                     />
@@ -509,40 +497,28 @@ class Voting extends React.Component {
 
         let voters_list = null;
         if (showList && total_votes > 0 && active_votes) {
-            const avotes = active_votes.toJS();
-            avotes.sort(
-                (a, b) =>
-                    Math.abs(parseInt(a.rshares)) >
-                    Math.abs(parseInt(b.rshares))
-                        ? -1
-                        : 1
-            );
             let voters = [];
-            for (
-                let v = 0;
-                v < avotes.length && voters.length < MAX_VOTES_DISPLAY;
-                ++v
-            ) {
-                const { percent, voter } = avotes[v];
-                const sign = Math.sign(percent);
-                if (sign === 0) continue;
+
+            // add top votes
+            const avotes = active_votes.toJS();
+            const maxlen = Math.min(avotes.length, MAX_VOTES_DISPLAY);
+            avotes.sort((a, b) => (abs(a.rshares) > abs(b.rshares) ? -1 : 1));
+            for (let v = 0; v < maxlen; ++v) {
+                const { rshares, voter } = avotes[v];
+                if (rshares == '0') continue;
+                const sign = rshares[0] == '-' ? '- ' : '+ ';
+                voters.push({ value: sign + voter, link: '/@' + voter });
+            }
+
+            // add overflow, if any
+            const extra = total_votes - voters.length;
+            if (extra > 0) {
                 voters.push({
-                    value: (sign > 0 ? '+ ' : '- ') + voter,
-                    link: '/@' + voter,
+                    value: tt('voting_jsx.and_more', { count: extra }),
                 });
             }
-            if (total_votes > voters.length) {
-                voters.push({
-                    value: (
-                        <span>
-                            &hellip;{' '}
-                            {tt('voting_jsx.and_more', {
-                                count: total_votes - voters.length,
-                            })}
-                        </span>
-                    ),
-                });
-            }
+
+            // build voters list
             voters_list = (
                 <DropdownMenu
                     selected={tt('voting_jsx.votes_plural', {
@@ -569,6 +545,7 @@ class Voting extends React.Component {
                 {up}
             </a>
         );
+
         if (myVote <= 0 && enable_slider) {
             voteUpClick = this.toggleWeightUp;
             voteChevron = null;
@@ -634,47 +611,49 @@ class Voting extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const post = state.global.getIn(['content', ownProps.post]);
-        if (!post) return ownProps;
+        const post =
+            ownProps.post || state.global.getIn(['content', ownProps.post_ref]);
+
+        if (!post) {
+            console.error('post_not_found', ownProps);
+            throw 'post not found';
+        }
+
         const author = post.get('author');
         const permlink = post.get('permlink');
         const active_votes = post.get('active_votes');
-        const is_comment = post.get('parent_author') !== '';
+        const is_comment = post.get('depth') == 0;
 
-        const current_account = state.user.get('current');
-        const username = current_account
-            ? current_account.get('username')
-            : null;
-        const vesting_shares = current_account
-            ? current_account.get('vesting_shares')
-            : 0.0;
-        const delegated_vesting_shares = current_account
-            ? current_account.get('delegated_vesting_shares')
-            : 0.0;
-        const received_vesting_shares = current_account
-            ? current_account.get('received_vesting_shares')
-            : 0.0;
-        const net_vesting_shares =
-            vesting_shares - delegated_vesting_shares + received_vesting_shares;
-        const voting = state.global.get(
-            `transaction_vote_active_${author}_${permlink}`
+        const current = state.user.get('current');
+        const username = current ? current.get('username') : null;
+        const net_vests = current ? current.get('effective_vests') : 0.0;
+        const vote_status_key = `transaction_vote_active_${author}_${permlink}`;
+        const voting = state.global.get(vote_status_key);
+        const price_per_steem =
+            pricePerSteem(state) || ownProps.price_per_steem;
+        const sbd_print_rate = state.global.getIn(
+            ['props', 'sbd_print_rate'],
+            ownProps.sbd_print_rate
         );
-        const price_per_steem = pricePerSteem(state);
-        const sbd_print_rate = state.global.getIn(['props', 'sbd_print_rate']);
-        const enable_slider =
-            net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD;
+        const enable_slider = net_vests > VOTE_WEIGHT_DROPDOWN_THRESHOLD;
+
+        let myVote = ownProps.myVote || null; // ownProps: test only
+        if (username && active_votes) {
+            const vote = active_votes.find(el => el.get('voter') === username);
+            if (vote) myVote = parseInt(vote.get('rshares'), 10);
+        }
 
         return {
-            post: ownProps.post,
+            post,
             showList: ownProps.showList,
+            net_vests,
             author,
             permlink,
             username,
+            myVote,
             active_votes,
             enable_slider,
             is_comment,
-            post_obj: post,
-            loggedin: username != null,
             voting,
             price_per_steem,
             sbd_print_rate,
@@ -683,9 +662,15 @@ export default connect(
 
     // mapDispatchToProps
     dispatch => ({
-        vote: (weight, { author, permlink, username, myVote, isFlag }) => {
+        vote: (
+            weight,
+            { author, permlink, username, myVote, isFlag, rshares }
+        ) => {
             const confirm = () => {
+                // new vote
                 if (myVote == null) return null;
+
+                // changing a vote
                 if (weight === 0)
                     return isFlag
                         ? tt('voting_jsx.removing_your_vote')
@@ -714,6 +699,7 @@ export default connect(
                         author,
                         permlink,
                         weight,
+                        __rshares: rshares,
                         __config: {
                             title: weight < 0 ? 'Confirm Downvote' : null,
                         },

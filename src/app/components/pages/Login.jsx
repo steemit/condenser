@@ -15,7 +15,7 @@ class Login extends React.Component {
         return (
             <div className="Login row">
                 <div className="column">
-                    <LoginForm afterLoginRedirectToWelcome />
+                    <LoginForm />
                 </div>
             </div>
         );

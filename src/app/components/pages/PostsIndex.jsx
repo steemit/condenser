@@ -6,36 +6,53 @@ import { Link } from 'react-router';
 import tt from 'counterpart';
 import { List } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
-import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import Callout from 'app/components/elements/Callout';
-import SidebarLinks from 'app/components/elements/SidebarLinks';
-import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
-import Notices from 'app/components/elements/Notices';
-import SteemMarket from 'app/components/elements/SteemMarket';
 import { GptUtils } from 'app/utils/GptUtils';
-import GptAd from 'app/components/elements/GptAd';
-import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
+import { ifHive } from 'app/utils/Community';
+import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
+import { _list_temp } from 'app/utils/steemApi';
+// posts_index.empty_feed_1 [-5]
+const noFriendsText = (
+    <div>
+        You haven't followed anyone yet!<br />
+        <br />
+        <span style={{ fontSize: '1.1rem' }}>
+            <Link to="/">Explore Trending</Link>
+        </span>
+        <br />
+        <br />
+        <Link to="/welcome">New users guide</Link>
+    </div>
+);
+
+const noCommunitiesText = (
+    <div>
+        You haven't joined any active communities yet!<br />
+        <br />
+        <span style={{ fontSize: '1.1rem' }}>
+            <Link to="/communities">Explore Communities</Link>
+        </span>
+        {/*
+        <br /><br />
+        <Link to="/welcome">New users guide</Link>*/}
+    </div>
+);
 
 class PostsIndex extends React.Component {
     static propTypes = {
-        discussions: PropTypes.object,
-        feed_posts: PropTypes.object,
+        posts: PropTypes.object,
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
         loading: PropTypes.bool,
         username: PropTypes.string,
         blogmode: PropTypes.bool,
-        categories: PropTypes.object,
-    };
-
-    static defaultProps = {
-        showSpam: false,
+        topics: PropTypes.object,
     };
 
     constructor() {
@@ -45,289 +62,187 @@ class PostsIndex extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsIndex');
     }
 
+    componentWillMount() {
+        const { subscriptions, getSubscriptions, username } = this.props;
+        if (!subscriptions && username) getSubscriptions(username);
+    }
+
     componentDidUpdate(prevProps) {
         if (
             window.innerHeight &&
             window.innerHeight > 3000 &&
-            prevProps.discussions !== this.props.discussions
+            prevProps.posts !== this.props.posts
         ) {
             this.refs.list.fetchIfNeeded();
         }
     }
 
-    getPosts(order, category) {
-        const topic_discussions = this.props.discussions.get(category || '');
-        if (!topic_discussions) return null;
-        return topic_discussions.get(order);
-    }
-
-    loadMore(last_post) {
+    loadMore() {
+        const last_post = this.props.posts ? this.props.posts.last() : null;
         if (!last_post) return;
-        let {
-            accountname,
-            category,
-            order = constants.DEFAULT_SORT_ORDER,
-        } = this.props.routeParams;
-        if (category === 'feed') {
-            accountname = order.slice(1);
-            order = 'by_feed';
-        }
-        if (isFetchingOrRecentlyUpdated(this.props.status, order, category))
-            return;
+        if (last_post == this.props.pending) return; // if last post is 'pending', its an invalid start token
+        const { username, status, order, category } = this.props;
+
+        if (isFetchingOrRecentlyUpdated(status, order, category)) return;
+
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
             author,
             permlink,
             order,
             category,
-            accountname,
+            observer: username,
         });
     }
-    onShowSpam = () => {
-        this.setState({ showSpam: !this.state.showSpam });
-    };
+
     render() {
-        let {
-            category,
-            order = constants.DEFAULT_SORT_ORDER,
-        } = this.props.routeParams;
-
         const {
-            categories,
-            featured,
-            promoted,
-            gptBannedTags,
-            topic,
+            topics,
+            subscriptions,
+            enableAds,
+            community,
+            category,
+            account_name, // TODO: for feed
+            order,
+            posts,
+            username,
         } = this.props;
-
-        let allowAdsOnContent = true;
-        allowAdsOnContent =
-            this.props.gptEnabled &&
-            !GptUtils.HasBannedTags([topic], gptBannedTags);
-
-        let topics_order = order;
-        let posts = [];
-        let account_name = '';
-        let emptyText = '';
-        if (category === 'feed') {
-            account_name = order.slice(1);
-            order = 'by_feed';
-            topics_order = 'trending';
-            posts = this.props.feed_posts;
-            const isMyAccount = this.props.username === account_name;
-            if (isMyAccount) {
-                emptyText = (
-                    <div>
-                        {tt('posts_index.empty_feed_1')}.<br />
-                        <br />
-                        {tt('posts_index.empty_feed_2')}.<br />
-                        <br />
-                        <Link to="/trending">
-                            {tt('posts_index.empty_feed_3')}
-                        </Link>
-                        <br />
-                        <Link to="/welcome">
-                            {tt('posts_index.empty_feed_4')}
-                        </Link>
-                        <br />
-                        <Link to="/faq.html">
-                            {tt('posts_index.empty_feed_5')}
-                        </Link>
-                        <br />
-                    </div>
-                );
-            } else {
-                emptyText = (
-                    <div>
-                        {tt('user_profile.user_hasnt_followed_anything_yet', {
-                            name: account_name,
-                        })}
-                    </div>
-                );
-            }
-        } else {
-            posts = this.getPosts(order, category);
-            if (posts && posts.size === 0) {
-                emptyText = (
-                    <div>
-                        {'No ' +
-                            topics_order +
-                            (category ? ' #' + category : '') +
-                            ' posts found'}
-                    </div>
-                );
-            }
-        }
 
         const status = this.props.status
             ? this.props.status.getIn([category || '', order])
             : null;
-        const fetching = (status && status.fetching) || this.props.loading;
-        const { showSpam } = this.state;
+        let fetching = (status && status.fetching) || this.props.loading;
 
-        // If we're at one of the four sort order routes without a tag filter,
-        // use the translated string for that sort order, f.ex "trending"
-        //
-        // If you click on a tag while you're in a sort order route,
-        // the title should be the translated string for that sort order
-        // plus the tag string, f.ex "trending: blog"
-        //
-        // Logged-in:
-        // At homepage (@user/feed) say "My feed"
-        let page_title = 'Posts'; // sensible default here?
-        if (category === 'feed') {
-            if (account_name === this.props.username)
-                page_title = tt('posts_index.my_feed');
-            else
-                page_title = tt('posts_index.accountnames_feed', {
-                    account_name,
-                });
-        } else {
-            switch (topics_order) {
-                case 'trending': // cribbed from Header.jsx where it's repeated 2x already :P
-                    page_title = tt('main_menu.trending');
-                    break;
-                case 'created':
-                    page_title = tt('g.new');
-                    break;
-                case 'hot':
-                    page_title = tt('main_menu.hot');
-                    break;
-                case 'promoted':
-                    page_title = tt('g.promoted');
-                    break;
-            }
-            if (typeof category !== 'undefined') {
-                page_title = `${page_title}: ${category}`; // maybe todo: localize the colon?
+        let emptyText = '';
+        if (order === 'feed') {
+            emptyText = noFriendsText;
+        } else if (category === 'my') {
+            if (!process.env.BROWSER) {
+                fetching = true;
             } else {
-                page_title = `${page_title}: ${tt('g.all_tags')}`;
+                emptyText = noCommunitiesText;
             }
+        } else if (posts.size === 0) {
+            const cat = community
+                ? 'community' //community.get('title')
+                : category ? ' #' + category : '';
+
+            if (order == 'payout')
+                emptyText = `No pending ${
+                    cat
+                } posts found. This view only shows posts within 12 - 36 hours of payout.`;
+            else if (order == 'created') emptyText = `No posts in ${cat} yet!`;
+            else emptyText = `No ${order} ${cat} posts found.`;
+        } else {
+            emptyText = 'Nothing here to see...';
         }
-        const layoutClass = this.props.blogmode
-            ? ' layout-block'
-            : ' layout-list';
+
+        // page title
+        let page_title = tt('g.all_tags');
+        if (order === 'feed') {
+            if (account_name === this.props.username)
+                page_title = 'My friends' || tt('posts_index.my_feed');
+            else
+                //page_title = tt('posts_index.accountnames_feed', {
+                //    account_name,
+                //});
+                //page_title = '@' + account_name + "'s friends"
+                page_title = 'My friends';
+        } else if (category === 'my') {
+            page_title = 'My communities';
+        } else if (community) {
+            page_title = community.get('title');
+        } else if (category) {
+            page_title = '#' + category;
+        }
+
+        let postsIndexDisplay = (
+            <PostsList
+                ref="list"
+                post_refs={posts}
+                loading={fetching}
+                order={order}
+                category={category}
+                hideCategory={!!community}
+                loadMore={this.loadMore}
+            />
+        );
+
+        if (!fetching && !posts.size) {
+            postsIndexDisplay = <Callout>{emptyText}</Callout>;
+        }
+        if (!username && posts.size && category === 'my') {
+            postsIndexDisplay = <Callout>{emptyText}</Callout>;
+        }
+        if (order === 'feed' && !username) {
+            postsIndexDisplay = <Callout>{emptyText}</Callout>;
+        }
+
         return (
-            <div
-                className={
-                    'PostsIndex row' +
-                    (fetching ? ' fetching' : '') +
-                    layoutClass
-                }
+            <PostsIndexLayout
+                category={category}
+                enableAds={enableAds}
+                blogmode={this.props.blogmode}
             >
-                <article className="articles">
-                    <div className="articles__header row">
-                        <div className="small-6 medium-6 large-6 column">
-                            <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
-                                {page_title}
-                            </h1>
-                            <span className="hide-for-mq-large articles__header-select">
-                                <Topics
-                                    username={this.props.username}
-                                    order={topics_order}
-                                    current={category}
-                                    categories={categories}
-                                    compact
-                                />
-                            </span>
+                <div className="articles__header row">
+                    <div className="small-8 medium-7 large-8 column">
+                        <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
+                            {page_title}
+                        </h1>
+                        <div className="show-for-mq-large">
+                            {community && (
+                                <div
+                                    style={{
+                                        fontSize: '80%',
+                                        color: 'gray',
+                                    }}
+                                >
+                                    Community
+                                </div>
+                            )}
+                            {!community &&
+                                category &&
+                                order !== 'feed' &&
+                                category !== 'my' && (
+                                    <div
+                                        style={{
+                                            fontSize: '80%',
+                                            color: 'gray',
+                                        }}
+                                    >
+                                        Unmoderated tag
+                                    </div>
+                                )}
                         </div>
-                        <div className="small-6 medium-5 large-5 column hide-for-large articles__header-select">
-                            <SortOrder
-                                sortOrder={this.props.sortOrder}
-                                topic={this.props.topic}
-                                horizontal={false}
+                        <span className="hide-for-mq-large articles__header-select">
+                            <Topics
+                                username={this.props.username}
+                                current={category}
+                                topics={topics}
+                                subscriptions={subscriptions}
+                                compact
                             />
-                        </div>
-                        <div className="medium-1 show-for-mq-medium column">
-                            <ArticleLayoutSelector />
-                        </div>
+                        </span>
                     </div>
-                    <hr className="articles__hr" />
-                    {!fetching &&
-                    (posts && !posts.size) &&
-                    (featured && !featured.size) &&
-                    (promoted && !promoted.size) ? (
-                        <Callout>{emptyText}</Callout>
-                    ) : (
-                        <PostsList
-                            ref="list"
-                            posts={posts ? posts : List()}
-                            loading={fetching}
-                            anyPosts
-                            category={category}
-                            loadMore={this.loadMore}
-                            showFeatured
-                            showPromoted
-                            showSpam={showSpam}
-                            allowAdsOnContent={allowAdsOnContent}
-                        />
-                    )}
-                </article>
-
-                <aside className="c-sidebar c-sidebar--right">
-                    {this.props.isBrowser &&
-                    !this.props.maybeLoggedIn &&
-                    !this.props.username ? (
-                        <SidebarNewUsers />
-                    ) : (
-                        this.props.isBrowser && (
-                            <div>
-                                {/* <SidebarStats steemPower={123} followers={23} reputation={62} />  */}
-                                <SidebarLinks username={this.props.username} />
-                            </div>
-                        )
-                    )}
-                    <Notices notices={this.props.notices} />
-                    <SteemMarket />
-                    {this.props.gptEnabled && allowAdsOnContent ? (
-                        <div className="sidebar-ad">
-                            <GptAd
-                                type="Freestar"
-                                id="bsa-zone_1566495004689-0_123456"
-                            />
-                        </div>
-                    ) : null}
-                </aside>
-
-                <aside className="c-sidebar c-sidebar--left">
-                    <Topics
-                        order={topics_order}
-                        current={category}
-                        compact={false}
-                        username={this.props.username}
-                        categories={categories}
-                    />
-                    <small>
-                        <a
-                            className="c-sidebar__more-link"
-                            onClick={this.onShowSpam}
-                        >
-                            {showSpam
-                                ? tt('g.next_3_strings_together.show_less')
-                                : tt('g.next_3_strings_together.show_more')}
-                        </a>
-                        {' ' + tt('g.next_3_strings_together.value_posts')}
-                    </small>
-                    {this.props.gptEnabled && allowAdsOnContent ? (
-                        <div>
-                            <div className="sidebar-ad">
-                                <GptAd
-                                    type="Freestar"
-                                    slotName="bsa-zone_1566494461953-7_123456"
+                    {order != 'feed' &&
+                        !(category === 'my' && !posts.size) && (
+                            <div className="small-4 medium-5 large-4 column articles__header-select">
+                                <SortOrder
+                                    sortOrder={order}
+                                    topic={category}
+                                    horizontal={false}
                                 />
                             </div>
-                            <div
-                                className="sidebar-ad"
-                                style={{ marginTop: 20 }}
-                            >
-                                <GptAd
-                                    type="Freestar"
-                                    slotName="bsa-zone_1566494856923-9_123456"
-                                />
-                            </div>
-                        </div>
-                    ) : null}
-                </aside>
-            </div>
+                        )}
+                    {/*
+                    medium-4 large-3
+                    <div className="medium-1 show-for-mq-medium column">
+                        <ArticleLayoutSelector />
+                    </div>*/}
+                </div>
+                <hr className="articles__hr" />
+                {postsIndexDisplay}
+            </PostsIndexLayout>
         );
     }
 }
@@ -336,52 +251,66 @@ module.exports = {
     path: ':order(/:category)',
     component: connect(
         (state, ownProps) => {
-            // special case if user feed (vs. trending, etc)
-            let feed_posts;
-            if (ownProps.routeParams.category === 'feed') {
-                const account_name = ownProps.routeParams.order.slice(1);
-                feed_posts = state.global.getIn([
-                    'accounts',
-                    account_name,
-                    'feed',
-                ]);
+            // route can be e.g. trending/food (order/category);
+            //   or, @username/feed (category/order). Branch on presence of `@`.
+            const route = ownProps.routeParams;
+            const account_name =
+                route.order && route.order[0] == '@'
+                    ? route.order.slice(1).toLowerCase()
+                    : null;
+            const category = account_name
+                ? route.order
+                : route.category ? route.category.toLowerCase() : null;
+            const order = account_name
+                ? route.category
+                : route.order || 'trending';
+
+            const hive = ifHive(category);
+            const community = state.global.getIn(['community', hive], null);
+
+            const enableAds =
+                ownProps.gptEnabled &&
+                !GptUtils.HasBannedTags(
+                    [category],
+                    state.app.getIn(['googleAds', 'gptBannedTags'])
+                );
+
+            const key = ['discussion_idx', category || '', order];
+            let posts = state.global.getIn(key, List());
+
+            // if 'pending' post is found, prepend it to posts list
+            //   (see GlobalReducer RECEIVE_CONTENT)
+            const pkey = ['discussion_idx', category || '', '_' + order];
+            const pending = state.global.getIn(pkey, null);
+            if (pending && !posts.includes(pending)) {
+                posts = posts.unshift(pending);
             }
+            const username =
+                state.user.getIn(['current', 'username']) ||
+                state.offchain.get('account');
 
             return {
-                discussions: state.global.get('discussion_idx'),
+                subscriptions: state.global.getIn(['subscriptions', username]),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                feed_posts,
-                username:
-                    state.user.getIn(['current', 'username']) ||
-                    state.offchain.get('account'),
+                account_name,
+                category,
+                order,
+                posts,
+                pending,
+                community,
+                username,
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
-                sortOrder: ownProps.params.order,
-                topic: ownProps.params.category,
-                categories: state.global
-                    .getIn(['tag_idx', 'trending'])
-                    .take(50),
-                featured: state.offchain
-                    .get('special_posts')
-                    .get('featured_posts'),
-                promoted: state.offchain
-                    .get('special_posts')
-                    .get('promoted_posts'),
-                notices: state.offchain
-                    .get('special_posts')
-                    .get('notices')
-                    .toJS(),
-                maybeLoggedIn: state.user.get('maybeLoggedIn'),
+                topics: state.global.getIn(['topics'], List()),
                 isBrowser: process.env.BROWSER,
-                gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
-                gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
+                enableAds,
             };
         },
-        dispatch => {
-            return {
-                requestData: args =>
-                    dispatch(fetchDataSagaActions.requestData(args)),
-            };
-        }
+        dispatch => ({
+            getSubscriptions: account =>
+                dispatch(fetchDataSagaActions.getSubscriptions(account)),
+            requestData: args =>
+                dispatch(fetchDataSagaActions.requestData(args)),
+        })
     )(PostsIndex),
 };

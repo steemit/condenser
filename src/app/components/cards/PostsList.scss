@@ -1,160 +1,35 @@
-.PostsList__post_overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 300;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-    backface-visibility: hidden;
-}
-
-.PostsList__post_top_overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 310;
-    height: 3rem;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    @include themify($themes) {
-        border-bottom: themed('border');
-    }
-    @media screen and (min-width: 60rem) {
-        @include themify($themes) {
-            border-bottom: themed('borderTransparent');
-        }
-    }
-}
-
-.PostsList__post_top_bar {
-    position: relative;
-    width: 100%;
-    height: 3rem;
-    margin: 0 auto;
-    overflow: hidden;
-    @include themify($themes) {
-        background-color: themed('navBackgroundColor');
-    }
-    @media screen and (min-width: 60rem) {
-        @include themify($themes) {
-            background-color: themed('backgroundTransparent');
-        }
-    }
-
-    a {
-        span.Icon path {
-            @include themify($themes) {
-                fill: themed('textColorAccent');
-            }
-        }
-    }
-
-    > .close-button {
-        visibility: hidden;
-        top: 1rem;
-        right: 0;
-    }
-}
-
-.PostsList__post_container {
-    position: relative;
-    @include themify($themes) {
-        background-color: themed('moduleBackgroundColor');
-    }
-    margin: 1rem auto;
-    padding: 2rem 0.9rem 0;
-    transform: translateZ(0);
-}
-
-body.with-post-overlay {
-    overflow: hidden;
-}
-@media screen and (min-width: 60rem) {
-    .PostsList__post_overlay {
-        background-color: rgba(0, 0, 0, 0.85);
-    }
-
-    .PostsList__post_top_overlay {
-        border-bottom: none;
-    }
-
-    .PostsList__post_top_bar {
-        width: 56rem;
-        background-color: transparent;
-
-        > .close-button {
-            visibility: visible;
-        }
-
-        > .back-button-menu {
-            visibility: hidden;
-        }
-    }
-
-    .PostsList__post_container {
-        width: 56rem;
-        margin-bottom: 3em;
-        @include themify($themes) {
-            box-shadow: 5px 5px 0 0 themed('contentBorderAccent');
-        }
-    }
-}
-@media screen and (min-width: 67rem) {
-    .PostsList__post_container {
-        width: 62rem;
-    }
-
-    .PostsList__post_top_bar {
-        width: 62rem;
-    }
-}
-
 .PostsList__summaries {
     .articles__summary {
         position: relative;
     }
 
-    .FeaturedTag {
+    .FeaturedTag, .PromotedTag {
         font-weight: 400;
         display: inline;
         padding: 0.1rem 0.2rem;
         margin: 0 1rem 0 0.5rem;
         border-radius: 0.3rem;
         font-size: 0.75rem;
-        vertical-align: 15%;
         @include themify($themes) {
             background-color: themed('colorAccent');
             color: themed('buttonText');
         }
     }
-
     .PromotedTag {
-        font-weight: 400;
-        display: inline;
-        padding: 0.1rem 0.2rem;
-        margin: 0 1rem 0 0.5rem;
-        border-radius: 0.3rem;
-        font-size: 0.75rem;
-        vertical-align: 15%;
         @include themify($themes) {
             background-color: themed('iconColorSecondary');
-            color: themed('buttonText');
         }
     }
 
     A.PostDismiss {
         position: absolute;
-        right: 0;
+        right: 0.15rem;
 
         svg {
             @include themify($themes) {
-                width: 0.8rem;
-                height: 0.8rem;
-                opacity: 0.5;
+                width: 0.6rem;
+                height: 0.6rem;
+                opacity: 0.3;
                 fill: themed('textColorSecondary');
             }
         }

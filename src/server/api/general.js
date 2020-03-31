@@ -6,7 +6,8 @@ import { getRemoteIp, rateLimitReq, checkCSRF } from 'server/utils/misc';
 import coBody from 'co-body';
 import Mixpanel from 'mixpanel';
 import { PublicKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
-import { api, broadcast } from '@steemit/steem-js';
+import { api } from '@steemit/steem-js';
+import fetch from 'node-fetch';
 
 const ACCEPTED_TOS_TAG = 'accepted_tos_20180614';
 
@@ -15,6 +16,20 @@ const mixpanel = config.get('mixpanel')
     : null;
 
 const _stringval = v => (typeof v === 'string' ? v : JSON.stringify(v));
+
+const _parse = params => {
+    if (typeof params === 'string') {
+        try {
+            return JSON.parse(params);
+        } catch (error) {
+            console.error('json_parse', error, params);
+            return {};
+        }
+    } else {
+        return params;
+    }
+};
+
 function logRequest(path, ctx, extra) {
     let d = { ip: getRemoteIp(ctx.req) };
     if (ctx.session) {
@@ -48,8 +63,7 @@ export default function useGeneralApi(app) {
     router.post('/login_account', koaBody, function*() {
         // if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const { csrf, account, signatures } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf, account, signatures } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
 
         logRequest('login_account', this, { account });
@@ -154,8 +168,7 @@ export default function useGeneralApi(app) {
     router.post('/logout_account', koaBody, function*() {
         // if (rateLimitReq(this, this.req)) return; - logout maybe immediately followed with login_attempt event
         const params = this.request.body;
-        const { csrf } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
         logRequest('logout_account', this);
         try {
@@ -204,8 +217,7 @@ export default function useGeneralApi(app) {
 
     router.post('/setUserPreferences', koaBody, function*() {
         const params = this.request.body;
-        const { csrf, payload } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf, payload } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
         console.log(
             '-- /setUserPreferences -->',
@@ -236,8 +248,7 @@ export default function useGeneralApi(app) {
 
     router.post('/isTosAccepted', koaBody, function*() {
         const params = this.request.body;
-        const { csrf } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
 
         this.body = '{}';
@@ -271,8 +282,7 @@ export default function useGeneralApi(app) {
 
     router.post('/acceptTos', koaBody, function*() {
         const params = this.request.body;
-        const { csrf } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
 
         if (!this.session.a) {
@@ -297,6 +307,35 @@ export default function useGeneralApi(app) {
                 this.session.uid,
                 error
             );
+            this.body = JSON.stringify({ error: error.message });
+            this.status = 500;
+        }
+    });
+    router.post('/search', koaBody, function*() {
+        const params = this.request.body;
+        const passThrough = {
+            method: this.request.method,
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: config.get('esteem_elastic_search_api_key'),
+            },
+            body: this.request.body,
+            // NOTE: agentOptions purely for testing, localhost vs SSL.
+            //agentOptions: { checkServerIdentity: () => {} },
+        };
+        const { csrf } =
+            typeof params === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+        try {
+            const searchResult = yield fetch(
+                'https://api.search.esteem.app/search',
+                passThrough
+            );
+            const resultJson = yield searchResult.json();
+            this.body = JSON.stringify(resultJson);
+            this.status = 200;
+        } catch (error) {
+            console.error('Error in /search api call', this.session.uid, error);
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }

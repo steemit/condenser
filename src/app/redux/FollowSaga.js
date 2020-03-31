@@ -8,21 +8,6 @@ import * as globalActions from 'app/redux/GlobalReducer';
     This loadFollows both 'blog' and 'ignore'
 */
 
-//fetch for follow/following count
-export function* fetchFollowCount(account) {
-    const counts = yield call([api, api.getFollowCountAsync], account);
-    yield put(
-        globalActions.update({
-            key: ['follow_count', account],
-            updater: m =>
-                m.mergeDeep({
-                    follower_count: counts.follower_count,
-                    following_count: counts.following_count,
-                }),
-        })
-    );
-}
-
 // Test limit with 2 (not 1, infinate looping)
 export function* loadFollows(method, account, type, force = false) {
     if (
@@ -30,8 +15,7 @@ export function* loadFollows(method, account, type, force = false) {
             state.global.getIn(['follow', method, account, type + '_loading'])
         )
     ) {
-        // console.log('Already loading', method, account, type)
-        return;
+        return; //already loading
     }
 
     if (!force) {
@@ -39,8 +23,7 @@ export function* loadFollows(method, account, type, force = false) {
             state.global.hasIn(['follow', method, account, type + '_result'])
         );
         if (hasResult) {
-            // console.log('Already loaded', method, account, type)
-            return;
+            return; //already loaded
         }
     }
 
@@ -57,7 +40,6 @@ export function* loadFollows(method, account, type, force = false) {
 
 function* loadFollowsLoop(method, account, type, start = '', limit = 1000) {
     const res = fromJS(yield api[method](account, start, type, limit));
-    // console.log('res.toJS()', res.toJS())
 
     let cnt = 0;
     let lastAccountName = null;

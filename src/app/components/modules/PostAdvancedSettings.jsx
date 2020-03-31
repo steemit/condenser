@@ -1,5 +1,5 @@
-import React, { PropTypes, Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import reactForm from 'app/utils/ReactForm';
 import { SUBMIT_FORM_ID } from 'shared/constants';
 import tt from 'counterpart';
@@ -162,8 +162,6 @@ class PostAdvancedSettings extends Component {
         );
     }
 }
-
-import { connect } from 'react-redux';
 
 export default connect(
     // mapStateToProps

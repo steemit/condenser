@@ -1,39 +1,48 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import { SUBMIT_FORM_ID } from 'shared/constants';
+import Callout from 'app/components/elements/Callout';
 
 const formId = SUBMIT_FORM_ID;
-// const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
-// const SubmitReplyEditor = ReplyEditor(formId, richTextEditor);
 const SubmitReplyEditor = ReplyEditor(formId);
 
+function _redirect_url(operations) {
+    try {
+        const { category } = operations[0][0][1];
+        return '/created/' + category;
+    } catch (e) {
+        console.error('redirect_url', e);
+    }
+    return '/created';
+}
+
 class SubmitPost extends React.Component {
-    // static propTypes = {
-    //     routeParams: PropTypes.object.isRequired,
-    // }
     constructor() {
         super();
-        this.success = (/*operation*/) => {
-            // const { category } = operation
+        this.success = operations => {
             localStorage.removeItem('replyEditorData-' + formId);
-            browserHistory.push('/created'); //'/category/' + category)
+            browserHistory.push(_redirect_url(operations));
         };
     }
     render() {
-        const { success } = this;
+        if (!this.props.username) {
+            return <Callout>Log in to make a post.</Callout>;
+        }
+
         return (
-            <div className="SubmitPost">
-                <SubmitReplyEditor
-                    type="submit_story"
-                    successCallback={success}
-                />
-            </div>
+            <SubmitReplyEditor
+                type="submit_story"
+                successCallback={this.success}
+            />
         );
     }
 }
 
 module.exports = {
     path: 'submit.html',
-    component: SubmitPost, // connect(state => ({ global: state.global }))(SubmitPost)
+    component: connect((state, ownProps) => ({
+        username: state.user.getIn(['current', 'username']),
+    }))(SubmitPost),
 };

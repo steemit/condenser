@@ -309,7 +309,9 @@ authorized to access;
 other harmful material;
 
 14.1.6. Encourage or induce any third-party to engage in any of the activities
-prohibited under this Section.
+prohibited under this Section;
+
+14.1.7. Use our services to promote third-party platforms or to promote each other without our written permission.
 
 ## 15. Copyright Complaints, the DMCA, and Takedowns
 

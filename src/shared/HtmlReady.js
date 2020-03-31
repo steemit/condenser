@@ -2,7 +2,7 @@ import xmldom from 'xmldom';
 import tt from 'counterpart';
 import linksRe, { any as linksAny } from 'app/utils/Links';
 import { validate_account_name } from 'app/utils/ChainValidation';
-import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import * as Phishing from 'app/utils/Phishing';
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
@@ -116,7 +116,7 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
         };
     } catch (error) {
         // xmldom error is bad
-        console.log(
+        console.error(
             'rendering error',
             JSON.stringify({ error: error.message, html })
         );
@@ -268,7 +268,7 @@ function linkifyNode(child, state) {
             return newChild;
         }
     } catch (error) {
-        console.log(error);
+        console.error('linkify_error', error);
     }
 }
 
@@ -343,7 +343,7 @@ function embedYouTubeNode(child, links, images) {
         if (links) links.add(yt.url);
         if (images) images.add(yt.thumbnail);
     } catch (error) {
-        console.log(error);
+        console.error('yt_node', error);
     }
     return child;
 }
@@ -444,7 +444,7 @@ function embedVimeoNode(child, links /*images*/) {
         if (links) links.add(vimeo.canonical);
         // if(images) images.add(vimeo.thumbnail) // not available
     } catch (error) {
-        console.log(error);
+        console.error('vimeo_embed', error);
     }
     return child;
 }
@@ -478,7 +478,7 @@ function embedTwitchNode(child, links /*images*/) {
 
         if (links) links.add(twitch.canonical);
     } catch (error) {
-        console.error(error);
+        console.error('twitch_error', error);
     }
     return child;
 }
@@ -508,7 +508,7 @@ function embedDTubeNode(child, links /*images*/) {
 
         if (links) links.add(dtube.canonical);
     } catch (error) {
-        console.log(error);
+        console.error('dtube_embed', error);
     }
     return child;
 }

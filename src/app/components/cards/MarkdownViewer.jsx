@@ -31,7 +31,6 @@ class MarkdownViewer extends Component {
         text: PropTypes.string,
         className: PropTypes.string,
         large: PropTypes.bool,
-        jsonMetadata: PropTypes.object,
         highQualityPost: PropTypes.bool,
         noImage: PropTypes.bool,
         allowDangerousHTML: PropTypes.bool,
@@ -70,11 +69,7 @@ class MarkdownViewer extends Component {
         const { allowNoImage } = this.state;
         let { text } = this.props;
         if (!text) text = ''; // text can be empty, still view the link meta data
-        const {
-            large,
-            highQualityPost,
-            //jsonMetadata,
-        } = this.props;
+        const { large, highQualityPost } = this.props;
 
         let html = false;
         // See also ReplyEditor isHtmlTest

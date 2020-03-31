@@ -46,7 +46,7 @@ module.exports = {
                     window[atty] = result;
                 })
                 .catch(error => {
-                    console.error(error);
+                    console.error('resolve_err', error);
                     reject(error);
                     window[atty] = error;
                 });

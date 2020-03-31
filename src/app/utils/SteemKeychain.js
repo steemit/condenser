@@ -21,6 +21,10 @@ export function isLoggedInWithKeychain() {
     if (!isLoggedIn()) {
         return false;
     }
+    if (!hasCompatibleKeychain()) {
+        // possible to log in w/ keychain, then disable plugin
+        return false;
+    }
     const data = localStorage.getItem('autopost2');
     const [
         username,

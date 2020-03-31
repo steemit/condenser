@@ -12,6 +12,8 @@ module.exports = {
                 VERSION: JSON.stringify(git.long())
             }
         }),
+        /*
+        // TODO: sourcemap
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false,
@@ -33,7 +35,7 @@ module.exports = {
             output: {
                 comments: false
             }
-        }),
+        }),*/
         ...baseConfig.plugins,
         // Fix window.onerror
         // See https://github.com/webpack/webpack/issues/5681#issuecomment-345861733

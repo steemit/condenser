@@ -26,6 +26,19 @@ class UserList extends React.Component {
         const users = this.props.users;
         const title = this.props.title;
 
+        if (!users) {
+            return (
+                <div className="UserList">
+                    <div className="row">
+                        <div className="column small-12">
+                            <h3>{title}</h3>
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         let idx = 0;
         let user_list = users.map(user => (
             <UserListRow user={user} key={idx++} />

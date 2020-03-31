@@ -4,34 +4,38 @@ import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
-import * as userActions from 'app/redux/UserReducer';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import { immutableAccessor } from 'app/utils/Accessors';
-import extractContent from 'app/utils/ExtractContent';
+import { extractBodySummary, extractImageLink } from 'app/utils/ExtractContent';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
-import { Map } from 'immutable';
+import { List, Map } from 'immutable';
 import Author from 'app/components/elements/Author';
-import TagList from 'app/components/elements/TagList';
+import Tag from 'app/components/elements/Tag';
 import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
-import proxifyImageUrl from 'app/utils/ProxifyUrl';
-import Userpic, { avatarSize } from 'app/components/elements/Userpic';
+import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
+import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import { hasNsfwTag } from 'app/utils/StateFunctions';
-import { repLog10 } from 'app/utils/ParsersAndFormatters';
+
+const CURATOR_VESTS_THRESHOLD = 1.0 * 1000.0 * 1000.0;
+
+// TODO: document why ` ` => `%20` is needed, and/or move to base fucntion
+const proxify = (url, size) => proxifyImageUrl(url, size).replace(/ /g, '%20');
+
+const vote_weights = post => {
+    const rshares = post.get('net_rshares');
+    const dn = post.getIn(['stats', 'flag_weight']);
+    const up = Math.max(String(parseInt(rshares / 2, 10)).length - 10, 0);
+    return { dn, up };
+};
 
 class PostSummary extends React.Component {
     static propTypes = {
-        post: PropTypes.string.isRequired,
-        pending_payout: PropTypes.string.isRequired,
-        total_payout: PropTypes.string.isRequired,
-        content: PropTypes.object.isRequired,
-        featured: PropTypes.bool,
-        promoted: PropTypes.bool,
+        post: PropTypes.object.isRequired,
         onClose: PropTypes.func,
-        thumbSize: PropTypes.string,
         nsfwPref: PropTypes.string,
     };
 
@@ -43,13 +47,11 @@ class PostSummary extends React.Component {
 
     shouldComponentUpdate(props, state) {
         return (
-            props.thumbSize !== this.props.thumbSize ||
-            props.pending_payout !== this.props.pending_payout ||
-            props.total_payout !== this.props.total_payout ||
             props.username !== this.props.username ||
             props.nsfwPref !== this.props.nsfwPref ||
             props.blogmode !== this.props.blogmode ||
-            state.revealNsfw !== this.state.revealNsfw
+            state.revealNsfw !== this.state.revealNsfw ||
+            props.post != this.props.post
         );
     }
 
@@ -59,17 +61,13 @@ class PostSummary extends React.Component {
     }
 
     render() {
-        const { thumbSize, ignore } = this.props;
-        const { post, content, featured, promoted, onClose } = this.props;
-        const { account } = this.props;
-        if (!content) return null;
+        const { ignore, hideCategory, net_vests } = this.props;
+        const { post, onClose } = this.props;
+        if (!post) return null;
 
         let reblogged_by;
-        if (
-            content.get('reblogged_by') &&
-            content.get('reblogged_by').size > 0
-        ) {
-            reblogged_by = content.get('reblogged_by').toJS();
+        if (post.get('reblogged_by', List()).size > 0) {
+            reblogged_by = post.get('reblogged_by').toJS();
         }
 
         if (reblogged_by) {
@@ -86,81 +84,31 @@ class PostSummary extends React.Component {
             );
         }
 
-        // 'account' is the current blog being viewed, if applicable.
-        if (account && account != content.get('author')) {
-            reblogged_by = (
-                <div className="articles__resteem">
-                    <p className="articles__resteem-text">
-                        <span className="articles__resteem-icon">
-                            <Icon name="reblog" />
-                        </span>
-                        {tt('postsummary_jsx.resteemed')}
-                    </p>
-                </div>
-            );
-        }
+        const gray = post.getIn(['stats', 'gray']);
+        const isNsfw = hasNsfwTag(post);
+        const isReply = post.get('depth') > 0;
+        const showReblog = !isReply;
+        const full_power = post.get('percent_steem_dollars') === 0;
 
-        const { gray } = content.get('stats', Map()).toJS();
-        const authorRepLog10 = repLog10(content.get('author_reputation'));
-        const isNsfw = hasNsfwTag(content);
-        const special = content.get('special');
-        const p = extractContent(immutableAccessor, content);
-        const desc = p.desc;
+        const author = post.get('author');
+        const permlink = post.get('permlink');
+        const category = post.get('category');
+        const post_url = `/${category}/@${author}/${permlink}`;
 
-        const archived = content.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF17. #1259
-        const full_power = content.get('percent_steem_dollars') === 0;
-
-        let post_url;
-        let title_text;
-        let comments_url;
-
-        if (content.get('depth') > 0) {
-            title_text = tt('g.re_to', { topic: content.get('root_title') });
-            post_url =
-                '/' +
-                content.get('category') +
-                '/@' +
-                content.get('author') +
-                '/' +
-                content.get('permlink');
-            comments_url = p.link + '#comments';
-        } else {
-            title_text = p.title;
-            post_url = p.link;
-            comments_url = post_url + '#comments';
-        }
-
+        const summary = extractBodySummary(post.get('body'), isReply);
         const content_body = (
             <div className="PostSummary__body entry-content">
-                <Link to={post_url}>{desc}</Link>
+                <Link to={post_url}>{summary}</Link>
             </div>
         );
+
         const content_title = (
             <h2 className="articles__h2 entry-title">
                 <Link to={post_url}>
                     {isNsfw && <span className="nsfw-flag">nsfw</span>}
-                    {title_text}
+                    {post.get('title')}
                 </Link>
-                {featured && <span className="FeaturedTag">Featured</span>}
-                {promoted && <span className="PromotedTag">Sponsored</span>}
             </h2>
-        );
-
-        // author and category
-        const author_category = (
-            <span className="vcard">
-                <Userpic account={p.author} />
-                <Author
-                    author={p.author}
-                    authorRepLog10={authorRepLog10}
-                    follow={false}
-                    mute={false}
-                />
-                {} {tt('g.in')} <TagList post={p} single />&nbsp;•&nbsp;
-                <Link to={post_url}>
-                    <TimeAgoWrapper date={p.created} className="updated" />
-                </Link>
-            </span>
         );
 
         // New Post Summary heading
@@ -169,35 +117,41 @@ class PostSummary extends React.Component {
                 <div className="user">
                     {!isNsfw ? (
                         <div className="user__col user__col--left">
-                            <a className="user__link" href={'/@' + p.author}>
-                                <Userpic
-                                    account={p.author}
-                                    size={avatarSize.small}
-                                />
+                            <a className="user__link" href={'/@' + author}>
+                                <Userpic account={author} size={SIZE_SMALL} />
                             </a>
                         </div>
                     ) : null}
                     <div className="user__col user__col--right">
                         <span className="user__name">
                             <Author
-                                author={p.author}
-                                authorRepLog10={authorRepLog10}
+                                post={post}
                                 follow={false}
-                                mute={false}
+                                hideEditor={true}
                             />
                         </span>
 
-                        <span className="articles__tag-link">
-                            {tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;
-                        </span>
+                        {hideCategory || (
+                            <span className="articles__tag-link">
+                                {tt('g.in')}&nbsp;
+                                <Tag post={post} />
+                                &nbsp;•&nbsp;
+                            </span>
+                        )}
                         <Link className="timestamp__link" to={post_url}>
                             <span className="timestamp__time">
+                                {this.props.order == 'payout' && (
+                                    <span>payout </span>
+                                )}
                                 <TimeAgoWrapper
-                                    date={p.created}
+                                    date={
+                                        this.props.order == 'payout'
+                                            ? post.get('payout_at')
+                                            : post.get('created')
+                                    }
                                     className="updated"
                                 />
                             </span>
-
                             {full_power && (
                                 <span
                                     className="articles__icon-100"
@@ -206,49 +160,43 @@ class PostSummary extends React.Component {
                                     <Icon name="steempower" />
                                 </span>
                             )}
+                            {post.getIn(['stats', 'is_pinned'], false) && (
+                                <span className="FeaturedTag">Pinned</span>
+                            )}
                         </Link>
                     </div>
-
-                    {(featured || promoted) && (
-                        <a
-                            onClick={onClose}
-                            className="PostDismiss"
-                            title="Dismiss Post"
-                        >
-                            <Icon name="close" />
-                        </a>
-                    )}
                 </div>
             </div>
         );
 
-        const content_footer = (
-            <div className="PostSummary__footer">
-                <Voting post={post} showList={false} />
-                <VotesAndComments post={post} commentsLink={comments_url} />
-                <span className="PostSummary__time_author_category">
-                    {!archived && (
-                        <Reblog
-                            author={p.author}
-                            permlink={p.permlink}
-                            parent_author={p.parent_author}
-                        />
-                    )}
-                    <span className="show-for-medium">{author_category}</span>
-                </span>
-            </div>
-        );
+        let dots;
+        if (net_vests >= CURATOR_VESTS_THRESHOLD) {
+            const _dots = cnt => {
+                return cnt > 0 ? '•'.repeat(cnt) : null;
+            };
+            const { up, dn } = vote_weights(post);
+            dots =
+                up || dn ? (
+                    <span className="vote_weights">
+                        {_dots(up)}
+                        {<span>{_dots(dn)}</span>}
+                    </span>
+                ) : null;
+        }
 
         const summary_footer = (
             <div className="articles__summary-footer">
+                {dots}
                 <Voting post={post} showList={false} />
-                <VotesAndComments post={post} commentsLink={comments_url} />
+                <VotesAndComments
+                    post={post}
+                    commentsLink={post_url + '#comments'}
+                />
                 <span className="PostSummary__time_author_category">
-                    {!archived && (
+                    {showReblog && (
                         <Reblog
-                            author={p.author}
-                            permlink={p.permlink}
-                            parent_author={p.parent_author}
+                            author={post.get('author')}
+                            permlink={post.get('permlink')}
                         />
                     )}
                 </span>
@@ -275,7 +223,6 @@ class PostSummary extends React.Component {
                             <span className="nsfw-flag">
                                 nsfw
                             </span>&nbsp;&nbsp;<span
-                                className="ptc"
                                 role="button"
                                 onClick={this.onRevealNsfw}
                             >
@@ -310,51 +257,34 @@ class PostSummary extends React.Component {
             }
         }
 
-        const userBlacklisted = ImageUserBlockList.includes(p.author);
-
+        const image_link = extractImageLink(
+            post.get('json_metadata'),
+            post.get('body')
+        );
         let thumb = null;
-        if (!gray && p.image_link && !userBlacklisted) {
+        if (!gray && image_link && !ImageUserBlockList.includes(author)) {
             // on mobile, we always use blog layout style -- there's no toggler
             // on desktop, we offer a choice of either blog or list
             // if blogmode is false, output an image with a srcset
             // which has the 256x512 for whatever the large breakpoint is where the list layout is used
             // and the 640 for lower than that
-
-            const blogSize = proxifyImageUrl(p.image_link, '640x480').replace(
-                / /g,
-                '%20'
-            );
+            const blogImg = proxify(image_link, '640x480');
 
             if (this.props.blogmode) {
-                thumb = (
-                    <span className="articles__feature-img-container">
-                        <img className="articles__feature-img" src={blogSize} />
-                    </span>
-                );
+                thumb = <img className="articles__feature-img" src={blogImg} />;
             } else {
-                const listSize = proxifyImageUrl(
-                    p.image_link,
-                    '256x512'
-                ).replace(/ /g, '%20');
-
+                const listImg = proxify(image_link, '256x512');
                 thumb = (
-                    <span className="articles__feature-img-container">
-                        <picture className="articles__feature-img">
-                            <source
-                                srcSet={listSize}
-                                media="(min-width: 1000px)"
-                            />
-                            <img srcSet={blogSize} />
-                        </picture>
-                    </span>
+                    <picture className="articles__feature-img">
+                        <source srcSet={listImg} media="(min-width: 1000px)" />
+                        <img srcSet={blogImg} />
+                    </picture>
                 );
             }
+            thumb = (
+                <span className="articles__feature-img-container">{thumb}</span>
+            );
         }
-
-        // A post is hidden if it's marked "gray" or "ignore" and it's not
-        // special.
-        const commentClasses = [];
-        if (!special && (gray || ignore)) commentClasses.push('downvoted'); // rephide
 
         return (
             <div className="articles__summary">
@@ -364,7 +294,7 @@ class PostSummary extends React.Component {
                     className={
                         'articles__content hentry' +
                         (thumb ? ' with-image ' : ' ') +
-                        commentClasses.join(' ')
+                        (gray || ignore ? ' downvoted' : '')
                     }
                     itemScope
                     itemType="http://schema.org/blogPost"
@@ -379,7 +309,11 @@ class PostSummary extends React.Component {
                     <div className="articles__content-block articles__content-block--text">
                         {content_title}
                         {content_body}
-                        {this.props.blogmode ? null : summary_footer}
+                        {this.props.blogmode ? null : (
+                            <div className="articles__footer">
+                                {summary_footer}
+                            </div>
+                        )}
                     </div>
                     {this.props.blogmode ? summary_footer : null}
                 </div>
@@ -388,36 +322,17 @@ class PostSummary extends React.Component {
     }
 }
 
-export default connect(
-    (state, props) => {
-        const { post } = props;
-        const content = state.global.get('content').get(post);
-        let pending_payout = 0;
-        let total_payout = 0;
-        if (content) {
-            pending_payout = content.get('pending_payout_value');
-            total_payout = content.get('total_payout_value');
-        }
-        return {
-            post,
-            content,
-            pending_payout: pending_payout
-                ? pending_payout.toString()
-                : pending_payout,
-            total_payout: total_payout ? total_payout.toString() : total_payout,
-            username:
-                state.user.getIn(['current', 'username']) ||
-                state.offchain.get('account'),
-            blogmode: state.app.getIn(['user_preferences', 'blogmode']),
-        };
-    },
-
-    dispatch => ({
-        dispatchSubmit: data => {
-            dispatch(userActions.usernamePasswordLogin({ ...data }));
-        },
-        clearError: () => {
-            dispatch(userActions.loginError({ error: null }));
-        },
-    })
-)(PostSummary);
+export default connect((state, props) => {
+    const { post, hideCategory, nsfwPref } = props;
+    const net_vests = state.user.getIn(['current', 'effective_vests'], 0.0);
+    return {
+        post,
+        hideCategory,
+        username:
+            state.user.getIn(['current', 'username']) ||
+            state.offchain.get('account'),
+        blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+        nsfwPref,
+        net_vests,
+    };
+})(PostSummary);

@@ -14,7 +14,7 @@ export default function runTests() {
         try {
             fn();
         } catch (error) {
-            console.error(error);
+            console.error('test', name, error);
             pass = false;
             rpt += error.stack + '\n\n';
             serverApiRecordEvent('client_error', error);

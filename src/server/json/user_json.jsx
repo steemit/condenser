@@ -10,9 +10,8 @@ export default function useUserJson(app) {
 
     router.get(routeRegex.UserJson, function*() {
         // validate and build user details in JSON
-        const segments = this.url.split('/');
-        const user_name = segments[1]
-            .match(routeRegex.UserNameJson)[0]
+        const user_name = this.url
+            .match(routeRegex.UserJson)[1]
             .replace('@', '');
         let user = '';
         let status = '';

@@ -1,28 +1,7 @@
-.UserWallet {
-    padding-top: 2rem;
-
-    .wallet-link {
-        margin-top: 1rem;
-        padding-left: 1rem;
-    }
-}
-
-.UserWallet__balance {
-  padding-bottom: 1rem;
-  padding-top: 1rem;
-
-  &.UserWallet__balance.zebra {
-      @include themify($themes) {
-        background-color: themed('tableRowEvenBackgroundColor');
-        color: themed('textColorPrimary');
-      }
-  }
-}
-
 .UserWallet__claimbox {
-  margin: 1.5rem 0 0.5rem;
-  padding: 1rem 1rem 1.1rem 1rem;
-  border-radius: 5px;
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -34,25 +13,9 @@
     color: themed('textColorPrimary');
   }
 
-  &-text {
-    font-weight: bold;
-  }
   .button {
     @extend .e-btn;
     @include font-size(14px);
     margin: 0;
   }
-  // spacing for mobile collapse
-  @media only screen and (max-width: 680px) {
-      .button {
-        margin: 8px 0 0 0;
-      }
-  }
-}
-
-// protect for foundation bug for collapsed state drop-downs
-@media only screen and (max-width: 40em) {
-    .Wallet_dropdown {
-        left: 10px!important;
-    }
 }

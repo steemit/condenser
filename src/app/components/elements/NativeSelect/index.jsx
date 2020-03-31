@@ -8,7 +8,11 @@ const NativeSelect = ({ options, className, currentlySelected, onChange }) => {
 
     const opts = options.map(val => {
         return (
-            <option key={val.name + val.label} value={val.value}>
+            <option
+                key={val.name + val.label}
+                value={val.value}
+                disabled={val.disabled ? val.disabled : false}
+            >
                 {val.label}
             </option>
         );

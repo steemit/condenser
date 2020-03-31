@@ -207,6 +207,9 @@ export default function ServerHTML({
                         async
                     />
                 ) : null}
+                {process.env.NODE_ENV === 'production' && (
+                    <script src="//cdn.catchjs.com/catch.js" />
+                )}
                 <title>{page_title}</title>
             </head>
             <body>
@@ -219,7 +222,7 @@ export default function ServerHTML({
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}
-                {gptEnabled ? (
+                {/* gptEnabled ? (
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `
@@ -231,7 +234,7 @@ export default function ServerHTML({
                         `,
                         }}
                     />
-                ) : null}
+                      ) : null*/}
             </body>
         </html>
     );

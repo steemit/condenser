@@ -40,6 +40,7 @@ export default function reducer(state = defaultState, action = {}) {
             // It is also worth noting that showTransactionErrorNotification in SagaShared
             // Will check state.transaction.errors and create a notification for whatever it finds there.
             // While TransactionReducer will add items to state.transaction.errors.
+            console.error('SteemApiError', action.payload);
             return state;
         case FETCH_DATA_BEGIN:
             return state.set('loading', true);

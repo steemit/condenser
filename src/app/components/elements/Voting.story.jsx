@@ -21,13 +21,16 @@ storiesOf('Elements', module)
                 post_obj={{
                     get: arg => {
                         switch (arg) {
-                            case 'cashout_time':
+                            case 'is_paidout':
+                                return true;
+                                break;
+                            case 'payout_at':
                                 return '2016';
                                 break;
                             case 'pending_payout_value':
                                 return 5;
                                 break;
-                            case 'total_payout_value':
+                            case 'author_payout_value':
                                 return 15;
                                 break;
                             case 'curator_payout_value':

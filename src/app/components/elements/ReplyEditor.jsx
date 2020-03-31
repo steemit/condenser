@@ -1,19 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import reactForm from 'app/utils/ReactForm';
+import { Map } from 'immutable';
+import { connect } from 'react-redux';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
-import CategorySelector from 'app/components/cards/CategorySelector';
-import { validateCategory } from 'app/components/cards/CategorySelector';
+import TagInput from 'app/components/cards/TagInput';
+import { validateTagInput } from 'app/components/cards/TagInput';
+import SlateEditor, {
+    serializeHtml,
+    deserializeHtml,
+    getDemoState,
+} from 'app/components/elements/SlateEditor';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import PostCategoryBanner from 'app/components/elements/PostCategoryBanner';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
 import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
 import * as globalActions from 'app/redux/GlobalReducer';
-import { fromJS, OrderedSet } from 'immutable';
+import { fromJS, Set, OrderedSet } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
@@ -22,6 +30,8 @@ const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
 const RTE_DEFAULT = false;
 const MAX_TAGS = 8;
+const MAX_FILE_TO_UPLOAD = 10;
+let imagesToUpload = [];
 
 function allTags(userInput, originalCategory, hashtags) {
     // take space-delimited user input
@@ -34,7 +44,7 @@ function allTags(userInput, originalCategory, hashtags) {
             : []
     );
 
-    // remove original category, if present
+    // remove original cat, if present
     if (originalCategory && /^[-a-z\d]+$/.test(originalCategory))
         tags = tags.delete(originalCategory);
 
@@ -63,7 +73,6 @@ class ReplyEditor extends React.Component {
         category: PropTypes.string, // initial value
         title: PropTypes.string, // initial value
         body: PropTypes.string, // initial value
-        richTextEditor: PropTypes.func,
         defaultPayoutType: PropTypes.string,
         payoutType: PropTypes.string,
     };
@@ -78,7 +87,7 @@ class ReplyEditor extends React.Component {
 
     constructor(props) {
         super();
-        this.state = { progress: {} };
+        this.state = { progress: {}, imagesUploadCount: 0 };
         this.initForm(props);
     }
 
@@ -104,8 +113,13 @@ class ReplyEditor extends React.Component {
             let draft = localStorage.getItem('replyEditorData-' + formId);
             if (draft) {
                 draft = JSON.parse(draft);
-                const { category, title } = this.state;
-                if (category) category.props.onChange(draft.category);
+                const { tags, title } = this.state;
+
+                if (tags) {
+                    this.checkTagsCommunity(draft.tags);
+                    tags.props.onChange(draft.tags);
+                }
+
                 if (title) title.props.onChange(draft.title);
                 if (draft.payoutType)
                     this.props.setPayoutType(formId, draft.payoutType);
@@ -123,18 +137,48 @@ class ReplyEditor extends React.Component {
             body.props.onChange(raw);
             this.setState({
                 rte,
-                rte_value: rte
-                    ? stateFromHtml(this.props.richTextEditor, raw)
-                    : null,
+                rte_value: rte ? stateFromHtml(raw) : null,
             });
         }
+
+        // Overwrite category (even if draft loaded) if authoritative category was provided
+        if (this.props.category) {
+            if (this.state.tags) {
+                this.state.tags.props.onChange(this.props.initialValues.tags);
+            }
+            this.checkTagsCommunity(this.props.category);
+        }
+    }
+
+    checkTagsCommunity(tagsInput) {
+        let community = null;
+        if (tagsInput) {
+            const primary = tagsInput.split(' ')[0];
+            if (primary.substring(0, 5) == 'hive-') {
+                community = primary;
+                this.setState({ disabledCommunity: null });
+            }
+        }
+        this.setState({ community });
+    }
+
+    shiftTagInput() {
+        const { tags } = this.state;
+        const items = tags.value.split(' ');
+        this.setState({ disabledCommunity: items.shift() });
+        tags.props.onChange(items.join(' '));
+    }
+
+    unshiftTagInput(tag) {
+        const { tags } = this.state;
+        tags.props.onChange(tag + ' ' + tags.value);
     }
 
     componentDidMount() {
         setTimeout(() => {
-            if (this.props.isStory) this.refs.titleRef.focus();
+            if (this.refs.rte) this.refs.rte._focus();
+            else if (this.props.isStory) this.refs.titleRef.focus();
             else if (this.refs.postRef) this.refs.postRef.focus();
-            else if (this.refs.rte) this.refs.rte._focus();
         }, 300);
     }
 
@@ -150,18 +194,18 @@ class ReplyEditor extends React.Component {
             // Save curent draft to localStorage
             if (
                 ts.body.value !== ns.body.value ||
-                (ns.category && ts.category.value !== ns.category.value) ||
+                (ns.tags && ts.tags.value !== ns.tags.value) ||
                 (ns.title && ts.title.value !== ns.title.value) ||
                 np.payoutType !== tp.payoutType ||
                 np.beneficiaries !== tp.beneficiaries
             ) {
                 // also prevents saving after parent deletes this information
                 const { formId, payoutType, beneficiaries } = np;
-                const { category, title, body } = ns;
+                const { tags, title, body } = ns;
                 const data = {
                     formId,
                     title: title ? title.value : undefined,
-                    category: category ? category.value : undefined,
+                    tags: tags ? tags.value : undefined,
                     body: body.value,
                     payoutType,
                     beneficiaries,
@@ -177,33 +221,46 @@ class ReplyEditor extends React.Component {
                     this.showDraftSaved();
                 }, 500);
             }
+
+            if (ns.tags && ts.tags && ts.tags.value !== ns.tags.value) {
+                this.checkTagsCommunity(ns.tags.value);
+            }
         }
     }
 
     initForm(props) {
         const { isStory, type, fields } = props;
         const isEdit = type === 'edit';
-        const maxKb = isStory ? 65 : 16;
+        const maxKb = isStory ? 64 : 16;
         reactForm({
             fields,
             instance: this,
             name: 'replyForm',
             initialValues: props.initialValues,
-            validation: values => ({
-                title:
-                    isStory &&
-                    (!values.title || values.title.trim() === ''
-                        ? tt('g.required')
-                        : values.title.length > 255
-                          ? tt('reply_editor.shorten_title')
-                          : null),
-                category: isStory && validateCategory(values.category, !isEdit),
-                body: !values.body
-                    ? tt('g.required')
-                    : values.body.length > maxKb * 1024
-                      ? tt('reply_editor.exceeds_maximum_length', { maxKb })
-                      : null,
-            }),
+            validation: values => {
+                let bodyValidation = null;
+                if (!values.body) {
+                    bodyValidation = tt('g.required');
+                }
+                if (
+                    values.body &&
+                    new Blob([values.body]).size >= maxKb * 1024 - 256
+                ) {
+                    bodyValidation = `Post body exceeds ${maxKb * 1024 -
+                        256} bytes.`;
+                }
+                return {
+                    title:
+                        isStory &&
+                        (!values.title || values.title.trim() === ''
+                            ? tt('g.required')
+                            : values.title.length > 255
+                              ? tt('reply_editor.shorten_title')
+                              : null),
+                    tags: isStory && validateTagInput(values.tags, !isEdit),
+                    body: bodyValidation,
+                };
+            },
         });
     }
 
@@ -231,9 +288,8 @@ class ReplyEditor extends React.Component {
             confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))
         ) {
             replyForm.resetForm();
-            this.setState({
-                rte_value: stateFromHtml(this.props.richTextEditor),
-            });
+            if (this.refs.rte)
+                this.refs.rte.setState({ state: stateFromHtml() });
             this.setState({ progress: {} });
             this.props.setPayoutType(formId, defaultPayoutType);
             this.props.setBeneficiaries(formId, []);
@@ -243,7 +299,7 @@ class ReplyEditor extends React.Component {
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
     onChange = rte_value => {
-        this.setState({ rte_value });
+        this.refs.rte.setState({ state: rte_value });
         const html = stateToHtml(rte_value);
         const { body } = this.state;
         if (body.value !== html) body.props.onChange(html);
@@ -255,8 +311,8 @@ class ReplyEditor extends React.Component {
         if (state.rte) {
             const { body } = this.state;
             state.rte_value = isHtmlTest(body.value)
-                ? stateFromHtml(this.props.richTextEditor, body.value)
-                : stateFromMarkdown(this.props.richTextEditor, body.value);
+                ? stateFromHtml(body.value)
+                : stateFromMarkdown(body.value);
         }
         this.setState(state);
         localStorage.setItem('replyEditorData-rte', !this.state.rte);
@@ -276,18 +332,44 @@ class ReplyEditor extends React.Component {
         this.props.showAdvancedSettings(this.props.formId);
     };
 
+    displayErrorMessage = message => {
+        this.setState({
+            progress: { error: message },
+        });
+
+        setTimeout(() => {
+            this.setState({ progress: {} });
+        }, 6000); // clear message
+    };
+
     onDrop = (acceptedFiles, rejectedFiles) => {
         if (!acceptedFiles.length) {
             if (rejectedFiles.length) {
-                this.setState({
-                    progress: { error: 'Please insert only image files.' },
-                });
+                this.displayErrorMessage('Please insert only image files.');
                 console.log('onDrop Rejected files: ', rejectedFiles);
             }
             return;
         }
-        const file = acceptedFiles[0];
-        this.upload(file, file.name);
+
+        if (acceptedFiles.length > MAX_FILE_TO_UPLOAD) {
+            this.displayErrorMessage(
+                `Please upload up to maximum ${MAX_FILE_TO_UPLOAD} images.`
+            );
+            console.log('onDrop too many files to upload');
+            return;
+        }
+
+        for (let fi = 0; fi < acceptedFiles.length; fi += 1) {
+            const acceptedFile = acceptedFiles[fi];
+            const imageToUpload = {
+                file: acceptedFile,
+                temporaryTag: '',
+            };
+            imagesToUpload.push(imageToUpload);
+        }
+
+        this.insertPlaceHolders();
+        this.uploadNextImage();
     };
 
     onOpenClick = () => {
@@ -297,12 +379,19 @@ class ReplyEditor extends React.Component {
     onPasteCapture = e => {
         try {
             if (e.clipboardData) {
+                // @TODO: currently it seems to capture only one file, try to find a fix for multiple files
                 for (const item of e.clipboardData.items) {
                     if (item.kind === 'file' && /^image\//.test(item.type)) {
                         const blob = item.getAsFile();
-                        this.upload(blob);
+                        imagesToUpload.push({
+                            file: blob,
+                            temporaryTag: '',
+                        });
                     }
                 }
+
+                this.insertPlaceHolders();
+                this.uploadNextImage();
             } else {
                 // http://joelb.me/blog/2011/code-snippet-accessing-clipboard-images-with-javascript/
                 // contenteditable element that catches all pasted data
@@ -313,29 +402,74 @@ class ReplyEditor extends React.Component {
         }
     };
 
-    upload = (file, name = '') => {
+    uploadNextImage = () => {
+        if (imagesToUpload.length > 0) {
+            const nextImage = imagesToUpload.pop();
+            this.upload(nextImage);
+        }
+    };
+
+    insertPlaceHolders = () => {
+        let { imagesUploadCount } = this.state;
+        const { body } = this.state;
+        const { selectionStart } = this.refs.postRef;
+        let placeholder = '';
+
+        for (let ii = 0; ii < imagesToUpload.length; ii += 1) {
+            const imageToUpload = imagesToUpload[ii];
+
+            if (imageToUpload.temporaryTag === '') {
+                imagesUploadCount++;
+                imageToUpload.temporaryTag = `![Uploading image #${
+                    imagesUploadCount
+                }...]()`;
+                placeholder += `\n${imageToUpload.temporaryTag}\n`;
+            }
+        }
+
+        this.setState({ imagesUploadCount: imagesUploadCount });
+
+        // Insert the temporary tag where the cursor currently is
+        body.props.onChange(
+            body.value.substring(0, selectionStart) +
+                placeholder +
+                body.value.substring(selectionStart, body.value.length)
+        );
+    };
+
+    upload = image => {
         const { uploadImage } = this.props;
         this.setState({
             progress: { message: tt('reply_editor.uploading') },
         });
-        uploadImage(file, progress => {
+
+        uploadImage(image.file, progress => {
+            const { body } = this.state;
+
             if (progress.url) {
                 this.setState({ progress: {} });
                 const { url } = progress;
-                const image_md = `![${name}](${url})`;
-                const { body } = this.state;
-                const { selectionStart, selectionEnd } = this.refs.postRef;
+                const imageMd = `![${image.file.name}](${url})`;
+
+                // Replace temporary image MD tag with the real one
                 body.props.onChange(
-                    body.value.substring(0, selectionStart) +
-                        image_md +
-                        body.value.substring(selectionEnd, body.value.length)
+                    body.value.replace(image.temporaryTag, imageMd)
                 );
+
+                this.uploadNextImage();
             } else {
-                this.setState({ progress });
+                if (progress.hasOwnProperty('error')) {
+                    this.displayErrorMessage(progress.error);
+                    const imageMd = `![${image.file.name}](UPLOAD FAILED)`;
+
+                    // Remove temporary image MD tag
+                    body.props.onChange(
+                        body.value.replace(image.temporaryTag, imageMd)
+                    );
+                } else {
+                    this.setState({ progress });
+                }
             }
-            setTimeout(() => {
-                this.setState({ progress: {} });
-            }, 4000); // clear message
         });
     };
 
@@ -345,20 +479,18 @@ class ReplyEditor extends React.Component {
             body: this.props.body,
         };
         const { onCancel, onTitleChange } = this;
-        const { title, category, body } = this.state;
+        const { title, tags, body, community, disabledCommunity } = this.state;
         const {
             reply,
             username,
             isStory,
             formId,
-            noImage,
             author,
             permlink,
             parent_author,
             parent_permlink,
             type,
             jsonMetadata,
-            state,
             successCallback,
             defaultPayoutType,
             payoutType,
@@ -395,7 +527,7 @@ class ReplyEditor extends React.Component {
             parent_author,
             parent_permlink,
             type,
-            state,
+            username,
             originalPost,
             isHtml,
             isStory,
@@ -433,10 +565,20 @@ class ReplyEditor extends React.Component {
         const vframe_section_shrink_class = isStory
             ? 'vframe__section--shrink'
             : '';
-        const RichTextEditor = this.props.richTextEditor;
 
         return (
             <div className="ReplyEditor row">
+                {isStory &&
+                    !isEdit &&
+                    username && (
+                        <PostCategoryBanner
+                            communityName={community}
+                            disabledCommunity={disabledCommunity}
+                            username={username}
+                            onCancel={this.shiftTagInput.bind(this)}
+                            onUndo={this.unshiftTagInput.bind(this)}
+                        />
+                    )}
                 <div className="column small-12">
                     <div
                         ref="draft"
@@ -514,13 +656,15 @@ class ReplyEditor extends React.Component {
                             }
                         >
                             {process.env.BROWSER && rte ? (
-                                <RichTextEditor
+                                <SlateEditor
                                     ref="rte"
-                                    readOnly={loading}
-                                    value={this.state.rte_value}
+                                    placeholder={
+                                        isStory
+                                            ? 'Write your story...'
+                                            : 'Reply'
+                                    }
+                                    initialState={this.state.rte_value}
                                     onChange={this.onChange}
-                                    onBlur={body.onBlur}
-                                    tabIndex={2}
                                 />
                             ) : (
                                 <span>
@@ -532,7 +676,7 @@ class ReplyEditor extends React.Component {
                                                 : 'none'
                                         }
                                         disableClick
-                                        multiple={false}
+                                        multiple
                                         accept="image/*"
                                         ref={node => {
                                             this.dropzone = node;
@@ -601,15 +745,16 @@ class ReplyEditor extends React.Component {
                         >
                             {isStory && (
                                 <span>
-                                    <CategorySelector
-                                        {...category.props}
+                                    <TagInput
+                                        {...tags.props}
+                                        onChange={tags.props.onChange}
                                         disabled={loading}
                                         isEdit={isEdit}
                                         tabIndex={3}
                                     />
                                     <div className="error">
-                                        {(category.touched || category.value) &&
-                                            category.error}&nbsp;
+                                        {(tags.touched || tags.value) &&
+                                            tags.error}&nbsp;
                                     </div>
                                 </span>
                             )}
@@ -761,9 +906,7 @@ class ReplyEditor extends React.Component {
                                     <h6>{tt('g.preview')}</h6>
                                     <MarkdownViewer
                                         text={body.value}
-                                        jsonMetadata={jsonMetadata}
                                         large={isStory}
-                                        noImage={noImage}
                                     />
                                 </div>
                             )}
@@ -781,28 +924,25 @@ function stripHtmlWrapper(text) {
     const m = text.match(/<html>\n*([\S\s]+?)?\n*<\/html>/m);
     return m && m.length === 2 ? m[1] : text;
 }
-
 // See also MarkdownViewer render
 const isHtmlTest = text => /^<html>/.test(text);
 
 function stateToHtml(state) {
-    let html = state.toString('html');
+    let html = serializeHtml(state);
     if (html === '<p></p>') html = '';
     if (html === '<p><br></p>') html = '';
     if (html == '') return '';
     return `<html>\n${html}\n</html>`;
 }
 
-function stateFromHtml(RichTextEditor, html = null) {
-    if (!RichTextEditor) return null;
+function stateFromHtml(html = null) {
     if (html) html = stripHtmlWrapper(html);
     if (html && html.trim() == '') html = null;
-    return html
-        ? RichTextEditor.createValueFromString(html, 'html')
-        : RichTextEditor.createEmptyValue();
+    return html ? deserializeHtml(html) : getDemoState();
 }
 
-function stateFromMarkdown(RichTextEditor, markdown) {
+//var htmlclean = require('htmlclean');
+function stateFromMarkdown(markdown) {
     let html;
     if (markdown && markdown.trim() !== '') {
         html = remarkable.render(markdown);
@@ -810,13 +950,8 @@ function stateFromMarkdown(RichTextEditor, markdown) {
         //html = htmlclean(html) // normalize whitespace
         console.log('markdown converted to:', html);
     }
-    return stateFromHtml(RichTextEditor, html);
+    return stateFromHtml(html);
 }
-
-import { connect } from 'react-redux';
-const richTextEditor = process.env.BROWSER
-    ? require('react-rte-image').default
-    : null;
 
 export default formId =>
     connect(
@@ -824,21 +959,41 @@ export default formId =>
         (state, ownProps) => {
             const username = state.user.getIn(['current', 'username']);
             const fields = ['body'];
-            const { type, parent_author, jsonMetadata } = ownProps;
+            const { type, parent_author } = ownProps;
             const isEdit = type === 'edit';
             const isStory =
-                /submit_story/.test(type) || (isEdit && parent_author === '');
+                /submit_story/.test(type) || (isEdit && !parent_author);
             if (isStory) fields.push('title');
-            if (isStory) fields.push('category');
+            if (isStory) fields.push('tags');
 
             let { category, title, body } = ownProps;
             if (/submit_/.test(type)) title = body = '';
-            if (isStory && jsonMetadata && jsonMetadata.tags) {
-                category = OrderedSet([category, ...jsonMetadata.tags]).join(
-                    ' '
-                );
+            // type: PropTypes.oneOf(['submit_story', 'submit_comment', 'edit'])
+
+            const query = state.routing.locationBeforeTransitions.query;
+            if (query && query.category) {
+                category = query.category;
             }
 
+            const jsonMetadata = ownProps.jsonMetadata
+                ? ownProps.jsonMetadata instanceof Map
+                  ? ownProps.jsonMetadata.toJS()
+                  : ownProps.jsonMetadata
+                : {};
+
+            let tags = category;
+            if (isStory && jsonMetadata && jsonMetadata.tags) {
+                tags = OrderedSet([category, ...jsonMetadata.tags]).join(' ');
+            }
+            let isNSFWCommunity = false;
+            isNSFWCommunity = state.global.getIn([
+                'community',
+                category,
+                'is_nsfw',
+            ]);
+            if (isNSFWCommunity) {
+                tags = `${tags} nsfw`;
+            }
             const defaultPayoutType = state.app.getIn(
                 [
                     'user_preferences',
@@ -863,20 +1018,39 @@ export default formId =>
             ]);
             beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
 
-            const ret = {
+            // Post full
+            /*
+            const replyParams = {
+                author,
+                permlink,
+                parent_author,
+                parent_permlink,
+                category,
+                title,
+                body: post.get('body'),
+            }; */
+
+            //ownProps:
+            //  {...comment},
+            //  author, permlink,
+            //  body, title, category
+            //  parent_author, parent_permlink,
+            //  type, successCallback,
+            //  successCallBack, onCancel
+            return {
                 ...ownProps,
+                type, //XX
+                jsonMetadata, //XX (if not reply)
+                category,
                 fields,
                 isStory,
                 username,
                 defaultPayoutType,
                 payoutType,
                 beneficiaries,
-                initialValues: { title, body, category },
-                state,
+                initialValues: { title, body, tags },
                 formId,
-                richTextEditor,
             };
-            return ret;
         },
 
         // mapDispatchToProps
@@ -900,7 +1074,7 @@ export default formId =>
                     })
                 ),
             reply: ({
-                category,
+                tags,
                 title,
                 body,
                 author,
@@ -913,15 +1087,12 @@ export default formId =>
                 originalPost,
                 payoutType = '50%',
                 beneficiaries = [],
-                state,
+                username,
                 jsonMetadata,
                 successCallback,
                 errorCallback,
                 startLoadingIndicator,
             }) => {
-                // const post = state.global.getIn(['content', author + '/' + permlink])
-                const username = state.user.getIn(['current', 'username']);
-
                 const isEdit = type === 'edit';
                 const isNew = /^submit_/.test(type);
 
@@ -971,7 +1142,7 @@ export default formId =>
                 }
 
                 const metaTags = allTags(
-                    category,
+                    tags,
                     originalPost.category,
                     rtags.hashtags
                 );
@@ -982,17 +1153,18 @@ export default formId =>
                 else delete meta.tags;
                 if (rtags.usertags.size) meta.users = rtags.usertags;
                 else delete meta.users;
-                if (rtags.images.size) meta.image = rtags.images;
+                if (rtags.images.size)
+                    meta.image = rtags.images; // TODO: save first image
                 else delete meta.image;
-                if (rtags.links.size) meta.links = rtags.links;
+                if (rtags.links.size)
+                    meta.links = rtags.links; // TODO: remove? save first?
                 else delete meta.links;
 
-                meta.app = 'steemit/0.1';
+                meta.app = 'steemit/0.2';
                 if (isStory) {
                     meta.format = isHtml ? 'html' : 'markdown';
                 }
 
-                // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
                 const sanitizeErrors = [];
                 sanitize(body, sanitizeConfig({ sanitizeErrors }));
                 if (sanitizeErrors.length) {
@@ -1066,7 +1238,7 @@ export default formId =>
                     category: originalPost.category || metaTags.first(),
                     title,
                     body,
-                    json_metadata: meta,
+                    json_metadata: JSON.stringify(meta),
                     __config,
                 };
                 dispatch(

@@ -4,29 +4,26 @@ import resolveRoute, { routeRegex } from './ResolveRoute';
 describe('routeRegex', () => {
     it('should produce the desired regex patterns', () => {
         const test_cases = [
-            ['PostsIndex', /^\/(@[\w\.\d-]+)\/feed\/?$/],
-            ['UserProfile1', /^\/(@[\w\.\d-]+)\/?$/],
+            ['UserFeed', /^\/(@[\w\.\d-]+)\/feed\/?$/],
             [
-                'UserProfile2',
-                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
+                'UserProfile',
+                /^\/(@[\w\.\d-]+)(?:\/(blog|posts|comments|replies|payout|feed|followed|followers|settings|notifications|communities))?\/?$/,
             ],
-            ['UserProfile3', /^\/(@[\w\.\d-]+)\/[\w\.\d-]+/],
             [
                 'CategoryFilters',
-                /^\/(hot|trending|promoted|payout|payout_comments|created)\/?$/gi,
+                /^\/(hot|trending|promoted|payout|payout_comments|muted|created)(?:\/([\w\W\d-]{1,32}))?\/?$/,
             ],
-            ['PostNoCategory', /^\/(@[\w\.\d-]+)\/([\w\d-]+)/],
-            ['Post', /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/],
+            ['PostNoCategory', /^\/(@[\w\.\d-]+)\/([\w\d-]+)$/],
+            ['Post', /^\/([\w\W\d-]{1,32})\/(@[\w\.\d-]+)\/([\w\d-]+)\/?$/],
             [
                 'PostJson',
-                /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
+                /^\/([\w\W\d-]{1,32})\/(@[\w\.\d-]+)\/([\w\d-]+)(\.json)$/,
             ],
             ['UserJson', /^\/(@[\w\.\d-]+)(\.json)$/],
-            ['UserNameJson', /^.*(?=(\.json))/],
         ];
 
         test_cases.forEach(r => {
-            expect(routeRegex[r[0]]).toEqual(r[1]);
+            expect(String(routeRegex[r[0]])).toEqual(String(r[1]));
         });
     });
 });
@@ -34,6 +31,9 @@ describe('routeRegex', () => {
 describe('resolveRoute', () => {
     const test_cases = [
         ['/', { page: 'PostsIndex', params: ['trending'] }],
+        ['/trending', { page: 'PostsIndex', params: ['trending', undefined] }],
+        ['/trending/cat', { page: 'PostsIndex', params: ['trending', 'cat'] }],
+        ['/trending/Dog', { page: 'PostsIndex', params: ['trending', 'Dog'] }],
         ['/about.html', { page: 'About' }],
         ['/faq.html', { page: 'Faq' }],
         ['/login.html', { page: 'Login' }],
@@ -41,26 +41,28 @@ describe('resolveRoute', () => {
         ['/support.html', { page: 'Support' }],
         ['/tos.html', { page: 'Tos' }],
         ['/submit.html', { page: 'SubmitPost' }],
-        [
-            '/@maitland/feed',
-            { page: 'PostsIndex', params: ['home', '@maitland'] },
-        ],
+        ['/@steem/feed', { page: 'PostsIndex', params: ['home', '@steem'] }],
         ['/@gdpr/feed', { page: 'NotFound' }],
+        ['/@steem', { page: 'UserProfile', params: ['@steem', undefined] }],
         [
-            '/@maitland/blog',
-            { page: 'UserProfile', params: ['@maitland', 'blog'] },
+            '/@steem/communities',
+            { page: 'UserProfile', params: ['@steem', 'communities'] },
         ],
+        ['/@steem/blog', { page: 'UserProfile', params: ['@steem', 'blog'] }],
         ['/@gdpr/blog', { page: 'NotFound' }],
-        [
-            '/@cool/nice345',
-            { page: 'PostNoCategory', params: ['@cool', 'nice345'] },
-        ],
+        ['/@foo/bar34', { page: 'PostNoCategory', params: ['@foo', 'bar34'] }],
         ['/@gdpr/nice345', { page: 'NotFound' }],
+        ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
         [
             '/ceasar/@salad/circa90',
-            { page: 'Post', params: ['ceasar', '@salad', 'circa90', ''] },
+            { page: 'Post', params: ['ceasar', '@salad', 'circa90'] },
         ],
-        ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
+        [
+            '/roles/hive-105677',
+            { page: 'CommunityRoles', params: ['hive-105677'] },
+        ],
+        ['/search', { page: 'SearchIndex' }],
+        ['/rewards', { page: 'Rewards' }],
     ];
     test_cases.forEach(r => {
         it(`should resolve the route for the ${r[1].page} page`, () => {

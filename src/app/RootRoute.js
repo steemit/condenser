@@ -1,6 +1,7 @@
 import App from 'app/components/App';
 import Benchmark from 'app/components/pages/Benchmark';
 import PostsIndex from 'app/components/pages/PostsIndex';
+import SearchIndex from 'app/components/pages/SearchIndex';
 import resolveRoute from './ResolveRoute';
 
 // polyfill webpack require.ensure
@@ -11,7 +12,9 @@ export default {
     component: App,
     getChildRoutes(nextState, cb) {
         const route = resolveRoute(nextState.location.pathname);
-        if (route.page === 'About') {
+        if (route.page === 'CommunityRoles') {
+            cb(null, [require('app/components/pages/CommunityRoles')]);
+        } else if (route.page === 'About') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/About')]);
             //});
@@ -50,21 +53,13 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/TagsIndex')]);
             //});
+        } else if (route.page === 'Communities') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/CommunitiesIndex')]);
+            //});
         } else if (route.page === 'Tos') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Tos')]);
-            //});
-        } else if (route.page === 'ChangePassword') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/ChangePasswordPage')]);
-            //});
-        } else if (route.page === 'RecoverAccountStep1') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/RecoverAccountStep1')]);
-            //});
-        } else if (route.page === 'Witnesses') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/Witnesses')]);
             //});
         } else if (route.page === 'SubmitPost') {
             if (process.env.BROWSER) {
@@ -80,16 +75,20 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/UserProfile')]);
             //});
-        } else if (route.page === 'Market') {
-            require.ensure([], require => {
-                cb(null, [require('app/components/pages/Market')]);
-            });
         } else if (route.page === 'Post') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/PostPage')]);
             //});
+        } else if (route.page === 'Rewards') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Rewards')]);
+            //});
         } else if (route.page === 'PostNoCategory') {
             cb(null, [require('app/components/pages/PostPageNoCategory')]);
+        } else if (route.page === 'SearchIndex') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/SearchIndex')]);
+            //});
         } else if (route.page === 'PostsIndex') {
             //require.ensure([], (require) => {
             //cb(null, [require('app/components/pages/PostsIndex')]);

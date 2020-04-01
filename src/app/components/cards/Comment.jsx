@@ -21,7 +21,6 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
 import { Role } from 'app/utils/Community';
-import { _user_list } from 'app/utils/steemApi';
 
 export function sortComments(cont, comments, sort_order) {
     const rshares = post => Long.fromString(String(post.get('net_rshares')));
@@ -270,10 +269,6 @@ class CommentImpl extends React.Component {
                 replies = comment.replies;
                 sortComments(cont, replies, this.props.sort_order);
                 replies = replies.map((reply, idx) => {
-                    const author = reply && reply.split('/')[0];
-                    if (author && _user_list.indexOf(author) > -1) {
-                        return '';
-                    }
                     return (
                         <Comment
                             key={idx}

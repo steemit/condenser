@@ -35,39 +35,16 @@ export async function getStateAsync(url, observer, ssr = false) {
         discussion_idx: {},
         profiles: {},
     };
-    // let _blist = [];
-
-    // if (ssr) {
-    //     // _blist = await getBlackList();
-    //     _blist = _blist.concat(_list_temp);
-    //     state['blacklist'] = _blist;
-    // }
 
     // load `content` and `discussion_idx`
     if (page == 'posts' || page == 'account') {
         let posts = await loadPosts(sort, tag, observer, ssr);
-        // let _content = ssr
-        //     ? filter(posts['content'], _blist, _user_list)
-        //     : posts['content'];
+
         state['content'] = posts['content'];
         state['discussion_idx'] = posts['discussion_idx'];
     } else if (page == 'thread') {
         const posts = await loadThread(key[0], key[1]);
         state['content'] = posts['content'];
-        // const post_id =
-        //     posts &&
-        //     posts['content'] &&
-        //     posts['content'][`${key[0].slice(1)}/${key[1]}`] &&
-        //     posts['content'][`${key[0].slice(1)}/${key[1]}`]['post_id'];
-
-        // // console.log('----posts----',post_id)
-
-        // if (
-        //     _user_list.indexOf(key[0].slice(1)) == -1 &&
-        //     (post_id && _list_temp.indexOf(post_id) == -1)
-        // ) {
-        //     state['content'] = posts['content'];
-        // }
     } else {
         // no-op
     }
@@ -91,9 +68,6 @@ export async function getStateAsync(url, observer, ssr = false) {
         // TODO: move to global reducer?
         const profile = await callBridge('get_profile', { account });
         if (profile && profile['name']) {
-            // if (_user_list.indexOf(account) > -1) {
-            //     profile['post_count'] = 0;
-            // }
             state['profiles'][account] = profile;
         }
     }
@@ -108,27 +82,6 @@ export async function getStateAsync(url, observer, ssr = false) {
     const cleansed = stateCleaner(state);
     return cleansed;
 }
-
-// export async function getBlackList() {
-//     const res = await xhr
-//         .get('http://39.105.221.87:8081/steemit/blacklist', { timeout: 3000 })
-//         .catch(e => console.log('error', e));
-//     console.log('blacklist', res && res.data);
-//     return (res && res.data && res.data.data) || [];
-// }
-
-// function filter(posts, blacklist, userlist) {
-//     let content = {};
-//     for (var key in posts) {
-//         if (
-//             blacklist.indexOf(posts[key].post_id) === -1 &&
-//             userlist.indexOf(posts[key].author) === -1
-//         ) {
-//             content[key] = posts[key];
-//         }
-//     }
-//     return content;
-// }
 
 async function loadThread(account, permlink) {
     const author = account.slice(1);

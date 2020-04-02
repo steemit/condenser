@@ -14,6 +14,7 @@ import * as transactionActions from './TransactionReducer';
 import constants from './constants';
 import { fromJS, Map, Set } from 'immutable';
 import { getStateAsync, callBridge } from 'app/utils/steemApi';
+
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 const GET_POST_HEADER = 'fetchDataSaga/GET_POST_HEADER';
@@ -173,9 +174,13 @@ export function* listCommunities(action) {
             query,
             sort,
         });
-        if (communities.length > 0) {
-            yield put(globalActions.receiveCommunities(communities));
-        }
+        // if (communities.length > 0) {
+        yield put(
+            globalActions.receiveCommunities(
+                communities.length > 0 ? communities : []
+            )
+        );
+        // }
     } catch (error) {
         console.log('Error requesting communities:', error);
     }

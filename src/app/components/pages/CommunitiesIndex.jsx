@@ -10,6 +10,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import UserNames from 'app/components/elements/UserNames';
 import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
 import NativeSelect from 'app/components/elements/NativeSelect';
+import Callout from 'app/components/elements/Callout';
 
 export default class CommunitiesIndex extends React.Component {
     constructor(props) {
@@ -62,16 +63,16 @@ export default class CommunitiesIndex extends React.Component {
             },
         ];
 
-        if (communities_idx.size === 0) {
-            return (
-                <center>
-                    <LoadingIndicator
-                        style={{ marginBottom: '2rem' }}
-                        type="circle"
-                    />
-                </center>
-            );
-        }
+        // if (communities_idx.size === 0) {
+        //     return (
+        //         <center>
+        //             <LoadingIndicator
+        //                 style={{ marginBottom: '2rem' }}
+        //                 type="circle"
+        //             />
+        //         </center>
+        //     );
+        // }
 
         const role = comm =>
             comm.context &&
@@ -139,7 +140,7 @@ export default class CommunitiesIndex extends React.Component {
                     <div className="articles__header row">
                         <div className="small-8 medium-7 large-8 column">
                             <ElasticSearchInput
-                                expanded={true}
+                                expanded
                                 handleSubmit={q => {
                                     this.setState({
                                         searchQuery: q,
@@ -171,9 +172,15 @@ export default class CommunitiesIndex extends React.Component {
                         </div>
                     </div>
                     <hr />
-                    <table>
-                        <tbody>{ordered.map(comm => row(comm.toJS()))}</tbody>
-                    </table>
+                    {ordered.size > 0 ? (
+                        <table>
+                            <tbody>
+                                {ordered.map(comm => row(comm.toJS()))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <Callout>{'Nothing was found.'}</Callout>
+                    )}
                 </div>
             </PostsIndexLayout>
         );

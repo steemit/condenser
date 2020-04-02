@@ -2,7 +2,6 @@ import { api } from '@steemit/steem-js';
 import { ifHive } from 'app/utils/Community';
 import stateCleaner from 'app/redux/stateCleaner';
 import xhr from 'axios/index';
-import demo from './demo';
 
 export async function callBridge(method, params) {
     console.log(
@@ -19,163 +18,9 @@ export async function callBridge(method, params) {
     });
 }
 
-export const _list_temp = [
-    85272851,
-    85292735,
-    85290072,
-    85280316,
-    85290308,
-    85240810,
-    85278992,
-    85276721,
-    85288504,
-    85303662,
-    85287965,
-    85283636,
-    85273231,
-    85306764,
-    85287931,
-    85299660,
-    85290948,
-    85293459,
-    85293772,
-    85276721,
-    85276833,
-    85293901,
-    85289063,
-    85294452,
-    85293865,
-    85305460,
-    85295587,
-    85312343,
-    85308672,
-    85311375,
-    85321625,
-    85311891,
-    85318584,
-    85308914,
-    85321248,
-    85325744,
-    85325042,
-    85323948,
-    85325276,
-    85326597,
-    85321023,
-    85324738,
-    85334812,
-    85316255,
-    85336207,
-    85323051,
-    85209019,
-    85343852,
-    85335737,
-    85341505,
-    85315644,
-    85357437,
-    85330639,
-    85359441,
-    85357235,
-    85354823,
-    85360899,
-    85358726,
-    85354772,
-    85362926,
-    85359018,
-    85364554,
-    85365012,
-    85354766,
-    85359759,
-    85373516,
-    85372593,
-    85369615,
-    85376101,
-    85375555,
-    85374894,
-    85373035,
-    85372824,
-    85384412,
-    85379917,
-    85380730,
-    85386878,
-    85387066,
-    85387144,
-    85379011,
-    85383898,
-    85389324,
-    85389409,
-    85394706,
-    85396049,
-    85398648,
-    85398733,
-    85395487,
-    85398888,
-    85395479,
-    85384940,
-    85393986,
-    85396311,
-    85398505,
-    85381494,
-    85398122,
-    85400019,
-    85329457,
-    85331044,
-    85324627,
-    85331103,
-    85328153,
-    85333897,
-    85410387,
-    85409683,
-    85404640,
-    85409916,
-    85405757,
-    85409356,
-    85405530,
-    85401526,
-    85402422,
-    85393662,
-    85417005,
-    85415441,
-    85415492,
-    85419632,
-    85421418,
-    85419875,
-    85418550,
-    85419942,
-    85407532,
-    85404441,
-    85359422,
-    85359577,
-    85396956,
-    85422421,
-    85430013,
-    85429106,
-    85428475,
-    85430206,
-    85431016,
-    85432937,
-];
+export const _list_temp = [];
 
-export const _user_list = [
-    'roelandp',
-    'blocktrades',
-    'anyx',
-    'ausbitbank',
-    'gtg',
-    'themarkymark',
-    'lukestokes.mhth',
-    'therealwolf',
-    'netuoso',
-    'innerhive',
-    'z8teyb289qav9z',
-    'ngc',
-    'sirvotesalot',
-    'cheetah',
-    'mapxv',
-    'xx0xx',
-    'phusionphil',
-    'cryptobrewmaster',
-    'iflagtrash',
-];
+export const _user_list = [];
 
 export async function getStateAsync(url, observer, ssr = false) {
     if (observer === undefined) observer = null;
@@ -190,38 +35,16 @@ export async function getStateAsync(url, observer, ssr = false) {
         discussion_idx: {},
         profiles: {},
     };
-    let _blist = [];
-
-    if (ssr) {
-        // _blist = await getBlackList();
-        _blist = _blist.concat(_list_temp);
-        state['blacklist'] = _blist;
-    }
 
     // load `content` and `discussion_idx`
     if (page == 'posts' || page == 'account') {
         let posts = await loadPosts(sort, tag, observer, ssr);
-        let _content = ssr
-            ? filter(posts['content'], _blist, _user_list)
-            : posts['content'];
-        state['content'] = _content;
+
+        state['content'] = posts['content'];
         state['discussion_idx'] = posts['discussion_idx'];
     } else if (page == 'thread') {
         const posts = await loadThread(key[0], key[1]);
-        const post_id =
-            posts &&
-            posts['content'] &&
-            posts['content'][`${key[0].slice(1)}/${key[1]}`] &&
-            posts['content'][`${key[0].slice(1)}/${key[1]}`]['post_id'];
-
-        // console.log('----posts----',post_id)
-
-        if (
-            _user_list.indexOf(key[0].slice(1)) == -1 &&
-            (post_id && _list_temp.indexOf(post_id) == -1)
-        ) {
-            state['content'] = posts['content'];
-        }
+        state['content'] = posts['content'];
     } else {
         // no-op
     }
@@ -245,9 +68,6 @@ export async function getStateAsync(url, observer, ssr = false) {
         // TODO: move to global reducer?
         const profile = await callBridge('get_profile', { account });
         if (profile && profile['name']) {
-            if (_user_list.indexOf(account) > -1) {
-                profile['post_count'] = 0;
-            }
             state['profiles'][account] = profile;
         }
     }
@@ -263,27 +83,6 @@ export async function getStateAsync(url, observer, ssr = false) {
     return cleansed;
 }
 
-export async function getBlackList() {
-    const res = await xhr
-        .get('http://39.105.221.87:8081/steemit/blacklist', { timeout: 3000 })
-        .catch(e => console.log('error', e));
-    console.log('blacklist', res && res.data);
-    return (res && res.data && res.data.data) || [];
-}
-
-function filter(posts, blacklist, userlist) {
-    let content = {};
-    for (var key in posts) {
-        if (
-            blacklist.indexOf(posts[key].post_id) === -1 &&
-            userlist.indexOf(posts[key].author) === -1
-        ) {
-            content[key] = posts[key];
-        }
-    }
-    return content;
-}
-
 async function loadThread(account, permlink) {
     const author = account.slice(1);
     const content = await callBridge('get_discussion', { author, permlink });
@@ -297,17 +96,10 @@ async function loadPosts(sort, tag, observer, ssr) {
     if (account) {
         const params = { sort, account, observer };
         posts = await callBridge('get_account_posts', params);
-        if (_user_list.indexOf(account) > -1) {
-            posts = [];
-        }
     } else {
         const params = { sort, tag, observer };
         posts = await callBridge('get_ranked_posts', params);
-        // if (!tag) {
-        //     posts = [].concat(demo, posts);
-        // }
     }
-    // console.log('----posts.length----',posts.length)
     let content = {};
     let keys = [];
     for (var idx in posts) {

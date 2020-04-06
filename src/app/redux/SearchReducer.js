@@ -29,14 +29,17 @@ export default function reducer(state = defaultSearchState, action) {
             return state.setIn(['error'], error);
         }
         case SEARCH_RESULT: {
-            const { hits, results, scroll_id, append } = payload;
-
+            const { hits, scroll_id, append } = payload;
+            const results = hits.hits;
             const posts = List(
                 results.map(post => {
-                    post.created = post.created_at;
-                    post.author_reputation = post.author_rep;
-                    post.stats = { total_votes: post.total_votes };
-                    return fromJS(post);
+                    const updatedPost = { ...post._source };
+                    updatedPost.created = post._source.created_at;
+                    updatedPost.author_reputation = post._source.author_rep;
+                    updatedPost.stats = {
+                        total_votes: post._source.total_votes,
+                    };
+                    return fromJS(updatedPost);
                 })
             );
 

@@ -317,7 +317,6 @@ export default function useGeneralApi(app) {
             method: this.request.method,
             headers: {
                 'Content-type': 'application/json',
-                Authorization: config.get('esteem_elastic_search_api_key'),
             },
             body: this.request.body,
             // NOTE: agentOptions purely for testing, localhost vs SSL.
@@ -326,11 +325,15 @@ export default function useGeneralApi(app) {
         const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
+
         try {
-            const searchResult = yield fetch(
-                'https://api.search.esteem.app/search',
-                passThrough
-            );
+            const { query, size } =
+                typeof params === 'string' ? JSON.parse(params) : params;
+
+            const esQuery = JSON.stringify({ query, size });
+            const esBody = { ...passThrough, body: esQuery };
+            const ep = config.get('steem_elastic_search_endpoint');
+            const searchResult = yield fetch(ep, esBody);
             const resultJson = yield searchResult.json();
             this.body = JSON.stringify(resultJson);
             this.status = 200;

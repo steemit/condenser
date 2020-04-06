@@ -17,9 +17,6 @@ import VideoAd from 'app/components/elements/VideoAd';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import xhr from 'axios/index';
 
-import { _list_temp, _user_list } from 'app/utils/steemApi';
-import { demo } from 'app/utils/demo';
-
 function topPosition(domElt) {
     if (!domElt) {
         return 0;
@@ -45,16 +42,14 @@ class PostsList extends React.Component {
         this.state = {
             thumbSize: 'desktop',
             showNegativeComments: false,
-            blist: _list_temp,
+            blist: [],
         };
         this.scrollListener = this.scrollListener.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList');
     }
 
-    async componentWillMount() {
-        // await this.getBlackList();
-    }
+    async componentWillMount() {}
 
     componentDidMount() {
         this.attachScrollListener();
@@ -64,19 +59,6 @@ class PostsList extends React.Component {
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
-    }
-
-    async getBlackList() {
-        const res = await xhr
-            .get('http://39.105.221.87:8081/steemit/blacklist', {
-                timeout: 10000,
-            })
-            .catch(e => console.log(e));
-        this.setState({
-            blist:
-                (res && res.data && res.data.data).concat(_list_temp) ||
-                _list_temp,
-        });
     }
 
     onBackButton(e) {
@@ -145,15 +127,8 @@ class PostsList extends React.Component {
             blacklist,
         } = this.props;
         const { thumbSize, blist } = this.state;
-        const _blist = blacklist.length != blist.length ? blist : blacklist;
         const renderSummary = items =>
             items.map((post, i) => {
-                // if (blacklist.length != blist.length) {
-                //     if (_blist.indexOf(post.get('post_id')) > -1) {
-                //         return;
-                //     }
-                // }
-
                 const ps = (
                     <PostSummary
                         post={post}
@@ -256,17 +231,6 @@ export default connect(
                     if (!muted) posts.push(post);
                 });
                 posts = List(posts);
-
-                const list = [];
-                posts.map(v => {
-                    if (
-                        blacklist.indexOf(v.get('post_id')) == -1 &&
-                        _user_list.indexOf(v.get('author')) == -1
-                    ) {
-                        list.push(v);
-                    }
-                });
-                posts = List(list);
             } else {
                 console.error('PostsList: no `posts` or `post_refs`');
             }

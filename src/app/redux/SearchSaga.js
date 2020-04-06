@@ -8,12 +8,15 @@ export function* search(action) {
     const { q, s, scroll_id } = action.payload;
     const append = action.payload.scroll_id ? true : false;
     yield put(reducer.searchPending({ pending: true }));
+    // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
+    const lucerneQuery = {
+        query_string: { query: q, default_field: 'searchable' },
+    };
     try {
         const requestParams = {
             body: {
-                q,
-                sort: s ? s : 'relevance',
-                scroll_id: scroll_id ? scroll_id : '',
+                size: 200,
+                query: lucerneQuery,
             },
         };
         const searchResponse = yield call(conductSearch, requestParams);

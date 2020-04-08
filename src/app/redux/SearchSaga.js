@@ -10,7 +10,12 @@ export function* search(action) {
     yield put(reducer.searchPending({ pending: true }));
     // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
     const lucerneQuery = {
-        query_string: { query: q, default_field: 'searchable' },
+        term: {
+            searchable: {
+                value: q,
+                boost: 1.0,
+            },
+        },
     };
     try {
         const requestParams = {

@@ -8,17 +8,29 @@ export function* search(action) {
     const { q, s, scroll_id } = action.payload;
     const append = action.payload.scroll_id ? true : false;
     yield put(reducer.searchPending({ pending: true }));
-    // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
-    const lucerneQuery = {
-        query_string: { query: q, default_field: 'searchable' },
+    const luceneQuery = {
+        term: {
+            searchable: {
+                value: q,
+                boost: 1.0,
+            },
+        },
     };
     try {
         const requestParams = {
             body: {
-                size: 200,
-                query: lucerneQuery,
+                searchQuery: {
+                    size: 30,
+                    query: luceneQuery,
+                },
             },
         };
+        if (scroll_id) {
+            requestParams.body.scrollQuery = {
+                scroll: '1m',
+                scroll_id,
+            };
+        }
         const searchResponse = yield call(conductSearch, requestParams);
         const searchJSON = yield call([searchResponse, searchResponse.json]);
         yield put(reducer.searchResult({ ...searchJSON, append }));

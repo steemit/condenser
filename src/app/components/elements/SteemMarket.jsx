@@ -44,9 +44,7 @@ class Coin extends Component {
             .toJS();
 
         let url = '';
-        if (symbol === 'XRP') {
-            return '';
-        }
+
         switch (symbol) {
             case 'STEEM':
                 url = 'https://poloniex.com/exchange#trx_steem';
@@ -67,7 +65,11 @@ class Coin extends Component {
                 url = '';
         }
         return (
-            <div ref="coin" className="coin">
+            <div
+                ref="coin"
+                className="coin"
+                style={{ display: `${symbol === 'XRP' ? 'none' : 'block'}` }}
+            >
                 {url ? (
                     <a href={url} target="_blank">
                         <div className="chart">

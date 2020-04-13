@@ -268,18 +268,20 @@ class CommentImpl extends React.Component {
             } else {
                 replies = comment.replies;
                 sortComments(cont, replies, this.props.sort_order);
-                replies = replies.map((reply, idx) => (
-                    <Comment
-                        key={idx}
-                        postref={reply}
-                        cont={cont}
-                        sort_order={this.props.sort_order}
-                        depth={depth + 1}
-                        rootComment={rootComment}
-                        showNegativeComments={showNegativeComments}
-                        onHide={this.props.onHide}
-                    />
-                ));
+                replies = replies.map((reply, idx) => {
+                    return (
+                        <Comment
+                            key={idx}
+                            postref={reply}
+                            cont={cont}
+                            sort_order={this.props.sort_order}
+                            depth={depth + 1}
+                            rootComment={rootComment}
+                            showNegativeComments={showNegativeComments}
+                            onHide={this.props.onHide}
+                        />
+                    );
+                });
             }
         }
 
@@ -335,9 +337,7 @@ class CommentImpl extends React.Component {
                     </div>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
-                            {canFlag && (
-                                <FlagButton post={post} isComment={true} />
-                            )}
+                            {canFlag && <FlagButton post={post} isComment />}
                             <a onClick={this.toggleCollapsed}>
                                 {this.state.collapsed ? '[+]' : '[-]'}
                             </a>

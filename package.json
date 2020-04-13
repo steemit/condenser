@@ -82,7 +82,7 @@
     "koa-static-cache": "4.1.1",
     "lodash.debounce": "4.0.8",
     "mem-stat": "1.0.5",
-    "minimist": "1.2.0",
+    "minimist": "1.2.2",
     "mixpanel": "0.5.0",
     "net": "1.0.2",
     "node-cache": "^4.2.0",

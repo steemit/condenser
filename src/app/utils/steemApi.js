@@ -1,6 +1,7 @@
 import { api } from '@steemit/steem-js';
 import { ifHive } from 'app/utils/Community';
 import stateCleaner from 'app/redux/stateCleaner';
+import xhr from 'axios/index';
 
 export async function callBridge(method, params) {
     console.log(
@@ -16,6 +17,10 @@ export async function callBridge(method, params) {
         });
     });
 }
+
+export const _list_temp = [];
+
+export const _user_list = [];
 
 export async function getStateAsync(url, observer, ssr = false) {
     if (observer === undefined) observer = null;
@@ -33,7 +38,8 @@ export async function getStateAsync(url, observer, ssr = false) {
 
     // load `content` and `discussion_idx`
     if (page == 'posts' || page == 'account') {
-        const posts = await loadPosts(sort, tag, observer);
+        let posts = await loadPosts(sort, tag, observer, ssr);
+
         state['content'] = posts['content'];
         state['discussion_idx'] = posts['discussion_idx'];
     } else if (page == 'thread') {
@@ -83,7 +89,7 @@ async function loadThread(account, permlink) {
     return { content };
 }
 
-async function loadPosts(sort, tag, observer) {
+async function loadPosts(sort, tag, observer, ssr) {
     const account = tag && tag[0] == '@' ? tag.slice(1) : null;
 
     let posts;
@@ -94,14 +100,13 @@ async function loadPosts(sort, tag, observer) {
         const params = { sort, tag, observer };
         posts = await callBridge('get_ranked_posts', params);
     }
-
     let content = {};
     let keys = [];
     for (var idx in posts) {
         const post = posts[idx];
         const key = post['author'] + '/' + post['permlink'];
         content[key] = post;
-        keys.push(key);
+        keys.indexOf(key) == -1 && keys.push(key);
     }
 
     let discussion_idx = {};

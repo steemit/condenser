@@ -141,7 +141,7 @@ class Post extends React.Component {
                 commentCount % 5 === 0 &&
                 commentCount !== replies.length &&
                 commentCount !== commentLimit;
-
+            const author = reply && reply.split('/')[0];
             return (
                 <div key={post + reply}>
                     <Comment

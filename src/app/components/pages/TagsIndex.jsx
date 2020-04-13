@@ -55,7 +55,7 @@ export default class TagsIndex extends React.Component {
     render() {
         const { tagsAll } = this.props;
         const { order } = this.state;
-        let tags = tagsAll;
+        const tags = tagsAll;
 
         const rows = tags
             .filter(

@@ -8,14 +8,29 @@ export function* search(action) {
     const { q, s, scroll_id } = action.payload;
     const append = action.payload.scroll_id ? true : false;
     yield put(reducer.searchPending({ pending: true }));
+    const luceneQuery = {
+        term: {
+            searchable: {
+                value: q,
+                boost: 1.0,
+            },
+        },
+    };
     try {
         const requestParams = {
             body: {
-                q,
-                sort: s ? s : 'relevance',
-                scroll_id: scroll_id ? scroll_id : '',
+                searchQuery: {
+                    size: 30,
+                    query: luceneQuery,
+                },
             },
         };
+        if (scroll_id) {
+            requestParams.body.scrollQuery = {
+                scroll: '1m',
+                scroll_id,
+            };
+        }
         const searchResponse = yield call(conductSearch, requestParams);
         const searchJSON = yield call([searchResponse, searchResponse.json]);
         yield put(reducer.searchResult({ ...searchJSON, append }));

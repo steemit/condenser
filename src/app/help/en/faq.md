@@ -236,7 +236,7 @@ You can earn digital tokens on Steemit by:
 
 **Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of Steem Power you have.
 
-**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [BlockTrades](https://blocktrades.us), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
+**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
 
 **Vesting** - STEEM tokens that are powered up to Steem Power will earn a small amount of new tokens for holding.
 
@@ -321,8 +321,6 @@ The only way to have an account created via steemit.com is to supply your email 
 If you are willing to pay your own signup fee, then there are other ways to create a new account on the blockchain.
 
 There is a third-party tool called <a href="https://www.SteemCreate.com">SteemCreate</a> that accepts credit cards, or BTC to create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
-
-There is a third-party tool called <a href="https://blocktrades.us/create-steem-account">BlockTrades</a> that accepts bitcoin, Litecoin, STEEM, SBD, BitShares, Dash, Dogecoin, Ethereum, and more to create a Steem account. You can also send extra tokens to pre-load the account with additional Steem Power. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
 
 There is a third-party tool called <a href="https://anon.steem.network/">AnonSteem</a> that accepts bitcoin, Litecoin, STEEM, or SBD to anonymously create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
 
@@ -684,10 +682,8 @@ STEEM and SBD are listed on the following exchanges:
 | [Bithumb](https://www.bithumb.com/)  | Y | N |
 | [BitShares](https://wallet.bitshares.org/)      | Y      |   Y |
 | [Bittrex](https://bittrex.com) | Y      |    Y |
-| [BlockTrades](https://blocktrades.us) | Y      |    Y |
 | [Changelly](https://changelly.com) | Y      |    N |
 | [GOBADA](https://www.gobaba.com/)  | Y | N |
-| [GOPAX](https://www.gopax.co.kr) | Y      |    Y |
 | [HitBTC](https://hitbtc.com/) | Y      |    Y |
 | [Huobi](https://www.huobi.pro/)  | Y | N |
 | [LocalBitcoinCash](https://www.localbitcoincash.org/)  | Y | N |
@@ -771,9 +767,8 @@ To buy:
 - Click the "Get Deposit Address" button.
 - Send the currency to the provided address.
 
-STEEM purchases made via steemit.com are facilitated by <a href="https://blocktrades.us">BlockTrades</a>.
 
-bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
+bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or Steem Power that I purchased to show up in my account?</span>
@@ -842,7 +837,7 @@ Other than making a post and making sales manually, there is no interface for se
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_can_I_withdraw_my_STEEM_or_SBD_coins">How can I withdraw my STEEM or SBD coins?</span>
 
-STEEM and SBD tokens are readily tradable to bitcoin, which can be traded for the local currency of your choice. There is a link to "Sell" your STEEM and SBD tokens in your wallet, which uses the <a href="https://blocktrades.us/">BlockTrades</a> interface.
+STEEM and SBD tokens are readily tradable to bitcoin, which can be traded for the local currency of your choice. There is a link to "Sell" your STEEM and SBD tokens in your wallet.
 
 There are several guides that have been posted by users in the community for using various external exchanges to withdraw STEEM and SBD tokens. Please read the <a href="#Disclaimer">disclaimer</a> before using any of these guides to withdraw your coins. The users, guides, and exchanges listed in the guides are not endorsed by Steemit, Inc. Use the guides below at your own risk.
 
@@ -1106,7 +1101,7 @@ If users do not have enough Resource Credits, they will be unable to transact wi
 
 If you get an error that you have exceeded your Resource Credit allowance, it is normally best to just wait and try again later. Usually if you wait and try again later, the transaction will go through.
 
-If you are unable to transact for extended periods of time, or you are frequently running into Resource Credit limits, then you will either need to reduce your usage to stay within your limit, or purchase more Steem Power for your account through a third-party exchange such as [BlockTrades](https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=).
+If you are unable to transact for extended periods of time, or you are frequently running into Resource Credit limits, then you will either need to reduce your usage to stay within your limit, or purchase more Steem Power for your account through a third-party exchange.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="What_is_the_difference_between_Steem_and_Steemit">What is the difference between Steem and Steemit?</span>
@@ -1139,7 +1134,7 @@ The Steem blockchain schedules witnesses to produce a new block every 3 seconds.
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="Is_there_a_way_to_see_the_raw_data_that_is_stored_in_the_blockchain">Is there a way to see the raw data that is stored in the blockchain?</span>
 
-Yes. The blockchain data can be viewed in different ways with third-party tools such as <a href="https://steemd.com">steemd.com</a> and <a href="https://steemdb.com">steemdb.com</a>.
+Yes. The blockchain data can be viewed in different ways with third-party tools such as <a href="https://steemd.com">steemd.com</a>.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="Where_can_I_find_the_information_for_the_official_launch_of_the_blockchain">Where can I find the information for the official launch of the blockchain?</span>
@@ -1352,7 +1347,7 @@ You can also create a post on steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-AnonSteem, Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, GOPAX, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, Vessel, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+AnonSteem, Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, Vessel, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

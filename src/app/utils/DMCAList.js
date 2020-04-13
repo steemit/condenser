@@ -347,6 +347,7 @@ export default `
 /beauty/@benziman/ill-5-year-old-marries-best-friend-before-undergoing-heart-surgery
 /foto/@tonyj28/cae-preso-en-ee-uu-hermano-de-viviana-gibelli-por-lavado-de-dinero
 /coins/@manojsharma/cashman-casino-free-coins-get-100-bonus-coins-android-ios-2018
+/technology/@srinivas3/how-hackers-hacking-paytm-money-or-and-cheating-you-with-fake-payments
 `
     .trim()
     .split('\n');

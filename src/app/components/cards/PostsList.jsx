@@ -15,6 +15,7 @@ import GptAd from 'app/components/elements/GptAd';
 import VideoAd from 'app/components/elements/VideoAd';
 
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import xhr from 'axios/index';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -41,11 +42,14 @@ class PostsList extends React.Component {
         this.state = {
             thumbSize: 'desktop',
             showNegativeComments: false,
+            blist: [],
         };
         this.scrollListener = this.scrollListener.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList');
     }
+
+    async componentWillMount() {}
 
     componentDidMount() {
         this.attachScrollListener();
@@ -120,9 +124,9 @@ class PostsList extends React.Component {
             order,
             nsfwPref,
             hideCategory,
+            blacklist,
         } = this.props;
-        const { thumbSize } = this.state;
-
+        const { thumbSize, blist } = this.state;
         const renderSummary = items =>
             items.map((post, i) => {
                 const ps = (
@@ -210,7 +214,7 @@ export default connect(
             ['follow', 'getFollowingAsync', username, 'ignore_result'],
             List()
         );
-
+        const blacklist = state.global.get('blacklist');
         let { posts } = props;
         if (typeof posts === 'undefined') {
             const { post_refs, loading } = props;
@@ -220,7 +224,7 @@ export default connect(
                     const post = state.global.getIn(['content', ref]);
                     if (!post) {
                         // can occur when deleting a post
-                        console.error('PostsList --> Missing cont key: ' + ref);
+                        // console.error('PostsList --> Missing cont key: ' + ref);
                         return;
                     }
                     const muted = mutes.has(post.get('author'));
@@ -239,6 +243,7 @@ export default connect(
             shouldSeeAds,
             videoAdsEnabled,
             adSlots,
+            blacklist,
         };
     },
     dispatch => ({

@@ -255,17 +255,8 @@ class NotificationsList extends React.Component {
                 {isOwnAccount && <ClaimBox accountName={accountName} />}
                 {notifications &&
                     notifications.length > 0 &&
-                    unreadNotifications !== 0 &&
                     !notificationActionPending && (
                         <center>
-                            <br />
-                            <a href="#" onClick={this.onClickMarkAsRead}>
-                                <strong>
-                                    {tt(
-                                        'notificationslist_jsx.mark_all_as_read'
-                                    )}
-                                </strong>
-                            </a>
                             <br />
                             <div className="notification__filter_select">
                                 <a
@@ -364,6 +355,22 @@ class NotificationsList extends React.Component {
                                     {tt('notificationslist_jsx.resteems')}
                                 </a>
                             </div>
+                        </center>
+                    )}
+                {notifications &&
+                    notifications.length > 0 &&
+                    unreadNotifications !== 0 &&
+                    !notificationActionPending && (
+                        <center>
+                            <br />
+                            <a href="#" onClick={this.onClickMarkAsRead}>
+                                <strong>
+                                    {tt(
+                                        'notificationslist_jsx.mark_all_as_read'
+                                    )}
+                                </strong>
+                            </a>
+                            <br />
                         </center>
                     )}
                 {(notificationActionPending || !process.env.BROWSER) && (

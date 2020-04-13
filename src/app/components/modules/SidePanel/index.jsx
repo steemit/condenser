@@ -74,7 +74,13 @@ const SidePanel = ({
                 onClick: toggleNightmode,
             },
         ],
-
+        exchanges: [
+            {
+                value: 'poloniex',
+                label: 'Poloniex',
+                link: 'https://poloniex.com/exchange#trx_steem',
+            },
+        ],
         wallet: [
             {
                 label: tt('navigation.stolen_account_recovery'),
@@ -175,6 +181,14 @@ const SidePanel = ({
                 </ul>
                 <ul className="vertical menu">
                     {sidePanelLinks.wallet.map(makeLink)}
+                </ul>
+                <ul className="vertical menu">
+                    <li>
+                        <a className="menu-section">
+                            {tt('navigation.third_party_exchanges')}
+                        </a>
+                    </li>
+                    {sidePanelLinks.exchanges.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
                     {sidePanelLinks.external.map(makeLink)}

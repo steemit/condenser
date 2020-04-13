@@ -15,7 +15,6 @@ import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import { ifHive } from 'app/utils/Community';
 import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
-
 // posts_index.empty_feed_1 [-5]
 const noFriendsText = (
     <div>

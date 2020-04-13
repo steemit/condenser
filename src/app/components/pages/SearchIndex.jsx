@@ -86,11 +86,11 @@ class SearchIndex extends React.Component {
                         <div className="small-12 medium-12 large-12 column">
                             <ElasticSearchInput
                                 initValue={params.q}
-                                expanded={true}
+                                expanded
                                 handleSubmit={q => {
                                     performSearch({ q, s: undefined });
                                 }}
-                                redirect={true}
+                                redirect
                             />
                         </div>
                     </div>

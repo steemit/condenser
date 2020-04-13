@@ -312,25 +312,37 @@ export default function useGeneralApi(app) {
         }
     });
     router.post('/search', koaBody, function*() {
-        const params = this.request.body;
-        const passThrough = {
-            method: this.request.method,
-            headers: {
-                'Content-type': 'application/json',
-                Authorization: config.get('esteem_elastic_search_api_key'),
-            },
-            body: this.request.body,
-            // NOTE: agentOptions purely for testing, localhost vs SSL.
-            //agentOptions: { checkServerIdentity: () => {} },
-        };
         const { csrf } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+            typeof this.request.body === 'string'
+                ? JSON.parse(this.request.body)
+                : this.request.body;
         if (!checkCSRF(this, csrf)) return;
+
         try {
-            const searchResult = yield fetch(
-                'https://api.search.esteem.app/search',
-                passThrough
+            const params = JSON.parse(this.request.body);
+            const elasticSearchService = config.get(
+                'steem_elastic_search_endpoint'
             );
+
+            let searchEndpoint = elasticSearchService.concat(
+                '/hive_posts/_search?scroll=1m'
+            );
+            let searchPayload = JSON.stringify(params.searchQuery);
+
+            if (params.scrollQuery) {
+                searchEndpoint = elasticSearchService.concat('/_search/scroll');
+                searchPayload = JSON.stringify(params.scrollQuery);
+            }
+
+            const req = {
+                method: this.request.method,
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: searchPayload,
+            };
+
+            const searchResult = yield fetch(searchEndpoint, req);
             const resultJson = yield searchResult.json();
             this.body = JSON.stringify(resultJson);
             this.status = 200;

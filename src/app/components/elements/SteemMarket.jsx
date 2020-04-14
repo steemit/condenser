@@ -42,20 +42,63 @@ class Coin extends Component {
         const pricesUsd = timepoints
             .map(point => parseFloat(point.get('price_usd')))
             .toJS();
+
+        let url = '';
+
+        switch (symbol) {
+            case 'STEEM':
+                url = 'https://poloniex.com/exchange#trx_steem';
+                break;
+            case 'BTC':
+                url = 'https://poloniex.com/exchange#usdt_btc';
+                break;
+            case 'ETH':
+                url = 'https://poloniex.com/exchange#usdt_eth';
+                break;
+            case 'SBD':
+                url = '';
+                break;
+            case 'TRX':
+                url = 'https://poloniex.com/exchange#usdt_trx';
+                break;
+            default:
+                url = '';
+        }
         return (
-            <div ref="coin" className="coin">
-                <div className="chart">
-                    <Sparklines data={pricesUsd}>
-                        <SparklinesLine
-                            color={color}
-                            style={{ strokeWidth: 3.0 }}
-                            onMouseMove={e => {
-                                console.log(e);
-                            }}
-                        />
-                    </Sparklines>
-                    <div className="caption" />
-                </div>
+            <div
+                ref="coin"
+                className="coin"
+                style={{ display: `${symbol === 'XRP' ? 'none' : 'block'}` }}
+            >
+                {url ? (
+                    <a href={url} target="_blank">
+                        <div className="chart">
+                            <Sparklines data={pricesUsd}>
+                                <SparklinesLine
+                                    color={color}
+                                    style={{ strokeWidth: 3.0 }}
+                                    onMouseMove={e => {
+                                        console.log(e);
+                                    }}
+                                />
+                            </Sparklines>
+                            <div className="caption" />
+                        </div>
+                    </a>
+                ) : (
+                    <div className="chart">
+                        <Sparklines data={pricesUsd}>
+                            <SparklinesLine
+                                color={color}
+                                style={{ strokeWidth: 3.0 }}
+                                onMouseMove={e => {
+                                    console.log(e);
+                                }}
+                            />
+                        </Sparklines>
+                        <div className="caption" />
+                    </div>
+                )}
                 <div className="coin-label">
                     <span className="symbol">{symbol}</span>{' '}
                     <span className="price">
@@ -105,7 +148,6 @@ class SteemMarket extends Component {
                 <div className="c-sidebar__content">
                     <div className="steem-market">
                         <Coin coin={steem} color="#09d6a8" />
-                        <Coin coin={sbd} color="#09d6a8" />
                         {topCoins.map(coin => (
                             <Coin
                                 key={coin.get('name')}
@@ -113,6 +155,7 @@ class SteemMarket extends Component {
                                 color="#788187"
                             />
                         ))}
+                        <Coin coin={sbd} color="#09d6a8" />
                     </div>
                 </div>
             </div>

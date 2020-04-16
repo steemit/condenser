@@ -139,7 +139,7 @@ class SteemMarket extends Component {
         const topCoins = steemMarketData.get('top_coins');
         const steem = steemMarketData.get('steem');
         const sbd = steemMarketData.get('sbd');
-        const trom = steemMarketData.get('tron');
+        const tron = steemMarketData.get('tron');
 
         return (
             <div className="c-sidebar__module">
@@ -157,7 +157,7 @@ class SteemMarket extends Component {
                             />
                         ))}
                         <Coin coin={sbd} color="#09d6a8" />
-                        <Coin coin={tron} color="#09d6a8" />
+                        <Coin coin={tron} color="#c62734" />
                     </div>
                 </div>
             </div>

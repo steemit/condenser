@@ -23,6 +23,7 @@ import {
 import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
+import { AccessLocalStorage } from 'app/utils/AccessLocalStorage';
 
 export const userWatches = [
     takeLatest(
@@ -287,7 +288,9 @@ function* usernamePasswordLogin2({
         if (!fullAuths.size) {
             console.log('No full auths');
             yield put(userActions.hideLoginWarning());
-            localStorage.removeItem('autopost2');
+            AccessLocalStorage(() => {
+                localStorage.removeItem('autopost2');
+            });
             const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
             if (
                 login_owner_pubkey === owner_pub_key ||
@@ -354,7 +357,10 @@ function* usernamePasswordLogin2({
                         'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.',
                 })
             );
-            localStorage.removeItem('autopost2');
+            yield put(userActions.hideLoginWarning());
+            AccessLocalStorage(() => {
+                localStorage.removeItem('autopost2');
+            });
             return;
         }
         if (username) feedURL = '/@' + username + '/feed';
@@ -517,7 +523,9 @@ function* saveLogin_localStorage() {
         console.error('Non-browser environment, skipping localstorage');
         return;
     }
-    localStorage.removeItem('autopost2');
+    AccessLocalStorage(() => {
+        localStorage.removeItem('autopost2');
+    });
     const [
         username,
         private_keys,
@@ -576,7 +584,9 @@ function* saveLogin_localStorage() {
         login_with_keychain
     );
     // autopost is a auto login for a low security key (like the posting key)
-    localStorage.setItem('autopost2', data);
+    AccessLocalStorage(() => {
+        localStorage.setItem('autopost2', data);
+    });
 }
 
 function* logout(action) {
@@ -588,7 +598,9 @@ function* logout(action) {
     yield put(userActions.saveLoginConfirm(false));
 
     if (process.env.BROWSER) {
-        localStorage.removeItem('autopost2');
+        AccessLocalStorage(() => {
+            localStorage.removeItem('autopost2');
+        });
     }
 
     yield serverApiLogout();

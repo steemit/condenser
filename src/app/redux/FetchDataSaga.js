@@ -14,6 +14,7 @@ import * as transactionActions from './TransactionReducer';
 import constants from './constants';
 import { fromJS, Map, Set } from 'immutable';
 import { getStateAsync, callBridge } from 'app/utils/steemApi';
+import { AccessLocalStorage } from 'app/utils/AccessLocalStorage';
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 const GET_POST_HEADER = 'fetchDataSaga/GET_POST_HEADER';
@@ -139,13 +140,17 @@ function* syncSpecialPosts() {
     // Mark all featured posts as seen.
     specialPosts.get('featured_posts').forEach(post => {
         const id = `${post.get('author')}/${post.get('permlink')}`;
-        localStorage.setItem(`featured-post-seen:${id}`, 'true');
+        AccessLocalStorage(() => {
+            localStorage.setItem(`featured-post-seen:${id}`, 'true');
+        });
     });
 
     // Mark all promoted posts as seen.
     specialPosts.get('promoted_posts').forEach(post => {
         const id = `${post.get('author')}/${post.get('permlink')}`;
-        localStorage.setItem(`promoted-post-seen:${id}`, 'true');
+        AccessLocalStorage(() => {
+            localStorage.setItem(`promoted-post-seen:${id}`, 'true');
+        });
     });
 }
 

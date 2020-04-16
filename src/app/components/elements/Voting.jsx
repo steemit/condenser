@@ -21,6 +21,7 @@ import {
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Dropdown from 'app/components/elements/Dropdown';
+import { AccessLocalStorage } from 'app/utils/AccessLocalStorage';
 
 const ABOUT_FLAG = (
     <div>
@@ -157,14 +158,16 @@ class Voting extends React.Component {
             const weight = up
                 ? this.state.sliderWeight.up
                 : this.state.sliderWeight.down;
-            localStorage.setItem(
-                'voteWeight' +
-                    (up ? '' : 'Down') +
-                    '-' +
-                    username +
-                    (is_comment ? '-comment' : ''),
-                weight
-            );
+            AccessLocalStorage(() => {
+                localStorage.setItem(
+                    'voteWeight' +
+                        (up ? '' : 'Down') +
+                        '-' +
+                        username +
+                        (is_comment ? '-comment' : ''),
+                    weight
+                );
+            });
         };
         this.readSliderWeight = () => {
             const { username, enable_slider, is_comment } = this.props;

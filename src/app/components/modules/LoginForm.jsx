@@ -114,7 +114,9 @@ class LoginForm extends Component {
     saveLoginToggle = () => {
         const { saveLogin } = this.state;
         saveLoginDefault = !saveLoginDefault;
-        localStorage.setItem('saveLogin', saveLoginDefault ? 'yes' : 'no');
+        AccessLocalStorage(() => {
+            localStorage.setItem('saveLogin', saveLoginDefault ? 'yes' : 'no');
+        });
         saveLogin.props.onChange(saveLoginDefault); // change UI
     };
 

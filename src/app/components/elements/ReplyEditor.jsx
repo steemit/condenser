@@ -13,6 +13,7 @@ import SlateEditor, {
     deserializeHtml,
     getDemoState,
 } from 'app/components/elements/SlateEditor';
+import { AccessLocalStorage } from 'app/utils/AccessLocalStorage';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostCategoryBanner from 'app/components/elements/PostCategoryBanner';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -214,10 +215,12 @@ class ReplyEditor extends React.Component {
                 clearTimeout(saveEditorTimeout);
                 saveEditorTimeout = setTimeout(() => {
                     // console.log('save formId', formId, body.value)
-                    localStorage.setItem(
-                        'replyEditorData-' + formId,
-                        JSON.stringify(data, null, 0)
-                    );
+                    AccessLocalStorage(() => {
+                        localStorage.setItem(
+                            'replyEditorData-' + formId,
+                            JSON.stringify(data, null, 0)
+                        );
+                    });
                     this.showDraftSaved();
                 }, 500);
             }
@@ -315,7 +318,9 @@ class ReplyEditor extends React.Component {
                 : stateFromMarkdown(body.value);
         }
         this.setState(state);
-        localStorage.setItem('replyEditorData-rte', !this.state.rte);
+        AccessLocalStorage(() => {
+            localStorage.setItem('replyEditorData-rte', !this.state.rte);
+        });
     };
     showDraftSaved() {
         const { draft } = this.refs;

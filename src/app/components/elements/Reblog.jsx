@@ -6,6 +6,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import Icon from 'app/components/elements/Icon';
 import tt from 'counterpart';
+import { AccessLocalStorage } from 'app/utils/AccessLocalStorage';
 
 const { string, func } = PropTypes;
 
@@ -65,8 +66,9 @@ export default class Reblog extends React.Component {
         let posts = getRebloggedList(account);
         posts.push(author + '/' + permlink);
         if (posts.length > 200) posts.shift(1);
-
-        localStorage.setItem('reblogged_' + account, JSON.stringify(posts));
+        AccessLocalStorage(() => {
+            localStorage.setItem('reblogged_' + account, JSON.stringify(posts));
+        });
     }
 
     render() {

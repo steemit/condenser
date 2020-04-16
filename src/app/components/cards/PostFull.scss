@@ -2,6 +2,12 @@
   @include themify($themes) {
     background-color: themed('transparent');
   }
+  .row.comment-editor {
+    max-width: 55.9rem;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .PostFull {

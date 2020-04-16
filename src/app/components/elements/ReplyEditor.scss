@@ -1,5 +1,5 @@
 .ReplyEditor {
-  max-width: 54rem;
+  max-width: 100%;
   .vframe {
     display: block;
     .public-DraftEditor-content {
@@ -24,6 +24,37 @@
     text-shadow: 0 0 0 rgba(0,0,0,0.0);
     border: transparent;
   }
+  .side-by-side {
+    padding: 10px;
+    margin-bottom: 15px;
+    height: calc(100vh - 140px);
+    overflow-y: auto;
+    @include themify($themes) {
+      border-radius: themed('roundedCorners');
+      border: themed('border');
+      background-color: themed('moduleBackgroundColor');
+    }
+  }
+  .Preview-info {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.4em 0 1em;
+  }
+}
+
+@media screen and (max-width: 63.9375em) {
+  .ReplyEditor .side-by-side {
+    height: auto;
+  }
+}
+
+.comment-editor .ReplyEditor .column {
+  flex: 100%;
+  max-width: 100%;
+}
+
+.comment-editor .ReplyEditor .side-by-side {
+  height: auto;
 }
 
 .upload-enabled {
@@ -47,10 +78,6 @@
 
 .PostFull .ReplyEditor__body {
   margin: 1rem 0 0;
-}
-
-.ReplyEditor form {
-  max-width: 52rem;
 }
 
 .ReplyEditor__title {
@@ -85,7 +112,7 @@
 }
 
 .ReplyEditor .Preview {
-  max-width: 42.125rem;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
 }

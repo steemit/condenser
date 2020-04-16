@@ -568,18 +568,18 @@ class ReplyEditor extends React.Component {
 
         return (
             <div className="ReplyEditor row">
-                {isStory &&
-                    !isEdit &&
-                    username && (
-                        <PostCategoryBanner
-                            communityName={community}
-                            disabledCommunity={disabledCommunity}
-                            username={username}
-                            onCancel={this.shiftTagInput.bind(this)}
-                            onUndo={this.unshiftTagInput.bind(this)}
-                        />
-                    )}
-                <div className="column small-12">
+                <div className="column small-12 large-6">
+                    {isStory &&
+                        !isEdit &&
+                        username && (
+                            <PostCategoryBanner
+                                communityName={community}
+                                disabledCommunity={disabledCommunity}
+                                username={username}
+                                onCancel={this.shiftTagInput.bind(this)}
+                                onUndo={this.unshiftTagInput.bind(this)}
+                            />
+                        )}
                     <div
                         ref="draft"
                         className="ReplyEditor__draft ReplyEditor__draft-hide"
@@ -587,7 +587,7 @@ class ReplyEditor extends React.Component {
                         {tt('reply_editor.draft_saved')}
                     </div>
                     <form
-                        className={vframe_class}
+                        className={`${vframe_class} side-by-side`}
                         onSubmit={handleSubmit(({ data }) => {
                             const startLoadingIndicator = () =>
                                 this.setState({
@@ -882,35 +882,37 @@ class ReplyEditor extends React.Component {
                                     </div>
                                 )}
                         </div>
-                        {!loading &&
-                            !rte &&
-                            body.value && (
-                                <div
-                                    className={
-                                        'Preview ' + vframe_section_shrink_class
-                                    }
-                                >
-                                    {!isHtml && (
-                                        <div className="float-right">
-                                            <a
-                                                target="_blank"
-                                                href="https://guides.github.com/features/mastering-markdown/"
-                                                rel="noopener noreferrer"
-                                            >
-                                                {tt(
-                                                    'reply_editor.markdown_styling_guide'
-                                                )}
-                                            </a>
-                                        </div>
-                                    )}
-                                    <h6>{tt('g.preview')}</h6>
-                                    <MarkdownViewer
-                                        text={body.value}
-                                        large={isStory}
-                                    />
-                                </div>
-                            )}
                     </form>
+                </div>
+                <div className="column small-12 large-6">
+                    <div className="Preview-info">
+                        <h6>{tt('g.preview')}</h6>
+                        {!isHtml && (
+                            <div>
+                                <a
+                                    target="_blank"
+                                    href="https://guides.github.com/features/mastering-markdown/"
+                                    rel="noopener noreferrer"
+                                >
+                                    {tt('reply_editor.markdown_styling_guide')}
+                                </a>
+                            </div>
+                        )}
+                    </div>
+                    {!loading &&
+                        !rte &&
+                        body.value && (
+                            <div
+                                className={`Preview side-by-side ${
+                                    vframe_section_shrink_class
+                                }`}
+                            >
+                                <MarkdownViewer
+                                    text={body.value}
+                                    large={isStory}
+                                />
+                            </div>
+                        )}
                 </div>
             </div>
         );

@@ -425,95 +425,103 @@ class PostFull extends React.Component {
         }
 
         return (
-            <article
-                className="PostFull hentry"
-                itemScope
-                itemType="http://schema.org/Blog"
-            >
-                {canFlag && <FlagButton post={post} />}
-                {showEdit ? (
-                    renderedEditor
-                ) : (
-                    <span>
-                        <div className="PostFull__header">
-                            {post_header}
-                            <TimeAuthorCategoryLarge post={post} />
-                        </div>
-                        <div className="PostFull__body entry-content">
-                            {contentBody}
-                        </div>
-                    </span>
-                )}
-
-                {canPromote &&
-                    username && (
-                        <button
-                            className="Promote__button float-right button hollow tiny"
-                            onClick={this.showPromotePost}
-                        >
-                            {tt('g.promote')}
-                        </button>
+            <div>
+                <article
+                    className="PostFull hentry"
+                    itemScope
+                    itemType="http://schema.org/Blog"
+                >
+                    {canFlag && <FlagButton post={post} />}
+                    {showEdit ? (
+                        renderedEditor
+                    ) : (
+                        <span>
+                            <div className="PostFull__header">
+                                {post_header}
+                                <TimeAuthorCategoryLarge post={post} />
+                            </div>
+                            <div className="PostFull__body entry-content">
+                                {contentBody}
+                            </div>
+                        </span>
                     )}
-                {!isReply && <TagList post={post} />}
-                <div className="PostFull__footer row">
-                    <div className="columns medium-12 large-8">
-                        <TimeAuthorCategory post={post} />
-                        <Voting post={post} />
-                    </div>
-                    <div className="RightShare__Menu small-11 medium-12 large-4 columns">
-                        {canReblog && (
-                            <Reblog author={author} permlink={permlink} />
-                        )}
-                        <span className="PostFull__reply">
-                            {/* all */}
-                            {canReply && (
-                                <a onClick={onShowReply}>{tt('g.reply')}</a>
-                            )}{' '}
-                            {/* mods */}
-                            {canPin && (
-                                <a onClick={() => this.onTogglePin(isPinned)}>
-                                    {isPinned ? tt('g.unpin') : tt('g.pin')}
-                                </a>
-                            )}{' '}
-                            {canMute && <MuteButton post={post} />}{' '}
-                            {/* owner */}
-                            {canEdit && (
-                                <a onClick={onShowEdit}>{tt('g.edit')}</a>
-                            )}{' '}
-                            {canDelete && (
-                                <a onClick={onDeletePost}>{tt('g.delete')}</a>
-                            )}
-                        </span>
-                        <span className="PostFull__responses">
-                            <Link
-                                to={link}
-                                title={tt('g.responses', {
-                                    count: post.get('children'),
-                                })}
+
+                    {canPromote &&
+                        username && (
+                            <button
+                                className="Promote__button float-right button hollow tiny"
+                                onClick={this.showPromotePost}
                             >
-                                <Icon
-                                    name="chatboxes"
-                                    className="space-right"
-                                />
-                                {post.get('children')}
-                            </Link>
-                        </span>
-                        <ShareMenu menu={share_menu} />
-                        <button
-                            className="explore-post"
-                            title={tt('g.share_this_post')}
-                            onClick={this.showExplorePost}
-                        >
-                            <Icon name="link" className="chain-right" />
-                        </button>
+                                {tt('g.promote')}
+                            </button>
+                        )}
+                    {!isReply && <TagList post={post} />}
+                    <div className="PostFull__footer row">
+                        <div className="columns medium-12 large-8">
+                            <TimeAuthorCategory post={post} />
+                            <Voting post={post} />
+                        </div>
+                        <div className="RightShare__Menu small-11 medium-12 large-4 columns">
+                            {canReblog && (
+                                <Reblog author={author} permlink={permlink} />
+                            )}
+                            <span className="PostFull__reply">
+                                {/* all */}
+                                {canReply && (
+                                    <a onClick={onShowReply}>{tt('g.reply')}</a>
+                                )}{' '}
+                                {/* mods */}
+                                {canPin && (
+                                    <a
+                                        onClick={() =>
+                                            this.onTogglePin(isPinned)
+                                        }
+                                    >
+                                        {isPinned ? tt('g.unpin') : tt('g.pin')}
+                                    </a>
+                                )}{' '}
+                                {canMute && <MuteButton post={post} />}{' '}
+                                {/* owner */}
+                                {canEdit && (
+                                    <a onClick={onShowEdit}>{tt('g.edit')}</a>
+                                )}{' '}
+                                {canDelete && (
+                                    <a onClick={onDeletePost}>
+                                        {tt('g.delete')}
+                                    </a>
+                                )}
+                            </span>
+                            <span className="PostFull__responses">
+                                <Link
+                                    to={link}
+                                    title={tt('g.responses', {
+                                        count: post.get('children'),
+                                    })}
+                                >
+                                    <Icon
+                                        name="chatboxes"
+                                        className="space-right"
+                                    />
+                                    {post.get('children')}
+                                </Link>
+                            </span>
+                            <ShareMenu menu={share_menu} />
+                            <button
+                                className="explore-post"
+                                title={tt('g.share_this_post')}
+                                onClick={this.showExplorePost}
+                            >
+                                <Icon name="link" className="chain-right" />
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div className="row">
-                    <div className="column large-8 medium-10 small-12">
+                </article>
+                <div className="row comment-editor">
+                    <div className="column large-12 medium-12 small-12">
                         {showReply && renderedEditor}
                     </div>
                 </div>
-            </article>
+            </div>
         );
     }
 }

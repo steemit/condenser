@@ -797,10 +797,21 @@
         "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
         "out_of_bandwidth_option_2":
             "Wait until your Resource Credits recharge",
-        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+        "out_of_bandwidth_option_3": "Wait until the network usage decreases",
+        "out_of_bandwidth_option_4": "Power up more Steem"
     },
     "sanitizedlink_jsx": {
         "phishylink_caution": "Link hidden; phishing attempt",
         "phishylink_reveal": "show link"
+    },
+    "notificationslist_jsx": {
+        "mark_all_as_read": "Mark all as read",
+        "load_more": "Load more...",
+        "all": "All",
+        "replies": "Replies",
+        "follows": "Follows",
+        "resteems": "Resteems",
+        "upvotes": "Upvotes",
+        "mentions": "Mentions"
     }
 }

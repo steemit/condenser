@@ -10,6 +10,8 @@ import ClaimBox from 'app/components/elements/ClaimBox';
 import Callout from 'app/components/elements/Callout';
 import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
+import tt from 'counterpart';
+import classNames from 'classnames';
 
 const notificationsIcon = type => {
     const types = {
@@ -57,6 +59,8 @@ const highlightText = (text, highlight) => {
     );
 };
 
+let notificationFilter = 'all';
+
 class NotificationsList extends React.Component {
     static propTypes = {
         notifications: PropTypes.arrayOf(
@@ -84,6 +88,14 @@ class NotificationsList extends React.Component {
         isLastPage: false,
     };
 
+    notificationFilterToTypes = {
+        replies: ['reply_comment', 'reply'],
+        follows: ['follow'],
+        upvotes: ['vote'],
+        resteems: ['reblog'],
+        mentions: ['mention'],
+    };
+
     constructor() {
         super();
     }
@@ -100,6 +112,7 @@ class NotificationsList extends React.Component {
         if (prevProps.username !== username) {
             getAccountNotifications(username);
         }
+        this.applyFilter();
     }
 
     onClickLoadMore = e => {
@@ -113,6 +126,67 @@ class NotificationsList extends React.Component {
         e.preventDefault();
         const { username, markAsRead } = this.props;
         markAsRead(username, new Date().toISOString().slice(0, 19));
+    };
+
+    applyFilter = () => {
+        const notificationElements = document.getElementsByClassName(
+            'notification__item'
+        );
+
+        for (let ni = 0; ni < notificationElements.length; ni += 1) {
+            const notificationElement = notificationElements[ni];
+
+            if (notificationFilter === 'all') {
+                notificationElement.classList.remove('hide');
+            } else if (
+                this.notificationFilterToTypes.hasOwnProperty(
+                    notificationFilter
+                )
+            ) {
+                const notificationTypes = this.notificationFilterToTypes[
+                    notificationFilter
+                ];
+                let matchType = false;
+
+                for (let ti = 0; ti < notificationTypes.length; ti += 1) {
+                    const notificationType = notificationTypes[ti];
+                    if (
+                        notificationElement.classList.contains(
+                            `notification__${notificationType}`
+                        )
+                    ) {
+                        matchType = true;
+                    }
+                }
+
+                if (matchType === false) {
+                    notificationElement.classList.add('hide');
+                } else {
+                    notificationElement.classList.remove('hide');
+                }
+            }
+        }
+    };
+
+    onClickFilter = e => {
+        e.preventDefault();
+        const target = e.target;
+
+        const filterElements = document.getElementsByClassName(
+            'notification__filter'
+        );
+
+        // reset
+        for (let fi = 0; fi < filterElements.length; fi += 1) {
+            const filterElement = filterElements[fi];
+            filterElement.classList.remove('selected');
+        }
+
+        target.classList.add('selected');
+        notificationFilter = target.dataset.type;
+        this.applyFilter();
+
+        target.blur();
     };
 
     render() {
@@ -141,7 +215,9 @@ class NotificationsList extends React.Component {
             return (
                 <div
                     key={item.id}
-                    className="notification__item flex-body"
+                    className={`notification__item flex-body notification__${
+                        item.type
+                    }`}
                     style={{
                         background: 'rgba(225,255,225,' + item.score + '%)',
                     }}
@@ -179,13 +255,122 @@ class NotificationsList extends React.Component {
                 {isOwnAccount && <ClaimBox accountName={accountName} />}
                 {notifications &&
                     notifications.length > 0 &&
+                    !notificationActionPending && (
+                        <center>
+                            <br />
+                            <div className="notification__filter_select">
+                                <a
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter === 'all',
+                                        }
+                                    )}
+                                    role="link"
+                                    data-type="all"
+                                    tabIndex={0}
+                                    onClick={this.onClickFilter}
+                                >
+                                    {tt('notificationslist_jsx.all')}
+                                </a>
+                                <a
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter ===
+                                                'replies',
+                                        }
+                                    )}
+                                    role="link"
+                                    data-type="replies"
+                                    tabIndex={0}
+                                    onClick={this.onClickFilter}
+                                >
+                                    {tt('notificationslist_jsx.replies')}
+                                </a>
+                                <a
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter ===
+                                                'mentions',
+                                        }
+                                    )}
+                                    role="link"
+                                    data-type="mentions"
+                                    tabIndex={0}
+                                    onClick={this.onClickFilter}
+                                >
+                                    {tt('notificationslist_jsx.mentions')}
+                                </a>
+                                <a
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter ===
+                                                'follows',
+                                        }
+                                    )}
+                                    role="link"
+                                    data-type="follows"
+                                    tabIndex={0}
+                                    onClick={this.onClickFilter}
+                                >
+                                    {tt('notificationslist_jsx.follows')}
+                                </a>
+                                <a
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter ===
+                                                'upvotes',
+                                        }
+                                    )}
+                                    role="link"
+                                    data-type="upvotes"
+                                    tabIndex={0}
+                                    onClick={this.onClickFilter}
+                                >
+                                    {tt('notificationslist_jsx.upvotes')}
+                                </a>
+                                <a
+                                    className={classNames(
+                                        'notification__filter',
+                                        {
+                                            selected:
+                                                notificationFilter ===
+                                                'resteems',
+                                        }
+                                    )}
+                                    role="link"
+                                    data-type="resteems"
+                                    tabIndex={0}
+                                    onClick={this.onClickFilter}
+                                >
+                                    {tt('notificationslist_jsx.resteems')}
+                                </a>
+                            </div>
+                        </center>
+                    )}
+                {notifications &&
+                    notifications.length > 0 &&
                     unreadNotifications !== 0 &&
                     !notificationActionPending && (
                         <center>
                             <br />
                             <a href="#" onClick={this.onClickMarkAsRead}>
-                                <strong>Mark as read</strong>
+                                <strong>
+                                    {tt(
+                                        'notificationslist_jsx.mark_all_as_read'
+                                    )}
+                                </strong>
                             </a>
+                            <br />
                         </center>
                     )}
                 {(notificationActionPending || !process.env.BROWSER) && (
@@ -214,7 +399,9 @@ class NotificationsList extends React.Component {
                         <center>
                             <br />
                             <a href="#" onClick={this.onClickLoadMore}>
-                                <strong>Load more...</strong>
+                                <strong>
+                                    {tt('notificationslist_jsx.load_more')}
+                                </strong>
                             </a>
                         </center>
                     )}

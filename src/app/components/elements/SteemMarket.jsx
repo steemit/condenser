@@ -149,6 +149,7 @@ class SteemMarket extends Component {
                 <div className="c-sidebar__content">
                     <div className="steem-market">
                         <Coin coin={steem} color="#09d6a8" />
+                        <Coin coin={tron} color="#788187" />
                         {topCoins.map(coin => (
                             <Coin
                                 key={coin.get('name')}
@@ -157,7 +158,6 @@ class SteemMarket extends Component {
                             />
                         ))}
                         <Coin coin={sbd} color="#09d6a8" />
-                        <Coin coin={tron} color="#c62734" />
                     </div>
                 </div>
             </div>

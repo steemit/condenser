@@ -130,6 +130,9 @@ class Modals extends React.Component {
                             </p>
                             <ol>
                                 <li>
+                                    {tt('modals_jsx.out_of_bandwidth_option_4')}
+                                </li>
+                                <li>
                                     {tt('modals_jsx.out_of_bandwidth_option_1')}
                                 </li>
                                 <li>
@@ -139,9 +142,9 @@ class Modals extends React.Component {
                                     {tt('modals_jsx.out_of_bandwidth_option_3')}
                                 </li>
                             </ol>
-                            <button className="button" onClick={buySteemPower}>
+                            {/* <button className="button" onClick={buySteemPower}>
                                 {tt('g.buy_steem_power')}
-                            </button>
+                            </button> */}
                         </div>
                     </Reveal>
                 )}

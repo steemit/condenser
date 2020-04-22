@@ -94,7 +94,6 @@ export function* fetchState(location_change_action) {
             ]);
         }
         const state = yield call(getStateAsync, url, username, false);
-        console.log(state);
         yield put(globalActions.receiveState(state));
         yield call(syncSpecialPosts);
     } catch (error) {

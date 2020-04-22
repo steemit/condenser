@@ -12,6 +12,7 @@ const RECEIVE_UNREAD_NOTIFICATIONS = 'global/RECEIVE_UNREAD_NOTIFICATIONS';
 const NOTIFICATIONS_LOADING = 'global/NOTIFICATIONS_LOADING';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
+const RECEIVE_ACCOUNT_COUNT = 'global/RECEIVE_ACCOUNT_COUNT';
 const RECEIVE_POST_HEADER = 'global/RECEIVE_POST_HEADER';
 const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
 const RECEIVE_COMMUNITIES = 'global/RECEIVE_COMMUNITIES';
@@ -119,6 +120,10 @@ export default function reducer(state = defaultState, action = {}) {
                 const transformed = transformAccount(curr);
                 return mergeAccounts(acc, transformed);
             }, state);
+        }
+
+        case RECEIVE_ACCOUNT_COUNT: {
+            return state.setIn(['account_count'], payload);
         }
 
         case RECEIVE_POST_HEADER: {
@@ -384,6 +389,11 @@ export const receiveAccount = payload => ({
 
 export const receiveAccounts = payload => ({
     type: RECEIVE_ACCOUNTS,
+    payload,
+});
+
+export const receiveAccountCount = payload => ({
+    type: RECEIVE_ACCOUNT_COUNT,
     payload,
 });
 

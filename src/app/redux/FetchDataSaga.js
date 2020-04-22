@@ -26,6 +26,7 @@ const GET_UNREAD_ACCOUNT_NOTIFICATIONS =
     'fetchDataSaga/GET_UNREAD_ACCOUNT_NOTIFICATIONS';
 const MARK_NOTIFICATIONS_AS_READ = 'fetchDataSaga/MARK_NOTIFICATIONS_AS_READ';
 const GET_REWARDS_DATA = 'fetchDataSaga/GET_REWARDS_DATA';
+const GET_ACCOUNT_COUNT = 'fetchDataSaga/GET_ACCOUNT_COUNT';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
@@ -42,6 +43,7 @@ export const fetchDataWatches = [
         getUnreadAccountNotificationsSaga
     ),
     takeEvery(GET_REWARDS_DATA, getRewardsDataSaga),
+    takeEvery(GET_ACCOUNT_COUNT, getAccountCountSaga),
     takeEvery(MARK_NOTIFICATIONS_AS_READ, markNotificationsAsReadSaga),
 ];
 
@@ -92,6 +94,7 @@ export function* fetchState(location_change_action) {
             ]);
         }
         const state = yield call(getStateAsync, url, username, false);
+        console.log(state);
         yield put(globalActions.receiveState(state));
         yield call(syncSpecialPosts);
     } catch (error) {
@@ -160,6 +163,18 @@ function* syncSpecialPosts() {
 function* getAccounts(usernames) {
     const accounts = yield call([api, api.getAccountsAsync], usernames);
     yield put(globalActions.receiveAccounts({ accounts }));
+}
+
+/**
+ * Request account count
+ *
+ * https://github.com/steemit/steem-js/tree/master/doc#get-account-count
+ * @param {}
+ */
+
+function* getAccountCountSaga() {
+    const count = yield call([api, api.getAccountCountAsync]);
+    yield put(globalActions.receiveAccountCount({ count }));
 }
 
 /**
@@ -491,6 +506,11 @@ export const actions = {
 
     getAccountNotifications: payload => ({
         type: GET_ACCOUNT_NOTIFICATIONS,
+        payload,
+    }),
+
+    getAccountCount: payload => ({
+        type: GET_ACCOUNT_COUNT,
         payload,
     }),
 

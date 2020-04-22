@@ -52,14 +52,19 @@ class Rewards extends Component {
     static propTypes = {
         loading: PropTypes.bool.isRequired,
         fetchRewardsData: PropTypes.func.isRequired,
+        fetchAccountCount: PropTypes.func.isRequired,
         rewards: PropTypes.shape({
             total: PropTypes.number,
             blogs: PropTypes.number,
             items: PropTypes.arrayOf(PropTypes.array),
         }).isRequired,
+        accountCount: PropTypes.shape({
+            count: PropTypes.number,
+        }),
     };
     static defaultProps = {
         loading: true,
+        accountCount: { count: 0 },
     };
 
     constructor() {
@@ -70,6 +75,7 @@ class Rewards extends Component {
 
     componentDidMount() {
         this.props.fetchRewardsData();
+        this.props.fetchAccountCount();
 
         window.addEventListener('resize', this.resizeListener, {
             capture: false,
@@ -93,7 +99,7 @@ class Rewards extends Component {
 
     render() {
         const { width, height } = this.state;
-        const { rewards, loading } = this.props;
+        const { rewards, loading, accountCount } = this.props;
 
         let body;
 
@@ -107,10 +113,16 @@ class Rewards extends Component {
         }
 
         return (
-            <div className="row">
-                <div className="column Rewards__chart" id="reward_container">
-                    {body}
+            <div>
+                <div className="row">
+                    <div
+                        className="column Rewards__chart"
+                        id="reward_container"
+                    >
+                        {body}
+                    </div>
                 </div>
+                <div>Accounts on the blockchain: {accountCount.count}</div>
             </div>
         );
     }
@@ -197,18 +209,26 @@ module.exports = {
         // mapStateToProps
         (state, ownProps) => {
             let rewards = Map({});
+            let accountCount = { count: 0 };
             if (state.global.hasIn(['rewards'])) {
                 rewards = state.global.getIn(['rewards'], null);
             }
+            if (state.global.hasIn(['account_count'])) {
+                accountCount = state.global.toJS().account_count;
+            }
+
             return {
                 rewards: rewards.toJS(),
                 loading: state.app.get('loading'),
+                accountCount,
             };
         },
         // mapDispatchToProps
         dispatch => ({
             fetchRewardsData: payload =>
                 dispatch(fetchDataSagaActions.getRewardsData()),
+            fetchAccountCount: payload =>
+                dispatch(fetchDataSagaActions.getAccountCount()),
         })
     )(Rewards),
 };

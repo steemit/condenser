@@ -12,8 +12,8 @@ import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
 import constants from './constants';
-import { fromJS, Map, Set } from 'immutable';
 import { getStateAsync, callBridge } from 'app/utils/steemApi';
+
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 const GET_POST_HEADER = 'fetchDataSaga/GET_POST_HEADER';
@@ -21,6 +21,7 @@ const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 const LIST_COMMUNITIES = 'fetchDataSaga/LIST_COMMUNITIES';
 const GET_SUBSCRIPTIONS = 'fetchDataSaga/GET_SUBSCRIPTIONS';
 const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
+const GET_POST_NOTIFICATIONS = 'fetchDataSaga/GET_POST_NOTIFICATIONS';
 const GET_UNREAD_ACCOUNT_NOTIFICATIONS =
     'fetchDataSaga/GET_UNREAD_ACCOUNT_NOTIFICATIONS';
 const MARK_NOTIFICATIONS_AS_READ = 'fetchDataSaga/MARK_NOTIFICATIONS_AS_READ';
@@ -42,6 +43,7 @@ export const fetchDataWatches = [
     ),
     takeEvery(GET_REWARDS_DATA, getRewardsDataSaga),
     takeEvery(MARK_NOTIFICATIONS_AS_READ, markNotificationsAsReadSaga),
+    takeEvery(GET_POST_NOTIFICATIONS, getPostNotificationsSaga),
 ];
 
 export function* getPostHeader(action) {
@@ -337,6 +339,61 @@ export function* markNotificationsAsReadSaga(action) {
     }
 }
 
+/**
+ * Request notifications for given post
+ * @param {object} payload containing:
+ *   - author (string)
+ *   - permlink (string)
+ */
+export function* getPostNotificationsSaga(action) {
+    if (!action.payload)
+        throw 'Cannot get post notifications, please specify an author and permlink';
+    const { author, permlink, last_id } = action.payload;
+    console.log('LAST ID IS:', last_id);
+    yield put(
+        globalActions.postNotificationsLoading({
+            author,
+            permlink,
+            loading: true,
+        })
+    );
+    try {
+        const postNotifications = yield call(
+            callBridge,
+            'post_notifications',
+            action.payload
+        );
+        if (postNotifications && postNotifications.error) {
+            console.error(
+                '~~ Saga getUnreadAccountNotifications error ~~>',
+                postNotifications.error
+            );
+            yield put(
+                appActions.steemApiError(postNotifications.error.message)
+            );
+        } else {
+            yield put(
+                globalActions.receivePostNotifications({
+                    author,
+                    permlink,
+                    postNotifications,
+                    last_id,
+                })
+            );
+        }
+    } catch (error) {
+        console.error('~~ Saga getUnreadAccountNotifications error ~~>', error);
+        yield put(appActions.steemApiError(error.message));
+    }
+    yield put(
+        globalActions.postNotificationsLoading({
+            author,
+            permlink,
+            loading: false,
+        })
+    );
+}
+
 export function* fetchData(action) {
     // TODO: postFilter unused
     const { order, author, permlink, postFilter, observer } = action.payload;
@@ -481,6 +538,11 @@ export const actions = {
 
     getSubscriptions: payload => ({
         type: GET_SUBSCRIPTIONS,
+        payload,
+    }),
+
+    getPostNotifications: payload => ({
+        type: GET_POST_NOTIFICATIONS,
         payload,
     }),
 

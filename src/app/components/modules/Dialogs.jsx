@@ -91,6 +91,7 @@ class Dialogs extends React.Component {
                                     'name',
                                 ])}
                                 isLastPage={false}
+                                postNotifications={false}
                             />
                         </Reveal>
                     </span>

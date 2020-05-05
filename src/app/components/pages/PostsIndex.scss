@@ -2,15 +2,19 @@
   clear: right;
 }
 
+.c-sidebar__module.CommunityPaneMobile {
+    padding: 0.75em 1em 0em;
+}
+
 .PostsList__summaries {
   list-style-type: none;
   margin-left: 0;
 }
 
 .PostsIndex {
-    .articles__h1--no-wrap {
-        white-space: nowrap;
-    }
+  .articles__h1--no-wrap {
+    white-space: nowrap;
+  }
 }
 
 .PostsIndex__topics {
@@ -27,10 +31,6 @@
     border-bottom: 1px solid $medium-gray;
     border-radius: 0;
   }
-}
-
-.PostsIndex.fetching .PostsIndex__topics_compact {
-  visibility: hidden;
 }
 
 /* Small only */
@@ -95,13 +95,14 @@
 
 .c-sidebar {
   width: 100%;
-  flex: 0 0 240px;
+  flex: 0 0 320px;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   &__module {
-      padding: 1.5em 2em;
+    padding: 1.5em 2em;
     @include themify($themes) {
-        background-color: themed('moduleBackgroundColor');
-        border: themed('border');
+      border-radius: themed('roundedCorners');
+      background-color: themed('moduleBackgroundColor');
+      border: themed('border');
     }
     margin-bottom: 1em;
     box-shadow: 0px 5px 10px 0 rgba(0,0,0,0);
@@ -112,20 +113,12 @@
         box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
       }
     }
-    &--tags {
-      display: none;
-      @include MQ(FL) {
-        display: block;
-      }
-      @include MQ(L) {
-        display: none;
-      }
-    }
   }
+
   &--left {
     display: none;
     order: 1;
-    @include MQ(L) {
+    @include MQ(M) {
       display: block;
       margin-left: 1em;
     }
@@ -133,7 +126,7 @@
   &--right {
     display: none;
     order: 3;
-    @include MQ(M) {
+    @include MQ(L) {
       display: block;
       margin-right: 1em;
     }
@@ -143,9 +136,8 @@
     margin: 0;
     padding: 0;
   }
-  &__list-item {
-    margin-bottom: 10px;
-    line-height: 1.2;
+
+  .li {
     &:last-child {
       margin-bottom: 0;
     }
@@ -165,6 +157,8 @@
     @extend .link--primary;
     font-family: $font-primary;
     &--emphasis {
+      font-size: 1rem;
+      margin: 1rem 0 0;
       font-weight: bold;
     }
   }
@@ -204,42 +198,32 @@
 }
 
 .articles {
-    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    padding: 4px 1em 1em 1em;
-    transition: all 0.2s ease-out;
-    border: transparent;
-    min-width: 300px;
-    width: 100%;
-    margin: auto;
-    background-color: transparent;
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 0em 1em;
+  transition: all 0.2s ease-out;
+  border: transparent;
+  min-width: 300px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: transparent;
+  box-shadow: none;
 
+  h2 {
+    font-family: sans-serif;
+  }
   @include MQ(M) {
-    margin: 0 1em;
-    padding: 0.5em 0em;
-    min-width: 550px;
+    padding: 0em 1em;
+    min-width: 500px;
     max-width: 664px;
     order: 2;
 
   }
-  h2 {
-    font-family: sans-serif;
-  }
   @include MQ(L) {
-    min-width: 664px;
+    min-width: 550px;
     max-width: 664px;
-    padding: 1.5em 4em;
     @include themify($themes) {
-        border: themed('border');
-        box-shadow: 5px 5px 0 0 themed('contentBorderAccent');
-        background-color: themed('moduleBackgroundColor');
-    }
-  }
-
-  &:hover {
-    @include MQ(L) {
-      @include themify($themes) {
-          box-shadow: 6px 6px 0 0 themed('contentBorderAccent');
-      }
+      border: themed('borderTransparent');
+      background-color: themed('transparent');
     }
   }
 
@@ -247,10 +231,10 @@
     margin-bottom: 20px;
     margin-top: 0px;
     @include themify($themes) {
-        border-bottom: themed('border');
-      }
+      border-bottom: themed('border');
+    }
     @include MQ(M) {
-        display: none;
+      display: none;
     }
   }
 
@@ -262,8 +246,8 @@
       float: right;
     }
     @include MQ(FM) {
-        display: flex;
-        justify-content: flex-end;
+      display: flex;
+      justify-content: flex-end;
     }
   }
   &__icon--layout {
@@ -272,27 +256,26 @@
     position: relative;
   }
   &__summary {
-      margin: 0em 0 1em;
-      transition: 0.2s all ease-in-out;
-      border: transparent;
-      padding-bottom: 10px;
+    margin: 0;
+    transition: 0.2s all ease-in-out;
+    border: transparent;
+    padding-bottom: 0;
+    @include themify($themes) {
+      background-color: themed('moduleBackgroundColor');
+    }
+    @include MQ(M) {
+      margin: 0 0 40px;
+      box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.0);
+      padding-bottom: 0;
       @include themify($themes) {
-          background-color: themed('moduleBackgroundColor');
-          border-bottom: themed('border');
-        }
+        border: themed('border');
+      }
+    }
+    &:hover {
       @include MQ(M) {
-        margin: 0 0 40px;
-        box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.0);
-        padding-bottom: 0;
-        @include themify($themes) {
-            border: themed('border');
-          }
+        box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
       }
-      &:hover {
-        @include MQ(M) {
-          box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
-        }
-      }
+    }
   }
   &__resteem-icon {
     position: relative;
@@ -307,18 +290,18 @@
     @include MQ(M) {
       padding: 10px 16px 5px;
       @include themify($themes) {
-          border-bottom: themed('border');
-        }
+        border-bottom: themed('border');
       }
+    }
     &--footer {
       @include themify($themes) {
-          border-top: themed('border');
-          border-bottom: themed('border');
-        }
+        border-top: themed('border');
+        border-bottom: themed('border');
+      }
       @include MQ(M) {
         @include themify($themes) {
-            border-bottom: transparent;
-          }
+          border-bottom: transparent;
+        }
       }
     }
   }
@@ -331,8 +314,8 @@
     @include MQ(M) {
       padding: 16px;
       @include themify($themes) {
-          border-top: themed('border');
-        }
+        border-top: themed('border');
+      }
     }
     a {
       @extend .link;
@@ -349,13 +332,14 @@
     justify-content: space-between;
     flex-wrap: wrap;
     line-height: 1;
+    min-height: 50px;
     @include MQ(M) {
       padding-top: 0;
     }
     &-select {
-        select {
-            max-width: 300px;
-        }
+      select {
+        max-width: 300px;
+      }
     }
   }
   &__header-col {
@@ -370,21 +354,20 @@
   }
   &__resteem {
     padding-bottom: 0px;
-    margin-top: 24px;
+    margin-top: 6px;
 
     @include MQ(M) {
-      margin-top: 8px;
       padding-bottom: 5px;
       @include themify($themes) {
-          border-bottom: themed('border');
-        }
+        border-bottom: themed('border');
       }
+    }
   }
   &__resteem-text {
     @include font-size(13px);
     margin-bottom: 0px;
     @include themify($themes) {
-        color: themed('textColorSecondary');
+      color: themed('textColorSecondary');
     }
     @include MQ(M) {
       margin-bottom: 2px;
@@ -409,7 +392,6 @@
     font-weight: bold;
     @include font-size(18px);
     margin: 0;
-    text-transform: capitalize;
     @include MQ(M) {
       @include font-size(18px);
     }
@@ -418,19 +400,19 @@
     // @extend .h2;
     margin: 0;
     @include font-size(16px);
-      overflow : hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     a {
-    font-weight: bold;
-    @include themify($themes) {
+      font-weight: bold;
+      @include themify($themes) {
         color: themed('textColorPrimary');
-    }
-     &:visited {
+      }
+      &:visited {
         @include themify($themes) {
-            color: themed('textColorSecondary');
+          color: themed('textColorSecondary');
         }
       }
     }
@@ -454,7 +436,7 @@
       top: -4px;
       margin-top: 12px;
       @include themify($themes) {
-          color: themed('textColorSecondary');
+        color: themed('textColorSecondary');
       }
       @media only screen and (min-width: 370px) {
         margin-top: 0;
@@ -477,8 +459,8 @@
   &__link {
     text-decoration: none;
     @include themify($themes) {
-        color: themed('textColorPrimary');
-      }
+      color: themed('textColorPrimary');
+    }
   }
   // &__profile-img {
   //   display: none;
@@ -492,16 +474,16 @@
   }
   &__tags {
     @include themify($themes) {
-        color: themed('textColorSecondary');
-      }
+      color: themed('textColorSecondary');
+    }
     @include font-size(14px);
     margin-bottom: 18px;
   }
   &__tag-link {
-     @include font-size(14px);
+    @include font-size(14px);
     @include themify($themes) {
-        color: themed('textColorSecondary');
-      }
+      color: themed('textColorSecondary');
+    }
     a {
       @extend .link;
       @extend .link--secondary;
@@ -521,16 +503,16 @@
 
     .icon-flag-svg {
       @include themify($themes) {
-          fill: themed('textColorSecondary');
-        }
+        fill: themed('textColorSecondary');
+      }
       transition: 0.2s all ease-in-out;
     }
     &:hover {
       cursor: pointer;
       .icon-flag-svg {
         @include themify($themes) {
-            fill: themed('textColorError');
-          }
+          fill: themed('textColorError');
+        }
       }
     }
   }
@@ -541,6 +523,12 @@
         margin-top: 1em;
       }
     }
+  }
+
+  &__content-block--text {
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    flex: 1;
   }
 
   &__content-block--img + &__content-block--text {
@@ -573,8 +561,8 @@
       .user__username {
         transition: 0.2s all ease-in-out;
         @include themify($themes) {
-            color: themed('textColorAccent');
-          }
+          color: themed('textColorAccent');
+        }
       }
     }
   }
@@ -592,7 +580,7 @@
   &__name {
     display: inline;
     font-weight: bold;
-    padding-right: 4px;
+    padding-right: 2px;
     margin: 0;
     line-height: 1.2;
 
@@ -631,12 +619,12 @@
 .icon-svg {
   transition: 0.2s all 0.05s ease-in-out;
   @include themify($themes) {
-      fill: themed('textColorSecondary');
-    }
+    fill: themed('textColorSecondary');
+  }
   &--accent {
     @include themify($themes) {
-        fill: themed('textColorAccent');
-      }
+      fill: themed('textColorAccent');
+    }
   }
   &--layout-line1, &--layout-line2, &--layout-line3 {
     height: 2px;
@@ -656,21 +644,21 @@
 
 
 .articles__layout-selector {
-    display: inline-block;
-        .icon-svg {
-            &--accent {
-                @include themify($themes) {
-                    fill: themed('textColorSecondary');
-                }
-            }
+  display: inline-block;
+  .icon-svg {
+    &--accent {
+      @include themify($themes) {
+        fill: themed('textColorSecondary');
+      }
     }
+  }
 }
 
 .articles__layout-selector:hover .icon-svg {
   &--accent {
     @include themify($themes) {
-        fill: themed('textColorPrimary');
-      }
+      fill: themed('textColorPrimary');
+    }
   }
 }
 
@@ -700,12 +688,10 @@ a#changeLayout:focus {
         y: 6px;
       }
     }
-    .content-container {
-      max-width: 1520px;
-    }
     .c-sidebar {
       &--right {
         display: none;
+        max-width: 320px;
         order: 3;
         @include MQ(L) {
           display: block;
@@ -714,15 +700,14 @@ a#changeLayout:focus {
       }
     }
     .articles {
-      padding: 1.5em 1.5em;
       max-width: none;
       max-width: 1056px;
       @include MQ(XL) {
-        min-width: 1050px;
+        min-width: 850px;
       }
       @include themify($themes) {
-         background-color: themed('moduleBackgroundColor');
-         border: themed('border');
+        background-color: transparent;
+        border: themed('borderTransparent');
       }
       &__hr {
         @include MQ(M) {
@@ -736,19 +721,16 @@ a#changeLayout:focus {
         border: transparent;
         box-shadow: none;
         padding-bottom: 0px;
-        margin: 0 0 1.4em;
-        @include themify($themes) {
-          border-bottom: themed('borderLight');
-        }
+        margin: 0;
         @include MQ(M) {
-          padding-bottom: 6px;
+          padding-bottom: 0;
         }
       }
       &__h2 {
-        @include font-size(16px);
+        @include font-size(15px);
 
         @include MQ(M) {
-          -webkit-line-clamp: 2;
+          -webkit-line-clamp: 1;
         }
         @include MQ(XL) {
           -webkit-line-clamp: 1;
@@ -769,7 +751,7 @@ a#changeLayout:focus {
         transform:translateY(-50%)
       }
       &__summary-header {
-        padding: 2px 0 5px;
+        padding: 2px 0;
         border: transparent;
       }
       &__summary-footer {
@@ -789,8 +771,15 @@ a#changeLayout:focus {
         padding-top: 0px;
       }
       &__content {
+        display: -webkit-box;
         display: flex;
         align-items: top;
+      }
+      &__footer {
+        @include themify($themes) {
+          border-top: themed('borderLight');
+          margin-top: 0.25em;
+        }
       }
       &__content-block {
         margin-bottom: 0;
@@ -818,6 +807,10 @@ a#changeLayout:focus {
           padding-right: 0;
         }
       }
+      .articles__hr {
+        margin-bottom: 0.3em;
+        display: none;
+      }
     }
     // ,user layout-list
     .user {
@@ -832,21 +825,7 @@ a#changeLayout:focus {
   }
 }
 
-
-.layout-list {
-  @include MQ(L) {
-    .articles {
-      padding: 1.5em 3em;
-    }
-  }
-  @include MQ(XL) {
-    .articles {
-      padding: 1.5em 4em;
-    }
-  }
-}
-
-.layout-list .user .Userpic {
+.layout-list .user > .user__col > .user__link > .Userpic {
   width: 24px !important;
   height: 24px !important;
   margin-right: 8px;
@@ -859,73 +838,15 @@ a#changeLayout:focus {
   }
 }
 
-.layout-compressed {
-  @extend .layout-list;
-
-  @include MQ(M) {
-    .Userpic {
-      display: none;
-    }
-    .articles {
-      &__summary {
-        margin: 0 0 10px;
-        padding-bottom: 0;
-        @include themify($themes) {
-          border-bottom: themed('borderTransparent');
-        }
-      }
-      &__summary-header {
-        padding: 2px 0;
-      }
-      &__summary-footer {
-        padding: 0;
-      }
-      &__h2 {
-        @include font-size(14px);
-        padding-bottom: 2px;
-      }
-      .PostSummary__body {
-        padding: 0;
-        @include font-size(14px);
-      }
-      &__content-block {
-        &--img {
-          margin-right: 12px;
-        }
-      }
-      &__feature-img-container {
-        width: 90px;
-        height: 56px;
-      }
-      &__hr {
-        margin-bottom: 12px;
-      }
-    }
-    .c-sidebar {
-      &__content {
-        @include font-size(14px);
-      }
-    }
-    .user {
-      &__name {
-        a {
-          font-weight: normal;
-        }
-      }
-    }
-  }
-}
-
-
 .icon-svg {
   transition: 0.2s all ease-in-out;
   @include themify($themes) {
-      fill: themed('textColorSecondary');
-    }
+    fill: themed('textColorSecondary');
+  }
   &--accent {
     @include themify($themes) {
-        fill: themed('textColorAccent');
-      }
+      fill: themed('textColorAccent');
+    }
   }
   &--layout-line1, &--layout-line2, &--layout-line3 {
     height: 2px;
@@ -949,12 +870,12 @@ a#changeLayout:focus {
 
 
 .articles__resteem .username {
-    @extend .link;
-    @extend .link--secondary;
-    text-decoration: none;
+  @extend .link;
+  @extend .link--secondary;
+  text-decoration: none;
 }
 
 
 .articles__resteem-icon path {
-    fill: #cacaca;
+  fill: #cacaca;
 }

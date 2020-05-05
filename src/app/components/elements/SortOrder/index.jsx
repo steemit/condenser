@@ -6,82 +6,86 @@ import { browserHistory } from 'react-router';
 import NativeSelect from 'app/components/elements/NativeSelect';
 
 const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
-    /*
-     * We do not sort the user feed by anything other than 'new'.
-     * So don't make links to it from the SortOrder component.
-     * Instead fall back to the 'all tags' route when a user attempts to sort from a feed page.
-     * If a user lands on the 'feed' page and the sort order is displayed (e.g. a mobile user) 
-     * display the active sort as 'new'.
-     */
-    let tag = topic;
+    let tag = topic || '';
     let sort = sortOrder;
 
-    if (topic === 'feed') {
+    if (sort === 'feed') {
         tag = '';
         sort = 'created';
     }
 
-    // If we are at the homepage, the sort order is 'trending'
     if (pathname === '/') {
         tag = '';
         sort = 'trending';
     }
 
-    const makeRoute = (tag, sort) =>
-        tag ? `/${sort.value}/${tag}` : `/${sort.value}`;
+    const sorts = (tag, topMenu = false) => {
+        if (tag != '') tag = `/${tag}`;
 
-    const handleChange = tag => sort => {
-        browserHistory.replace(makeRoute(tag, sort));
-    };
-
-    const sorts = tag => {
-        return [
+        let out = [
             {
-                value: 'trending',
                 label: tt('main_menu.trending'),
-                link: `/trending/${tag}`,
-            },
+                value: `/trending${tag}`,
+            } /*
             {
-                value: 'created',
-                label: tt('g.new'),
-                link: `/created/${tag}`,
-            },
-            {
-                value: 'hot',
                 label: tt('main_menu.hot'),
-                link: `/hot/${tag}`,
-            },
-            {
-                value: 'promoted',
-                label: tt('g.promoted'),
-                link: `/promoted/${tag}`,
-            },
+                value: `/hot${tag}`,
+            },*/,
         ];
+
+        if (!topMenu) {
+            out.push({
+                label: tt('g.new'),
+                value: `/created${tag}`,
+            });
+
+            /*
+            out.push({
+                label: tt('g.promoted'),
+                value: `/promoted${tag}`,
+            });
+            */
+
+            out.push({
+                label: tt('g.payouts'),
+                value: `/payout${tag}`,
+            });
+
+            out.push({
+                label: 'Muted',
+                value: `/muted${tag}`,
+            });
+        }
+
+        return out;
     };
 
-    return horizontal ? (
+    // vertical dropdown
+    if (!horizontal) {
+        const url = (sort, tag = null) =>
+            tag ? `/${sort}/${tag}` : `/${sort}`;
+        return (
+            <NativeSelect
+                currentlySelected={url(sort, tag)}
+                options={sorts(tag, false)}
+                onChange={el => browserHistory.replace(el.value)}
+            />
+        );
+    }
+
+    // site header
+    return (
         <ul className="nav__block-list">
-            {sorts(tag).map(i => {
+            {sorts('', true).map(i => {
+                const active = i.value === `/${sort}`;
+                const cls = active ? 'nav__block-list-item--active' : '';
                 return (
-                    <li
-                        key={i.value}
-                        className={`nav__block-list-item ${
-                            i.value === sort
-                                ? 'nav__block-list-item--active'
-                                : ''
-                        }`}
-                    >
-                        <Link to={i.link}>{i.label}</Link>
+                    <li key={i.value} className={`nav__block-list-item ${cls}`}>
+                        <Link to={i.value}>{i.label}</Link>
                     </li>
                 );
             })}
         </ul>
-    ) : (
-        <NativeSelect
-            currentlySelected={sort}
-            options={sorts(tag)}
-            onChange={handleChange(tag)}
-        />
     );
 };
 

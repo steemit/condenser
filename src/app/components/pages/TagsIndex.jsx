@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
+import { Map } from 'immutable';
 
 export default class TagsIndex extends React.Component {
     static propTypes = {
@@ -53,9 +54,8 @@ export default class TagsIndex extends React.Component {
 
     render() {
         const { tagsAll } = this.props;
-        //console.log('-- TagsIndex.render -->', tagsAll.toJS());
         const { order } = this.state;
-        let tags = tagsAll;
+        const tags = tagsAll;
 
         const rows = tags
             .filter(
@@ -129,6 +129,6 @@ export default class TagsIndex extends React.Component {
 module.exports = {
     path: 'tags(/:order)',
     component: connect(state => ({
-        tagsAll: state.global.get('tags'),
+        tagsAll: state.global.get('tags', Map()),
     }))(TagsIndex),
 };

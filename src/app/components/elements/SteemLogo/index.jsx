@@ -5,7 +5,7 @@ const SteemLogo = () => {
     return (
         <span className="logo">
             <svg width="150" height="40" viewBox="0 0 150 40" version="1.1">
-                <title>Steemit logo</title>
+                <title>Home</title>
                 <g id="steemit">
                     <path
                         className="logo__steemit"

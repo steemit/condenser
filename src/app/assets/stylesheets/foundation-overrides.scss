@@ -63,6 +63,7 @@ button, .button {
 
 .close-button {
   position: absolute;
+  z-index: 999;
   cursor: pointer;
   transition: color 0.2s ease-in-out;
   top: 0.5rem;
@@ -115,12 +116,18 @@ tbody tr:nth-child(even) {
 
 .reveal {
   box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-teal;   
-  border-radius: 0;
+  border-radius: 0 30px;
   border: transparent;
   transition: 0.2s all ease-in-out;
+  outline: none;
   @include themify($themes) {
     background-color: themed('modalBackgroundColor');
     color: themed('modalTextColorPrimary');
+  }
+  label {
+    @include themify($themes) {
+      color: themed('modalTextColorPrimary');
+    }
   }
   .button {
     @extend .e-btn;

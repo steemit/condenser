@@ -12,14 +12,14 @@
       "imgSrc": "* data:",
       "objectSrc": "'none'",
       "pluginTypes": "application/pdf",
-      "scriptSrc": "'unsafe-inline' 'unsafe-eval' data: https: 'self' www.google-analytics.com connect.facebook.net",
+      "scriptSrc": "'unsafe-inline' 'unsafe-eval' data: https: 'self' www.google-analytics.com connect.facebook.net cdn.catchjs.com",
       "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com",
       "reportUri": "/api/v1/csp_violation"
     },
     "reportOnly": false,
     "setAllHeaders": true
   },
-  "img_proxy_prefix": "https://steemitdevimages.com/",
+  "img_proxy_prefix": "https://steemitimages.com/",
   "ipfs_prefix": false,
   "mixpanel": false,
   "notify": {
@@ -30,24 +30,10 @@
     "secret_key": false,
     "site_key": false
   },
-  "sendgrid": {
-    "from": "noreply@example.com",
-    "key": "SG.xxx_yyyy",
-    "templates": {
-    }
-  },
   "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",
   "session_cookie_key": "stm-dev",
   "session_key": "steemses",
   "site_domain": "steemitdev.com",
-  "telesign": {
-    "customer_id": false,
-    "rest_api_key": false
-  },
-  "twilio": {
-    "account_sid": false,
-    "auth_token": false
-  },
   "upload_image": false,
   "steemd_connection_client": "https://api.steemit.com",
   "steemd_connection_server": "https://api.steemit.com",
@@ -57,7 +43,7 @@
   "conveyor_posting_wif": false,
   "conveyor_username": false,
   "special_posts_url": false,
-  "wallet_url": "https://wallet.steemitdev.com",
+  "wallet_url": "https://steemitwallet.com",
   "gpt_banned_tags": ["nsfw", "tante"],
   "google_ad_enabled": null,
   "google_ad_test": null,
@@ -238,5 +224,6 @@
   "steem_market_cache": {
     "ttl": 7200,
     "key": "steem-market"
-  }
+  },
+  "steem_elastic_search_endpoint": null
 }

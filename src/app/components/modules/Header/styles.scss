@@ -109,6 +109,25 @@
   }
 }
 
+.Header__notification {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: -10px;
+    right: -10px;
+    border-radius: 50%;
+    background: red;
+    line-height: 20px;
+    font-size: 11px;
+    text-align: center;
+    > span {
+        color: white;
+    }
+    &--loading {
+     background: transparent; 
+    }
+}
+
 span.Header__hamburger.toggle-menu {
     width: 1rem;
     height: 1rem;

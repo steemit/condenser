@@ -25,7 +25,7 @@ try {
         ConsoleExports.init(window);
     }
 } catch (e) {
-    console.error(e);
+    console.error('console_export', e);
 }
 
 function runApp(initial_state) {
@@ -63,6 +63,10 @@ function runApp(initial_state) {
                 return cmd.call(this, command);
             };
         }
+    };
+
+    window.onunhandledrejection = function(evt) {
+        console.error('unhandled rejection', evt ? evt.toString() : '<null>');
     };
 
     window.document.body.onkeypress = e => {
@@ -118,7 +122,7 @@ function runApp(initial_state) {
     try {
         clientRender(initial_state);
     } catch (error) {
-        console.error(error);
+        console.error('render_error', error);
         serverApiRecordEvent('client_error', error);
     }
 }

@@ -1290,7 +1290,7 @@ The Steem blockchain requires a set of people to create blocks and uses a consen
 <a href="#Table_of_Contents_Witnesses">^</a>
 ## <span id="How_can_I_vote_for_witnesses">How can I vote for witnesses?</span>
 
-Visit https://steemit.com/~witnesses.
+Visit https://steemitwallet.com/~witnesses.
 
 <a href="#Table_of_Contents_Witnesses">^</a>
 ## <span id="How_many_witnesses_can_I_vote_for">How many witnesses can I vote for?</span>

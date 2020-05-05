@@ -126,8 +126,7 @@
 - <a href="#What_is_considered_spam_or_abuse">What is considered spam or abuse?</a>
 - <a href="#What_are_Steemit_s_policies_on_plagiarism">What are Steemit’s policies on plagiarism?</a>
 - <a href="#Is_it_okay_to_use_random_pictures_from_the_internet">Is it okay to use random pictures from the internet?</a>
-- <a href="#What_is_Steemcleaners">What is Steemcleaners?</a>
-- <a href="#What_is__cheetah">What is @cheetah?</a>
+- <a href="#What_is_Steem_Sentinels">What is Steem Sentinels?</a>
 - <a href="#Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Where do I report a post or comment that contains plagiarism, spam, or abuse?</a>
 
 ### <span id="Table_of_Contents_Reputation">Reputation</span>
@@ -298,7 +297,7 @@ You will need to provide your email address and phone number.
 
 Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or two to review.
 
-If your account has not been approved after more than two weeks, you can ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
+If your account has not been approved after more than two weeks, you can ask for help in the <a href="https://discord.gg/taRY2vp">#General</a> channel on <a href="https://discord.gg/taRY2vp">Steem Center</a>.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</span>
@@ -320,16 +319,12 @@ The only way to have an account created via steemit.com is to supply your email 
 
 If you are willing to pay your own signup fee, then there are other ways to create a new account on the blockchain.
 
-There is a third-party tool called <a href="https://www.SteemCreate.com">SteemCreate</a> that accepts credit cards, or BTC to create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
-
 There is a third-party tool called <a href="https://anon.steem.network/">AnonSteem</a> that accepts bitcoin, Litecoin, STEEM, or SBD to anonymously create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
-
-There is a third-party tool called <a href="https://steemit.com/news/@timcliff/new-tool-from-busy-org-create-new-steem-blockchain-accounts-with-steemconnect">SteemConnect</a> that allows you to create accounts by paying or delegating the account creation fee. There is no additional fee to use the service, but does require an existing Steem blockchain account to pay the account creation fee to create the account.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</span>
 
-Ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
+Ask for help in the <a href="https://discord.gg/taRY2vp">#General</a> channel on <a href="https://discord.gg/taRY2vp">Steem Center</a>.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="What_happens_if_my_email_or_phone_number_changes">What happens if my email or phone number changes?</span>
@@ -998,25 +993,17 @@ Here is a post from @mindover that has links to many websites that have images y
 https://steemit.com/steem-help/@mindover/don-t-plagiarize-images-here-are-13-free-and-legal-ways-to-find-high-quality-photos-you-can-use-on-steemit
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
-## <span id="What_is_Steemcleaners">What is Steemcleaners?</span>
+## <span id="What_is_Steem_Sentinels">What is Steem Sentinels?</span>
 
-Steemcleaners are a group of Steemians concerned with plagiarism, copy/paste, spam, scams and other forms of abuse on Steemit.
-https://steemit.com/steemcleaners/@steemcleaners/announcing-steemcleaners-the-steemit-abuse-fighting-team
+Steem Sentinels is a community-led project that aims to spread [cybercrime awareness & prevention] on the Steem Blockchain.
+https://steempeak.com/steem/@symbionts/symbiont-s-or-anti-abuse-initiative-or-steem-sentinels
 
-<a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
-## <span id="What_is__cheetah">What is @cheetah?</span>
 
-@cheetah is a bot developed by @anyx that scours Steemit for copy/pasted content. Cheetah will not downvote copied content, but it alerts other users to look into it further.
-
-Abusive accounts (serial plagiarists or identity thieves, for example) will go on Cheetah’s blacklist. These users will get downvoted by @cheetah accounts when they post.
-
-More information on the @cheetah bot can be found in this post:
-https://steemit.com/steemit/@cheetah/faq-about-cheetah
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 ## <span id="Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Where do I report a post or comment that contains plagiarism, spam, or abuse?</span>
 
-You can report any abusive content to the <a href="https://steem.chat/channel/steemitabuse">#steemitabuse</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
+You can report any abusive content to the <a href="https://discord.gg/J8JuNQh">#abuse-discussions</a> channel on <a href="https://discord.gg/J8JuNQh">the Steem Sentienls server</a>.
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 # Reputation
@@ -1337,7 +1324,7 @@ https://steem.io/SteemWhitePaper.pdf
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 ## <span id="Where_can_I_ask_for_help_if_my_question_was_not_answered_here">Where can I ask for help if my question was not answered here?</span>
 
-If you post your question in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>, the users there may be able to help.
+If you post your question in the <a href="https://discord.gg/taRY2vp">#General</a> channel on <a href="https://discord.gg/taRY2vp">Steem Center</a>, the users there may be able to help.
 
 You can also create a post on steemit.com with the tag #help, and someone in the community may be able to answer it.
 
@@ -1347,7 +1334,7 @@ You can also create a post on steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-AnonSteem, Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, Vessel, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+AnonSteem, Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, Vessel, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

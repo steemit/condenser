@@ -348,6 +348,7 @@ export default `
 /foto/@tonyj28/cae-preso-en-ee-uu-hermano-de-viviana-gibelli-por-lavado-de-dinero
 /coins/@manojsharma/cashman-casino-free-coins-get-100-bonus-coins-android-ios-2018
 /technology/@srinivas3/how-hackers-hacking-paytm-money-or-and-cheating-you-with-fake-payments
+/steemhunt/@abdulhanan/4kt5nu-getbookvideos-videos-of-authors-sharing-key-ideas-from-their-books
 `
     .trim()
     .split('\n');

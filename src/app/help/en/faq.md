@@ -735,7 +735,7 @@ Posts and comments remain active for 7 days. When the period is over, you are ab
 
 **STEEM** - STEEM is the base liquid currency token in the platform. STEEM can be powered up into Steem Power, traded for Steem Dollars, or transferred to other accounts. It is a cryptocurrency token, similar to bitcoin.
 
-**Steem Power** - Steem Power (abbreviated SP) is a measurement of how much influence a user has in the Steem network. The more Steem Power a user holds, the more they can influence the value of posts and comments. Steem Power is less liquid. If a user wishes to “Power Down” SP, they will receive equal distributions of the STEEM weekly, over a 13 week period.
+**Steem Power** - Steem Power (abbreviated SP) is a measurement of how much influence a user has in the Steem network. The more Steem Power a user holds, the more they can influence the value of posts and comments. Steem Power is less liquid. If a user wishes to “Power Down” SP, they will receive equal distributions of the STEEM weekly, over a 4 week period.
 
 **Steem Dollars** - Steem Dollars (commonly abbreviated SBD) are liquid stable-value currency tokens designed to be pegged to $1 USD. Steem Dollars can be traded with STEEM, and transferred to other accounts for commerce or exchange.  Steem Dollars may also be converted into STEEM via a process that takes 3.5 days. 
 
@@ -782,7 +782,7 @@ If you paid using bitcoin, the third party website <a href="https://bitcoinfees.
 
 **Powering up** - If you have STEEM tokens, you can Power Up to Steem Power to get more voting influence on posts and comments. Having more Steem Power also increases the amount of curation rewards and new vested tokens that you can earn. More SP also grants more influence on approving Steem witnesses.
 
-**Powering down** - If you have Steem Power, you can power down to turn it into liquid STEEM over a period of time. The system will transfer 1/13 of your Steem Power to STEEM each week for about three months (13 weeks), starting 1 week from the time it is started. However, you will lose your influence in the network proportionally to how much is powered down, so think about it carefully. Power downs can be stopped at any time.
+**Powering down** - If you have Steem Power, you can power down to turn it into liquid STEEM over a period of time. The system will transfer 1/4 of your Steem Power to STEEM each week for about one month (4 weeks), starting 1 week from the time it is started. However, you will lose your influence in the network proportionally to how much is powered down, so think about it carefully. Power downs can be stopped at any time.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_do_the_dollar_amounts_for_pending_payouts_represent">What do the dollar amounts for pending payouts represent?</span>
@@ -1235,7 +1235,7 @@ It is strongly recommended that you store an offline copy of your password somew
 
 No, liquid tokens can not be taken back if stolen or sent to the wrong account.
 
-If your tokens are in Steem Power, it is impossible for a hacker to take out more than 1/13 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
+If your tokens are in Steem Power, it is impossible for a hacker to take out more than 1/4 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
 
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="What_should_I_do_if_I_discover_that_someone_hacked_my_account">What should I do if I discover that someone hacked my account?</span>

@@ -23,7 +23,6 @@
 - <a href="#Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</a>
 - <a href="#Why_do_I_need_to_provide_my_email_and_phone_number">Why do I need to provide my email and phone number?</a>
 - <a href="#Can_I_create_a_Steem_account_without_an_email_and_phone_number">Can I create a Steem account without an email and phone number?</a>
-- <a href="#What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using Steemit.com?</a>
 - <a href="#It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</a>
 - <a href="#What_happens_if_my_email_or_phone_number_changes">What happens if my email or phone number changes?</a>
 - <a href="#Am_I_allowed_to_create_more_than_one_account">Am I allowed to create more than one account?</a>
@@ -314,17 +313,6 @@ To create an account on the blockchain, it costs STEEM tokens. When you create a
 ## <span id="Can_I_create_a_Steem_account_without_an_email_and_phone_number">Can I create a Steem account without an email and phone number?</span>
 
 The only way to have an account created via steemit.com is to supply your email and phone number. Because Steem is an open and permissionless network, there are other ways to create an account. Any Steem blockchain account can be used on steemit.com.
-
-<a href="#Table_of_Contents_Accounts">^</a>
-## <span id="What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using steemit.com?</span>
-
-If you are willing to pay your own signup fee, then there are other ways to create a new account on the blockchain.
-
-There is a third-party tool called <a href="https://www.SteemCreate.com">SteemCreate</a> that accepts credit cards, or BTC to create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
-
-There is a third-party tool called <a href="https://anon.steem.network/">AnonSteem</a> that accepts bitcoin, Litecoin, STEEM, or SBD to anonymously create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
-
-There is a third-party tool called <a href="https://steemit.com/news/@timcliff/new-tool-from-busy-org-create-new-steem-blockchain-accounts-with-steemconnect">SteemConnect</a> that allows you to create accounts by paying or delegating the account creation fee. There is no additional fee to use the service, but does require an existing Steem blockchain account to pay the account creation fee to create the account.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</span>

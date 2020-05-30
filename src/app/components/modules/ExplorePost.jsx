@@ -52,9 +52,9 @@ class ExplorePost extends Component {
     render() {
         const link = this.props.permlink;
         const title = this.props.title;
-        const steemd = 'https://steemd.com' + link;
-        const steemdb = 'https://steemdb.com' + link;
-        const busy = 'https://busy.org' + link;
+        const steemscan = 'https://steemscan.com/' + link;
+        const steemdb = 'https://steemdb.io' + link;
+        // const busy = 'https://busy.org' + link;
         const steemit = 'https://steemit.com' + link;
         const steemitmd = '[' + title + '](https://steemit.com' + link + ')';
         let text =
@@ -103,12 +103,12 @@ class ExplorePost extends Component {
                 <ul>
                     <li>
                         <a
-                            href={steemd}
+                            href={steemscan}
                             onClick={this.Steemd}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            steemd.com <Icon name="extlink" />
+                            steemscan.com <Icon name="extlink" />
                         </a>
                     </li>
                     <li>
@@ -118,10 +118,10 @@ class ExplorePost extends Component {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            steemdb.com <Icon name="extlink" />
+                            steemdb.io <Icon name="extlink" />
                         </a>
                     </li>
-                    <li>
+                    {/* <li>
                         <a
                             href={busy}
                             onClick={this.Busy}
@@ -130,7 +130,7 @@ class ExplorePost extends Component {
                         >
                             busy.org <Icon name="extlink" />
                         </a>
-                    </li>
+                    </li> */}
                 </ul>
             </span>
         );

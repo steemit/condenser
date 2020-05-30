@@ -296,8 +296,6 @@ You will need to provide your email address and phone number.
 ## <span id="How_long_does_the_account_approval_process_take">How long does the account approval process take?</span>
 
 Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or two to review.
-<!-- 
-If your account has not been approved after more than two weeks, you can ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>. -->
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</span>
@@ -317,7 +315,6 @@ The only way to have an account created via steemit.com is to supply your email 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</span>
 
-<!-- Ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>. -->
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="What_happens_if_my_email_or_phone_number_changes">What happens if my email or phone number changes?</span>
@@ -1005,7 +1002,7 @@ https://steemit.com/steemit/@cheetah/faq-about-cheetah
 ## <span id="Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Where do I report a post or comment that contains plagiarism, spam, or abuse?</span>
 
 feel free to shot us a email. 
-<!-- You can report any abusive content to the <a href="https://steem.chat/channel/steemitabuse">#steemitabuse</a> channel on <a href="https://steem.chat/home">steem.chat</a>. -->
+
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 # Reputation
@@ -1305,8 +1302,6 @@ Each account can vote for up to 30 witnesses.
 
 ## <span id="What_third_party_tools_are_there_for_Steemit">What third-party tools are there for Steemit?</span>
 
-<!-- https://steemprojects.com/ -->
-
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 ## <span id="Is_there_an_official_Steemit_Facebook_page">Is there an official Steemit Facebook page?</span>
 
@@ -1327,7 +1322,6 @@ https://steem.io/SteemWhitePaper.pdf
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 ## <span id="Where_can_I_ask_for_help_if_my_question_was_not_answered_here">Where can I ask for help if my question was not answered here?</span>
 
-<!-- If you post your question in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>, the users there may be able to help. -->
 
 You can also create a post on steemit.com with the tag #help, and someone in the community may be able to answer it.
 

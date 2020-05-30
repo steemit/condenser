@@ -43,11 +43,11 @@ from those profiles.
 
 ### 5. Sign up for Steem Chat
 
-A lot of users mingle and chat in [Steem.chat](https://steem.chat/). It is a
-great place to meet people!
+<!-- A lot of users mingle and chat in [Steem.chat](https://steem.chat/). It is a
+great place to meet people! -->
 
-It's a separate account from your Steem account. Ask questions in the
-[\#help](https://steem.chat/channel/help) channel.
+<!-- It's a separate account from your Steem account. Ask questions in the
+[\#help](https://steem.chat/channel/help) channel. -->
 
 
 ### 6. Voting and Tokens
@@ -67,5 +67,6 @@ currency used by the Steem Blockchain. More information
 - [FAQ](https://steemit.com/faq.html) - Answers to commonly asked questions
 - [Steem Bluepaper](https://steem.io/steem-bluepaper.pdf) - Explanation of how the platform works
 - [Steem Whitepaper](https://steem.io/SteemWhitePaper.pdf) - Technical details of the Steem blockchain
-- [Apps Built on Steem](https://steemprojects.com/) - Directory of apps, sites and tools built by Steem community
-- [Steem Block Explorer](https://steemd.com/) - Shows the raw Steem blockchain data 
+-  Apps Built on Steem - Coming soon....
+- [Steem Block Explorer](https://steemscan.com/account/) - Shows the raw Steem blockchain data  
+- [Steem Block Explorer](https://steemdb.io/) - Shows the raw Steem blockchain data  

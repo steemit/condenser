@@ -203,7 +203,7 @@ Steemit has redefined social media by building a living, breathing, and growing 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="How_does_Steemit_work">How does Steemit work?</span>
 
-Steemit.com is one of the many websites (including [Busy.org](https://busy.org/), [DTube](https://d.tube/), and [SteemPeak.com](https://steempeak.com/)) that are powered by the Steem blockchain and STEEM cryptocurrency. All of these websites read and write content to the Steem blockchain, which stores the content in an immutable blockchain ledger, and rewards users for their contributions with digital tokens called STEEM.
+Steemit.com is one of the many websites (including [DTube](https://d.tube/), and [SteemPeak.com](https://steempeak.com/)) that are powered by the Steem blockchain and STEEM cryptocurrency. All of these websites read and write content to the Steem blockchain, which stores the content in an immutable blockchain ledger, and rewards users for their contributions with digital tokens called STEEM.
 
 Every day, the Steem blockchain mints new STEEM tokens and adds them to a community's "rewards pool". These tokens are then awarded to users for their contributions, based on the votes that their content receives. Users who hold more tokens in their account as "Steem Power" will get to decide where a larger portion of the rewards pool is distributed.
 
@@ -235,7 +235,7 @@ You can earn digital tokens on Steemit by:
 
 **Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of Steem Power you have.
 
-**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
+**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Huobi](https://www.huobi.pro/), [Poloniex](https://poloniex.com), [UpBit](https://upbit.com/), [probit](https://www.probit.com/), [bitribe](https://www.bitribe.com/), [GOPAX](https://www.gopax.co.kr/), [Lykke](https://www.lykke.com/).
 
 **Vesting** - STEEM tokens that are powered up to Steem Power will earn a small amount of new tokens for holding.
 
@@ -667,15 +667,13 @@ STEEM and SBD are listed on the following exchanges:
 | [Bithumb](https://www.bithumb.com/)  | Y | N |
 | [BitShares](https://wallet.bitshares.org/)      | Y      |   Y |
 | [Bittrex](https://bittrex.com) | Y      |    Y |
-| [Changelly](https://changelly.com) | Y      |    N |
-| [GOBADA](https://www.gobaba.com/)  | Y | N |
-| [HitBTC](https://hitbtc.com/) | Y      |    Y |
 | [Huobi](https://www.huobi.pro/)  | Y | N |
-| [LocalBitcoinCash](https://www.localbitcoincash.org/)  | Y | N |
 | [Poloniex](https://poloniex.com) | Y      |    Y |
-| [Shapeshift.io](https://shapeshift.io) | Y      |    N |
 | [UpBit](https://upbit.com/) | Y      |    Y |
-| [Yensesa](https://yensesa.com) | Y      |    Y |
+| [Lykke](https://www.lykke.com/) | Y   |      | 
+| [GOPAX](https://www.gopax.co.kr/) | Y   |      |
+| [ProBit](https://www.probit.com/) | Y   |      |
+| [Bitribe](https://www.bitribe.com/) | Y   |     |
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_the_reward_pool">What is the reward pool?</span>
@@ -753,7 +751,7 @@ To buy:
 - Send the currency to the provided address.
 
 
-bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
+bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Huobi](https://www.huobi.pro/), [Poloniex](https://poloniex.com), [UpBit](https://upbit.com/), [probit](https://www.probit.com/), [bitribe](https://www.bitribe.com/), [GOPAX](https://www.gopax.co.kr/), [Lykke](https://www.lykke.com/).
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or Steem Power that I purchased to show up in my account?</span>
@@ -1331,7 +1329,7 @@ You can also create a post on steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
- Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemCreate, steemd,, SteemStats, Streemian, The Steemit Shop, UpBit, Utopian.io, Vessel, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+ Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, Changelly, @cheetah, Coinbase, DTube, GOBADA, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemCreate, SteemStats, Streemian, The Steemit Shop, UpBit, Utopian.io, and Vessel are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

@@ -203,7 +203,7 @@ Steemit has redefined social media by building a living, breathing, and growing 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="How_does_Steemit_work">How does Steemit work?</span>
 
-Steemit.com is one of the many websites (including [Busy.org](https://busy.org/), [DTube](https://d.tube/), and [SteemPeak.com](https://steempeak.com/)) that are powered by the Steem blockchain and STEEM cryptocurrency. All of these websites read and write content to the Steem blockchain, which stores the content in an immutable blockchain ledger, and rewards users for their contributions with digital tokens called STEEM.
+Steemit.com is one of the many websites (including [DTube](https://d.tube/), and [SteemPeak.com](https://steempeak.com/)) that are powered by the Steem blockchain and STEEM cryptocurrency. All of these websites read and write content to the Steem blockchain, which stores the content in an immutable blockchain ledger, and rewards users for their contributions with digital tokens called STEEM.
 
 Every day, the Steem blockchain mints new STEEM tokens and adds them to a community's "rewards pool". These tokens are then awarded to users for their contributions, based on the votes that their content receives. Users who hold more tokens in their account as "Steem Power" will get to decide where a larger portion of the rewards pool is distributed.
 
@@ -235,7 +235,7 @@ You can earn digital tokens on Steemit by:
 
 **Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of Steem Power you have.
 
-**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
+**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Huobi](https://www.huobi.pro/), [Poloniex](https://poloniex.com), [UpBit](https://upbit.com/), [probit](https://www.probit.com/), [bitribe](https://www.bitribe.com/), [GOPAX](https://www.gopax.co.kr/), [Lykke](https://www.lykke.com/).
 
 **Vesting** - STEEM tokens that are powered up to Steem Power will earn a small amount of new tokens for holding.
 
@@ -296,9 +296,7 @@ You will need to provide your email address and phone number.
 ## <span id="How_long_does_the_account_approval_process_take">How long does the account approval process take?</span>
 
 Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or two to review.
-
-If your account has not been approved after more than two weeks, you can ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
-
+If your account has not been approved after more than two weeks, you can ask for help: contact@steemit.com
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</span>
 
@@ -317,7 +315,7 @@ The only way to have an account created via steemit.com is to supply your email 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</span>
 
-Ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
+Ask for help : contact@steemit.com
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="What_happens_if_my_email_or_phone_number_changes">What happens if my email or phone number changes?</span>
@@ -670,15 +668,13 @@ STEEM and SBD are listed on the following exchanges:
 | [Bithumb](https://www.bithumb.com/)  | Y | N |
 | [BitShares](https://wallet.bitshares.org/)      | Y      |   Y |
 | [Bittrex](https://bittrex.com) | Y      |    Y |
-| [Changelly](https://changelly.com) | Y      |    N |
-| [GOBADA](https://www.gobaba.com/)  | Y | N |
-| [HitBTC](https://hitbtc.com/) | Y      |    Y |
 | [Huobi](https://www.huobi.pro/)  | Y | N |
-| [LocalBitcoinCash](https://www.localbitcoincash.org/)  | Y | N |
 | [Poloniex](https://poloniex.com) | Y      |    Y |
-| [Shapeshift.io](https://shapeshift.io) | Y      |    N |
 | [UpBit](https://upbit.com/) | Y      |    Y |
-| [Yensesa](https://yensesa.com) | Y      |    Y |
+| [Lykke](https://www.lykke.com/) | Y   |      | 
+| [GOPAX](https://www.gopax.co.kr/) | Y   |      |
+| [ProBit](https://www.probit.com/) | Y   |      |
+| [Bitribe](https://www.bitribe.com/) | Y   |     |
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_the_reward_pool">What is the reward pool?</span>
@@ -756,7 +752,7 @@ To buy:
 - Send the currency to the provided address.
 
 
-bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
+bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Huobi](https://www.huobi.pro/), [Poloniex](https://poloniex.com), [UpBit](https://upbit.com/), [probit](https://www.probit.com/), [bitribe](https://www.bitribe.com/), [GOPAX](https://www.gopax.co.kr/), [Lykke](https://www.lykke.com/).
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or Steem Power that I purchased to show up in my account?</span>
@@ -815,8 +811,8 @@ You can exchange them. Visit the internal Market, found in the main menu. There 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_a_MVEST">What is a MVEST?</span>
 
-A VEST is a unit of measurement for Steem Power. A MVEST is one million VESTS. The amount of Steem Power in one MVEST can be found on <a href="https://steemd.com/">steemd.com</a> as `steem_per_mvests`.
-
+A VEST is a unit of measurement for Steem Power. A MVEST is one million VESTS. The amount of Steem Power in one MVEST can be found on <a href="https://steemscan.com/">steemscan.com</a> as `steem_per_mvests`. or <a href="https://steemdb.io//">steemdb.io</a> 
+ 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Can_I_sell_goods_and_services_on_Steemit">Can I sell goods and services on Steemit?</span>
 
@@ -891,7 +887,7 @@ Once you reach about 500 Steem Power, you will see a vote slider appear when you
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Where_can_I_check_my_voting_mana">Where can I check my voting mana?</span>
 
-You can view your current voting mana using third party tools such as https://steemd.com/@youraccount.
+You can view your current voting mana using third party tools such as https://steemscan.com/account/youraccount or https://steemdb.io/@youraccount
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">What determines how much of the curation reward goes to the author versus curators?</span>
@@ -1004,7 +1000,7 @@ https://steemit.com/steemit/@cheetah/faq-about-cheetah
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 ## <span id="Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Where do I report a post or comment that contains plagiarism, spam, or abuse?</span>
 
-You can report any abusive content to the <a href="https://steem.chat/channel/steemitabuse">#steemitabuse</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
+feel free to shot us a email : contact@steemit.com
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 # Reputation
@@ -1083,7 +1079,7 @@ Every user has a limited amount of Resource Credits to use each week. The more t
 When the blockchain becomes busy (due to heavy use), the Resource Credit cost of transactions may become higher than during times when the blockchain is less busy.
 
 You can check how many Resource Credits you currently have at:
-https://steemd.com/@youraccount
+https://steemdb.io/@youraccount or https://steemscan.com/account/youraccount
 
 If users do not have enough Resource Credits, they will be unable to transact with the blockchain until their Resource Credits recharge or they acquire additional Steem Power to increase their Resource Credit balance.
 
@@ -1122,7 +1118,8 @@ The Steem blockchain schedules witnesses to produce a new block every 3 seconds.
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="Is_there_a_way_to_see_the_raw_data_that_is_stored_in_the_blockchain">Is there a way to see the raw data that is stored in the blockchain?</span>
 
-Yes. The blockchain data can be viewed in different ways with third-party tools such as <a href="https://steemd.com">steemd.com</a>.
+Yes. The blockchain data can be viewed in different ways with third-party tools such as <a href="https://https://steemscan.com/">steemscan.com</a> 
+and <a href="https://steemdb.io/">steemdb.io</a>
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="Where_can_I_find_the_information_for_the_official_launch_of_the_blockchain">Where can I find the information for the official launch of the blockchain?</span>
@@ -1303,8 +1300,6 @@ Each account can vote for up to 30 witnesses.
 
 ## <span id="What_third_party_tools_are_there_for_Steemit">What third-party tools are there for Steemit?</span>
 
-https://steemprojects.com/
-
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 ## <span id="Is_there_an_official_Steemit_Facebook_page">Is there an official Steemit Facebook page?</span>
 
@@ -1325,9 +1320,8 @@ https://steem.io/SteemWhitePaper.pdf
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 ## <span id="Where_can_I_ask_for_help_if_my_question_was_not_answered_here">Where can I ask for help if my question was not answered here?</span>
 
-If you post your question in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>, the users there may be able to help.
-
-You can also create a post on steemit.com with the tag #help, and someone in the community may be able to answer it.
+ 1. ontact us at contact@steemit.com    
+ 2. You can also create a post on steemit.com with the tag #help, and someone in the community may be able to answer it.
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 
@@ -1335,7 +1329,7 @@ You can also create a post on steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-AnonSteem, Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, Vessel, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+ Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, Changelly, @cheetah, Coinbase, DTube, GOBADA, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemCreate, SteemStats, Streemian, The Steemit Shop, UpBit, Utopian.io, and Vessel are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

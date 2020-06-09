@@ -280,17 +280,16 @@ class About extends React.Component {
                             <p className="AboutMission__text">
                                 Steemit Inc. (The “Company”), is a private
                                 company that helps develop the open-source
-                                software that powers steemit.com, including
-                                steemd. The Company may own various digital
-                                assets, including, without limitation,
-                                quantities of cryptocurrencies such as STEEM.
-                                These assets are the sole property of the
-                                Company. Further, the Company’s mission, vision,
-                                goals, statements, actions, and core values do
-                                not constitute a contract, commitment,
-                                obligation, or other duty to any person, company
-                                or cryptocurrency network user and are subject
-                                to change at any time.
+                                software that powers steemit.com. The Company
+                                may own various digital assets, including,
+                                without limitation, quantities of
+                                cryptocurrencies such as STEEM. These assets are
+                                the sole property of the Company. Further, the
+                                Company’s mission, vision, goals, statements,
+                                actions, and core values do not constitute a
+                                contract, commitment, obligation, or other duty
+                                to any person, company or cryptocurrency network
+                                user and are subject to change at any time.
                             </p>
                         </div>
                         <div className="AboutMission__image-container">

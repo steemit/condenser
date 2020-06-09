@@ -40,7 +40,6 @@ export const icons = [
     'eye',
     'location',
     'calendar',
-    'steemd',
     'chain',
     'wallet',
     'cog',

@@ -244,7 +244,7 @@ export default class PdfDownload extends Component {
                 'keep it somewhere safe. When in doubt, use your Private ' +
                 'Posting Key as your password, not your Master Password which ' +
                 'is only intended to be used to change your private keys. You ' +
-                'can also view these anytime at: https://steemd.com/' +
+                'can also view these anytime at: https://steemdb.io/' +
                 this.props.name,
             {
                 scale,
@@ -619,7 +619,7 @@ export default class PdfDownload extends Component {
             ctx,
             'Public keys are associated with usernames and are used to ' +
                 'encrypt and verify messages. Your public keys are not required ' +
-                'for login. You can view these anytime at: https://steemd.com/@' +
+                'for login. You can view these anytime at: https://steemscan.com/account/' +
                 this.props.name,
             {
                 scale,

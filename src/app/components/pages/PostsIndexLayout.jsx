@@ -13,6 +13,7 @@ import Topics from './Topics';
 import CommunityPane from 'app/components/elements/CommunityPane';
 import CommunityPaneMobile from 'app/components/elements/CommunityPaneMobile';
 import { recordAdsView } from 'app/utils/ServerApiClient';
+import { APP_DOMAIN } from 'app/client_config';
 
 class PostsIndexLayout extends React.Component {
     static propTypes = {
@@ -116,7 +117,7 @@ class PostsIndexLayout extends React.Component {
                             onClick={this.setRecordAdsView}
                         >
                             <img
-                                src={require('app/assets/images/dlive.png')}
+                                src={`https://${APP_DOMAIN}/images/dlive.png`}
                                 alt=""
                                 width="240"
                                 height="240"

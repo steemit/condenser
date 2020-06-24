@@ -122,6 +122,13 @@
       display: block;
       margin-left: 1em;
     }
+    .c-sidebr-ads{
+      a{
+        img[src=""]{
+          opacity: 0;
+        }
+      }
+    }
   }
   &--right {
     display: none;

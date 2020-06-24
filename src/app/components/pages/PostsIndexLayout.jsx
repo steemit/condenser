@@ -109,7 +109,7 @@ class PostsIndexLayout extends React.Component {
                         subscriptions={subscriptions}
                         topics={topics}
                     />
-                    <div>
+                    <div className="c-sidebr-ads">
                         <a
                             href="https://dlive.tv/"
                             target="_blank"

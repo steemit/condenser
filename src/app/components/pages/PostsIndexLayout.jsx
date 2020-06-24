@@ -12,6 +12,7 @@ import GptAd from 'app/components/elements/GptAd';
 import Topics from './Topics';
 import CommunityPane from 'app/components/elements/CommunityPane';
 import CommunityPaneMobile from 'app/components/elements/CommunityPaneMobile';
+import { recordAdsView } from 'app/utils/ServerApiClient';
 
 class PostsIndexLayout extends React.Component {
     static propTypes = {
@@ -19,6 +20,11 @@ class PostsIndexLayout extends React.Component {
         blogmode: PropTypes.bool,
         topics: PropTypes.object,
     };
+
+    constructor() {
+        super();
+        this.setRecordAdsView = this.setRecordAdsView.bind(this);
+    }
 
     componentWillMount() {
         const { subscriptions, getSubscriptions, username } = this.props;
@@ -29,6 +35,13 @@ class PostsIndexLayout extends React.Component {
         const { subscriptions, getSubscriptions, username } = this.props;
         if (!subscriptions && username && username != prevProps.username)
             getSubscriptions(username);
+    }
+
+    setRecordAdsView() {
+        recordAdsView({
+            trackingId: this.props.trackingId,
+            adTag: 'SteemitDlivebanner240*240',
+        });
     }
 
     render() {
@@ -96,6 +109,20 @@ class PostsIndexLayout extends React.Component {
                         subscriptions={subscriptions}
                         topics={topics}
                     />
+                    <div>
+                        <a
+                            href="https://dlive.tv/"
+                            target="_blank"
+                            onClick={this.setRecordAdsView}
+                        >
+                            <img
+                                src={require('app/assets/images/dlive.png')}
+                                alt=""
+                                width="240"
+                                height="240"
+                            />
+                        </a>
+                    </div>
                     {enableAds && (
                         <div>
                             <div className="sidebar-ad">
@@ -126,6 +153,7 @@ export default connect(
         const username =
             state.user.getIn(['current', 'username']) ||
             state.offchain.get('account');
+        const trackingId = state.user.get('trackingId');
         return {
             blogmode: props.blogmode,
             enableAds: props.enableAds,
@@ -137,6 +165,7 @@ export default connect(
             topics: state.global.getIn(['topics'], List()),
             isBrowser: process.env.BROWSER,
             username,
+            trackingId,
         };
     },
     dispatch => ({

@@ -36,7 +36,10 @@ const SHOW_ANNOUNCEMENT = 'user/SHOW_ANNOUNCEMENT';
 
 // Saga-related
 export const UPLOAD_IMAGE = 'user/UPLOAD_IMAGE';
-
+const generateTrackingId = () =>
+    `x-${Math.random()
+        .toString()
+        .slice(2)}`;
 const defaultState = fromJS({
     current: {},
     show_login_modal: false,
@@ -47,6 +50,7 @@ const defaultState = fromJS({
     show_side_panel: false,
     maybeLoggedIn: false,
     showAnnouncement: false,
+    trackingId: '',
 });
 
 export default function reducer(state = defaultState, action) {
@@ -143,7 +147,9 @@ export default function reducer(state = defaultState, action) {
             return state; // saga
 
         case USERNAME_PASSWORD_LOGIN:
-            return state; // saga
+            return state.mergeDeep({
+                trackingId: generateTrackingId(),
+            }); // saga
 
         case SET_USER:
             return state.mergeDeep({

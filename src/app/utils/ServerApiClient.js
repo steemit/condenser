@@ -47,6 +47,12 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
     );
 }
 
+export function recordAdsView({ trackingId, adTag }) {
+    api.call('overseer.collect', ['ad', { trackingId, adTag }], error => {
+        if (error) console.warn('overseer error', error);
+    });
+}
+
 let last_page, last_views, last_page_promise;
 export function recordPageView(page, referer, account) {
     if (last_page_promise && page === last_page) return last_page_promise;
@@ -68,7 +74,7 @@ export function recordPageView(page, referer, account) {
 
 export function saveCords(x, y) {
     const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ csrf: $STM_csrf, x: x, y: y }),
+        body: JSON.stringify({ csrf: $STM_csrf, x, y }),
     });
     fetch('/api/v1/save_cords', request);
 }

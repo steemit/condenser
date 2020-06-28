@@ -206,6 +206,11 @@ class Post extends React.Component {
                 <div className="row">
                     <div className="column">{postBody}</div>
                 </div>
+                {/* <div style={{margin: 'auto', maxWidth: '75rem'}}>
+                    <a href="https://poloniex.com/" target="_blank">
+                        <img src="" alt="" width="1200" height="120" />
+                    </a>
+                </div> */}
                 {false &&
                     !isLoggedIn() && (
                         <div className="row">

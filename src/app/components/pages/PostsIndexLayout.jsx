@@ -117,7 +117,7 @@ class PostsIndexLayout extends React.Component {
                             onClick={this.setRecordAdsView}
                         >
                             <img
-                                src="images/dlive.png"
+                                src="/images/dlive.png"
                                 alt=""
                                 width="240"
                                 height="240"

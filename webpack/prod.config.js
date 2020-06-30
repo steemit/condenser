@@ -4,17 +4,19 @@ const baseConfig = require('./base.config');
 
 module.exports = {
     ...baseConfig,
+    devtool: 'source-map', // https://webpack.js.org/configuration/devtool/#production
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('production'),
-                VERSION: JSON.stringify(git.long())
-            }
+                VERSION: JSON.stringify(git.long()),
+            },
         }),
         /*
         // TODO: sourcemap
         new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true, // https://github.com/mishoo/UglifyJS2#minify-options
             compress: {
                 warnings: false,
                 screw_ie8: true,
@@ -30,19 +32,12 @@ module.exports = {
                 hoist_funs: true,
                 if_return: true,
                 join_vars: true,
-                cascade: true
+                cascade: true,
             },
             output: {
                 comments: false
             }
         }),*/
         ...baseConfig.plugins,
-        // Fix window.onerror
-        // See https://github.com/webpack/webpack/issues/5681#issuecomment-345861733
-        new webpack.SourceMapDevToolPlugin({
-            module: true,
-            columns: false,
-            moduleFilenameTemplate: info => { return `${info.resourcePath}?${info.loaders}` }
-        })
-    ]
+    ],
 };

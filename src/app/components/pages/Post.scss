@@ -1,3 +1,14 @@
+.Post{
+  position: relative;
+  .c-sidebr-ads{
+    position: absolute;
+    left: calc(50% - 27rem);
+    margin-left: -255px;
+    @media screen and (max-width: 85rem){
+      display: none;
+    }
+  }
+}
 .Post__comments_sort_order {
   margin: 0.5rem 0;
   @include themify($themes) {

@@ -15,6 +15,7 @@ import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
 import GptAd from 'app/components/elements/GptAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
+import { recordAdsView } from 'app/utils/ServerApiClient';
 
 import Icon from 'app/components/elements/Icon';
 
@@ -37,6 +38,7 @@ class Post extends React.Component {
     };
     constructor() {
         super();
+        this.setRecordAdsView = this.setRecordAdsView.bind(this);
         this.state = {
             showNegativeComments: false,
         };
@@ -60,6 +62,12 @@ class Post extends React.Component {
     showAnywayClick = () => {
         this.setState({ showAnyway: true });
     };
+    setRecordAdsView() {
+        recordAdsView({
+            trackingId: this.props.trackingId,
+            adTag: 'SteemitDlivebanner240*240Post',
+        });
+    }
 
     render() {
         const { showSignUp } = this;
@@ -203,6 +211,20 @@ class Post extends React.Component {
 
         return (
             <div className="Post">
+                <div className="c-sidebr-ads">
+                    <a
+                        href="https://dlive.tv/"
+                        target="_blank"
+                        onClick={this.setRecordAdsView}
+                    >
+                        <img
+                            src="/images/dlive.png"
+                            alt=""
+                            width="240"
+                            height="240"
+                        />
+                    </a>
+                </div>
                 <div className="row">
                     <div className="column">{postBody}</div>
                 </div>
@@ -284,12 +306,13 @@ export default connect((state, ownProps) => {
     const post = username + '/' + slug;
     const content = state.global.get('content');
     const dis = content.get(post);
-
+    const trackingId = state.user.get('trackingId');
     return {
         post,
         content,
         dis,
         sortOrder: currLocation.query.sort || 'trending',
         gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
+        trackingId,
     };
 })(Post);

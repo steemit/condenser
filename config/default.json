@@ -219,8 +219,8 @@
   },
   "cookie_consent_enabled": null,
   "cookie_consent_api_key": null,
-  "steem_market_endpoint": null,
-  "steem_market_token": null,
+  "steem_market_endpoint": "https://steem-market-prod.herokuapp.com",
+  "steem_market_token": "c70830f8-ea55-4d88-a80a-e6edf40e400b",
   "steem_market_cache": {
     "ttl": 7200,
     "key": "steem-market"

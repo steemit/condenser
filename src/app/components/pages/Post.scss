@@ -1,13 +1,31 @@
 .Post{
   position: relative;
-  .c-sidebr-ads{
-    position: absolute;
-    left: calc(50% - 27rem);
-    margin-left: -255px;
-    @media screen and (max-width: 85rem){
+  .post-content{
+    display: flex;
+    margin: 0 auto;
+    max-width: 1454px;
+    .c-sidebr-ads{
       display: none;
+      width: 240px;
+      min-width: 240px;
+      max-width: 240px;
+      @include MQ(M) {
+        display: block;
+        margin-left: 1em;
+      }
+    }
+    .c-sidebr-market{
+      display: none;
+      max-width: 320px;
+      width: 320px;
+      min-width: 320px;
+      @include MQ(L) {
+        display: block;
+        margin-right: 1em;
+      }
     }
   }
+  
 }
 .Post__comments_sort_order {
   margin: 0.5rem 0;

@@ -55,6 +55,7 @@ class PostsIndexLayout extends React.Component {
             blogmode,
             isBrowser,
             children,
+            category,
         } = this.props;
 
         return (
@@ -92,7 +93,14 @@ class PostsIndexLayout extends React.Component {
                             <SidebarLinks username={username} topics={topics} />
                         )}
                     {false && !community && <Notices />}
-                    {!community && <SteemMarket />}
+                    {/* {!community && <SteemMarket />} */}
+                    <SteemMarket
+                        page={`${
+                            category
+                                ? 'CoinMarketPlaceCommunity'
+                                : 'CoinMarketPlaceIndex'
+                        }`}
+                    />
                     {enableAds && (
                         <div className="sidebar-ad">
                             <GptAd

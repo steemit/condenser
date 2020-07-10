@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
+import { recordAdsView } from 'app/utils/ServerApiClient';
 
 class Coin extends Component {
     constructor(props) {
         super(props);
         this.onPointMouseMove = this.onPointMouseMove.bind(this);
         this.onPointMouseOut = this.onPointMouseOut.bind(this);
+        this.setRecordAdsView = this.setRecordAdsView.bind(this);
     }
 
     componentDidMount() {
@@ -30,6 +32,14 @@ class Coin extends Component {
             circle.removeEventListener('mouseover', this.onPointMouseMove);
         });
         node.removeEventListener('mouseout', this.onPointMouseOut);
+    }
+
+    setRecordAdsView() {
+        const { trackingId, page } = this.props;
+        recordAdsView({
+            trackingId,
+            adTag: page,
+        });
     }
 
     render() {
@@ -71,7 +81,11 @@ class Coin extends Component {
                 style={{ display: `${symbol === 'XRP' ? 'none' : 'block'}` }}
             >
                 {url ? (
-                    <a href={url} target="_blank">
+                    <a
+                        href={url}
+                        target="_blank"
+                        onClick={this.setRecordAdsView}
+                    >
                         <div className="chart">
                             <Sparklines data={pricesUsd}>
                                 <SparklinesLine
@@ -140,6 +154,7 @@ class SteemMarket extends Component {
         const steem = steemMarketData.get('steem');
         const sbd = steemMarketData.get('sbd');
         const tron = steemMarketData.get('tron');
+        const { trackingId, page } = this.props;
 
         return (
             <div className="c-sidebar__module">
@@ -148,13 +163,25 @@ class SteemMarket extends Component {
                 </div>
                 <div className="c-sidebar__content">
                     <div className="steem-market">
-                        <Coin coin={steem} color="#09d6a8" />
-                        <Coin coin={tron} color="#788187" />
+                        <Coin
+                            coin={steem}
+                            color="#09d6a8"
+                            trackingId={trackingId}
+                            page={page}
+                        />
+                        <Coin
+                            coin={tron}
+                            color="#788187"
+                            trackingId={trackingId}
+                            page={page}
+                        />
                         {topCoins.map(coin => (
                             <Coin
                                 key={coin.get('name')}
                                 coin={coin}
                                 color="#788187"
+                                trackingId={trackingId}
+                                page={page}
                             />
                         ))}
                         <Coin coin={sbd} color="#09d6a8" />
@@ -169,9 +196,11 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const steemMarketData = state.app.get('steemMarket');
+        const trackingId = state.user.get('trackingId');
         return {
             ...ownProps,
             steemMarketData,
+            trackingId,
         };
     },
     // mapDispatchToProps

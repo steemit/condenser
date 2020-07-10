@@ -62,10 +62,10 @@ class Post extends React.Component {
     showAnywayClick = () => {
         this.setState({ showAnyway: true });
     };
-    setRecordAdsView() {
+    setRecordAdsView(tag) {
         recordAdsView({
             trackingId: this.props.trackingId,
-            adTag: 'SteemitDlivebanner240*240Post',
+            adTag: tag,
         });
     }
 
@@ -215,7 +215,11 @@ class Post extends React.Component {
                     <a
                         href="https://dlive.tv/"
                         target="_blank"
-                        onClick={this.setRecordAdsView}
+                        onClick={() =>
+                            this.setRecordAdsView(
+                                'SteemitDlivebanner240*240Post'
+                            )
+                        }
                     >
                         <img
                             src="/images/dlive.png"
@@ -228,11 +232,23 @@ class Post extends React.Component {
                 <div className="row">
                     <div className="column">{postBody}</div>
                 </div>
-                {/* <div style={{margin: 'auto', maxWidth: '75rem'}}>
-                    <a href="https://poloniex.com/" target="_blank">
-                        <img src="" alt="" width="1200" height="120" />
+                <div style={{ margin: '1rem auto 0.5rem', maxWidth: '54rem' }}>
+                    <a
+                        href="https://poloniex.com/"
+                        target="_blank"
+                        onClick={() =>
+                            this.setRecordAdsView(
+                                'SteemitPoloniexbanner864*86Post'
+                            )
+                        }
+                    >
+                        <img
+                            src={require('../../assets/images/poloniex.png')}
+                            alt=""
+                            width="100%"
+                        />
                     </a>
-                </div> */}
+                </div>
                 {false &&
                     !isLoggedIn() && (
                         <div className="row">

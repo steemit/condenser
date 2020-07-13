@@ -16,6 +16,7 @@ import { SIGNUP_URL } from 'shared/constants';
 import GptAd from 'app/components/elements/GptAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
 import { recordAdsView } from 'app/utils/ServerApiClient';
+import SvgImage from 'app/components/elements/SvgImage';
 
 import Icon from 'app/components/elements/Icon';
 
@@ -232,22 +233,27 @@ class Post extends React.Component {
                 <div className="row">
                     <div className="column">{postBody}</div>
                 </div>
-                <div style={{ margin: '1rem auto 0.5rem', maxWidth: '54rem' }}>
-                    <a
-                        href="https://poloniex.com/"
-                        target="_blank"
-                        onClick={() =>
-                            this.setRecordAdsView(
-                                'SteemitPoloniexbanner864*86Post'
-                            )
-                        }
-                    >
-                        <img
-                            src={require('../../assets/images/poloniex.png')}
-                            alt=""
-                            width="100%"
-                        />
-                    </a>
+                <div className="row">
+                    <div className="column">
+                        <div
+                            style={{
+                                margin: '0.5rem auto 0',
+                                maxWidth: '54rem',
+                            }}
+                        >
+                            <a
+                                href="https://poloniex.com/"
+                                target="_blank"
+                                onClick={() =>
+                                    this.setRecordAdsView(
+                                        'SteemitPoloniexbanner864*86Post'
+                                    )
+                                }
+                            >
+                                <SvgImage name="poloniex" width="100%" />
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 {false &&
                     !isLoggedIn() && (

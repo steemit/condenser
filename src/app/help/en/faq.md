@@ -916,7 +916,7 @@ No. Since downvoting reduces the rewards on a post/comment, it does not earn cur
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="What_are_curation_trails">What are curation trails?</span>
 
-Some users decide to use third party applications such as <a href="https://streemian.com/">Streemian</a> to automatically cast votes. Users can automatically vote for the same posts and comments that other users does. Typically they will set this up to follow the votes of users who are good at curating. When a user has other users automatically voting for the same content that they do, the people that automatically vote after them are called their "curation trail".
+Some users decide to use third party applications to automatically cast votes. Users can automatically vote for the same posts and comments that other users does. Typically they will set this up to follow the votes of users who are good at curating. When a user has other users automatically voting for the same content that they do, the people that automatically vote after them are called their "curation trail".
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards">Why don't my upvotes have an effect on a post's rewards?</span>
@@ -1329,7 +1329,7 @@ https://steem.io/SteemWhitePaper.pdf
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
- Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, Changelly, @cheetah, Coinbase, DTube, GOBADA, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemCreate, SteemStats, Streemian, The Steemit Shop, UpBit, Utopian.io, and Vessel are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+ Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, Changelly, @cheetah, Coinbase, DTube, GOBADA, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemCreate, SteemStats, The Steemit Shop, UpBit, Utopian.io, and Vessel are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

@@ -17,6 +17,8 @@ import GptAd from 'app/components/elements/GptAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
 import { recordAdsView } from 'app/utils/ServerApiClient';
 import SteemMarket from 'app/components/elements/SteemMarket';
+import SvgImage from 'app/components/elements/SvgImage';
+
 import Icon from 'app/components/elements/Icon';
 
 function isEmptyPost(post) {
@@ -62,10 +64,10 @@ class Post extends React.Component {
     showAnywayClick = () => {
         this.setState({ showAnyway: true });
     };
-    setRecordAdsView() {
+    setRecordAdsView(tag) {
         recordAdsView({
             trackingId: this.props.trackingId,
-            adTag: 'SteemitDlivebanner240*240Post',
+            adTag: tag,
         });
     }
 
@@ -216,7 +218,11 @@ class Post extends React.Component {
                         <a
                             href="https://dlive.tv/"
                             target="_blank"
-                            onClick={this.setRecordAdsView}
+                            onClick={() =>
+                                this.setRecordAdsView(
+                                    'SteemitDlivebanner240*240Post'
+                                )
+                            }
                         >
                             <img
                                 src="/images/dlive.png"
@@ -230,11 +236,31 @@ class Post extends React.Component {
                         <div className="row">
                             <div className="column">{postBody}</div>
                         </div>
-                        {/* <div style={{margin: 'auto', maxWidth: '75rem'}}>
-                    <a href="https://poloniex.com/" target="_blank">
-                        <img src="" alt="" width="1200" height="120" />
-                    </a>
-                </div> */}
+                        <div className="row">
+                            <div className="column">
+                                <div
+                                    style={{
+                                        margin: '0.5rem auto 0',
+                                        maxWidth: '54rem',
+                                    }}
+                                >
+                                    <a
+                                        href="https://poloniex.com/"
+                                        target="_blank"
+                                        onClick={() =>
+                                            this.setRecordAdsView(
+                                                'SteemitPoloniexbanner864*86Post'
+                                            )
+                                        }
+                                    >
+                                        <SvgImage
+                                            name="poloniex"
+                                            width="100%"
+                                        />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                         {false &&
                             !isLoggedIn() && (
                                 <div className="row">

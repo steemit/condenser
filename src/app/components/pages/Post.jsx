@@ -73,7 +73,7 @@ class Post extends React.Component {
 
     render() {
         const { showSignUp } = this;
-        const { content, sortOrder, post, dis } = this.props;
+        const { content, sortOrder, post, dis, steemMarketData } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
 
         if (isEmptyPost(dis))
@@ -325,9 +325,11 @@ class Post extends React.Component {
                             </div>
                         ) : null}
                     </div>
-                    <div className="c-sidebr-market">
-                        <SteemMarket page="CoinMarketPlacePost" />
-                    </div>
+                    {!steemMarketData.isEmpty() && (
+                        <div className="c-sidebr-market">
+                            <SteemMarket page="CoinMarketPlacePost" />
+                        </div>
+                    )}
                 </div>
             </div>
         );
@@ -342,12 +344,14 @@ export default connect((state, ownProps) => {
     const content = state.global.get('content');
     const dis = content.get(post);
     const trackingId = state.user.get('trackingId');
+    const steemMarketData = state.app.get('steemMarket');
     return {
         post,
         content,
         dis,
         sortOrder: currLocation.query.sort || 'trending',
-        gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
+        gptEnabled: false, //state.app.getIn(['googleAds', 'gptEnabled']),
         trackingId,
+        steemMarketData,
     };
 })(Post);

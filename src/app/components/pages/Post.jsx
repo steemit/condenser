@@ -16,6 +16,7 @@ import { SIGNUP_URL } from 'shared/constants';
 import GptAd from 'app/components/elements/GptAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
 import { recordAdsView } from 'app/utils/ServerApiClient';
+import SteemMarket from 'app/components/elements/SteemMarket';
 import SvgImage from 'app/components/elements/SvgImage';
 
 import Icon from 'app/components/elements/Icon';
@@ -72,7 +73,7 @@ class Post extends React.Component {
 
     render() {
         const { showSignUp } = this;
-        const { content, sortOrder, post, dis } = this.props;
+        const { content, sortOrder, post, dis, steemMarketData } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
 
         if (isEmptyPost(dis))
@@ -212,110 +213,124 @@ class Post extends React.Component {
 
         return (
             <div className="Post">
-                <div className="c-sidebr-ads">
-                    <a
-                        href="https://dlive.tv/"
-                        target="_blank"
-                        onClick={() =>
-                            this.setRecordAdsView(
-                                'SteemitDlivebanner240*240Post'
-                            )
-                        }
-                    >
-                        <img
-                            src="/images/dlive.png"
-                            alt=""
-                            width="240"
-                            height="240"
-                        />
-                    </a>
-                </div>
-                <div className="row">
-                    <div className="column">{postBody}</div>
-                </div>
-                <div className="row">
-                    <div className="column">
-                        <div
-                            style={{
-                                margin: '0.5rem auto 0',
-                                maxWidth: '54rem',
-                            }}
+                <div className="post-content">
+                    <div className="c-sidebr-ads">
+                        <a
+                            href="https://dlive.tv/"
+                            target="_blank"
+                            onClick={() =>
+                                this.setRecordAdsView(
+                                    'SteemitDlivebanner240*240Post'
+                                )
+                            }
                         >
-                            <a
-                                href="https://poloniex.com/"
-                                target="_blank"
-                                onClick={() =>
-                                    this.setRecordAdsView(
-                                        'SteemitPoloniexbanner864*86Post'
-                                    )
-                                }
-                            >
-                                <SvgImage name="poloniex" width="100%" />
-                            </a>
-                        </div>
+                            <img
+                                src="/images/dlive.png"
+                                alt=""
+                                width="240"
+                                height="240"
+                            />
+                        </a>
                     </div>
-                </div>
-                {false &&
-                    !isLoggedIn() && (
+                    <div className="post-main">
+                        <div className="row">
+                            <div className="column">{postBody}</div>
+                        </div>
                         <div className="row">
                             <div className="column">
-                                <div className="Post__promo">
-                                    {tt(
-                                        'g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post'
-                                    )}.
-                                    <br />
-                                    {tt(
-                                        'g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount'
-                                    )}
-                                    <br />
-                                    <button
-                                        type="button"
-                                        className="button e-btn"
-                                        onClick={showSignUp}
+                                <div
+                                    style={{
+                                        margin: '0.5rem auto 0',
+                                        maxWidth: '54rem',
+                                    }}
+                                >
+                                    <a
+                                        href="https://poloniex.com/"
+                                        target="_blank"
+                                        onClick={() =>
+                                            this.setRecordAdsView(
+                                                'SteemitPoloniexbanner864*86Post'
+                                            )
+                                        }
                                     >
-                                        {tt('loginform_jsx.sign_up_get_steem')}
-                                    </button>
+                                        <SvgImage
+                                            name="poloniex"
+                                            width="100%"
+                                        />
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                    )}
-                {this.props.gptEnabled && commentCount >= 5 ? (
-                    <div className="Post_footer__ad">
-                        <GptAd
-                            tags={gptTags}
-                            type="Freestar"
-                            id="bsa-zone_1566494147292-7_123456"
-                        />
-                    </div>
-                ) : null}
-                <div id="#comments" className="Post_comments row hfeed">
-                    <div className="column large-12">
-                        <div className="Post_comments__content">
-                            {positiveComments.length ? (
-                                <div className="Post__comments_sort_order float-right">
-                                    {tt('post_jsx.sort_order')}: &nbsp;
-                                    <DropdownMenu
-                                        items={sort_menu}
-                                        el="li"
-                                        selected={sort_label}
-                                        position="left"
-                                    />
+                        {false &&
+                            !isLoggedIn() && (
+                                <div className="row">
+                                    <div className="column">
+                                        <div className="Post__promo">
+                                            {tt(
+                                                'g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post'
+                                            )}.
+                                            <br />
+                                            {tt(
+                                                'g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount'
+                                            )}
+                                            <br />
+                                            <button
+                                                type="button"
+                                                className="button e-btn"
+                                                onClick={showSignUp}
+                                            >
+                                                {tt(
+                                                    'loginform_jsx.sign_up_get_steem'
+                                                )}
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            ) : null}
-                            {positiveComments}
-                            {negativeGroup}
+                            )}
+                        {this.props.gptEnabled && commentCount >= 5 ? (
+                            <div className="Post_footer__ad">
+                                <GptAd
+                                    tags={gptTags}
+                                    type="Freestar"
+                                    id="bsa-zone_1566494147292-7_123456"
+                                />
+                            </div>
+                        ) : null}
+                        <div id="#comments" className="Post_comments row hfeed">
+                            <div className="column large-12">
+                                <div className="Post_comments__content">
+                                    {positiveComments.length ? (
+                                        <div className="Post__comments_sort_order float-right">
+                                            {tt('post_jsx.sort_order')}: &nbsp;
+                                            <DropdownMenu
+                                                items={sort_menu}
+                                                el="li"
+                                                selected={sort_label}
+                                                position="left"
+                                            />
+                                        </div>
+                                    ) : null}
+                                    {positiveComments}
+                                    {negativeGroup}
+                                </div>
+                            </div>
                         </div>
+                        {this.props.gptEnabled ? (
+                            <div className="Post_footer__ad">
+                                <GptAd
+                                    tags={gptTags}
+                                    type="Freestar"
+                                    id="bsa-zone_1566494371533-0_123456"
+                                />
+                            </div>
+                        ) : null}
                     </div>
+                    {!steemMarketData.isEmpty() && (
+                        <div className="c-sidebr-market">
+                            <SteemMarket page="CoinMarketPlacePost" />
+                        </div>
+                    )}
                 </div>
-                {this.props.gptEnabled ? (
-                    <div className="Post_footer__ad">
-                        <GptAd
-                            tags={gptTags}
-                            type="Freestar"
-                            id="bsa-zone_1566494371533-0_123456"
-                        />
-                    </div>
-                ) : null}
             </div>
         );
     }
@@ -329,12 +344,14 @@ export default connect((state, ownProps) => {
     const content = state.global.get('content');
     const dis = content.get(post);
     const trackingId = state.user.get('trackingId');
+    const steemMarketData = state.app.get('steemMarket');
     return {
         post,
         content,
         dis,
         sortOrder: currLocation.query.sort || 'trending',
-        gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
+        gptEnabled: false, //state.app.getIn(['googleAds', 'gptEnabled']),
         trackingId,
+        steemMarketData,
     };
 })(Post);

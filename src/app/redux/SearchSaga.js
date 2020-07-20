@@ -8,11 +8,19 @@ export function* search(action) {
     const { q, s, scroll_id } = action.payload;
     const append = action.payload.scroll_id ? true : false;
     yield put(reducer.searchPending({ pending: true }));
+    // const luceneQuery = {
+    //     term: {
+    //         searchable: {
+    //             value: q,
+    //             boost: 1.0,
+    //         },
+    //     },
+    // };
     const luceneQuery = {
-        term: {
+        match_phrase: {
             searchable: {
-                value: q,
-                boost: 1.0,
+                query: q,
+                slop: 3,
             },
         },
     };

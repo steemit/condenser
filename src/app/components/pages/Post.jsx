@@ -4,7 +4,8 @@ import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import { immutableAccessor } from 'app/utils/Accessors';
 import { connect } from 'react-redux';
-
+import { List } from 'immutable';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import { parseJsonTags } from 'app/utils/StateFunctions';
 import { sortComments } from 'app/components/cards/Comment';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
@@ -18,7 +19,9 @@ import { isLoggedIn } from 'app/utils/UserUtil';
 import { recordAdsView } from 'app/utils/ServerApiClient';
 import SteemMarket from 'app/components/elements/SteemMarket';
 import SvgImage from 'app/components/elements/SvgImage';
-
+import SidebarLinks from 'app/components/elements/SidebarLinks';
+import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
+import Topics from './Topics';
 import Icon from 'app/components/elements/Icon';
 
 function isEmptyPost(post) {
@@ -50,6 +53,17 @@ class Post extends React.Component {
         };
     }
 
+    componentWillMount() {
+        const { subscriptions, getSubscriptions, uname } = this.props;
+        if (!subscriptions && uname) getSubscriptions(uname);
+    }
+
+    componentDidUpdate(prevProps) {
+        const { subscriptions, getSubscriptions, uname } = this.props;
+        if (!subscriptions && uname && uname != prevProps.uname)
+            getSubscriptions(uname);
+    }
+
     toggleNegativeReplies = e => {
         this.setState({
             showNegativeComments: !this.state.showNegativeComments,
@@ -73,7 +87,17 @@ class Post extends React.Component {
 
     render() {
         const { showSignUp } = this;
-        const { content, sortOrder, post, dis, steemMarketData } = this.props;
+        const {
+            content,
+            sortOrder,
+            post,
+            dis,
+            steemMarketData,
+            isBrowser,
+            uname,
+            topics,
+            subscriptions,
+        } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
 
         if (isEmptyPost(dis))
@@ -215,22 +239,30 @@ class Post extends React.Component {
             <div className="Post">
                 <div className="post-content">
                     <div className="c-sidebr-ads">
-                        <a
-                            href="https://dlive.tv/"
-                            target="_blank"
-                            onClick={() =>
-                                this.setRecordAdsView(
-                                    'SteemitDlivebanner240*240Post'
-                                )
-                            }
-                        >
-                            <img
-                                src="/images/dlive.png"
-                                alt=""
-                                width="240"
-                                height="240"
-                            />
-                        </a>
+                        <Topics
+                            compact={false}
+                            username={uname}
+                            subscriptions={subscriptions}
+                            topics={topics}
+                        />
+                        <div>
+                            <a
+                                href="https://dlive.tv/"
+                                target="_blank"
+                                onClick={() =>
+                                    this.setRecordAdsView(
+                                        'SteemitDlivebanner240*240Post'
+                                    )
+                                }
+                            >
+                                <img
+                                    src="/images/dlive.png"
+                                    alt=""
+                                    width="240"
+                                    height="240"
+                                />
+                            </a>
+                        </div>
                     </div>
                     <div className="post-main">
                         <div className="row">
@@ -256,6 +288,7 @@ class Post extends React.Component {
                                         <SvgImage
                                             name="poloniex"
                                             width="100%"
+                                            height="auto"
                                         />
                                     </a>
                                 </div>
@@ -325,11 +358,19 @@ class Post extends React.Component {
                             </div>
                         ) : null}
                     </div>
-                    {!steemMarketData.isEmpty() && (
-                        <div className="c-sidebr-market">
+                    <div className="c-sidebr-market">
+                        {!steemMarketData.isEmpty() && (
                             <SteemMarket page="CoinMarketPlacePost" />
-                        </div>
-                    )}
+                        )}
+                        {isBrowser && !uname && <SidebarNewUsers />}
+                        {isBrowser &&
+                            uname && (
+                                <SidebarLinks
+                                    username={uname}
+                                    topics={topics}
+                                />
+                            )}
+                    </div>
                 </div>
             </div>
         );
@@ -337,21 +378,34 @@ class Post extends React.Component {
 }
 
 const emptySet = Set();
-export default connect((state, ownProps) => {
-    const currLocation = ownProps.router.getCurrentLocation();
-    const { username, slug } = ownProps.routeParams;
-    const post = username + '/' + slug;
-    const content = state.global.get('content');
-    const dis = content.get(post);
-    const trackingId = state.user.get('trackingId');
-    const steemMarketData = state.app.get('steemMarket');
-    return {
-        post,
-        content,
-        dis,
-        sortOrder: currLocation.query.sort || 'trending',
-        gptEnabled: false, //state.app.getIn(['googleAds', 'gptEnabled']),
-        trackingId,
-        steemMarketData,
-    };
-})(Post);
+export default connect(
+    (state, ownProps) => {
+        const currLocation = ownProps.router.getCurrentLocation();
+        const { username, slug } = ownProps.routeParams;
+        const post = username + '/' + slug;
+        const content = state.global.get('content');
+        const dis = content.get(post);
+        const trackingId = state.user.get('trackingId');
+        const steemMarketData = state.app.get('steemMarket');
+        const uname =
+            state.user.getIn(['current', 'username']) ||
+            state.offchain.get('account');
+        return {
+            post,
+            content,
+            dis,
+            sortOrder: currLocation.query.sort || 'trending',
+            gptEnabled: false, //state.app.getIn(['googleAds', 'gptEnabled']),
+            trackingId,
+            steemMarketData,
+            isBrowser: process.env.BROWSER,
+            uname,
+            topics: state.global.getIn(['topics'], List()),
+            subscriptions: state.global.getIn(['subscriptions', uname], null),
+        };
+    },
+    dispatch => ({
+        getSubscriptions: account =>
+            dispatch(fetchDataSagaActions.getSubscriptions(account)),
+    })
+)(Post);

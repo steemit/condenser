@@ -359,9 +359,6 @@ class Post extends React.Component {
                         ) : null}
                     </div>
                     <div className="c-sidebr-market">
-                        {!steemMarketData.isEmpty() && (
-                            <SteemMarket page="CoinMarketPlacePost" />
-                        )}
                         {isBrowser && !uname && <SidebarNewUsers />}
                         {isBrowser &&
                             uname && (
@@ -370,6 +367,9 @@ class Post extends React.Component {
                                     topics={topics}
                                 />
                             )}
+                        {!steemMarketData.isEmpty() && (
+                            <SteemMarket page="CoinMarketPlacePost" />
+                        )}
                     </div>
                 </div>
             </div>

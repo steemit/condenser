@@ -140,6 +140,23 @@ export default function useGeneralApi(app) {
                     }
                 }
             }
+            // login checkpoint
+            api.call(
+                'overseer.collect',
+                [
+                    'custom',
+                    {
+                        measurement: 'user_login',
+                        tags: {},
+                        fields: {
+                            username: account,
+                        },
+                    },
+                ],
+                error => {
+                    if (error) console.warn('overseer error', error);
+                }
+            );
 
             this.body = JSON.stringify({
                 status: 'ok',

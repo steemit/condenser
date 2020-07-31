@@ -147,7 +147,9 @@ export default function useGeneralApi(app) {
                     'custom',
                     {
                         measurement: 'user_login',
-                        tags: {},
+                        tags: {
+                            entry: 'condenser',
+                        },
                         fields: {
                             username: account,
                         },

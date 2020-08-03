@@ -7,6 +7,7 @@ export const searchWatches = [takeEvery('search/SEARCH_DISPATCH', search)];
 export function* search(action) {
     const { q, s, scroll_id } = action.payload;
     const append = action.payload.scroll_id ? true : false;
+    const q_low = q.toLowerCase();
     yield put(reducer.searchPending({ pending: true }));
     // const luceneQuery = {
     //     term: {
@@ -19,7 +20,7 @@ export function* search(action) {
     const luceneQuery = {
         match_phrase: {
             searchable: {
-                query: q,
+                query: q_low,
                 slop: 3,
             },
         },

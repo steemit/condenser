@@ -145,6 +145,9 @@ export default class PdfDownload extends Component {
         });
         ctx.addImage(canvas, 'PNG', x, y, size, size);
     }
+    addPage(ctx) {
+        ctx.addPage('letter', 'portrait');
+    }
 
     renderPdf(keys, filename) {
         const widthInches = this.props.widthInches, //8.5,
@@ -260,18 +263,6 @@ export default class PdfDownload extends Component {
 */
         // PRIVATE KEYS INTRO
 
-        offset += 0.2;
-        offset += this.renderText(ctx, 'Your Private Keys', {
-            scale,
-            x: margin,
-            y: offset,
-            lineHeight: lineHeight,
-            maxWidth: maxLineWidth,
-            color: 'black',
-            fontSize: 0.18,
-            font: 'Roboto-Bold',
-        });
-
         offset += 0.1;
         offset += this.renderText(
             ctx,
@@ -290,8 +281,161 @@ export default class PdfDownload extends Component {
                 font: 'Roboto-Regular',
             }
         );
-        offset += 0.2;
+        // offset += 0.2;
 
+        // tron account information
+        offset += 0.2;
+        offset += this.renderText(ctx, 'Your Tron account', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.18,
+            font: 'Roboto-Bold',
+        });
+        offset += 0.1;
+        // tron account public key
+        sectionStart = offset;
+        sectionHeight = qrSize + 0.15 * 2;
+        this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
+            color: 'f4f4f4',
+        });
+
+        offset += 0.15;
+        this.drawQr(
+            ctx,
+            'steem://import/wif/' +
+                keys.postingPrivate +
+                '/account/' +
+                this.props.name,
+            margin,
+            offset,
+            qrSize,
+            '#f4f4f4'
+        );
+
+        offset += 0.1;
+        offset += this.renderText(
+            ctx,
+            'TRON Account Public key(Tron Account Address)',
+            {
+                scale,
+                x: margin + qrSize + 0.1,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth,
+                color: 'black',
+                fontSize: 0.2,
+                font: 'Roboto-Bold',
+            }
+        );
+
+        offset += this.renderText(
+            ctx,
+            'Used for transfers. The public key is the address you send the tokens to',
+            {
+                scale,
+                x: margin + qrSize + 0.1,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth - (qrSize + 0.1),
+                color: 'black',
+                fontSize: 0.14,
+                font: 'Roboto-Regular',
+            }
+        );
+
+        offset += 0.075; // todo: replace tron address
+        offset += this.renderText(ctx, this.props.tron_address, {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: sectionStart + sectionHeight - 0.4,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
+        offset += 0.2;
+        offset = sectionStart + sectionHeight;
+
+        // tron account private key
+        // sectionStart = offset;
+        // sectionHeight = qrSize + 0.15 * 2;
+        // this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
+        //     color: 'f4f4f4',
+        // });
+
+        offset += 0.15;
+        this.drawQr(
+            ctx,
+            'steem://import/wif/' +
+                keys.postingPrivate +
+                '/account/' +
+                this.props.name,
+            margin,
+            offset,
+            qrSize,
+            '#f4f4f4'
+        );
+
+        offset += 0.1;
+        offset += this.renderText(ctx, 'TRON Account Private Key', {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.2,
+            font: 'Roboto-Bold',
+        });
+
+        offset += this.renderText(
+            ctx,
+            'This private key has the highest authority on your TRON account. It is ' +
+                'used for signing transactions of TRON, such as transferring tokens,freezing and voting',
+            {
+                scale,
+                x: margin + qrSize + 0.1,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth - (qrSize + 0.1),
+                color: 'black',
+                fontSize: 0.14,
+                font: 'Roboto-Regular',
+            }
+        );
+
+        offset += 0.075; // todo: replace tron private key
+        offset += this.renderText(ctx, this.props.tron_key, {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: sectionStart + sectionHeight - 0.6,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
+        offset += 0.2;
+        offset = sectionStart + sectionHeight;
+
+        // Steemit Account
+        offset += 0.4;
+        offset += this.renderText(ctx, 'Your Steemit Private Keys', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.18,
+            font: 'Roboto-Bold',
+        });
+        offset += 0.1;
         // POSTING KEY
 
         sectionStart = offset;
@@ -478,15 +622,17 @@ export default class PdfDownload extends Component {
             fontSize: 0.14,
             font: 'RobotoMono-Regular',
         });
-        offset += 0.2;
+        // offset += 0.2;
 
-        offset = sectionStart + sectionHeight;
+        // offset = sectionStart + sectionHeight;
+        // add a new page
+        ctx.addPage('letter', 'portrait');
+        offset = 0.2;
 
         // OWNER KEY
-
         sectionStart = offset;
         sectionHeight = qrSize + 0.15 * 2;
-        //this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
+        // this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
 
         offset += 0.15;
         this.drawQr(
@@ -603,7 +749,7 @@ export default class PdfDownload extends Component {
         //this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
 
         offset += 0.1;
-        offset += this.renderText(ctx, 'Your Public Keys', {
+        offset += this.renderText(ctx, 'Your Steemit Public Keys', {
             scale,
             x: margin,
             y: offset,

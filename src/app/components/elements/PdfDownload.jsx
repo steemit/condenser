@@ -423,6 +423,8 @@ export default class PdfDownload extends Component {
         offset += 0.2;
         offset = sectionStart + sectionHeight;
 
+        // todo: pass newUser
+        if (this.props.newUser) return ctx;
         // Steemit Account
         offset += 0.4;
         offset += this.renderText(ctx, 'Your Steemit Private Keys', {

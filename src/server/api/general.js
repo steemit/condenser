@@ -371,6 +371,74 @@ export default function useGeneralApi(app) {
             this.status = 500;
         }
     });
+    router.get('/test_steem_market', function*() {
+        const timepoints = [
+            { timepoint: '2020-08-18T12:00:00Z', price_usd: '12250.0889773' },
+            { timepoint: '2020-08-18T13:00:00Z', price_usd: '12260.3148296' },
+            { timepoint: '2020-08-18T14:00:00Z', price_usd: '12167.8228289' },
+            { timepoint: '2020-08-18T15:00:00Z', price_usd: '12005.0074994' },
+            { timepoint: '2020-08-18T16:00:00Z', price_usd: '11986.8350721' },
+            { timepoint: '2020-08-18T17:00:00Z', price_usd: '12036.3091798' },
+            { timepoint: '2020-08-18T18:00:00Z', price_usd: '12028.9378102' },
+            { timepoint: '2020-08-18T19:00:00Z', price_usd: '12003.137178' },
+            { timepoint: '2020-08-18T20:00:00Z', price_usd: '12008.4364642' },
+            { timepoint: '2020-08-18T21:00:00Z', price_usd: '12023.6575825' },
+            { timepoint: '2020-08-18T22:00:00Z', price_usd: '12076.2749952' },
+            { timepoint: '2020-08-18T23:00:00Z', price_usd: '12067.4046651' },
+            { timepoint: '2020-08-19T00:00:00Z', price_usd: '11983.2200043' },
+            { timepoint: '2020-08-19T01:00:00Z', price_usd: '12006.2852368' },
+            { timepoint: '2020-08-19T02:00:00Z', price_usd: '11996.8557859' },
+            { timepoint: '2020-08-19T03:00:00Z', price_usd: '11953.2549565' },
+            { timepoint: '2020-08-19T04:00:00Z', price_usd: '11897.2228038' },
+            { timepoint: '2020-08-19T05:00:00Z', price_usd: '11809.8239793' },
+            { timepoint: '2020-08-19T06:00:00Z', price_usd: '11779.2416125' },
+            { timepoint: '2020-08-19T07:00:00Z', price_usd: '11751.5085188' },
+            { timepoint: '2020-08-19T08:00:00Z', price_usd: '11845.9507192' },
+            { timepoint: '2020-08-19T09:00:00Z', price_usd: '11833.3444898' },
+            { timepoint: '2020-08-19T10:00:00Z', price_usd: '11831.8872932' },
+            { timepoint: '2020-08-19T11:00:00Z', price_usd: '11817.9327232' },
+        ];
+        const data = {
+            top_coins: [
+                {
+                    symbol: 'BTC',
+                    name: 'Bitcoin',
+                    timepoints,
+                },
+                {
+                    symbol: 'ETH',
+                    name: 'Ethereum',
+                    timepoints,
+                },
+                {
+                    symbol: 'XRP',
+                    name: 'XRP',
+                    timepoints,
+                },
+            ],
+            steem: {
+                symbol: 'STEEM',
+                name: 'Steem',
+                timepoints,
+            },
+            sbd: {
+                symbol: 'STEEM',
+                name: 'Steem',
+                timepoints,
+            },
+            tron: {
+                symbol: 'TRX',
+                name: 'Tron',
+                timepoints,
+            },
+            jst: {
+                symbol: 'JST',
+                name: 'JUST',
+                timepoints,
+            },
+        };
+        this.body = JSON.stringify(data);
+    });
 }
 
 const parseSig = hexSig => {

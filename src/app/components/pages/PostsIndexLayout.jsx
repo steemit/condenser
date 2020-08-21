@@ -151,7 +151,6 @@ export default connect(
             state.offchain.get('account');
         const trackingId = state.user.get('trackingId');
         const leftSideAdList = state.ad.get('leftSideAdList').toArray();
-        console.log('Post Index leftSideAdList:', leftSideAdList);
         return {
             blogmode: props.blogmode,
             enableAds: props.enableAds,

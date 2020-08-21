@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { List } from 'immutable';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactSwipe from 'react-swipe';
@@ -30,18 +31,18 @@ class AdSwipe extends Component {
                 <ReactSwipe swipeOptions={swipeOpt}>
                     {adList.map(
                         (ad, inx) =>
-                            ad.enable && (
+                            ad.get('enable') && (
                                 <a
                                     key={inx}
                                     target="_blank"
-                                    href={ad.url}
+                                    href={ad.get('url')}
                                     onClick={() =>
-                                        this.setRecordAdsView(ad.tag)
+                                        this.setRecordAdsView(ad.get('tag'))
                                     }
                                 >
                                     <img
                                         key={inx}
-                                        src={ad.img}
+                                        src={ad.get('img')}
                                         width={width}
                                         height={height}
                                     />

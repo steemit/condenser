@@ -49,7 +49,7 @@ class PostsIndexLayout extends React.Component {
             isBrowser,
             children,
             category,
-            leftSideAdList,
+            indexLeftSideAdList,
             trackingId,
         } = this.props;
 
@@ -114,7 +114,7 @@ class PostsIndexLayout extends React.Component {
                         topics={topics}
                     />
                     <AdSwipe
-                        adList={leftSideAdList}
+                        adList={indexLeftSideAdList}
                         trackingId={trackingId}
                         width={240}
                         height={240}
@@ -150,7 +150,10 @@ export default connect(
             state.user.getIn(['current', 'username']) ||
             state.offchain.get('account');
         const trackingId = state.app.getIn(['trackingId'], null);
-        const leftSideAdList = state.ad.getIn(['leftSideAdList'], List());
+        const indexLeftSideAdList = state.ad.getIn(
+            ['indexLeftSideAdList'],
+            List()
+        );
         return {
             blogmode: props.blogmode,
             enableAds: props.enableAds,
@@ -163,7 +166,7 @@ export default connect(
             isBrowser: process.env.BROWSER,
             username,
             trackingId,
-            leftSideAdList,
+            indexLeftSideAdList,
         };
     },
     dispatch => ({

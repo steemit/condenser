@@ -92,7 +92,7 @@ class Post extends React.Component {
             topics,
             subscriptions,
             trackingId,
-            leftSideAdList,
+            postLeftSideAdList,
             bottomAdList,
         } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
@@ -244,7 +244,7 @@ class Post extends React.Component {
                         />
                         <div>
                             <AdSwipe
-                                adList={leftSideAdList}
+                                adList={postLeftSideAdList}
                                 trackingId={trackingId}
                                 width={240}
                                 height={240}
@@ -366,7 +366,10 @@ export default connect(
         const uname =
             state.user.getIn(['current', 'username']) ||
             state.offchain.get('account');
-        const leftSideAdList = state.ad.getIn(['leftSideAdList'], List());
+        const postLeftSideAdList = state.ad.getIn(
+            ['postLeftSideAdList'],
+            List()
+        );
         const bottomAdList = state.ad.getIn(['bottomAdList'], List());
         return {
             post,
@@ -380,7 +383,7 @@ export default connect(
             uname,
             topics: state.global.getIn(['topics'], List()),
             subscriptions: state.global.getIn(['subscriptions', uname], null),
-            leftSideAdList,
+            postLeftSideAdList,
             bottomAdList,
         };
     },

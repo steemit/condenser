@@ -368,7 +368,6 @@ export default connect(
             state.offchain.get('account');
         const leftSideAdList = state.ad.get('leftSideAdList').toArray();
         const bottomAdList = state.ad.get('bottomAdList').toArray();
-        console.log('post left bottom ad:', leftSideAdList, bottomAdList);
         return {
             post,
             content,

@@ -14,6 +14,7 @@ import CommunityPane from 'app/components/elements/CommunityPane';
 import CommunityPaneMobile from 'app/components/elements/CommunityPaneMobile';
 import { recordAdsView } from 'app/utils/ServerApiClient';
 import { APP_DOMAIN } from 'app/client_config';
+import AdSwipe from 'app/components/elements/AdSwipe';
 
 class PostsIndexLayout extends React.Component {
     static propTypes = {
@@ -24,7 +25,6 @@ class PostsIndexLayout extends React.Component {
 
     constructor() {
         super();
-        this.setRecordAdsView = this.setRecordAdsView.bind(this);
     }
 
     componentWillMount() {
@@ -38,13 +38,6 @@ class PostsIndexLayout extends React.Component {
             getSubscriptions(username);
     }
 
-    setRecordAdsView() {
-        recordAdsView({
-            trackingId: this.props.trackingId,
-            adTag: 'SteemitDlivebanner240*240',
-        });
-    }
-
     render() {
         const {
             topics,
@@ -56,6 +49,8 @@ class PostsIndexLayout extends React.Component {
             isBrowser,
             children,
             category,
+            leftSideAdList,
+            trackingId,
         } = this.props;
 
         return (
@@ -118,20 +113,12 @@ class PostsIndexLayout extends React.Component {
                         subscriptions={subscriptions}
                         topics={topics}
                     />
-                    <div className="c-sidebr-ads">
-                        <a
-                            href="https://dlive.tv/"
-                            target="_blank"
-                            onClick={this.setRecordAdsView}
-                        >
-                            <img
-                                src="/images/dlive.png"
-                                alt=""
-                                width="240"
-                                height="240"
-                            />
-                        </a>
-                    </div>
+                    <AdSwipe
+                        adList={leftSideAdList}
+                        trackingId={trackingId}
+                        width={240}
+                        height={240}
+                    />
                     {enableAds && (
                         <div>
                             <div className="sidebar-ad">
@@ -163,6 +150,7 @@ export default connect(
             state.user.getIn(['current', 'username']) ||
             state.offchain.get('account');
         const trackingId = state.user.get('trackingId');
+        const leftSideAdList = state.ad.get('leftSideAdList');
         return {
             blogmode: props.blogmode,
             enableAds: props.enableAds,
@@ -175,6 +163,7 @@ export default connect(
             isBrowser: process.env.BROWSER,
             username,
             trackingId,
+            leftSideAdList,
         };
     },
     dispatch => ({

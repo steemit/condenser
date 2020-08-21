@@ -149,8 +149,8 @@ export default connect(
         const username =
             state.user.getIn(['current', 'username']) ||
             state.offchain.get('account');
-        const trackingId = state.user.get('trackingId');
-        const leftSideAdList = state.ad.get('leftSideAdList').toArray();
+        const trackingId = state.app.getIn(['trackingId'], null);
+        const leftSideAdList = state.ad.getIn(['leftSideAdList'], List());
         return {
             blogmode: props.blogmode,
             enableAds: props.enableAds,

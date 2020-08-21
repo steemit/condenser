@@ -17,6 +17,7 @@ import { api } from '@steemit/steem-js';
 
 import RootRoute from 'app/RootRoute';
 import * as appActions from 'app/redux/AppReducer';
+import * as userActions from 'app/redux/UserReducer';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
@@ -318,7 +319,6 @@ export async function serverRender(
 
         server_store = createStore(rootReducer, {
             app: initialState.app,
-            user: initialState.user,
             global: onchain,
             userProfiles: { profiles: onchain['profiles'] },
             offchain,

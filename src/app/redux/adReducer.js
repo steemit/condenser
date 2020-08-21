@@ -1,23 +1,23 @@
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 
 export const defaultState = Map({
-    leftSideAdList: [
-        {
+    leftSideAdList: List([
+        Map({
             enable: true,
             img: '/images/dlive.png',
             tag: 'SteemitDlivebanner240*240',
             url: 'https://dlive.tv/',
-        },
-    ],
+        }),
+    ]),
     rightSideAdList: [],
-    bottomAdList: [
-        {
+    bottomAdList: List([
+        Map({
             enable: true,
             img: '/images/poloniex.png',
             tag: 'SteemitPoloniexbanner864*86Post',
             url: 'https://poloniex.com/',
-        },
-    ],
+        }),
+    ]),
 });
 
 export default function reducer(state = defaultState, action = {}) {

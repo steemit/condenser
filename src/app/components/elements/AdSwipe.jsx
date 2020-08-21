@@ -29,26 +29,27 @@ class AdSwipe extends Component {
         return (
             <div className="ad-carousel">
                 <ReactSwipe swipeOptions={swipeOpt}>
-                    {adList.map(
-                        (ad, inx) =>
-                            ad.get('enable') && (
-                                <a
-                                    key={inx}
-                                    target="_blank"
-                                    href={ad.get('url')}
-                                    onClick={() =>
-                                        this.setRecordAdsView(ad.get('tag'))
-                                    }
-                                >
-                                    <img
+                    {adList.size > 0 &&
+                        adList.map(
+                            (ad, inx) =>
+                                ad.get('enable') && (
+                                    <a
                                         key={inx}
-                                        src={ad.get('img')}
-                                        width={width}
-                                        height={height}
-                                    />
-                                </a>
-                            )
-                    )}
+                                        target="_blank"
+                                        href={ad.get('url')}
+                                        onClick={() =>
+                                            this.setRecordAdsView(ad.get('tag'))
+                                        }
+                                    >
+                                        <img
+                                            key={inx}
+                                            src={ad.get('img')}
+                                            width={width}
+                                            height={height}
+                                        />
+                                    </a>
+                                )
+                        )}
                 </ReactSwipe>
             </div>
         );
@@ -57,7 +58,7 @@ class AdSwipe extends Component {
 
 AdSwipe.propTypes = {
     trackingId: PropTypes.string.isRequired,
-    adList: PropTypes.array,
+    adList: PropTypes.instanceOf(List),
     width: PropTypes.number,
     height: PropTypes.number,
 };

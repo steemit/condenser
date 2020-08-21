@@ -361,13 +361,13 @@ export default connect(
         const post = username + '/' + slug;
         const content = state.global.get('content');
         const dis = content.get(post);
-        const trackingId = state.user.get('trackingId');
+        const trackingId = state.app.getIn(['trackingId'], null);
         const steemMarketData = state.app.get('steemMarket');
         const uname =
             state.user.getIn(['current', 'username']) ||
             state.offchain.get('account');
-        const leftSideAdList = state.ad.get('leftSideAdList').toArray();
-        const bottomAdList = state.ad.get('bottomAdList').toArray();
+        const leftSideAdList = state.ad.getIn(['leftSideAdList'], List());
+        const bottomAdList = state.ad.getIn(['bottomAdList'], List());
         return {
             post,
             content,

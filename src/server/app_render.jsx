@@ -79,8 +79,6 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 env: process.env.NODE_ENV,
                 walletUrl: config.wallet_url,
                 steemMarket: ctx.steemMarketData,
-            },
-            user: {
                 trackingId: ctx.session.uid,
             },
         };

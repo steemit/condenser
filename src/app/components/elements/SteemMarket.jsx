@@ -211,7 +211,7 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const steemMarketData = state.app.get('steemMarket');
-        const trackingId = state.user.get('trackingId');
+        const trackingId = state.app.get('trackingId');
         return {
             ...ownProps,
             steemMarketData,

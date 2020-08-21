@@ -318,6 +318,7 @@ export async function serverRender(
 
         server_store = createStore(rootReducer, {
             app: initialState.app,
+            user: initialState.user,
             global: onchain,
             userProfiles: { profiles: onchain['profiles'] },
             offchain,

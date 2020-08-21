@@ -80,6 +80,9 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 walletUrl: config.wallet_url,
                 steemMarket: ctx.steemMarketData,
             },
+            user: {
+                trackingId: ctx.session.uid,
+            },
         };
 
         const {

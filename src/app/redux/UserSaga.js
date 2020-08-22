@@ -302,6 +302,7 @@ function* usernamePasswordLogin2({
                     tron_user: body.result.tron_addr == '' ? false : true,
                     tron_reward: body.result.pending_claim_tron_reward,
                     tron_balance: res.balance == undefined ? 0.0 : res.balance,
+                    tron_reward_rate: body.reward_rate,
                 })
             );
         } else {

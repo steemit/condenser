@@ -400,7 +400,8 @@ export default function useGeneralApi(app) {
         const response = yield fetch(
             host + '/tron_user?username=' + q.username
         );
-        const body = yield response.json();
+        let body = yield response.json();
+        body['reward_rate'] = config.get('trx_reward_rate');
         this.body = JSON.stringify(body);
     });
     router.post('/tron_user', koaBody, function*() {

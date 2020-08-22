@@ -19,6 +19,10 @@ import {
     serverApiRecordEvent,
     isTosAccepted,
     acceptTos,
+    checkTronUser,
+    getTronAccount,
+    createTronAccount,
+    updateTronUser,
 } from 'app/utils/ServerApiClient';
 import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
@@ -35,6 +39,8 @@ export const userWatches = [
     takeLatest(userActions.LOGOUT, logout),
     takeLatest(userActions.LOGIN_ERROR, loginError),
     takeLatest(userActions.UPLOAD_IMAGE, uploadImage),
+    takeLatest(userActions.UPDATE_USER, updateTronAccount),
+
     takeLatest(userActions.ACCEPT_TERMS, function*() {
         try {
             yield call(acceptTos);
@@ -53,12 +59,94 @@ function effectiveVests(account) {
     return vests - delegated + received;
 }
 
+function* updateTronAccount({ payload: { claim_reward, tron_address } }) {
+    const username = yield select(state =>
+        state.user.getIn(['current', 'username'])
+    );
+    if (claim_reward) {
+        console.log('start claim reward...');
+        const response = yield updateTronUser(username, tron_address, true);
+        const body = yield response.json();
+        console.log('claim reward...' + JSON.stringify(body));
+    } else {
+        // create a tron account
+        const res = yield createTronAccount();
+        const obj = yield res.json();
+        if (obj.address.base58 == undefined) {
+            yield put(
+                userActions.setUser({
+                    username,
+                    tron_address: '',
+                    tron_user: false,
+                    tron_create: false,
+                    tron_create_msg: 'fail to create tron account',
+                })
+            );
+            return;
+        }
+        const response1 = yield updateTronUser(
+            username,
+            obj.address.base58,
+            false
+        );
+        const body1 = yield response1.json();
+        if (!body1.hasOwnProperty('status') || body1.status != 'ok') {
+            yield put(
+                userActions.setUser({
+                    username,
+                    tron_address: '',
+                    tron_user: true,
+                    tron_create: false,
+                    tron_create_msg:
+                        'create a tron account,fail to update tron account',
+                })
+            );
+            return;
+        }
+
+        // query tron user information
+        const response = yield checkTronUser(username);
+        const body = yield response.json();
+        if (body.hasOwnProperty('status') && body.status == 'ok') {
+            console.log(obj);
+            yield put(
+                userActions.setUser({
+                    username,
+                    tron_address: body.result.tron_addr,
+                    tron_user: body.result.tron_addr == '' ? false : true,
+                    // tron_user: true,
+                    tron_reward: body.result.pending_claim_tron_reward,
+                    tron_balance: 0.0,
+                    tron_private_key: obj.privateKey,
+                    tron_public_key: obj.publicKey,
+                    tron_create: true,
+                    tron_create_msg: '',
+                })
+            );
+        } else {
+            yield put(
+                userActions.setUser({
+                    username,
+                    tron_address: '',
+                    tron_user: true,
+                    tron_reward: 0.0,
+                    tron_balance: 0.0,
+                    tron_create_msg:
+                        'successful update tron account,but fail to query tron account information',
+                    tron_create: false,
+                })
+            );
+            return;
+        }
+    }
+}
+
 function* shouldShowLoginWarning({ username, password }) {
     // If it's a master key, show the warning.
     if (!auth.isWif(password)) {
         const account = (yield api.getAccountsAsync([username]))[0];
         if (!account) {
-            console.error("shouldShowLoginWarning - account not found");
+            console.error('shouldShowLoginWarning - account not found');
             return false;
         }
         const pubKey = PrivateKey.fromSeed(username + 'posting' + password)
@@ -195,6 +283,51 @@ function* usernamePasswordLogin2({
         yield put(userActions.loginError({ error: 'Username does not exist' }));
         return;
     }
+
+    let queryName = username == undefined ? account.get('name') : username;
+    // check tron user name
+    // check tron users
+    var exit_tron_user = false;
+    const response = yield checkTronUser(queryName);
+    const body = yield response.json();
+    if (body.status && body.status == 'ok') {
+        if (body.result.tron_addr != '' || body.result.tron_addr.length > 0) {
+            exit_tron_user = true;
+            const response2 = yield getTronAccount(body.result.tron_addr);
+            const res = yield response2.json();
+            yield put(
+                userActions.setUser({
+                    username,
+                    tron_address: body.result.tron_addr,
+                    tron_user: body.result.tron_addr == '' ? false : true,
+                    tron_reward: body.result.pending_claim_tron_reward,
+                    tron_balance: res.balance == undefined ? 0.0 : res.balance,
+                })
+            );
+        } else {
+            yield put(
+                userActions.setUser({
+                    username,
+                    tron_address: body.result.tron_addr,
+                    tron_user: body.result.tron_addr == '' ? false : true,
+                    tron_reward: body.result.pending_claim_tron_reward,
+                    tron_balance: 0.0,
+                })
+            );
+        }
+    } else {
+        // todo: retry just show error windows
+        yield put(
+            userActions.setUser({
+                username,
+                tron_address: 'error,please refresh page',
+                tron_user: true,
+                tron_reward: 0.0,
+                tron_balance: 0.0,
+            })
+        );
+    }
+
     //dmca user block
     if (username && DMCAUserList.includes(username)) {
         console.log('DMCA list');
@@ -435,6 +568,15 @@ function* usernamePasswordLogin2({
             console.log('Logging in as', username);
             const response = yield serverApiLogin(username, signatures);
             const body = yield response.json();
+            if (body.status != undefined && body.status == 'ok') {
+                yield put(
+                    userActions.setUser({
+                        username,
+                        pass_auth: true,
+                    })
+                );
+                if (!exit_tron_user) yield put(userActions.showTronCreate());
+            }
         }
     } catch (error) {
         // Does not need to be fatal

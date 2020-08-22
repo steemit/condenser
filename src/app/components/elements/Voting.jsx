@@ -10,6 +10,7 @@ import {
     DEBT_TOKEN_SHORT,
     LIQUID_TOKEN_UPPERCASE,
     INVEST_TOKEN_SHORT,
+    INVEST_TRON_SHORT,
 } from 'app/client_config';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import { pricePerSteem } from 'app/utils/StateFunctions';
@@ -375,7 +376,7 @@ class Voting extends React.Component {
         const pending_sp = (pending_payout - _sbd) / price_per_steem;
         const pending_sbd = _sbd * (sbd_print_rate / SBD_PRINT_RATE_MAX);
         const pending_steem = (_sbd - pending_sbd) / price_per_steem;
-
+        const pending_trx = pending_sp * $STM_Config.trx_reward_rate;
         const payout_limit_hit = total_payout >= max_payout;
         const shown_payout =
             payout_limit_hit && max_payout > 0 ? max_payout : total_payout;
@@ -411,7 +412,9 @@ class Voting extends React.Component {
                         (sbd_print_rate != SBD_PRINT_RATE_MAX
                             ? fmt(pending_steem, LIQUID_TOKEN_UPPERCASE) + ', '
                             : '') +
-                        fmt(pending_sp, INVEST_TOKEN_SHORT),
+                        fmt(pending_sp, INVEST_TOKEN_SHORT) +
+                        ',' +
+                        fmt(pending_trx, INVEST_TRON_SHORT),
                 });
             }
 

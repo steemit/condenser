@@ -1,4 +1,5 @@
 import { api } from '@steemit/steem-js';
+import { signData } from 'server/utils/encrypted';
 
 const request_base = {
     method: 'post',
@@ -114,4 +115,50 @@ export function conductSearch(req) {
         body: JSON.stringify(bodyWithCSRF),
     });
     return fetch('/api/v1/search', request);
+}
+
+export function checkTronUser(username) {
+    const queryString = '/api/v1/tron_user?username=' + username;
+    console.log('check_tron_user:', queryString);
+    return fetch(queryString);
+}
+
+export function createTronAccount() {
+    const queryString = '/api/v1/create_account';
+    return fetch(queryString);
+}
+export function getTronAccount(tron_address) {
+    const queryString = '/api/v1/get_account?tron_address=' + tron_address;
+    return fetch(queryString);
+}
+
+export function updateTronUser(username, tron_address, claim_reward) {
+    // todo: add api call function
+    // const r = signTron(username, tron_address);
+    // todo: add api call function
+    // todo: bug on backend api
+    const auth_type = 'posting';
+    const data = {
+        username,
+        tron_address,
+        auth_type,
+        claim_reward,
+    };
+    const privKey = '5JPJJNot5TyFPDdBeKo2CWjkpLtGUAojMeewVaSxzfmbYJauutH';
+    const r = signData(data, privKey);
+
+    const body = {
+        username,
+        tron_addr: tron_address,
+        nonce: r.nonce,
+        timestamp: r.timestamp,
+        signature: r.signature,
+        auth_type: 'posting',
+        claim_reward,
+    };
+
+    const request = Object.assign({}, request_base, {
+        body: JSON.stringify(body),
+    });
+    return fetch('/api/v1/tron_user', request);
 }

@@ -376,7 +376,8 @@ class Voting extends React.Component {
         const pending_sp = (pending_payout - _sbd) / price_per_steem;
         const pending_sbd = _sbd * (sbd_print_rate / SBD_PRINT_RATE_MAX);
         const pending_steem = (_sbd - pending_sbd) / price_per_steem;
-        const pending_trx = pending_sp * $STM_Config.trx_reward_rate;
+        const pending_trx =
+            pending_sp * parseFloat(this.props.tron_reward_rate);
         const payout_limit_hit = total_payout >= max_payout;
         const shown_payout =
             payout_limit_hit && max_payout > 0 ? max_payout : total_payout;
@@ -629,6 +630,10 @@ export default connect(
 
         const current = state.user.get('current');
         const username = current ? current.get('username') : null;
+        const tron_reward_rate =
+            current && current.has('tron_reward_rate')
+                ? current.get('tron_reward_rate')
+                : 0.0;
         const net_vests = current ? current.get('effective_vests') : 0.0;
         const vote_status_key = `transaction_vote_active_${author}_${permlink}`;
         const voting = state.global.get(vote_status_key);
@@ -646,6 +651,8 @@ export default connect(
             if (vote) myVote = parseInt(vote.get('rshares'), 10);
         }
 
+        console.log('tron reward rate' + tron_reward_rate);
+
         return {
             post,
             showList: ownProps.showList,
@@ -660,6 +667,7 @@ export default connect(
             voting,
             price_per_steem,
             sbd_print_rate,
+            tron_reward_rate,
         };
     },
 

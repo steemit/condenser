@@ -813,5 +813,38 @@
         "resteems": "Resteems",
         "upvotes": "Upvotes",
         "mentions": "Mentions"
+    },
+    "tron_jsx": {
+        "content0":
+            "Using TRx vote for tron node and joining in construction of TRON ECOSYSTEM, where you can receive at most eight percentage benefit rate",
+        "content1": "Freeze TRX before voting in order to gain right to vote.",
+        "content2": "Do Following:",
+        "step1":
+            "Step1: click \"Vote\" button , which redirect to Tron scan vote page",
+        "step2": "Step2: click \"link wallet\",chose \"import\"",
+        "step3":
+            "Step3: Click \"Sign in\" button once finish input TRON private key ",
+        "step4": "Step4: click \"Vote\" button and follow the instruction",
+        "vote_button": "go vote",
+        "step": "step",
+        "tron_tx_history": "TRON transaction history >",
+        "update_tron_account": "UPDATE TRON ACCOUNT",
+        "update_tron_content":
+            "To update TRON account, please confirm following information so as to avoid potential risk. \n Save TRON private key locally or import this TRON account into other wallet supporting TRON. or transfer tron asset into other tron account. ",
+        "update_button": "UPDATE AND DOWNLOAD",
+        "update_success": "UPDATE SUCCESS",
+        "update_success_content":
+            " You successfully update your TRON account. If fail to download, please",
+        "update_success_click": "click download",
+        "update_success_content2":
+            " with TRON public key pdf file. please take care of this file, if loss, cannot get it back. please do not share with anyone",
+        "safe_save_button": "safe save",
+        "create_tron_account": "CREATE TRON ACCOUNT GET REWARD",
+        "create_tron_account_content":
+            "Steemit will give you extra TRX reward, this tron account was used to receive those reward. System will automatically create a free TRON account for you. Do you agree creating TRON account and download a pdf file with TRON keys?",
+        "create_tron_agree": "Agree",
+        "create_tron_success": "SUCCESS CREATED",
+        "create_tron_success_content":
+            "You successfully create your TRON account.If fail to download, please "
     }
 }

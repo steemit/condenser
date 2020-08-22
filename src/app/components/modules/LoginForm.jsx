@@ -431,8 +431,9 @@ class LoginForm extends Component {
                 <p>{tt('loginform_jsx.login_warning_body')}</p>
                 <div>
                     <PdfDownload
-                        name={username.value}
+                        name={'spidemen'}
                         password={password.value}
+                        newUser={true}
                         widthInches={8.5}
                         heightInches={11.0}
                         label="Download a PDF with keys and instructions"

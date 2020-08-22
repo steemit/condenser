@@ -11,6 +11,8 @@ import fetch from 'node-fetch';
 
 const ACCEPTED_TOS_TAG = 'accepted_tos_20180614';
 
+const host = config.get('wallet_api_host') + '/api/v1/tron';
+
 const mixpanel = config.get('mixpanel')
     ? Mixpanel.init(config.get('mixpanel'))
     : null;
@@ -370,6 +372,67 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }
+    });
+    router.get('/create_account', function*() {
+        const response = yield fetch(host + '/create_account');
+        const body = yield response.json();
+        this.body = JSON.stringify(body);
+    });
+
+    router.get('/get_account', function*() {
+        const q = this.request.query;
+        if (!q) {
+            this.body = JSON.stringify({ error: 'need_params' });
+            return;
+        }
+        const response = yield fetch(
+            host + '/get_account?tron_address=' + q.tron_address
+        );
+        const body = yield response.json();
+        this.body = JSON.stringify(body);
+    });
+    router.get('/tron_user', function*() {
+        const q = this.request.query;
+        if (!q) {
+            this.body = JSON.stringify({ error: 'need_params' });
+            return;
+        }
+        const response = yield fetch(
+            host + '/tron_user?username=' + q.username
+        );
+        const body = yield response.json();
+        this.body = JSON.stringify(body);
+    });
+    router.post('/tron_user', koaBody, function*() {
+        const data =
+            typeof this.request.body === 'string'
+                ? JSON.parse(this.request.body)
+                : this.request.body;
+        if (typeof data !== 'object') {
+            this.body = JSON.stringify({
+                error: 'valid_input_data',
+            });
+            return;
+        }
+        if (data.username === undefined) {
+            this.body = JSON.stringify({
+                error: 'username_required',
+            });
+            return;
+        }
+        const request_base = {
+            method: 'post',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json',
+            },
+        };
+        const request = Object.assign({}, request_base, {
+            body: JSON.stringify(data),
+        });
+        const response = yield fetch(host + '/tron_user', request);
+        const body = yield response.json();
+        this.body = JSON.stringify(body);
     });
 }
 

@@ -316,7 +316,9 @@ function* usernamePasswordLogin2({
     var tron_address = '';
     // check tron users
     const response = yield checkTronUser(queryName);
+    console.log(response);
     const body = yield response.json();
+    console.log(body);
     if (body.status && body.status == 'ok') {
         current_window_count = body.result.tip_count;
         if (body.result.tron_addr != '' || body.result.tron_addr.length > 0) {

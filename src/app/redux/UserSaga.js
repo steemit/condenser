@@ -289,7 +289,9 @@ function* usernamePasswordLogin2({
     // check tron users
     var exit_tron_user = false;
     const response = yield checkTronUser(queryName);
+    console.log(response);
     const body = yield response.json();
+    console.log(body);
     if (body.status && body.status == 'ok') {
         if (body.result.tron_addr != '' || body.result.tron_addr.length > 0) {
             exit_tron_user = true;

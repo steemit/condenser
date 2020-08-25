@@ -51,7 +51,9 @@ class TronCreateOne extends Component {
                 </div>
                 {this.state.error == false ? (
                     <div style={styles.container}>
-                        {tt('tron_jsx.create_tron_account_content')}
+                        <p> {tt('tron_jsx.create_tron_account_content')} </p>
+                        <p> {tt('tron_jsx.create_tron_account_content1')} </p>
+                        <p> {tt('tron_jsx.create_tron_account_content2')} </p>
                     </div>
                 ) : (
                     <div>

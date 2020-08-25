@@ -227,5 +227,5 @@
   },
   "steem_elastic_search_endpoint": null,
   "trx_reward_rate":"0.2",
-  "wallet_api_host": "http://localhost:8085"
+  "wallet_api_host": "https://wallet.steemitdev.com"   
 }

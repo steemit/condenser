@@ -23,10 +23,12 @@ import {
     getTronAccount,
     createTronAccount,
     updateTronUser,
+    getTronConfig,
 } from 'app/utils/ServerApiClient';
 import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
+const max_pop_window_count = 5;
 
 export const userWatches = [
     takeLatest(
@@ -65,14 +67,14 @@ function* updateTronAccount({ payload: { claim_reward, tron_address } }) {
     );
     if (claim_reward) {
         console.log('start claim reward...');
-        const response = yield updateTronUser(username, tron_address, true);
+        const response = yield updateTronUser(username, tron_address, true, 0);
         const body = yield response.json();
-        console.log('claim reward...' + JSON.stringify(body));
+        // console.log('claim reward...' + JSON.stringify(body));
     } else {
         // create a tron account
         const res = yield createTronAccount();
         const obj = yield res.json();
-        if (obj.address.base58 == undefined) {
+        if (obj.address == undefined || obj.address.base58 == undefined) {
             yield put(
                 userActions.setUser({
                     username,
@@ -87,7 +89,8 @@ function* updateTronAccount({ payload: { claim_reward, tron_address } }) {
         const response1 = yield updateTronUser(
             username,
             obj.address.base58,
-            false
+            false,
+            0
         );
         const body1 = yield response1.json();
         if (!body1.hasOwnProperty('status') || body1.status != 'ok') {
@@ -233,6 +236,16 @@ function* usernamePasswordLogin2({
         username
     );
 
+    // query api get tron information
+    const res1 = yield getTronConfig();
+    const res_config = yield res1.json();
+    // set trx_reward_rate
+    yield put(
+        userActions.setUser({
+            username,
+            tron_reward_rate: res_config.reward_rate,
+        })
+    );
     // login, using saved password
     let feedURL = false;
     let autopost,
@@ -285,18 +298,23 @@ function* usernamePasswordLogin2({
     }
 
     let queryName = username == undefined ? account.get('name') : username;
-    // check tron user name
-    // check tron users
     var exit_tron_user = false;
+    const windows_count_threshold =
+        res_config.unbind_tip_limit == undefined
+            ? max_pop_window_count
+            : res_config.unbind_tip_limit;
+    var current_window_count = 0;
+    var tron_address = '';
+    // check tron users
     const response = yield checkTronUser(queryName);
-    console.log(response);
     const body = yield response.json();
-    console.log(body);
     if (body.status && body.status == 'ok') {
+        current_window_count = body.result.tip_count;
         if (body.result.tron_addr != '' || body.result.tron_addr.length > 0) {
             exit_tron_user = true;
             const response2 = yield getTronAccount(body.result.tron_addr);
             const res = yield response2.json();
+            tron_address = body.result.tron_addr;
             yield put(
                 userActions.setUser({
                     username,
@@ -324,12 +342,13 @@ function* usernamePasswordLogin2({
             userActions.setUser({
                 username,
                 tron_address: 'error,please refresh page',
-                tron_user: true,
+                tron_user: false,
                 tron_reward: 0.0,
                 tron_balance: 0.0,
             })
         );
     }
+    // console.log("tron current window count="+current_window_count+"   exit user="+exit_tron_user+" tron address="+tron_address+"&");
 
     //dmca user block
     if (username && DMCAUserList.includes(username)) {
@@ -578,7 +597,18 @@ function* usernamePasswordLogin2({
                         pass_auth: true,
                     })
                 );
-                if (!exit_tron_user) yield put(userActions.showTronCreate());
+                if (!exit_tron_user) {
+                    const response_tip_count = yield updateTronUser(
+                        username,
+                        tron_address,
+                        false,
+                        current_window_count + 1
+                    );
+                    // const res= yield response_tip_count.json();
+                    // console.log('update tron users'+JSON.stringify(res));
+                    if (current_window_count < windows_count_threshold)
+                        yield put(userActions.showTronCreate());
+                }
             }
         }
     } catch (error) {

@@ -11,6 +11,7 @@ import fetch from 'node-fetch';
 
 const ACCEPTED_TOS_TAG = 'accepted_tos_20180614';
 
+// todo: fix last slash or double slash
 const host = config.get('wallet_api_host') + '/api/v1/tron';
 
 const mixpanel = config.get('mixpanel')
@@ -373,6 +374,14 @@ export default function useGeneralApi(app) {
             this.status = 500;
         }
     });
+
+    router.get('/get_config', function*() {
+        const response = yield fetch(host + '/get_config');
+        const body = yield response.json();
+        body['reward_rate'] = config.get('trx_reward_rate');
+        this.body = JSON.stringify(body);
+    });
+
     router.get('/create_account', function*() {
         const response = yield fetch(host + '/create_account');
         const body = yield response.json();

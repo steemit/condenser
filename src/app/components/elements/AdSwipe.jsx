@@ -21,14 +21,19 @@ class AdSwipe extends Component {
     }
 
     render() {
-        const { width, height, adList } = this.props;
+        const { width, height, adList, timer } = this.props;
+        let reactSwipeEl;
         const swipeOpt = {
-            speed: 3000,
-            auto: 3000,
+            speed: 1000,
+            auto: timer,
         };
         return (
             <div className="ad-carousel">
-                <ReactSwipe swipeOptions={swipeOpt} childCount={adList.size}>
+                <ReactSwipe
+                    swipeOptions={swipeOpt}
+                    childCount={adList.size}
+                    ref={el => (reactSwipeEl = el)}
+                >
                     {adList.size > 0 &&
                         adList.map(
                             (ad, inx) =>
@@ -48,8 +53,14 @@ class AdSwipe extends Component {
                                         <img
                                             key={inx}
                                             src={ad.get('img')}
-                                            width={width}
-                                            height={height}
+                                            width={`${width}px`}
+                                            height={`${height}px`}
+                                            onClick={() =>
+                                                this.goTo(
+                                                    ad.get('url'),
+                                                    ad.get('tag')
+                                                )
+                                            }
                                         />
                                     </a>
                                 )
@@ -65,6 +76,7 @@ AdSwipe.propTypes = {
     adList: PropTypes.instanceOf(List),
     width: PropTypes.number,
     height: PropTypes.number,
+    timer: PropTypes.number,
 };
 
 export default connect(

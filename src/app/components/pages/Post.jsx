@@ -266,6 +266,8 @@ class Post extends React.Component {
                                     <AdSwipe
                                         adList={bottomAdList}
                                         trackingId={trackingId}
+                                        width={864}
+                                        height={86}
                                     />
                                 </div>
                             </div>

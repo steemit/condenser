@@ -7,9 +7,9 @@ import PdfDownload from 'app/components/elements/PdfDownload';
 const styles = {
     container: {
         display: 'flex',
-        flexDirection: 'row',
-        flexFlow: 'row wrap',
+        flexDirection: 'column',
         marginTop: '40px',
+        width: '100%',
     },
     flowBelow: {
         marginTop: '40px',

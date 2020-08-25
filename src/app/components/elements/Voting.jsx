@@ -651,8 +651,6 @@ export default connect(
             if (vote) myVote = parseInt(vote.get('rshares'), 10);
         }
 
-        console.log('tron reward rate' + tron_reward_rate);
-
         return {
             post,
             showList: ownProps.showList,

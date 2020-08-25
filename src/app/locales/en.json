@@ -837,14 +837,18 @@
             " You successfully update your TRON account. If fail to download, please",
         "update_success_click": "click download",
         "update_success_content2":
-            " with TRON public key pdf file. please take care of this file, if loss, cannot get it back. please do not share with anyone",
-        "safe_save_button": "safe save",
-        "create_tron_account": "CREATE TRON ACCOUNT GET REWARD",
+            " where you can find TRON public and private key. Please keep it safe, otherwise we cannot recover it for you.Please do not share the file with anyone else.",
+        "safe_save_button": "PDF securely saved",
+        "create_tron_account": "Create a TRON account and claim rewards",
         "create_tron_account_content":
-            "Steemit will give you extra TRX reward, this tron account was used to receive those reward. System will automatically create a free TRON account for you. Do you agree creating TRON account and download a pdf file with TRON keys?",
+            "Steemit will distribute extra TRX to you as rewards. This account is for receiving such rewards",
+        "create_tron_account_content1":
+            "The system will automatically create a TRON account for you for free.Do you agree to create a TRON account and download the PDF with your TRON public and private keys?",
+        "create_tron_account_content2":
+            "Do you agree to create a TRON account and download the PDF with your TRON public and private keys?",
         "create_tron_agree": "Agree",
-        "create_tron_success": "SUCCESS CREATED",
+        "create_tron_success": "Your account has been created",
         "create_tron_success_content":
-            "You successfully create your TRON account.If fail to download, please "
+            "You successfully create a TRON account.If fail to download, please "
     }
 }

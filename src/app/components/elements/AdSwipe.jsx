@@ -28,7 +28,7 @@ class AdSwipe extends Component {
         };
         return (
             <div className="ad-carousel">
-                <ReactSwipe swipeOptions={swipeOpt}>
+                <ReactSwipe swipeOptions={swipeOpt} childCount={adList.size}>
                     {adList.size > 0 &&
                         adList.map(
                             (ad, inx) =>
@@ -40,6 +40,10 @@ class AdSwipe extends Component {
                                         onClick={() =>
                                             this.setRecordAdsView(ad.get('tag'))
                                         }
+                                        style={{
+                                            height: `${height}px`,
+                                            width: `${width}px`,
+                                        }}
                                     >
                                         <img
                                             key={inx}

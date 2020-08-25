@@ -9,8 +9,8 @@ export const defaultState = Map({
             url: 'https://go.dlive.tv/steemit-dlive/',
         }),
         Map({
-            enable: false,
-            img: '',
+            enable: true,
+            img: '/images/justswap-sider.png',
             tag: 'JustswapBanner240*240',
             url: 'https://justswap.io/#/home',
         }),
@@ -23,8 +23,8 @@ export const defaultState = Map({
             url: 'https://go.dlive.tv/steemit-dlive/',
         }),
         Map({
-            enable: false,
-            img: '',
+            enable: true,
+            img: '/images/justswap-sider.png',
             tag: 'JustswapBanner240*240Post',
             url: 'https://justswap.io/#/home',
         }),
@@ -38,8 +38,8 @@ export const defaultState = Map({
             url: 'https://poloniex.com/',
         }),
         Map({
-            enable: false,
-            img: '',
+            enable: true,
+            img: '/images/justswap.png',
             tag: 'JustswapBanner864*86Post',
             url: 'https://justswap.io/#/home',
         }),

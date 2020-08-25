@@ -249,6 +249,7 @@ class Post extends React.Component {
                                 width={240}
                                 height={240}
                                 timer={5000}
+                                direction="horizontal"
                             />
                         </div>
                     </div>
@@ -270,6 +271,7 @@ class Post extends React.Component {
                                         width={864}
                                         height={86}
                                         timer={5000}
+                                        direction="vertical"
                                     />
                                 </div>
                             </div>

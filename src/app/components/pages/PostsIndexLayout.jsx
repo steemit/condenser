@@ -12,7 +12,6 @@ import GptAd from 'app/components/elements/GptAd';
 import Topics from './Topics';
 import CommunityPane from 'app/components/elements/CommunityPane';
 import CommunityPaneMobile from 'app/components/elements/CommunityPaneMobile';
-import { recordAdsView } from 'app/utils/ServerApiClient';
 import { APP_DOMAIN } from 'app/client_config';
 import AdSwipe from 'app/components/elements/AdSwipe';
 
@@ -118,6 +117,7 @@ class PostsIndexLayout extends React.Component {
                         trackingId={trackingId}
                         width={240}
                         height={240}
+                        timer={5000}
                     />
                     {enableAds && (
                         <div>

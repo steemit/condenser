@@ -179,12 +179,14 @@ class SteemMarket extends Component {
                             trackingId={trackingId}
                             page={page}
                         />
-                        <Coin
-                            coin={jst}
-                            color="#788187"
-                            trackingId={trackingId}
-                            page={page}
-                        />
+                        {jst && (
+                            <Coin
+                                coin={jst}
+                                color="#788187"
+                                trackingId={trackingId}
+                                page={page}
+                            />
+                        )}
                         {topCoins.map(coin => (
                             <Coin
                                 key={coin.get('name')}

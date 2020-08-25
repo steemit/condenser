@@ -2917,12 +2917,12 @@ dom-walk@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
 
-dom7@^2.1.5:
-  version "2.1.5"
-  resolved "https://registry.npm.taobao.org/dom7/download/dom7-2.1.5.tgz#a79411017800b31d8400070cdaebbfc92c1f6377"
-  integrity sha1-p5QRAXgAsx2EAAcM2uu/ySwfY3c=
+dom7@^3.0.0-alpha.7:
+  version "3.0.0-alpha.9"
+  resolved "https://registry.npm.taobao.org/dom7/download/dom7-3.0.0-alpha.9.tgz#0110c21181b8bad3a1ee72443e04d3c2e3f1d38f"
+  integrity sha1-ARDCEYG4utOh7nJEPgTTwuPx048=
   dependencies:
-    ssr-window "^2.0.0"
+    ssr-window "^3.0.0-alpha.1"
 
 domain-browser@^1.1.1:
   version "1.2.0"
@@ -5780,11 +5780,6 @@ lodash.isarray@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
 
-lodash.isequal@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.npm.taobao.org/lodash.isequal/download/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
-  integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
-
 lodash.isplainobject@^4.0.6:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
@@ -7628,15 +7623,6 @@ react-style-proptype@^3.0.0:
   dependencies:
     prop-types "^15.5.4"
 
-react-swipe@^6.0.4:
-  version "6.0.4"
-  resolved "https://registry.npm.taobao.org/react-swipe/download/react-swipe-6.0.4.tgz#76e53599b1a093d5a3a841c7f391ef0abcc1babb"
-  integrity sha1-duU1mbGgk9WjqEHH85HvCrzBurs=
-  dependencies:
-    lodash.isequal "^4.5.0"
-    prop-types "^15.6.0"
-    swipe-js-iso "^2.1.5"
-
 react-test-renderer@15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-15.6.2.tgz#d0333434fc2c438092696ca770da5ed48037efa8"
@@ -8544,10 +8530,10 @@ sshpk@^1.7.0:
     jsbn "~0.1.0"
     tweetnacl "~0.14.0"
 
-ssr-window@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npm.taobao.org/ssr-window/download/ssr-window-2.0.0.tgz#98c301aef99523317f8d69618f0010791096efc4"
-  integrity sha1-mMMBrvmVIzF/jWlhjwAQeRCW78Q=
+ssr-window@^3.0.0-alpha.1, ssr-window@^3.0.0-alpha.4:
+  version "3.0.0-alpha.4"
+  resolved "https://registry.npm.taobao.org/ssr-window/download/ssr-window-3.0.0-alpha.4.tgz#0c69a18c4305ecccdd8e11596155ca07b635f345"
+  integrity sha1-DGmhjEMF7MzdjhFZYVXKB7Y180U=
 
 stack-utils@^1.0.1:
   version "1.0.1"
@@ -8830,18 +8816,13 @@ svgo@^0.7.0:
     sax "~1.2.1"
     whet.extend "~0.9.9"
 
-swipe-js-iso@^2.1.5:
-  version "2.1.5"
-  resolved "https://registry.npm.taobao.org/swipe-js-iso/download/swipe-js-iso-2.1.5.tgz#9b0eea8b9740487e6169d655184fc6440b6a2e34"
-  integrity sha1-mw7qi5dASH5hadZVGE/GRAtqLjQ=
-
-swiper@^5.4.1:
-  version "5.4.5"
-  resolved "https://registry.npm.taobao.org/swiper/download/swiper-5.4.5.tgz?cache=0&sync_timestamp=1597671939152&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fswiper%2Fdownload%2Fswiper-5.4.5.tgz#a350f654bf68426dbb651793824925512d223c0f"
-  integrity sha1-o1D2VL9oQm27ZReTgkklUS0iPA8=
+swiper@^6.1.2:
+  version "6.1.2"
+  resolved "https://registry.npm.taobao.org/swiper/download/swiper-6.1.2.tgz?cache=0&sync_timestamp=1597671939152&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fswiper%2Fdownload%2Fswiper-6.1.2.tgz#334693491915da51954fa388115c521dfba1eb6a"
+  integrity sha1-M0aTSRkV2lGVT6OIEVxSHfuh62o=
   dependencies:
-    dom7 "^2.1.5"
-    ssr-window "^2.0.0"
+    dom7 "^3.0.0-alpha.7"
+    ssr-window "^3.0.0-alpha.4"
 
 symbol-observable@1.0.1:
   version "1.0.1"

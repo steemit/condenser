@@ -118,6 +118,7 @@ class PostsIndexLayout extends React.Component {
                         width={240}
                         height={240}
                         timer={5000}
+                        direction="horizontal"
                     />
                     {enableAds && (
                         <div>

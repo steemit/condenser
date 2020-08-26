@@ -23,6 +23,7 @@ import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Topics from './Topics';
 import Icon from 'app/components/elements/Icon';
+import AdSwipe from 'app/components/elements/AdSwipe';
 
 function isEmptyPost(post) {
     // check if the post doesn't exist
@@ -43,7 +44,6 @@ class Post extends React.Component {
     };
     constructor() {
         super();
-        this.setRecordAdsView = this.setRecordAdsView.bind(this);
         this.state = {
             showNegativeComments: false,
         };
@@ -78,12 +78,6 @@ class Post extends React.Component {
     showAnywayClick = () => {
         this.setState({ showAnyway: true });
     };
-    setRecordAdsView(tag) {
-        recordAdsView({
-            trackingId: this.props.trackingId,
-            adTag: tag,
-        });
-    }
 
     render() {
         const { showSignUp } = this;
@@ -97,6 +91,9 @@ class Post extends React.Component {
             uname,
             topics,
             subscriptions,
+            trackingId,
+            postLeftSideAdList,
+            bottomAdList,
         } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
 
@@ -246,22 +243,14 @@ class Post extends React.Component {
                             topics={topics}
                         />
                         <div>
-                            <a
-                                href="https://dlive.tv/"
-                                target="_blank"
-                                onClick={() =>
-                                    this.setRecordAdsView(
-                                        'SteemitDlivebanner240*240Post'
-                                    )
-                                }
-                            >
-                                <img
-                                    src="/images/dlive.png"
-                                    alt=""
-                                    width="240"
-                                    height="240"
-                                />
-                            </a>
+                            <AdSwipe
+                                adList={postLeftSideAdList}
+                                trackingId={trackingId}
+                                width={240}
+                                height={240}
+                                timer={5000}
+                                direction="horizontal"
+                            />
                         </div>
                     </div>
                     <div className="post-main">
@@ -276,21 +265,14 @@ class Post extends React.Component {
                                         maxWidth: '54rem',
                                     }}
                                 >
-                                    <a
-                                        href="https://poloniex.com/"
-                                        target="_blank"
-                                        onClick={() =>
-                                            this.setRecordAdsView(
-                                                'SteemitPoloniexbanner864*86Post'
-                                            )
-                                        }
-                                    >
-                                        <SvgImage
-                                            name="poloniex"
-                                            width="100%"
-                                            height="auto"
-                                        />
-                                    </a>
+                                    <AdSwipe
+                                        adList={bottomAdList}
+                                        trackingId={trackingId}
+                                        width={864}
+                                        height={86}
+                                        timer={5000}
+                                        direction="vertical"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -385,11 +367,16 @@ export default connect(
         const post = username + '/' + slug;
         const content = state.global.get('content');
         const dis = content.get(post);
-        const trackingId = state.user.get('trackingId');
+        const trackingId = state.app.getIn(['trackingId'], null);
         const steemMarketData = state.app.get('steemMarket');
         const uname =
             state.user.getIn(['current', 'username']) ||
             state.offchain.get('account');
+        const postLeftSideAdList = state.ad.getIn(
+            ['postLeftSideAdList'],
+            List()
+        );
+        const bottomAdList = state.ad.getIn(['bottomAdList'], List());
         return {
             post,
             content,
@@ -402,6 +389,8 @@ export default connect(
             uname,
             topics: state.global.getIn(['topics'], List()),
             subscriptions: state.global.getIn(['subscriptions', uname], null),
+            postLeftSideAdList,
+            bottomAdList,
         };
     },
     dispatch => ({

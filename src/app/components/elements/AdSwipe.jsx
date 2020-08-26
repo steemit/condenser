@@ -32,6 +32,7 @@ class AdSwipe extends Component {
             height,
             autoplay: {
                 delay: timer,
+                disableOnInteraction: false,
             },
             spaceBetween: 10,
             loop: true,

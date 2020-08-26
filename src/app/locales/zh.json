@@ -101,7 +101,6 @@
         "to": "至",
         "topics": "主题",
         "toggle_nightmode": "切换夜间模式",
-
         "all_tags": "所有标签",
         "transfer": "转账",
         "trending_topics": "热门话题",
@@ -646,6 +645,9 @@
         "create_tron_account": "创建TRON账户领取奖励",
         "create_tron_account_content":
             "Steemit 将会为你发放额外的TRX奖励，此账户用来接手奖励。系统会自动为您免费创建TRON用户",
+        "create_tron_account_content1": "系统会自动为您免费创建TRON用户.",
+        "create_tron_account_content2":
+            "是否同意创建TRON账户并下载带有TRON账户公私钥的PDF？",
         "create_tron_agree": "同意",
         "create_tron_success": "创建成功",
         "create_tron_success_content": "已经成功创建TRON账户，若下载失败，请"

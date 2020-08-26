@@ -843,7 +843,7 @@
         "create_tron_account_content":
             "Steemit will distribute extra TRX to you as rewards. This account is for receiving such rewards",
         "create_tron_account_content1":
-            "The system will automatically create a TRON account for you for free.Do you agree to create a TRON account and download the PDF with your TRON public and private keys?",
+            "The system will automatically create a TRON account for you for free.",
         "create_tron_account_content2":
             "Do you agree to create a TRON account and download the PDF with your TRON public and private keys?",
         "create_tron_agree": "Agree",

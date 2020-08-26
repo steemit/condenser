@@ -33,6 +33,8 @@ class AdSwipe extends Component {
             autoplay: {
                 delay: timer,
             },
+            spaceBetween: 10,
+            loop: true,
         });
         this.setState({ hide: false });
     }

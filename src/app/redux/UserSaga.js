@@ -62,15 +62,23 @@ function effectiveVests(account) {
 }
 
 function* updateTronAccount({ payload: { claim_reward, tron_address } }) {
-    const username = yield select(state =>
-        state.user.getIn(['current', 'username'])
-    );
+    const [username, private_key] = yield select(state => [
+        state.user.getIn(['current', 'username']),
+        state.user.getIn(['current', 'private_keys']),
+    ]);
     if (claim_reward) {
         console.log('start claim reward...');
-        const response = yield updateTronUser(username, tron_address, true, 0);
+        const response = yield updateTronUser(
+            username,
+            tron_address,
+            true,
+            0,
+            private_key.get('posting_private').toWif()
+        );
         const body = yield response.json();
         // console.log('claim reward...' + JSON.stringify(body));
     } else {
+        console.log('update tron user ...' + username);
         // create a tron account
         const res = yield createTronAccount();
         const obj = yield res.json();
@@ -90,7 +98,8 @@ function* updateTronAccount({ payload: { claim_reward, tron_address } }) {
             username,
             obj.address.base58,
             false,
-            0
+            0,
+            private_key.get('posting_private').toWif()
         );
         const body1 = yield response1.json();
         if (!body1.hasOwnProperty('status') || body1.status != 'ok') {
@@ -602,7 +611,8 @@ function* usernamePasswordLogin2({
                         username,
                         tron_address,
                         false,
-                        current_window_count + 1
+                        current_window_count + 1,
+                        private_keys.get('posting_private').toWif()
                     );
                     // const res= yield response_tip_count.json();
                     // console.log('update tron users'+JSON.stringify(res));

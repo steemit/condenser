@@ -136,35 +136,32 @@ export function updateTronUser(
     username,
     tron_address,
     claim_reward,
-    tip_count
+    tip_count,
+    privKey
 ) {
-    // todo: add api call function
-    // const r = signTron(username, tron_address);
-    // todo: add api call function
-    // todo: bug on backend api
     const auth_type = 'posting';
     const data = {
-        username,
-        tron_address,
-        auth_type,
-        claim_reward,
+        username: username,
+        tron_addr: tron_address,
+        auth_type: auth_type,
+        claim_reward: claim_reward,
+        tip_count: tip_count,
     };
-    const privKey = '5JPJJNot5TyFPDdBeKo2CWjkpLtGUAojMeewVaSxzfmbYJauutH';
     const r = signData(data, privKey);
 
-    const body = {
-        username,
-        tron_addr: tron_address,
-        nonce: r.nonce,
-        timestamp: r.timestamp,
-        signature: r.signature,
-        auth_type: 'posting',
-        claim_reward,
-        tip_count,
-    };
+    // const body = {
+    //     username,
+    //     tron_addr: tron_address,
+    //     nonce: r.nonce,
+    //     timestamp: r.timestamp,
+    //     signature: r.signature,
+    //     auth_type: 'posting',
+    //     claim_reward,
+    //     tip_count,
+    // };
 
     const request = Object.assign({}, request_base, {
-        body: JSON.stringify(body),
+        body: JSON.stringify(r),
     });
     return fetch('/api/v1/tron_user', request);
 }

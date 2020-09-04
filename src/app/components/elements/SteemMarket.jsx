@@ -71,6 +71,9 @@ class Coin extends Component {
             case 'TRX':
                 url = 'https://poloniex.com/exchange#usdt_trx';
                 break;
+            case 'JST':
+                url = 'https://poloniex.com/exchange#trx_jst';
+                break;
             default:
                 url = '';
         }
@@ -116,7 +119,7 @@ class Coin extends Component {
                 <div className="coin-label">
                     <span className="symbol">{symbol}</span>{' '}
                     <span className="price">
-                        {parseFloat(priceUsd).toFixed(2)}
+                        {parseFloat(priceUsd).toFixed(symbol === 'JST' ? 3 : 2)}
                     </span>
                 </div>
             </div>
@@ -154,6 +157,7 @@ class SteemMarket extends Component {
         const steem = steemMarketData.get('steem');
         const sbd = steemMarketData.get('sbd');
         const tron = steemMarketData.get('tron');
+        const jst = steemMarketData.get('jst');
         const { trackingId, page } = this.props;
 
         return (
@@ -175,6 +179,14 @@ class SteemMarket extends Component {
                             trackingId={trackingId}
                             page={page}
                         />
+                        {jst && (
+                            <Coin
+                                coin={jst}
+                                color="#788187"
+                                trackingId={trackingId}
+                                page={page}
+                            />
+                        )}
                         {topCoins.map(coin => (
                             <Coin
                                 key={coin.get('name')}
@@ -184,7 +196,12 @@ class SteemMarket extends Component {
                                 page={page}
                             />
                         ))}
-                        <Coin coin={sbd} color="#09d6a8" />
+                        <Coin
+                            coin={sbd}
+                            color="#09d6a8"
+                            trackingId={trackingId}
+                            page={page}
+                        />
                     </div>
                 </div>
             </div>
@@ -196,7 +213,7 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const steemMarketData = state.app.get('steemMarket');
-        const trackingId = state.user.get('trackingId');
+        const trackingId = state.app.get('trackingId');
         return {
             ...ownProps,
             steemMarketData,

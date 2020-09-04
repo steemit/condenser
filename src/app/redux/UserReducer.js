@@ -46,6 +46,7 @@ const generateTrackingId = () =>
     `x-${Math.random()
         .toString()
         .slice(2)}`;
+
 const defaultState = fromJS({
     current: {},
     show_login_modal: false,
@@ -160,6 +161,8 @@ export default function reducer(state = defaultState, action) {
             }); // saga
         case UPDATE_USER:
             return state; // saga
+        // saga
+
         case SET_USER:
             return state.mergeDeep({
                 current: payload,

@@ -459,6 +459,16 @@ export default function useGeneralApi(app) {
         const body = yield response.json();
         this.body = JSON.stringify(body);
     });
+    router.get('/get_config', function*() {
+        const q = this.request.query;
+        if (!q) {
+            this.body = JSON.stringify({ error: 'need_params' });
+            return;
+        }
+        const response = yield fetch(host + '/get_config');
+        const body = yield response.json();
+        this.body = JSON.stringify(body);
+    });
     router.get('/tron_user', function*() {
         const q = this.request.query;
         if (!q) {

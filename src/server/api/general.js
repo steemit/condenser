@@ -467,6 +467,7 @@ export default function useGeneralApi(app) {
         }
         const response = yield fetch(host + '/get_config');
         const body = yield response.json();
+        body['reward_rate'] = config.get('trx_reward_rate');
         this.body = JSON.stringify(body);
     });
     router.get('/tron_user', function*() {
@@ -479,6 +480,7 @@ export default function useGeneralApi(app) {
             host + '/tron_user?username=' + q.username
         );
         const body = yield response.json();
+        body['reward_rate'] = config.get('trx_reward_rate');
         this.body = JSON.stringify(body);
     });
     router.post('/tron_user', koaBody, function*() {

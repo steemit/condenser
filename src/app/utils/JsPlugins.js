@@ -50,12 +50,12 @@ export default function init(config) {
             'dataLayer',
             'gtag'
         );
-        ga('create', {
+        gtag('config', config.google_analytics_id, {
             trackingId: config.google_analytics_id,
             cookieDomain: 'auto',
             sampleRate: 5,
         });
-        // gtag('js', new Date());
-        // gtag('config', config.google_analytics_id);
+        gtag('js', new Date());
+        gtag('config', config.google_analytics_id);
     }
 }

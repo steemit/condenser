@@ -51,6 +51,9 @@ export default function init(config) {
             'gtag'
         );
         gtag('js', new Date());
-        gtag('config', config.google_analytics_id);
+        gtag('config', config.google_analytics_id, {
+            cookie_domain: 'auto',
+            sample_rate: 5,
+        });
     }
 }

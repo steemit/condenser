@@ -245,14 +245,22 @@ function* usernamePasswordLogin2({
         username
     );
 
+    const global_props = yield api.getDynamicGlobalPropertiesAsync();
+    const vest_per_steem =
+        parseFloat(global_props['total_vesting_shares']) /
+        parseFloat(global_props['total_vesting_fund_steem']);
+    console.log('vest per steem =' + vest_per_steem);
     // query api get tron information
     const res1 = yield getTronConfig();
     const res_config = yield res1.json();
+    const trx_per_steem =
+        parseFloat(res_config['result'].vests_per_trx) / vest_per_steem;
+    console.log('trx per steem=' + trx_per_steem);
     // set trx_reward_rate
     yield put(
         userActions.setUser({
             username,
-            tron_reward_rate: res_config.reward_rate,
+            tron_reward_rate: trx_per_steem == undefined ? 0.0 : trx_per_steem,
         })
     );
     // login, using saved password
@@ -331,7 +339,8 @@ function* usernamePasswordLogin2({
                     tron_user: body.result.tron_addr == '' ? false : true,
                     tron_reward: body.result.pending_claim_tron_reward,
                     tron_balance: res.balance == undefined ? 0.0 : res.balance,
-                    tron_reward_rate: body.reward_rate,
+                    tron_reward_rate:
+                        trx_per_steem == undefined ? 0.0 : trx_per_steem,
                 })
             );
         } else {

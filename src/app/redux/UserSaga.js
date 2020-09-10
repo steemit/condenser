@@ -253,14 +253,14 @@ function* usernamePasswordLogin2({
     // query api get tron information
     const res1 = yield getTronConfig();
     const res_config = yield res1.json();
-    const trx_per_steem =
-        parseFloat(res_config['result'].vests_per_trx) / vest_per_steem;
-    console.log('trx per steem=' + trx_per_steem);
+    const steem_per_trx =
+        vest_per_steem / parseFloat(res_config['result'].vests_per_trx);
+    console.log('steem per trx =' + steem_per_trx);
     // set trx_reward_rate
     yield put(
         userActions.setUser({
             username,
-            tron_reward_rate: trx_per_steem == undefined ? 0.0 : trx_per_steem,
+            tron_reward_rate: steem_per_trx == undefined ? 0.0 : steem_per_trx,
         })
     );
     // login, using saved password
@@ -340,7 +340,7 @@ function* usernamePasswordLogin2({
                     tron_reward: body.result.pending_claim_tron_reward,
                     tron_balance: res.balance == undefined ? 0.0 : res.balance,
                     tron_reward_rate:
-                        trx_per_steem == undefined ? 0.0 : trx_per_steem,
+                        steem_per_trx == undefined ? 0.0 : steem_per_trx,
                 })
             );
         } else {

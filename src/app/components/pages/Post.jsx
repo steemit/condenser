@@ -246,8 +246,6 @@ class Post extends React.Component {
                             <AdSwipe
                                 adList={postLeftSideAdList}
                                 trackingId={trackingId}
-                                width={240}
-                                height={240}
                                 timer={5000}
                                 direction="horizontal"
                             />
@@ -268,8 +266,6 @@ class Post extends React.Component {
                                     <AdSwipe
                                         adList={bottomAdList}
                                         trackingId={trackingId}
-                                        width={864}
-                                        height={86}
                                         timer={5000}
                                         direction="vertical"
                                     />

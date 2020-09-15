@@ -115,8 +115,6 @@ class PostsIndexLayout extends React.Component {
                     <AdSwipe
                         adList={indexLeftSideAdList}
                         trackingId={trackingId}
-                        width={240}
-                        height={240}
                         timer={5000}
                         direction="horizontal"
                     />

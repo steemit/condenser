@@ -24,6 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
+    "@steemfans/auth-data": "^1.0.2",
     "@steemit/steem-js": "0.7.9",
     "assert": "1.4.1",
     "autoprefixer-loader": "3.2.0",

@@ -1,5 +1,5 @@
 import { api } from '@steemit/steem-js';
-import { signData } from 'server/utils/encrypted';
+import { signData } from '@steemfans/auth-data';
 
 const request_base = {
     method: 'post',

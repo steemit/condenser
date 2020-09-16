@@ -14,30 +14,52 @@ class AdSwipe extends Component {
         this.setRecordAdsView = this.setRecordAdsView.bind(this);
         this.onMouseOver = this.onMouseOver.bind(this);
         this.onMouseOut = this.onMouseOut.bind(this);
+        this.getHeight = this.getHeight.bind(this);
         this.state = {
             hide: true,
         };
-        this.swiperEl;
+        this.heightState;
         this.swiperInstance;
     }
 
     componentWillMount() {}
 
     componentDidMount() {
-        const { width, height, direction, timer } = this.props;
-        this.swiperInstance = new SwiperCore(this.swiperEl, {
+        this.initSwiper();
+        this.setState({ hide: false });
+    }
+
+    initSwiper() {
+        const { direction, timer } = this.props;
+        this.swiperInstance = new SwiperCore(this.refs.swiperEl, {
             direction,
             speed: 1000,
-            width,
-            height,
             autoplay: {
                 delay: timer,
                 disableOnInteraction: false,
             },
             spaceBetween: 10,
             loop: true,
+            on: {
+                init: e => {
+                    if (direction === 'horizontal') return;
+                    this.setState({
+                        heightState: this.getHeight(e.$el[0].clientWidth),
+                    });
+                },
+                resize: e => {
+                    if (direction === 'horizontal') return;
+                    this.setState({
+                        heightState: this.getHeight(e.$el[0].clientWidth),
+                    });
+                },
+            },
         });
-        this.setState({ hide: false });
+    }
+
+    getHeight(width) {
+        const rate = 864 / 86;
+        return (width / rate).toFixed(1);
     }
 
     setRecordAdsView(tag) {
@@ -56,18 +78,18 @@ class AdSwipe extends Component {
     }
 
     render() {
-        const { width, height, adList } = this.props;
-        const { hide } = this.state;
+        const { width, adList } = this.props;
+        const { hide, heightState } = this.state;
         const swiperWrapperClass = `swiper-wrapper ${
             hide === true ? 'hide' : ''
         }`;
         return (
             <div
                 className="ad-carousel swiper-container"
-                ref={el => (this.swiperEl = el)}
+                ref="swiperEl"
                 style={{
-                    width: `${width}px`,
-                    height: `${height}px`,
+                    width,
+                    height: `${heightState}px`,
                 }}
             >
                 {adList.size > 0 && (
@@ -84,18 +106,14 @@ class AdSwipe extends Component {
                                                     ad.get('tag')
                                                 )
                                             }
-                                            style={{
-                                                width: `${width}px`,
-                                                height: `${height}px`,
-                                            }}
                                         >
                                             <img
                                                 onMouseOut={this.onMouseOut}
                                                 onMouseOver={this.onMouseOver}
                                                 src={ad.get('img')}
                                                 style={{
-                                                    width: `${width}px`,
-                                                    height: `${height}px`,
+                                                    width,
+                                                    height: `${heightState}px`,
                                                 }}
                                             />
                                         </a>
@@ -111,8 +129,8 @@ class AdSwipe extends Component {
 
 AdSwipe.defaultProps = {
     trackingId: '',
-    width: 240,
-    height: 240,
+    width: '100%',
+    height: 'auto',
     adList: List(),
     timer: 5000,
     direction: 'horizontal', // Could be 'horizontal' or 'vertical'
@@ -121,8 +139,8 @@ AdSwipe.defaultProps = {
 AdSwipe.propTypes = {
     trackingId: PropTypes.string.isRequired,
     adList: PropTypes.instanceOf(List).isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
+    width: PropTypes.string,
+    height: PropTypes.string,
     timer: PropTypes.number.isRequired,
     direction: PropTypes.string.isRequired,
 };

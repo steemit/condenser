@@ -48,6 +48,11 @@
     libsodium "^0.4.8"
     libsodium-wrappers "^0.4.8"
 
+"@steemfans/auth-data@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/@steemfans/auth-data/-/auth-data-1.0.2.tgz#97b47b247d81562d46029740b3b27696b65b65e8"
+  integrity sha512-7nI/WK22Z7OATUClgGrGLvr7ZOkk6g9gUzoIrk0EIzNzA6CS2jn7m/XE1ZaWtMk3tAbRGO5H329xj4btLJo2Uw==
+
 "@steemit/libcrypto@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@steemit/libcrypto/-/libcrypto-1.0.1.tgz#c31ab3e5deb667628169b3d54d746b015de31a79"

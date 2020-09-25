@@ -266,7 +266,7 @@ export async function serverRender(
         const tronConfig = await getTronConfig();
         initialState.app.tron_reward_switch = tronConfig.tron_reward_switch;
         initialState.app.vests_per_trx = tronConfig.vests_per_trx;
-        initialState.app.ubind_tip_limit = tronConfig.ubind_tip_limit;
+        initialState.app.unbind_tip_limit = tronConfig.unbind_tip_limit;
         requestTimer.stopTimer('getTronConfig_ms');
 
         // If a user profile URL is requested but no profile information is

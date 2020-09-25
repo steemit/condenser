@@ -80,6 +80,10 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 walletUrl: config.wallet_url,
                 steemMarket: ctx.steemMarketData,
                 trackingId: ctx.session.uid,
+                tronHost: config.get('tron_create_node'),
+                tronRewardSwitch: 'off',
+                vestsPerTrx: null,
+                unbindTipLimit: 5,
             },
         };
 

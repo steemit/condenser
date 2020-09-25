@@ -3,6 +3,7 @@
 // https://github.com/eslint/eslint/issues/4442
 import Iso from 'iso';
 import React from 'react';
+import axios from 'axios';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
 import {
@@ -261,6 +262,13 @@ export async function serverRender(
         onchain = await apiFetchState(url);
         requestTimer.stopTimer('apiFetchState_ms');
 
+        requestTimer.startTimer('getTronConfig_ms');
+        const tronConfig = await getTronConfig();
+        initialState.app.tronRewardSwitch = tronConfig.tron_reward_switch;
+        initialState.app.vestsPerTrx = tronConfig.vests_per_trx;
+        initialState.app.unbindTipLimit = tronConfig.ubind_tip_limit;
+        requestTimer.stopTimer('getTronConfig_ms');
+
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
         if (
@@ -477,4 +485,20 @@ async function apiFetchState(url) {
     }
 
     return onchain;
+}
+
+async function getTronConfig() {
+    const url = `${$STM_Config.wallet_url}/api/v1/tron/get_config`;
+    console.log('TEST getTronConfig:', url);
+    try {
+        const result = await axios.get(url).then(res => {
+            return res.data;
+        });
+        if (result.error) {
+            throw new Error(result.error);
+        }
+        return result.result;
+    } catch (e) {
+        console.error('Get TRON config failed!', e.message);
+    }
 }

@@ -48,6 +48,6 @@
   "cookie_consent_enabled": "SDC_ENABLE_COOKIE_CONSENT",
   "cookie_consent_api_key": "SDC_COOKIE_CONSENT_KEY",
   "steem_elastic_search_endpoint": "STEEM_ELASTIC_SEARCH_ENDPOINT",
-  "trx_reward_rate":"TRX_REWARD_RATE",
-  "wallet_api_host":"WALLET_API_HOST"
+  "wallet_api_host":"WALLET_API_HOST",
+  "tron_create_node": "TRON_CREATE_NODE"
 }

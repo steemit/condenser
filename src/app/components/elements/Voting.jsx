@@ -227,7 +227,15 @@ class Voting extends React.Component {
             price_per_steem,
             sbd_print_rate,
             username,
+            vests_per_steem,
+            vests_per_trx,
+            tron_market_price,
         } = this.props;
+
+        const trx_price =
+            tron_market_price[0] && tron_market_price[0].has('price_usd')
+                ? parseFloat(tron_market_price[0].get('price_usd'))
+                : 0.0;
 
         // `lite` Voting component: e.g. search results
         if (!post.get('pending_payout_value')) {
@@ -376,8 +384,13 @@ class Voting extends React.Component {
         const pending_sp = (pending_payout - _sbd) / price_per_steem;
         const pending_sbd = _sbd * (sbd_print_rate / SBD_PRINT_RATE_MAX);
         const pending_steem = (_sbd - pending_sbd) / price_per_steem;
-        const pending_trx =
-            pending_sp * parseFloat(this.props.tron_reward_rate);
+
+        let pending_trx = 0.0;
+        if (vests_per_trx) {
+            pending_trx = parseFloat(
+                pending_sp * vests_per_steem / vests_per_trx
+            );
+        }
         const payout_limit_hit = total_payout >= max_payout;
         const shown_payout =
             payout_limit_hit && max_payout > 0 ? max_payout : total_payout;
@@ -399,23 +412,29 @@ class Voting extends React.Component {
         if (!post.get('is_paidout') && pending_payout > 0) {
             payoutItems.push({
                 value: tt('voting_jsx.pending_payout', {
-                    value: fmt(pending_payout),
+                    value: fmt(pending_payout + pending_trx * trx_price),
                 }),
             });
 
             // pending breakdown
             if (max_payout > 0) {
                 payoutItems.push({
-                    value:
-                        tt('voting_jsx.breakdown') +
-                        ': ' +
-                        (fmt(pending_sbd, DEBT_TOKEN_SHORT) + ', ') +
-                        (sbd_print_rate != SBD_PRINT_RATE_MAX
-                            ? fmt(pending_steem, LIQUID_TOKEN_UPPERCASE) + ', '
-                            : '') +
-                        fmt(pending_sp, INVEST_TOKEN_SHORT) +
-                        ',' +
-                        fmt(pending_trx, INVEST_TRON_SHORT),
+                    value: `${tt('voting_jsx.breakdown')}:
+                        ${fmt(pending_sbd, DEBT_TOKEN_SHORT)},
+                        ${
+                            sbd_print_rate != SBD_PRINT_RATE_MAX
+                                ? `${fmt(
+                                      pending_steem,
+                                      LIQUID_TOKEN_UPPERCASE
+                                  )},`
+                                : ''
+                        }
+                        ${fmt(pending_sp, INVEST_TOKEN_SHORT)}
+                        ${
+                            vests_per_trx
+                                ? `, ${fmt(pending_trx, INVEST_TRON_SHORT)}`
+                                : ''
+                        }`,
                 });
             }
 
@@ -469,14 +488,42 @@ class Voting extends React.Component {
 
         // past payout stats
         if (post.get('is_paidout') && total_payout > 0) {
+            // estimated author has been payout breakdowns
+            const _sbd_temp = author_payout * percent_sbd;
+            const payout_sp = (author_payout - _sbd_temp) / price_per_steem;
+            const payout_sbd =
+                _sbd_temp * (sbd_print_rate / SBD_PRINT_RATE_MAX);
+            const payout_steem = (_sbd_temp - payout_sbd) / price_per_steem;
+            let payout_trx = 0;
+            if (vests_per_trx) {
+                payout_trx = parseFloat(
+                    payout_sp * vests_per_steem / vests_per_trx
+                );
+            }
+
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts', {
-                    value: fmt(total_payout),
+                    value: fmt(total_payout + payout_trx * trx_price),
                 }),
             });
             payoutItems.push({
+                value: `${tt('voting_jsx.breakdown')}:
+                    ${fmt(payout_sbd, DEBT_TOKEN_SHORT)},
+                    ${
+                        sbd_print_rate != SBD_PRINT_RATE_MAX
+                            ? `${fmt(payout_steem, LIQUID_TOKEN_UPPERCASE)},`
+                            : ''
+                    }
+                    ${fmt(payout_sp, INVEST_TOKEN_SHORT)}
+                    ${
+                        vests_per_trx
+                            ? `, ${fmt(payout_trx, INVEST_TRON_SHORT)}`
+                            : ''
+                    }`,
+            });
+            payoutItems.push({
                 value: tt('voting_jsx.past_payouts_author', {
-                    value: fmt(author_payout),
+                    value: fmt(author_payout + payout_trx * trx_price),
                 }),
             });
             payoutItems.push({
@@ -630,10 +677,6 @@ export default connect(
 
         const current = state.user.get('current');
         const username = current ? current.get('username') : null;
-        const tron_reward_rate =
-            current && current.has('tron_reward_rate')
-                ? current.get('tron_reward_rate')
-                : 0.0;
         const net_vests = current ? current.get('effective_vests') : 0.0;
         const vote_status_key = `transaction_vote_active_${author}_${permlink}`;
         const voting = state.global.get(vote_status_key);
@@ -665,7 +708,15 @@ export default connect(
             voting,
             price_per_steem,
             sbd_print_rate,
-            tron_reward_rate,
+            vests_per_steem: state.global.has('vests_per_steem')
+                ? state.global.get('vests_per_steem')
+                : false,
+            vests_per_trx: state.app.get('vests_per_trx'),
+            tron_market_price: state.app.getIn([
+                'steemMarket',
+                'tron',
+                'timepoints',
+            ]),
         };
     },
 

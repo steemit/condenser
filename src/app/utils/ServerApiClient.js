@@ -117,10 +117,21 @@ export function conductSearch(req) {
     return fetch('/api/v1/search', request);
 }
 
-export function checkTronUser(username) {
-    const queryString = '/api/v1/tron_user?username=' + username;
-    console.log('check_tron_user:', queryString);
-    return fetch(queryString);
+export function checkTronUser(data, type = 'steem') {
+    let queryString = '';
+    if (type === 'steem') {
+        queryString = `/api/v1/tron_user?username=${data}`;
+    } else {
+        queryString = `/api/v1/tron_user?tron_addr=${data}`;
+    }
+    return fetch(queryString)
+        .then(res => {
+            return res.json();
+        })
+        .then(res => {
+            if (res.error) throw new Error(res.error);
+            return res.result;
+        });
 }
 
 export function createTronAccount() {
@@ -132,41 +143,12 @@ export function getTronAccount(tron_address) {
     return fetch(queryString);
 }
 
-export function updateTronUser(
-    username,
-    tron_address,
-    claim_reward,
-    tip_count,
-    privKey
-) {
-    const auth_type = 'posting';
-    const data = {
-        username: username,
-        tron_addr: tron_address,
-        auth_type: auth_type,
-        claim_reward: claim_reward,
-        tip_count: tip_count,
-    };
+export function updateTronUser(data, privKey) {
     const r = signData(data, privKey);
-
-    // const body = {
-    //     username,
-    //     tron_addr: tron_address,
-    //     nonce: r.nonce,
-    //     timestamp: r.timestamp,
-    //     signature: r.signature,
-    //     auth_type: 'posting',
-    //     claim_reward,
-    //     tip_count,
-    // };
-
     const request = Object.assign({}, request_base, {
         body: JSON.stringify(r),
     });
-    return fetch('/api/v1/tron_user', request);
-}
-
-export function getTronConfig() {
-    const queryString = '/api/v1/get_config';
-    return fetch(queryString);
+    return fetch('/api/v1/tron_user', request).then(res => {
+        return res.json();
+    });
 }

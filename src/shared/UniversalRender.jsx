@@ -489,7 +489,6 @@ async function apiFetchState(url) {
 
 async function getTronConfig() {
     const url = `${$STM_Config.wallet_url}/api/v1/tron/get_config`;
-    console.log('TEST getTronConfig:', url);
     try {
         const result = await axios.get(url).then(res => {
             return res.data;

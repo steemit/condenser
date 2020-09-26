@@ -35,7 +35,7 @@ class TronCreateTwo extends Component {
                 </div>
                 <div style={styles.container}>
                     <div>{tt('tron_jsx.create_tron_success_content')}</div>
-                    <div style={{ display: 'flex' }}>
+                    <div className="tron-account-dl">
                         <span>
                             {tt('tron_jsx.create_tron_success_content2')}
                         </span>

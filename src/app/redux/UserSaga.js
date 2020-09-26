@@ -845,8 +845,6 @@ function* updateTronPopupTipCount() {
     const tip_count = current.get('tip_count');
     const private_keys = current.get('private_keys');
 
-    console.log('TEST update tip count:', username, tip_count, private_keys);
-
     if (tip_count === undefined || private_keys === undefined) return;
 
     // charge that which level private key we own.

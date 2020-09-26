@@ -431,7 +431,8 @@ class LoginForm extends Component {
                 <p>{tt('loginform_jsx.login_warning_body')}</p>
                 <div>
                     <PdfDownload
-                        name={'spidemen'}
+                        filename={`Steem keys for @${username.value}`}
+                        name={username.value}
                         password={password.value}
                         newUser={true}
                         widthInches={8.5}

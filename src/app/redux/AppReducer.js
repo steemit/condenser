@@ -10,6 +10,8 @@ export const SET_USER_PREFERENCES = 'app/SET_USER_PREFERENCES';
 export const TOGGLE_NIGHTMODE = 'app/TOGGLE_NIGHTMODE';
 export const TOGGLE_BLOGMODE = 'app/TOGGLE_BLOGMODE';
 export const RECEIVE_FEATURE_FLAGS = 'app/RECEIVE_FEATURE_FLAGS';
+export const MODAL_LOADING_BEGIN = 'app/MODAL_LOADING_BEGIN';
+export const MODAL_LOADING_END = 'app/MODAL_LOADING_END';
 
 export const defaultState = Map({
     loading: false,
@@ -26,6 +28,7 @@ export const defaultState = Map({
         defaultCommentPayout: '50%',
     }),
     featureFlags: Map({}),
+    modalLoading: false,
 });
 
 export default function reducer(state = defaultState, action = {}) {
@@ -77,6 +80,10 @@ export default function reducer(state = defaultState, action = {}) {
                 ? state.get('featureFlags').merge(action.flags)
                 : Map(action.flags);
             return state.set('featureFlags', newFlags);
+        case MODAL_LOADING_BEGIN:
+            return state.set('modalLoading', true);
+        case MODAL_LOADING_END:
+            return state.set('modalLoading', false);
         default:
             return state;
     }
@@ -127,3 +134,13 @@ export const selectors = {
     getFeatureFlag: (state, flagName) =>
         state.getIn(['featureFlags', flagName], false),
 };
+
+export const modalLoadingBegin = payload => ({
+    type: MODAL_LOADING_BEGIN,
+    payload,
+});
+
+export const modalLoadingEnd = payload => ({
+    type: MODAL_LOADING_END,
+    payload,
+});

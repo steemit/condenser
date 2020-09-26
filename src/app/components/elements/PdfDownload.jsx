@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
 import QRious from 'qrious';
 import { Link } from 'react-router';
+import jsPDF from 'jspdf';
+import RobotoRegular from 'app/assets/fonts/Roboto-Regular.ttf';
+import RobotoBold from 'app/assets/fonts/Roboto-Bold.ttf';
+import RobotoMonoRegular from 'app/assets/fonts/RobotoMono-Regular.ttf';
 
 function image2canvas(image, bgcolor) {
     const canvas = document.createElement('canvas');
@@ -18,8 +22,10 @@ function image2canvas(image, bgcolor) {
 export default class PdfDownload extends Component {
     constructor(props) {
         super(props);
-        this.downloadPdf = this.downloadPdf.bind(this);
         this.state = { loaded: false };
+        this.downloadPdf = this.downloadPdf.bind(this);
+        this.handleImageLoaded = this.handleImageLoaded.bind(this);
+        this.handleImageErrored = this.handleImageErrored.bind(this);
     }
 
     // Generate a list of public and private keys from a master password
@@ -37,48 +43,33 @@ export default class PdfDownload extends Component {
 
     downloadPdf() {
         const keys = this.generateKeys(this.props.name, this.props.password);
-        const filename = this.props.name + '_steem_keys.pdf';
+        const filename = this.props.filename
+            ? this.props.filename
+            : this.props.name + '_steem_keys.pdf';
         this.renderPdf(keys, filename).save(filename);
     }
 
-    // Generate the canvas, which will be generated into a PDF
-    async componentDidMount() {
-        // Load jsPDF. It does not work with webpack, so it must be loaded here.
-        // On the plus side, it is only loaded when the warning page is shown.
-        this.setState({ loaded: false });
-        await new Promise((res, rej) => {
-            const s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.src = 'https://staticfiles.steemit.com/jspdf.min.js';
-            document.body.appendChild(s);
-            s.addEventListener('load', res);
-        });
-
-        await new Promise((res, rej) => {
-            const s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.src = 'https://staticfiles.steemit.com/Roboto-Regular-normal.js';
-            document.body.appendChild(s);
-            s.addEventListener('load', res);
-        });
-
-        await new Promise((res, rej) => {
-            const s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.src = 'https://staticfiles.steemit.com/Roboto-Bold-normal.js';
-            document.body.appendChild(s);
-            s.addEventListener('load', res);
-        });
-
-        await new Promise((res, rej) => {
-            const s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.src =
-                'https://staticfiles.steemit.com/RobotoMono-Regular-normal.js';
-            document.body.appendChild(s);
-            s.addEventListener('load', res);
-        });
+    handleImageLoaded() {
+        console.log('test image has loaded');
         this.setState({ loaded: true });
+        if (this.props.handleImageLoaded) {
+            this.props.handleImageLoaded();
+        }
+    }
+
+    handleImageErrored() {
+        console.error('pdf logo loaded error.');
+        this.setState({ loaded: true });
+        if (this.props.handleImageErrored) {
+            this.props.handleImageErrored();
+        }
+    }
+
+    // Generate the canvas, which will be generated into a PDF
+    componentDidMount() {
+        if (this.props.download === true && this.state.loaded === true) {
+            this.downloadPdf();
+        }
     }
 
     // shouldComponentUpdate(nextProps, nextState){
@@ -87,41 +78,46 @@ export default class PdfDownload extends Component {
     // }
     componentDidUpdate(prevProps) {
         // start to download pdf key file
-        if (this.props.download !== prevProps.download || this.props.download) {
+        if (this.props.download === true && this.state.loaded === true) {
             this.downloadPdf();
         }
     }
 
     render() {
         return (
-            <div className="pdf-download">
+            <div
+                className="pdf-download"
+                style={this.props.style ? this.props.style : {}}
+            >
                 <img
                     src="/images/pdf-logo.svg"
                     style={{ display: 'none' }}
                     className="pdf-logo"
+                    onLoad={this.handleImageLoaded}
+                    onError={this.handleImageErrored}
                 />
-                {this.state.loaded &&
-                    (!this.props.link ? (
-                        <button
-                            style={{ display: 'block' }}
-                            onClick={e => {
-                                this.downloadPdf();
-                                e.preventDefault();
-                            }}
-                        >
-                            {this.props.label}
-                        </button>
-                    ) : (
-                        <Link
-                            style={{ display: 'block' }}
-                            onClick={e => {
-                                this.downloadPdf();
-                                e.preventDefault();
-                            }}
-                        >
-                            {this.props.label}
-                        </Link>
-                    ))}
+
+                {!this.props.link ? (
+                    <button
+                        style={{ display: 'block' }}
+                        onClick={e => {
+                            this.downloadPdf();
+                            e.preventDefault();
+                        }}
+                    >
+                        {this.props.label}
+                    </button>
+                ) : (
+                    <Link
+                        style={{ display: 'block', color: '#1FBF8F' }}
+                        onClick={e => {
+                            this.downloadPdf();
+                            e.preventDefault();
+                        }}
+                    >
+                        {this.props.label}
+                    </Link>
+                )}
             </div>
         );
     }
@@ -188,6 +184,10 @@ export default class PdfDownload extends Component {
             format: 'letter',
         }).setProperties({ title: filename });
 
+        ctx.addFont(RobotoRegular, 'Roboto-Regular', 'normal');
+        ctx.addFont(RobotoBold, 'Roboto-Bold', 'normal');
+        ctx.addFont(RobotoMonoRegular, 'RobotoMono-Regular', 'normal');
+
         let offset = 0.0,
             sectionStart = 0,
             sectionHeight = 0;
@@ -208,17 +208,23 @@ export default class PdfDownload extends Component {
             '#1F0FD1'
         );
         offset += 0.265;
-        offset += this.renderText(ctx, `Steem keys for @${this.props.name}`, {
-            scale,
-            x: margin,
-            y: offset,
-            lineHeight: 1.0,
-            maxWidth: maxLineWidth,
-            color: 'white',
-            fontSize: 0.36,
-            font: 'Roboto-Bold',
-        });
-        console.log('rendtext 202 to render pdf');
+        offset += this.renderText(
+            ctx,
+            this.props.filename
+                ? this.props.filename
+                : `Steem keys for @${this.props.name}`,
+            {
+                scale,
+                x: margin,
+                y: offset,
+                lineHeight: 1.0,
+                maxWidth: maxLineWidth,
+                color: 'white',
+                fontSize: 0.36,
+                font: 'Roboto-Bold',
+            }
+        );
+        // console.log('rendtext 202 to render pdf');
         /*
         offset += 0.1;
         offset += this.renderText(
@@ -326,17 +332,7 @@ export default class PdfDownload extends Component {
         const tron_public_key = this.props.tron_public_key;
 
         offset += 0.15;
-        this.drawQr(
-            ctx,
-            'steem://import/wif/' +
-                tron_public_key +
-                '/account/' +
-                this.props.name,
-            margin,
-            offset,
-            qrSize,
-            '#f4f4f4'
-        );
+        this.drawQr(ctx, tron_public_key, margin, offset, qrSize, '#f4f4f4');
         offset += 0.1;
         offset += this.renderText(
             ctx,
@@ -391,17 +387,7 @@ export default class PdfDownload extends Component {
         const tron_private_key = this.props.tron_private_key;
 
         offset += 0.15;
-        this.drawQr(
-            ctx,
-            'steem://import/wif/' +
-                tron_private_key +
-                '/account/' +
-                this.props.name,
-            margin,
-            offset,
-            qrSize,
-            '#f4f4f4'
-        );
+        this.drawQr(ctx, tron_private_key, margin, offset, qrSize, '#f4f4f4');
 
         offset += 0.1;
         offset += this.renderText(ctx, 'TRON Account Private Key', {

@@ -226,6 +226,6 @@
     "key": "steem-market"
   },
   "steem_elastic_search_endpoint": null,
-  "trx_reward_rate":"0.2",
-  "wallet_api_host": "https://wallet.steemitdev.com"   
+  "wallet_api_host": "https://wallet.steemitdev.com",
+  "tron_create_node": "https://api.shasta.trongrid.io"
 }

@@ -51,6 +51,16 @@ const voteTestObj = fromJS({
     payout_at: '2018-03-30T10:00:00Z',
 });
 
+const marketPrice = fromJS([
+    {
+        timepoint: '2020-09-25T10:00:00Z',
+        price_usd: '0.01',
+    },
+]);
+
+const vests_per_trx = 100;
+const vests_per_steem = 2000;
+
 describe('Voting', () => {
     it('should render flag if user is logged in and flag prop is true.', () => {
         const mockStore = configureMockStore()({
@@ -69,6 +79,9 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
+                vests_per_trx={vests_per_trx}
+                vests_per_steem={vests_per_steem}
+                tron_market_price={marketPrice}
                 store={mockStore}
             />
         ).dive();
@@ -96,6 +109,9 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
+                vests_per_trx={vests_per_trx}
+                vests_per_steem={vests_per_steem}
+                tron_market_price={marketPrice}
                 store={mockStore}
             />
         ).dive();
@@ -126,6 +142,9 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
+                vests_per_trx={vests_per_trx}
+                vests_per_steem={vests_per_steem}
+                tron_market_price={marketPrice}
                 store={mockStore}
             />
         ).dive();
@@ -150,6 +169,9 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
+                vests_per_trx={vests_per_trx}
+                vests_per_steem={vests_per_steem}
+                tron_market_price={marketPrice}
                 store={mockStore}
             />
         ).dive();
@@ -183,6 +205,9 @@ describe('Voting', () => {
                         vote={(w, p) => {}}
                         post={post_obj}
                         price_per_steem={1}
+                        vests_per_trx={vests_per_trx}
+                        vests_per_steem={vests_per_steem}
+                        tron_market_price={marketPrice}
                         sbd_print_rate={10000}
                     />
                 </IntlProvider>
@@ -211,6 +236,9 @@ describe('Voting', () => {
                         vote={(w, p) => {}}
                         post={post_obj}
                         price_per_steem={1}
+                        vests_per_trx={vests_per_trx}
+                        vests_per_steem={vests_per_steem}
+                        tron_market_price={marketPrice}
                         sbd_print_rate={10000}
                     />
                 </IntlProvider>
@@ -240,12 +268,46 @@ describe('Voting', () => {
                         post={post_obj}
                         price_per_steem={1}
                         sbd_print_rate={5000}
+                        vests_per_trx={vests_per_trx}
+                        vests_per_steem={vests_per_steem}
+                        tron_market_price={marketPrice}
                     />
                 </IntlProvider>
             </Provider>
         );
         expect(JSON.stringify(component.toJSON())).toContain(
             '2.50 SBD, 2.50 STEEM, 5.00 SP'
+        );
+    });
+
+    it('TRX should be 100.00 TRX', () => {
+        const post_obj = fromJS({
+            stats: {
+                total_votes: 1,
+            },
+            max_accepted_payout: '999999 SBD',
+            percent_steem_dollars: 10000,
+            pending_payout_value: '10 SBD',
+            payout_at: '2018-03-30T10:00:00Z',
+        });
+        const store = createStore(rootReducer);
+        const component = renderer.create(
+            <Provider store={store}>
+                <IntlProvider locale="en">
+                    <Voting
+                        vote={(w, p) => {}}
+                        post={post_obj}
+                        price_per_steem={1}
+                        sbd_print_rate={5000}
+                        vests_per_trx={vests_per_trx}
+                        vests_per_steem={vests_per_steem}
+                        tron_market_price={marketPrice}
+                    />
+                </IntlProvider>
+            </Provider>
+        );
+        expect(JSON.stringify(component.toJSON())).toContain(
+            '2.50 SBD, 2.50 STEEM, 5.00 SP, 100.00 TRX'
         );
     });
 });

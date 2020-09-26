@@ -34,13 +34,13 @@ const HIDE_POST_ADVANCED_SETTINGS = 'user/HIDE_POST_ADVANCED_SETTINGS';
 const HIDE_ANNOUNCEMENT = 'user/HIDE_ANNOUNCEMENT';
 const SHOW_ANNOUNCEMENT = 'user/SHOW_ANNOUNCEMENT';
 const SHOW_TRON_CREATE = 'user/SHOW_TRON_CREATE';
-const HIDE_TRON_CREATE = 'user/HIDE_TRON_CREATE';
+export const HIDE_TRON_CREATE = 'user/HIDE_TRON_CREATE';
+export const UPDATE_TRON_ADDR = 'user/UPDATE_TRON_ADDR';
 const SHOW_TRON_CREATE_SUCCESS = 'user/SHOW_TRON_CREATE_SUCCESS';
 const HIDE_TRON_CREATE_SUCCESS = 'user/HIDE_TRON_CREATE_SUCCESS';
 
 // Saga-related
 export const UPLOAD_IMAGE = 'user/UPLOAD_IMAGE';
-export const UPDATE_USER = 'user/UPDATE_USER';
 
 const generateTrackingId = () =>
     `x-${Math.random()
@@ -159,7 +159,7 @@ export default function reducer(state = defaultState, action) {
             return state.mergeDeep({
                 trackingId: generateTrackingId(),
             }); // saga
-        case UPDATE_USER:
+        case UPDATE_TRON_ADDR:
             return state; // saga
         // saga
 
@@ -388,8 +388,8 @@ export const uploadImage = payload => ({
     type: UPLOAD_IMAGE,
     payload,
 });
-export const updateUser = payload => ({
-    type: UPDATE_USER,
+export const updateTronAddr = payload => ({
+    type: UPDATE_TRON_ADDR,
     payload,
 });
 

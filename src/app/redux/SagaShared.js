@@ -48,29 +48,37 @@ export function* getAccount(username, force = false) {
         if (account) {
             // get tron information by steem username
             // and merge into account
-            let tronAccount = fromJS(yield call(checkTronUser, username));
+            try {
+                let tronAccount = fromJS(yield call(checkTronUser, username));
 
-            // get tron balance and merge into account
-            tronAccount = tronAccount.mergeDeep(fromJS({ tron_balance: 0 }));
-            if (tronAccount.get('tron_addr')) {
-                const tronNetworkAccount = yield call(
-                    getTronAccount,
-                    tronAccount.get('tron_addr')
+                // get tron balance and merge into account
+                tronAccount = tronAccount.mergeDeep(
+                    fromJS({ tron_balance: 0 })
                 );
-                if (
-                    Object.keys(tronNetworkAccount).length > 0 &&
-                    tronNetworkAccount.balance !== undefined
-                ) {
-                    tronAccount = tronAccount.mergeDeep(
-                        fromJS({
-                            tron_balance: tronNetworkAccount.balance / 1e6,
-                        })
+                if (tronAccount.get('tron_addr')) {
+                    const tronNetworkAccount = yield call(
+                        getTronAccount,
+                        tronAccount.get('tron_addr')
                     );
+                    if (
+                        Object.keys(tronNetworkAccount).length > 0 &&
+                        tronNetworkAccount.balance !== undefined
+                    ) {
+                        tronAccount = tronAccount.mergeDeep(
+                            fromJS({
+                                tron_balance: tronNetworkAccount.balance / 1e6,
+                            })
+                        );
+                    }
                 }
+                // merge and update account
+                account = fromJS(account).mergeDeep(tronAccount);
+                yield put(globalActions.receiveAccount({ account }));
+            } catch (err) {
+                console.error('SagaShared getAccount:', err.message);
+                account = fromJS(account);
+                yield put(globalActions.receiveAccount({ account }));
             }
-            // merge and update account
-            account = fromJS(account).mergeDeep(tronAccount);
-            yield put(globalActions.receiveAccount({ account }));
         }
     }
     return account;

@@ -264,9 +264,11 @@ export async function serverRender(
 
         requestTimer.startTimer('getTronConfig_ms');
         const tronConfig = await getTronConfig();
-        initialState.app.tron_reward_switch = tronConfig.tron_reward_switch;
-        initialState.app.vests_per_trx = tronConfig.vests_per_trx;
-        initialState.app.unbind_tip_limit = tronConfig.unbind_tip_limit;
+        if (tronConfig !== false) {
+            initialState.app.tron_reward_switch = tronConfig.tron_reward_switch;
+            initialState.app.vests_per_trx = tronConfig.vests_per_trx;
+            initialState.app.unbind_tip_limit = tronConfig.unbind_tip_limit;
+        }
         requestTimer.stopTimer('getTronConfig_ms');
 
         // If a user profile URL is requested but no profile information is
@@ -498,6 +500,7 @@ async function getTronConfig() {
         }
         return result.result;
     } catch (e) {
-        console.error('Get TRON config failed!', e.message);
+        console.error('Get TRON CONFIG failed!', e.message);
+        return false;
     }
 }

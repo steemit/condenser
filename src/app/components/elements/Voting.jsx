@@ -233,8 +233,9 @@ class Voting extends React.Component {
         } = this.props;
 
         const trx_price =
-            tron_market_price[0] && tron_market_price[0].has('price_usd')
-                ? parseFloat(tron_market_price[0].get('price_usd'))
+            tron_market_price.get(0) &&
+            tron_market_price.get(0).has('price_usd')
+                ? parseFloat(tron_market_price.get(0).get('price_usd'))
                 : 0.0;
 
         // `lite` Voting component: e.g. search results
@@ -419,22 +420,18 @@ class Voting extends React.Component {
             // pending breakdown
             if (max_payout > 0) {
                 payoutItems.push({
-                    value: `${tt('voting_jsx.breakdown')}:
-                        ${fmt(pending_sbd, DEBT_TOKEN_SHORT)},
-                        ${
-                            sbd_print_rate != SBD_PRINT_RATE_MAX
-                                ? `${fmt(
-                                      pending_steem,
-                                      LIQUID_TOKEN_UPPERCASE
-                                  )},`
-                                : ''
-                        }
-                        ${fmt(pending_sp, INVEST_TOKEN_SHORT)}
-                        ${
-                            vests_per_trx
-                                ? `, ${fmt(pending_trx, INVEST_TRON_SHORT)}`
-                                : ''
-                        }`,
+                    value: `${tt('voting_jsx.breakdown')}: ${fmt(
+                        pending_sbd,
+                        DEBT_TOKEN_SHORT
+                    )}, ${
+                        sbd_print_rate != SBD_PRINT_RATE_MAX
+                            ? `${fmt(pending_steem, LIQUID_TOKEN_UPPERCASE)}, `
+                            : ''
+                    }${fmt(pending_sp, INVEST_TOKEN_SHORT)}${
+                        vests_per_trx
+                            ? `, ${fmt(pending_trx, INVEST_TRON_SHORT)}`
+                            : ''
+                    }`,
                 });
             }
 
@@ -507,19 +504,18 @@ class Voting extends React.Component {
                 }),
             });
             payoutItems.push({
-                value: `${tt('voting_jsx.breakdown')}:
-                    ${fmt(payout_sbd, DEBT_TOKEN_SHORT)},
-                    ${
-                        sbd_print_rate != SBD_PRINT_RATE_MAX
-                            ? `${fmt(payout_steem, LIQUID_TOKEN_UPPERCASE)},`
-                            : ''
-                    }
-                    ${fmt(payout_sp, INVEST_TOKEN_SHORT)}
-                    ${
-                        vests_per_trx
-                            ? `, ${fmt(payout_trx, INVEST_TRON_SHORT)}`
-                            : ''
-                    }`,
+                value: `${tt('voting_jsx.breakdown')}: ${fmt(
+                    payout_sbd,
+                    DEBT_TOKEN_SHORT
+                )}, ${
+                    sbd_print_rate != SBD_PRINT_RATE_MAX
+                        ? `${fmt(payout_steem, LIQUID_TOKEN_UPPERCASE)}, `
+                        : ''
+                }${fmt(payout_sp, INVEST_TOKEN_SHORT)}${
+                    vests_per_trx
+                        ? `, ${fmt(payout_trx, INVEST_TRON_SHORT)}`
+                        : ''
+                }`,
             });
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts_author', {
@@ -708,15 +704,16 @@ export default connect(
             voting,
             price_per_steem,
             sbd_print_rate,
-            vests_per_steem: state.global.has('vests_per_steem')
-                ? state.global.get('vests_per_steem')
-                : false,
-            vests_per_trx: state.app.get('vests_per_trx'),
-            tron_market_price: state.app.getIn([
-                'steemMarket',
-                'tron',
-                'timepoints',
-            ]),
+            vests_per_steem:
+                ownProps.vests_per_steem ||
+                (state.global.has('vests_per_steem')
+                    ? state.global.get('vests_per_steem')
+                    : 0),
+            vests_per_trx:
+                ownProps.vests_per_trx || state.app.get('vests_per_trx'),
+            tron_market_price:
+                ownProps.tron_market_price ||
+                state.app.getIn(['steemMarket', 'tron', 'timepoints']),
         };
     },
 

@@ -31,6 +31,7 @@ class Modals extends React.Component {
         loginBroadcastOperation: undefined,
         show_tron_create_modal: false,
         show_tron_create_success_modal: false,
+        loading: false,
     };
     static propTypes = {
         show_tron_create_modal: PropTypes.bool,
@@ -55,6 +56,7 @@ class Modals extends React.Component {
             successCallback: PropTypes.func,
             errorCallback: PropTypes.func,
         }),
+        loading: PropTypes.bool,
     };
 
     constructor() {
@@ -102,7 +104,9 @@ class Modals extends React.Component {
             <div>
                 {show_tron_create_modal && (
                     <Reveal
-                        onHide={hideTronCreate}
+                        onHide={() => {
+                            if (this.props.loading === false) hideTronCreate();
+                        }}
                         show={show_tron_create_modal}
                     >
                         <CloseButton onClick={hideTronCreate} />
@@ -111,7 +115,10 @@ class Modals extends React.Component {
                 )}
                 {show_tron_create_success_modal && (
                     <Reveal
-                        onHide={hideTronCreateSuccess}
+                        onHide={() => {
+                            if (this.props.loading === false)
+                                hideTronCreateSuccess();
+                        }}
                         show={show_tron_create_success_modal}
                     >
                         <CloseButton onClick={hideTronCreateSuccess} />
@@ -232,6 +239,7 @@ export default connect(
             show_tron_create_success_modal: state.user.get(
                 'show_tron_create_success_modal'
             ),
+            loading: state.app.get('modalLoading'),
         };
     },
     dispatch => ({

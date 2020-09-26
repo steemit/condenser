@@ -11,7 +11,7 @@ import fetch from 'node-fetch';
 
 const ACCEPTED_TOS_TAG = 'accepted_tos_20180614';
 
-const host = config.get('wallet_api_host') + '/api/v1/tron';
+const walletApiURI = $STM_Config.wallet_url + '/api/v1/tron';
 
 const mixpanel = config.get('mixpanel')
     ? Mixpanel.init(config.get('mixpanel'))
@@ -442,7 +442,7 @@ export default function useGeneralApi(app) {
         this.body = JSON.stringify(data);
     });
     router.get('/create_account', function*() {
-        const response = yield fetch(host + '/create_account');
+        const response = yield fetch(walletApiURI + '/create_account');
         const body = yield response.json();
         this.body = JSON.stringify(body);
     });
@@ -454,7 +454,7 @@ export default function useGeneralApi(app) {
             return;
         }
         const response = yield fetch(
-            host + '/get_account?tron_address=' + q.tron_address
+            walletApiURI + '/get_account?tron_address=' + q.tron_address
         );
         const body = yield response.json();
         this.body = JSON.stringify(body);
@@ -465,9 +465,8 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({ error: 'need_params' });
             return;
         }
-        const response = yield fetch(host + '/get_config');
+        const response = yield fetch(walletApiURI + '/get_config');
         const body = yield response.json();
-        body['reward_rate'] = config.get('trx_reward_rate');
         this.body = JSON.stringify(body);
     });
     router.get('/tron_user', function*() {
@@ -477,10 +476,9 @@ export default function useGeneralApi(app) {
             return;
         }
         const response = yield fetch(
-            host + '/tron_user?username=' + q.username
+            walletApiURI + '/tron_user?username=' + q.username
         );
         const body = yield response.json();
-        body['reward_rate'] = config.get('trx_reward_rate');
         this.body = JSON.stringify(body);
     });
     router.post('/tron_user', koaBody, function*() {
@@ -510,7 +508,7 @@ export default function useGeneralApi(app) {
         const request = Object.assign({}, request_base, {
             body: JSON.stringify(data),
         });
-        const response = yield fetch(host + '/tron_user', request);
+        const response = yield fetch(walletApiURI + '/tron_user', request);
         const body = yield response.json();
         this.body = JSON.stringify(body);
     });

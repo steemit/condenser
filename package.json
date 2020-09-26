@@ -24,6 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
+    "@steemfans/auth-data": "^1.0.2",
     "@steemit/steem-js": "0.7.9",
     "assert": "1.4.1",
     "autoprefixer-loader": "3.2.0",
@@ -63,6 +64,7 @@
     "intl": "1.2.5",
     "iso": "5.2.0",
     "json-loader": "0.5.7",
+    "jspdf": "^2.1.1",
     "koa": "1.4.1",
     "koa-body": "1.6.0",
     "koa-compressor": "1.0.3",
@@ -134,6 +136,7 @@
     "svg-inline-react": "1.0.3",
     "svgo-loader": "1.2.1",
     "swiper": "^6.1.2",
+    "tronweb": "^3.0.0",
     "underscore.string": "3.3.5",
     "url-loader": "0.6.2",
     "web-push": "3.2.3",

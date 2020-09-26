@@ -19,44 +19,15 @@ const styles = {
 class TronCreateTwo extends Component {
     constructor() {
         super();
-        this.state = {
-            tron_public: '',
-            tron_private: '',
-            tron_create: false,
-        };
+        this.state = {};
         this.handleSubmit = e => {
             e.preventDefault();
             this.props.hideTronCreateSuccess();
         };
     }
-    async componentWillMount() {
-        if (this.props.tron_create == true) {
-            setTimeout(() => {
-                // wait for one second for loading pdf js library
-                this.setState({
-                    tron_public: this.props.tron_public_key,
-                    tron_private: this.props.tron_private_key,
-                    tron_create: true,
-                });
-            }, 1000);
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        // start to download pdf key file
-        if (
-            this.props.tron_address !== prevProps.tron_address &&
-            this.props.create == true
-        ) {
-            this.setState({
-                tron_public: this.props.tron_public_key,
-                tron_private: this.props.tron_private_key,
-                tron_create: true,
-            });
-        }
-    }
 
     render() {
+        const { username, tronAddr, tronPrivateKey } = this.props;
         return (
             <div>
                 <div>
@@ -64,18 +35,29 @@ class TronCreateTwo extends Component {
                 </div>
                 <div style={styles.container}>
                     <div>{tt('tron_jsx.create_tron_success_content')}</div>
-                    <div>
+                    <div style={{ display: 'flex' }}>
+                        <span>
+                            {tt('tron_jsx.create_tron_success_content2')}
+                        </span>
                         <PdfDownload
-                            name={this.props.username}
-                            tron_public_key={this.state.tron_public}
-                            tron_private_key={this.state.tron_private}
+                            filename={`TRON account for @${username}`}
+                            name={username}
+                            tron_public_key={tronAddr}
+                            tron_private_key={tronPrivateKey}
                             newUser={false}
                             widthInches={8.5}
                             heightInches={11.0}
-                            label="click download"
+                            label={tt('tron_jsx.update_success_click')}
                             link={true}
-                            download={this.state.tron_create}
+                            download={!!tronPrivateKey}
+                            style={{
+                                marginTop: 0,
+                                marginBottom: 0,
+                            }}
                         />
+                        <span>
+                            {tt('tron_jsx.create_tron_success_content3')}
+                        </span>
                     </div>
                     <div>{tt('tron_jsx.update_success_content2')}</div>
                 </div>
@@ -97,43 +79,27 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const currentUser = state.user.get('current');
-        const tron_user =
-            currentUser && currentUser.has('tron_user')
-                ? currentUser.get('tron_user')
-                : false;
-        const tron_address =
-            currentUser && currentUser.has('tron_address')
-                ? currentUser.get('tron_address')
+        const tronAddr =
+            currentUser && currentUser.has('tron_addr')
+                ? currentUser.get('tron_addr')
                 : '';
         const username =
             currentUser && currentUser.has('username')
                 ? currentUser.get('username')
                 : '';
-        const tron_public_key =
-            currentUser && currentUser.has('tron_public_key')
-                ? currentUser.get('tron_public_key')
-                : '';
-        const tron_private_key =
+        const tronPrivateKey =
             currentUser && currentUser.has('tron_private_key')
                 ? currentUser.get('tron_private_key')
                 : '';
-        const tron_create =
-            currentUser && currentUser.has('tron_create')
-                ? currentUser.get('tron_create')
-                : false;
         return {
             ...ownProps,
-            tron_user,
-            tron_address,
+            tronAddr,
             username,
-            tron_public_key,
-            tron_private_key,
-            tron_create,
+            tronPrivateKey,
         };
     },
     dispatch => ({
         hideTronCreateSuccess: () => {
-            // if (e) e.preventDefault();
             dispatch(userActions.hideTronCreateSuccess());
         },
     })

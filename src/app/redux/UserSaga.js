@@ -3,9 +3,12 @@ import { call, put, select, fork, takeLatest } from 'redux-saga/effects';
 import { api, auth } from '@steemit/steem-js';
 import { PrivateKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 
+import tt from 'counterpart';
 import { accountAuthLookup } from 'app/redux/AuthSaga';
 import { getAccount } from 'app/redux/SagaShared';
 import * as userActions from 'app/redux/UserReducer';
+import * as appActions from 'app/redux/AppReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
 import { receiveFeatureFlags } from 'app/redux/AppReducer';
 import {
     hasCompatibleKeychain,
@@ -21,13 +24,13 @@ import {
     acceptTos,
     checkTronUser,
     getTronAccount,
-    createTronAccount,
     updateTronUser,
     getTronConfig,
 } from 'app/utils/ServerApiClient';
 import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
+import { createTronAccount } from 'app/utils/tronApi';
 const max_pop_window_count = 5;
 
 export const userWatches = [
@@ -41,8 +44,8 @@ export const userWatches = [
     takeLatest(userActions.LOGOUT, logout),
     takeLatest(userActions.LOGIN_ERROR, loginError),
     takeLatest(userActions.UPLOAD_IMAGE, uploadImage),
-    takeLatest(userActions.UPDATE_USER, updateTronAccount),
-
+    takeLatest(userActions.HIDE_TRON_CREATE, updateTronPopupTipCount),
+    takeLatest(userActions.UPDATE_TRON_ADDR, updateTronAddr),
     takeLatest(userActions.ACCEPT_TERMS, function*() {
         try {
             yield call(acceptTos);
@@ -59,98 +62,6 @@ function effectiveVests(account) {
     const delegated = parseFloat(account.get('delegated_vesting_shares'));
     const received = parseFloat(account.get('received_vesting_shares'));
     return vests - delegated + received;
-}
-
-function* updateTronAccount({ payload: { claim_reward, tron_address } }) {
-    const [username, private_key] = yield select(state => [
-        state.user.getIn(['current', 'username']),
-        state.user.getIn(['current', 'private_keys']),
-    ]);
-    if (claim_reward) {
-        console.log('start claim reward...');
-        const response = yield updateTronUser(
-            username,
-            tron_address,
-            true,
-            0,
-            private_key.get('posting_private').toWif()
-        );
-        const body = yield response.json();
-        // console.log('claim reward...' + JSON.stringify(body));
-    } else {
-        console.log('update tron user ...' + username);
-        // create a tron account
-        const res = yield createTronAccount();
-        const obj = yield res.json();
-        if (obj.address == undefined || obj.address.base58 == undefined) {
-            yield put(
-                userActions.setUser({
-                    username,
-                    tron_address: '',
-                    tron_user: false,
-                    tron_create: false,
-                    tron_create_msg: 'fail to create tron account',
-                })
-            );
-            return;
-        }
-        const response1 = yield updateTronUser(
-            username,
-            obj.address.base58,
-            false,
-            0,
-            private_key.get('posting_private').toWif()
-        );
-        const body1 = yield response1.json();
-        if (!body1.hasOwnProperty('status') || body1.status != 'ok') {
-            yield put(
-                userActions.setUser({
-                    username,
-                    tron_address: '',
-                    tron_user: true,
-                    tron_create: false,
-                    tron_create_msg:
-                        'create a tron account,fail to update tron account',
-                })
-            );
-            return;
-        }
-
-        // query tron user information
-        const response = yield checkTronUser(username);
-        const body = yield response.json();
-        if (body.hasOwnProperty('status') && body.status == 'ok') {
-            console.log(obj);
-            yield put(
-                userActions.setUser({
-                    username,
-                    tron_address: body.result.tron_addr,
-                    tron_user: body.result.tron_addr == '' ? false : true,
-                    // tron_user: true,
-                    tron_reward: body.result.pending_claim_tron_reward,
-                    tron_balance: 0.0,
-                    tron_private_key: obj.privateKey,
-                    tron_public_key: obj.publicKey,
-                    tron_create: true,
-                    tron_create_msg: '',
-                })
-            );
-        } else {
-            yield put(
-                userActions.setUser({
-                    username,
-                    tron_address: '',
-                    tron_user: true,
-                    tron_reward: 0.0,
-                    tron_balance: 0.0,
-                    tron_create_msg:
-                        'successful update tron account,but fail to query tron account information',
-                    tron_create: false,
-                })
-            );
-            return;
-        }
-    }
 }
 
 function* shouldShowLoginWarning({ username, password }) {
@@ -245,24 +156,6 @@ function* usernamePasswordLogin2({
         username
     );
 
-    const global_props = yield api.getDynamicGlobalPropertiesAsync();
-    const vest_per_steem =
-        parseFloat(global_props['total_vesting_shares']) /
-        parseFloat(global_props['total_vesting_fund_steem']);
-    console.log('vest per steem =' + vest_per_steem);
-    // query api get tron information
-    const res1 = yield getTronConfig();
-    const res_config = yield res1.json();
-    const steem_per_trx =
-        vest_per_steem / parseFloat(res_config['result'].vests_per_trx);
-    console.log('steem per trx =' + steem_per_trx);
-    // set trx_reward_rate
-    yield put(
-        userActions.setUser({
-            username,
-            tron_reward_rate: steem_per_trx == undefined ? 0.0 : steem_per_trx,
-        })
-    );
     // login, using saved password
     let feedURL = false;
     let autopost,
@@ -307,66 +200,12 @@ function* usernamePasswordLogin2({
     const isRole = (role, fn) =>
         !userProvidedRole || role === userProvidedRole ? fn() : undefined;
 
-    const account = yield call(getAccount, username);
+    const account = yield call(getAccount, username, true);
     if (!account) {
         console.log('No account');
         yield put(userActions.loginError({ error: 'Username does not exist' }));
         return;
     }
-
-    let queryName = username == undefined ? account.get('name') : username;
-    var exit_tron_user = false;
-    const windows_count_threshold =
-        res_config.unbind_tip_limit == undefined
-            ? max_pop_window_count
-            : res_config.unbind_tip_limit;
-    var current_window_count = 0;
-    var tron_address = '';
-    // check tron users
-    const response = yield checkTronUser(queryName);
-    const body = yield response.json();
-    if (body.status && body.status == 'ok') {
-        current_window_count = body.result.tip_count;
-        if (body.result.tron_addr != '' || body.result.tron_addr.length > 0) {
-            exit_tron_user = true;
-            const response2 = yield getTronAccount(body.result.tron_addr);
-            const res = yield response2.json();
-            tron_address = body.result.tron_addr;
-            yield put(
-                userActions.setUser({
-                    username,
-                    tron_address: body.result.tron_addr,
-                    tron_user: body.result.tron_addr == '' ? false : true,
-                    tron_reward: body.result.pending_claim_tron_reward,
-                    tron_balance: res.balance == undefined ? 0.0 : res.balance,
-                    tron_reward_rate:
-                        steem_per_trx == undefined ? 0.0 : steem_per_trx,
-                })
-            );
-        } else {
-            yield put(
-                userActions.setUser({
-                    username,
-                    tron_address: body.result.tron_addr,
-                    tron_user: body.result.tron_addr == '' ? false : true,
-                    tron_reward: body.result.pending_claim_tron_reward,
-                    tron_balance: 0.0,
-                })
-            );
-        }
-    } else {
-        // todo: retry just show error windows
-        yield put(
-            userActions.setUser({
-                username,
-                tron_address: 'error,please refresh page',
-                tron_user: false,
-                tron_reward: 0.0,
-                tron_balance: 0.0,
-            })
-        );
-    }
-    // console.log("tron current window count="+current_window_count+"   exit user="+exit_tron_user+" tron address="+tron_address+"&");
 
     //dmca user block
     if (username && DMCAUserList.includes(username)) {
@@ -384,6 +223,12 @@ function* usernamePasswordLogin2({
                 username,
                 login_with_keychain: true,
                 effective_vests: effectiveVests(account),
+                tip_count: account.get('tip_count'),
+                tron_addr: account.get('tron_addr'),
+                tron_balance: account.get('tron_balance'),
+                pending_claim_tron_reward: account.get(
+                    'pending_claim_tron_reward'
+                ),
             })
         );
         return;
@@ -542,6 +387,12 @@ function* usernamePasswordLogin2({
                     private_keys,
                     login_owner_pubkey,
                     effective_vests: effectiveVests(account),
+                    tip_count: account.get('tip_count'),
+                    tron_addr: account.get('tron_addr'),
+                    tron_balance: account.get('tron_balance'),
+                    pending_claim_tron_reward: account.get(
+                        'pending_claim_tron_reward'
+                    ),
                 })
             );
         } else {
@@ -549,6 +400,12 @@ function* usernamePasswordLogin2({
                 userActions.setUser({
                     username,
                     effective_vests: effectiveVests(account),
+                    tip_count: account.get('tip_count'),
+                    tron_addr: account.get('tron_addr'),
+                    tron_balance: account.get('tron_balance'),
+                    pending_claim_tron_reward: account.get(
+                        'pending_claim_tron_reward'
+                    ),
                 })
             );
         }
@@ -591,6 +448,12 @@ function* usernamePasswordLogin2({
                         username,
                         login_with_keychain: true,
                         effective_vests: effectiveVests(account),
+                        tip_count: account.get('tip_count'),
+                        tron_addr: account.get('tron_addr'),
+                        tron_balance: account.get('tron_balance'),
+                        pending_claim_tron_reward: account.get(
+                            'pending_claim_tron_reward'
+                        ),
                     })
                 );
             } else {
@@ -613,21 +476,14 @@ function* usernamePasswordLogin2({
                     userActions.setUser({
                         username,
                         pass_auth: true,
+                        tip_count: account.get('tip_count'),
+                        tron_addr: account.get('tron_addr'),
+                        tron_balance: account.get('tron_balance'),
+                        pending_claim_tron_reward: account.get(
+                            'pending_claim_tron_reward'
+                        ),
                     })
                 );
-                if (!exit_tron_user) {
-                    const response_tip_count = yield updateTronUser(
-                        username,
-                        tron_address,
-                        false,
-                        current_window_count + 1,
-                        private_keys.get('posting_private').toWif()
-                    );
-                    // const res= yield response_tip_count.json();
-                    // console.log('update tron users'+JSON.stringify(res));
-                    if (current_window_count < windows_count_threshold)
-                        yield put(userActions.showTronCreate());
-                }
             }
         }
     } catch (error) {
@@ -646,6 +502,19 @@ function* usernamePasswordLogin2({
     }
     // TOS acceptance
     yield fork(promptTosAcceptance, username);
+
+    // check if user binded tron address
+    const unbindTipLimit = yield select(state =>
+        state.app.get('unbind_tip_limit')
+    );
+    if (
+        account.has('tron_addr') &&
+        account.get('tron_addr') === '' &&
+        account.has('tip_count') &&
+        account.get('tip_count') < unbindTipLimit
+    ) {
+        yield put(userActions.showTronCreate());
+    }
 
     // Redirect user to the appropriate page after login.
     if (afterLoginRedirectToWelcome) {
@@ -965,4 +834,127 @@ function* uploadImage({
         }
     };
     xhr.send(formData);
+}
+
+/**
+ *
+ */
+function* updateTronPopupTipCount() {
+    const current = yield select(state => state.user.get('current'));
+    const username = current.get('username');
+    const tip_count = current.get('tip_count');
+    const private_keys = current.get('private_keys');
+
+    console.log('TEST update tip count:', username, tip_count, private_keys);
+
+    if (tip_count === undefined || private_keys === undefined) return;
+
+    // charge that which level private key we own.
+    let privateKeyType = null;
+    if (private_keys.has('active_private')) privateKeyType = 'active_private';
+    if (private_keys.has('posting_private')) privateKeyType = 'posting_private';
+    if (privateKeyType === null) {
+        console.log('there is no private key in browser cache.');
+        return;
+    }
+
+    const data = {
+        username,
+        auth_type: privateKeyType === 'active_private' ? 'active' : 'posting',
+        tip_count: tip_count + 1,
+    };
+    yield put(
+        userActions.setUser({
+            tip_count: tip_count + 1,
+            tip_count_lock: true, // prevent tip popup multi times
+        })
+    );
+
+    // let updateTronUser executes in next event loop
+    setTimeout(() =>
+        updateTronUser(data, private_keys.get(privateKeyType).toWif())
+    );
+}
+
+function* updateTronAddr() {
+    const [username, private_keys] = yield select(state => [
+        state.user.getIn(['current', 'username']),
+        state.user.getIn(['current', 'private_keys']),
+    ]);
+
+    // charge that which level private key we own.
+    let privateKeyType = null;
+    if (private_keys.has('active_private')) privateKeyType = 'active_private';
+    if (private_keys.has('posting_private')) privateKeyType = 'posting_private';
+    if (privateKeyType === null) {
+        console.log('there is no private key in browser cache.');
+        yield put(
+            appActions.addNotification({
+                key: 'chpwd_' + Date.now(),
+                message: tt('loginform_jsx.login_to_create_tron_addr'),
+                dismissAfter: 3000,
+            })
+        );
+        return;
+    }
+
+    // create tron account
+    const tronAccount = yield createTronAccount();
+    if (
+        tronAccount === null ||
+        tronAccount.address === undefined ||
+        tronAccount.address.base58 === undefined
+    ) {
+        yield put(
+            appActions.addNotification({
+                key: 'chpwd_' + Date.now(),
+                message: tt('userwallet_jsx.create_trx_failed'),
+                dismissAfter: 3000,
+            })
+        );
+        return;
+    }
+
+    const tronPrivKey = tronAccount.privateKey;
+    const tronPubKey = tronAccount.address.base58;
+
+    // update steem user's tron_addr
+    const data = {
+        username,
+        auth_type: privateKeyType === 'active_private' ? 'active' : 'posting',
+        tron_addr: tronPubKey,
+    };
+    const result = yield updateTronUser(
+        data,
+        private_keys.get(privateKeyType).toWif()
+    );
+    if (result.error !== undefined) {
+        yield put(
+            appActions.addNotification({
+                key: 'chpwd_' + Date.now(),
+                message: result.error,
+                dismissAfter: 3000,
+            })
+        );
+        return;
+    }
+
+    // update current login user's state
+    yield put(
+        userActions.setUser({
+            tron_addr: tronPubKey,
+            tron_private_key: tronPrivKey,
+        })
+    );
+
+    // update current route user's state
+    const state = {
+        accounts: {},
+    };
+    state.accounts[username] = {};
+    const tronInfo = yield call(checkTronUser, username);
+    Object.keys(tronInfo).forEach(k => {
+        state.accounts[username][k] = tronInfo[k];
+    });
+    yield put(globalActions.receiveState(state));
 }

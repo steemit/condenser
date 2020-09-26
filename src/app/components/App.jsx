@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import * as userActions from 'app/redux/UserReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
 import classNames from 'classnames';
 import ConnectedSidePanel from 'app/components/modules/ConnectedSidePanel';
 import CloseButton from 'app/components/elements/CloseButton';
@@ -43,6 +44,9 @@ class App extends React.Component {
     componentWillMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost'); // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
+        if (!this.props.hasDGP) {
+            this.props.getDGP();
+        }
     }
 
     componentDidMount() {
@@ -236,9 +240,11 @@ export default connect(
             order: ownProps.params.order,
             category: ownProps.params.category,
             showAnnouncement: state.user.get('showAnnouncement'),
+            hasDGP: state.global.has('dgp'),
         };
     },
     dispatch => ({
         loginUser: () => dispatch(userActions.usernamePasswordLogin({})),
+        getDGP: () => dispatch(globalActions.getDGP({})),
     })
 )(App);

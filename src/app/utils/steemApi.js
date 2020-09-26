@@ -183,3 +183,7 @@ function parsePath(url) {
 
     return { page, tag, sort, key };
 }
+
+export async function getDynamicGlobalProperties() {
+    return await api.getDynamicGlobalPropertiesAsync();
+}

@@ -1,3 +1,11 @@
+/* eslint-disable import/newline-after-import */
+/* eslint-disable import/first */
+/* eslint-disable no-useless-escape */
+/* eslint-disable react/jsx-boolean-value */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable react/no-string-refs */
+/* eslint-disable arrow-parens */
+/* eslint-disable no-undef */
 /* eslint react/prop-types: 0 */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -422,7 +430,7 @@ class LoginForm extends Component {
                         username: username.value,
                         password: password.value,
                         saveLogin: saveLogin.value,
-                        loginBroadcastOperation: loginBroadcastOperation,
+                        loginBroadcastOperation,
                     };
                     reallySubmit(data, afterLoginRedirectToWelcome);
                 })}

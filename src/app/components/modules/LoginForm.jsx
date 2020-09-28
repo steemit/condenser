@@ -203,7 +203,7 @@ class LoginForm extends Component {
             opType === 'custom_json' &&
             loginBroadcastOperation.getIn(['operation', 'id']) === 'follow'
         ) {
-            postType = 'Login to Follow Users';
+            postType = tt('loginform_jsx.login_to_follow_users');
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
             postType = loginBroadcastOperation.getIn(['operation', 'title'])
@@ -272,7 +272,6 @@ class LoginForm extends Component {
                 : null;
         const titleText = (
             <h3>
-                {tt('loginform_jsx.returning_users')}
                 <span className="OpAction">{title}</span>
             </h3>
         );
@@ -395,7 +394,6 @@ class LoginForm extends Component {
                     </label>
                 </div>
                 <div className="login-modal-buttons">
-                    <br />
                     <button
                         type="submit"
                         disabled={submitting || disabled}
@@ -403,16 +401,16 @@ class LoginForm extends Component {
                     >
                         {submitLabel}
                     </button>
-                    {this.props.onCancel && (
-                        <button
-                            type="button float-right"
-                            disabled={submitting}
-                            className="button hollow"
-                            onClick={onCancel}
-                        >
-                            {tt('g.cancel')}
-                        </button>
-                    )}
+                    <div className="register">
+                        <div className="register-title">
+                            {tt('loginform_jsx.not_a_steemit_user')}
+                        </div>
+                        <div className="register-link">
+                            <a href={SIGNUP_URL}>
+                                {tt('loginform_jsx.free_register')}
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 {/*signupLink*/}
             </form>
@@ -455,7 +453,6 @@ class LoginForm extends Component {
                     </a>
                 </div>
                 <div className="login-modal-buttons">
-                    <br />
                     <button
                         type="submit"
                         disabled={submitting}

@@ -508,6 +508,7 @@
         "login_to_vote": "登录后投票",
         "login_to_post": "登录后发帖",
         "login_to_comment": "登录后评论",
+        "login_to_follow_users": "登录后关注",
         "posting": "发帖",
         "active_or_owner": "Active 或 Owner",
         "this_password_is_bound_to_your_account_owner_key":
@@ -536,7 +537,9 @@
         "returning_users": "返回用户:",
         "join_our": "加入我们",
         "sign_transfer": "Sign to complete transfer",
-        "use_keychain": "Use keychain extension"
+        "use_keychain": "Use keychain extension",
+        "not_a_steemit_user": "还不是Steemit用户？",
+        "free_register": "免费注册"
     },
     "chainvalidation_js": {
         "account_name_should": "帐户名称应该",

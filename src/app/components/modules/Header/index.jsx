@@ -1,6 +1,14 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable prefer-const */
+/* eslint-disable no-multi-assign */
+/* eslint-disable react/sort-comp */
+/* eslint-disable consistent-return */
+/* eslint-disable react/no-unused-prop-types */
+/* eslint-disable no-undef */
+/* eslint-disable import/first */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { parseJsonTags } from 'app/utils/StateFunctions';
 import Headroom from 'react-headroom';
@@ -254,8 +262,15 @@ class Header extends React.Component {
         // Since navigate isn't set, defaultNavigate will always be used.
         const nav = navigate || defaultNavigate;
 
+        const checkIfLogin = () => {
+            if (!loggedIn) {
+                return showLogin();
+            }
+            return browserHistory.replace('/submit.html');
+        };
+
         const submit_story = $STM_Config.read_only_mode ? null : (
-            <Link to="/submit.html">
+            <Link onClick={checkIfLogin}>
                 <IconButton />
             </Link>
         );

@@ -1,3 +1,8 @@
+/* eslint-disable react/style-prop-object */
+/* eslint-disable arrow-parens */
+/* eslint-disable no-undef */
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -18,21 +23,6 @@ import TronCreateOne from 'app/components/modules/TronCreateOne';
 import TronCreateTwo from 'app/components/modules/TronCreateTwo';
 
 class Modals extends React.Component {
-    static defaultProps = {
-        username: '',
-        notifications: undefined,
-        removeNotification: () => {},
-        show_terms_modal: false,
-        show_promote_post_modal: false,
-        show_bandwidth_error_modal: false,
-        show_confirm_modal: false,
-        show_login_modal: false,
-        show_post_advanced_settings_modal: '',
-        loginBroadcastOperation: undefined,
-        show_tron_create_modal: false,
-        show_tron_create_success_modal: false,
-        loading: false,
-    };
     static propTypes = {
         show_tron_create_modal: PropTypes.bool,
         show_tron_create_success_modal: PropTypes.bool,
@@ -57,6 +47,22 @@ class Modals extends React.Component {
             errorCallback: PropTypes.func,
         }),
         loading: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        username: '',
+        notifications: undefined,
+        removeNotification: () => {},
+        show_terms_modal: false,
+        show_promote_post_modal: false,
+        show_bandwidth_error_modal: false,
+        show_confirm_modal: false,
+        show_login_modal: false,
+        show_post_advanced_settings_modal: '',
+        loginBroadcastOperation: undefined,
+        show_tron_create_modal: false,
+        show_tron_create_success_modal: false,
+        loading: false,
     };
 
     constructor() {

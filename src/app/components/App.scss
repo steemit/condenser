@@ -215,10 +215,25 @@
 }
 
 .reveal {
-    .tron-account-dl {
-        margin: 12px 0;
-        .pdf-download {
-            display: inline-block;
-        }
+  .tron-account-dl {
+    margin: 12px 0;
+    .pdf-download {
+        display: inline-block;
     }
+  }
+
+  .login-modal-buttons {
+    margin-top: 1.5em;
+    display: flex;
+    justify-content: space-between;
+    .register {
+      text-align: right;
+      .register-title {
+        font-size: 0.8em;
+      }
+      .register-link {
+        font-size: 1.2em;
+      }
+    }
+  }
 }

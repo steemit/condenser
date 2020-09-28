@@ -620,6 +620,7 @@
         "login_to_vote": "Login to Vote",
         "login_to_post": "Login to Post",
         "login_to_comment": "Login to Comment",
+        "login_to_follow_users": "Login to Follow Users",
         "posting": "Posting",
         "active_or_owner": "Active or Owner",
         "this_password_is_bound_to_your_account_owner_key":
@@ -659,7 +660,9 @@
             "Open my Steemit Wallet to access and view my posting key",
         "join_our": "Join our",
         "sign_transfer": "Sign to complete transfer",
-        "use_keychain": "Use keychain extension"
+        "use_keychain": "Use keychain extension",
+        "not_a_steemit_user": "Not a Steemit User?",
+        "free_register": "Free to register"
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",

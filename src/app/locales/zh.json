@@ -478,7 +478,7 @@
         "empty_feed_5": "浏览常见问题解答"
     },
     "explorepost_jsx": {
-        "copied": "已复制！",
+        "copied": "复制成功",
         "copy": "复制",
         "alternative_sources": "其他资源"
     },
@@ -643,17 +643,17 @@
         "update_success_content": "已经成功更新TRON账户。若下载失败 ",
         "update_success_click": "点击下载",
         "update_success_content2":
-            "请小心保管，若丢失无法找回，不要与任何人共享此文件",
+            "请小心保管，丢失无法找回。不要与任何人共享此文件",
         "safe_save_button": "安全保存",
         "create_tron_account": "创建TRON账户领取奖励",
         "create_tron_account_content":
             "Steemit 将会为你发放额外的TRX奖励，此账户用来接收奖励。",
-        "create_tron_account_content1": "系统会自动为您免费创建TRON账户",
+        "create_tron_account_content1": "系统会自动为您免费创建TRON账户。",
         "create_tron_account_content2":
             "是否同意创建TRON账户并下载带有TRON账户公私钥的PDF？",
         "create_tron_agree": "同意",
         "create_tron_success": "创建成功",
-        "create_tron_success_content": "已经成功创建TRON账户. ",
+        "create_tron_success_content": "已经成功创建TRON账户。",
         "create_tron_success_content2": "若下载失败，",
         "create_tron_success_content3": "带有TRON账户公私钥的PDF。"
     }

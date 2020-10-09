@@ -588,7 +588,7 @@
         "accountnames_feed": "%(account_name)s's Feed"
     },
     "explorepost_jsx": {
-        "copied": "Copied!",
+        "copied": "Copied Successfully",
         "copy": "COPY",
         "alternative_sources": "Alternative Sources"
     },
@@ -844,9 +844,9 @@
         "safe_save_button": "PDF securely saved",
         "create_tron_account": "Create a TRON account and claim rewards",
         "create_tron_account_content":
-            "Steemit will distribute extra TRX to you as rewards. This account is for receiving such rewards",
+            "Steemit will distribute extra TRX to you as rewards. This account is for receiving such rewards.",
         "create_tron_account_content1":
-            "The system will automatically create a free TRON account for you.",
+            "The system will automatically create a TRON account for you for free.",
         "create_tron_account_content2":
             "Do you agree to create a TRON account and download the PDF with your TRON public and private keys?",
         "create_tron_agree": "Agree",

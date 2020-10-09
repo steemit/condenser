@@ -851,14 +851,34 @@ function* updateTronPopupTipCount() {
     let privateKeyType = null;
     if (private_keys.has('active_private')) privateKeyType = 'active_private';
     if (private_keys.has('posting_private')) privateKeyType = 'posting_private';
+    if (private_keys.has('owner_private')) privateKeyType = 'owner_private';
+    if (private_keys.has('memo_private')) privateKeyType = 'memo_private';
     if (privateKeyType === null) {
         console.log('there is no private key in browser cache.');
         return;
     }
 
+    let authType;
+    switch (privateKeyType) {
+        case 'active_private':
+            authType = 'active';
+            break;
+        case 'posting_private':
+            authType = 'posting';
+            break;
+        case 'owner_private':
+            authType = 'owner';
+            break;
+        case 'memo_private':
+            authType = 'memo';
+            break;
+        default:
+            throw Error('unexpected auth type.');
+    }
+
     const data = {
         username,
-        auth_type: privateKeyType === 'active_private' ? 'active' : 'posting',
+        auth_type: authType,
         tip_count: tip_count + 1,
     };
     yield put(

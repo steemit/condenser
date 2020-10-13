@@ -84,6 +84,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 tron_reward_switch: 'off',
                 vests_per_trx: null,
                 unbind_tip_limit: 5,
+                frontend_has_rendered: false,
             },
         };
 

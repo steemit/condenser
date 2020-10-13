@@ -1,9 +1,16 @@
+/* eslint-disable react/no-string-refs */
+/* eslint-disable react/jsx-no-comment-textnodes */
+/* eslint-disable no-constant-condition */
+/* eslint-disable no-undef */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable react/sort-comp */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import * as userActions from 'app/redux/UserReducer';
+import * as appActions from 'app/redux/AppReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import classNames from 'classnames';
 import ConnectedSidePanel from 'app/components/modules/ConnectedSidePanel';
@@ -43,7 +50,11 @@ class App extends React.Component {
 
     componentWillMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost'); // July 14 '16 compromise, renamed to autopost2
-        this.props.loginUser();
+        // make sure the autologin triggered each refresh page not each rendered progress.
+        if (process.env.BROWSER && this.props.frontendHasRendered === false) {
+            this.props.setFeRendered();
+            this.props.loginUser();
+        }
         if (!this.props.hasDGP) {
             this.props.getDGP();
         }
@@ -241,10 +252,12 @@ export default connect(
             category: ownProps.params.category,
             showAnnouncement: state.user.get('showAnnouncement'),
             hasDGP: state.global.has('dgp'),
+            frontendHasRendered: state.app.get('frontend_has_rendered'),
         };
     },
     dispatch => ({
         loginUser: () => dispatch(userActions.usernamePasswordLogin({})),
+        setFeRendered: () => dispatch(appActions.setFeRendered({})),
         getDGP: () => dispatch(globalActions.getDGP({})),
     })
 )(App);

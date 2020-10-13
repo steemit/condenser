@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { Map, OrderedMap } from 'immutable';
 import tt from 'counterpart';
 
@@ -6,6 +7,7 @@ const FETCH_DATA_BEGIN = 'app/FETCH_DATA_BEGIN';
 const FETCH_DATA_END = 'app/FETCH_DATA_END';
 const ADD_NOTIFICATION = 'app/ADD_NOTIFICATION';
 const REMOVE_NOTIFICATION = 'app/REMOVE_NOTIFICATION';
+const SET_FE_RENDERED = 'app/SET_FE_RENDERED';
 export const SET_USER_PREFERENCES = 'app/SET_USER_PREFERENCES';
 export const TOGGLE_NIGHTMODE = 'app/TOGGLE_NIGHTMODE';
 export const TOGGLE_BLOGMODE = 'app/TOGGLE_BLOGMODE';
@@ -84,6 +86,8 @@ export default function reducer(state = defaultState, action = {}) {
             return state.set('modalLoading', true);
         case MODAL_LOADING_END:
             return state.set('modalLoading', false);
+        case SET_FE_RENDERED:
+            return state.set('frontend_has_rendered', true);
         default:
             return state;
     }
@@ -142,5 +146,10 @@ export const modalLoadingBegin = payload => ({
 
 export const modalLoadingEnd = payload => ({
     type: MODAL_LOADING_END,
+    payload,
+});
+
+export const setFeRendered = payload => ({
+    type: SET_FE_RENDERED,
     payload,
 });

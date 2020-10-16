@@ -851,8 +851,7 @@
             "Do you agree to create a TRON account and download the PDF with your TRON public and private keys?",
         "create_tron_agree": "Agree",
         "create_tron_success": "Your account has been created",
-        "create_tron_success_content":
-            "You successfully create a TRON account.If fail to download,",
+        "create_tron_success_content": "You have created a TRON account.",
         "create_tron_success_content2": "If the file wasn't downloaded, ",
         "create_tron_success_content3":
             " to download the PDF with your TRON public and private keys."

@@ -1,3 +1,15 @@
+/* eslint-disable space-before-function-paren */
+/* eslint-disable no-continue */
+/* eslint-disable no-plusplus */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-constant-condition */
+/* eslint-disable no-mixed-operators */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-undef */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -486,45 +498,47 @@ class Voting extends React.Component {
         // past payout stats
         if (post.get('is_paidout') && total_payout > 0) {
             // estimated author has been payout breakdowns
-            const _sbd_temp = author_payout * percent_sbd;
-            const payout_sp = (author_payout - _sbd_temp) / price_per_steem;
-            const payout_sbd =
-                _sbd_temp * (sbd_print_rate / SBD_PRINT_RATE_MAX);
-            const payout_steem = (_sbd_temp - payout_sbd) / price_per_steem;
-            let payout_trx = 0;
+            const _author_sbd_temp = author_payout * percent_sbd;
+            const _author_payout_sp =
+                (author_payout - _author_sbd_temp) / price_per_steem;
+            const _curator_sbd_temp = curator_payout * percent_sbd;
+            const _curator_payout_sp =
+                (curator_payout - _curator_sbd_temp) / price_per_steem;
+
+            let author_payout_trx = 0;
+            let curator_payout_trx = 0;
             if (vests_per_trx) {
-                payout_trx = parseFloat(
-                    payout_sp * vests_per_steem / vests_per_trx
+                author_payout_trx = parseFloat(
+                    _author_payout_sp * vests_per_steem / vests_per_trx
+                );
+                curator_payout_trx = parseFloat(
+                    _curator_payout_sp * vests_per_steem / vests_per_trx
                 );
             }
+            const total_payout_trx = author_payout_trx + curator_payout_trx;
 
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts', {
-                    value: fmt(total_payout + payout_trx * trx_price),
+                    value:
+                        fmt(total_payout) +
+                        ', ' +
+                        fmt(total_payout_trx, INVEST_TRON_SHORT),
                 }),
             });
             payoutItems.push({
-                value: `${tt('voting_jsx.breakdown')}: ${fmt(
-                    payout_sbd,
-                    DEBT_TOKEN_SHORT
-                )}, ${
-                    sbd_print_rate != SBD_PRINT_RATE_MAX
-                        ? `${fmt(payout_steem, LIQUID_TOKEN_UPPERCASE)}, `
-                        : ''
-                }${fmt(payout_sp, INVEST_TOKEN_SHORT)}${
-                    vests_per_trx
-                        ? `, ${fmt(payout_trx, INVEST_TRON_SHORT)}`
-                        : ''
-                }`,
-            });
-            payoutItems.push({
                 value: tt('voting_jsx.past_payouts_author', {
-                    value: fmt(author_payout + payout_trx * trx_price),
+                    value:
+                        fmt(author_payout) +
+                        ', ' +
+                        fmt(author_payout_trx, INVEST_TRON_SHORT),
                 }),
             });
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts_curators', {
-                    value: fmt(curator_payout),
+                    value:
+                        fmt(curator_payout) +
+                        ', ' +
+                        fmt(curator_payout_trx, INVEST_TRON_SHORT),
                 }),
             });
         }
@@ -544,7 +558,7 @@ class Voting extends React.Component {
 
         let voters_list = null;
         if (showList && total_votes > 0 && active_votes) {
-            let voters = [];
+            const voters = [];
 
             // add top votes
             const avotes = active_votes.toJS();

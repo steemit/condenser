@@ -1,3 +1,14 @@
+/* eslint-disable no-continue */
+/* eslint-disable no-plusplus */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-constant-condition */
+/* eslint-disable no-mixed-operators */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-undef */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -544,7 +555,7 @@ class Voting extends React.Component {
 
         let voters_list = null;
         if (showList && total_votes > 0 && active_votes) {
-            let voters = [];
+            const voters = [];
 
             // add top votes
             const avotes = active_votes.toJS();

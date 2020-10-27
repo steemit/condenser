@@ -138,6 +138,7 @@ class Modals extends React.Component {
                         }}
                         show={show_login_modal}
                     >
+                        <CloseButton onClick={() => hideLogin()} />
                         <LoginForm onCancel={hideLogin} />
                     </Reveal>
                 )}

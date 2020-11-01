@@ -144,7 +144,7 @@ class CommentImpl extends React.Component {
             }
 
             const notOwn = this.props.username !== post.get('author');
-            this.setState({ hide, hide_body: notOwn && (hide || gray) });
+            this.setState({ hide, hide_body: false });
         }
     }
 
@@ -193,7 +193,7 @@ class CommentImpl extends React.Component {
             username,
             depth,
             anchor_link,
-            showNegativeComments,
+            pshowNegativeComments,
             ignored,
             rootComment,
             community,
@@ -204,17 +204,20 @@ class CommentImpl extends React.Component {
             PostEditEditor,
             showReply,
             showEdit,
-            hide,
-            hide_body,
+            phide,
+            phide_body,
         } = this.state;
 
+        const hide = false;
+        const hide_body = false;
+        const showNegativeComments = true;
         if (!showNegativeComments && (hide || ignored)) return null;
 
         const Editor = showReply ? PostReplyEditor : PostEditEditor;
 
         const author = post.get('author');
         const comment = post.toJS();
-        const gray = comment.stats.gray || ImageUserBlockList.includes(author);
+        const gray = false; // comment.stats.gray || ImageUserBlockList.includes(author);
 
         const allowReply = Role.canComment(community, viewer_role);
         const canEdit = username && username === author;
@@ -227,11 +230,7 @@ class CommentImpl extends React.Component {
         let body = null;
         let controls = null;
         if (!this.state.collapsed && !hide_body) {
-            body = gray ? (
-                <pre style={{ opacity: 0.5, whiteSpace: 'pre-wrap' }}>
-                    {comment.body}
-                </pre>
-            ) : (
+            body = (
                 <MarkdownViewer
                     formId={postref + '-viewer'}
                     text={comment.body}

@@ -271,4 +271,36 @@ describe('htmlready', () => {
         const res = HtmlReady(testString).html;
         expect(res).toEqual(htmlified);
     });
+
+    it('should not omit text on same line as banned video link', () => {
+        const testString =
+            '<html><p>before text https://electionnight.news/watch?id=5f9b6d9e57b3de0a553c18b3 after text</p></html>';
+        // why is this proper HTML but in the d-tube case we get "embed:" + gibberish?
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>before text ~~~embed:5f9b6d9e57b3de0a553c18b3 bannedvideo after text</p></html>';
+        const res = HtmlReady(testString).html;
+        expect(
+            res.indexOf('before text') != -1 && res.indexOf('after text') != -1
+        ).toEqual(true);
+    });
+
+    it('should handle banned video URL #1', () => {
+        const testString =
+            '<html><p>https://electionnight.news/watch?id=5f9b6d9e57b3de0a553c18b3</p></html>';
+        // why is this proper HTML but in the d-tube case we get "embed:" + gibberish?
+        const embedcode =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:5f9b6d9e57b3de0a553c18b3 bannedvideo ~~~</p></html>';
+
+        const res1 = HtmlReady(testString).html;
+        expect(res1).toEqual(embedcode);
+    });
+
+    it('should handle banned video embed', () => {
+        const testString =
+            '<html><div class="ifw-player" data-video-id="5f9b6d9e57b3de0a553c18b3"></div><script src="https://infowarsmedia.com/js/player.js" async></script></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><div class="ifw-player" data-video-id="5f9b6d9e57b3de0a553c18b3"></div><script src="https://infowarsmedia.com/js/player.js" async="async"></script></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
 });

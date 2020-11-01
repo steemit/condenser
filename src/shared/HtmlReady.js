@@ -183,8 +183,11 @@ function iframe(state, child) {
     const url = child.getAttribute('src');
     if (url) {
         const { images, links } = state;
+        const bv = getBannedVideoId(url);
         const yt = youTubeId(url);
-        if (yt && images && links) {
+        if (bv && links) {
+            links.add(url);
+        } else if (yt && images && links) {
             links.add(yt.url);
             images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg');
         }
@@ -245,6 +248,8 @@ function linkifyNode(child, state) {
 
         const { mutate } = state;
         if (!child.data) return;
+
+        child = embedBannedVideoNode(child, state.links, state.images);
         child = embedYouTubeNode(child, state.links, state.images);
         child = embedVimeoNode(child, state.links, state.images);
         child = embedTwitchNode(child, state.links, state.images);
@@ -371,6 +376,26 @@ function youTubeId(data) {
 }
 
 /** @return {id, url} or <b>null</b> */
+function getBannedVideoId(data) {
+    const monkeywrench = 'getBannedVideoId called';
+
+    if (!data) return null;
+
+    const m = data.match(linksRe.bannedVideo);
+    const url = m ? m[1] : null;
+    if (!url) return null;
+    const id = m[2];
+    if (!id) return null;
+
+    return {
+        id,
+        url,
+        startTime: 0,
+        thumbnail: null,
+    };
+}
+
+/** @return {id, url} or <b>null</b> */
 function getThreeSpeakId(data) {
     if (!data) return null;
 
@@ -386,6 +411,27 @@ function getThreeSpeakId(data) {
         url,
         thumbnail: `https://img.3speakcontent.online/${id}/post.png`,
     };
+}
+
+function embedBannedVideoNode(child, links, images) {
+    try {
+        // If child is not a string, we are processing plain text
+        // to replace a bare URL
+        let data = child.data;
+        const bannedVideoId = getBannedVideoId(data);
+        if (!bannedVideoId) return child;
+
+        child.data = data.replace(
+            bannedVideoId.url,
+            `~~~ embed:${bannedVideoId.id} bannedvideo ~~~`
+        );
+
+        if (links) links.add(bannedVideoId.url);
+    } catch (error) {
+        console.log(error);
+    }
+
+    return child;
 }
 
 function embedThreeSpeakNode(child, links, images) {

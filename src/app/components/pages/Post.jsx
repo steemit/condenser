@@ -38,7 +38,7 @@ class Post extends React.Component {
     constructor() {
         super();
         this.state = {
-            showNegativeComments: false,
+            showNegativeComments: true,
         };
         this.showSignUp = () => {
             serverApiRecordEvent('SignUp', 'Post Promo');
@@ -64,7 +64,10 @@ class Post extends React.Component {
     render() {
         const { showSignUp } = this;
         const { content, sortOrder, post, dis } = this.props;
-        const { showNegativeComments, commentHidden, showAnyway } = this.state;
+        //const { showNegativeComments, commentHidden, showAnyway } = this.state;
+        const showNegativeComments = true;
+        const commentHidden = false;
+        const showAnyway = true;
 
         if (isEmptyPost(dis))
             return (
@@ -98,7 +101,11 @@ class Post extends React.Component {
         // anyway", and is designated "gray".
         let postBody;
         const special = dis.get('special');
-        if (!special && !showAnyway && dis.getIn(['stats', 'gray'], false)) {
+        //const activeVotes = dis.get('active_votes').toJS();
+
+        //  // This line below used to prevent negative rewarded posts from being visible
+        //if (!special && !showAnyway && dis.getIn(['stats', 'gray'], false)) {
+        if (false) {
             postBody = (
                 <div className="Post">
                     <div className="row">
@@ -126,7 +133,6 @@ class Post extends React.Component {
         }
 
         let replies = dis.get('replies').toJS();
-
         sortComments(content, replies, sortOrder);
 
         // Don't render too many comments on server-side

@@ -139,7 +139,7 @@ class MarkdownViewer extends Component {
         // HtmlReady inserts ~~~ embed:${id} type ~~~
         for (let section of cleanText.split('~~~ embed:')) {
             const match = section.match(
-                /^([A-Za-z0-9\?\=\_\-\/\.]+) (youtube|vimeo|twitch|dtube|threespeak)\s?(\d+)? ~~~/
+                /^([A-Za-z0-9\?\=\_\-\/\.]+) (youtube|vimeo|twitch|dtube|threespeak|bannedvideo|bitchute|brightreon|lbry|rumble|thedailymotion|ultimedia)\s?(\d+)? ~~~/
             );
             if (match && match.length >= 3) {
                 const id = match[1];
@@ -148,7 +148,49 @@ class MarkdownViewer extends Component {
                 const w = large ? 640 : 480,
                     h = large ? 360 : 270;
 
-                if (type === 'youtube') {
+                if (type === 'bannedvideo') {
+                    sections.push(
+                        <div>
+                            <div className="ifw-player" data-video-id={id} />
+                            <script
+                                src="https://infowarsmedia.com/js/player.js"
+                                async="async"
+                            />
+                        </div>
+                    );
+                } else if (type === 'bitchute') {
+                    const url = `https://www.bitchute.com/embed/${id}`;
+                    sections.push(
+                        <div className="videoWrapper" key={id}>
+                            <iframe
+                                src={url}
+                                width={w}
+                                height={h}
+                                frameBorder="0"
+                                webkitallowfullscreen="true"
+                                mozallowfullscreen="true"
+                                allowFullScreen
+                                title={`Bitchute video ${id}`}
+                            />
+                        </div>
+                    );
+                } else if (type === 'brightreon') {
+                    const url = `https://www.brighteon.com/embed/${id}`;
+                    sections.push(
+                        <div className="videoWrapper" key={id}>
+                            <iframe
+                                src={url}
+                                width={w}
+                                height={h}
+                                frameBorder="0"
+                                webkitallowfullscreen="true"
+                                mozallowfullscreen="true"
+                                allowFullScreen
+                                title={`Brightreon video ${id}`}
+                            />
+                        </div>
+                    );
+                } else if (type === 'youtube') {
                     sections.push(
                         <YoutubePreview
                             key={id}

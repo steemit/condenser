@@ -183,8 +183,11 @@ function iframe(state, child) {
     const url = child.getAttribute('src');
     if (url) {
         const { images, links } = state;
+        const bv = getBannedVideoId(url);
         const yt = youTubeId(url);
-        if (yt && images && links) {
+        if (bv && links) {
+            links.add(url);
+        } else if (yt && images && links) {
             links.add(yt.url);
             images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg');
         }
@@ -245,11 +248,19 @@ function linkifyNode(child, state) {
 
         const { mutate } = state;
         if (!child.data) return;
-        child = embedYouTubeNode(child, state.links, state.images);
+
+        child = embedBannedVideoNode(child, state.links, state.images);
+        child = embedBitchuteVideoNode(child, state.links, state.images);
+        child = embedBrightreonVideoNode(child, state.links, state.images);
+        child = embedLBRYVideoNode(child, state.links, state.images);
+        child = embedRumbleVideoNode(child, state.links, state.images);
+        child = embedTheDailyMotionNode(child, state.links, state.images);
+        child = embedUltimedia(child, state.links, state.images);
         child = embedVimeoNode(child, state.links, state.images);
         child = embedTwitchNode(child, state.links, state.images);
         child = embedDTubeNode(child, state.links, state.images);
         child = embedThreeSpeakNode(child, state.links, state.images);
+        child = embedYouTubeNode(child, state.links, state.images);
 
         const data = XMLSerializer.serializeToString(child);
         const content = linkify(
@@ -371,6 +382,78 @@ function youTubeId(data) {
 }
 
 /** @return {id, url} or <b>null</b> */
+function getBannedVideoId(data) {
+    if (!data) return null;
+
+    const m = data.match(linksRe.bannedVideo);
+    const url = m ? m[1] : null;
+    if (!url) return null;
+    const id = m[2];
+    if (!id) return null;
+
+    return {
+        id,
+        url,
+        startTime: 0,
+        thumbnail: null,
+    };
+}
+
+/** @return {id, url} or <b>null</b> */
+function getBitchuteVideoId(data) {
+    if (!data) return null;
+
+    const m = data.match(linksRe.bitchute);
+    const url = m ? m[1] : null;
+    if (!url) return null;
+    const id = m[2];
+    if (!id) return null;
+
+    return {
+        id,
+        url,
+        startTime: 0,
+        thumbnail: null,
+    };
+}
+
+/** @return {id, url} or <b>null</b> */
+function getBittubeVideoId(data) {
+    if (!data) return null;
+
+    const m = data.match(linksRe.bitchute);
+    const url = m ? m[1] : null;
+    if (!url) return null;
+    const id = m[2];
+    if (!id) return null;
+
+    return {
+        id,
+        url,
+        startTime: 0,
+        thumbnail: null,
+    };
+}
+
+/** @return {id, url} or <b>null</b> */
+function getBrightreonVideoId(data) {
+    if (!data) return null;
+
+    const m = data.match(linksRe.brightreon);
+    const url = m ? m[1] : null;
+    if (!url) return null;
+    const id = m[2];
+    if (!id) return null;
+
+    return {
+        id,
+        url,
+        startTime: 0,
+        thumbnail: null,
+    };
+}
+
+/** @return {id, url} or <b>null</b> */
 function getThreeSpeakId(data) {
     if (!data) return null;
 
@@ -386,6 +469,77 @@ function getThreeSpeakId(data) {
         url,
         thumbnail: `https://img.3speakcontent.online/${id}/post.png`,
     };
+}
+
+function embedBannedVideoNode(child, links, images) {
+    try {
+        // If child is not a string, we are processing plain text
+        // to replace a bare URL
+        let data = child.data;
+        const bannedVideoId = getBannedVideoId(data);
+        if (!bannedVideoId) return child;
+
+        child.data = data.replace(
+            bannedVideoId.url,
+            `~~~ embed:${bannedVideoId.id} bannedvideo ~~~`
+        );
+
+        if (links) links.add(bannedVideoId.url);
+    } catch (error) {
+        console.log(error);
+    }
+
+    return child;
+}
+
+function embedBitchuteVideoNode(child, links, images) {
+    try {
+        // If child is not a string, we are processing plain text
+        // to replace a bare URL
+        let data = child.data;
+        const matchResults = getBitchuteVideoId(data);
+        if (!matchResults) return child;
+
+        child.data = data.replace(
+            matchResults.url,
+            `~~~ embed:${matchResults.id} bitchute ~~~`
+        );
+
+        if (links) links.add(matchResults.url);
+    } catch (error) {
+        console.log(error);
+    }
+
+    return child;
+}
+
+function embedBrightreonVideoNode(child, links, images) {
+    try {
+        // If child is not a string, we are processing plain text
+        // to replace a bare URL
+        let data = child.data;
+        const matchData = getBrightreonVideoId(data);
+        if (!matchData) return child;
+
+        child.data = data.replace(
+            matchData.url,
+            `~~~ embed:${matchData.id} brightreon ~~~`
+        );
+
+        if (links) links.add(matchData.url);
+    } catch (error) {
+        console.log(error);
+    }
+
+    return child;
+}
+
+function embedLBRYVideoNode(child, links, images) {
+    return child;
+}
+
+function embedRumbleVideoNode(child, links, images) {
+    return child;
 }
 
 function embedThreeSpeakNode(child, links, images) {
@@ -419,6 +573,14 @@ function embedThreeSpeakNode(child, links, images) {
         console.log(error);
     }
 
+    return child;
+}
+
+function embedTheDailyMotionNode(child, links, images) {
+    return child;
+}
+
+function embedUltimedia(child, links, images) {
     return child;
 }
 

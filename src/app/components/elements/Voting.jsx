@@ -432,18 +432,30 @@ class Voting extends React.Component {
             // pending breakdown
             if (max_payout > 0) {
                 payoutItems.push({
-                    value: `${tt('voting_jsx.breakdown')}: ${fmt(
+                    value: `${tt(
+                        'voting_jsx.breakdown'
+                    )}: <br>&nbsp;&nbsp;&nbsp;&nbsp;${fmt(
                         pending_sbd,
                         DEBT_TOKEN_SHORT
                     )}, ${
                         sbd_print_rate != SBD_PRINT_RATE_MAX
-                            ? `${fmt(pending_steem, LIQUID_TOKEN_UPPERCASE)}, `
+                            ? `<br>&nbsp;&nbsp;&nbsp;&nbsp;${fmt(
+                                  pending_steem,
+                                  LIQUID_TOKEN_UPPERCASE
+                              )}, `
                             : ''
-                    }${fmt(pending_sp, INVEST_TOKEN_SHORT)}${
+                    }<br>&nbsp;&nbsp;&nbsp;&nbsp;${fmt(
+                        pending_sp,
+                        INVEST_TOKEN_SHORT
+                    )}${
                         vests_per_trx
-                            ? `, ${fmt(pending_trx, INVEST_TRON_SHORT)}`
+                            ? `, <br>&nbsp;&nbsp;&nbsp;&nbsp;${fmt(
+                                  pending_trx,
+                                  INVEST_TRON_SHORT
+                              )}`
                             : ''
                     }`,
+                    raw: true,
                 });
             }
 

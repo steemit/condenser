@@ -214,7 +214,7 @@ describe('Voting', () => {
             </Provider>
         );
         expect(JSON.stringify(component.toJSON())).toContain(
-            '0.00 SBD, 10.00 SP'
+            '0.00 SBD, <br>&nbsp;&nbsp;&nbsp;&nbsp;10.00 SP'
         );
     });
 
@@ -245,7 +245,7 @@ describe('Voting', () => {
             </Provider>
         );
         expect(JSON.stringify(component.toJSON())).toContain(
-            '5.00 SBD, 5.00 SP'
+            '5.00 SBD, <br>&nbsp;&nbsp;&nbsp;&nbsp;5.00 SP'
         );
     });
 
@@ -276,7 +276,7 @@ describe('Voting', () => {
             </Provider>
         );
         expect(JSON.stringify(component.toJSON())).toContain(
-            '2.50 SBD, 2.50 STEEM, 5.00 SP'
+            '2.50 SBD, <br>&nbsp;&nbsp;&nbsp;&nbsp;2.50 STEEM, <br>&nbsp;&nbsp;&nbsp;&nbsp;5.00 SP'
         );
     });
 
@@ -307,7 +307,7 @@ describe('Voting', () => {
             </Provider>
         );
         expect(JSON.stringify(component.toJSON())).toContain(
-            '2.50 SBD, 2.50 STEEM, 5.00 SP, 100.00 TRX'
+            '2.50 SBD, <br>&nbsp;&nbsp;&nbsp;&nbsp;2.50 STEEM, <br>&nbsp;&nbsp;&nbsp;&nbsp;5.00 SP, <br>&nbsp;&nbsp;&nbsp;&nbsp;100.00 TRX'
         );
     });
 });

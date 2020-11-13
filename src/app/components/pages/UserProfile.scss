@@ -1,6 +1,4 @@
 .UserProfile {
-    margin-top: -1.5rem;
-
     .articles {
       @include MQ(M) {
         margin: 0 auto;
@@ -96,7 +94,7 @@
         min-height: 155px;
     }
     h1 {
-        padding-top: 20px;
+        padding-top: 15px;
         font-weight: 600;
         font-size: 1.84524rem!important;
         @media screen and (max-width: 39.9375em) {

@@ -621,6 +621,7 @@
         "login_to_post": "Login to Post",
         "login_to_comment": "Login to Comment",
         "login_to_follow_users": "Login to Follow Users",
+        "login_to_reblog": "Login to Reblog",
         "posting": "Posting",
         "active_or_owner": "Active or Owner",
         "this_password_is_bound_to_your_account_owner_key":

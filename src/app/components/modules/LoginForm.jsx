@@ -203,7 +203,7 @@ class LoginForm extends Component {
             opType === 'custom_json' &&
             loginBroadcastOperation.getIn(['operation', 'id']) === 'follow'
         ) {
-            postType = tt('loginform_jsx.login_to_follow_users');
+            postType = tt('loginform_jsx.login_to_reblog');
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
             postType = loginBroadcastOperation.getIn(['operation', 'title'])
@@ -211,7 +211,7 @@ class LoginForm extends Component {
                 : tt('g.confirm_password');
         }
         const title = postType ? postType : tt('g.login');
-        const authType = /^vote|comment/.test(opType)
+        const authType = /^vote|comment|custom_json/.test(opType)
             ? tt('loginform_jsx.posting')
             : tt('loginform_jsx.active_or_owner');
         const submitLabel = showLoginWarning

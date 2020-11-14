@@ -509,6 +509,7 @@
         "login_to_post": "登录后发帖",
         "login_to_comment": "登录后评论",
         "login_to_follow_users": "登录后关注",
+        "login_to_reblog": "登录后转发",
         "posting": "发帖",
         "active_or_owner": "Active 或 Owner",
         "this_password_is_bound_to_your_account_owner_key":

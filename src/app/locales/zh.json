@@ -657,5 +657,8 @@
         "create_tron_success_content": "已经成功创建TRON账户。",
         "create_tron_success_content2": "若下载失败，",
         "create_tron_success_content3": "带有TRON账户公私钥的PDF。"
+    },
+    "tron_err_msg": {
+        "data_is_invalid": "数据异常.请确认你使用的私钥是正确的。"
     }
 }

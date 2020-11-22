@@ -856,5 +856,9 @@
         "create_tron_success_content2": "If the file wasn't downloaded, ",
         "create_tron_success_content3":
             " to download the PDF with your TRON public and private keys."
+    },
+    "tron_err_msg": {
+        "data_is_invalid":
+            "Data is invalid. Please check if you are using the correct private key."
     }
 }

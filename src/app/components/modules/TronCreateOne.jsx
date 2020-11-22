@@ -26,6 +26,7 @@ class TronCreateOne extends Component {
         };
         this.handleSubmit = e => {
             e.preventDefault();
+            this.props.setTronErrMsg(null);
             this.props.startLoading();
             this.props.updateTronAddr();
         };
@@ -36,12 +37,20 @@ class TronCreateOne extends Component {
             tronPrivateKey,
             showTronCreateSuccess,
             hideTronCreate,
+            tronErrMsg,
         } = nextProps;
         if (tronPrivateKey) {
             this.props.endLoading();
             showTronCreateSuccess();
             hideTronCreate();
         }
+        if (tronErrMsg) {
+            this.props.endLoading();
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.setTronErrMsg(null);
     }
 
     render() {
@@ -69,6 +78,16 @@ class TronCreateOne extends Component {
                             <LoadingIndicator type="circle" />
                         </span>
                     )}
+                    {this.props.tronErrMsg && (
+                        <span
+                            style={{
+                                display: 'block',
+                                color: 'red',
+                            }}
+                        >
+                            {this.props.tronErrMsg}
+                        </span>
+                    )}
                 </div>
             </div>
         );
@@ -83,10 +102,14 @@ export default connect(
             currentUser && currentUser.has('tron_private_key')
                 ? currentUser.get('tron_private_key')
                 : '';
+        const tronErrMsg = state.app.has('tronErrMsg')
+            ? state.app.get('tronErrMsg')
+            : null;
         return {
             ...ownProps,
             loading: state.app.get('modalLoading'),
             tronPrivateKey,
+            tronErrMsg,
         };
     },
     dispatch => ({
@@ -105,6 +128,9 @@ export default connect(
         },
         endLoading: () => {
             dispatch(appActions.modalLoadingEnd());
+        },
+        setTronErrMsg: msg => {
+            dispatch(appActions.setTronErrMsg(msg));
         },
     })
 )(TronCreateOne);

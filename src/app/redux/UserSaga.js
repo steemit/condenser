@@ -905,11 +905,9 @@ function* updateTronAddr() {
     if (privateKeyType === null) {
         console.log('there is no private key in browser cache.');
         yield put(
-            appActions.addNotification({
-                key: 'chpwd_' + Date.now(),
-                message: tt('loginform_jsx.login_to_create_tron_addr'),
-                dismissAfter: 3000,
-            })
+            appActions.setTronErrMsg(
+                tt('loginform_jsx.login_to_create_tron_addr')
+            )
         );
         return;
     }
@@ -922,11 +920,7 @@ function* updateTronAddr() {
         tronAccount.address.base58 === undefined
     ) {
         yield put(
-            appActions.addNotification({
-                key: 'chpwd_' + Date.now(),
-                message: tt('userwallet_jsx.create_trx_failed'),
-                dismissAfter: 3000,
-            })
+            appActions.setTronErrMsg(tt('userwallet_jsx.create_trx_failed'))
         );
         return;
     }
@@ -945,13 +939,7 @@ function* updateTronAddr() {
         private_keys.get(privateKeyType).toWif()
     );
     if (result.error !== undefined) {
-        yield put(
-            appActions.addNotification({
-                key: 'chpwd_' + Date.now(),
-                message: result.error,
-                dismissAfter: 3000,
-            })
-        );
+        yield put(appActions.setTronErrMsg(tt(`tron_err_msg.${result.error}`)));
         return;
     }
 

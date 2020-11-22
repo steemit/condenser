@@ -8,6 +8,7 @@ const FETCH_DATA_END = 'app/FETCH_DATA_END';
 const ADD_NOTIFICATION = 'app/ADD_NOTIFICATION';
 const REMOVE_NOTIFICATION = 'app/REMOVE_NOTIFICATION';
 const SET_FE_RENDERED = 'app/SET_FE_RENDERED';
+const SET_TRON_ERR_MSG = 'app/SET_TRON_ERR_MSG';
 export const SET_USER_PREFERENCES = 'app/SET_USER_PREFERENCES';
 export const TOGGLE_NIGHTMODE = 'app/TOGGLE_NIGHTMODE';
 export const TOGGLE_BLOGMODE = 'app/TOGGLE_BLOGMODE';
@@ -31,6 +32,7 @@ export const defaultState = Map({
     }),
     featureFlags: Map({}),
     modalLoading: false,
+    tronErrMsg: null,
 });
 
 export default function reducer(state = defaultState, action = {}) {
@@ -88,6 +90,8 @@ export default function reducer(state = defaultState, action = {}) {
             return state.set('modalLoading', false);
         case SET_FE_RENDERED:
             return state.set('frontend_has_rendered', true);
+        case SET_TRON_ERR_MSG:
+            return state.set('tronErrMsg', action.msg);
         default:
             return state;
     }
@@ -152,4 +156,9 @@ export const modalLoadingEnd = payload => ({
 export const setFeRendered = payload => ({
     type: SET_FE_RENDERED,
     payload,
+});
+
+export const setTronErrMsg = msg => ({
+    type: SET_TRON_ERR_MSG,
+    msg,
 });

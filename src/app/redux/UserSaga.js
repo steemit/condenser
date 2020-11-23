@@ -900,8 +900,10 @@ function* updateTronAddr() {
 
     // charge that which level private key we own.
     let privateKeyType = null;
-    if (private_keys.has('active_private')) privateKeyType = 'active_private';
-    if (private_keys.has('posting_private')) privateKeyType = 'posting_private';
+    if (private_keys && private_keys.has('active_private'))
+        privateKeyType = 'active_private';
+    if (private_keys && private_keys.has('posting_private'))
+        privateKeyType = 'posting_private';
     if (privateKeyType === null) {
         console.log('there is no private key in browser cache.');
         yield put(

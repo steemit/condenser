@@ -105,6 +105,11 @@ export default connect(
         const tronErrMsg = state.app.has('tronErrMsg')
             ? state.app.get('tronErrMsg')
             : null;
+        console.log(
+            'TEST has private_keys:',
+            currentUser,
+            currentUser && currentUser.has('private_keys')
+        );
         return {
             ...ownProps,
             loading: state.app.get('modalLoading'),

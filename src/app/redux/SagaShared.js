@@ -1,3 +1,6 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable import/first */
 import { fromJS } from 'immutable';
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import tt from 'counterpart';
@@ -32,7 +35,7 @@ export function* getAccount(username, force = false) {
     );
 
     // hive never serves `owner` prop (among others)
-    let isLite = !!account && !account.get('owner');
+    const isLite = !!account && !account.get('owner');
 
     if (!account || force || isLite) {
         console.log(
@@ -100,7 +103,7 @@ export function* getContent({ author, permlink, resolve, reject }) {
     while (!content) {
         console.log('getContent', author, permlink);
         content = yield call([api, api.getContentAsync], author, permlink);
-        if (content['author'] == '') {
+        if (content.author == '') {
             // retry if content not found. #1870
             content = null;
             yield call(wait, 3000);
@@ -109,7 +112,7 @@ export function* getContent({ author, permlink, resolve, reject }) {
 
     function dbg(content) {
         const cop = Object.assign({}, content);
-        delete cop['active_votes'];
+        delete cop.active_votes;
         return JSON.stringify(cop);
     }
 

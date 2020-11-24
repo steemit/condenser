@@ -920,7 +920,7 @@ function* updateTronAddr() {
         console.log('there is no private key in browser cache.');
         yield put(
             appActions.setTronErrMsg(
-                tt('loginform_jsx.login_to_create_tron_addr')
+                tt('loginform_jsx.there_is_no_private_key_in_browser_cache')
             )
         );
         return;

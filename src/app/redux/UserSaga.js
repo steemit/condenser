@@ -1,3 +1,4 @@
+/* eslint-disable generator-star-spacing */
 /* eslint-disable no-shadow */
 /* eslint-disable no-useless-return */
 /* eslint-disable space-before-function-paren */

@@ -412,6 +412,8 @@ function* usernamePasswordLogin2({
             yield put(
                 userActions.setUser({
                     username,
+                    private_keys, // TODO: this is a temp way
+                    login_owner_pubkey, // TODO: this is a temp way
                     effective_vests: effectiveVests(account),
                     tip_count: account.get('tip_count'),
                     tron_addr: account.get('tron_addr'),

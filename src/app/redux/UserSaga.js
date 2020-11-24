@@ -1,3 +1,13 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-useless-return */
+/* eslint-disable space-before-function-paren */
+/* eslint-disable no-undef */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-empty-pattern */
+/* eslint-disable require-yield */
+/* eslint-disable prefer-rest-params */
+/* eslint-disable no-else-return */
+/* eslint-disable no-mixed-operators */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-unreachable */
 import { fromJS, Set, List } from 'immutable';
@@ -416,8 +426,8 @@ function* usernamePasswordLogin2({
     try {
         // const challengeString = yield serverApiLoginChallenge()
         const offchainData = yield select(state => state.offchain);
-        let serverAccount = offchainData.get('account');
-        let challengeString = offchainData.get('login_challenge');
+        const serverAccount = offchainData.get('account');
+        const challengeString = offchainData.get('login_challenge');
         if (!serverAccount && challengeString) {
             console.log('No server account, but challenge string');
             const signatures = {};
@@ -437,7 +447,7 @@ function* usernamePasswordLogin2({
                     );
                 });
                 if (response.success) {
-                    signatures['posting'] = response.result;
+                    signatures.posting = response.result;
                 } else {
                     yield put(
                         userActions.loginError({ error: response.message })

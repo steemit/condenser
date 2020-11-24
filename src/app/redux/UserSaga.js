@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-unreachable */
 import { fromJS, Set, List } from 'immutable';
 import { call, put, select, fork, takeLatest } from 'redux-saga/effects';
 import { api, auth } from '@steemit/steem-js';
@@ -9,7 +11,6 @@ import { getAccount } from 'app/redux/SagaShared';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
-import { receiveFeatureFlags } from 'app/redux/AppReducer';
 import {
     hasCompatibleKeychain,
     isLoggedInWithKeychain,
@@ -31,6 +32,7 @@ import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
 import { createTronAccount } from 'app/utils/tronApi';
+
 const max_pop_window_count = 5;
 
 export const userWatches = [
@@ -569,7 +571,7 @@ function* getFeatureFlags(username, posting_private) {
                 posting_private
             );
         }
-        yield put(receiveFeatureFlags(flags));
+        yield put(appActions.receiveFeatureFlags(flags));
     } catch (error) {
         // Do nothing; feature flags are not ready yet. Or posting_private is not available.
     }

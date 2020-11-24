@@ -540,7 +540,8 @@
         "sign_transfer": "Sign to complete transfer",
         "use_keychain": "Use keychain extension",
         "not_a_steemit_user": "还不是Steemit用户？",
-        "free_register": "免费注册"
+        "free_register": "免费注册",
+        "there_is_no_private_key_in_browser_cache": "在浏览器缓存中没有找到私钥"
     },
     "chainvalidation_js": {
         "account_name_should": "帐户名称应该",

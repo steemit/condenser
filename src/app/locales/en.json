@@ -663,7 +663,9 @@
         "sign_transfer": "Sign to complete transfer",
         "use_keychain": "Use keychain extension",
         "not_a_steemit_user": "Not a Steemit User?",
-        "free_register": "Free to register"
+        "free_register": "Free to register",
+        "there_is_no_private_key_in_browser_cache":
+            "There is no private key in browser cache."
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",

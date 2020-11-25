@@ -35,10 +35,10 @@ export default function(tagName, trackingId) {
     // check if exist cookie
     if (activityTag === undefined) {
         const data = {};
-        data[tagName] = { isReg: 0 };
+        data[tagName] = { isVisit: 0, isReg: 0 };
         Cookies.set(cookieName, data, { expires: expiresTime, domain });
     } else if (Object.keys(activityTag).indexOf(tagName) === -1) {
-        activityTag[tagName] = { isReg: 0 };
+        activityTag[tagName] = { isVisit: 0, isReg: 0 };
         Cookies.set(cookieName, activityTag, { expires: expiresTime, domain });
     }
 

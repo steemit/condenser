@@ -1,3 +1,6 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-plusplus */
+/* eslint-disable arrow-parens */
 import { PARAM_VIEW_MODE, VIEW_MODE_WHISTLE } from '../../shared/constants';
 
 const urlChar = '[^\\s"<>\\]\\[\\(\\)]';
@@ -112,6 +115,15 @@ export const determineViewMode = search => {
         }
     }
     return '';
+};
+
+export const determineActivityTag = hash => {
+    const tagList = window.activityTag ? window.activityTag : [];
+    const originHash = hash.substr(1);
+    if (tagList.indexOf(originHash) !== -1) {
+        return originHash;
+    }
+    return false;
 };
 
 // Original regex

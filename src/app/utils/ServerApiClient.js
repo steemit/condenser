@@ -63,11 +63,11 @@ export function recordActivityTracker({ trackingId, activityTag, pathname }) {
         measurement: 'activity_tracker',
         tags: {
             activityTag,
+            appType: 'condenser',
         },
         fields: {
             views: 1,
             trackingId,
-            appType: 'condenser',
             pathname,
         },
     };

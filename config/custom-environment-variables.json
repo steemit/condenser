@@ -47,6 +47,7 @@
   "steem_market_token": "STEEM_MARKET_TOKEN",
   "cookie_consent_enabled": "SDC_ENABLE_COOKIE_CONSENT",
   "cookie_consent_api_key": "SDC_COOKIE_CONSENT_KEY",
-  "steem_elastic_search_endpoint": "STEEM_ELASTIC_SEARCH_ENDPOINT"
+  "steem_elastic_search_endpoint": "STEEM_ELASTIC_SEARCH_ENDPOINT",
+  "activity_tag": "ACTIVITY_TAG"
 
 }

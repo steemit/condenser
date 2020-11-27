@@ -80,6 +80,10 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 walletUrl: config.wallet_url,
                 steemMarket: ctx.steemMarketData,
                 trackingId: ctx.session.uid,
+                activityTag:
+                    config.activity_tag !== ''
+                        ? config.activity_tag.split(',')
+                        : [],
             },
         };
 

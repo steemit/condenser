@@ -62,6 +62,7 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }],
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": 0,
-    "import/extensions": 0
+    "import/extensions": 0,
+    "space-before-function-paren": 0
   }
 }

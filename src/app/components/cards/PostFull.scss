@@ -63,6 +63,11 @@
     margin-left: 12px;
     position: relative;
     top: -2px;
+    @media only screen and (max-width: 450px) {
+        .Author__container {
+            left: -62px;
+        }
+    }
   }
 }
 
@@ -106,6 +111,7 @@
 }
 
 .PostFull__body {
+  overflow: hidden;
   padding: 1rem 0 1rem 0;
   clear: left;
   a {

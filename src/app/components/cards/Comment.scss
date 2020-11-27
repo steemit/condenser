@@ -58,6 +58,7 @@
     }
   }
   .Comment__header {
+    overflow: hidden;
     .Voting {
       margin-left: 1rem;
       border-right: none;
@@ -69,12 +70,14 @@
     }
   }
   .Comment__body {
+    overflow: hidden;
     @include themify($themes) {
       padding: 0;
       border: none;
     }
   }
   .Comment__footer {
+    overflow: hidden;
     @include themify($themes) {
       padding: 0;
       border: none;

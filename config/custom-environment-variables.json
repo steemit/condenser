@@ -50,4 +50,5 @@
   "steem_elastic_search_endpoint": "STEEM_ELASTIC_SEARCH_ENDPOINT",
   "wallet_api_host":"WALLET_API_HOST",
   "tron_create_node": "TRON_CREATE_NODE"
+  "activity_tag": "ACTIVITY_TAG"
 }

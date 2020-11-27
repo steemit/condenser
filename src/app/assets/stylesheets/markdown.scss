@@ -98,10 +98,16 @@
   }
 
   img {
-    width: auto;
+    width: 100%;
     max-width: 100%;
     height: auto;
     max-height: none;
+  }
+
+  @media only screen and (min-width: 768px) {
+      img {
+          width: auto;
+      }
   }
 
   iframe {
@@ -154,12 +160,12 @@
   blockquote {
     @include themify($themes) {
       border-left: themed('borderDark');
-    }       
+    }
   }
   blockquote > p {
     @include themify($themes) {
       color: themed('textColorSecondary');
-    }    
+    }
   }
 }
 

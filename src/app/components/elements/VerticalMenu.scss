@@ -2,6 +2,8 @@
 
   width: 200px;
 
+  overflow: hidden;
+
   .Icon {
     padding-left: 0.1rem;
     margin-right: 14px;
@@ -10,8 +12,8 @@
 
   svg path, svg polygon {
     @include themify($themes) {
-        fill: themed('textColorSecondary');  
-    }      
+        fill: themed('textColorSecondary');
+    }
   }
 
   > li > a {
@@ -35,7 +37,11 @@
     padding-left: 16px;
     @include themify($themes) {
       border-bottom: themed('border');
-    }    
+    }
+  }
+
+  @media screen and (max-width: 450px) {
+    left: -58px;
   }
 }
 

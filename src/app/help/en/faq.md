@@ -13,14 +13,10 @@
 - <a href="#Where_do_the_tokens_come_from">Where do the tokens come from?</a>
 - <a href="#Where_does_the_value_come_from">Where does the value come from?</a>
 - <a href="#Why_are_people_getting_vastly_different_rewards">Why are people getting vastly different rewards?</a>
-- <a href="#Is_there_a_desktop_wallet_available_for_STEEM">Is there a desktop wallet available for STEEM?</a>
-- <a href="#What_are_Smart_Media_Tokens_SMTs">What are Smart Media Tokens (SMTs)?</a>
 
 ### <span id="Table_of_Contents_Accounts">Accounts</span>
 - <a href="#How_do_I_create_an_account">How do I create an account?</a>
 - <a href="#What_information_do_I_need_to_provide_in_order_to_create_an_account">What information do I need to provide in order to create an account?</a>
-- <a href="#How_long_does_the_account_approval_process_take">How long does the account approval process take?</a>
-- <a href="#Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</a>
 - <a href="#Why_do_I_need_to_provide_my_email_and_phone_number">Why do I need to provide my email and phone number?</a>
 - <a href="#Can_I_create_a_Steem_account_without_an_email_and_phone_number">Can I create a Steem account without an email and phone number?</a>
 - <a href="#It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</a>
@@ -41,7 +37,6 @@
 - <a href="#What_information_is_shown_in_my_wallet">What information is shown in my wallet?</a>
 - <a href="#How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings">How do I transfer my STEEM or Steem Dollars into savings?</a>
 - <a href="#How_do_I_send_money_to_another_user">How do I send money to another user?</a>
-- <a href="#Will_I_receive_notifications_when_there_is_activity_with_my_account">Will I receive notifications when there is activity with my account?</a>
 - <a href="#What_is_shown_in_my_profile">What is shown in my profile?</a>
 - <a href="#How_do_I_change_my_avatar_image_and_other_profile_information">How do I change my avatar image and other profile information?</a>
 - <a href="#What_is_the_recommend_size_for_the_cover_image">What is the recommend size for the cover image?</a>
@@ -125,8 +120,6 @@
 - <a href="#What_is_considered_spam_or_abuse">What is considered spam or abuse?</a>
 - <a href="#What_are_Steemit_s_policies_on_plagiarism">What are Steemit’s policies on plagiarism?</a>
 - <a href="#Is_it_okay_to_use_random_pictures_from_the_internet">Is it okay to use random pictures from the internet?</a>
-- <a href="#What_is_Steemcleaners">What is Steemcleaners?</a>
-- <a href="#What_is__cheetah">What is @cheetah?</a>
 - <a href="#Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Where do I report a post or comment that contains plagiarism, spam, or abuse?</a>
 
 ### <span id="Table_of_Contents_Reputation">Reputation</span>
@@ -153,9 +146,7 @@
 - <a href="#Can_I_mine_STEEM">Can I mine STEEM?</a>
 
 ### <span id="Table_of_Contents_Steemit__Inc">Steemit, Inc.</span>
-- <a href="#Who_is_the_CEO_of_Steemit">Who is the CEO of Steemit?</a>
 - <a href="#Can_I_invest_in_Steemit">Can I invest in Steemit?</a>
-- <a href="#What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</a>
 - <a href="#Am_I_allowed_to_use_the_Steem_and_Steemit_logos">Am I allowed to use the Steem and Steemit logos?</a>
 - <a href="#Can_I_purchase_official_Steemit_merchandise">Can I purchase official Steemit merchandise?</a>
 - <a href="#Did_Steemit__pre_mine__tokens">Did Steemit "pre-mine" tokens?</a>
@@ -261,22 +252,6 @@ Most of the authors that you see earning high rewards are users that have spent 
 It is best to have realistic expectations, without focusing on rewards when you are first starting out. Work on building a following, making connections, and developing a good reputation. Consistency will pay off in the long run.
 
 <a href="#Table_of_Contents_General">^</a>
-## <span id="Is_there_a_desktop_wallet_available_for_STEEM">Is there a desktop wallet available for STEEM?</span>
-
-Yes. There is a third party wallet called [Vessel](https://github.com/aaroncox/vessel/), developed by one of the Steem witnesses @jesta. The latest release can be downloaded [here](https://github.com/aaroncox/vessel/releases).
-
-<a href="#Table_of_Contents_General">^</a>
-## <span id="What_are_Smart_Media_Tokens_SMTs">What are Smart Media Tokens (SMTs)?</span>
-
-A Smart Media Token (SMT) is a native digital asset on the Steem blockchain that can be quickly launched by anyone to help monetize online content and create incentives to encourage desired user behavior.
-
-They're like Ethereum's ERC-20 tokens, but with certain built-in ‘Proof-of-Brain’ properties and a token distribution reward system designed specifically for digital content businesses.
-
-SMTs are planned to be launched in 2020!
-
-More information can be found on the SMTs website: [smt.steem.io](https://smt.steem.io/).
-
-<a href="#Table_of_Contents_General">^</a>
 # Accounts
 
 ## <span id="How_do_I_create_an_account">How do I create an account?</span>
@@ -291,16 +266,6 @@ After you receive notification that your account is approved, click on the link 
 ## <span id="What_information_do_I_need_to_provide_in_order_to_create_an_account">What information do I need to provide in order to create an account?</span>
 
 You will need to provide your email address and phone number.
-
-<a href="#Table_of_Contents_Accounts">^</a>
-## <span id="How_long_does_the_account_approval_process_take">How long does the account approval process take?</span>
-
-Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or two to review.
-If your account has not been approved after more than two weeks, you can ask for help: contact@steemit.com
-<a href="#Table_of_Contents_Accounts">^</a>
-## <span id="Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</span>
-
-There is currently no way to speed up the account approval process. If you are unable to wait, there are third-party websites listed below that allow you to bypass the approval process and pay to open an account.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Why_do_I_need_to_provide_my_email_and_phone_number">Why do I need to provide my email and phone number?</span>
@@ -429,16 +394,11 @@ Your savings balance is STEEM and SBD tokens that are subject to 3 day withdraw 
 - You will be prompted for your password. You will need to enter your master password or active key.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
-## <span id="Will_I_receive_notifications_when_there_is_activity_with_my_account">Will I receive notifications when there is activity with my account?</span>
-
-Notifications are currently not supported, but they are a feature we are planning to add.
-
-<a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_is_shown_in_my_profile">What is shown in my profile?</span>
 
 At the top of your profile is your display name and reputation score. Below your display name is the number of followers you have, the number of posts and comments you have written, and the number of people you are following. It also shows the month and year when your account was created.
 
-You have the option to change your avatar and display name on the [steemitwallet.com](https://steemitwallet.com) Settings page. There, you can set additional information such as "about" information, your location, and add a link to a website of your choosing. You also have the option to set a cover image for your profile.
+You have the option to change your display name on the [steemit.com](https://steemit.com) Settings page. There, you can set additional information such as "about" information, your location, and add a link to a website of your choosing. You also have the option to set a cover image for your profile.
 
 You can view your own profile by clicking on the link to your Blog in your account menu.
 
@@ -982,22 +942,6 @@ Here is a post from @mindover that has links to many websites that have images y
 https://steemit.com/steem-help/@mindover/don-t-plagiarize-images-here-are-13-free-and-legal-ways-to-find-high-quality-photos-you-can-use-on-steemit
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
-## <span id="What_is_Steemcleaners">What is Steemcleaners?</span>
-
-Steemcleaners are a group of Steemians concerned with plagiarism, copy/paste, spam, scams and other forms of abuse on Steemit.
-https://steemit.com/steemcleaners/@steemcleaners/announcing-steemcleaners-the-steemit-abuse-fighting-team
-
-<a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
-## <span id="What_is__cheetah">What is @cheetah?</span>
-
-@cheetah is a bot developed by @anyx that scours Steemit for copy/pasted content. Cheetah will not downvote copied content, but it alerts other users to look into it further.
-
-Abusive accounts (serial plagiarists or identity thieves, for example) will go on Cheetah’s blacklist. These users will get downvoted by @cheetah accounts when they post.
-
-More information on the @cheetah bot can be found in this post:
-https://steemit.com/steemit/@cheetah/faq-about-cheetah
-
-<a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 ## <span id="Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Where do I report a post or comment that contains plagiarism, spam, or abuse?</span>
 
 feel free to shot us a email : contact@steemit.com
@@ -1134,23 +1078,11 @@ No. Proof of work mining has been removed from Steem.
 <a href="#Table_of_Contents_Blockchain">^</a>
 # Steemit, Inc.
 
-## <span id="Who_is_the_CEO_of_Steemit">Who is the CEO of Steemit?</span>
-
-Ned Scott, @ned
-https://www.linkedin.com/in/nedscott
-
-<a href="#Table_of_Contents_Steemit__Inc">^</a>
 ## <span id="Can_I_invest_in_Steemit">Can I invest in Steemit?</span>
 
 Steemit, Inc. is a privately held company and is not available for public investment.
 
 Though not considered an investment, you can purchase STEEM tokens which can go up or down in value. You can power up these tokens into Steem Power, which grants more influence in the Steem platform.
-
-<a href="#Table_of_Contents_Steemit__Inc">^</a>
-## <span id="What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</span>
-
-You can view the latest Roadmap here:
-https://steemitwallet.com/about.html
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 ## <span id="Am_I_allowed_to_use_the_Steem_and_Steemit_logos">Am I allowed to use the Steem and Steemit logos?</span>
@@ -1303,7 +1235,7 @@ Each account can vote for up to 30 witnesses.
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 ## <span id="Is_there_an_official_Steemit_Facebook_page">Is there an official Steemit Facebook page?</span>
 
-https://www.facebook.com/steemit/
+https://www.facebook.com/steemnetwork
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 ## <span id="Is_there_an_official_Steemit_Twitter_account">Is there an official Steemit Twitter account?</span>

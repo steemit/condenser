@@ -85,6 +85,10 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 vests_per_trx: null,
                 unbind_tip_limit: 5,
                 frontend_has_rendered: false,
+                activityTag:
+                    config.activity_tag !== ''
+                        ? config.activity_tag.split(',')
+                        : [],
             },
         };
 

@@ -21,7 +21,7 @@
 
     @include themify($themes) {
       background-color: themed('backgroundColor');
-      border: themed('borderDark');    
+      border: themed('borderDark');
     }
     transform: translateY(10%);
     transition: all 0.3s ease 0s, visibility 0s linear 0.3s;
@@ -38,12 +38,12 @@
     a {
       transition: 0.2s all ease-in-out;
       @include themify($themes) {
-        color: themed('textColorPrimary');  
-      }       
+        color: themed('textColorPrimary');
+      }
       &:hover {
         @include themify($themes) {
-          color: themed('textColorAccent');  
-        } 
+          color: themed('textColorAccent');
+        }
       }
     }
   }
@@ -51,6 +51,9 @@
   &.left > .VerticalMenu {
     position: absolute;
     right: 0%;
+    @media only screen and (max-width: 450px) {
+        left: -85px;
+    }
   }
   &.right > .VerticalMenu {
     position: absolute;

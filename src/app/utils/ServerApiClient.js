@@ -1,3 +1,8 @@
+/* eslint-disable no-undef */
+/* eslint-disable consistent-return */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-unreachable */
+/* eslint-disable arrow-parens */
 import { api } from '@steemit/steem-js';
 
 const request_base = {
@@ -50,6 +55,24 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
 export function recordAdsView({ trackingId, adTag }) {
     api.call('overseer.collect', ['ad', { trackingId, adTag }], error => {
         if (error) console.warn('overseer error', error);
+    });
+}
+
+export function recordActivityTracker({ trackingId, activityTag, pathname }) {
+    const data = {
+        measurement: 'activity_tracker',
+        tags: {
+            activityTag,
+            appType: 'condenser',
+        },
+        fields: {
+            views: 1,
+            trackingId,
+            pathname,
+        },
+    };
+    api.call('overseer.collect', ['custom', data], error => {
+        if (error) console.warn('overseer error:', data, error);
     });
 }
 

@@ -588,7 +588,7 @@
         "accountnames_feed": "%(account_name)s's Feed"
     },
     "explorepost_jsx": {
-        "copied": "Copied!",
+        "copied": "Copied Successfully",
         "copy": "COPY",
         "alternative_sources": "Alternative Sources"
     },
@@ -620,6 +620,8 @@
         "login_to_vote": "Login to Vote",
         "login_to_post": "Login to Post",
         "login_to_comment": "Login to Comment",
+        "login_to_follow_users": "Login to Follow Users",
+        "login_to_reblog": "Login to Reblog",
         "posting": "Posting",
         "active_or_owner": "Active or Owner",
         "this_password_is_bound_to_your_account_owner_key":
@@ -659,7 +661,11 @@
             "Open my Steemit Wallet to access and view my posting key",
         "join_our": "Join our",
         "sign_transfer": "Sign to complete transfer",
-        "use_keychain": "Use keychain extension"
+        "use_keychain": "Use keychain extension",
+        "not_a_steemit_user": "Not a Steemit User?",
+        "free_register": "Free to register",
+        "there_is_no_private_key_in_browser_cache":
+            "There is no private key in browser cache."
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",
@@ -813,5 +819,48 @@
         "resteems": "Resteems",
         "upvotes": "Upvotes",
         "mentions": "Mentions"
+    },
+    "tron_jsx": {
+        "content0":
+            "Using TRx vote for tron node and joining in construction of TRON ECOSYSTEM, where you can receive at most eight percentage benefit rate",
+        "content1": "Freeze TRX before voting in order to gain right to vote.",
+        "content2": "Do Following:",
+        "step1":
+            "Step1: click \"Vote\" button , which redirect to Tron scan vote page",
+        "step2": "Step2: click \"link wallet\",chose \"import\"",
+        "step3":
+            "Step3: Click \"Sign in\" button once finish input TRON private key ",
+        "step4": "Step4: click \"Vote\" button and follow the instruction",
+        "vote_button": "go vote",
+        "step": "step",
+        "tron_tx_history": "TRON transaction history >",
+        "update_tron_account": "UPDATE TRON ACCOUNT",
+        "update_tron_content":
+            "To update TRON account, please confirm following information so as to avoid potential risk. \n Save TRON private key locally or import this TRON account into other wallet supporting TRON. or transfer tron asset into other tron account. ",
+        "update_button": "UPDATE AND DOWNLOAD",
+        "update_success": "UPDATE SUCCESS",
+        "update_success_content":
+            " You successfully update your TRON account. If fail to download, please",
+        "update_success_click": "click download",
+        "update_success_content2":
+            "Please keep it safe, otherwise we cannot recover it for you.Please do not share the file with anyone else.",
+        "safe_save_button": "PDF securely saved",
+        "create_tron_account": "Create a TRON account and claim rewards",
+        "create_tron_account_content":
+            "Steemit will distribute extra TRX to you as rewards. This account is for receiving such rewards.",
+        "create_tron_account_content1":
+            "The system will automatically create a TRON account for you for free.",
+        "create_tron_account_content2":
+            "Do you agree to create a TRON account and download the PDF with your TRON public and private keys?",
+        "create_tron_agree": "Agree",
+        "create_tron_success": "Your account has been created",
+        "create_tron_success_content": "You have created a TRON account.",
+        "create_tron_success_content2": "If the file wasn't downloaded, ",
+        "create_tron_success_content3":
+            " to download the PDF with your TRON public and private keys."
+    },
+    "tron_err_msg": {
+        "data_is_invalid":
+            "Data is invalid. Please check if you are using the correct private key."
     }
 }

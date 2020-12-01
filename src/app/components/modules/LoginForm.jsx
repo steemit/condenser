@@ -1,3 +1,11 @@
+/* eslint-disable import/newline-after-import */
+/* eslint-disable import/first */
+/* eslint-disable no-useless-escape */
+/* eslint-disable react/jsx-boolean-value */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable react/no-string-refs */
+/* eslint-disable arrow-parens */
+/* eslint-disable no-undef */
 /* eslint react/prop-types: 0 */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -195,7 +203,7 @@ class LoginForm extends Component {
             opType === 'custom_json' &&
             loginBroadcastOperation.getIn(['operation', 'id']) === 'follow'
         ) {
-            postType = 'Login to Follow Users';
+            postType = tt('loginform_jsx.login_to_reblog');
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
             postType = loginBroadcastOperation.getIn(['operation', 'title'])
@@ -203,7 +211,7 @@ class LoginForm extends Component {
                 : tt('g.confirm_password');
         }
         const title = postType ? postType : tt('g.login');
-        const authType = /^vote|comment/.test(opType)
+        const authType = /^vote|comment|custom_json/.test(opType)
             ? tt('loginform_jsx.posting')
             : tt('loginform_jsx.active_or_owner');
         const submitLabel = showLoginWarning
@@ -264,7 +272,6 @@ class LoginForm extends Component {
                 : null;
         const titleText = (
             <h3>
-                {tt('loginform_jsx.returning_users')}
                 <span className="OpAction">{title}</span>
             </h3>
         );
@@ -387,7 +394,6 @@ class LoginForm extends Component {
                     </label>
                 </div>
                 <div className="login-modal-buttons">
-                    <br />
                     <button
                         type="submit"
                         disabled={submitting || disabled}
@@ -395,16 +401,16 @@ class LoginForm extends Component {
                     >
                         {submitLabel}
                     </button>
-                    {this.props.onCancel && (
-                        <button
-                            type="button float-right"
-                            disabled={submitting}
-                            className="button hollow"
-                            onClick={onCancel}
-                        >
-                            {tt('g.cancel')}
-                        </button>
-                    )}
+                    <div className="register">
+                        <div className="register-title">
+                            {tt('loginform_jsx.not_a_steemit_user')}
+                        </div>
+                        <div className="register-link">
+                            <a href={SIGNUP_URL}>
+                                {tt('loginform_jsx.free_register')}
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 {/*signupLink*/}
             </form>
@@ -422,7 +428,7 @@ class LoginForm extends Component {
                         username: username.value,
                         password: password.value,
                         saveLogin: saveLogin.value,
-                        loginBroadcastOperation: loginBroadcastOperation,
+                        loginBroadcastOperation,
                     };
                     reallySubmit(data, afterLoginRedirectToWelcome);
                 })}
@@ -431,8 +437,10 @@ class LoginForm extends Component {
                 <p>{tt('loginform_jsx.login_warning_body')}</p>
                 <div>
                     <PdfDownload
+                        filename={`Steem keys for @${username.value}`}
                         name={username.value}
                         password={password.value}
+                        newUser={true}
                         widthInches={8.5}
                         heightInches={11.0}
                         label="Download a PDF with keys and instructions"
@@ -445,7 +453,6 @@ class LoginForm extends Component {
                     </a>
                 </div>
                 <div className="login-modal-buttons">
-                    <br />
                     <button
                         type="submit"
                         disabled={submitting}

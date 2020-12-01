@@ -10,10 +10,13 @@ import { api } from '@steemit/steem-js';
 import { loadFollows } from 'app/redux/FollowSaga';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
+import * as userActions from 'app/redux/UserReducer';
 import * as transactionActions from './TransactionReducer';
 import constants from './constants';
 import { fromJS, Map, Set } from 'immutable';
 import { getStateAsync, callBridge } from 'app/utils/steemApi';
+// import { checkTronUser } from 'app/utils/ServerApiClient';
+// import { getTronAccount } from 'app/utils/tronApi';
 
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
@@ -93,6 +96,12 @@ export function* fetchState(location_change_action) {
         }
         const state = yield call(getStateAsync, url, username, false);
         yield put(globalActions.receiveState(state));
+        // unlock tron account create tip
+        yield put(
+            userActions.setUser({
+                tip_count_lock: false,
+            })
+        );
         yield call(syncSpecialPosts);
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);

@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { Map, OrderedMap } from 'immutable';
 import tt from 'counterpart';
 
@@ -6,10 +7,14 @@ const FETCH_DATA_BEGIN = 'app/FETCH_DATA_BEGIN';
 const FETCH_DATA_END = 'app/FETCH_DATA_END';
 const ADD_NOTIFICATION = 'app/ADD_NOTIFICATION';
 const REMOVE_NOTIFICATION = 'app/REMOVE_NOTIFICATION';
+const SET_FE_RENDERED = 'app/SET_FE_RENDERED';
+const SET_TRON_ERR_MSG = 'app/SET_TRON_ERR_MSG';
 export const SET_USER_PREFERENCES = 'app/SET_USER_PREFERENCES';
 export const TOGGLE_NIGHTMODE = 'app/TOGGLE_NIGHTMODE';
 export const TOGGLE_BLOGMODE = 'app/TOGGLE_BLOGMODE';
 export const RECEIVE_FEATURE_FLAGS = 'app/RECEIVE_FEATURE_FLAGS';
+export const MODAL_LOADING_BEGIN = 'app/MODAL_LOADING_BEGIN';
+export const MODAL_LOADING_END = 'app/MODAL_LOADING_END';
 
 export const defaultState = Map({
     loading: false,
@@ -26,6 +31,8 @@ export const defaultState = Map({
         defaultCommentPayout: '50%',
     }),
     featureFlags: Map({}),
+    modalLoading: false,
+    tronErrMsg: null,
 });
 
 export default function reducer(state = defaultState, action = {}) {
@@ -77,6 +84,14 @@ export default function reducer(state = defaultState, action = {}) {
                 ? state.get('featureFlags').merge(action.flags)
                 : Map(action.flags);
             return state.set('featureFlags', newFlags);
+        case MODAL_LOADING_BEGIN:
+            return state.set('modalLoading', true);
+        case MODAL_LOADING_END:
+            return state.set('modalLoading', false);
+        case SET_FE_RENDERED:
+            return state.set('frontend_has_rendered', true);
+        case SET_TRON_ERR_MSG:
+            return state.set('tronErrMsg', action.msg);
         default:
             return state;
     }
@@ -127,3 +142,23 @@ export const selectors = {
     getFeatureFlag: (state, flagName) =>
         state.getIn(['featureFlags', flagName], false),
 };
+
+export const modalLoadingBegin = payload => ({
+    type: MODAL_LOADING_BEGIN,
+    payload,
+});
+
+export const modalLoadingEnd = payload => ({
+    type: MODAL_LOADING_END,
+    payload,
+});
+
+export const setFeRendered = payload => ({
+    type: SET_FE_RENDERED,
+    payload,
+});
+
+export const setTronErrMsg = msg => ({
+    type: SET_TRON_ERR_MSG,
+    msg,
+});

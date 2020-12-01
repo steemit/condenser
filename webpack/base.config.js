@@ -82,7 +82,11 @@ module.exports = {
             {
                 test: /\.md/,
                 use: 'raw-loader'
-            }
+            },
+            {
+                loader: 'file-loader?name=[name].[hash].[ext]&limit=1',
+                test: /\.(eot|ttf|woff|woff2)(\?.+)?$/,
+            },
         ]
     },
     plugins: [

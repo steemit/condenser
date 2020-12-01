@@ -1,3 +1,15 @@
+/* eslint-disable space-before-function-paren */
+/* eslint-disable no-continue */
+/* eslint-disable no-plusplus */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-constant-condition */
+/* eslint-disable no-mixed-operators */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-undef */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,6 +22,7 @@ import {
     DEBT_TOKEN_SHORT,
     LIQUID_TOKEN_UPPERCASE,
     INVEST_TOKEN_SHORT,
+    INVEST_TRON_SHORT,
 } from 'app/client_config';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import { pricePerSteem } from 'app/utils/StateFunctions';
@@ -226,7 +239,16 @@ class Voting extends React.Component {
             price_per_steem,
             sbd_print_rate,
             username,
+            vests_per_steem,
+            vests_per_trx,
+            tron_market_price,
         } = this.props;
+
+        const trx_price =
+            tron_market_price.get(0) &&
+            tron_market_price.get(0).has('price_usd')
+                ? parseFloat(tron_market_price.get(0).get('price_usd'))
+                : 0.0;
 
         // `lite` Voting component: e.g. search results
         if (!post.get('pending_payout_value')) {
@@ -376,6 +398,12 @@ class Voting extends React.Component {
         const pending_sbd = _sbd * (sbd_print_rate / SBD_PRINT_RATE_MAX);
         const pending_steem = (_sbd - pending_sbd) / price_per_steem;
 
+        let pending_trx = 0.0;
+        if (vests_per_trx) {
+            pending_trx = parseFloat(
+                pending_sp * vests_per_steem / vests_per_trx
+            );
+        }
         const payout_limit_hit = total_payout >= max_payout;
         const shown_payout =
             payout_limit_hit && max_payout > 0 ? max_payout : total_payout;
@@ -397,21 +425,37 @@ class Voting extends React.Component {
         if (!post.get('is_paidout') && pending_payout > 0) {
             payoutItems.push({
                 value: tt('voting_jsx.pending_payout', {
-                    value: fmt(pending_payout),
+                    value: fmt(pending_payout + pending_trx * trx_price),
                 }),
             });
 
             // pending breakdown
             if (max_payout > 0) {
                 payoutItems.push({
-                    value:
-                        tt('voting_jsx.breakdown') +
-                        ': ' +
-                        (fmt(pending_sbd, DEBT_TOKEN_SHORT) + ', ') +
-                        (sbd_print_rate != SBD_PRINT_RATE_MAX
-                            ? fmt(pending_steem, LIQUID_TOKEN_UPPERCASE) + ', '
-                            : '') +
-                        fmt(pending_sp, INVEST_TOKEN_SHORT),
+                    value: `${tt(
+                        'voting_jsx.breakdown'
+                    )}: <br>&nbsp;&nbsp;&nbsp;&nbsp;${fmt(
+                        pending_sbd,
+                        DEBT_TOKEN_SHORT
+                    )}, ${
+                        sbd_print_rate != SBD_PRINT_RATE_MAX
+                            ? `<br>&nbsp;&nbsp;&nbsp;&nbsp;${fmt(
+                                  pending_steem,
+                                  LIQUID_TOKEN_UPPERCASE
+                              )}, `
+                            : ''
+                    }<br>&nbsp;&nbsp;&nbsp;&nbsp;${fmt(
+                        pending_sp,
+                        INVEST_TOKEN_SHORT
+                    )}${
+                        vests_per_trx
+                            ? `, <br>&nbsp;&nbsp;&nbsp;&nbsp;${fmt(
+                                  pending_trx,
+                                  INVEST_TRON_SHORT
+                              )}`
+                            : ''
+                    }`,
+                    raw: true,
                 });
             }
 
@@ -465,19 +509,48 @@ class Voting extends React.Component {
 
         // past payout stats
         if (post.get('is_paidout') && total_payout > 0) {
+            // estimated author has been payout breakdowns
+            const _author_sbd_temp = author_payout * percent_sbd;
+            const _author_payout_sp =
+                (author_payout - _author_sbd_temp) / price_per_steem;
+            const _curator_sbd_temp = curator_payout * percent_sbd;
+            const _curator_payout_sp =
+                (curator_payout - _curator_sbd_temp) / price_per_steem;
+
+            let author_payout_trx = 0;
+            let curator_payout_trx = 0;
+            if (vests_per_trx) {
+                author_payout_trx = parseFloat(
+                    _author_payout_sp * vests_per_steem / vests_per_trx
+                );
+                curator_payout_trx = parseFloat(
+                    _curator_payout_sp * vests_per_steem / vests_per_trx
+                );
+            }
+            const total_payout_trx = author_payout_trx + curator_payout_trx;
+
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts', {
-                    value: fmt(total_payout),
+                    value:
+                        fmt(total_payout) +
+                        ', ' +
+                        fmt(total_payout_trx, INVEST_TRON_SHORT),
                 }),
             });
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts_author', {
-                    value: fmt(author_payout),
+                    value:
+                        fmt(author_payout) +
+                        ', ' +
+                        fmt(author_payout_trx, INVEST_TRON_SHORT),
                 }),
             });
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts_curators', {
-                    value: fmt(curator_payout),
+                    value:
+                        fmt(curator_payout) +
+                        ', ' +
+                        fmt(curator_payout_trx, INVEST_TRON_SHORT),
                 }),
             });
         }
@@ -497,7 +570,7 @@ class Voting extends React.Component {
 
         let voters_list = null;
         if (showList && total_votes > 0 && active_votes) {
-            let voters = [];
+            const voters = [];
 
             // add top votes
             const avotes = active_votes.toJS();
@@ -657,6 +730,16 @@ export default connect(
             voting,
             price_per_steem,
             sbd_print_rate,
+            vests_per_steem:
+                ownProps.vests_per_steem ||
+                (state.global.has('vests_per_steem')
+                    ? state.global.get('vests_per_steem')
+                    : 0),
+            vests_per_trx:
+                ownProps.vests_per_trx || state.app.get('vests_per_trx'),
+            tron_market_price:
+                ownProps.tron_market_price ||
+                state.app.getIn(['steemMarket', 'tron', 'timepoints']),
         };
     },
 

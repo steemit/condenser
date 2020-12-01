@@ -4,6 +4,7 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable arrow-parens */
 import { api } from '@steemit/steem-js';
+import { signData } from '@steemfans/auth-data';
 
 const request_base = {
     method: 'post',
@@ -137,4 +138,40 @@ export function conductSearch(req) {
         body: JSON.stringify(bodyWithCSRF),
     });
     return fetch('/api/v1/search', request);
+}
+
+export function checkTronUser(data, type = 'steem') {
+    let queryString = '';
+    if (type === 'steem') {
+        queryString = `/api/v1/tron_user?username=${data}`;
+    } else {
+        queryString = `/api/v1/tron_user?tron_addr=${data}`;
+    }
+    return fetch(queryString)
+        .then(res => {
+            return res.json();
+        })
+        .then(res => {
+            if (res.error) throw new Error(res.error);
+            return res.result;
+        });
+}
+
+export function createTronAccount() {
+    const queryString = '/api/v1/create_account';
+    return fetch(queryString);
+}
+export function getTronAccount(tron_address) {
+    const queryString = '/api/v1/get_account?tron_address=' + tron_address;
+    return fetch(queryString);
+}
+
+export function updateTronUser(data, privKey) {
+    const r = signData(data, privKey);
+    const request = Object.assign({}, request_base, {
+        body: JSON.stringify(r),
+    });
+    return fetch('/api/v1/tron_user', request).then(res => {
+        return res.json();
+    });
 }

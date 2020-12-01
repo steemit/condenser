@@ -32,6 +32,9 @@ const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT';
 const SHOW_DIALOG = 'global/SHOW_DIALOG';
 const HIDE_DIALOG = 'global/HIDE_DIALOG';
 const RECEIVE_REWARDS = 'global/RECEIVE_REWARDS';
+export const GET_DGP = 'global/GET_DGP';
+export const SET_DGP = 'global/SET_DGP';
+const SET_VESTS_PER_STEEM = 'global/SET_VESTS_PER_STEEM';
 
 const postKey = (author, permlink) => {
     if ((author || '') === '' || (permlink || '') === '') return null;
@@ -340,6 +343,15 @@ export default function reducer(state = defaultState, action = {}) {
             return state.update('active_dialogs', d => d.delete(payload.name));
         }
 
+        case GET_DGP:
+            return state;
+
+        case SET_DGP:
+            return state.set('dgp', fromJS(payload));
+
+        case SET_VESTS_PER_STEEM:
+            return state.set('vests_per_steem', payload);
+
         default:
             return state;
     }
@@ -479,5 +491,20 @@ export const showDialog = payload => ({
 
 export const hideDialog = payload => ({
     type: HIDE_DIALOG,
+    payload,
+});
+
+export const getDGP = payload => ({
+    type: GET_DGP,
+    payload,
+});
+
+export const setDGP = payload => ({
+    type: SET_DGP,
+    payload,
+});
+
+export const setVestsPerSteem = payload => ({
+    type: SET_VESTS_PER_STEEM,
     payload,
 });

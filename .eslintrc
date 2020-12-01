@@ -63,6 +63,9 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": 0,
     "import/extensions": 0,
+    "no-unused-vars": 0,
+    "react/require-default-props": 0,
+    "arrow-parens": 0
     "space-before-function-paren": 0
   }
 }

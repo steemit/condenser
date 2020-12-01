@@ -1,5 +1,9 @@
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-undef */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
@@ -8,6 +12,7 @@ import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
 import Icon from 'app/components/elements/Icon';
 import * as globalActions from 'app/redux/GlobalReducer';
+import * as userActions from 'app/redux/UserReducer';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 
 const nl2br = text =>
@@ -32,6 +37,8 @@ class CommunityPane extends Component {
             community,
             showRecentSubscribers,
             showModerationLog,
+            loggedIn,
+            showLogin,
         } = this.props;
         const handleSubscriberClick = () => {
             showRecentSubscribers(community);
@@ -66,6 +73,13 @@ class CommunityPane extends Component {
         const category = community.get('name');
         const viewer_role = community.getIn(['context', 'role'], 'guest');
         const canPost = Role.canPost(category, viewer_role);
+
+        const checkIfLogin = () => {
+            if (!loggedIn) {
+                return showLogin();
+            }
+            return browserHistory.replace(`/submit.html?category=${category}`);
+        };
 
         return (
             <div>
@@ -138,7 +152,7 @@ class CommunityPane extends Component {
                                     display: 'block',
                                     margin: '-6px 0 8px',
                                 }}
-                                to={`/submit.html?category=${category}`}
+                                onClick={checkIfLogin}
                             >
                                 New Post
                             </Link>
@@ -204,10 +218,15 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => ({
         community: ownProps.community,
+        loggedIn: !!state.user.getIn(['current', 'username']),
     }),
     // mapDispatchToProps
     dispatch => {
         return {
+            showLogin: e => {
+                if (e) e.preventDefault();
+                dispatch(userActions.showLogin({ type: 'basic' }));
+            },
             showRecentSubscribers: community => {
                 dispatch(
                     globalActions.showDialog({

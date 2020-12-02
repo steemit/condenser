@@ -245,6 +245,7 @@ class Voting extends React.Component {
         } = this.props;
 
         const trx_price =
+            tron_market_price &&
             tron_market_price.get(0) &&
             tron_market_price.get(0).has('price_usd')
                 ? parseFloat(tron_market_price.get(0).get('price_usd'))

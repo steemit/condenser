@@ -242,14 +242,18 @@ class Voting extends React.Component {
             vests_per_steem,
             vests_per_trx,
             tron_market_price,
+            tron_price_tronscan,
         } = this.props;
 
-        const trx_price =
+        let trx_price =
             tron_market_price &&
             tron_market_price.get(0) &&
             tron_market_price.get(0).has('price_usd')
                 ? parseFloat(tron_market_price.get(0).get('price_usd'))
                 : 0.0;
+        if (trx_price == 0) {
+            trx_price = tron_price_tronscan;
+        }
 
         // `lite` Voting component: e.g. search results
         if (!post.get('pending_payout_value')) {
@@ -738,6 +742,9 @@ export default connect(
                     : 0),
             vests_per_trx:
                 ownProps.vests_per_trx || state.app.get('vests_per_trx'),
+            tron_price_tronscan:
+                ownProps.tron_price_tronscan ||
+                state.app.getIn(['tronPrice', 'price_in_usd']),
             tron_market_price:
                 ownProps.tron_market_price ||
                 state.app.getIn(['steemMarket', 'tron', 'timepoints']),

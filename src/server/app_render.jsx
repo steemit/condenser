@@ -79,6 +79,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 env: process.env.NODE_ENV,
                 walletUrl: config.wallet_url,
                 steemMarket: ctx.steemMarketData,
+                tronPrice: ctx.tronPriceData,
                 trackingId: ctx.session.uid,
                 tron_host: config.get('tron_create_node'),
                 tron_reward_switch: 'off',

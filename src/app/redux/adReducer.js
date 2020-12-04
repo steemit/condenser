@@ -4,6 +4,13 @@ export const defaultState = Map({
     indexLeftSideAdList: List([
         Map({
             enable: true,
+            img: '/images/tron-steem-240_240.png',
+            tag: 'SteemTron240*240',
+            url:
+                '/steemit/@steemitblog/the-trx-and-steemit-integration-is-now-live',
+        }),
+        Map({
+            enable: true,
             img: '/images/dlive.png',
             tag: 'SteemitDlivebanner240*240',
             url: 'https://go.dlive.tv/steemit-dlive/',

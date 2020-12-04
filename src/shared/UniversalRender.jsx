@@ -263,7 +263,12 @@ export async function serverRender(
         requestTimer.stopTimer('apiFetchState_ms');
 
         requestTimer.startTimer('getTronConfig_ms');
-        const tronConfig = await getTronConfig();
+        // const tronConfig = await getTronConfig();
+        const tronConfig = {
+            tron_reward_switch: 'on',
+            vests_per_trx: 1913,
+            unbind_tip_limit: 5,
+        };
         if (tronConfig !== false) {
             initialState.app.tron_reward_switch = tronConfig.tron_reward_switch;
             initialState.app.vests_per_trx = tronConfig.vests_per_trx;

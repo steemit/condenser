@@ -6,6 +6,7 @@ import koa_logger from 'koa-logger';
 import requestTime from './requesttimings';
 import StatsLoggerClient from './utils/StatsLoggerClient';
 import { SteemMarket } from './utils/SteemMarket';
+import { TronPrice } from './utils/TronPrice';
 import hardwareStats from './hardwarestats';
 import cluster from 'cluster';
 import os from 'os';
@@ -148,8 +149,10 @@ function convertEntriesToArrays(obj) {
 
 // Fetch cached currency data for homepage
 const steemMarket = new SteemMarket();
+const tronPrice = new TronPrice();
 app.use(function*(next) {
     this.steemMarketData = yield steemMarket.get();
+    this.tronPriceData = yield tronPrice.get();
     yield next;
 });
 

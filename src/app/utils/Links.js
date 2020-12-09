@@ -64,12 +64,12 @@ export default {
     threespeakImageLink: /<a href="(https?:\/\/3speak.online\/watch\?v=([A-Za-z0-9\_\-\/]+))".*<img.*?><\/a>/i,
     bannedVideo: /(https?:\/\/(?:2020electioncenter.com|electionnight.news)\/watch\?id=([0-9a-f]+))/,
     bannedVideoId: /https?:\/\/(?:2020electioncenter.com|electionnight.news)\/watch\?id=([0-9a-f]+)/,
-    brightreon: /\bhttps?:\/\/www.brighteon.com\/([0-9a-f-]+)/,
-    bitchute: /\bhttps?:\/\/www.bitchute.com\/video\/([A-Za-z0-9]+\/?)/,
-    lbry: /\bhttps?:\/\/lbry.tv\/\$\/embed\/([/?a-z0-9@:=-]+)/,
-    rumble: /\bhttps?:\/\/rumble.com\/embed\/([a-z0-9]+)(\/\?.*)/,
-    theDailyMotion: /\bhttps?:\/\/dai.ly\/([a-z0-9]+)/,
-    ultimedia: /\bhttps?:\/\/www.ultimedia.com\/default\/index\/videogeneric\/id\/([a-z0-9]+)/,
+    bitchute: /\b(https?:\/\/www.bitchute.com\/video\/([A-Za-z0-9]+)\/?)/,
+    brightreon: /\b(https?:\/\/www.brighteon.com\/([0-9a-f-]+)\/?)/,
+    lbry: /https?:\/\/lbry.tv\/\$\/embed\/([/?a-z0-9@:=-]+)/,
+    rumble: /https?:\/\/rumble.com\/embed\/([a-z0-9]+)(\/\?.*)/,
+    theDailyMotion: /https?:\/\/dai.ly\/([a-z0-9]+)/,
+    ultimedia: /https?:\/\/www.ultimedia.com\/default\/index\/videogeneric\/id\/([a-z0-9]+)/,
 };
 
 //TODO: possible this should go somewhere else.

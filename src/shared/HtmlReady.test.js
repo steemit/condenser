@@ -287,7 +287,6 @@ describe('htmlready', () => {
     it('should handle banned video URL #1', () => {
         const testString =
             '<html><p>https://electionnight.news/watch?id=5f9b6d9e57b3de0a553c18b3</p></html>';
-        // why is this proper HTML but in the d-tube case we get "embed:" + gibberish?
         const embedcode =
             '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:5f9b6d9e57b3de0a553c18b3 bannedvideo ~~~</p></html>';
 
@@ -302,5 +301,25 @@ describe('htmlready', () => {
             '<html xmlns="http://www.w3.org/1999/xhtml"><div class="ifw-player" data-video-id="5f9b6d9e57b3de0a553c18b3"></div><script src="https://infowarsmedia.com/js/player.js" async="async"></script></html>';
         const res = HtmlReady(testString).html;
         expect(res).toEqual(htmlified);
+    });
+
+    it('should handle bitchute video URL #1', () => {
+        const testString =
+            '<html><p>https://www.bitchute.com/video/KhQkI5w4kL0/</p></html>';
+        const embedcode =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:KhQkI5w4kL0 bitchute ~~~</p></html>';
+
+        const res1 = HtmlReady(testString).html;
+        expect(res1).toEqual(embedcode);
+    });
+
+    it('should handle bitchute video URL #2', () => {
+        const testString =
+            '<html><p>https://www.bitchute.com/video/VAhOKZ2w270/</p></html>';
+        const embedcode =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:VAhOKZ2w270 bitchute ~~~</p></html>';
+
+        const res1 = HtmlReady(testString).html;
+        expect(res1).toEqual(embedcode);
     });
 });

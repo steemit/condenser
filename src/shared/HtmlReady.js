@@ -250,6 +250,12 @@ function linkifyNode(child, state) {
         if (!child.data) return;
 
         child = embedBannedVideoNode(child, state.links, state.images);
+        child = embedBitchuteVideoNode(child, state.links, state.images);
+        child = embedBrightreonVideoNode(child, state.links, state.images);
+        child = embedLBRYVideoNode(child, state.links, state.images);
+        child = embedRumbleVideoNode(child, state.links, state.images);
+        child = embedTheDailyMotionNode(child, state.links, state.images);
+        child = embedUltimedia(child, state.links, state.images);
         child = embedYouTubeNode(child, state.links, state.images);
         child = embedVimeoNode(child, state.links, state.images);
         child = embedTwitchNode(child, state.links, state.images);
@@ -377,11 +383,45 @@ function youTubeId(data) {
 
 /** @return {id, url} or <b>null</b> */
 function getBannedVideoId(data) {
-    const monkeywrench = 'getBannedVideoId called';
-
     if (!data) return null;
 
     const m = data.match(linksRe.bannedVideo);
+    const url = m ? m[1] : null;
+    if (!url) return null;
+    const id = m[2];
+    if (!id) return null;
+
+    return {
+        id,
+        url,
+        startTime: 0,
+        thumbnail: null,
+    };
+}
+
+/** @return {id, url} or <b>null</b> */
+function getBitchuteVideoId(data) {
+    if (!data) return null;
+
+    const m = data.match(linksRe.bitchute);
+    const url = m ? m[1] : null;
+    if (!url) return null;
+    const id = m[2];
+    if (!id) return null;
+
+    return {
+        id,
+        url,
+        startTime: 0,
+        thumbnail: null,
+    };
+}
+
+/** @return {id, url} or <b>null</b> */
+function getBrightreonVideoId(data) {
+    if (!data) return null;
+
+    const m = data.match(linksRe.brightreon);
     const url = m ? m[1] : null;
     if (!url) return null;
     const id = m[2];
@@ -434,6 +474,56 @@ function embedBannedVideoNode(child, links, images) {
     return child;
 }
 
+function embedBitchuteVideoNode(child, links, images) {
+    try {
+        // If child is not a string, we are processing plain text
+        // to replace a bare URL
+        let data = child.data;
+        const matchResults = getBitchuteVideoId(data);
+        if (!matchResults) return child;
+
+        child.data = data.replace(
+            matchResults.url,
+            `~~~ embed:${matchResults.id} bitchute ~~~`
+        );
+
+        if (links) links.add(matchResults.url);
+    } catch (error) {
+        console.log(error);
+    }
+
+    return child;
+}
+
+function embedBrightreonVideoNode(child, links, images) {
+    try {
+        // If child is not a string, we are processing plain text
+        // to replace a bare URL
+        let data = child.data;
+        const matchData = getBrightreonVideoId(data);
+        if (!matchData) return child;
+
+        child.data = data.replace(
+            matchData.url,
+            `~~~ embed:${matchData.id} brightreon ~~~`
+        );
+
+        if (links) links.add(matchData.url);
+    } catch (error) {
+        console.log(error);
+    }
+
+    return child;
+}
+
+function embedLBRYVideoNode(child, links, images) {
+    return child;
+}
+
+function embedRumbleVideoNode(child, links, images) {
+    return child;
+}
+
 function embedThreeSpeakNode(child, links, images) {
     try {
         if (typeof child === 'string') {
@@ -465,6 +555,14 @@ function embedThreeSpeakNode(child, links, images) {
         console.log(error);
     }
 
+    return child;
+}
+
+function embedTheDailyMotionNode(child, links, images) {
+    return child;
+}
+
+function embedUltimedia(child, links, images) {
     return child;
 }
 

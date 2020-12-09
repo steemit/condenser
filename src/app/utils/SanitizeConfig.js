@@ -10,7 +10,7 @@ import {
 
 const iframeWhitelist = [
     {
-        re: /^(https?:)?\/\/player.vimeo.com\/video\/.*/i,
+        re: /^(https?:)?\/\/player\.vimeo\.com\/video\/.*/i,
         fn: src => {
             // <iframe src="https://player.vimeo.com/video/179213493" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
             if (!src) return null;
@@ -22,19 +22,19 @@ const iframeWhitelist = [
         },
     },
     {
-        re: /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
+        re: /^(https?:)?\/\/www\.youtube\.com\/embed\/.*/i,
         fn: src => {
             return src.replace(/\?.+$/, ''); // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)
         },
     },
     {
-        re: /^(https?:)?\/\/3speak.online\/embed\?v=.*/i,
+        re: /^(https?:)?\/\/3speak\.(?:co|online)\/embed\?v=.*/i,
         fn: src => {
             return src;
         },
     },
     {
-        re: /^https:\/\/w.soundcloud.com\/player\/.*/i,
+        re: /^https:\/\/w\.soundcloud\.com\/player\/.*/i,
         fn: src => {
             if (!src) return null;
             // <iframe width="100%" height="450" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/257659076&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>
@@ -49,20 +49,51 @@ const iframeWhitelist = [
         },
     },
     {
-        re: /^(https?:)?\/\/player.twitch.tv\/.*/i,
+        re: /^(https?:)?\/\/player\.twitch\.tv\/.*/i,
         fn: src => {
             //<iframe src="https://player.twitch.tv/?channel=ninja" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620">
             return src;
         },
     },
     {
-        re: /^https:\/\/emb.d.tube\/\#\!\/([a-zA-Z0-9\-\.\/]+)$/,
+        re: /^https:\/\/emb\.d\.tube\/\#\!\/([a-zA-Z0-9\-\.\/]+)$/,
         fn: src => {
             // <iframe width="560" height="315" src="https://emb.d.tube/#!/justineh/u6qoydvy" frameborder="0" allowfullscreen></iframe>
             return src;
         },
     },
+    {
+        re: /^https?:\/\/rumble\.com\/embed\/([a-z0-9]+(\/\?.*))$/,
+        fn: src => {
+            return src;
+        },
+    },
+    {
+        re: /^https?:\/\/lbry\.tv\/\$\/embed\/([/?a-zA-Z0-9@:=-]+)$/,
+        fn: src => {
+            return src;
+        },
+    },
+    {
+        re: /^https?:\/\/www\.dailymotion\.com\/embed\/video\/([/?a-zA-Z0-9@:=/-]+)$/,
+        fn: src => {
+            return src;
+        },
+    },
+    {
+        re: /^https?:\/\/www\.bitchute\.com\/embed\/([a-zA-Z0-9]+)\/?$/,
+        fn: src => {
+            return src;
+        },
+    },
+    {
+        re: /^https?:\/\/brandnewtube\.com\/embed\/([a-zA-Z0-9]+)$/,
+        fn: src => {
+            return src;
+        },
+    },
 ];
+
 export const noImageText = '(Image not shown due to low ratings)';
 export const allowedTags = `
     div, iframe, del,

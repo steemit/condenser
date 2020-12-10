@@ -256,11 +256,11 @@ function linkifyNode(child, state) {
         child = embedRumbleVideoNode(child, state.links, state.images);
         child = embedTheDailyMotionNode(child, state.links, state.images);
         child = embedUltimedia(child, state.links, state.images);
-        child = embedYouTubeNode(child, state.links, state.images);
         child = embedVimeoNode(child, state.links, state.images);
         child = embedTwitchNode(child, state.links, state.images);
         child = embedDTubeNode(child, state.links, state.images);
         child = embedThreeSpeakNode(child, state.links, state.images);
+        child = embedYouTubeNode(child, state.links, state.images);
 
         const data = XMLSerializer.serializeToString(child);
         const content = linkify(
@@ -401,6 +401,24 @@ function getBannedVideoId(data) {
 
 /** @return {id, url} or <b>null</b> */
 function getBitchuteVideoId(data) {
+    if (!data) return null;
+
+    const m = data.match(linksRe.bitchute);
+    const url = m ? m[1] : null;
+    if (!url) return null;
+    const id = m[2];
+    if (!id) return null;
+
+    return {
+        id,
+        url,
+        startTime: 0,
+        thumbnail: null,
+    };
+}
+
+/** @return {id, url} or <b>null</b> */
+function getBittubeVideoId(data) {
     if (!data) return null;
 
     const m = data.match(linksRe.bitchute);

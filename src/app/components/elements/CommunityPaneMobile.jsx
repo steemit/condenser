@@ -50,7 +50,7 @@ class CommunityPaneMobile extends Component {
         const subs = community.get('subscribers');
 
         const checkIfLogin = () => {
-            if (!loggedIn) {
+            if (!this.props.loggedIn) {
                 return showLogin();
             }
             return browserHistory.replace(`/submit.html?category=${category}`);

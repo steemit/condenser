@@ -76,6 +76,7 @@ export function recordActivityTracker({
             trackingId,
             pathname,
             referrer,
+            ua: navigator ? navigator.userAgent.toLowerCase() : null,
         },
     };
     api.call('overseer.collect', ['custom', data], error => {

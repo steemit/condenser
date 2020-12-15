@@ -23,10 +23,10 @@ export default function(tagName, trackingId) {
     const pathname = window.location.pathname;
     const referrer = document.referrer;
 
-    if (referrer === '' || referrer.indexOf(host) !== -1) {
-        console.log('referrer: not_from_outside', referrer, hostname);
-        return;
-    }
+    // if (referrer === '' || referrer.indexOf(host) !== -1) {
+    //     console.log('referrer: not_from_outside', referrer, hostname);
+    //     return;
+    // }
     console.log('cookie location info:', domain, referrer);
 
     // get cookie
@@ -43,5 +43,10 @@ export default function(tagName, trackingId) {
     }
 
     // record
-    recordActivityTracker({ trackingId, activityTag: tagName, pathname });
+    recordActivityTracker({
+        trackingId,
+        activityTag: tagName,
+        pathname,
+        referrer,
+    });
 }

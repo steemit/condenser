@@ -59,7 +59,12 @@ export function recordAdsView({ trackingId, adTag }) {
     });
 }
 
-export function recordActivityTracker({ trackingId, activityTag, pathname }) {
+export function recordActivityTracker({
+    trackingId,
+    activityTag,
+    pathname,
+    referrer,
+}) {
     const data = {
         measurement: 'activity_tracker',
         tags: {
@@ -70,6 +75,7 @@ export function recordActivityTracker({ trackingId, activityTag, pathname }) {
             views: 1,
             trackingId,
             pathname,
+            referrer,
         },
     };
     api.call('overseer.collect', ['custom', data], error => {

@@ -360,6 +360,19 @@ class Header extends React.Component {
                             </div>
 
                             <div className="small-6 medium-8 large-7 columns Header__buttons">
+                                {/*CUSTOM SEARCH*/}
+                                <span
+                                    className="Header__search--desktop"
+                                    style={{ marginRight: 20 }}
+                                >
+                                    <ElasticSearchInput redirect />
+                                </span>
+                                <span className="Header__search">
+                                    <a href="/search">
+                                        <IconButton icon="magnifyingGlass" />
+                                    </a>
+                                </span>
+
                                 {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
                                 {!loggedIn && (
                                     <span className="Header__user-signup show-for-medium">
@@ -378,16 +391,6 @@ class Header extends React.Component {
                                         </a>
                                     </span>
                                 )}
-
-                                {/*CUSTOM SEARCH*/}
-                                <span className="Header__search--desktop">
-                                    <ElasticSearchInput redirect />
-                                </span>
-                                <span className="Header__search">
-                                    <a href="/search">
-                                        <IconButton icon="magnifyingGlass" />
-                                    </a>
-                                </span>
 
                                 {/*SUBMIT STORY*/}
                                 {submit_story}

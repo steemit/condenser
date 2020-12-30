@@ -125,6 +125,7 @@ class PostsList extends React.Component {
             nsfwPref,
             hideCategory,
             blacklist,
+            query,
         } = this.props;
         const { thumbSize, blist } = this.state;
         const renderSummary = items =>
@@ -136,6 +137,7 @@ class PostsList extends React.Component {
                         nsfwPref={nsfwPref}
                         hideCategory={hideCategory}
                         order={order}
+                        query={query}
                     />
                 );
 
@@ -169,7 +171,6 @@ class PostsList extends React.Component {
                         </div>
                     );
                 }
-
                 return summary;
             });
 

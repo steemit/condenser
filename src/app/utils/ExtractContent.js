@@ -57,7 +57,6 @@ export function extractImageLink(json_metadata, body = null) {
  */
 export function extractBodySummary(body, strip_quotes = false) {
     let desc = body;
-
     if (strip_quotes)
         desc = desc.replace(/(^(\n|\r|\s)*)>([\s\S]*?).*\s*/g, '');
     desc = remarkableStripper.render(desc); // render markdown to html
@@ -81,4 +80,12 @@ export function extractBodySummary(body, strip_quotes = false) {
     }
 
     return desc;
+}
+
+export function highlightKeyword(text, keyword, color) {
+    var content = text.split(keyword);
+    var newText = content.join(
+        `<span style="background: ${color};">${keyword}</span>`
+    );
+    return newText;
 }

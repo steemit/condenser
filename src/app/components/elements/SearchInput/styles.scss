@@ -4,7 +4,7 @@ form.search-input {
 
     svg.search-input__icon {
         position: absolute;
-        pointer-events: none;
+        //pointer-events: none;
         @include themify($themes) {
             stroke: themed('colorAccentReverse');
         }
@@ -63,12 +63,13 @@ form.search-input {
 }
 
 form.search-input--expanded {
-
+    position: relative;
     height: 42px;
 
     svg.search-input__icon {
         position: absolute;
-        pointer-events: none;
+        right: 10px;
+        //pointer-events: none;
         @include themify($themes) {
             stroke: themed('colorAccentReverse');
         }
@@ -79,6 +80,10 @@ form.search-input--expanded {
     &:hover {
         svg.search-input__icon {
             stroke: $color-white;
+            cursor: pointer;
+        }
+        input.search-input__inner {
+            background-color: $color-teal;
         }
     }
 

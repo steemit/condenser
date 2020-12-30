@@ -6,6 +6,7 @@ import { search } from 'app/redux/SearchReducer';
 import Callout from 'app/components/elements/Callout';
 import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
 import PostsList from 'app/components/cards/PostsList';
+import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 import { List, Map, fromJS } from 'immutable';
 
 class SearchIndex extends React.Component {
@@ -49,6 +50,7 @@ class SearchIndex extends React.Component {
 
     componentDidMount() {
         const { performSearch, params } = this.props;
+        console.log(params);
         if (!params.s) {
             params.s = undefined;
         }
@@ -76,31 +78,38 @@ class SearchIndex extends React.Component {
                 posts={fromJS(result)}
                 loading={loading}
                 loadMore={this.fetchMoreResults}
+                query={params.q}
             />
         );
 
         return (
-            <div className={'PostsIndex row ' + 'layout-list'}>
-                <article className="articles">
-                    <div className="articles__header row">
-                        <div className="small-12 medium-12 large-12 column">
-                            <ElasticSearchInput
-                                initValue={params.q}
-                                expanded
-                                handleSubmit={q => {
-                                    performSearch({ q, s: undefined });
-                                }}
-                                redirect
-                            />
+            <PostsIndexLayout
+                category={null}
+                enableAds={false}
+                blogmode={false}
+            >
+                <div className={'PostsIndex row ' + 'layout-list'}>
+                    <article className="articles">
+                        <div className="articles__header row">
+                            <div className="small-12 medium-12 large-12 column">
+                                <ElasticSearchInput
+                                    initValue={params.q}
+                                    expanded
+                                    handleSubmit={q => {
+                                        performSearch({ q, s: undefined });
+                                    }}
+                                    redirect
+                                />
+                            </div>
                         </div>
-                    </div>
-                    {!loading && result.length === 0 ? (
-                        <Callout>{'Nothing was found.'}</Callout>
-                    ) : (
-                        searchResults
-                    )}
-                </article>
-            </div>
+                        {!loading && result.length === 0 ? (
+                            <Callout>{'Nothing was found.'}</Callout>
+                        ) : (
+                            searchResults
+                        )}
+                    </article>
+                </div>
+            </PostsIndexLayout>
         );
     }
 }

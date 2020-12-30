@@ -7,7 +7,11 @@ import { connect } from 'react-redux';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import { immutableAccessor } from 'app/utils/Accessors';
-import { extractBodySummary, extractImageLink } from 'app/utils/ExtractContent';
+import {
+    extractBodySummary,
+    extractImageLink,
+    highlightKeyword,
+} from 'app/utils/ExtractContent';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import { List, Map } from 'immutable';
 import Author from 'app/components/elements/Author';
@@ -61,7 +65,7 @@ class PostSummary extends React.Component {
     }
 
     render() {
-        const { ignore, hideCategory, net_vests } = this.props;
+        const { ignore, hideCategory, net_vests, query } = this.props;
         const { post, onClose } = this.props;
         if (!post) return null;
 
@@ -96,9 +100,20 @@ class PostSummary extends React.Component {
         const post_url = `/${category}/@${author}/${permlink}`;
 
         const summary = extractBodySummary(post.get('body'), isReply);
+        const keyWord = decodeURI(window.location.search).split('=')[1];
+        const highlightColor = '#00FFC8';
         const content_body = (
             <div className="PostSummary__body entry-content">
-                <Link to={post_url}>{summary}</Link>
+                <Link
+                    to={post_url}
+                    dangerouslySetInnerHTML={{
+                        __html: highlightKeyword(
+                            summary,
+                            keyWord,
+                            highlightColor
+                        ),
+                    }}
+                />
             </div>
         );
 
@@ -106,7 +121,15 @@ class PostSummary extends React.Component {
             <h2 className="articles__h2 entry-title">
                 <Link to={post_url}>
                     {isNsfw && <span className="nsfw-flag">nsfw</span>}
-                    {post.get('title')}
+                    <span
+                        dangerouslySetInnerHTML={{
+                            __html: highlightKeyword(
+                                post.get('title'),
+                                keyWord,
+                                highlightColor
+                            ),
+                        }}
+                    />
                 </Link>
             </h2>
         );

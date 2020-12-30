@@ -18,7 +18,8 @@
     "debug": "NODE_ENV=development webpack --config ./webpack/debug.config.js && rm -rf ./lib && babel src --source-maps --out-dir lib -D && node --inspect-brk lib/server/index.js",
     "checktranslations": "node scripts/check_translations.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "storybook-build": "build-storybook -c .storybook -o docs"
+    "storybook-build": "build-storybook -c .storybook -o docs",
+    "env-start": "env $(tr '\\n' ' ' < .env) yarn start"
   },
   "author": "Steemit, Inc.",
   "license": "MIT",

@@ -7,6 +7,7 @@ const SEARCH_RESULT = 'search/SEARCH_RESULT';
 const SEARCH_RESET = 'search/SEARCH_RESET';
 const SEARCH_DEPTH = 'search/SEARCH_DEPTH';
 const SEARCH_SORT = 'search/SEARCH_SORT';
+const SEARCH_TOTAL = 'search/SEARCH_TOTAL';
 
 const defaultSearchState = Map({
     pending: false,
@@ -14,6 +15,7 @@ const defaultSearchState = Map({
     scrollId: false,
     result: List([]),
     depth: 0,
+    total_result: 0,
     sort: 'created_at',
 });
 
@@ -42,6 +44,9 @@ export default function reducer(state = defaultSearchState, action) {
         case SEARCH_SORT: {
             return state.setIn(['sort'], payload);
         }
+        case SEARCH_TOTAL: {
+            return state.setIn(['total_result'], payload);
+        }
         case SEARCH_RESULT: {
             const { hits, _scroll_id, append } = payload;
             const results = hits.hits;
@@ -62,13 +67,15 @@ export default function reducer(state = defaultSearchState, action) {
             if (!append) {
                 newState = state
                     .set('result', posts)
-                    .set('scrollId', scroll_id);
+                    .set('scrollId', scroll_id)
+                    .set('total_result', hits.total.value);
             } else {
                 // If append is true. need to process results and append them to previous result
                 const updatedResults = state.get('result').concat(posts);
                 newState = state
                     .setIn(['result'], new List(updatedResults))
-                    .setIn(['scrollId'], scroll_id);
+                    .setIn(['scrollId'], scroll_id)
+                    .setIn(['total_result'], hits.total.value);
             }
             return newState;
         }
@@ -107,5 +114,10 @@ export const searchDepth = payload => ({
 
 export const searchSort = payload => ({
     type: SEARCH_SORT,
+    payload,
+});
+
+export const searchTotal = payload => ({
+    type: SEARCH_TOTAL,
     payload,
 });

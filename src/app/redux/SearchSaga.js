@@ -1,11 +1,13 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
 import * as reducer from 'app/redux/SearchReducer';
-import { conductSearch } from 'app/utils/ServerApiClient';
+import { conductSearch, userSearch } from 'app/utils/ServerApiClient';
 
 export const searchWatches = [takeEvery('search/SEARCH_DISPATCH', search)];
 
 export function* search(action) {
-    const { q, s, scroll_id } = action.payload;
+    const { q, s, scroll_id, depth, sort } = action.payload;
+    console.log(action.payload);
+    console.log('sort:', sort);
     const append = action.payload.scroll_id ? true : false;
     yield put(reducer.searchPending({ pending: true }));
     // const luceneQuery = {
@@ -17,19 +19,36 @@ export function* search(action) {
     //     },
     // };
     const luceneQuery = {
-        match_phrase: {
-            searchable: {
-                query: q,
-                slop: 3,
-            },
+        bool: {
+            must: [
+                {
+                    match_phrase: {
+                        searchable: {
+                            query: q,
+                            slop: 3,
+                        },
+                    },
+                },
+                {
+                    match: {
+                        depth: depth,
+                    },
+                },
+            ],
         },
     };
+
     try {
         const requestParams = {
             body: {
                 searchQuery: {
                     size: 30,
                     query: luceneQuery,
+                    sort: {
+                        [sort]: {
+                            order: 'desc',
+                        },
+                    },
                 },
             },
         };
@@ -47,4 +66,12 @@ export function* search(action) {
         yield put(reducer.searchError({ error }));
     }
     yield put(reducer.searchPending({ pending: false }));
+}
+
+export function* searchReset(action) {
+    yield put(reducer.searchReset());
+}
+
+export function* searchUser(action) {
+    const searchUserResponse = yield call(userSearch, {});
 }

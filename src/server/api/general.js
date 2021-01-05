@@ -348,6 +348,15 @@ export default function useGeneralApi(app) {
             let searchEndpoint = elasticSearchService.concat(
                 '/hive_posts/_search?scroll=1m'
             );
+            /*const elasticSearchService = config.get(
+                'es_url'
+            );
+
+            let searchEndpoint = elasticSearchService.concat(
+                '/hive_accounts/_search?scroll=1m',
+                '/hive_posts/_search?scroll=1m',
+                '/hive_replies/_search?scroll=1m',
+            );*/
             let searchPayload = JSON.stringify(params.searchQuery);
 
             if (params.scrollQuery) {

@@ -32,10 +32,12 @@ export function extractImageLink(json_metadata, body = null) {
             const htmlText = isHtml
                 ? body
                 : remarkable.render(
-                      body.replace(
-                          /<!--([\s\S]+?)(-->|$)/g,
-                          '(html comment removed: $1)'
-                      )
+                      body
+                          ? body.replace(
+                                /<!--([\s\S]+?)(-->|$)/g,
+                                '(html comment removed: $1)'
+                            )
+                          : null
                   );
             rtags = HtmlReady(htmlText, { mutate: false });
         }
@@ -83,6 +85,7 @@ export function extractBodySummary(body, strip_quotes = false) {
 }
 
 export function highlightKeyword(text, keyword, color) {
+    if (!text) return '';
     var content = text.split(keyword);
     var newText = content.join(
         `<span style="background: ${color};">${keyword}</span>`

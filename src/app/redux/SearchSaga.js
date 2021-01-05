@@ -6,8 +6,6 @@ export const searchWatches = [takeEvery('search/SEARCH_DISPATCH', search)];
 
 export function* search(action) {
     const { q, s, scroll_id, depth, sort } = action.payload;
-    console.log(action.payload);
-    console.log('sort:', sort);
     const append = action.payload.scroll_id ? true : false;
     yield put(reducer.searchPending({ pending: true }));
     // const luceneQuery = {
@@ -19,22 +17,19 @@ export function* search(action) {
     //     },
     // };
     const luceneQuery = {
-        bool: {
-            must: [
-                {
-                    match_phrase: {
-                        searchable: {
-                            query: q,
-                            slop: 3,
-                        },
-                    },
-                },
-                {
-                    match: {
-                        depth: depth,
-                    },
-                },
-            ],
+        match_phrase: {
+            searchable: {
+                query: q,
+                slop: 3,
+            },
+        },
+    };
+
+    const userQuery = {
+        wildcard: {
+            name: {
+                value: `${q}*`,
+            },
         },
     };
 
@@ -43,15 +38,20 @@ export function* search(action) {
             body: {
                 searchQuery: {
                     size: 30,
-                    query: luceneQuery,
-                    sort: {
-                        [sort]: {
-                            order: 'desc',
-                        },
-                    },
                 },
+                depth: depth,
             },
         };
+        if (depth < 2) {
+            requestParams.body.searchQuery.query = luceneQuery;
+            requestParams.body.searchQuery.sort = {
+                [sort]: {
+                    order: 'desc',
+                },
+            };
+        } else {
+            requestParams.body.searchQuery.query = userQuery;
+        }
         if (scroll_id) {
             requestParams.body.scrollQuery = {
                 scroll: '1m',

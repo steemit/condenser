@@ -8,6 +8,7 @@ import {
     searchDepth,
     searchSort,
     searchUser,
+    searchTotal,
 } from 'app/redux/SearchReducer';
 import Callout from 'app/components/elements/Callout';
 import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
@@ -75,7 +76,6 @@ class SearchIndex extends React.Component {
         }
         // searchUser()
         emit.on('query_change', query => {
-            console.log('=====query====', query);
             if (query && params.q !== query) {
                 params.q = query;
                 searchReset();
@@ -116,6 +116,7 @@ class SearchIndex extends React.Component {
             searchDepth,
             sort,
             searchSort,
+            total_result,
         } = this.props;
 
         const searchResults = (
@@ -126,6 +127,7 @@ class SearchIndex extends React.Component {
                 loadMore={this.fetchMoreResults}
                 query={params.q}
                 depth={depth}
+                total_result={total_result}
             />
         );
 
@@ -157,7 +159,6 @@ class SearchIndex extends React.Component {
                             searchSort={searchSort}
                             handleTabChange={params => {
                                 searchReset();
-                                console.log(params);
                                 performSearch(params);
                             }}
                         />
@@ -185,6 +186,7 @@ module.exports = {
                 isBrowser: process.env.BROWSER,
                 depth: state.search.get('depth'),
                 sort: state.search.get('sort'),
+                total_result: state.search.get('total_result'),
                 params,
             };
         },
@@ -194,6 +196,7 @@ module.exports = {
             searchDepth: args => dispatch(searchDepth(args)),
             searchSort: args => dispatch(searchSort(args)),
             searchUser: args => dispatch(searchUser(args)),
+            searchTotal: args => dispatch(searchTotal(args)),
         })
     )(SearchIndex),
 };

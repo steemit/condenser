@@ -21,6 +21,7 @@ import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
+import SearchUserList from 'app/components/cards/SearchUserList';
 import { SIGNUP_URL } from 'shared/constants';
 import { hasNsfwTag } from 'app/utils/StateFunctions';
 
@@ -68,7 +69,6 @@ class PostSummary extends React.Component {
         const { ignore, hideCategory, net_vests, depth } = this.props;
         const { post, onClose } = this.props;
         if (!post) return null;
-        console.log('depth:', depth);
         let reblogged_by;
         if (post.get('reblogged_by', List()).size > 0) {
             reblogged_by = post.get('reblogged_by').toJS();
@@ -228,30 +228,7 @@ class PostSummary extends React.Component {
 
         const userList = (
             <div>
-                <div className="articles__summary-header">
-                    <div className="user">
-                        <div className="user__col user__col--left">
-                            <a className="user__link" href={'/@' + author}>
-                                <Userpic account={author} size={SIZE_SMALL} />
-                            </a>
-                        </div>
-                        <div className="user__col user__col--right">
-                            <span className="user__name">
-                                <Author
-                                    post={post}
-                                    follow={false}
-                                    hideEditor={true}
-                                />
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="userlist-footer">
-                    <span className="userlist-footer-followers">
-                        141个关注者
-                    </span>
-                    <span>141个帖子</span>
-                </div>
+                <SearchUserList post={post} />
             </div>
         );
 
@@ -338,7 +315,9 @@ class PostSummary extends React.Component {
             );
         }
 
-        return depth < 2 ? (
+        return depth === 2 ? (
+            <div className="articles__summary">{userList}</div>
+        ) : (
             <div className="articles__summary">
                 {reblogged_by}
                 {summary_header}
@@ -370,8 +349,6 @@ class PostSummary extends React.Component {
                     {this.props.blogmode ? summary_footer : null}
                 </div>
             </div>
-        ) : (
-            <div className="articles__summary">{userList}</div>
         );
     }
 }

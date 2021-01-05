@@ -86,8 +86,9 @@ class PostsList extends React.Component {
             topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight <
             10
         ) {
-            const { loadMore, posts } = this.props;
-            if (loadMore && posts.size > 0) loadMore();
+            const { loadMore, posts, total_result } = this.props;
+            if (loadMore && posts.size > 0 && posts.size < total_result)
+                loadMore();
         }
 
         // Detect if we're in mobile mode (renders larger preview imgs)

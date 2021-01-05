@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { browserHistory } from 'react-router';
 import tt from 'counterpart';
+import { emit } from '../../../utils/emit';
 
 class ElasticSearchInput extends React.Component {
     static propTypes = {
@@ -34,6 +35,7 @@ class ElasticSearchInput extends React.Component {
         const { handleSubmit, redirect } = this.props;
         handleSubmit && handleSubmit(this.state.value);
         redirect && browserHistory.push(`/search?q=${this.state.value}`);
+        emit.emit('query_change', this.state.value);
     };
 
     render() {

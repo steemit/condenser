@@ -4,12 +4,17 @@ const SEARCH_DISPATCH = 'search/SEARCH_DISPATCH';
 const SEARCH_PENDING = 'search/SEARCH_PENDING';
 const SEARCH_ERROR = 'search/SEARCH_ERROR';
 const SEARCH_RESULT = 'search/SEARCH_RESULT';
+const SEARCH_RESET = 'search/SEARCH_RESET';
+const SEARCH_DEPTH = 'search/SEARCH_DEPTH';
+const SEARCH_SORT = 'search/SEARCH_SORT';
 
 const defaultSearchState = Map({
     pending: false,
     error: false,
     scrollId: false,
     result: List([]),
+    depth: 0,
+    sort: 'created_at',
 });
 
 export default function reducer(state = defaultSearchState, action) {
@@ -27,6 +32,15 @@ export default function reducer(state = defaultSearchState, action) {
         case SEARCH_ERROR: {
             const { error } = payload;
             return state.setIn(['error'], error);
+        }
+        case SEARCH_RESET: {
+            return state.setIn(['result'], List([]));
+        }
+        case SEARCH_DEPTH: {
+            return state.setIn(['depth'], payload);
+        }
+        case SEARCH_SORT: {
+            return state.setIn(['sort'], payload);
         }
         case SEARCH_RESULT: {
             const { hits, _scroll_id, append } = payload;
@@ -78,5 +92,20 @@ export const searchError = payload => ({
 
 export const searchResult = payload => ({
     type: SEARCH_RESULT,
+    payload,
+});
+
+export const searchReset = payload => ({
+    type: SEARCH_RESET,
+    payload,
+});
+
+export const searchDepth = payload => ({
+    type: SEARCH_DEPTH,
+    payload,
+});
+
+export const searchSort = payload => ({
+    type: SEARCH_SORT,
     payload,
 });

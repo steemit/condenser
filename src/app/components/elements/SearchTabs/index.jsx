@@ -39,19 +39,19 @@ class SearchTabs extends Component {
                         className={depth === 0 ? 'active' : ''}
                         onClick={() => this.handleClick(0)}
                     >
-                        帖子
+                        {tt('g.tiezi')}
                     </li>
                     <li
                         className={depth === 1 ? 'active' : ''}
                         onClick={() => this.handleClick(1)}
                     >
-                        回复
+                        {tt('g.replies_to')}
                     </li>
                     <li
                         className={depth === 2 ? 'active' : ''}
                         onClick={() => this.handleClick(2)}
                     >
-                        用户
+                        {tt('g.user')}
                     </li>
                     <li
                         className="li-right"
@@ -61,8 +61,12 @@ class SearchTabs extends Component {
                             className="search-sort"
                             onChange={e => this.handleSortChange(e)}
                         >
-                            <option value={'created_at'}>按时间排序</option>
-                            <option value={'payout'}>按奖励排序</option>
+                            <option value={'created_at'}>
+                                {tt('g.sort_by_time')}
+                            </option>
+                            <option value={'payout'}>
+                                {tt('g.sort_by_reward')}
+                            </option>
                         </select>
                     </li>
                 </ul>

@@ -217,7 +217,17 @@
             "zero": "没有回复",
             "one": "%(count)s回复",
             "other": "%(count)s个回复"
-        }
+        },
+        "tiezi": "帖子",
+        "replies_to": "回复",
+        "user": "用户",
+        "sort_by_time": "按时间排序",
+        "sort_by_reward": "按奖励排序",
+        "one_follower": "%(count)s个关注者",
+        "one_post": "%(count)s个帖子",
+        "many_followers": "%(count)s个关注者",
+        "many_posts": "%(count)s个帖子",
+        "search_history": "搜索历史"
     },
     "navigation": {
         "about": "关于",
@@ -493,7 +503,9 @@
         "curation_rewards_by": "审查收入 by",
         "author_rewards_by": "作者收入 by",
         "replies_to": "回复",
-        "comments_by": "评论"
+        "comments_by": "评论",
+        "sort_by_time": "按时间排序",
+        "sort_by_reward": "按奖励排序"
     },
     "loginform_jsx": {
         "you_need_a_private_password_or_key":

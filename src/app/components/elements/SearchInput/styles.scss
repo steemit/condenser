@@ -100,7 +100,8 @@ form.search-input--expanded {
         width: 100%;
         border-color: $color-teal;
         box-shadow: 0 0 5px rgba(109,207,246,.5);
-        padding-left: 2.5rem;
+        padding-left: 2rem;
+        padding-right: 2.5rem;
         cursor: auto;
         @include themify($themes) {
             border: 1px solid rgba(202, 202, 202, 0.6);

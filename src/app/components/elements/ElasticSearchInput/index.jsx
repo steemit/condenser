@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { browserHistory } from 'react-router';
 import tt from 'counterpart';
 import { emit } from '../../../utils/emit';
+import SearchHistory from './SearchHistory';
+import { isPhone } from '../../../utils/Common';
 
 class ElasticSearchInput extends React.Component {
     static propTypes = {
@@ -21,13 +23,26 @@ class ElasticSearchInput extends React.Component {
         super(props);
         this.state = {
             value: this.props.initValue ? this.props.initValue : '',
+            showHistory: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.onSearchSubmit = this.onSearchSubmit.bind(this);
+        this.setSearchText = this.setSearchText.bind(this);
+        this.changeHistory = this.changeHistory.bind(this);
+    }
+
+    changeHistory(display) {
+        this.setState({
+            showHistory: display,
+        });
     }
 
     handleChange(event) {
-        this.setState({ value: event.target.value });
+        this.setSearchText(event.target.value);
+    }
+
+    setSearchText(value) {
+        this.setState({ value });
     }
 
     onSearchSubmit = e => {
@@ -36,6 +51,25 @@ class ElasticSearchInput extends React.Component {
         handleSubmit && handleSubmit(this.state.value);
         redirect && browserHistory.push(`/search?q=${this.state.value}`);
         emit.emit('query_change', this.state.value);
+        const history = window.localStorage.getItem('steemit_search');
+        if (!history) {
+            window.localStorage.setItem('steemit_search', this.state.value);
+        } else {
+            let historyArr = history.split(',');
+            if (historyArr.includes(this.state.value)) {
+                historyArr.splice(historyArr.indexOf(this.state.value), 1);
+                historyArr.unshift(this.state.value);
+                window.localStorage.setItem(
+                    'steemit_search',
+                    historyArr.join(',')
+                );
+            } else {
+                window.localStorage.setItem(
+                    'steemit_search',
+                    `${this.state.value},${history}`
+                );
+            }
+        }
     };
 
     render() {
@@ -69,7 +103,21 @@ class ElasticSearchInput extends React.Component {
                         placeholder={tt('g.search')}
                         onChange={this.handleChange}
                         value={this.state.value}
+                        autoComplete="off"
+                        onFocus={() => this.changeHistory(true)}
+                        onBlur={() =>
+                            setTimeout(() => {
+                                this.changeHistory(false);
+                            }, 200)
+                        }
                     />
+                    {!isPhone() && (
+                        <SearchHistory
+                            show={this.state.showHistory}
+                            changeHistory={this.changeHistory}
+                            setSearchText={this.setSearchText}
+                        />
+                    )}
                 </form>
             </span>
         );

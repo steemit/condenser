@@ -5,6 +5,7 @@ import { Link, browserHistory } from 'react-router';
 import { imageProxy } from 'app/utils/ProxifyUrl';
 import { highlightKeyword } from 'app/utils/ExtractContent';
 import * as userActions from 'app/redux/UserReducer';
+import tt from 'counterpart';
 
 export const SIZE_SMALL = 'small';
 export const SIZE_MED = 'medium';
@@ -54,9 +55,15 @@ class SearchUserList extends Component {
                     </div>
                     <div className="search-userlist-left-bottom">
                         <span className="user-follower">
-                            {followers}个关注者
+                            {followers > 1
+                                ? tt('g.many_followers', { count: followers })
+                                : tt('g.one_follower', { count: followers })}
                         </span>
-                        <span>{post_count}个帖子</span>
+                        <span>
+                            {post_count > 1
+                                ? tt('g.many_posts', { count: post_count })
+                                : tt('g.one_post', { count: post_count })}
+                        </span>
                     </div>
                 </div>
                 <div className="search-userlist-right">

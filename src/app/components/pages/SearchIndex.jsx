@@ -17,6 +17,7 @@ import PostsList from 'app/components/cards/PostsList';
 import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 import { List, Map, fromJS } from 'immutable';
 import { emit } from '../../utils/emit';
+import { isPhone } from '../../utils/Common';
 
 class SearchIndex extends React.Component {
     static propTypes = {
@@ -139,18 +140,26 @@ class SearchIndex extends React.Component {
             >
                 <div className={'PostsIndex row ' + 'layout-list'}>
                     <article className="articles">
-                        {/*<div className="articles__header row">
-                            <div className="small-12 medium-12 large-12 column">
-                                <ElasticSearchInput
-                                    initValue={params.q}
-                                    expanded
-                                    handleSubmit={q => {
-                                        performSearch({ q, s: undefined });
-                                    }}
-                                    redirect
-                                />
+                        {isPhone() ? (
+                            <div className="articles__header row">
+                                <div className="small-12 medium-12 large-12 column">
+                                    <ElasticSearchInput
+                                        initValue={params.q}
+                                        expanded
+                                        handleSubmit={q => {
+                                            searchReset();
+                                            performSearch({
+                                                q,
+                                                s: undefined,
+                                                depth,
+                                                sort,
+                                            });
+                                        }}
+                                        redirect
+                                    />
+                                </div>
                             </div>
-                        </div>*/}
+                        ) : null}
                         <SearchTabs
                             params={params}
                             depth={depth}

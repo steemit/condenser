@@ -311,6 +311,16 @@ module.exports = {
         (state, ownProps) => {
             const username = state.user.getIn(['current', 'username']);
             const accountname = ownProps.routeParams.accountname.toLowerCase();
+            console.log(username);
+            console.log(accountname);
+            console.log(
+                state.global.getIn([
+                    'follow',
+                    'getFollowingAsync',
+                    accountname,
+                    'blog_result',
+                ])
+            );
             const walletUrl = state.app.get('walletUrl');
 
             let { section } = ownProps.routeParams;

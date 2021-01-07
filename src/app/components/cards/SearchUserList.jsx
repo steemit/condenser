@@ -5,6 +5,7 @@ import { Link, browserHistory } from 'react-router';
 import { imageProxy } from 'app/utils/ProxifyUrl';
 import { highlightKeyword } from 'app/utils/ExtractContent';
 import * as userActions from 'app/redux/UserReducer';
+import * as transactionActions from 'app/redux/TransactionReducer';
 import tt from 'counterpart';
 
 export const SIZE_SMALL = 'small';
@@ -12,12 +13,52 @@ export const SIZE_MED = 'medium';
 export const SIZE_LARGE = 'large';
 
 class SearchUserList extends Component {
-    checkIfLogin = () => {
-        const { loggedIn, showLogin } = this.props;
+    checkIfLogin = isFollow => {
+        const {
+            loggedIn,
+            allFollowing,
+            username,
+            name,
+            showLogin,
+            updateFollow,
+        } = this.props;
         if (!loggedIn) {
             return showLogin();
+        } else {
+            if (isFollow) {
+                updateFollow(username, name, undefined, () => {
+                    console.log('取消关注');
+                });
+            } else {
+                updateFollow(username, name, 'blog', () => {
+                    console.log('关注');
+                });
+            }
         }
         return true;
+    };
+
+    renderFollow = () => {
+        const { loggedIn, allFollowing, name } = this.props;
+        let isFollow = false;
+        if (!loggedIn) {
+            isFollow = false;
+        } else {
+            allFollowing &&
+                allFollowing.map((item, i) => {
+                    if (item === name) {
+                        isFollow = true;
+                    }
+                });
+        }
+        return (
+            <a
+                className="follow-btn"
+                onClick={() => this.checkIfLogin(isFollow)}
+            >
+                {isFollow ? tt('g.unfollow') : tt('g.follow')}
+            </a>
+        );
     };
 
     render() {
@@ -28,6 +69,7 @@ class SearchUserList extends Component {
             followers,
             post_count,
             loggedIn,
+            allFollowing,
         } = this.props;
         const url = imageProxy() + `u/${name}/avatar/${SIZE_MED}`;
         const keyWord = decodeURI(window.location.search).split('=')[1];
@@ -67,9 +109,7 @@ class SearchUserList extends Component {
                     </div>
                 </div>
                 <div className="search-userlist-right">
-                    <a className="follow-btn" onClick={this.checkIfLogin}>
-                        {loggedIn ? '取消关注' : '关注'}
-                    </a>
+                    {this.renderFollow()}
                 </div>
             </div>
         );
@@ -81,6 +121,15 @@ export default connect(
         const { post } = props;
         const username = state.user.getIn(['current', 'username']);
         const loggedIn = !!username;
+        console.log(username);
+        console.log(
+            state.global.getIn([
+                'follow',
+                'getFollowingAsync',
+                username,
+                'blog_result',
+            ])
+        );
         return {
             follow: typeof props.follow === 'undefined' ? true : props.follow,
             name: post.get('name'),
@@ -89,6 +138,12 @@ export default connect(
             following: post.get('following'),
             post_count: post.get('post_count'),
             profile_image: post.get('profile_image'),
+            allFollowing: state.global.getIn([
+                'follow',
+                'getFollowingAsync',
+                username,
+                'blog_result',
+            ]),
             username,
             loggedIn,
         };
@@ -101,6 +156,23 @@ export default connect(
         logout: e => {
             if (e) e.preventDefault();
             dispatch(userActions.logout({ type: 'default' }));
+        },
+        updateFollow: (follower, following, action, done) => {
+            const what = action ? [action] : [];
+            const json = ['follow', { follower, following, what }];
+            dispatch(
+                transactionActions.broadcastOperation({
+                    type: 'custom_json',
+                    operation: {
+                        id: 'follow',
+                        required_posting_auths: [follower],
+                        json: JSON.stringify(json),
+                    },
+                    successCallback: done,
+                    // TODO: Why?
+                    errorCallback: done,
+                })
+            );
         },
     })
 )(SearchUserList);

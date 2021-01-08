@@ -87,7 +87,7 @@ class PostsList extends React.Component {
             10
         ) {
             const { loadMore, posts, total_result } = this.props;
-            if (loadMore && posts.size > 0 && posts.size < total_result)
+            if (loadMore && posts.size > 0 /*&& posts.size < total_result*/)
                 loadMore();
         }
 

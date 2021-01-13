@@ -180,7 +180,12 @@ class SearchIndex extends React.Component {
                             searchSort={searchSort}
                             handleTabChange={params => {
                                 searchReset();
-                                if (params.q.trim() === '') return;
+                                if (
+                                    !params ||
+                                    !params.q ||
+                                    params.q.trim() === ''
+                                )
+                                    return;
                                 performSearch(params);
                             }}
                         />

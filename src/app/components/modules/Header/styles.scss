@@ -47,14 +47,24 @@
 }
 
 .Header__search {
-    @include MQ(L) {
+    /*@include MQ(L) {
         display: none;
+    }*/
+    display: none;
+    @media screen and (max-width: 765px) {
+      display: block;
     }
     &--desktop {
         display: none;
         @include MQ(L) {
             display: block;
         }
+    }
+    &--desktop--new {
+      display: block;
+      @media screen and (max-width: 765px) {
+        display: none;
+      }
     }
 }
 

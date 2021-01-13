@@ -362,7 +362,7 @@ class Header extends React.Component {
                             <div className="small-6 medium-8 large-7 columns Header__buttons">
                                 {/*CUSTOM SEARCH*/}
                                 <span
-                                    className="Header__search--desktop"
+                                    className="Header__search--desktop--new"
                                     style={{ marginRight: 20 }}
                                 >
                                     <ElasticSearchInput redirect />

@@ -27,11 +27,11 @@ class SearchUserList extends Component {
         } else {
             if (isFollow) {
                 updateFollow(username, name, undefined, () => {
-                    console.log('取消关注');
+                    //console.log('取消关注');
                 });
             } else {
                 updateFollow(username, name, 'blog', () => {
-                    console.log('关注');
+                    //console.log('关注');
                 });
             }
         }
@@ -121,15 +121,6 @@ export default connect(
         const { post } = props;
         const username = state.user.getIn(['current', 'username']);
         const loggedIn = !!username;
-        console.log(username);
-        console.log(
-            state.global.getIn([
-                'follow',
-                'getFollowingAsync',
-                username,
-                'blog_result',
-            ])
-        );
         return {
             follow: typeof props.follow === 'undefined' ? true : props.follow,
             name: post.get('name'),

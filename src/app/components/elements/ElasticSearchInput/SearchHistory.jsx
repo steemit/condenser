@@ -3,7 +3,6 @@ import tt from 'counterpart';
 
 class SearchHistory extends React.Component {
     handleClick(text) {
-        console.log(text);
         this.props.setSearchText(text);
         this.props.changeHistory(false);
     }

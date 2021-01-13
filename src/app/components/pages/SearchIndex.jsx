@@ -77,9 +77,11 @@ class SearchIndex extends React.Component {
         }
         // searchUser()
         emit.on('query_change', query => {
-            if (query && params.q !== query) {
+            if (params.q !== query) {
+                //console.log('query_change', query)
                 params.q = query;
                 searchReset();
+                if (query.trim() === '') return;
                 performSearch({
                     ...params,
                     depth: this.props.depth,
@@ -91,6 +93,15 @@ class SearchIndex extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         //console.log('componentDidUpdate')
+    }
+
+    componentWillUnmount() {
+        const { searchReset, searchDepth, searchSort } = this.props;
+
+        searchReset();
+        searchDepth(0);
+        searchSort('created_at');
+        emit.removeAllListeners();
     }
 
     getQueryString = name => {
@@ -148,6 +159,7 @@ class SearchIndex extends React.Component {
                                         expanded
                                         handleSubmit={q => {
                                             searchReset();
+                                            if (q.trim() === '') return;
                                             performSearch({
                                                 q,
                                                 s: undefined,
@@ -168,6 +180,7 @@ class SearchIndex extends React.Component {
                             searchSort={searchSort}
                             handleTabChange={params => {
                                 searchReset();
+                                if (params.q.trim() === '') return;
                                 performSearch(params);
                             }}
                         />

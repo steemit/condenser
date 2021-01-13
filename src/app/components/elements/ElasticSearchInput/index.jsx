@@ -47,11 +47,13 @@ class ElasticSearchInput extends React.Component {
 
     onSearchSubmit = e => {
         e.preventDefault();
+        e.stopPropagation();
         const { handleSubmit, redirect } = this.props;
         handleSubmit && handleSubmit(this.state.value);
         redirect && browserHistory.push(`/search?q=${this.state.value}`);
         emit.emit('query_change', this.state.value);
         const history = window.localStorage.getItem('steemit_search');
+        if (this.state.value.trim() === '') return;
         if (!history) {
             window.localStorage.setItem('steemit_search', this.state.value);
         } else {
@@ -78,7 +80,12 @@ class ElasticSearchInput extends React.Component {
             : 'search-input';
         return (
             <span>
-                <form className={formClass} onSubmit={this.onSearchSubmit}>
+                <form
+                    className={formClass}
+                    onSubmit={e => {
+                        this.onSearchSubmit(e);
+                    }}
+                >
                     <svg
                         className="search-input__icon"
                         width="42"
@@ -86,7 +93,9 @@ class ElasticSearchInput extends React.Component {
                         viewBox="0 0 32 32"
                         version="1.1"
                         xmlns="http://www.w3.org/2000/svg"
-                        onClick={this.onSearchSubmit}
+                        onClick={e => {
+                            this.onSearchSubmit(e);
+                        }}
                     >
                         <g>
                             <path

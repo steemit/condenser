@@ -1,5 +1,5 @@
 export const isPhone = () => {
-    if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
+    if (/(iPhone|iPad|iPod|iOS|Android)/i.test(window.navigator.userAgent)) {
         //移动端
         return true;
     }

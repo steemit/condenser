@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { browserHistory } from 'react-router';
 import tt from 'counterpart';
-import { emit } from '../../../utils/emit';
+import { emit } from 'app/utils/emit';
 import SearchHistory from './SearchHistory';
-import { isPhone } from '../../../utils/Common';
 
 class ElasticSearchInput extends React.Component {
     static propTypes = {
@@ -120,13 +119,13 @@ class ElasticSearchInput extends React.Component {
                             }, 200)
                         }
                     />
-                    {!isPhone() && (
+                    <div className="search-history-display">
                         <SearchHistory
                             show={this.state.showHistory}
                             changeHistory={this.changeHistory}
                             setSearchText={this.setSearchText}
                         />
-                    )}
+                    </div>
                 </form>
             </span>
         );

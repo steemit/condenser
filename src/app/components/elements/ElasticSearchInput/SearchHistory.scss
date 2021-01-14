@@ -3,12 +3,12 @@
     list-style: none;
     border: 1px solid #eee;
     border-radius: 6px;
-    text-shadow: 1px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     background: #fff;
     margin-top: 2px;
     max-width: 220px;
     overflow: hidden;
+    z-index: 99;
     li {
         padding: 6px 12px;
         &:hover {
@@ -30,5 +30,10 @@
                 cursor: pointer;
             }
         }
+    }
+}
+.search-history-display {
+    @media screen and (max-width: 765px) {
+      display: none;
     }
 }

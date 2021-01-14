@@ -157,7 +157,8 @@ class PostsList extends React.Component {
                 } else if (
                     this.props.shouldSeeAds &&
                     i >= every &&
-                    i % every === 0
+                    i % every === 0 &&
+                    depth !== 2
                 ) {
                     summary.push(
                         <div

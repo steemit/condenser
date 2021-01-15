@@ -119,13 +119,13 @@ class ElasticSearchInput extends React.Component {
                             }, 200)
                         }
                     />
-                    <div className="search-history-display">
+                    {this.props.addHistory && (
                         <SearchHistory
                             show={this.state.showHistory}
                             changeHistory={this.changeHistory}
                             setSearchText={this.setSearchText}
                         />
-                    </div>
+                    )}
                 </form>
             </span>
         );

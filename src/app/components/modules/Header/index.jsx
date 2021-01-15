@@ -365,7 +365,10 @@ class Header extends React.Component {
                                     className="Header__search--desktop--new"
                                     style={{ marginRight: 20 }}
                                 >
-                                    <ElasticSearchInput redirect />
+                                    <ElasticSearchInput
+                                        addHistory={true}
+                                        redirect
+                                    />
                                 </span>
                                 <span className="Header__search">
                                     <a href="/search">

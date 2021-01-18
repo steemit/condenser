@@ -8,12 +8,16 @@ class SearchHistory extends React.Component {
     }
 
     clearHistory() {
-        window.localStorage.removeItem('steemit_search');
+        if (process.env.BROWSER) {
+            window.localStorage.removeItem('steemit_search');
+        }
         this.props.changeHistory(false);
     }
 
     render() {
-        const history = window.localStorage.getItem('steemit_search');
+        const history = process.env.BROWSER
+            ? window.localStorage.getItem('steemit_search')
+            : null;
         if (!history) return null;
         return (
             <ul

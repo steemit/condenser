@@ -16,7 +16,6 @@ class SearchTabs extends Component {
 
     handleSortChange(e) {
         const { depth, searchSort } = this.props;
-        console.log('value:', e.target.value);
         searchSort(e.target.value);
         this.searchAgain(depth, e.target.value);
     }

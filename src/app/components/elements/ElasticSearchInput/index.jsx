@@ -51,24 +51,26 @@ class ElasticSearchInput extends React.Component {
         handleSubmit && handleSubmit(this.state.value);
         redirect && browserHistory.push(`/search?q=${this.state.value}`);
         emit.emit('query_change', this.state.value);
-        const history = window.localStorage.getItem('steemit_search');
-        if (this.state.value.trim() === '') return;
-        if (!history) {
-            window.localStorage.setItem('steemit_search', this.state.value);
-        } else {
-            let historyArr = history.split(',');
-            if (historyArr.includes(this.state.value)) {
-                historyArr.splice(historyArr.indexOf(this.state.value), 1);
-                historyArr.unshift(this.state.value);
-                window.localStorage.setItem(
-                    'steemit_search',
-                    historyArr.join(',')
-                );
+        if (process.env.BROWSER) {
+            const history = window.localStorage.getItem('steemit_search');
+            if (this.state.value.trim() === '') return;
+            if (!history) {
+                window.localStorage.setItem('steemit_search', this.state.value);
             } else {
-                window.localStorage.setItem(
-                    'steemit_search',
-                    `${this.state.value},${history}`
-                );
+                let historyArr = history.split(',');
+                if (historyArr.includes(this.state.value)) {
+                    historyArr.splice(historyArr.indexOf(this.state.value), 1);
+                    historyArr.unshift(this.state.value);
+                    window.localStorage.setItem(
+                        'steemit_search',
+                        historyArr.join(',')
+                    );
+                } else {
+                    window.localStorage.setItem(
+                        'steemit_search',
+                        `${this.state.value},${history}`
+                    );
+                }
             }
         }
     };

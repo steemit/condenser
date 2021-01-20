@@ -49,7 +49,10 @@ class ElasticSearchInput extends React.Component {
         e.stopPropagation();
         const { handleSubmit, redirect } = this.props;
         handleSubmit && handleSubmit(this.state.value);
-        redirect && browserHistory.push(`/search?q=${this.state.value}`);
+        redirect &&
+            browserHistory.push(
+                `/search?q=${this.state.value.replace(/%/g, '%25')}`
+            );
         emit.emit('query_change', this.state.value);
         if (process.env.BROWSER) {
             const history = window.localStorage.getItem('steemit_search');

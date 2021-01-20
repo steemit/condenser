@@ -69,6 +69,8 @@ class SearchIndex extends React.Component {
         if (!params.s) {
             params.s = undefined;
         }
+        console.log(params);
+        console.log(params.q);
         if (params.q) {
             searchDepth(0);
             searchSort('created_at');

@@ -11,6 +11,9 @@
     z-index: 99;
     li {
         padding: 6px 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         &:hover {
             cursor: pointer;
             background-color: rgba(0, 0, 0, 0.05);

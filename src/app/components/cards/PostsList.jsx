@@ -13,7 +13,7 @@ import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import GptAd from 'app/components/elements/GptAd';
 import VideoAd from 'app/components/elements/VideoAd';
-
+import SearchUserList from 'app/components/cards/SearchUserList';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import xhr from 'axios/index';
 
@@ -129,6 +129,7 @@ class PostsList extends React.Component {
             depth,
         } = this.props;
         const { thumbSize, blist } = this.state;
+
         const renderSummary = items =>
             items.map((post, i) => {
                 const ps = (

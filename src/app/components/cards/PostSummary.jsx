@@ -101,6 +101,7 @@ class PostSummary extends React.Component {
 
         const summary = extractBodySummary(post.get('body'), isReply);
         const keyWord = decodeURI(window.location.search).split('=')[1];
+
         const highlightColor = '#00FFC8';
         const content_body = (
             <div className="PostSummary__body entry-content">

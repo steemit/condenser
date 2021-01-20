@@ -8,6 +8,7 @@ const SEARCH_RESET = 'search/SEARCH_RESET';
 const SEARCH_DEPTH = 'search/SEARCH_DEPTH';
 const SEARCH_SORT = 'search/SEARCH_SORT';
 const SEARCH_TOTAL = 'search/SEARCH_TOTAL';
+const searchTypes = ['hive_posts', 'hive_replies', 'hive_accounts'];
 
 const defaultSearchState = Map({
     pending: false,
@@ -51,6 +52,12 @@ export default function reducer(state = defaultSearchState, action) {
             const { hits, _scroll_id, append } = payload;
             const results = hits.hits;
             const scroll_id = _scroll_id;
+            const depth = state.getIn(['depth']);
+            if (results.length > 0) {
+                if (results[0]._index !== searchTypes[depth]) {
+                    return state;
+                }
+            }
             const posts = List(
                 results.map(post => {
                     const updatedPost = { ...post._source };

@@ -7,12 +7,18 @@ import { highlightKeyword } from 'app/utils/ExtractContent';
 import * as userActions from 'app/redux/UserReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import tt from 'counterpart';
+import USERLOGO from 'app/assets/images/user-static.png';
 
 export const SIZE_SMALL = 'small';
 export const SIZE_MED = 'medium';
 export const SIZE_LARGE = 'large';
 
 class SearchUserList extends Component {
+    imgErrorFun(event) {
+        event.target.src = USERLOGO;
+        event.target.οnerrοr = null; //控制图片显示区域不要一直跳动
+    }
+
     checkIfLogin = isFollow => {
         const {
             loggedIn,
@@ -70,6 +76,7 @@ class SearchUserList extends Component {
             post_count,
             loggedIn,
             allFollowing,
+            search_type,
         } = this.props;
         const url = imageProxy() + `u/${name}/avatar/${SIZE_MED}`;
         const keyWord = decodeURI(window.location.search).split('=')[1];
@@ -79,7 +86,11 @@ class SearchUserList extends Component {
                 <div className="search-userlist-left">
                     <div className="search-userlist-left-top">
                         <a>
-                            <img className="user-logo" src={url} />
+                            <img
+                                className="user-logo"
+                                src={url}
+                                onError={event => this.imgErrorFun(event)}
+                            />
                         </a>
                         <span
                             className="user-name"
@@ -129,6 +140,7 @@ export default connect(
             following: post.get('following'),
             post_count: post.get('post_count'),
             profile_image: post.get('profile_image'),
+            search_type: post.get('_index'),
             allFollowing: state.global.getIn([
                 'follow',
                 'getFollowingAsync',

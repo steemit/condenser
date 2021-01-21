@@ -64,6 +64,7 @@ class Post extends React.Component {
             getSubscriptions(uname);
     }
 
+    componentWillUnmount() {}
     toggleNegativeReplies = e => {
         this.setState({
             showNegativeComments: !this.state.showNegativeComments,
@@ -96,10 +97,6 @@ class Post extends React.Component {
             bottomAdList,
         } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
-
-        if (dis === undefined) {
-            return null;
-        }
         if (isEmptyPost(dis))
             return (
                 <div className="NotFound float-center">

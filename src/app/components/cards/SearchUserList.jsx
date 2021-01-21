@@ -79,7 +79,9 @@ class SearchUserList extends Component {
             search_type,
         } = this.props;
         const url = imageProxy() + `u/${name}/avatar/${SIZE_MED}`;
-        const keyWord = decodeURI(window.location.search).split('=')[1];
+        const keyWord = process.env.BROWSER
+            ? decodeURI(window.location.search).split('=')[1]
+            : null;
         const highlightColor = '#00FFC8';
         return (
             <div className="search-userlist">

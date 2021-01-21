@@ -97,6 +97,9 @@ class Post extends React.Component {
         } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
 
+        if (dis === undefined) {
+            return null;
+        }
         if (isEmptyPost(dis))
             return (
                 <div className="NotFound float-center">
@@ -362,8 +365,6 @@ export default connect(
         const { username, slug } = ownProps.routeParams;
         const post = username + '/' + slug;
         const content = state.global.get('content');
-        console.log(`content`);
-        console.log(content);
         const dis = content.get(post);
         const trackingId = state.app.getIn(['trackingId'], null);
         const steemMarketData = state.app.get('steemMarket');

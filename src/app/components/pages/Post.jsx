@@ -73,7 +73,7 @@ class Post extends React.Component {
                     timeOut: true,
                 });
             }
-        }, 1000);
+        }, 2000);
     }
 
     componentWillUnmount() {

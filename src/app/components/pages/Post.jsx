@@ -68,10 +68,12 @@ class Post extends React.Component {
     componentDidMount() {
         const _this = this;
         setTimeout(() => {
-            _this.setState({
-                timeOut: true,
-            });
-        }, 500);
+            if (_this.props.dis === undefined) {
+                _this.setState({
+                    timeOut: true,
+                });
+            }
+        }, 1000);
     }
 
     componentWillUnmount() {
@@ -120,7 +122,7 @@ class Post extends React.Component {
         if (dis === undefined && !timeOut) {
             return null;
         }
-        if (isEmptyPost(dis))
+        if (isEmptyPost(dis) || timeOut)
             return (
                 <div className="NotFound float-center">
                     <div>

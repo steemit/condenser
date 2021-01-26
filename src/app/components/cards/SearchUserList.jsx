@@ -87,7 +87,7 @@ class SearchUserList extends Component {
             <div className="search-userlist">
                 <div className="search-userlist-left">
                     <div className="search-userlist-left-top">
-                        <a>
+                        <a href={'/@' + name} target="_blank">
                             <img
                                 className="user-logo"
                                 src={url}
@@ -104,9 +104,9 @@ class SearchUserList extends Component {
                                 ),
                             }}
                         />
-                        <span className="user-repution">{`(${
+                        <span className="user-repution">{`(${Math.floor(
                             reputation
-                        })`}</span>
+                        )})`}</span>
                     </div>
                     <div className="search-userlist-left-bottom">
                         <span className="user-follower">

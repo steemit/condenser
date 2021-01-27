@@ -236,12 +236,12 @@ function* usernamePasswordLogin2({
                 username,
                 login_with_keychain: true,
                 effective_vests: effectiveVests(account),
-                // tip_count: account.get('tip_count'),
-                // tron_addr: account.get('tron_addr'),
-                // tron_balance: account.get('tron_balance'),
-                // pending_claim_tron_reward: account.get(
-                //     'pending_claim_tron_reward'
-                // ),
+                tip_count: account.get('tip_count'),
+                tron_addr: account.get('tron_addr'),
+                tron_balance: account.get('tron_balance'),
+                pending_claim_tron_reward: account.get(
+                    'pending_claim_tron_reward'
+                ),
             })
         );
         return;
@@ -400,12 +400,12 @@ function* usernamePasswordLogin2({
                     private_keys,
                     login_owner_pubkey,
                     effective_vests: effectiveVests(account),
-                    // tip_count: account.get('tip_count'),
-                    // tron_addr: account.get('tron_addr'),
-                    // tron_balance: account.get('tron_balance'),
-                    // pending_claim_tron_reward: account.get(
-                    //     'pending_claim_tron_reward'
-                    // ),
+                    tip_count: account.get('tip_count'),
+                    tron_addr: account.get('tron_addr'),
+                    tron_balance: account.get('tron_balance'),
+                    pending_claim_tron_reward: account.get(
+                        'pending_claim_tron_reward'
+                    ),
                 })
             );
         } else {
@@ -415,12 +415,12 @@ function* usernamePasswordLogin2({
                     private_keys, // TODO: this is a temp way
                     login_owner_pubkey, // TODO: this is a temp way
                     effective_vests: effectiveVests(account),
-                    // tip_count: account.get('tip_count'),
-                    // tron_addr: account.get('tron_addr'),
-                    // tron_balance: account.get('tron_balance'),
-                    // pending_claim_tron_reward: account.get(
-                    //     'pending_claim_tron_reward'
-                    // ),
+                    tip_count: account.get('tip_count'),
+                    tron_addr: account.get('tron_addr'),
+                    tron_balance: account.get('tron_balance'),
+                    pending_claim_tron_reward: account.get(
+                        'pending_claim_tron_reward'
+                    ),
                 })
             );
         }
@@ -463,12 +463,12 @@ function* usernamePasswordLogin2({
                         username,
                         login_with_keychain: true,
                         effective_vests: effectiveVests(account),
-                        // tip_count: account.get('tip_count'),
-                        // tron_addr: account.get('tron_addr'),
-                        // tron_balance: account.get('tron_balance'),
-                        // pending_claim_tron_reward: account.get(
-                        //     'pending_claim_tron_reward'
-                        // ),
+                        tip_count: account.get('tip_count'),
+                        tron_addr: account.get('tron_addr'),
+                        tron_balance: account.get('tron_balance'),
+                        pending_claim_tron_reward: account.get(
+                            'pending_claim_tron_reward'
+                        ),
                     })
                 );
             } else {
@@ -491,12 +491,12 @@ function* usernamePasswordLogin2({
                     userActions.setUser({
                         username,
                         pass_auth: true,
-                        // tip_count: account.get('tip_count'),
-                        // tron_addr: account.get('tron_addr'),
-                        // tron_balance: account.get('tron_balance'),
-                        // pending_claim_tron_reward: account.get(
-                        //     'pending_claim_tron_reward'
-                        // ),
+                        tip_count: account.get('tip_count'),
+                        tron_addr: account.get('tron_addr'),
+                        tron_balance: account.get('tron_balance'),
+                        pending_claim_tron_reward: account.get(
+                            'pending_claim_tron_reward'
+                        ),
                     })
                 );
             }

@@ -411,7 +411,9 @@ class Voting extends React.Component {
         }
         const payout_limit_hit = total_payout >= max_payout;
         const shown_payout =
-            payout_limit_hit && max_payout > 0 ? max_payout : total_payout;
+            payout_limit_hit && max_payout > 0
+                ? max_payout + pending_trx * trx_price
+                : total_payout + pending_trx * trx_price;
 
         const up = (
             <Icon

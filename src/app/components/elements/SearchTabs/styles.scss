@@ -1,10 +1,13 @@
 .search-nav {
     .search-tabs {
         display: flex;
-        background: #fff;
         padding: .8rem;
         list-style: none;
         margin-left: 0;
+        @include themify($themes) {
+            background: themed('moduleBackgroundColor');
+            color: themed('textColorPrimary');
+        }
         li {
             margin-right: 2.8rem;
             font-weight: 500;

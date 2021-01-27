@@ -13,7 +13,7 @@ import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import GptAd from 'app/components/elements/GptAd';
 import VideoAd from 'app/components/elements/VideoAd';
-
+import SearchUserList from 'app/components/cards/SearchUserList';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import xhr from 'axios/index';
 
@@ -86,8 +86,9 @@ class PostsList extends React.Component {
             topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight <
             10
         ) {
-            const { loadMore, posts } = this.props;
-            if (loadMore && posts.size > 0) loadMore();
+            const { loadMore, posts, total_result } = this.props;
+            if (loadMore && posts.size > 0 /*&& posts.size < total_result*/)
+                loadMore();
         }
 
         // Detect if we're in mobile mode (renders larger preview imgs)
@@ -125,8 +126,10 @@ class PostsList extends React.Component {
             nsfwPref,
             hideCategory,
             blacklist,
+            depth,
         } = this.props;
         const { thumbSize, blist } = this.state;
+
         const renderSummary = items =>
             items.map((post, i) => {
                 const ps = (
@@ -136,6 +139,7 @@ class PostsList extends React.Component {
                         nsfwPref={nsfwPref}
                         hideCategory={hideCategory}
                         order={order}
+                        depth={depth}
                     />
                 );
 
@@ -154,7 +158,8 @@ class PostsList extends React.Component {
                 } else if (
                     this.props.shouldSeeAds &&
                     i >= every &&
-                    i % every === 0
+                    i % every === 0 &&
+                    depth !== 2
                 ) {
                     summary.push(
                         <div
@@ -169,7 +174,6 @@ class PostsList extends React.Component {
                         </div>
                     );
                 }
-
                 return summary;
             });
 

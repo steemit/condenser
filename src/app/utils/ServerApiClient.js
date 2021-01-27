@@ -147,6 +147,17 @@ export function conductSearch(req) {
     return fetch('/api/v1/search', request);
 }
 
+export function userSearch(req) {
+    const bodyWithCSRF = {
+        ...req.body,
+        csrf: window.$STM_csrf,
+    };
+    const request = Object.assign({}, request_base, {
+        body: JSON.stringify(bodyWithCSRF),
+    });
+    return fetch('/hive_accounts/_search', request);
+}
+
 export function checkTronUser(data, type = 'steem') {
     let queryString = '';
     if (type === 'steem') {

@@ -1,0 +1,37 @@
+.search-history {
+    margin: 0;
+    list-style: none;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+    background: #fff;
+    margin-top: 2px;
+    max-width: 220px;
+    overflow: hidden;
+    z-index: 99;
+    li {
+        padding: 6px 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &:hover {
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    }
+    .search-history-first {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #eee;
+        &:hover {
+            cursor: auto;
+        }
+        .search-history-clear {
+            color: #333;
+            font-size: 14px;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}

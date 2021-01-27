@@ -1,16 +1,14 @@
 form.search-input {
-
     height: 42px;
 
     svg.search-input__icon {
         position: absolute;
-        pointer-events: none;
+        //pointer-events: none;
         @include themify($themes) {
             stroke: themed('colorAccentReverse');
         }
         stroke-width: 1.2;
         fill: none;
-        
     }
 
     input.search-input__inner {

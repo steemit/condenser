@@ -18,7 +18,8 @@
     "debug": "NODE_ENV=development webpack --config ./webpack/debug.config.js && rm -rf ./lib && babel src --source-maps --out-dir lib -D && node --inspect-brk lib/server/index.js",
     "checktranslations": "node scripts/check_translations.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "storybook-build": "build-storybook -c .storybook -o docs"
+    "storybook-build": "build-storybook -c .storybook -o docs",
+    "env-start": "env $(tr '\\n' ' ' < .env) yarn start"
   },
   "author": "Steemit, Inc.",
   "license": "MIT",
@@ -56,6 +57,7 @@
     "disk-stat": "1.0.4",
     "ecurve": "1.0.5",
     "estraverse-fb": "1.3.2",
+    "events": "^3.2.0",
     "file-loader": "0.11.2",
     "foundation-sites": "git+https://github.com/steemit/foundation-sites.git#e8e32c715bbc4c822b80b555345f61337269ca78",
     "git-rev-sync": "1.9.1",

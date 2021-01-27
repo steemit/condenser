@@ -345,9 +345,25 @@ export default function useGeneralApi(app) {
                 'steem_elastic_search_endpoint'
             );
 
-            let searchEndpoint = elasticSearchService.concat(
-                '/hive_posts/_search?scroll=1m'
-            );
+            let searchEndpoint = null;
+            console.log(params.depth);
+            // 回复
+            if (params.depth === 1) {
+                searchEndpoint = elasticSearchService.concat(
+                    '/hive_replies/_search?scroll=1m'
+                );
+            } else if (params.depth === 2) {
+                // 用户
+                searchEndpoint = elasticSearchService.concat(
+                    '/hive_accounts/_search?scroll=1m'
+                );
+            } else {
+                // 帖子
+                searchEndpoint = elasticSearchService.concat(
+                    '/hive_posts/_search?scroll=1m'
+                );
+            }
+
             let searchPayload = JSON.stringify(params.searchQuery);
 
             if (params.scrollQuery) {

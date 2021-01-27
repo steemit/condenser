@@ -7,7 +7,11 @@ import { connect } from 'react-redux';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import { immutableAccessor } from 'app/utils/Accessors';
-import { extractBodySummary, extractImageLink } from 'app/utils/ExtractContent';
+import {
+    extractBodySummary,
+    extractImageLink,
+    highlightKeyword,
+} from 'app/utils/ExtractContent';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import { List, Map } from 'immutable';
 import Author from 'app/components/elements/Author';
@@ -17,6 +21,7 @@ import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
+import SearchUserList from 'app/components/cards/SearchUserList';
 import { SIGNUP_URL } from 'shared/constants';
 import { hasNsfwTag } from 'app/utils/StateFunctions';
 
@@ -61,10 +66,9 @@ class PostSummary extends React.Component {
     }
 
     render() {
-        const { ignore, hideCategory, net_vests } = this.props;
+        const { ignore, hideCategory, net_vests, depth } = this.props;
         const { post, onClose } = this.props;
         if (!post) return null;
-
         let reblogged_by;
         if (post.get('reblogged_by', List()).size > 0) {
             reblogged_by = post.get('reblogged_by').toJS();
@@ -96,9 +100,22 @@ class PostSummary extends React.Component {
         const post_url = `/${category}/@${author}/${permlink}`;
 
         const summary = extractBodySummary(post.get('body'), isReply);
+        const keyWord = process.env.BROWSER
+            ? decodeURI(window.location.search).split('=')[1]
+            : null;
+        const highlightColor = '#00FFC8';
         const content_body = (
             <div className="PostSummary__body entry-content">
-                <Link to={post_url}>{summary}</Link>
+                <Link
+                    to={post_url}
+                    dangerouslySetInnerHTML={{
+                        __html: highlightKeyword(
+                            summary,
+                            keyWord,
+                            highlightColor
+                        ),
+                    }}
+                />
             </div>
         );
 
@@ -106,7 +123,15 @@ class PostSummary extends React.Component {
             <h2 className="articles__h2 entry-title">
                 <Link to={post_url}>
                     {isNsfw && <span className="nsfw-flag">nsfw</span>}
-                    {post.get('title')}
+                    <span
+                        dangerouslySetInnerHTML={{
+                            __html: highlightKeyword(
+                                post.get('title'),
+                                keyWord,
+                                highlightColor
+                            ),
+                        }}
+                    />
                 </Link>
             </h2>
         );
@@ -203,6 +228,12 @@ class PostSummary extends React.Component {
             </div>
         );
 
+        const userList = (
+            <div>
+                <SearchUserList post={post} />
+            </div>
+        );
+
         const { nsfwPref, username } = this.props;
         const { revealNsfw } = this.state;
 
@@ -286,7 +317,9 @@ class PostSummary extends React.Component {
             );
         }
 
-        return (
+        return depth === 2 ? (
+            <div className="articles__summary">{userList}</div>
+        ) : (
             <div className="articles__summary">
                 {reblogged_by}
                 {summary_header}

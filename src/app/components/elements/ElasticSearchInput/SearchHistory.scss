@@ -9,6 +9,10 @@
     max-width: 220px;
     overflow: hidden;
     z-index: 99;
+    @include themify($themes) {
+        background: themed('moduleBackgroundColor');
+        color: themed('textColorPrimary');
+    }
     li {
         padding: 6px 12px;
         white-space: nowrap;
@@ -27,7 +31,6 @@
             cursor: auto;
         }
         .search-history-clear {
-            color: #333;
             font-size: 14px;
             &:hover {
                 cursor: pointer;

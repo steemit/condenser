@@ -28,6 +28,10 @@
       border-radius: 4px;
       padding: .4rem .6rem;
       color: #333;
+      @include themify($themes) {
+        background: themed('colorWhite');
+      }
+      
       &:hover {
         cursor: pointer;
         color: #06D6A9;

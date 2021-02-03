@@ -1,3 +1,6 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable import/first */
 import { fromJS } from 'immutable';
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import tt from 'counterpart';
@@ -5,8 +8,9 @@ import { api } from '@steemit/steem-js';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
-import { setUserPreferences } from 'app/utils/ServerApiClient';
+import { setUserPreferences, checkTronUser } from 'app/utils/ServerApiClient';
 import { callBridge } from 'app/utils/steemApi';
+import { getTronAccount } from 'app/utils/tronApi';
 
 const wait = ms =>
     new Promise(resolve => {
@@ -31,7 +35,7 @@ export function* getAccount(username, force = false) {
     );
 
     // hive never serves `owner` prop (among others)
-    let isLite = !!account && !account.get('owner');
+    const isLite = !!account && !account.get('owner');
 
     if (!account || force || isLite) {
         console.log(
@@ -45,8 +49,40 @@ export function* getAccount(username, force = false) {
 
         [account] = yield call([api, api.getAccountsAsync], [username]);
         if (account) {
-            account = fromJS(account);
-            yield put(globalActions.receiveAccount({ account }));
+            // get tron information by steem username
+            // and merge into account
+            try {
+                let tronAccount = fromJS(yield call(checkTronUser, username));
+
+                // get tron balance and merge into account
+                tronAccount = tronAccount.mergeDeep(
+                    fromJS({ tron_balance: 0 })
+                );
+                if (tronAccount.get('tron_addr')) {
+                    const tronNetworkAccount = yield call(
+                        getTronAccount,
+                        tronAccount.get('tron_addr')
+                    );
+                    if (
+                        Object.keys(tronNetworkAccount).length > 0 &&
+                        tronNetworkAccount.balance !== undefined
+                    ) {
+                        tronAccount = tronAccount.mergeDeep(
+                            fromJS({
+                                tron_balance: tronNetworkAccount.balance / 1e6,
+                            })
+                        );
+                    }
+                }
+                // merge and update account
+                account = fromJS(account).mergeDeep(tronAccount);
+                account = fromJS(account);
+                yield put(globalActions.receiveAccount({ account }));
+            } catch (err) {
+                console.error('SagaShared getAccount:', err.message);
+                account = fromJS(account);
+                yield put(globalActions.receiveAccount({ account }));
+            }
         }
     }
     return account;
@@ -68,7 +104,7 @@ export function* getContent({ author, permlink, resolve, reject }) {
     while (!content) {
         console.log('getContent', author, permlink);
         content = yield call([api, api.getContentAsync], author, permlink);
-        if (content['author'] == '') {
+        if (content.author == '') {
             // retry if content not found. #1870
             content = null;
             yield call(wait, 3000);
@@ -77,7 +113,7 @@ export function* getContent({ author, permlink, resolve, reject }) {
 
     function dbg(content) {
         const cop = Object.assign({}, content);
-        delete cop['active_votes'];
+        delete cop.active_votes;
         return JSON.stringify(cop);
     }
 

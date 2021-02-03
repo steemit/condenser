@@ -1,0 +1,44 @@
+.search-userlist {
+  display: flex;
+  padding: .6rem;
+  .search-userlist-left {
+    .search-userlist-left-top {
+      margin-bottom: .6rem;
+      .user-logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: .6rem;
+      }
+      .user-name {
+        margin-right: .6rem;
+      }
+    }
+    .search-userlist-left-bottom {
+      .user-follower {
+        margin-right: 1.4rem;
+      }
+    }
+  }
+  .search-userlist-right {
+    margin-left: auto;
+    align-self: center;
+    .follow-btn {
+      border: 1px solid gray;
+      border-radius: 4px;
+      padding: .4rem .6rem;
+      color: #333;
+      @include themify($themes) {
+        background: themed('colorWhite');
+      }
+      
+      &:hover {
+        cursor: pointer;
+        color: #06D6A9;
+        border: 1px solid #06D6A9;
+      }
+ 
+    }
+  }
+
+}

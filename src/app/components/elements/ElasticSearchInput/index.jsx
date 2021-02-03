@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { browserHistory } from 'react-router';
 import tt from 'counterpart';
+import { emit } from 'app/utils/emit';
+import SearchHistory from './SearchHistory';
 
 class ElasticSearchInput extends React.Component {
     static propTypes = {
@@ -20,20 +22,60 @@ class ElasticSearchInput extends React.Component {
         super(props);
         this.state = {
             value: this.props.initValue ? this.props.initValue : '',
+            showHistory: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.onSearchSubmit = this.onSearchSubmit.bind(this);
+        this.setSearchText = this.setSearchText.bind(this);
+        this.changeHistory = this.changeHistory.bind(this);
+    }
+
+    changeHistory(display) {
+        this.setState({
+            showHistory: display,
+        });
     }
 
     handleChange(event) {
-        this.setState({ value: event.target.value });
+        this.setSearchText(event.target.value);
+    }
+
+    setSearchText(value) {
+        this.setState({ value });
     }
 
     onSearchSubmit = e => {
         e.preventDefault();
+        e.stopPropagation();
         const { handleSubmit, redirect } = this.props;
         handleSubmit && handleSubmit(this.state.value);
-        redirect && browserHistory.push(`/search?q=${this.state.value}`);
+        redirect &&
+            browserHistory.push(
+                `/search?q=${this.state.value.replace(/%/g, '%25')}`
+            );
+        emit.emit('query_change', this.state.value);
+        if (process.env.BROWSER) {
+            const history = window.localStorage.getItem('steemit_search');
+            if (this.state.value.trim() === '') return;
+            if (!history) {
+                window.localStorage.setItem('steemit_search', this.state.value);
+            } else {
+                let historyArr = history.split(',');
+                if (historyArr.includes(this.state.value)) {
+                    historyArr.splice(historyArr.indexOf(this.state.value), 1);
+                    historyArr.unshift(this.state.value);
+                    window.localStorage.setItem(
+                        'steemit_search',
+                        historyArr.join(',')
+                    );
+                } else {
+                    window.localStorage.setItem(
+                        'steemit_search',
+                        `${this.state.value},${history}`
+                    );
+                }
+            }
+        }
     };
 
     render() {
@@ -42,7 +84,12 @@ class ElasticSearchInput extends React.Component {
             : 'search-input';
         return (
             <span>
-                <form className={formClass} onSubmit={this.onSearchSubmit}>
+                <form
+                    className={formClass}
+                    onSubmit={e => {
+                        this.onSearchSubmit(e);
+                    }}
+                >
                     <svg
                         className="search-input__icon"
                         width="42"
@@ -50,6 +97,9 @@ class ElasticSearchInput extends React.Component {
                         viewBox="0 0 32 32"
                         version="1.1"
                         xmlns="http://www.w3.org/2000/svg"
+                        onClick={e => {
+                            this.onSearchSubmit(e);
+                        }}
                     >
                         <g>
                             <path
@@ -66,7 +116,21 @@ class ElasticSearchInput extends React.Component {
                         placeholder={tt('g.search')}
                         onChange={this.handleChange}
                         value={this.state.value}
+                        autoComplete="off"
+                        onFocus={() => this.changeHistory(true)}
+                        onBlur={() =>
+                            setTimeout(() => {
+                                this.changeHistory(false);
+                            }, 200)
+                        }
                     />
+                    {this.props.addHistory && (
+                        <SearchHistory
+                            show={this.state.showHistory}
+                            changeHistory={this.changeHistory}
+                            setSearchText={this.setSearchText}
+                        />
+                    )}
                 </form>
             </span>
         );

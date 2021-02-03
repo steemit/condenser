@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
@@ -42,7 +43,17 @@ export default class VerticalMenu extends React.Component {
                             ) : (
                                 <span>
                                     {i.icon && <Icon name={i.icon} />}
-                                    {i.label ? i.label : i.value}
+                                    {i.label ? (
+                                        i.label
+                                    ) : i.raw ? (
+                                        <span
+                                            dangerouslySetInnerHTML={{
+                                                __html: i.value,
+                                            }}
+                                        />
+                                    ) : (
+                                        i.value
+                                    )}
                                 </span>
                             )}
                         </li>

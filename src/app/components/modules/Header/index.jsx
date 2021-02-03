@@ -1,6 +1,14 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable prefer-const */
+/* eslint-disable no-multi-assign */
+/* eslint-disable react/sort-comp */
+/* eslint-disable consistent-return */
+/* eslint-disable react/no-unused-prop-types */
+/* eslint-disable no-undef */
+/* eslint-disable import/first */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { parseJsonTags } from 'app/utils/StateFunctions';
 import Headroom from 'react-headroom';
@@ -254,8 +262,15 @@ class Header extends React.Component {
         // Since navigate isn't set, defaultNavigate will always be used.
         const nav = navigate || defaultNavigate;
 
+        const checkIfLogin = () => {
+            if (!loggedIn) {
+                return showLogin();
+            }
+            return browserHistory.replace('/submit.html');
+        };
+
         const submit_story = $STM_Config.read_only_mode ? null : (
-            <Link to="/submit.html">
+            <Link onClick={checkIfLogin}>
                 <IconButton />
             </Link>
         );
@@ -345,6 +360,22 @@ class Header extends React.Component {
                             </div>
 
                             <div className="small-6 medium-8 large-7 columns Header__buttons">
+                                {/*CUSTOM SEARCH*/}
+                                <span
+                                    className="Header__search--desktop--new"
+                                    style={{ marginRight: 20 }}
+                                >
+                                    <ElasticSearchInput
+                                        addHistory={true}
+                                        redirect
+                                    />
+                                </span>
+                                <span className="Header__search">
+                                    <a href="/search">
+                                        <IconButton icon="magnifyingGlass" />
+                                    </a>
+                                </span>
+
                                 {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
                                 {!loggedIn && (
                                     <span className="Header__user-signup show-for-medium">
@@ -363,16 +394,6 @@ class Header extends React.Component {
                                         </a>
                                     </span>
                                 )}
-
-                                {/*CUSTOM SEARCH*/}
-                                <span className="Header__search--desktop">
-                                    <ElasticSearchInput redirect />
-                                </span>
-                                <span className="Header__search">
-                                    <a href="/search">
-                                        <IconButton icon="magnifyingGlass" />
-                                    </a>
-                                </span>
 
                                 {/*SUBMIT STORY*/}
                                 {submit_story}

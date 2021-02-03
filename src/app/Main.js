@@ -1,17 +1,23 @@
+/* eslint-disable no-multi-assign */
+/* eslint-disable no-unused-vars */
+/* eslint-disable space-before-function-paren */
+/* eslint-disable no-fallthrough */
+/* eslint-disable arrow-parens */
 import 'babel-core/register';
 import 'babel-polyfill';
 import 'whatwg-fetch';
 import store from 'store';
-import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from 'shared/constants';
-import './assets/stylesheets/app.scss';
-import plugins from 'app/utils/JsPlugins';
 import Iso from 'iso';
-import { clientRender } from 'shared/UniversalRender';
-import ConsoleExports from './utils/ConsoleExports';
-import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import * as steem from '@steemit/steem-js';
-import { determineViewMode } from 'app/utils/Links';
+// import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from 'shared/constants';
 import frontendLogger from 'app/utils/FrontendLogger';
+import plugins from 'app/utils/JsPlugins';
+import { clientRender } from 'shared/UniversalRender';
+import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
+import { determineViewMode, determineActivityTag } from 'app/utils/Links';
+import ActivityTracker from 'app/utils/ActivityTracker';
+import ConsoleExports from './utils/ConsoleExports';
+import './assets/stylesheets/app.scss';
 
 window.addEventListener('error', frontendLogger);
 
@@ -102,6 +108,13 @@ function runApp(initial_state) {
     }
 
     initial_state.app.viewMode = determineViewMode(window.location.search);
+
+    window.activityTag = initial_state.app.activityTag;
+    const currentActivityTag = determineActivityTag(window.location.hash);
+    if (currentActivityTag !== false) {
+        ActivityTracker(currentActivityTag, initial_state.app.trackingId);
+        console.log('activityTag:', currentActivityTag);
+    }
 
     const locale = store.get('language');
     if (locale) initial_state.user.locale = locale;

@@ -5,6 +5,7 @@
 @import "./cards/Comment";
 @import "./cards/MarkdownViewer";
 @import "./cards/PostSummary";
+@import "./cards/SearchUserList";
 @import "./cards/PostFull";
 @import "./cards/PostsList";
 @import "./cards/NotificationsList";
@@ -31,6 +32,8 @@
 @import "./elements/UserNames";
 @import "./elements/SortOrder/styles";
 @import "./elements/SearchInput/styles";
+@import "./elements/SearchTabs/styles";
+@import "./elements/ElasticSearchInput/SearchHistory";
 @import "./elements/IconButton/styles";
 @import "./elements/NativeSelect/styles";
 @import "./elements/SteemLogo/styles";
@@ -65,3 +68,4 @@
 @import "./pages/CommunitiesIndex";
 @import "./pages/CommunityRoles";
 @import "./pages/Rewards";
+@import "./pages/SearchIndex";

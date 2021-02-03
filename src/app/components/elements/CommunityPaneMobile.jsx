@@ -1,11 +1,15 @@
+/* eslint-disable no-undef */
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Role } from 'app/utils/Community';
 import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
 import * as globalActions from 'app/redux/GlobalReducer';
+import * as userActions from 'app/redux/UserReducer';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 
 class CommunityPaneMobile extends Component {
@@ -20,6 +24,7 @@ class CommunityPaneMobile extends Component {
             community,
             showRecentSubscribers,
             showModerationLog,
+            showLogin,
         } = this.props;
         const handleSubscriberClick = () => {
             showRecentSubscribers(community);
@@ -43,6 +48,13 @@ class CommunityPaneMobile extends Component {
         );
 
         const subs = community.get('subscribers');
+
+        const checkIfLogin = () => {
+            if (!this.props.loggedIn) {
+                return showLogin();
+            }
+            return browserHistory.replace(`/submit.html?category=${category}`);
+        };
 
         return (
             <div>
@@ -128,7 +140,7 @@ class CommunityPaneMobile extends Component {
                                     <Link
                                         className="button primary"
                                         style={{ minWidth: '7em' }}
-                                        to={`/submit.html?category=${category}`}
+                                        onClick={checkIfLogin}
                                     >
                                         Post
                                     </Link>
@@ -146,10 +158,15 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => ({
         community: ownProps.community,
+        loggedIn: !!state.user.getIn(['current', 'username']),
     }),
     // mapDispatchToProps
     dispatch => {
         return {
+            showLogin: e => {
+                if (e) e.preventDefault();
+                dispatch(userActions.showLogin({ type: 'basic' }));
+            },
             showRecentSubscribers: community => {
                 dispatch(
                     globalActions.showDialog({

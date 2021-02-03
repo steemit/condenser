@@ -1,0 +1,31 @@
+.search-nav {
+    .search-tabs {
+        display: flex;
+        padding: .8rem;
+        list-style: none;
+        margin-left: 0;
+        @include themify($themes) {
+            background: themed('moduleBackgroundColor');
+            color: themed('textColorPrimary');
+        }
+        li {
+            margin-right: 2.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            @media screen and (max-width: 456px) {
+                margin-right: 1rem;
+            }
+        }
+        .active {
+            color: #00FFC8;
+            border-bottom: 4px solid #00FFC8;
+        }
+        .li-right {
+            margin-left: auto;
+            .search-sort {
+                font-size: 14px;
+                height: 2.2rem;
+            }
+        }
+    }
+}

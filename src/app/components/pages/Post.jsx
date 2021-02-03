@@ -46,6 +46,7 @@ class Post extends React.Component {
         super();
         this.state = {
             showNegativeComments: false,
+            timeOut: false,
         };
         this.showSignUp = () => {
             serverApiRecordEvent('SignUp', 'Post Promo');
@@ -62,6 +63,23 @@ class Post extends React.Component {
         const { subscriptions, getSubscriptions, uname } = this.props;
         if (!subscriptions && uname && uname != prevProps.uname)
             getSubscriptions(uname);
+    }
+
+    componentDidMount() {
+        const _this = this;
+        setTimeout(() => {
+            if (_this.props.dis === undefined) {
+                _this.setState({
+                    timeOut: true,
+                });
+            }
+        }, 2000);
+    }
+
+    componentWillUnmount() {
+        this.setState({
+            timeOut: false,
+        });
     }
 
     toggleNegativeReplies = e => {
@@ -95,9 +113,16 @@ class Post extends React.Component {
             postLeftSideAdList,
             bottomAdList,
         } = this.props;
-        const { showNegativeComments, commentHidden, showAnyway } = this.state;
-
-        if (isEmptyPost(dis))
+        const {
+            showNegativeComments,
+            commentHidden,
+            showAnyway,
+            timeOut,
+        } = this.state;
+        if (dis === undefined && !timeOut) {
+            return null;
+        }
+        if (isEmptyPost(dis) || timeOut)
             return (
                 <div className="NotFound float-center">
                     <div>

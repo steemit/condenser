@@ -1,6 +1,4 @@
 import React from 'react';
-import tt from 'counterpart';
-import { SIGNUP_URL } from 'shared/constants';
 
 const SidebarNewUsers = () => (
     <div className="c-sidebar__module">
@@ -10,7 +8,10 @@ const SidebarNewUsers = () => (
         <div className="c-sidebar__content">
             <ul className="c-sidebar__list">
                 <li className="c-sidebar__list-item">
-                    <a className="c-sidebar__link" href="/welcome">
+                    <a
+                        className="c-sidebar__link"
+                        href="/guide/@steemitblog/steemit-a-guide-for-newcomers"
+                    >
                         Welcome Guide
                     </a>
                 </li>
@@ -25,7 +26,7 @@ const SidebarNewUsers = () => (
                         {tt('g.read_offical_blog')}
                     </a>
                 </li>
-                */}
+                
                 <li className="c-sidebar__list-item">
                     <a
                         className="c-sidebar__link"
@@ -34,6 +35,7 @@ const SidebarNewUsers = () => (
                         Whitepaper
                     </a>
                 </li>
+                */}
             </ul>
         </div>
     </div>

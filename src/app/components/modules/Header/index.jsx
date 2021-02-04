@@ -52,6 +52,7 @@ class Header extends React.Component {
             showAd: false,
             showAnnouncement: this.props.showAnnouncement,
         };
+        this.handleSignup = this.handleSignup.bind(this);
     }
 
     componentWillMount() {
@@ -107,6 +108,17 @@ class Header extends React.Component {
                     window.last_sort_order = this.last_sort_order = sort_order;
             }
         }
+    }
+
+    handleSignup() {
+        const { routeTag } = this.props;
+        if (!routeTag) return;
+        const signupUrl = routeTag
+            ? `${SIGNUP_URL}/#source=condenser|${routeTag.routeTag}`
+            : SIGNUP_URL;
+        const new_window = window.open();
+        new_window.opener = null;
+        new_window.location = signupUrl;
     }
 
     headroomOnUnpin() {
@@ -388,7 +400,7 @@ class Header extends React.Component {
                                         </a>
                                         <a
                                             className="Header__signup-link"
-                                            href={SIGNUP_URL}
+                                            onClick={this.handleSignup}
                                         >
                                             {tt('g.sign_up')}
                                         </a>
@@ -510,6 +522,7 @@ const mapStateToProps = (state, ownProps) => {
             'notifications',
             'loading',
         ]),
+        routeTag: state.app.has('routeTag') ? state.app.get('routeTag') : null,
         ...ownProps,
     };
 };

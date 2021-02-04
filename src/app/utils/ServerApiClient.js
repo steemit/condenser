@@ -90,6 +90,7 @@ export function recordRouteTag(trackingId, tag, params) {
                 tag,
                 sort: params.order,
                 is_user_feed: params.is_user_feed,
+                is_my_community: params.category === 'my',
             };
             break;
         case 'index':

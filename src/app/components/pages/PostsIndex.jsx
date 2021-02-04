@@ -15,6 +15,7 @@ import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import { ifHive } from 'app/utils/Community';
 import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
+import * as appActions from 'app/redux/AppReducer';
 // posts_index.empty_feed_1 [-5]
 const noFriendsText = (
     <div>
@@ -62,8 +63,22 @@ class PostsIndex extends React.Component {
     }
 
     componentWillMount() {
-        const { subscriptions, getSubscriptions, username } = this.props;
+        const {
+            subscriptions,
+            getSubscriptions,
+            username,
+            category,
+            order,
+        } = this.props;
+        this.props.setRouteTag(ifHive(category), category, order);
         if (!subscriptions && username) getSubscriptions(username);
+    }
+
+    componentWillUpdate(nextProps) {
+        const { category, order } = nextProps;
+        if (category !== this.props.category || order !== this.props.order) {
+            this.props.setRouteTag(ifHive(category), category, order);
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -310,6 +325,40 @@ module.exports = {
                 dispatch(fetchDataSagaActions.getSubscriptions(account)),
             requestData: args =>
                 dispatch(fetchDataSagaActions.requestData(args)),
+            setRouteTag: (community, category, order) => {
+                if (community) {
+                    // community
+                    dispatch(
+                        appActions.setRouteTag({
+                            routeTag: 'community_index',
+                            params: {
+                                community_name: category,
+                                order,
+                            },
+                        })
+                    );
+                } else if (category) {
+                    dispatch(
+                        appActions.setRouteTag({
+                            routeTag: 'category',
+                            params: {
+                                category,
+                                order,
+                                is_user_feed: category[0] === '@',
+                            },
+                        })
+                    );
+                } else {
+                    dispatch(
+                        appActions.setRouteTag({
+                            routeTag: 'index',
+                            params: {
+                                order,
+                            },
+                        })
+                    );
+                }
+            },
         })
     )(PostsIndex),
 };

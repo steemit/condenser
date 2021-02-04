@@ -1,7 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import HelpContent from 'app/components/elements/HelpContent';
+import * as appActions from 'app/redux/AppReducer';
 
 class Tos extends React.Component {
+    componentWillMount() {
+        this.props.setRouteTag();
+    }
     render() {
         return (
             <div className="row">
@@ -14,6 +19,12 @@ class Tos extends React.Component {
 }
 
 module.exports = {
-    component: Tos,
     path: 'tos.html',
+    component: connect(
+        (state, ownProps) => ({}),
+        dispatch => ({
+            setRouteTag: () =>
+                dispatch(appActions.setRouteTag({ routeTag: 'tos' })),
+        })
+    )(Tos),
 };

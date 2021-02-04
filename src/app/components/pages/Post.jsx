@@ -24,6 +24,7 @@ import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Topics from './Topics';
 import Icon from 'app/components/elements/Icon';
 import AdSwipe from 'app/components/elements/AdSwipe';
+import * as appActions from 'app/redux/AppReducer';
 
 function isEmptyPost(post) {
     // check if the post doesn't exist
@@ -55,8 +56,16 @@ class Post extends React.Component {
     }
 
     componentWillMount() {
-        const { subscriptions, getSubscriptions, uname } = this.props;
+        const { subscriptions, getSubscriptions, uname, dis } = this.props;
+        this.props.setRouteTag(dis.get('url'));
         if (!subscriptions && uname) getSubscriptions(uname);
+    }
+
+    componentWillUpdate(nextProps) {
+        const { dis } = nextProps;
+        if (dis.get('url') !== this.props.dis.get('url')) {
+            this.props.setRouteTag(dis.get('url'));
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -417,5 +426,12 @@ export default connect(
     dispatch => ({
         getSubscriptions: account =>
             dispatch(fetchDataSagaActions.getSubscriptions(account)),
+        setRouteTag: permlink =>
+            dispatch(
+                appActions.setRouteTag({
+                    routeTag: 'post',
+                    params: { permlink },
+                })
+            ),
     })
 )(Post);

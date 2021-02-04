@@ -11,6 +11,7 @@ import UserNames from 'app/components/elements/UserNames';
 import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
 import NativeSelect from 'app/components/elements/NativeSelect';
 import Callout from 'app/components/elements/Callout';
+import * as appActions from 'app/redux/AppReducer';
 
 export default class CommunitiesIndex extends React.Component {
     constructor(props) {
@@ -22,6 +23,7 @@ export default class CommunitiesIndex extends React.Component {
     }
 
     componentWillMount = () => {
+        this.props.setRouteTag();
         this.props.performSearch(
             this.props.username,
             this.state.searchQuery,
@@ -210,6 +212,10 @@ module.exports = {
                         })
                     );
                 },
+                setRouteTag: () =>
+                    dispatch(
+                        appActions.setRouteTag({ routeTag: 'more_communities' })
+                    ),
             };
         }
     )(CommunitiesIndex),

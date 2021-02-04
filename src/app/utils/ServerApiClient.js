@@ -34,21 +34,99 @@ export function serverApiLogout() {
 
 let last_call;
 export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    if (last_call && new Date() - last_call < rate_limit_ms) return;
-    last_call = new Date();
-    const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
-    if (typeof catchjs !== 'undefined') {
-        catchjs.log(type, value);
-        //} else if(process.env.NODE_ENV !== 'production') {
-        //    console.log("Event>", type, value)
-    }
     return;
+    // if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    // if (last_call && new Date() - last_call < rate_limit_ms) return;
+    // last_call = new Date();
+    // const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
+    // if (typeof catchjs !== 'undefined') {
+    //     catchjs.log(type, value);
+    //     //} else if(process.env.NODE_ENV !== 'production') {
+    //     //    console.log("Event>", type, value)
+    // }
+    // api.call(
+    //     'overseer.collect',
+    //     { collection: 'event', metadata: { type, value } },
+    //     error => {
+    //         if (error) console.warn('overseer error', error, error.data);
+    //     }
+    // );
+}
+
+export function recordRouteTag(trackingId, tag, params) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    let tags = {
+        app: 'condenser',
+        tag,
+    };
+    let fields = {
+        trackingId,
+    };
+    switch (tag) {
+        case 'post':
+            fields = {
+                trackingId,
+                permlink: params.permlink,
+            };
+            break;
+        case 'community_index':
+            fields = {
+                trackingId,
+                community_name: params.community_name,
+            };
+            tags = {
+                app: 'condenser',
+                tag,
+                sort: params.order,
+            };
+            break;
+        case 'category':
+            fields = {
+                trackingId,
+                category: params.category,
+            };
+            tags = {
+                app: 'condenser',
+                tag,
+                sort: params.order,
+                is_user_feed: params.is_user_feed,
+            };
+            break;
+        case 'index':
+            fields = {
+                trackingId,
+            };
+            tags = {
+                app: 'condenser',
+                tag,
+                sort: params.order,
+            };
+            break;
+        case 'user_index':
+            fields = {
+                trackingId,
+                username: params.username,
+            };
+            tags = {
+                app: 'condenser',
+                tag,
+                section: params.section,
+            };
+            break;
+    }
     api.call(
         'overseer.collect',
-        { collection: 'event', metadata: { type, value } },
+        [
+            'custom',
+            {
+                measurement: 'route',
+                fields,
+                tags,
+            },
+        ],
         error => {
-            if (error) console.warn('overseer error', error, error.data);
+            if (error)
+                console.warn('record route tag error', error, error.data);
         }
     );
 }
@@ -94,11 +172,11 @@ export function recordPageView(page, referer, account) {
         window.ga('set', 'page', page);
         window.ga('send', 'pageview');
     }
-    last_page_promise = api.callAsync('overseer.pageview', {
-        page,
-        referer,
-        account,
-    });
+    // last_page_promise = api.callAsync('overseer.pageview', {
+    //     page,
+    //     referer,
+    //     account,
+    // });
     last_page = page;
     return last_page_promise;
 }

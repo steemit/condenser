@@ -1,7 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import HelpContent from 'app/components/elements/HelpContent';
+import * as appActions from 'app/redux/AppReducer';
 
 class Faq extends React.Component {
+    componentWillMount() {
+        this.props.setRouteTag();
+    }
     render() {
         return (
             <div className="row">
@@ -15,5 +20,11 @@ class Faq extends React.Component {
 
 module.exports = {
     path: 'faq.html',
-    component: Faq,
+    component: connect(
+        (state, ownProps) => ({}),
+        dispatch => ({
+            setRouteTag: () =>
+                dispatch(appActions.setRouteTag({ routeTag: 'faq' })),
+        })
+    )(Faq),
 };

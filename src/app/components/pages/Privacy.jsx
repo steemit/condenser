@@ -1,6 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import * as appActions from 'app/redux/AppReducer';
 
 class Privacy extends React.Component {
+    componentWillMount() {
+        this.props.setRouteTag();
+    }
     render() {
         return (
             <div className="Privacy row">
@@ -1027,5 +1032,11 @@ class Privacy extends React.Component {
 
 module.exports = {
     path: 'privacy.html',
-    component: Privacy,
+    component: connect(
+        (state, ownProps) => ({}),
+        dispatch => ({
+            setRouteTag: () =>
+                dispatch(appActions.setRouteTag({ routeTag: 'privacy' })),
+        })
+    )(Privacy),
 };

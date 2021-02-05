@@ -450,7 +450,7 @@ const Comment = connect(
         deletePost: (author, permlink) => {
             userActionRecord('delete_comment', {
                 username: author,
-                comment_type: 'comment',
+                comment_type: 'reply',
                 permlink,
             });
             dispatch(

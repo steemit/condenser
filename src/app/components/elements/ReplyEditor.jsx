@@ -1246,6 +1246,7 @@ export default formId =>
                     username,
                     is_edit: isEdit,
                     payout_type: payoutType,
+                    comment_type: /-reply$/.test(formId) ? 'reply' : 'post',
                 });
                 dispatch(
                     transactionActions.broadcastOperation({

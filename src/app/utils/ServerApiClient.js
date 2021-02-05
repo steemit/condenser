@@ -146,6 +146,7 @@ export function userActionRecord(action, params) {
                 action_type: action,
                 is_edit: params.is_edit,
                 payout_type: params.payout_type,
+                comment_type: params.comment_type,
             };
             fields = {
                 username: params.username,

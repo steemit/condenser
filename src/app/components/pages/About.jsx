@@ -1,8 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { APP_NAME, APP_URL } from 'app/client_config';
 import tt from 'counterpart';
+import * as appActions from 'app/redux/AppReducer';
 
 class About extends React.Component {
+    componentWillMount() {
+        this.props.setRouteTag();
+    }
     render() {
         return (
             <div className="About">
@@ -308,5 +313,11 @@ class About extends React.Component {
 
 module.exports = {
     path: 'about.html',
-    component: About,
+    component: connect(
+        (state, ownProps) => ({}),
+        dispatch => ({
+            setRouteTag: () =>
+                dispatch(appActions.setRouteTag({ routeTag: 'faq' })),
+        })
+    )(About),
 };

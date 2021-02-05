@@ -132,6 +132,72 @@ export function recordRouteTag(trackingId, tag, params) {
     );
 }
 
+export function userActionRecord(action, params) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    let tags = {
+        app: 'condenser',
+        action_type: action,
+    };
+    let fields = {};
+    switch (action) {
+        case 'comment':
+            tags = {
+                app: 'condenser',
+                action_type: action,
+                is_edit: params.is_edit,
+                payout_type: params.payout_type,
+            };
+            fields = {
+                username: params.username,
+            };
+            break;
+        case 'vote':
+            tags = {
+                app: 'condenser',
+                action_type: action,
+                vote_type: params.vote_type,
+            };
+            fields = {
+                voter: params.voter,
+                author: params.author,
+                permlink: params.permlink,
+                weight: params.weight,
+            };
+            break;
+        case 'update_account':
+            fields = {
+                username: params.username,
+            };
+            break;
+        case 'delete_comment':
+            tags = {
+                app: 'condenser',
+                action_type: action,
+                comment_type: params.comment_type,
+            };
+            fields = {
+                username: params.username,
+                permlink: params.permlink,
+            };
+            break;
+    }
+    api.call(
+        'overseer.collect',
+        [
+            'custom',
+            {
+                measurement: 'user_action',
+                fields,
+                tags,
+            },
+        ],
+        error => {
+            if (error)
+                console.warn('user action record error', error, error.data);
+        }
+    );
+}
+
 export function recordAdsView({ trackingId, adTag }) {
     api.call('overseer.collect', ['ad', { trackingId, adTag }], error => {
         if (error) console.warn('overseer error', error);

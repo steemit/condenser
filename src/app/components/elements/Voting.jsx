@@ -34,6 +34,7 @@ import {
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Dropdown from 'app/components/elements/Dropdown';
+import { userActionRecord } from 'app/utils/ServerApiClient';
 
 const ABOUT_FLAG = (
     <div>
@@ -784,6 +785,13 @@ export default connect(
                           );
                 return null;
             };
+            userActionRecord('vote', {
+                vote_type: weight === 0 ? 'cancel' : weight > 0 ? 'up' : 'down',
+                voter: username,
+                author,
+                permlink,
+                weight,
+            });
             dispatch(
                 transactionActions.broadcastOperation({
                     type: 'vote',

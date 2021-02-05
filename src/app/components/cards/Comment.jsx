@@ -21,6 +21,7 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
 import { Role } from 'app/utils/Community';
+import { userActionRecord } from 'app/utils/ServerApiClient';
 
 export function sortComments(cont, comments, sort_order) {
     const rshares = post => Long.fromString(String(post.get('net_rshares')));
@@ -447,6 +448,11 @@ const Comment = connect(
             dispatch(userActions.showLogin());
         },
         deletePost: (author, permlink) => {
+            userActionRecord('delete_comment', {
+                username: author,
+                comment_type: 'reply',
+                permlink,
+            });
             dispatch(
                 transactionActions.broadcastOperation({
                     type: 'delete_comment',

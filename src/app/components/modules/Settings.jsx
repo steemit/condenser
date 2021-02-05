@@ -10,6 +10,7 @@ import reactForm from 'app/utils/ReactForm';
 import Dropzone from 'react-dropzone';
 import MuteList from 'app/components/elements/MuteList';
 import { isLoggedIn } from 'app/utils/UserUtil';
+import { userActionRecord } from 'app/utils/ServerApiClient';
 
 class Settings extends React.Component {
     constructor(props) {
@@ -192,6 +193,9 @@ class Settings extends React.Component {
                 }
             },
             successCallback: () => {
+                userActionRecord('update_account', {
+                    username: account.get('name'),
+                });
                 this.setState({
                     loading: false,
                     changed: false,

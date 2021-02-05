@@ -170,6 +170,13 @@ export function userActionRecord(action, params) {
                 username: params.username,
             };
             break;
+        case 'reblog':
+            fields = {
+                username: params.username,
+                permlink: params.permlink,
+                author: params.author,
+            };
+            break;
         case 'delete_comment':
             tags = {
                 app: 'condenser',

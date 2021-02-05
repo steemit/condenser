@@ -6,6 +6,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import Icon from 'app/components/elements/Icon';
 import tt from 'counterpart';
+import { userActionRecord } from 'app/utils/ServerApiClient';
 
 const { string, func } = PropTypes;
 
@@ -45,6 +46,11 @@ export default class Reblog extends React.Component {
             author,
             permlink,
             () => {
+                userActionRecord('reblog', {
+                    username: account,
+                    author,
+                    permlink,
+                });
                 this.setState({ active: true, loading: false });
                 this.setReblogged(account);
             },

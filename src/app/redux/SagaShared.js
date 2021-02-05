@@ -8,7 +8,11 @@ import { api } from '@steemit/steem-js';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
-import { setUserPreferences, checkTronUser } from 'app/utils/ServerApiClient';
+import {
+    setUserPreferences,
+    checkTronUser,
+    recordRouteTag,
+} from 'app/utils/ServerApiClient';
 import { callBridge } from 'app/utils/steemApi';
 import { getTronAccount } from 'app/utils/tronApi';
 
@@ -26,6 +30,7 @@ export const sharedWatches = [
         ],
         saveUserPreferences
     ),
+    takeEvery(appActions.ROUTE_TAG_SET, triggeRecordRouteTag),
     takeEvery('transaction/ERROR', showTransactionErrorNotification),
 ];
 
@@ -141,4 +146,12 @@ function* saveUserPreferences({ payload }) {
 
     const prefs = yield select(state => state.app.get('user_preferences'));
     yield setUserPreferences(prefs.toJS());
+}
+
+function* triggeRecordRouteTag({ routeTag, params }) {
+    console.log('set_route_tag:', routeTag, params);
+    let trackingId = yield select(state =>
+        state.app.getIn(['trackingId'], null)
+    );
+    yield recordRouteTag(trackingId, routeTag, params);
 }

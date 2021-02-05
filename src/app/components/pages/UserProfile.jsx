@@ -17,6 +17,7 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
 import UserProfileHeader from 'app/components/cards/UserProfileHeader';
 import SubscriptionsList from '../cards/SubscriptionsList';
+import * as appActions from 'app/redux/AppReducer';
 
 const emptyPostsText = (section, account, isMyAccount) => {
     const name = '@' + account;
@@ -73,8 +74,25 @@ export default class UserProfile extends React.Component {
     }
 
     componentWillMount() {
-        const { profile, accountname, fetchProfile, username } = this.props;
+        const {
+            profile,
+            accountname,
+            fetchProfile,
+            username,
+            section,
+        } = this.props;
+        this.props.setRouteTag(accountname, section);
         if (!profile) fetchProfile(accountname, username);
+    }
+
+    componentWillUpdate(nextProps) {
+        const { accountname, section } = nextProps;
+        if (
+            this.props.accountname !== accountname ||
+            this.props.section !== section
+        ) {
+            this.props.setRouteTag(accountname, section);
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -374,6 +392,13 @@ module.exports = {
             fetchProfile: (account, observer) =>
                 dispatch(
                     UserProfilesSagaActions.fetchProfile({ account, observer })
+                ),
+            setRouteTag: (accountname, section) =>
+                dispatch(
+                    appActions.setRouteTag({
+                        routeTag: 'user_index',
+                        params: { username: accountname, section },
+                    })
                 ),
         })
     )(UserProfile),

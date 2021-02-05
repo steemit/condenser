@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import { SUBMIT_FORM_ID } from 'shared/constants';
 import Callout from 'app/components/elements/Callout';
+import * as appActions from 'app/redux/AppReducer';
 
 const formId = SUBMIT_FORM_ID;
 const SubmitReplyEditor = ReplyEditor(formId);
@@ -27,6 +28,9 @@ class SubmitPost extends React.Component {
             browserHistory.push(_redirect_url(operations));
         };
     }
+    componentWillMount() {
+        this.props.setRouteTag();
+    }
     render() {
         if (!this.props.username) {
             return <Callout>Log in to make a post.</Callout>;
@@ -43,7 +47,13 @@ class SubmitPost extends React.Component {
 
 module.exports = {
     path: 'submit.html',
-    component: connect((state, ownProps) => ({
-        username: state.user.getIn(['current', 'username']),
-    }))(SubmitPost),
+    component: connect(
+        (state, ownProps) => ({
+            username: state.user.getIn(['current', 'username']),
+        }),
+        dispatch => ({
+            setRouteTag: () =>
+                dispatch(appActions.setRouteTag({ routeTag: 'submit_post' })),
+        })
+    )(SubmitPost),
 };

@@ -25,6 +25,7 @@ import { fromJS, Set, OrderedSet } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
+import { userActionRecord } from 'app/utils/ServerApiClient';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
@@ -1241,6 +1242,11 @@ export default formId =>
                     json_metadata: JSON.stringify(meta),
                     __config,
                 };
+                userActionRecord('comment', {
+                    username,
+                    is_edit: isEdit,
+                    payout_type: payoutType,
+                });
                 dispatch(
                     transactionActions.broadcastOperation({
                         type: 'comment',

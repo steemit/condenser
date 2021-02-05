@@ -20,7 +20,7 @@ import DMCAList from 'app/utils/DMCAList';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import MuteButton from 'app/components/elements/MuteButton';
 import FlagButton from 'app/components/elements/FlagButton';
-import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
+import { userActionRecord } from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
 import tt from 'counterpart';
@@ -131,11 +131,17 @@ class PostFull extends React.Component {
             'fbshare',
             'width=600, height=400, scrollbars=no'
         );
-        serverApiRecordEvent('FbShare', this.share_params.link);
+        userActionRecord('FbShare', {
+            trackingId: this.props.trackingId,
+            permlink: this.share_params.link,
+        });
     }
 
     twitterShare(e) {
-        serverApiRecordEvent('TwitterShare', this.share_params.link);
+        userActionRecord('TwitterShare', {
+            trackingId: this.props.trackingId,
+            permlink: this.share_params.link,
+        });
         e.preventDefault();
         const winWidth = 640;
         const winHeight = 320;
@@ -162,7 +168,10 @@ class PostFull extends React.Component {
     }
 
     redditShare(e) {
-        serverApiRecordEvent('RedditShare', this.share_params.link);
+        userActionRecord('RedditShare', {
+            trackingId: this.props.trackingId,
+            permlink: this.share_params.link,
+        });
         e.preventDefault();
         const s = this.share_params;
         const q =
@@ -174,7 +183,10 @@ class PostFull extends React.Component {
     }
 
     linkedInShare(e) {
-        serverApiRecordEvent('LinkedInShare', this.share_params.link);
+        userActionRecord('LinkedInShare', {
+            trackingId: this.props.trackingId,
+            permlink: this.share_params.link,
+        });
         e.preventDefault();
         const winWidth = 720;
         const winHeight = 480;
@@ -525,6 +537,7 @@ export default connect(
 
         const category = post.get('category');
         const community = state.global.getIn(['community', category, 'name']);
+        const trackingId = state.app.get('trackingId');
 
         return {
             post,
@@ -535,10 +548,16 @@ export default connect(
                 ['community', community, 'context', 'role'],
                 'guest'
             ),
+            trackingId,
         };
     },
     dispatch => ({
         deletePost: (author, permlink) => {
+            userActionRecord('delete_comment', {
+                username: author,
+                comment_type: 'post',
+                permlink,
+            });
             dispatch(
                 transactionActions.broadcastOperation({
                     type: 'delete_comment',

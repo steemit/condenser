@@ -150,8 +150,9 @@ function* saveUserPreferences({ payload }) {
 
 function* triggeRecordRouteTag({ routeTag, params }) {
     console.log('set_route_tag:', routeTag, params);
-    let trackingId = yield select(state =>
-        state.app.getIn(['trackingId'], null)
-    );
-    yield recordRouteTag(trackingId, routeTag, params);
+    const [trackingId, username] = yield select(state => [
+        state.app.getIn(['trackingId'], null),
+        state.user.getIn(['current', 'username'], null),
+    ]);
+    yield recordRouteTag(trackingId, routeTag, params, username !== null);
 }

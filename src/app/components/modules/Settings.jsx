@@ -426,7 +426,7 @@ class Settings extends React.Component {
                             <br />
                             <h4>{tt('settings_jsx.preferences')}</h4>
 
-                            <label>
+                            {/*<label>
                                 {tt('g.choose_language')}
                                 <select
                                     defaultValue={user_preferences.locale}
@@ -442,7 +442,7 @@ class Settings extends React.Component {
                                     <option value="pl">Polish</option>
                                     <option value="zh">Chinese 简体中文</option>
                                 </select>
-                            </label>
+                            </label>*/}
                             <br />
 
                             <label>

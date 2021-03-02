@@ -26,6 +26,7 @@ import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
 import { userActionRecord } from 'app/utils/ServerApiClient';
+import Editor from 'app/components/elements/Editor';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
@@ -58,7 +59,7 @@ function allTags(userInput, originalCategory, hashtags) {
     return tags;
 }
 
-class ReplyEditor extends React.Component {
+class ReplyEditorNew extends React.Component {
     static propTypes = {
         // html component attributes
         formId: PropTypes.string.isRequired, // unique form id for each editor
@@ -88,7 +89,7 @@ class ReplyEditor extends React.Component {
 
     constructor(props) {
         super();
-        this.state = { progress: {}, imagesUploadCount: 0 };
+        this.state = { progress: {}, imagesUploadCount: 0, editorHtml: '' };
         this.initForm(props);
     }
 
@@ -106,15 +107,12 @@ class ReplyEditor extends React.Component {
 
             // Process initial body value (if this is an edit)
             const { body } = this.state;
-            console.log(body);
-            console.log(body.value);
             if (body.value) {
                 raw = body.value;
             }
-            console.log(raw);
+            console.log(body);
             // Check for draft data
             let draft = localStorage.getItem('replyEditorData-' + formId);
-            console.log(draft);
             if (draft) {
                 draft = JSON.parse(draft);
                 const { tags, title } = this.state;
@@ -138,9 +136,6 @@ class ReplyEditor extends React.Component {
             }
 
             // console.log("initial reply body:", raw || '(empty)')
-            console.log('raw');
-            console.log(raw);
-            console.log(rte);
             body.props.onChange(raw);
             this.setState({
                 rte,
@@ -271,6 +266,11 @@ class ReplyEditor extends React.Component {
         });
     }
 
+    onEditorHtmlChange = html => {
+        console.log(html);
+        this.setState({ editorHtml: html });
+    };
+
     onTitleChange = e => {
         const value = e.target.value;
         // TODO block links in title (they do not make good permlinks)
@@ -306,12 +306,11 @@ class ReplyEditor extends React.Component {
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
     onChange = rte_value => {
-        console.log('rte_value');
-        console.log(rte_value);
-        this.refs.rte.setState({ state: rte_value });
-        const html = stateToHtml(rte_value);
+        /*this.refs.rte.setState({ state: rte_value });*/
+        //const html = stateToHtml(rte_value);
         const { body } = this.state;
-        if (body.value !== html) body.props.onChange(html);
+        //if (body.value !== html) body.props.onChange(rte_value);
+        body.props.onChange(rte_value);
     };
 
     toggleRte = e => {
@@ -386,7 +385,6 @@ class ReplyEditor extends React.Component {
     };
 
     onPasteCapture = e => {
-        console.log('onPasteCapture');
         try {
             if (e.clipboardData) {
                 // @TODO: currently it seems to capture only one file, try to find a fix for multiple files
@@ -413,6 +411,7 @@ class ReplyEditor extends React.Component {
     };
 
     uploadNextImage = () => {
+        console.log('uploadNextImage');
         if (imagesToUpload.length > 0) {
             const nextImage = imagesToUpload.pop();
             this.upload(nextImage);
@@ -440,7 +439,6 @@ class ReplyEditor extends React.Component {
         this.setState({ imagesUploadCount: imagesUploadCount });
 
         // Insert the temporary tag where the cursor currently is
-        console.log('insertPlaceHolders');
         body.props.onChange(
             body.value.substring(0, selectionStart) +
                 placeholder +
@@ -449,19 +447,22 @@ class ReplyEditor extends React.Component {
     };
 
     upload = image => {
+        console.log('image');
+        console.log(image);
         const { uploadImage } = this.props;
         this.setState({
             progress: { message: tt('reply_editor.uploading') },
         });
 
-        uploadImage(image.file, progress => {
+        uploadImage(image, progress => {
             const { body } = this.state;
 
             if (progress.url) {
                 this.setState({ progress: {} });
                 const { url } = progress;
-                const imageMd = `![${image.file.name}](${url})`;
-
+                const imageMd = `![${image.name}](${url})`;
+                console.log(url);
+                console.log(imageMd);
                 // Replace temporary image MD tag with the real one
                 body.props.onChange(
                     body.value.replace(image.temporaryTag, imageMd)
@@ -471,12 +472,13 @@ class ReplyEditor extends React.Component {
             } else {
                 if (progress.hasOwnProperty('error')) {
                     this.displayErrorMessage(progress.error);
-                    const imageMd = `![${image.file.name}](UPLOAD FAILED)`;
+                    const imageMd = `![${image.name}](UPLOAD FAILED)`;
 
                     // Remove temporary image MD tag
                     body.props.onChange(
                         body.value.replace(image.temporaryTag, imageMd)
                     );
+                    console.log(imageMd);
                 } else {
                     this.setState({ progress });
                 }
@@ -600,6 +602,7 @@ class ReplyEditor extends React.Component {
                     <form
                         className={vframe_class}
                         onSubmit={handleSubmit(({ data }) => {
+                            console.log(data);
                             const startLoadingIndicator = () =>
                                 this.setState({
                                     loading: true,
@@ -666,7 +669,17 @@ class ReplyEditor extends React.Component {
                                     : vframe_section_shrink_class)
                             }
                         >
-                            {process.env.BROWSER && rte ? (
+                            <Editor
+                                placeholder={
+                                    isStory
+                                        ? tt('g.write_your_story')
+                                        : tt('g.reply')
+                                }
+                                editorHtml={this.state.editorHtml}
+                                onChange={this.onChange}
+                                uploadImage={this.upload}
+                            />
+                            {/*process.env.BROWSER && rte ? (
                                 <SlateEditor
                                     ref="rte"
                                     placeholder={
@@ -739,7 +752,7 @@ class ReplyEditor extends React.Component {
                                         </div>
                                     )}
                                 </span>
-                            )}
+                                    )*/}
                         </div>
                         <div className={vframe_section_shrink_class}>
                             <div className="error">
@@ -1268,4 +1281,4 @@ export default formId =>
                 );
             },
         })
-    )(ReplyEditor);
+    )(ReplyEditorNew);

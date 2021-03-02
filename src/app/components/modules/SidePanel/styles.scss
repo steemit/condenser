@@ -45,6 +45,15 @@ $menu-width: 250px;
         background-color: inherit;
         border-bottom: 1px solid $color-blue-black-darkest;
       }
+      .language {
+        background-color: #11161A;
+        color: #fff;
+        border: none;
+        padding-left: 16px;
+        &:hover {
+          cursor: pointer;
+        }
+      }
     }
     ul:nth-of-type(n+3) {
       margin-top: 2rem;

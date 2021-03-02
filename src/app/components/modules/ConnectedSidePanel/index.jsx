@@ -13,6 +13,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
     hideSidePanel: () => dispatch(userActions.hideSidePanel()),
+    showSidePanel: () => dispatch(userActions.showSidePanel()),
 });
 
 const ConnectedSideBar = connect(mapStateToProps, mapDispatchToProps)(

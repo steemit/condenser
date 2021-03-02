@@ -810,7 +810,7 @@ function* uploadImage({
         sig = Signature.signBufferSha256(bufSha, d).toHex();
     }
     const postUrl = `${$STM_Config.upload_image}/${username}/${sig}`;
-
+    console.log(postUrl);
     const xhr = new XMLHttpRequest();
     xhr.open('POST', postUrl);
     xhr.onload = function() {

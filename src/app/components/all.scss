@@ -19,6 +19,7 @@
 @import "./elements/FormattedAsset";
 @import "./elements/ReplyEditor";
 @import "./elements/SlateEditor";
+@import "./elements/Editor/styles";
 @import "./elements/DropdownMenu";
 @import "./elements/VerticalMenu";
 @import "./elements/VotesAndComments";
@@ -58,6 +59,7 @@
 // pages
 @import "./pages/PostsIndex";
 @import "./pages/Topics";
+@import "./pages/Announcement";
 @import "./pages/Post";
 @import "./pages/Privacy";
 @import "./pages/Tos";

@@ -439,7 +439,10 @@ class Header extends React.Component {
                                 )}
                                 {/*HAMBURGER*/}
                                 <span
-                                    onClick={showSidePanel}
+                                    onClick={e => {
+                                        showSidePanel();
+                                        e.nativeEvent.stopImmediatePropagation();
+                                    }}
                                     className="toggle-menu Header__hamburger"
                                 >
                                     <span className="hamburger" />

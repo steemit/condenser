@@ -94,7 +94,10 @@ class ReactMutationObserver extends React.Component {
     }
 
     initObserver(componentElement) {
-        if (typeof MutationObserver !== 'undefined') {
+        if (
+            typeof MutationObserver !== 'undefined' &&
+            componentElement !== null
+        ) {
             this.observer.observe(componentElement, this.observerConfig);
         }
     }

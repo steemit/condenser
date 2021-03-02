@@ -10,6 +10,7 @@ import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
 import GptAd from 'app/components/elements/GptAd';
 import Topics from './Topics';
+import Announcement from './Announcement';
 import CommunityPane from 'app/components/elements/CommunityPane';
 import CommunityPaneMobile from 'app/components/elements/CommunityPaneMobile';
 import { APP_DOMAIN } from 'app/client_config';
@@ -51,7 +52,6 @@ class PostsIndexLayout extends React.Component {
             indexLeftSideAdList,
             trackingId,
         } = this.props;
-
         return (
             <div
                 className={
@@ -106,6 +106,7 @@ class PostsIndexLayout extends React.Component {
                 </aside>
 
                 <aside className="c-sidebar c-sidebar--left">
+                    <Announcement />
                     <Topics
                         compact={false}
                         username={username}

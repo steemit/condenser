@@ -835,6 +835,7 @@ function* uploadImage({
         } else {
             console.error('upload_error3', xhr.status, xhr.statusText);
             progress({ error: `Error: ${xhr.status}: ${xhr.statusText}` });
+            console.log('888333777');
             return;
         }
     };

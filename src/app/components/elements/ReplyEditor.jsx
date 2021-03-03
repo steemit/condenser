@@ -106,15 +106,12 @@ class ReplyEditor extends React.Component {
 
             // Process initial body value (if this is an edit)
             const { body } = this.state;
-            console.log(body);
-            console.log(body.value);
             if (body.value) {
                 raw = body.value;
             }
-            console.log(raw);
+
             // Check for draft data
             let draft = localStorage.getItem('replyEditorData-' + formId);
-            console.log(draft);
             if (draft) {
                 draft = JSON.parse(draft);
                 const { tags, title } = this.state;
@@ -138,9 +135,6 @@ class ReplyEditor extends React.Component {
             }
 
             // console.log("initial reply body:", raw || '(empty)')
-            console.log('raw');
-            console.log(raw);
-            console.log(rte);
             body.props.onChange(raw);
             this.setState({
                 rte,
@@ -306,8 +300,6 @@ class ReplyEditor extends React.Component {
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
     onChange = rte_value => {
-        console.log('rte_value');
-        console.log(rte_value);
         this.refs.rte.setState({ state: rte_value });
         const html = stateToHtml(rte_value);
         const { body } = this.state;
@@ -386,7 +378,6 @@ class ReplyEditor extends React.Component {
     };
 
     onPasteCapture = e => {
-        console.log('onPasteCapture');
         try {
             if (e.clipboardData) {
                 // @TODO: currently it seems to capture only one file, try to find a fix for multiple files
@@ -440,7 +431,6 @@ class ReplyEditor extends React.Component {
         this.setState({ imagesUploadCount: imagesUploadCount });
 
         // Insert the temporary tag where the cursor currently is
-        console.log('insertPlaceHolders');
         body.props.onChange(
             body.value.substring(0, selectionStart) +
                 placeholder +

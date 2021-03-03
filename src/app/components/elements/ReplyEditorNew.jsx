@@ -134,12 +134,13 @@ class ReplyEditorNew extends React.Component {
             if (raw) {
                 rte = isHtmlTest(raw);
             }
-
+            console.log(raw);
             // console.log("initial reply body:", raw || '(empty)')
             body.props.onChange(raw);
             this.setState({
                 rte,
                 rte_value: rte ? stateFromHtml(raw) : null,
+                editorHtml: raw,
             });
         }
 
@@ -286,6 +287,10 @@ class ReplyEditorNew extends React.Component {
         title.props.onChange(e);
     };
 
+    onRef = ref => {
+        this.child = ref;
+    };
+
     onCancel = e => {
         if (e) e.preventDefault();
         const { formId, onCancel, defaultPayoutType } = this.props;
@@ -300,6 +305,8 @@ class ReplyEditorNew extends React.Component {
             this.setState({ progress: {} });
             this.props.setPayoutType(formId, defaultPayoutType);
             this.props.setBeneficiaries(formId, []);
+            console.log(this.refs[`quill-editor`]);
+            this.child.clear();
             if (onCancel) onCancel(e);
         }
     };
@@ -411,7 +418,6 @@ class ReplyEditorNew extends React.Component {
     };
 
     uploadNextImage = () => {
-        console.log('uploadNextImage');
         if (imagesToUpload.length > 0) {
             const nextImage = imagesToUpload.pop();
             this.upload(nextImage);
@@ -454,13 +460,14 @@ class ReplyEditorNew extends React.Component {
             progress: { message: tt('reply_editor.uploading') },
         });
 
-        uploadImage(image, progress => {
+        uploadImage(image.file, progress => {
             const { body } = this.state;
-
+            console.log('progress');
             if (progress.url) {
+                console.log('progress.url');
                 this.setState({ progress: {} });
                 const { url } = progress;
-                const imageMd = `![${image.name}](${url})`;
+                const imageMd = `![${image.file.name}](${url})`;
                 console.log(url);
                 console.log(imageMd);
                 // Replace temporary image MD tag with the real one
@@ -470,16 +477,21 @@ class ReplyEditorNew extends React.Component {
 
                 this.uploadNextImage();
             } else {
+                console.log('progress.else');
                 if (progress.hasOwnProperty('error')) {
+                    console.log('progress.else.error');
                     this.displayErrorMessage(progress.error);
-                    const imageMd = `![${image.name}](UPLOAD FAILED)`;
-
-                    // Remove temporary image MD tag
-                    body.props.onChange(
+                    const imageMd = `![${image.file.name}](UPLOAD FAILED)`;
+                    console.log(imageMd);
+                    console.log(
                         body.value.replace(image.temporaryTag, imageMd)
                     );
-                    console.log(imageMd);
+                    // Remove temporary image MD tag
+                    var value = `${body.value}${imageMd}`;
+                    body.props.onChange(value);
+                    this.child.setHtml(value);
                 } else {
+                    console.log('progress.else.else');
                     this.setState({ progress });
                 }
             }
@@ -678,6 +690,8 @@ class ReplyEditorNew extends React.Component {
                                 editorHtml={this.state.editorHtml}
                                 onChange={this.onChange}
                                 uploadImage={this.upload}
+                                onRef={this.onRef}
+                                initialState={this.state.rte_value}
                             />
                             {/*process.env.BROWSER && rte ? (
                                 <SlateEditor

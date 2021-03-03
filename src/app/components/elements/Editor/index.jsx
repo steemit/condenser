@@ -63,11 +63,14 @@ export default class Editor extends React.Component {
         // Listen upload local image and save to server
         input.onchange = () => {
             const file = input.files[0];
-
+            const imageToUpload = {
+                file,
+                temporaryTag: '',
+            };
             // file type is only image.
             if (/^image\//.test(file.type)) {
                 //this.saveToServer(file);
-                this.props.uploadImage(file);
+                this.props.uploadImage(imageToUpload);
             } else {
                 console.warn('You could only upload images.');
             }
@@ -110,22 +113,56 @@ export default class Editor extends React.Component {
         );
     }
 
+    getQuillHtml() {
+        return this.editor.root.innerHTML;
+    }
+
+    setHtml(html) {
+        this.editor.root.innerHTML = html;
+    }
+
+    setText(text) {
+        this.editor.setText(text);
+    }
+
+    clear() {
+        this.setText('');
+    }
+
     componentDidMount() {
         //this.refs.quill.getEditor().getModule("toolbar").addHandler("image", imgHandler);
+        let _this = this;
+        this.props.onRef(this);
         this.editor = new Quill('#editor', {
             modules: {
-                toolbar: ['image'],
+                toolbar: [
+                    [{ header: '1' }, { header: '2' }, { font: [] }],
+                    [{ size: [] }],
+                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                    [
+                        { list: 'ordered' },
+                        { list: 'bullet' },
+                        { indent: '-1' },
+                        { indent: '+1' },
+                    ],
+                    ['link', 'image', 'video'],
+                    ['clean'],
+                ],
             },
-            placeholder: 'Insert an image...',
+            placeholder: this.props.placeholder,
             theme: 'snow',
-            imageHandler: () => {
-                console.log('123');
-            },
+        });
+        this.editor.on('text-change', function(delta, oldDelta, source) {
+            var content = _this.getQuillHtml();
+            console.log(content);
+            _this.props.onChange(content);
         });
         // quill editor add image handler
         this.editor.getModule('toolbar').addHandler('image', () => {
             this.selectLocalImage();
         });
+        console.log(this.props.editorHtml);
+        this.setHtml(this.props.editorHtml);
     }
 
     render() {

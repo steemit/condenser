@@ -3,7 +3,7 @@ import React from 'react';
 import UserListRow from 'app/components/cards/UserListRow';
 import tt from 'counterpart';
 
-const PER_PAGE = 50;
+const PER_PAGE = 20;
 
 class UserList extends React.Component {
     constructor() {
@@ -58,15 +58,21 @@ class UserList extends React.Component {
 
         const navButtons = (
             <nav>
-                <ul className="pager">
+                <ul
+                    className="pager"
+                    style={{ display: 'flex', justifyContent: 'flex-end' }}
+                >
                     <li>
                         <div
                             className={
-                                'button tiny hollow float-left ' +
+                                'button tiny hollow ' +
                                 (historyIndex === 0 ? ' disabled' : '')
                             }
                             onClick={this._setHistoryPagePrevious}
                             aria-label={tt('g.previous')}
+                            style={{
+                                marginRight: 20,
+                            }}
                         >
                             <span aria-hidden="true">
                                 &larr; {tt('g.previous')}
@@ -76,7 +82,7 @@ class UserList extends React.Component {
                     <li>
                         <div
                             className={
-                                'button tiny hollow float-right ' +
+                                'button tiny hollow ' +
                                 (historyIndex >= usersLength - PER_PAGE
                                     ? ' disabled'
                                     : '')
@@ -102,7 +108,7 @@ class UserList extends React.Component {
                 <div className="row">
                     <div className="column small-12">
                         <h3>{title}</h3>
-                        {navButtons}
+                        {/*navButtons*/}
                         <table>
                             <tbody>{user_list}</tbody>
                         </table>

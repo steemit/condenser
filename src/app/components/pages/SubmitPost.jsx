@@ -2,13 +2,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import ReplyEditor from 'app/components/elements/ReplyEditor';
+import ReplyEditorNew from 'app/components/elements/ReplyEditorNew';
 import { SUBMIT_FORM_ID } from 'shared/constants';
 import Callout from 'app/components/elements/Callout';
 import * as appActions from 'app/redux/AppReducer';
 
 const formId = SUBMIT_FORM_ID;
-const SubmitReplyEditor = ReplyEditor(formId);
+const SubmitReplyEditor = ReplyEditorNew(formId);
 
 function _redirect_url(operations) {
     try {

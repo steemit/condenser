@@ -35,6 +35,7 @@ const RECEIVE_REWARDS = 'global/RECEIVE_REWARDS';
 export const GET_DGP = 'global/GET_DGP';
 export const SET_DGP = 'global/SET_DGP';
 const SET_VESTS_PER_STEEM = 'global/SET_VESTS_PER_STEEM';
+const NOTICES = 'global/NOTICES';
 
 const postKey = (author, permlink) => {
     if ((author || '') === '' || (permlink || '') === '') return null;
@@ -158,7 +159,9 @@ export default function reducer(state = defaultState, action = {}) {
         case RECEIVE_REWARDS: {
             return state.set('rewards', fromJS(payload.rewards));
         }
-
+        case NOTICES: {
+            return state.set('notices', fromJS(payload));
+        }
         // Interleave special posts into the map of posts.
         case SYNC_SPECIAL_POSTS: {
             return payload.featuredPosts
@@ -386,6 +389,11 @@ export const notificationsLoading = payload => ({
 
 export const receiveRewards = payload => ({
     type: RECEIVE_REWARDS,
+    payload,
+});
+
+export const receiveNotices = payload => ({
+    type: NOTICES,
     payload,
 });
 

@@ -3,7 +3,7 @@ import { ifHive } from 'app/utils/Community';
 import stateCleaner from 'app/redux/stateCleaner';
 import xhr from 'axios/index';
 
-export async function callBridge(method, params) {
+export async function callBridge(method, params, pre = 'bridge.') {
     console.log(
         'call bridge',
         method,
@@ -11,7 +11,7 @@ export async function callBridge(method, params) {
     );
 
     return new Promise(function(resolve, reject) {
-        api.call('bridge.' + method, params, function(err, data) {
+        api.call(pre + method, params, function(err, data) {
             if (err) reject(err);
             else resolve(data);
         });

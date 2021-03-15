@@ -24,6 +24,7 @@ const GET_POST_HEADER = 'fetchDataSaga/GET_POST_HEADER';
 const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 const LIST_COMMUNITIES = 'fetchDataSaga/LIST_COMMUNITIES';
 const GET_SUBSCRIPTIONS = 'fetchDataSaga/GET_SUBSCRIPTIONS';
+const GET_NOTICES = 'fetchDataSaga/GET_NOTICES';
 const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
 const GET_UNREAD_ACCOUNT_NOTIFICATIONS =
     'fetchDataSaga/GET_UNREAD_ACCOUNT_NOTIFICATIONS';
@@ -38,6 +39,7 @@ export const fetchDataWatches = [
     takeEvery(GET_POST_HEADER, getPostHeader),
     takeEvery(GET_COMMUNITY, getCommunity),
     takeLatest(GET_SUBSCRIPTIONS, getSubscriptions),
+    takeLatest(GET_NOTICES, getNotices),
     takeEvery(LIST_COMMUNITIES, listCommunities),
     takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
     takeEvery(
@@ -241,6 +243,27 @@ export function* getSubscriptions(action) {
         console.log('Error Fetching Account Subscriptions: ', error);
     }
     yield put(globalActions.loadingSubscriptions(false));
+}
+
+/**
+ * Request all user subscriptions
+ * @param {string} name of account
+ */
+export function* getNotices(action) {
+    try {
+        const notices = yield call(
+            callBridge,
+            'get_notices',
+            {
+                limit: 1,
+            },
+            'turtle.'
+        );
+        console.log(notices);
+        yield put(globalActions.receiveNotices(notices));
+    } catch (error) {
+        console.log('Error Fetching get_notices: ', error);
+    }
 }
 
 /**
@@ -495,6 +518,11 @@ export const actions = {
 
     getSubscriptions: payload => ({
         type: GET_SUBSCRIPTIONS,
+        payload,
+    }),
+
+    getNotices: payload => ({
+        type: GET_NOTICES,
         payload,
     }),
 

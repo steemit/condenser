@@ -3,9 +3,11 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import tt from 'counterpart';
-import PropTypes from 'prop-types';
-import NativeSelect from 'app/components/elements/NativeSelect';
+import markdown from 'markdown';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 
+const mk = markdown.markdown;
+console.log(mk);
 class Announcement extends Component {
     static propTypes = {};
 
@@ -13,15 +15,13 @@ class Announcement extends Component {
         current: '',
     };
 
+    componentDidMount() {
+        const { getNotices } = this.props;
+        getNotices();
+    }
+
     render() {
-        const {
-            current,
-            compact,
-            username,
-            topics,
-            subscriptions,
-            communities,
-        } = this.props;
+        const { notices, user_preferences } = this.props;
 
         const commsHead = (
             <div style={{ color: '#aaa', paddingTop: '0em' }}>{}</div>
@@ -31,23 +31,29 @@ class Announcement extends Component {
                 <li>
                     <div className="c-sidebar__header">公告</div>
                 </li>
-                <li>
-                    <a href="https://www.baidu.com/" target="_blank">
-                        www.baidu.com
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.google.com/" target="_blank">
-                        www.google.com
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.youtube.com/" target="_blank">
-                        www.youtube.com
-                    </a>
-                </li>
+                {notices &&
+                    notices.map((item, index) => {
+                        const notice = item.toJS();
+                        const locale = user_preferences.locale;
+                        console.log(notice);
+                        console.log(locale);
+                        if (notice.status !== 1) return null;
+                        return (
+                            <li
+                                key={index}
+                                dangerouslySetInnerHTML={{
+                                    __html: mk.toHTML(
+                                        notice.body[
+                                            locale === 'zh' ? 'cn' : 'en'
+                                        ]
+                                    ),
+                                }}
+                            />
+                        );
+                    })}
             </ul>
         );
+        console.log(notices);
         return (
             <div className="c-sidebar__module">
                 <div className="c-sidebar__content">{list}</div>
@@ -60,6 +66,12 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => ({
         ...ownProps,
-        communities: state.global.get('community'),
+        notices: state.global.get('notices'),
+        user_preferences: state.app.get('user_preferences').toJS(),
+    }),
+    dispatch => ({
+        getNotices: username => {
+            return dispatch(fetchDataSagaActions.getNotices(username));
+        },
     })
 )(Announcement);

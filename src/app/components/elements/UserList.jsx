@@ -2,6 +2,7 @@
 import React from 'react';
 import UserListRow from 'app/components/cards/UserListRow';
 import tt from 'counterpart';
+import ReactPaginate from 'react-paginate';
 
 const PER_PAGE = 20;
 
@@ -112,7 +113,20 @@ class UserList extends React.Component {
                         <table>
                             <tbody>{user_list}</tbody>
                         </table>
-                        {navButtons}
+                        {/*navButtons*/}
+                        <ReactPaginate
+                            previousLabel={tt('g.previous')}
+                            nextLabel={tt('g.next')}
+                            breakLabel={'...'}
+                            breakClassName={'break-me'}
+                            pageCount={this.state.pageCount}
+                            marginPagesDisplayed={2}
+                            pageRangeDisplayed={5}
+                            onPageChange={() => {}}
+                            containerClassName={'pagination'}
+                            subContainerClassName={'pages pagination'}
+                            activeClassName={'pag-active'}
+                        />
                     </div>
                 </div>
             </div>

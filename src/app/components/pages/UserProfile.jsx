@@ -177,7 +177,8 @@ export default class UserProfile extends React.Component {
         }
 
         const isMyAccount = username === accountname;
-
+        console.log(followers);
+        console.log(following);
         let tab_content = null;
         if (userIllegalContent.includes(accountname)) {
             // invalid users

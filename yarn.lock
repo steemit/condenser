@@ -9558,6 +9558,13 @@ react-overlays@0.7.2:
     prop-types-extra "^1.0.1"
     warning "^3.0.0"
 
+react-paginate@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.npm.taobao.org/react-paginate/download/react-paginate-7.1.0.tgz#7dc244ad7ca2db59b6eb83472655de3c126be1bc"
+  integrity sha1-fcJErXyi21m264NHJlXePBJr4bw=
+  dependencies:
+    prop-types "^15.6.1"
+
 react-portal@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-portal/-/react-portal-3.0.0.tgz#9304fce836e8a3216b22588f8dc91b447728f0ae"

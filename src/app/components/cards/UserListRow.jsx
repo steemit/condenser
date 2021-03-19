@@ -5,19 +5,19 @@ import Follow from 'app/components/elements/Follow';
 class UserListRow extends React.Component {
     render() {
         const { user, loggedIn } = this.props;
-        console.log(user);
         return (
             <tr>
-                {loggedIn && (
-                    <td width="250">
-                        <Follow following={user} />
-                    </td>
-                )}
                 <td>
-                    <Link to={'/@' + user}>
-                        <strong>{user}</strong>
+                    <Link to={'/@' + user.follower}>
+                        <strong>{user.follower}</strong>
+                        {user.reputation && `(${Math.floor(user.reputation)})`}
                     </Link>
                 </td>
+                {loggedIn && (
+                    <td width="250">
+                        <Follow following={user.follower} />
+                    </td>
+                )}
             </tr>
         );
     }

@@ -177,18 +177,30 @@ export default class UserProfile extends React.Component {
         }
 
         const isMyAccount = username === accountname;
-        console.log(followers);
-        console.log(following);
         let tab_content = null;
         if (userIllegalContent.includes(accountname)) {
             // invalid users
             tab_content = <div>Unavailable For Legal Reasons.</div>;
         } else if (section === 'followers') {
             // users following this user
-            tab_content = <UserList title="Followers" users={followers} />;
+            tab_content = (
+                <UserList
+                    title="Followers"
+                    users={followers}
+                    accountname={accountname}
+                    profile={profile}
+                />
+            );
         } else if (section === 'followed') {
             // users followed by this user
-            tab_content = <UserList title="Followed" users={following} />;
+            tab_content = (
+                <UserList
+                    title="Followed"
+                    users={following}
+                    accountname={accountname}
+                    profile={profile}
+                />
+            );
         } else if (section === 'notifications') {
             // notifications
             tab_content = (

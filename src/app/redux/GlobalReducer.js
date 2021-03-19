@@ -36,6 +36,7 @@ export const GET_DGP = 'global/GET_DGP';
 export const SET_DGP = 'global/SET_DGP';
 const SET_VESTS_PER_STEEM = 'global/SET_VESTS_PER_STEEM';
 const NOTICES = 'global/NOTICES';
+const FOLLOWERSLIST = 'global/FOLLOWERSLIST';
 
 const postKey = (author, permlink) => {
     if ((author || '') === '' || (permlink || '') === '') return null;
@@ -161,6 +162,9 @@ export default function reducer(state = defaultState, action = {}) {
         }
         case NOTICES: {
             return state.set('notices', fromJS(payload));
+        }
+        case FOLLOWERSLIST: {
+            return state.set('followersList', fromJS(payload));
         }
         // Interleave special posts into the map of posts.
         case SYNC_SPECIAL_POSTS: {
@@ -394,6 +398,11 @@ export const receiveRewards = payload => ({
 
 export const receiveNotices = payload => ({
     type: NOTICES,
+    payload,
+});
+
+export const receiveFollowersList = payload => ({
+    type: FOLLOWERSLIST,
     payload,
 });
 

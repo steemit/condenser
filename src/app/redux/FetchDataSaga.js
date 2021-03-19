@@ -25,6 +25,7 @@ const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 const LIST_COMMUNITIES = 'fetchDataSaga/LIST_COMMUNITIES';
 const GET_SUBSCRIPTIONS = 'fetchDataSaga/GET_SUBSCRIPTIONS';
 const GET_NOTICES = 'fetchDataSaga/GET_NOTICES';
+const GET_FOLLOWERS = 'fetchDataSaga/GET_FOLLOWERS';
 const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
 const GET_UNREAD_ACCOUNT_NOTIFICATIONS =
     'fetchDataSaga/GET_UNREAD_ACCOUNT_NOTIFICATIONS';
@@ -40,6 +41,7 @@ export const fetchDataWatches = [
     takeEvery(GET_COMMUNITY, getCommunity),
     takeLatest(GET_SUBSCRIPTIONS, getSubscriptions),
     takeLatest(GET_NOTICES, getNotices),
+    takeLatest(GET_FOLLOWERS, getFollowers),
     takeEvery(LIST_COMMUNITIES, listCommunities),
     takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
     takeEvery(
@@ -259,7 +261,6 @@ export function* getNotices(action) {
             },
             'turtle.'
         );
-        console.log(notices);
         yield put(globalActions.receiveNotices(notices));
     } catch (error) {
         console.log('Error Fetching get_notices: ', error);
@@ -271,19 +272,21 @@ export function* getNotices(action) {
  * @param {string} name of account
  */
 export function* getFollowers(action) {
+    console.log(action.payload);
+    const { title, accountname, currentPage, per_page } = action.payload;
     try {
-        const notices = yield call(
+        const list = yield call(
             callBridge,
-            'get_notices',
-            {
-                limit: 1,
-            },
-            'turtle.'
+            title === 'Followers'
+                ? 'get_followers_by_page'
+                : 'get_following_by_page',
+            [accountname, currentPage, per_page, 'blog'],
+            'condenser_api.'
         );
-        console.log(notices);
-        yield put(globalActions.receiveNotices(notices));
+        console.log(list);
+        yield put(globalActions.receiveFollowersList(list));
     } catch (error) {
-        console.log('Error Fetching get_notices: ', error);
+        console.log('Error Fetching receiveFollowersList: ', error);
     }
 }
 
@@ -544,6 +547,11 @@ export const actions = {
 
     getNotices: payload => ({
         type: GET_NOTICES,
+        payload,
+    }),
+
+    getFollowers: payload => ({
+        type: GET_FOLLOWERS,
         payload,
     }),
 

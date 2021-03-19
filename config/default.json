@@ -228,5 +228,7 @@
   "steem_elastic_search_endpoint": null,
   "wallet_api_host": "https://wallet.steemitdev.com",
   "tron_create_node": "https://api.shasta.trongrid.io",
-  "activity_tag": ""
+  "activity_tag": "",
+  "sdc_image_proxy_prefix": "https://steemit-dev-imagehoster-001.us-east-1.elasticbeanstalk.com",
+  "sdc_upload_image_url": "https://steemit-dev-imagehoster-001.us-east-1.elasticbeanstalk.com"
 }

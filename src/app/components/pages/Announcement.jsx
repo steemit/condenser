@@ -56,7 +56,12 @@ class Announcement extends Component {
         console.log(notices);
         return (
             <div className="c-sidebar__module">
-                <div className="c-sidebar__content">{list}</div>
+                <div className="c-sidebar__content">
+                    {notices &&
+                        notices.size > 0 &&
+                        notices.toJS()[0].status === 1 &&
+                        list}
+                </div>
             </div>
         );
     }

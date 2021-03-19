@@ -5,6 +5,7 @@ import Follow from 'app/components/elements/Follow';
 class UserListRow extends React.Component {
     render() {
         const { user, loggedIn } = this.props;
+        console.log(user);
         return (
             <tr>
                 {loggedIn && (

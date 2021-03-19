@@ -246,10 +246,31 @@ export function* getSubscriptions(action) {
 }
 
 /**
- * Request all user subscriptions
+ * Request Notices
  * @param {string} name of account
  */
 export function* getNotices(action) {
+    try {
+        const notices = yield call(
+            callBridge,
+            'get_notices',
+            {
+                limit: 1,
+            },
+            'turtle.'
+        );
+        console.log(notices);
+        yield put(globalActions.receiveNotices(notices));
+    } catch (error) {
+        console.log('Error Fetching get_notices: ', error);
+    }
+}
+
+/**
+ * Request Notices
+ * @param {string} name of account
+ */
+export function* getFollowers(action) {
     try {
         const notices = yield call(
             callBridge,

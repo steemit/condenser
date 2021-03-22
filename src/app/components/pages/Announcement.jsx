@@ -7,7 +7,7 @@ import markdown from 'markdown';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 
 const mk = markdown.markdown;
-console.log(mk);
+
 class Announcement extends Component {
     static propTypes = {};
 
@@ -35,8 +35,6 @@ class Announcement extends Component {
                     notices.map((item, index) => {
                         const notice = item.toJS();
                         const locale = user_preferences.locale;
-                        console.log(notice);
-                        console.log(locale);
                         if (notice.status !== 1) return null;
                         return (
                             <li
@@ -53,7 +51,7 @@ class Announcement extends Component {
                     })}
             </ul>
         );
-        console.log(notices);
+
         return (
             <div className="c-sidebar__module">
                 <div className="c-sidebar__content">

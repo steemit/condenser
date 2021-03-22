@@ -35,7 +35,6 @@ class UserList extends React.Component {
 
     onPageChange(node) {
         const currentPage = node.selected;
-        console.log(currentPage);
         this.setState({
             currentPage,
         });
@@ -43,7 +42,6 @@ class UserList extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log(prevProps.title, this.props.title);
         if (prevProps.title !== this.props.title) {
             /*const parent = document.getElementsByClassName('pagination')[0];
             const lis = parent.getElementsByTagName('li');

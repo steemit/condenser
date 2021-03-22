@@ -27,6 +27,7 @@ import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
 import { userActionRecord } from 'app/utils/ServerApiClient';
 import Editor from 'app/components/elements/Editor';
+import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
@@ -95,7 +96,9 @@ class ReplyEditorNew extends React.Component {
 
     componentWillMount() {
         const { formId } = this.props;
-
+        this.proxifyImages(
+            this.parseToDOM(`<p>weqeqeqeqeq<img src='dadada'/></p>`)
+        );
         if (process.env.BROWSER) {
             // Check for rte editor preference
             let rte =
@@ -151,6 +154,30 @@ class ReplyEditorNew extends React.Component {
             }
             this.checkTagsCommunity(this.props.category);
         }
+    }
+    parseToDOM(str) {
+        var div = document.createElement('div');
+        if (typeof str == 'string') div.innerHTML = str;
+        return div;
+    }
+
+    domToString(dom) {
+        return dom.innerHTML;
+    }
+
+    proxifyImages(doc) {
+        console.log('``````````doc```````');
+        console.log(doc);
+        console.log(doc.getElementsByTagName('img'));
+        if (!doc) return;
+        [...doc.getElementsByTagName('img')].forEach(node => {
+            const url = node.getAttribute('src');
+            console.log(url);
+            if (url.indexOf('/https:') > -1)
+                node.setAttribute('src', `https:${url.split('/https:')[1]}`);
+        });
+        console.log(doc);
+        return doc;
     }
 
     checkTagsCommunity(tagsInput) {
@@ -471,10 +498,15 @@ class ReplyEditorNew extends React.Component {
                 console.log(url);
                 console.log(imageMd);
                 // Replace temporary image MD tag with the real one
-                body.props.onChange(
-                    body.value.replace(image.temporaryTag, imageMd)
-                );
-
+                console.log(body.value);
+                body.value += `<img src='${proxifyImageUrl(url, true)}'/>`;
+                console.log(body.value);
+                body.props.onChange(body.value);
+                this.setState({
+                    editorHtml: body.value,
+                });
+                this.child.setHtml(body.value);
+                console.log(body.value);
                 this.uploadNextImage();
             } else {
                 console.log('progress.else');
@@ -486,6 +518,7 @@ class ReplyEditorNew extends React.Component {
                     console.log(
                         body.value.replace(image.temporaryTag, imageMd)
                     );
+                    console.log(body.value);
                     // Remove temporary image MD tag
                     var value = `${body.value}${imageMd}`;
                     body.props.onChange(value);
@@ -615,6 +648,10 @@ class ReplyEditorNew extends React.Component {
                         className={vframe_class}
                         onSubmit={handleSubmit(({ data }) => {
                             console.log(data);
+                            let body = data.body;
+                            data.body = this.domToString(
+                                this.proxifyImages(this.parseToDOM(body))
+                            );
                             const startLoadingIndicator = () =>
                                 this.setState({
                                     loading: true,
@@ -945,6 +982,7 @@ class ReplyEditorNew extends React.Component {
                                     <MarkdownViewer
                                         text={body.value}
                                         large={isStory}
+                                        isProxifyImages={true}
                                     />
                                 </div>
                             )}
@@ -984,7 +1022,7 @@ function stateFromMarkdown(markdown) {
     let html;
     if (markdown && markdown.trim() !== '') {
         html = remarkable.render(markdown);
-        html = HtmlReady(html).html; // TODO: option to disable youtube conversion, @-links, img proxy
+        html = HtmlReady(html, { isProxifyImages: true }).html; // TODO: option to disable youtube conversion, @-links, img proxy
         //html = htmlclean(html) // normalize whitespace
         console.log('markdown converted to:', html);
     }
@@ -1162,7 +1200,10 @@ export default formId =>
                 let rtags;
                 {
                     const html = isHtml ? body : remarkable.render(body);
-                    rtags = HtmlReady(html, { mutate: false });
+                    rtags = HtmlReady(html, {
+                        mutate: false,
+                        isProxifyImages: true,
+                    });
                 }
 
                 allowedTags.forEach(tag => {

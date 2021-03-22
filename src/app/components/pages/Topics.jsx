@@ -119,7 +119,7 @@ class Topics extends Component {
         const commsHead = (
             <div style={{ color: '#aaa', paddingTop: '0em' }}>{title}</div>
         );
-        console.log(topics.toJS());
+
         const list = (
             <ul className="c-sidebar__list">
                 <li>{link('/', tt('g.all_tags'))}</li>
@@ -154,7 +154,7 @@ class Topics extends Component {
                 </li>
             </ul>
         );
-        console.log(list);
+
         return (
             <div className="c-sidebar__module">
                 <div className="c-sidebar__content">{list}</div>

@@ -5,3 +5,8 @@
 .ql-tooltip {
     left: 0 !important;
 }
+.ql-editor {
+@include themify($themes) {
+    background: themed('backgroundColor');  
+  } 
+}

@@ -14,7 +14,7 @@ class UserList extends React.Component {
         super();
         this.state = {
             historyIndex: 0,
-            initialPage: 0,
+            currentPage: 0,
         };
     }
 
@@ -34,18 +34,29 @@ class UserList extends React.Component {
     }
 
     onPageChange(node) {
-        const page = node.selected;
-        console.log(page);
-        this.getList(page);
+        const currentPage = node.selected;
+        console.log(currentPage);
+        this.setState({
+            currentPage,
+        });
+        this.getList(currentPage);
     }
 
     componentDidUpdate(prevProps) {
         console.log(prevProps.title, this.props.title);
         if (prevProps.title !== this.props.title) {
-            this.setState({
-                initialPage: 0,
-            });
+            /*const parent = document.getElementsByClassName('pagination')[0];
+            const lis = parent.getElementsByTagName('li');
+            console.log(parent);
+            console.log(lis);
+            lis[this.state.currentPage + 1].classList.remove("pag-active");
+            lis[this.state.currentPage + 1].getElementsByTagName('a')[0].removeAttribute('aria-current');
+            lis[1].classList.add("pag-active");
+            lis[1].getElementsByTagName('a')[0].setAttribute('aria-current','page');*/
             this.getList(0);
+            this.setState({
+                currentPage: 0,
+            });
         }
     }
 
@@ -153,7 +164,6 @@ class UserList extends React.Component {
                                 {followersList &&
                                     followersList.map((item, index) => {
                                         const user = item.toJS();
-                                        console.log(user);
                                         return (
                                             <UserListRow
                                                 user={user}
@@ -177,8 +187,6 @@ class UserList extends React.Component {
                                 containerClassName={'pagination'}
                                 subContainerClassName={'pages pagination'}
                                 activeClassName={'pag-active'}
-                                initialPage={this.state.initialPage}
-                                forcePage={this.state.initialPage}
                             />
                         )}
                     </div>

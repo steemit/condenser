@@ -65,7 +65,7 @@ class MarkdownViewer extends Component {
     };
 
     render() {
-        const { noImage, hideImages } = this.props;
+        const { noImage, hideImages, isProxifyImages } = this.props;
         const { allowNoImage } = this.state;
         let { text } = this.props;
         if (!text) text = ''; // text can be empty, still view the link meta data
@@ -94,7 +94,7 @@ class MarkdownViewer extends Component {
         }
 
         let renderedText = html ? text : renderer.render(text);
-
+        console.log(renderedText);
         // If content isn't wrapped with an html element at this point, add it.
         if (!renderedText.indexOf('<html>') !== 0) {
             renderedText = '<html>' + renderedText + '</html>';
@@ -102,11 +102,15 @@ class MarkdownViewer extends Component {
 
         // Embed videos, link mentions and hashtags, etc...
         if (renderedText)
-            renderedText = HtmlReady(renderedText, { hideImages }).html;
+            renderedText = HtmlReady(renderedText, {
+                hideImages,
+                isProxifyImages,
+            }).html;
 
         // Complete removal of javascript and other dangerous tags..
         // The must remain as close as possible to dangerouslySetInnerHTML
         let cleanText = renderedText;
+        console.log(cleanText);
         if (this.props.allowDangerousHTML === true) {
             console.log('WARN\tMarkdownViewer rendering unsanitized content');
         } else {

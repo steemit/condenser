@@ -43,14 +43,17 @@ class UserList extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.title !== this.props.title) {
-            /*const parent = document.getElementsByClassName('pagination')[0];
+            const parent = document.getElementsByClassName('pagination')[0];
             const lis = parent.getElementsByTagName('li');
             console.log(parent);
             console.log(lis);
-            lis[this.state.currentPage + 1].classList.remove("pag-active");
-            lis[this.state.currentPage + 1].getElementsByTagName('a')[0].removeAttribute('aria-current');
-            lis[1].classList.add("pag-active");
-            lis[1].getElementsByTagName('a')[0].setAttribute('aria-current','page');*/
+            //lis[1].click();
+            //lis[this.state.currentPage + 1].classList.remove("pag-active");
+            //lis[this.state.currentPage + 1].getElementsByTagName('a')[0].removeAttribute('aria-current');
+            //lis[1].classList.add("pag-active");
+            //lis[1].getElementsByTagName('a')[0].setAttribute('aria-current','page');
+            console.log('click');
+            lis[1].getElementsByTagName('a')[0].click();
             this.getList(0);
             this.setState({
                 currentPage: 0,

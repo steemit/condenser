@@ -1,12 +1,9 @@
 .ql-container {
-    background-color: #fff;
+    @include themify($themes) {
+        background: themed('backgroundColor');  
+    } 
     min-height: 140px;
 }
 .ql-tooltip {
     left: 0 !important;
-}
-.ql-editor {
-@include themify($themes) {
-    background: themed('backgroundColor');  
-  } 
 }

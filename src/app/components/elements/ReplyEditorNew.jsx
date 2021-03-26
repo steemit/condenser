@@ -137,7 +137,6 @@ class ReplyEditorNew extends React.Component {
             if (raw) {
                 rte = isHtmlTest(raw);
             }
-            console.log(raw);
             // console.log("initial reply body:", raw || '(empty)')
             body.props.onChange(raw);
             this.setState({
@@ -166,17 +165,12 @@ class ReplyEditorNew extends React.Component {
     }
 
     proxifyImages(doc) {
-        console.log('``````````doc```````');
-        console.log(doc);
-        console.log(doc.getElementsByTagName('img'));
         if (!doc) return;
         [...doc.getElementsByTagName('img')].forEach(node => {
             const url = node.getAttribute('src');
-            console.log(url);
             if (url.indexOf('/https:') > -1)
                 node.setAttribute('src', `https:${url.split('/https:')[1]}`);
         });
-        console.log(doc);
         return doc;
     }
 
@@ -495,18 +489,16 @@ class ReplyEditorNew extends React.Component {
                 this.setState({ progress: {} });
                 const { url } = progress;
                 const imageMd = `![${image.file.name}](${url})`;
-                console.log(url);
-                console.log(imageMd);
                 // Replace temporary image MD tag with the real one
-                console.log(body.value);
+
                 body.value += `<img src='${proxifyImageUrl(url, true)}'/>`;
-                console.log(body.value);
+
                 body.props.onChange(body.value);
                 this.setState({
                     editorHtml: body.value,
                 });
                 this.child.setHtml(body.value);
-                console.log(body.value);
+
                 this.uploadNextImage();
             } else {
                 console.log('progress.else');
@@ -514,11 +506,6 @@ class ReplyEditorNew extends React.Component {
                     console.log('progress.else.error');
                     this.displayErrorMessage(progress.error);
                     const imageMd = `![${image.file.name}](UPLOAD FAILED)`;
-                    console.log(imageMd);
-                    console.log(
-                        body.value.replace(image.temporaryTag, imageMd)
-                    );
-                    console.log(body.value);
                     // Remove temporary image MD tag
                     var value = `${body.value}${imageMd}`;
                     body.props.onChange(value);

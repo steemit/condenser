@@ -29,7 +29,9 @@ class Announcement extends Component {
         const list = (
             <ul className="c-sidebar__list_ann">
                 <li>
-                    <div className="c-sidebar__header">公告</div>
+                    <div className="c-sidebar__header">
+                        {tt('g.announcement')}
+                    </div>
                 </li>
                 {notices &&
                     notices.map((item, index) => {

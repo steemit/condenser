@@ -289,7 +289,8 @@
         "one_post": "%(count)s Post",
         "many_followers": "%(count)s Followers",
         "many_posts": "%(count)s Posts",
-        "search_history": "History"
+        "search_history": "History",
+        "announcement": "Announcement"
     },
     "navigation": {
         "about": "About Steemit, Inc.",

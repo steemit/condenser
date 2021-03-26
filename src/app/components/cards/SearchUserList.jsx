@@ -8,6 +8,7 @@ import * as userActions from 'app/redux/UserReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import tt from 'counterpart';
 import USERLOGO from 'app/assets/images/user-static.png';
+import { Set, Map } from 'immutable';
 
 export const SIZE_SMALL = 'small';
 export const SIZE_MED = 'medium';
@@ -27,16 +28,17 @@ class SearchUserList extends Component {
             name,
             showLogin,
             updateFollow,
+            ignoreList,
         } = this.props;
         if (!loggedIn) {
             return showLogin();
         } else {
             if (isFollow) {
-                updateFollow(username, name, undefined, () => {
+                updateFollow(username, name, '', ignoreList, () => {
                     //console.log('取消关注');
                 });
             } else {
-                updateFollow(username, name, 'blog', () => {
+                updateFollow(username, name, 'blog', ignoreList, () => {
                     //console.log('关注');
                 });
             }
@@ -129,11 +131,23 @@ class SearchUserList extends Component {
     }
 }
 
+const emptyMap = Map();
+const emptySet = Set();
+
 export default connect(
     (state, props) => {
         const { post } = props;
         const username = state.user.getIn(['current', 'username']);
         const loggedIn = !!username;
+        const f = state.global.getIn(
+            ['follow', 'getFollowingAsync', username],
+            emptyMap
+        );
+
+        // the line below was commented out by val - I think it's broken so sometimes the loading indicator is shown forever
+        // const loading = f.get('blog_loading', false) || f.get('ignore_loading', false)
+        const ignoreList = f.get('ignore_result', emptySet);
+
         return {
             follow: typeof props.follow === 'undefined' ? true : props.follow,
             name: post.get('name'),
@@ -151,6 +165,7 @@ export default connect(
             ]),
             username,
             loggedIn,
+            ignoreList,
         };
     },
     dispatch => ({
@@ -162,8 +177,11 @@ export default connect(
             if (e) e.preventDefault();
             dispatch(userActions.logout({ type: 'default' }));
         },
-        updateFollow: (follower, following, action, done) => {
-            const what = action ? [action] : [];
+        updateFollow: (follower, following, action, ignoreList, done) => {
+            const what = [
+                action,
+                ignoreList.contains(following) ? 'ignore' : '',
+            ];
             const json = ['follow', { follower, following, what }];
             dispatch(
                 transactionActions.broadcastOperation({

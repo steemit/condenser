@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { Link } from 'react-router';
 import * as transactionActions from 'app/redux/TransactionReducer';
+import { Set, Map } from 'immutable';
 
 class MuteList extends React.Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class MuteList extends React.Component {
         };
 
         const { account } = this.props;
-        this.props.updateFollow(account, target, null, done);
+        this.props.updateFollow(account, target, '', this.props.blogList, done);
     }
 
     render() {
@@ -48,11 +49,24 @@ class MuteList extends React.Component {
     }
 }
 
+const emptyMap = Map();
+const emptySet = Set();
+
 module.exports = connect(
-    (state, props) => ({}),
+    (state, props) => {
+        const username = state.user.getIn(['current', 'username']);
+        const f = state.global.getIn(
+            ['follow', 'getFollowingAsync', username],
+            emptyMap
+        );
+        const blogList = f.get('blog_result', emptySet);
+        return {
+            blogList,
+        };
+    },
     dispatch => ({
-        updateFollow: (follower, following, type, done) => {
-            const what = type ? [type] : [];
+        updateFollow: (follower, following, type, blogList, done) => {
+            const what = [blogList.contains(following) ? 'blog' : '', type];
             const json = ['follow', { follower, following, what }];
             dispatch(
                 transactionActions.broadcastOperation({

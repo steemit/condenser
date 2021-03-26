@@ -360,16 +360,37 @@ function* accepted_comment({ operation }) {
     yield put(globalActions.linkReply(operation));
 }
 
-function updateFollowState(action, following, state) {
-    if (action == null) {
+function updateFollowState(what, following, state) {
+    let action = null;
+    console.log('=======what=======');
+    console.log(what);
+    if (what.indexOf('blog') > -1 && what.indexOf('ignore') > -1) {
+        action = 'blog&ignore';
+    } else if (what.indexOf('blog') > -1) {
+        action = 'blog';
+    } else if (what.indexOf('ignore') > -1) {
+        action = 'ignore';
+    } else {
+        action = 'cancel_blog&ignore';
+    }
+    console.log('action:', action);
+    /*if (action == null) {
         state = state.update('blog_result', Set(), r => r.delete(following));
         state = state.update('ignore_result', Set(), r => r.delete(following));
-    } else if (action === 'blog') {
+    } else */ if (
+        action === 'blog&ignore'
+    ) {
         state = state.update('blog_result', Set(), r => r.add(following));
-        state = state.update('ignore_result', Set(), r => r.delete(following));
+        state = state.update('ignore_result', Set(), r => r.add(following));
     } else if (action === 'ignore') {
         state = state.update('ignore_result', Set(), r => r.add(following));
         state = state.update('blog_result', Set(), r => r.delete(following));
+    } else if (action == 'blog') {
+        state = state.update('blog_result', Set(), r => r.add(following));
+        state = state.update('ignore_result', Set(), r => r.delete(following));
+    } else {
+        state = state.update('blog_result', Set(), r => r.delete(following));
+        state = state.update('ignore_result', Set(), r => r.delete(following));
     }
     state = state.set('blog_count', state.get('blog_result', Set()).size);
     state = state.set('ignore_count', state.get('ignore_result', Set()).size);
@@ -383,11 +404,13 @@ function* accepted_custom_json({ operation }) {
         try {
             if (json[0] === 'follow') {
                 const { follower, following, what: [action] } = json[1];
+
                 yield put(
                     globalActions.update({
                         key: ['follow', 'getFollowingAsync', follower],
                         notSet: Map(),
-                        updater: m => updateFollowState(action, following, m),
+                        updater: m =>
+                            updateFollowState(json[1].what, following, m),
                     })
                 );
             }

@@ -227,7 +227,8 @@
         "one_post": "%(count)s个帖子",
         "many_followers": "%(count)s个关注者",
         "many_posts": "%(count)s个帖子",
-        "search_history": "搜索历史"
+        "search_history": "搜索历史",
+        "announcement": "公告"
     },
     "navigation": {
         "about": "关于",

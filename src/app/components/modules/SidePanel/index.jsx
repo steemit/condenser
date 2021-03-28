@@ -41,7 +41,7 @@ const SidePanel = ({
     const handleLanguageChange = event => {
         const locale = event.target.value;
         const userPreferences = { ...user_preferences, locale };
-        console.log(locale);
+        // console.log(locale);
         setUserPreferences(userPreferences);
         hideSidePanel();
     };
@@ -102,7 +102,7 @@ const SidePanel = ({
             },
             {
                 label: tt('navigation.language'),
-                link: `/faq.html`,
+                link: '/',
                 key: `switchLanguage`,
             },
             {

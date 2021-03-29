@@ -26,6 +26,7 @@ const LIST_COMMUNITIES = 'fetchDataSaga/LIST_COMMUNITIES';
 const GET_SUBSCRIPTIONS = 'fetchDataSaga/GET_SUBSCRIPTIONS';
 const GET_NOTICES = 'fetchDataSaga/GET_NOTICES';
 const GET_FOLLOWERS = 'fetchDataSaga/GET_FOLLOWERS';
+const UPDATE_FOLLPWERSLIST = 'fetchDataSaga/UPDATE_FOLLPWERSLIST';
 const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
 const GET_UNREAD_ACCOUNT_NOTIFICATIONS =
     'fetchDataSaga/GET_UNREAD_ACCOUNT_NOTIFICATIONS';
@@ -42,6 +43,7 @@ export const fetchDataWatches = [
     takeLatest(GET_SUBSCRIPTIONS, getSubscriptions),
     takeLatest(GET_NOTICES, getNotices),
     takeLatest(GET_FOLLOWERS, getFollowers),
+    takeLatest(UPDATE_FOLLPWERSLIST, updateFollowersList),
     takeEvery(LIST_COMMUNITIES, listCommunities),
     takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
     takeEvery(
@@ -287,6 +289,15 @@ export function* getFollowers(action) {
         yield put(globalActions.receiveFollowersList(list));
     } catch (error) {
         console.log('Error Fetching receiveFollowersList: ', error);
+    }
+}
+
+export function* updateFollowersList(list) {
+    console.log(list);
+    try {
+        yield put(globalActions.receiveFollowersList(list));
+    } catch (error) {
+        console.log('Error Fetching updateFollowersList: ', error);
     }
 }
 
@@ -552,6 +563,11 @@ export const actions = {
 
     getFollowers: payload => ({
         type: GET_FOLLOWERS,
+        payload,
+    }),
+
+    updateFollowersList: payload => ({
+        type: UPDATE_FOLLPWERSLIST,
         payload,
     }),
 

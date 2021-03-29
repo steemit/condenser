@@ -5,6 +5,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import { Set, Map } from 'immutable';
 import tt from 'counterpart';
 
@@ -46,12 +47,14 @@ export default class Follow extends React.Component {
             following,
             followingWhat,
             ignoreWhat,
+            updateFollowersList,
         } = props;
         const upd = (action, index) => {
             if (this.state.busy) return;
             this.setState({ busy: true });
             const done = () => {
                 this.setState({ busy: false });
+                //updateFollowersList([{}])
             };
             const whatIf = [followingWhat, ignoreWhat];
             const what = [];
@@ -217,6 +220,9 @@ module.exports = connect(
         showLogin: e => {
             if (e) e.preventDefault();
             dispatch(userActions.showLogin());
+        },
+        updateFollowersList: list => {
+            return dispatch(fetchDataSagaActions.updateFollowersList(list));
         },
     })
 )(Follow);

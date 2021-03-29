@@ -25,6 +25,7 @@ import Topics from './Topics';
 import Icon from 'app/components/elements/Icon';
 import AdSwipe from 'app/components/elements/AdSwipe';
 import * as appActions from 'app/redux/AppReducer';
+import Announcement from './Announcement';
 
 function isEmptyPost(post) {
     // check if the post doesn't exist
@@ -270,6 +271,7 @@ class Post extends React.Component {
             <div className="Post">
                 <div className="post-content">
                     <div className="c-sidebr-ads">
+                        <Announcement />
                         <Topics
                             compact={false}
                             username={uname}

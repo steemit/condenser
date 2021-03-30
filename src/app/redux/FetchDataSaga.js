@@ -295,7 +295,7 @@ export function* getFollowers(action) {
 export function* updateFollowersList(list) {
     console.log(list);
     try {
-        yield put(globalActions.receiveFollowersList(list));
+        yield put(globalActions.receiveFollowersList([]));
     } catch (error) {
         console.log('Error Fetching updateFollowersList: ', error);
     }

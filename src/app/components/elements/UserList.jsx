@@ -43,6 +43,7 @@ class UserList extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.title !== this.props.title) {
+            this.props.updateFollowersList([]);
             this.getList(0);
             const parent = document.getElementsByClassName('pagination')[0];
             if (!parent) return;
@@ -206,6 +207,9 @@ export default connect(
     dispatch => ({
         getFollowers: payload => {
             return dispatch(fetchDataSagaActions.getFollowers(payload));
+        },
+        updateFollowersList: list => {
+            return dispatch(fetchDataSagaActions.updateFollowersList(list));
         },
     })
 )(UserList);

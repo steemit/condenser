@@ -195,7 +195,7 @@ export default class UserProfile extends React.Component {
             // users followed by this user
             tab_content = (
                 <UserList
-                    title="Followed"
+                    title="Following"
                     users={following}
                     accountname={accountname}
                     profile={profile}

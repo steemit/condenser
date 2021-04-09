@@ -104,7 +104,10 @@ module.exports = {
     resolve: {
         alias: {
             react: path.join(__dirname, '../node_modules', 'react'),
-            assets: path.join(__dirname, '../src/app/assets')
+            assets: path.join(__dirname, '../src/app/assets'),
+            editormd: path.join(__dirname, '../src/app/assets/js/editormd.min.js'),
+            $: path.join(__dirname, '../src/app/assets/js/jquery-3.1.0.slim.js'),
+            editormdlib: path.join(__dirname, '../src/app/assets/js/lib'),
         },
         extensions: ['.js', '.json', '.jsx'],
         modules: [

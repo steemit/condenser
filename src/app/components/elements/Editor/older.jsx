@@ -5,11 +5,10 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 var IMGUR_CLIENT_ID = 'bcab3ce060640ba';
 var IMGUR_API_URL = 'https://api.imgur.com/3/image';
-import Editor from './md';
 /* 
  * Simple editor component that takes placeholder text as a prop 
  */
-export default class EditorMd extends React.Component {
+export default class Editor extends React.Component {
     constructor(props) {
         super(props);
         this.state = { editorHtml: '', theme: 'snow' };
@@ -131,34 +130,44 @@ export default class EditorMd extends React.Component {
         this.setText('');
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        //this.refs.quill.getEditor().getModule("toolbar").addHandler("image", imgHandler);
+        let _this = this;
+        this.props.onRef(this);
+        this.editor = new Quill('#editor', {
+            modules: {
+                toolbar: [
+                    [{ header: '1' }, { header: '2' }, { font: [] }],
+                    [{ size: [] }],
+                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                    [
+                        { list: 'ordered' },
+                        { list: 'bullet' },
+                        { indent: '-1' },
+                        { indent: '+1' },
+                    ],
+                    ['link', 'image', 'video'],
+                    ['clean'],
+                ],
+            },
+            placeholder: this.props.placeholder,
+            theme: 'snow',
+        });
+        this.editor.on('text-change', function(delta, oldDelta, source) {
+            var content = _this.getQuillHtml();
+            console.log(content);
+            _this.props.onChange(content);
+        });
+        // quill editor add image handler
+        this.editor.getModule('toolbar').addHandler('image', () => {
+            this.selectLocalImage();
+        });
+        console.log(this.props.editorHtml);
+        this.setHtml(this.props.editorHtml);
+    }
 
     render() {
-        return (
-            <Editor
-                config={{
-                    width: '100%',
-                    height: 300,
-                    toolbar: true,
-                    placeholder: this.props.placeholder,
-                    onload: (editor, func) => {
-                        let md = editor.getMarkdown();
-                        let html = editor.getHTML();
-                        editor.showToolbar();
-                    },
-                    imageUploadURL:
-                        'https://steemitdevimages.com/poz520/1f6366c5e96bec7425301dc7ea1d5ca746a568384a43b3164b02036ea2186fb4ad57f6df26dad3edd8d6aafdf3acb78fea57e0fde35d76ef9ec0986f1e97abb5fe',
-                    imageUpload: true,
-                    crossDomainUpload: true,
-                    onchange: (editor, that) => {
-                        console.log('onchange');
-                        console.log(editor.getMarkdown());
-                        console.log(that.getHTML());
-                        this.props.onChange(that.getHTML());
-                    },
-                }}
-            />
-        );
+        return <div id="editor" />;
     }
 }
 
@@ -198,6 +207,6 @@ Editor.modules = {
 /* 
    * PropType validation
    */
-EditorMd.propTypes = {
+Editor.propTypes = {
     placeholder: PropTypes.string,
 };

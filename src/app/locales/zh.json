@@ -100,7 +100,8 @@
         "tag": "标签",
         "to": "至",
         "topics": "主题",
-        "toggle_nightmode": "切换夜间模式",
+        "toggle_nightmode": "切换到夜间模式",
+        "toggle_daymode": "关闭夜间模式",
         "all_tags": "所有标签",
         "transfer": "转账",
         "trending_topics": "热门话题",
@@ -284,7 +285,8 @@
         "update_post": "更新帖子",
         "markdown_not_supported": "这里不支持Markdown标记语言",
         "advanced_settings": "Advanced settings",
-        "beneficiaries_set": "%(count)s set"
+        "beneficiaries_set": "%(count)s set",
+        "tag": "#标签"
     },
     "beneficiary_selector_jsx": {
         "header": "Who should receive any rewards?",

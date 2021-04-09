@@ -14,6 +14,7 @@ const SidePanel = ({
     showSidePanel,
     username,
     walletUrl,
+    nightmode,
     toggleNightmode,
     user_preferences,
     setUserPreferences,
@@ -116,7 +117,9 @@ const SidePanel = ({
             },
             */
             {
-                label: tt('g.toggle_nightmode'),
+                label: nightmode
+                    ? tt('g.toggle_daymode')
+                    : tt('g.toggle_nightmode'),
                 link: '/',
                 onClick: toggleNightmode,
             },
@@ -266,8 +269,10 @@ SidePanel.defaultProps = {
 export default connect(
     (state, ownProps) => {
         const walletUrl = state.app.get('walletUrl');
+        const nightmode = state.app.getIn(['user_preferences', 'nightmode']);
         return {
             walletUrl,
+            nightmode,
             user_preferences: state.app.get('user_preferences').toJS(),
             ...ownProps,
         };

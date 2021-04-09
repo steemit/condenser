@@ -156,7 +156,7 @@ export default class UserProfile extends React.Component {
                 subscriptions,
             },
         } = this;
-
+        console.log(walletUrl);
         // Loading status
         const _state = status ? status.getIn([category, order]) : null;
         const fetching = (_state && _state.fetching) || this.props.loading;

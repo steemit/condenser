@@ -26,7 +26,8 @@ import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
 import { userActionRecord } from 'app/utils/ServerApiClient';
-import Editor from 'app/components/elements/Editor';
+import EditorMd from 'app/components/elements/Editor';
+
 import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
@@ -90,7 +91,12 @@ class ReplyEditorNew extends React.Component {
 
     constructor(props) {
         super();
-        this.state = { progress: {}, imagesUploadCount: 0, editorHtml: '' };
+        this.state = {
+            progress: {},
+            imagesUploadCount: 0,
+            editorHtml: '',
+            editorCom: null,
+        };
         this.initForm(props);
     }
 
@@ -518,6 +524,57 @@ class ReplyEditorNew extends React.Component {
         });
     };
 
+    appendJQCDN(url, fn) {
+        var head = document.head || document.getElementsByTagName('head')[0];
+        var script = document.createElement('script');
+        var style = document.createElement('style');
+        script.setAttribute('src', url);
+        style.innerHTML = '';
+        head.appendChild(script);
+        head.appendChild(style);
+        script.onload = function() {
+            fn && fn();
+        };
+    }
+
+    loadCssCode(code) {
+        var style = document.createElement('style');
+        style.type = 'text/css';
+        style.rel = 'stylesheet';
+        //for Chrome Firefox Opera Safari
+        style.appendChild(document.createTextNode(code));
+        //for IE
+        //style.styleSheet.cssText = code;
+        var head = document.getElementsByTagName('head')[0];
+        head.appendChild(style);
+    }
+
+    componentWillMount() {
+        this.loadCssCode(
+            'https://s0.meituan.net/xm/open-platform-static/editormd/css/editormd.css'
+        );
+        this.appendJQCDN(
+            '//s0.meituan.net/xm/static/jquery/1.11.3/jquery.min.js'
+        );
+        this.appendJQCDN(
+            'https://s0.meituan.net/xm/open-platform-static/editormd/editormd.js',
+            () => {
+                this.setState({
+                    editorCom: (
+                        <EditorMd
+                            placeholder={
+                                this.props.isStory
+                                    ? tt('g.write_your_story')
+                                    : tt('g.reply')
+                            }
+                            onChange={this.onChange}
+                        />
+                    ),
+                });
+            }
+        );
+    }
+
     render() {
         const originalPost = {
             category: this.props.category,
@@ -705,7 +762,7 @@ class ReplyEditorNew extends React.Component {
                                     : vframe_section_shrink_class)
                             }
                         >
-                            <Editor
+                            {/*<Editor
                                 placeholder={
                                     isStory
                                         ? tt('g.write_your_story')
@@ -716,7 +773,8 @@ class ReplyEditorNew extends React.Component {
                                 uploadImage={this.upload}
                                 onRef={this.onRef}
                                 initialState={this.state.rte_value}
-                            />
+                            />*/}
+                            {this.state.editorCom}
                             {/*process.env.BROWSER && rte ? (
                                 <SlateEditor
                                     ref="rte"

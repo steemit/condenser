@@ -143,7 +143,8 @@
         "tag": "Tag",
         "to": " to ",
         "topics": "Topics",
-        "toggle_nightmode": "Night Mode",
+        "toggle_nightmode": "Switch to Night Mode",
+        "toggle_daymode": "Close Night Mode",
         "all_tags": "All posts",
         "all_tags_mobile": "All posts",
         "transfer": "Transfer ",
@@ -356,7 +357,8 @@
         "update_post": "Update Post",
         "markdown_not_supported": "Markdown is not supported here",
         "advanced_settings": "Advanced settings",
-        "beneficiaries_set": "%(count)s set"
+        "beneficiaries_set": "%(count)s set",
+        "tag": "#tag"
     },
     "beneficiary_selector_jsx": {
         "header": "Who should receive any rewards?",

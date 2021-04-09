@@ -168,6 +168,10 @@ export default function ServerHTML({
                     rel="stylesheet"
                     type="text/css"
                 />
+                <link
+                    rel="stylesheet"
+                    href="https://s0.meituan.net/xm/open-platform-static/editormd/css/editormd.css"
+                />
                 {assets.style.map((href, idx) => (
                     <link
                         href={href}

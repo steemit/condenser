@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const writeStats = require('./utils/write-stats');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 const webpack_isomorphic_tools_plugin =
@@ -60,7 +61,7 @@ module.exports = {
     },
     module: {
         rules: [
-            {test: /\.(jpe?g|png)/, use: 'url-loader?limit=4096'},
+            {test: /\.(jpe?g|png|gif)/, use: 'url-loader?limit=4096'},
             {test: /\.json$/, use: 'json-loader'},
             {test: /\.js$|\.jsx$/, exclude: [/node_modules/, /\*\/app\/assets\/static\/\*\.js/], use: 'babel-loader'},
             {test: /\.svg$/, use: 'svg-inline-loader'},
@@ -99,15 +100,38 @@ module.exports = {
            minChunks: Infinity
         }),
         webpack_isomorphic_tools_plugin,
-        new ExtractTextPlugin('[name]-[chunkhash].css')
+        new ExtractTextPlugin('[name]-[chunkhash].css'),
+        new CopyWebpackPlugin(
+            [
+                {
+                    from: path.resolve(__dirname, '../src/app/assets/js/jquery-3.6.0.min.js'),
+                    to: path.resolve(__dirname, '../dist/js/jquery-3.6.0.min.js')
+                },
+                {
+                    from: path.resolve(__dirname, '../src/app/assets/js/jquery-3.6.0.min.map'),
+                    to: path.resolve(__dirname, '../dist/js/jquery-3.6.0.min.map')
+                },
+                {
+                    from: path.resolve(__dirname, '../src/app/assets/plugins'),
+                    to: path.resolve(__dirname, '../dist/plugins/')
+                },
+            ], {
+                ignore: [
+                    '../src/app/assets/plugins/editor.md/examples',
+                    '../src/app/assets/plugins/editor.md/scss',
+                    '../src/app/assets/plugins/editor.md/src',
+                    '../src/app/assets/plugins/editor.md/tests',
+                ],
+            }
+        ),
     ],
     resolve: {
         alias: {
             react: path.join(__dirname, '../node_modules', 'react'),
             assets: path.join(__dirname, '../src/app/assets'),
-            editormd: path.join(__dirname, '../src/app/assets/js/editormd.min.js'),
-            $: path.join(__dirname, '../src/app/assets/js/jquery-3.1.0.slim.js'),
-            editormdlib: path.join(__dirname, '../src/app/assets/js/lib'),
+            // editormd: path.join(__dirname, '../src/app/assets/js/plugins/editor.md'),
+            // $: path.join(__dirname, '../src/app/assets/js/jquery-3.1.0.slim.js'),
+            // editormdlib: path.join(__dirname, '../src/app/assets/js/lib'),
         },
         extensions: ['.js', '.json', '.jsx'],
         modules: [

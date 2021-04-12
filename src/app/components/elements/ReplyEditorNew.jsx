@@ -5,10 +5,9 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
-import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import TagInput from 'app/components/cards/TagInput';
 import { validateTagInput } from 'app/components/cards/TagInput';
-import SlateEditor, {
+import {
     serializeHtml,
     deserializeHtml,
     getDemoState,
@@ -94,17 +93,14 @@ class ReplyEditorNew extends React.Component {
         this.state = {
             progress: {},
             imagesUploadCount: 0,
-            editorHtml: '',
-            editorCom: null,
+            content: '',
+            cm: null,
         };
         this.initForm(props);
     }
 
     componentWillMount() {
         const { formId } = this.props;
-        this.proxifyImages(
-            this.parseToDOM(`<p>weqeqeqeqeq<img src='dadada'/></p>`)
-        );
         if (process.env.BROWSER) {
             // Check for rte editor preference
             let rte =
@@ -115,13 +111,13 @@ class ReplyEditorNew extends React.Component {
             let raw = null;
 
             // Process initial body value (if this is an edit)
-            const { body } = this.state;
-            if (body.value) {
-                raw = body.value;
+            const { content } = this.state;
+            if (content) {
+                raw = content;
             }
-            console.log(body);
             // Check for draft data
             let draft = localStorage.getItem('replyEditorData-' + formId);
+            console.log('body loaded:', content, draft);
             if (draft) {
                 draft = JSON.parse(draft);
                 const { tags, title } = this.state;
@@ -144,11 +140,10 @@ class ReplyEditorNew extends React.Component {
                 rte = isHtmlTest(raw);
             }
             // console.log("initial reply body:", raw || '(empty)')
-            body.props.onChange(raw);
             this.setState({
                 rte,
                 rte_value: rte ? stateFromHtml(raw) : null,
-                editorHtml: raw,
+                content: raw,
             });
         }
 
@@ -223,7 +218,7 @@ class ReplyEditorNew extends React.Component {
 
             // Save curent draft to localStorage
             if (
-                ts.body.value !== ns.body.value ||
+                ts.content !== ns.content ||
                 (ns.tags && ts.tags.value !== ns.tags.value) ||
                 (ns.title && ts.title.value !== ns.title.value) ||
                 np.payoutType !== tp.payoutType ||
@@ -231,19 +226,19 @@ class ReplyEditorNew extends React.Component {
             ) {
                 // also prevents saving after parent deletes this information
                 const { formId, payoutType, beneficiaries } = np;
-                const { tags, title, body } = ns;
+                const { tags, title, content } = ns;
                 const data = {
                     formId,
                     title: title ? title.value : undefined,
                     tags: tags ? tags.value : undefined,
-                    body: body.value,
+                    body: content,
                     payoutType,
                     beneficiaries,
                 };
 
                 clearTimeout(saveEditorTimeout);
                 saveEditorTimeout = setTimeout(() => {
-                    // console.log('save formId', formId, body.value)
+                    // console.log('save formId', formId, content)
                     localStorage.setItem(
                         'replyEditorData-' + formId,
                         JSON.stringify(data, null, 0)
@@ -294,9 +289,8 @@ class ReplyEditorNew extends React.Component {
         });
     }
 
-    onEditorHtmlChange = html => {
-        console.log(html);
-        this.setState({ editorHtml: html });
+    onEditorChange = content => {
+        this.setState({ content });
     };
 
     onTitleChange = e => {
@@ -321,9 +315,9 @@ class ReplyEditorNew extends React.Component {
     onCancel = e => {
         if (e) e.preventDefault();
         const { formId, onCancel, defaultPayoutType } = this.props;
-        const { replyForm, body } = this.state;
+        const { replyForm, content, cm } = this.state;
         if (
-            !body.value ||
+            !content ||
             confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))
         ) {
             replyForm.resetForm();
@@ -332,8 +326,7 @@ class ReplyEditorNew extends React.Component {
             this.setState({ progress: {} });
             this.props.setPayoutType(formId, defaultPayoutType);
             this.props.setBeneficiaries(formId, []);
-            console.log(this.refs[`quill-editor`]);
-            this.child.clear();
+            cm.clear();
             if (onCancel) onCancel(e);
         }
     };
@@ -452,9 +445,7 @@ class ReplyEditorNew extends React.Component {
     };
 
     insertPlaceHolders = () => {
-        let { imagesUploadCount } = this.state;
-        const { body } = this.state;
-        const { selectionStart } = this.refs.postRef;
+        let { imagesUploadCount, cm } = this.state;
         let placeholder = '';
 
         for (let ii = 0; ii < imagesToUpload.length; ii += 1) {
@@ -469,14 +460,8 @@ class ReplyEditorNew extends React.Component {
             }
         }
 
-        this.setState({ imagesUploadCount: imagesUploadCount });
-
-        // Insert the temporary tag where the cursor currently is
-        body.props.onChange(
-            body.value.substring(0, selectionStart) +
-                placeholder +
-                body.value.substring(selectionStart, body.value.length)
-        );
+        this.setState({ imagesUploadCount });
+        cm.insertValue(`${placeholder}`);
     };
 
     upload = image => {
@@ -488,92 +473,38 @@ class ReplyEditorNew extends React.Component {
         });
 
         uploadImage(image.file, progress => {
-            const { body } = this.state;
-            console.log('progress');
+            const { cm } = this.state;
             if (progress.url) {
-                console.log('progress.url');
                 this.setState({ progress: {} });
                 const { url } = progress;
                 const imageMd = `![${image.file.name}](${url})`;
                 // Replace temporary image MD tag with the real one
-
-                body.value += `<img src='${proxifyImageUrl(url, true)}'/>`;
-
-                body.props.onChange(body.value);
-                this.setState({
-                    editorHtml: body.value,
-                });
-                this.child.setHtml(body.value);
-
+                const tmpContent = cm
+                    .getMarkdown()
+                    .replace(image.temporaryTag, imageMd);
+                cm.setMarkdown(tmpContent);
                 this.uploadNextImage();
             } else {
-                console.log('progress.else');
                 if (progress.hasOwnProperty('error')) {
-                    console.log('progress.else.error');
                     this.displayErrorMessage(progress.error);
                     const imageMd = `![${image.file.name}](UPLOAD FAILED)`;
                     // Remove temporary image MD tag
-                    var value = `${body.value}${imageMd}`;
-                    body.props.onChange(value);
-                    this.child.setHtml(value);
+                    const tmpContent = cm
+                        .getMarkdown()
+                        .replace(image.temporaryTag, imageMd);
+                    cm.setMarkdown(tmpContent);
                 } else {
-                    console.log('progress.else.else');
                     this.setState({ progress });
                 }
             }
         });
     };
 
-    appendJQCDN(url, fn) {
-        var head = document.head || document.getElementsByTagName('head')[0];
-        var script = document.createElement('script');
-        var style = document.createElement('style');
-        script.setAttribute('src', url);
-        style.innerHTML = '';
-        head.appendChild(script);
-        head.appendChild(style);
-        script.onload = function() {
-            fn && fn();
-        };
-    }
-
-    loadCssCode(code) {
-        var style = document.createElement('style');
-        style.type = 'text/css';
-        style.rel = 'stylesheet';
-        //for Chrome Firefox Opera Safari
-        style.appendChild(document.createTextNode(code));
-        //for IE
-        //style.styleSheet.cssText = code;
-        var head = document.getElementsByTagName('head')[0];
-        head.appendChild(style);
-    }
-
-    componentWillMount() {
-        this.loadCssCode(
-            'https://s0.meituan.net/xm/open-platform-static/editormd/css/editormd.css'
-        );
-        this.appendJQCDN(
-            '//s0.meituan.net/xm/static/jquery/1.11.3/jquery.min.js'
-        );
-        this.appendJQCDN(
-            'https://s0.meituan.net/xm/open-platform-static/editormd/editormd.js',
-            () => {
-                this.setState({
-                    editorCom: (
-                        <EditorMd
-                            placeholder={
-                                this.props.isStory
-                                    ? tt('g.write_your_story')
-                                    : tt('g.reply')
-                            }
-                            onChange={this.onChange}
-                        />
-                    ),
-                });
-            }
-        );
-    }
+    onLoaded = cm => {
+        this.setState({
+            cm,
+        });
+    };
 
     render() {
         const originalPost = {
@@ -725,30 +656,6 @@ class ReplyEditorNew extends React.Component {
                                         tabIndex={1}
                                         {...title.props}
                                     />
-                                    <div
-                                        className="float-right secondary"
-                                        style={{ marginRight: '1rem' }}
-                                    >
-                                        {rte && (
-                                            <a
-                                                href="#"
-                                                onClick={this.toggleRte}
-                                            >
-                                                {body.value
-                                                    ? 'Raw HTML'
-                                                    : 'Markdown'}
-                                            </a>
-                                        )}
-                                        {!rte &&
-                                            (isHtml || !body.value) && (
-                                                <a
-                                                    href="#"
-                                                    onClick={this.toggleRte}
-                                                >
-                                                    {tt('reply_editor.editor')}
-                                                </a>
-                                            )}
-                                    </div>
                                     {titleError}
                                 </span>
                             )}
@@ -762,93 +669,34 @@ class ReplyEditorNew extends React.Component {
                                     : vframe_section_shrink_class)
                             }
                         >
-                            {/*<Editor
-                                placeholder={
-                                    isStory
-                                        ? tt('g.write_your_story')
-                                        : tt('g.reply')
-                                }
-                                editorHtml={this.state.editorHtml}
-                                onChange={this.onChange}
-                                uploadImage={this.upload}
-                                onRef={this.onRef}
-                                initialState={this.state.rte_value}
-                            />*/}
-                            {this.state.editorCom}
-                            {/*process.env.BROWSER && rte ? (
-                                <SlateEditor
-                                    ref="rte"
-                                    placeholder={
-                                        isStory
-                                            ? 'Write your story...'
-                                            : 'Reply'
+                            {process.env.BROWSER && (
+                                <Dropzone
+                                    onDrop={this.onDrop}
+                                    className={
+                                        type === 'submit_story'
+                                            ? 'dropzone'
+                                            : 'none'
                                     }
-                                    initialState={this.state.rte_value}
-                                    onChange={this.onChange}
-                                />
-                            ) : (
-                                <span>
-                                    <Dropzone
-                                        onDrop={this.onDrop}
-                                        className={
-                                            type === 'submit_story'
-                                                ? 'dropzone'
-                                                : 'none'
+                                    disableClick
+                                    multiple
+                                    accept="image/*"
+                                    ref={node => {
+                                        this.dropzone = node;
+                                    }}
+                                >
+                                    <EditorMd
+                                        placeholder={
+                                            this.props.isStory
+                                                ? tt('g.write_your_story')
+                                                : tt('g.reply')
                                         }
-                                        disableClick
-                                        multiple
-                                        accept="image/*"
-                                        ref={node => {
-                                            this.dropzone = node;
-                                        }}
-                                    >
-                                        <textarea
-                                            {...body.props}
-                                            ref="postRef"
-                                            onPasteCapture={this.onPasteCapture}
-                                            className={
-                                                type === 'submit_story'
-                                                    ? 'upload-enabled'
-                                                    : ''
-                                            }
-                                            disabled={loading}
-                                            rows={isStory ? 10 : 3}
-                                            placeholder={
-                                                isStory
-                                                    ? tt('g.write_your_story')
-                                                    : tt('g.reply')
-                                            }
-                                            autoComplete="off"
-                                            tabIndex={2}
-                                        />
-                                    </Dropzone>
-                                    <p className="drag-and-drop">
-                                        {tt(
-                                            'reply_editor.insert_images_by_dragging_dropping'
-                                        )}
-                                        {noClipboardData
-                                            ? ''
-                                            : tt(
-                                                  'reply_editor.pasting_from_the_clipboard'
-                                              )}
-                                        {tt('reply_editor.or_by')}{' '}
-                                        <a onClick={this.onOpenClick}>
-                                            {tt('reply_editor.selecting_them')}
-                                        </a>.
-                                    </p>
-                                    {progress.message && (
-                                        <div className="info">
-                                            {progress.message}
-                                        </div>
-                                    )}
-                                    {progress.error && (
-                                        <div className="error">
-                                            {tt('reply_editor.image_upload')} :{' '}
-                                            {progress.error}
-                                        </div>
-                                    )}
-                                </span>
-                                    )*/}
+                                        onPasteCapture={this.onPasteCapture}
+                                        onChange={this.onEditorChange}
+                                        customUpload={this.onOpenClick}
+                                        onLoaded={this.onLoaded}
+                                    />
+                                </Dropzone>
+                            )}
                         </div>
                         <div className={vframe_section_shrink_class}>
                             <div className="error">
@@ -1002,35 +850,6 @@ class ReplyEditorNew extends React.Component {
                                     </div>
                                 )}
                         </div>
-                        {!loading &&
-                            !rte &&
-                            body.value && (
-                                <div
-                                    className={
-                                        'Preview ' + vframe_section_shrink_class
-                                    }
-                                >
-                                    {!isHtml && (
-                                        <div className="float-right">
-                                            <a
-                                                target="_blank"
-                                                href="https://guides.github.com/features/mastering-markdown/"
-                                                rel="noopener noreferrer"
-                                            >
-                                                {tt(
-                                                    'reply_editor.markdown_styling_guide'
-                                                )}
-                                            </a>
-                                        </div>
-                                    )}
-                                    <h6>{tt('g.preview')}</h6>
-                                    <MarkdownViewer
-                                        text={body.value}
-                                        large={isStory}
-                                        isProxifyImages={true}
-                                    />
-                                </div>
-                            )}
                     </form>
                 </div>
             </div>

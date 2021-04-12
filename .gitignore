@@ -8,5 +8,6 @@ vendor/*
 tmp/*
 .vagrant
 lib
+!src/app/assets/plugins/editor.md/lib
 .env
 

@@ -56,6 +56,15 @@ export default function ServerHTML({
                             );
                         return null;
                     })}
+                <link
+                    rel="stylesheet"
+                    href="/assets/plugins/editor.md/css/editormd.css"
+                />
+                <script src="/assets/js/jquery-3.6.0.min.js" />
+                <script src="/assets/plugins/editor.md/editormd.js" />
+                {locale !== 'zh' && (
+                    <script src="/assets/plugins/editor.md/languages/en.js" />
+                )}
                 <link rel="manifest" href="/static/manifest.json" />
                 <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
                 <link
@@ -167,10 +176,6 @@ export default function ServerHTML({
                     href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600"
                     rel="stylesheet"
                     type="text/css"
-                />
-                <link
-                    rel="stylesheet"
-                    href="https://s0.meituan.net/xm/open-platform-static/editormd/css/editormd.css"
                 />
                 {assets.style.map((href, idx) => (
                     <link

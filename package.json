@@ -213,6 +213,10 @@
   "jest": {
     "testURL": "http://localhost:8080",
     "rootDir": "src",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/src/app/assets/"
+    ],
     "modulePaths": [
       "<rootDir>/"
     ],

@@ -238,12 +238,6 @@ class ReplyEditorNew extends React.Component {
             initialValues: props.initialValues,
             validation: values => {
                 let bodyValidation = null;
-                console.log(
-                    'state in form create:',
-                    this.state,
-                    'values:',
-                    values
-                );
                 if (!values.body) {
                     bodyValidation = tt('g.required');
                 }

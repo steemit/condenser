@@ -7,11 +7,6 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import TagInput from 'app/components/cards/TagInput';
 import { validateTagInput } from 'app/components/cards/TagInput';
-import {
-    serializeHtml,
-    deserializeHtml,
-    getDemoState,
-} from 'app/components/elements/SlateEditor';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostCategoryBanner from 'app/components/elements/PostCategoryBanner';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -19,7 +14,6 @@ import Tooltip from 'app/components/elements/Tooltip';
 import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
-import * as globalActions from 'app/redux/GlobalReducer';
 import { fromJS, Set, OrderedSet } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
@@ -27,11 +21,8 @@ import tt from 'counterpart';
 import { userActionRecord } from 'app/utils/ServerApiClient';
 import EditorMd from 'app/components/elements/Editor';
 
-import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
-
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
-const RTE_DEFAULT = false;
 const MAX_TAGS = 8;
 const MAX_FILE_TO_UPLOAD = 10;
 let imagesToUpload = [];
@@ -93,8 +84,8 @@ class ReplyEditorNew extends React.Component {
         this.state = {
             progress: {},
             imagesUploadCount: 0,
-            content: '',
             cm: null,
+            editorId: 'EditorID' + new Date().getTime(),
         };
         this.initForm(props);
     }
@@ -102,22 +93,14 @@ class ReplyEditorNew extends React.Component {
     componentWillMount() {
         const { formId } = this.props;
         if (process.env.BROWSER) {
-            // Check for rte editor preference
-            let rte =
-                this.props.isStory &&
-                JSON.parse(
-                    localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT
-                );
             let raw = null;
-
             // Process initial body value (if this is an edit)
-            const { content } = this.state;
-            if (content) {
-                raw = content;
+            const { body } = this.state;
+            if (body) {
+                raw = body.value;
             }
             // Check for draft data
             let draft = localStorage.getItem('replyEditorData-' + formId);
-            console.log('body loaded:', content, draft);
             if (draft) {
                 draft = JSON.parse(draft);
                 const { tags, title } = this.state;
@@ -135,16 +118,7 @@ class ReplyEditorNew extends React.Component {
                 raw = draft.body;
             }
 
-            // If we have an initial body, check if it's html or markdown
-            if (raw) {
-                rte = isHtmlTest(raw);
-            }
-            // console.log("initial reply body:", raw || '(empty)')
-            this.setState({
-                rte,
-                rte_value: rte ? stateFromHtml(raw) : null,
-                content: raw,
-            });
+            body.props.onChange(raw);
         }
 
         // Overwrite category (even if draft loaded) if authoritative category was provided
@@ -218,7 +192,7 @@ class ReplyEditorNew extends React.Component {
 
             // Save curent draft to localStorage
             if (
-                ts.content !== ns.content ||
+                ts.body.value !== ns.body.value ||
                 (ns.tags && ts.tags.value !== ns.tags.value) ||
                 (ns.title && ts.title.value !== ns.title.value) ||
                 np.payoutType !== tp.payoutType ||
@@ -226,12 +200,12 @@ class ReplyEditorNew extends React.Component {
             ) {
                 // also prevents saving after parent deletes this information
                 const { formId, payoutType, beneficiaries } = np;
-                const { tags, title, content } = ns;
+                const { tags, title, body } = ns;
                 const data = {
                     formId,
                     title: title ? title.value : undefined,
                     tags: tags ? tags.value : undefined,
-                    body: content,
+                    body: body ? body.value : undefined,
                     payoutType,
                     beneficiaries,
                 };
@@ -264,6 +238,12 @@ class ReplyEditorNew extends React.Component {
             initialValues: props.initialValues,
             validation: values => {
                 let bodyValidation = null;
+                console.log(
+                    'state in form create:',
+                    this.state,
+                    'values:',
+                    values
+                );
                 if (!values.body) {
                     bodyValidation = tt('g.required');
                 }
@@ -290,7 +270,8 @@ class ReplyEditorNew extends React.Component {
     }
 
     onEditorChange = content => {
-        this.setState({ content });
+        const { body } = this.state;
+        body.props.onChange(content);
     };
 
     onTitleChange = e => {
@@ -308,21 +289,15 @@ class ReplyEditorNew extends React.Component {
         title.props.onChange(e);
     };
 
-    onRef = ref => {
-        this.child = ref;
-    };
-
     onCancel = e => {
         if (e) e.preventDefault();
         const { formId, onCancel, defaultPayoutType } = this.props;
-        const { replyForm, content, cm } = this.state;
+        const { replyForm, body, cm } = this.state;
         if (
-            !content ||
+            !body.value ||
             confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))
         ) {
             replyForm.resetForm();
-            if (this.refs.rte)
-                this.refs.rte.setState({ state: stateFromHtml() });
             this.setState({ progress: {} });
             this.props.setPayoutType(formId, defaultPayoutType);
             this.props.setBeneficiaries(formId, []);
@@ -340,18 +315,6 @@ class ReplyEditorNew extends React.Component {
         body.props.onChange(rte_value);
     };
 
-    toggleRte = e => {
-        e.preventDefault();
-        const state = { rte: !this.state.rte };
-        if (state.rte) {
-            const { body } = this.state;
-            state.rte_value = isHtmlTest(body.value)
-                ? stateFromHtml(body.value)
-                : stateFromMarkdown(body.value);
-        }
-        this.setState(state);
-        localStorage.setItem('replyEditorData-rte', !this.state.rte);
-    };
     showDraftSaved() {
         const { draft } = this.refs;
         if (draft) {
@@ -535,7 +498,7 @@ class ReplyEditorNew extends React.Component {
             handleSubmit,
             resetForm,
         } = this.state.replyForm;
-        const { postError, titleWarn, rte } = this.state;
+        const { postError, titleWarn } = this.state;
         const { progress, noClipboardData } = this.state;
         const disabled = submitting || !valid;
         const loading = submitting || this.state.loading;
@@ -553,7 +516,6 @@ class ReplyEditorNew extends React.Component {
             this.props.setBeneficiaries(formId, []);
             if (successCallback) successCallback(args);
         };
-        const isHtml = rte || isHtmlTest(body.value);
         const replyParams = {
             author,
             permlink,
@@ -562,7 +524,6 @@ class ReplyEditorNew extends React.Component {
             type,
             username,
             originalPost,
-            isHtml,
             isStory,
             jsonMetadata,
             payoutType,
@@ -594,7 +555,6 @@ class ReplyEditorNew extends React.Component {
 
         // TODO: remove all references to these vframe classes. Removed from css and no longer needed.
         const vframe_class = isStory ? 'vframe' : '';
-        const vframe_section_class = isStory ? 'vframe__section' : '';
         const vframe_section_shrink_class = isStory
             ? 'vframe__section--shrink'
             : '';
@@ -622,7 +582,6 @@ class ReplyEditorNew extends React.Component {
                     <form
                         className={vframe_class}
                         onSubmit={handleSubmit(({ data }) => {
-                            console.log(data);
                             let body = data.body;
                             data.body = this.domToString(
                                 this.proxifyImages(this.parseToDOM(body))
@@ -664,9 +623,7 @@ class ReplyEditorNew extends React.Component {
                         <div
                             className={
                                 'ReplyEditor__body ' +
-                                (rte
-                                    ? `rte ${vframe_section_class}`
-                                    : vframe_section_shrink_class)
+                                vframe_section_shrink_class
                             }
                         >
                             {process.env.BROWSER && (
@@ -694,6 +651,12 @@ class ReplyEditorNew extends React.Component {
                                         onChange={this.onEditorChange}
                                         customUpload={this.onOpenClick}
                                         onLoaded={this.onLoaded}
+                                        content={
+                                            this.state.body
+                                                ? this.state.body.value
+                                                : null
+                                        }
+                                        editorId={this.state.editorId}
                                     />
                                 </Dropzone>
                             )}
@@ -859,39 +822,8 @@ class ReplyEditorNew extends React.Component {
 
 let saveEditorTimeout;
 
-// removes <html></html> wrapper if exists
-function stripHtmlWrapper(text) {
-    const m = text.match(/<html>\n*([\S\s]+?)?\n*<\/html>/m);
-    return m && m.length === 2 ? m[1] : text;
-}
 // See also MarkdownViewer render
 const isHtmlTest = text => /^<html>/.test(text);
-
-function stateToHtml(state) {
-    let html = serializeHtml(state);
-    if (html === '<p></p>') html = '';
-    if (html === '<p><br></p>') html = '';
-    if (html == '') return '';
-    return `<html>\n${html}\n</html>`;
-}
-
-function stateFromHtml(html = null) {
-    if (html) html = stripHtmlWrapper(html);
-    if (html && html.trim() == '') html = null;
-    return html ? deserializeHtml(html) : getDemoState();
-}
-
-//var htmlclean = require('htmlclean');
-function stateFromMarkdown(markdown) {
-    let html;
-    if (markdown && markdown.trim() !== '') {
-        html = remarkable.render(markdown);
-        html = HtmlReady(html, { isProxifyImages: true }).html; // TODO: option to disable youtube conversion, @-links, img proxy
-        //html = htmlclean(html) // normalize whitespace
-        console.log('markdown converted to:', html);
-    }
-    return stateFromHtml(html);
-}
 
 export default formId =>
     connect(
@@ -958,25 +890,6 @@ export default formId =>
             ]);
             beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
 
-            // Post full
-            /*
-            const replyParams = {
-                author,
-                permlink,
-                parent_author,
-                parent_permlink,
-                category,
-                title,
-                body: post.get('body'),
-            }; */
-
-            //ownProps:
-            //  {...comment},
-            //  author, permlink,
-            //  body, title, category
-            //  parent_author, parent_permlink,
-            //  type, successCallback,
-            //  successCallBack, onCancel
             return {
                 ...ownProps,
                 type, //XX
@@ -1021,7 +934,6 @@ export default formId =>
                 permlink,
                 parent_author,
                 parent_permlink,
-                isHtml,
                 isStory,
                 type,
                 originalPost,
@@ -1053,17 +965,9 @@ export default formId =>
 
                 if (!linkProps) throw new Error('Unknown type: ' + type);
 
-                // If this is an HTML post, it MUST begin and end with the tag
-                if (isHtml && !body.match(/^<html>[\s\S]*<\/html>$/)) {
-                    errorCallback(
-                        'HTML posts must begin with <html> and end with </html>'
-                    );
-                    return;
-                }
-
                 let rtags;
                 {
-                    const html = isHtml ? body : remarkable.render(body);
+                    const html = remarkable.render(body);
                     rtags = HtmlReady(html, {
                         mutate: false,
                         isProxifyImages: true,
@@ -1073,7 +977,6 @@ export default formId =>
                 allowedTags.forEach(tag => {
                     rtags.htmltags.delete(tag);
                 });
-                if (isHtml) rtags.htmltags.delete('html'); // html tag allowed only in HTML mode
                 if (rtags.htmltags.size) {
                     errorCallback(
                         'Please remove the following HTML elements from your post: ' +
@@ -1105,7 +1008,7 @@ export default formId =>
 
                 meta.app = 'steemit/0.2';
                 if (isStory) {
-                    meta.format = isHtml ? 'html' : 'markdown';
+                    meta.format = 'markdown';
                 }
 
                 const sanitizeErrors = [];

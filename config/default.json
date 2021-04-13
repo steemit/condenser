@@ -6,7 +6,7 @@
       "childSrc": "'self' 3speak.online emb.d.tube player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
       "connectSrc": "https://steemitimages.com securepubads.g.doubleclick.net 'self' steemit.com https://api.steemit.com www.googletagmanager.com www.google-analytics.com pagead2.googlesyndication.com googleads.g.doubleclick.net",
       "defaultSrc": "tpc.googlesyndication.com 'self' img.3speakcontent.online emb.d.tube www.youtube.com staticxx.facebook.com player.vimeo.com *.streamrail.com",
-      "fontSrc": "data: fonts.gstatic.com",
+      "fontSrc": "data: fonts.gstatic.com steemitdev.com steemit.com steemitwallet.com",
       "frameAncestors": "'none'",
       "frameSrc": "'self' googleads.g.doubleclick.net https:",
       "imgSrc": "* data:",

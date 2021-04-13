@@ -5,9 +5,7 @@ export default class EditorMd extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorHtml: '',
             theme: 'snow',
-            id: 'EditorID' + new Date().getTime(),
             cm: null,
         };
     }
@@ -19,13 +17,14 @@ export default class EditorMd extends React.Component {
 
     componentDidMount() {
         const config = {
-            id: this.state.id,
+            id: this.props.editorId,
             width: '100%',
             height: 700,
             path: '/assets/plugins/editor.md/lib/',
-            markdown: '',
+            markdown: this.props.content,
+            placeholder: this.props.placeholder,
             codeFold: true,
-            saveHTMLToTextarea: true,
+            saveHTMLToTextarea: false,
             searchReplace: true,
             toolbarIcons: () => [
                 'undo',
@@ -69,7 +68,6 @@ export default class EditorMd extends React.Component {
             },
             toolbarHandlers: {
                 'custom-image': (cm, icon, cursor, selection) => {
-                    console.log('testtttt');
                     this.props.customUpload();
                 },
             },
@@ -80,18 +78,20 @@ export default class EditorMd extends React.Component {
             onchange: this.handleChange,
         };
         this.setState({
-            cm: editormd(this.state.id, config),
+            cm: editormd(this.props.editorId, config),
         });
     }
 
     render() {
-        return <div id={this.state.id} />;
+        return <div id={this.props.editorId} />;
     }
 }
 
 EditorMd.propTypes = {
+    editorId: PropTypes.string,
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
     customUpload: PropTypes.func,
     onLoaded: PropTypes.func,
+    content: PropTypes.string,
 };

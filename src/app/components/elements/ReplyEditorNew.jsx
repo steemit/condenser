@@ -807,6 +807,18 @@ class ReplyEditorNew extends React.Component {
                                     </div>
                                 )}
                         </div>
+                        <div className={vframe_section_shrink_class}>
+                            {disabled && (
+                                <span
+                                    style={{
+                                        fontSize: '14px',
+                                        color: '#FF0000',
+                                    }}
+                                >
+                                    {tt('reply_editor.tips')}
+                                </span>
+                            )}
+                        </div>
                     </form>
                 </div>
             </div>

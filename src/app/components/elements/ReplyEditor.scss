@@ -2,6 +2,7 @@
   max-width: 54rem;
   .vframe {
     display: block;
+    padding-bottom: 2em;
     .public-DraftEditor-content {
       height: 20em;
       resize: vertical;
@@ -10,7 +11,7 @@
   }
   .button {
     @extend .e-btn;
-    margin-bottom: 2em;
+    margin-bottom: 0em;
   }
   .button.hollow.no-border {
     background-color: transparent;

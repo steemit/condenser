@@ -7,9 +7,11 @@ import ReplyEditor from 'app/components/elements/ReplyEditor';
 import { SUBMIT_FORM_ID } from 'shared/constants';
 import Callout from 'app/components/elements/Callout';
 import * as appActions from 'app/redux/AppReducer';
+import tt from 'counterpart';
 
 const formId = SUBMIT_FORM_ID;
 const SubmitReplyEditor = ReplyEditor(formId);
+const SubmitReplyEditorNew = ReplyEditorNew(formId);
 
 function _redirect_url(operations) {
     try {
@@ -24,11 +26,21 @@ function _redirect_url(operations) {
 class SubmitPost extends React.Component {
     constructor() {
         super();
+        this.state = {
+            editorNew: false,
+        };
         this.success = operations => {
             localStorage.removeItem('replyEditorData-' + formId);
             browserHistory.push(_redirect_url(operations));
         };
     }
+
+    switchEditor() {
+        this.setState({
+            editorNew: !this.state.editorNew,
+        });
+    }
+
     componentWillMount() {
         this.props.setRouteTag();
     }
@@ -36,12 +48,39 @@ class SubmitPost extends React.Component {
         if (!this.props.username) {
             return <Callout>Log in to make a post.</Callout>;
         }
-
+        const SwitchButton = (
+            <span
+                style={{
+                    background: '#06D6A9',
+                    color: '#fff',
+                    fontSize: '14px',
+                    borderRadius: '8px',
+                    padding: '8px 10px',
+                    cursor: 'pointer',
+                }}
+                onClick={this.switchEditor.bind(this)}
+            >{`${
+                this.state.editorNew
+                    ? tt('g.switch_old_editor')
+                    : tt('g.switch_new_editor')
+            }`}</span>
+        );
         return (
-            <SubmitReplyEditor
-                type="submit_story"
-                successCallback={this.success}
-            />
+            <div>
+                {this.state.editorNew ? (
+                    <SubmitReplyEditorNew
+                        type="submit_story"
+                        successCallback={this.success}
+                        editorButton={SwitchButton}
+                    />
+                ) : (
+                    <SubmitReplyEditor
+                        type="submit_story"
+                        successCallback={this.success}
+                        editorButton={SwitchButton}
+                    />
+                )}
+            </div>
         );
     }
 }

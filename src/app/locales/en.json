@@ -291,7 +291,11 @@
         "many_followers": "%(count)s Followers",
         "many_posts": "%(count)s Posts",
         "search_history": "History",
-        "announcement": "Announcement"
+        "announcement": "Announcement",
+        "switch_new_editor": "Switch to new editor",
+        "switch_old_editor": "Switch to old editor",
+        "tag_tips":
+            "Tags must only contain lower case letters, numbers, and hyphens. They must be no more than 24 characters which start with a letter and end with a letter or a number."
     },
     "navigation": {
         "about": "About Steemit, Inc.",

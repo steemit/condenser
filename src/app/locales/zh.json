@@ -229,7 +229,11 @@
         "many_followers": "%(count)s个关注者",
         "many_posts": "%(count)s个帖子",
         "search_history": "搜索历史",
-        "announcement": "公告"
+        "announcement": "公告",
+        "switch_new_editor": "切换新版编辑器",
+        "switch_old_editor": "切换旧版编辑器",
+        "tag_tips":
+            "标签只能包含小写字母，数字和破折号。长度不能超过24个字符，请以字母开头，以字母或数字结尾。"
     },
     "navigation": {
         "about": "关于",

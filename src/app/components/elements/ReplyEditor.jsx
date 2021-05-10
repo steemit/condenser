@@ -578,6 +578,7 @@ class ReplyEditor extends React.Component {
                             username={username}
                             onCancel={this.shiftTagInput.bind(this)}
                             onUndo={this.unshiftTagInput.bind(this)}
+                            editorButton={this.props.editorButton}
                         />
                     )}
                 <div className="column small-12">
@@ -753,10 +754,17 @@ class ReplyEditor extends React.Component {
                                         isEdit={isEdit}
                                         tabIndex={3}
                                     />
-                                    <div className="error">
-                                        {(tags.touched || tags.value) &&
-                                            tags.error}&nbsp;
-                                    </div>
+                                    {(tags.touched || tags.value) &&
+                                    tags.error ? (
+                                        <div className="error">
+                                            {(tags.touched || tags.value) &&
+                                                tags.error}&nbsp;
+                                        </div>
+                                    ) : (
+                                        <div className="tap_input_tips">
+                                            {tt('g.tag_tips')}
+                                        </div>
+                                    )}
                                 </span>
                             )}
                         </div>

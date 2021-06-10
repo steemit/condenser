@@ -54,6 +54,7 @@ class PostCategoryBanner extends React.Component {
                         Posting to {community ? 'Community: ' : ''}
                         <span className="smallLabel">{label}</span>
                     </small>
+                    {this.props.editorButton}
                 </div>
                 {/*
                 <div className="categoryName">

@@ -564,6 +564,7 @@ class ReplyEditorNew extends React.Component {
                             username={username}
                             onCancel={this.shiftTagInput.bind(this)}
                             onUndo={this.unshiftTagInput.bind(this)}
+                            editorButton={this.props.editorButton}
                         />
                     )}
                 <div className="column small-12">
@@ -677,10 +678,17 @@ class ReplyEditorNew extends React.Component {
                                         isEdit={isEdit}
                                         tabIndex={3}
                                     />
-                                    <div className="error">
-                                        {(tags.touched || tags.value) &&
-                                            tags.error}&nbsp;
-                                    </div>
+                                    {(tags.touched || tags.value) &&
+                                    tags.error ? (
+                                        <div className="error">
+                                            {(tags.touched || tags.value) &&
+                                                tags.error}&nbsp;
+                                        </div>
+                                    ) : (
+                                        <div className="tap_input_tips">
+                                            {tt('g.tag_tips')}
+                                        </div>
+                                    )}
                                 </span>
                             )}
                         </div>
@@ -863,6 +871,7 @@ export default formId =>
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 tags = OrderedSet([category, ...jsonMetadata.tags]).join(' ');
             }
+            console.log(tags);
             let isNSFWCommunity = false;
             isNSFWCommunity = state.global.getIn([
                 'community',

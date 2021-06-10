@@ -2,6 +2,8 @@
 
   margin: .5em 0 1em;
   .postTo {
+    display: flex;
+    justify-content: space-between;
     small {
       font-size: 100%;
       color: #666;

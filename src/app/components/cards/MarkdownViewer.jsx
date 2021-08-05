@@ -94,7 +94,6 @@ class MarkdownViewer extends Component {
         }
 
         let renderedText = html ? text : renderer.render(text);
-        console.log(renderedText);
         // If content isn't wrapped with an html element at this point, add it.
         if (!renderedText.indexOf('<html>') !== 0) {
             renderedText = '<html>' + renderedText + '</html>';

@@ -291,7 +291,7 @@
         "many_followers": "%(count)s Followers",
         "many_posts": "%(count)s Posts",
         "search_history": "History",
-        "announcement": "Announcement"
+        "announcement": "Announcements"
     },
     "navigation": {
         "about": "About Steemit, Inc.",

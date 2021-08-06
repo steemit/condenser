@@ -94,7 +94,6 @@ class MarkdownViewer extends Component {
         }
 
         let renderedText = html ? text : renderer.render(text);
-        console.log(renderedText);
         // If content isn't wrapped with an html element at this point, add it.
         if (!renderedText.indexOf('<html>') !== 0) {
             renderedText = '<html>' + renderedText + '</html>';
@@ -110,7 +109,6 @@ class MarkdownViewer extends Component {
         // Complete removal of javascript and other dangerous tags..
         // The must remain as close as possible to dangerouslySetInnerHTML
         let cleanText = renderedText;
-        console.log(cleanText);
         if (this.props.allowDangerousHTML === true) {
             console.log('WARN\tMarkdownViewer rendering unsanitized content');
         } else {

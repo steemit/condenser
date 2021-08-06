@@ -109,7 +109,6 @@ class MarkdownViewer extends Component {
         // Complete removal of javascript and other dangerous tags..
         // The must remain as close as possible to dangerouslySetInnerHTML
         let cleanText = renderedText;
-        console.log(cleanText);
         if (this.props.allowDangerousHTML === true) {
             console.log('WARN\tMarkdownViewer rendering unsanitized content');
         } else {

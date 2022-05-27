@@ -1,4 +1,4 @@
-FROM node:10.0
+FROM node:10.0 as builder
 
 ARG SOURCE_COMMIT
 ENV SOURCE_COMMIT ${SOURCE_COMMIT}
@@ -27,13 +27,23 @@ COPY . /var/app
 RUN mkdir tmp && \
     yarn test && yarn build
 
-ENV PORT 8080
-ENV NODE_ENV production
-
-EXPOSE 8080
-
-CMD [ "yarn", "run", "production" ]
-
 # uncomment the lines below to run it in development mode
 # ENV NODE_ENV development
 # CMD [ "yarn", "run", "start" ]
+
+FROM node:10.0 as final
+
+ARG SOURCE_COMMIT
+ENV SOURCE_COMMIT ${SOURCE_COMMIT}
+ARG DOCKER_TAG
+ENV DOCKER_TAG ${DOCKER_TAG}
+ENV PORT 8080
+ENV NODE_ENV production
+EXPOSE 8080
+
+WORKDIR /var/app
+
+RUN npm install -g yarn && chmod +x /usr/local/bin/yarn
+COPY --from=builder /var/app /var/app
+
+CMD [ "yarn", "run", "production" ]

@@ -180,7 +180,7 @@
     "extract-text-webpack-plugin": "3.0.1",
     "husky": "0.14.3",
     "jest": "22.0.6",
-    "jsdom": "9.12.0",
+    "jsdom": "16.5.0",
     "koa-webpack-dev-middleware": "1.4.6",
     "koa-webpack-hot-middleware": "1.0.3",
     "lint-staged": "6.0.0",

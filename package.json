@@ -89,7 +89,7 @@
     "koa-static-cache": "4.1.1",
     "lodash.debounce": "4.0.8",
     "markdown": "^0.5.0",
-    "markdown-it": "^12.0.4",
+    "markdown-it": "^12.3.2",
     "mem-stat": "1.0.5",
     "minimist": "1.2.6",
     "mixpanel": "0.5.0",

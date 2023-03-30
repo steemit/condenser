@@ -65,3 +65,25 @@
   margin: 0 auto 3.5rem;
   font-size: 92%;
 }
+
+.comment-button {
+  background-color: #06d6a9;
+  padding: 15px 32px;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.Post_comments__count{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 150%;
+}

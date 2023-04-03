@@ -11,6 +11,7 @@ import Dropzone from 'react-dropzone';
 import MuteList from 'app/components/elements/MuteList';
 import { isLoggedIn } from 'app/utils/UserUtil';
 import { userActionRecord } from 'app/utils/ServerApiClient';
+import * as steem from '@steemit/steem-js';
 
 class Settings extends React.Component {
     constructor(props) {
@@ -216,6 +217,12 @@ class Settings extends React.Component {
         });
     }
 
+    validateUrlFormat(url) {
+        if (!url) return false;
+        if (!/^https?:\/\//.test(url)) return false;
+        return true;
+    }
+
     handleDefaultBlogPayoutChange = event => {
         this.props.setUserPreferences({
             ...this.props.user_preferences,
@@ -227,6 +234,30 @@ class Settings extends React.Component {
         this.props.setUserPreferences({
             ...this.props.user_preferences,
             defaultCommentPayout: event.target.value,
+        });
+    };
+
+    handleSelectRPCNode = event => {
+        const selectedUrl = event.target.value;
+
+        if (this.validateUrlFormat(selectedUrl) === false) {
+            this.setState({
+                rpcError: tt('settings_jsx.invalid_url'),
+            });
+            return;
+        }
+
+        this.props.setUserPreferences({
+            ...this.props.user_preferences,
+            selectedRpc: selectedUrl,
+        });
+
+        // Set RPC Node
+        localStorage.setItem('steemSelectedRpc', selectedUrl);
+
+        // Set at the same time as selection
+        steem.api.setOptions({
+            url: selectedUrl,
         });
     };
 
@@ -267,6 +298,33 @@ class Settings extends React.Component {
 
         return (
             <div className="Settings">
+                <div className="row">
+                    <div className="small-12 medium-4 large-4 columns">
+                        <br />
+                        <br />
+                        <h4>{tt('settings_jsx.rpc_title')}</h4>
+
+                        <label>
+                            {tt('settings_jsx.rpc_select')}
+
+                            <select
+                                defaultValue={
+                                    user_preferences.selectedRpc ||
+                                    global.$STM_Config.steemd_connection_client
+                                }
+                                onChange={this.handleSelectRPCNode}
+                            >
+                                {$STM_Config.steemd_rpc_list.map(rpc => (
+                                    <option key={rpc} value={rpc}>
+                                        {rpc}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                        <br />
+                        <br />
+                    </div>
+                </div>
                 <div className="row">
                     {isLoggedIn() &&
                         isOwnAccount && (

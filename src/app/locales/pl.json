@@ -608,7 +608,10 @@
         "profile_name": "Wyświetlana nazwa",
         "profile_about": "Opis",
         "profile_location": "Lokalizacja",
-        "profile_website": "Strona www"
+        "profile_website": "Strona www",
+        "saved": "zapisane!",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "RPC Node wybierać"
     },
     "transfer_jsx": {
         "amount_is_in_form": "Podana kwota musi być w formacie 99999.999",

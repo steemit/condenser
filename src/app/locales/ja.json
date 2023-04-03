@@ -624,7 +624,10 @@
         "profile_name": "表示名",
         "profile_about": "概要",
         "profile_location": "場所",
-        "profile_website": "ウェブサイト"
+        "profile_website": "ウェブサイト",
+        "saved": "保存済み!",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "RPC Node 選択"
     },
     "transfer_jsx": {
         "amount_is_in_form": "金額は99999.999の形式です",

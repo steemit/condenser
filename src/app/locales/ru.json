@@ -645,7 +645,10 @@
         "profile_name": "Отображаемое имя",
         "profile_about": "О себе",
         "profile_location": "Местоположение",
-        "profile_website": "Веб-сайт"
+        "profile_website": "Веб-сайт",
+        "saved": "сохранен!",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "RPC Node выбирать"
     },
     "transfer_jsx": {
         "amount_is_in_form": "Сумма должна быть в формате 99999.999",

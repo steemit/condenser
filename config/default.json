@@ -64,10 +64,12 @@
         "https://steemapi.boylikegirl.club",
         // "https://api.pennsif.net",
         // "https://rpc.amarbangla.net",
-        "https://api.steem.buzz"
+        "https://api.steem.buzz",
         // "https://steem.senior.workers.dev",
         // "https://api.campingclub.me",
-        // "https://api.blokfield.io"
+        // "https://api.blokfield.io",
+        "https://api.futureshock.world",
+        "https://api.worldofxpilar.com"
     ],
     "steemd_use_appbase": false,
     "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",

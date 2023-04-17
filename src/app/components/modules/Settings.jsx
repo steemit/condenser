@@ -88,6 +88,10 @@ class Settings extends React.Component {
         this.handleSubmitForm = this.state.accountSettings.handleSubmit(args =>
             this.handleSubmit(args)
         );
+        this.rpcNode =
+            (this.props.user_preferences &&
+                this.props.user_preferences.selectedRpc) ||
+            $STM_Config.steemd_connection_client;
     }
 
     onDrop = (acceptedFiles, rejectedFiles) => {
@@ -252,7 +256,7 @@ class Settings extends React.Component {
             selectedRpc: selectedUrl,
         });
 
-        // Set RPC Node
+        // Store RPC Node in localStorage
         localStorage.setItem('steemSelectedRpc', selectedUrl);
 
         // Set at the same time as selection
@@ -307,11 +311,7 @@ class Settings extends React.Component {
                         <label>{tt('settings_jsx.rpc_select')}</label>
 
                         <select
-                            defaultValue={
-                                (user_preferences &&
-                                    user_preferences.selectedRpc) ||
-                                global.$STM_Config.steemd_connection_client
-                            }
+                            defaultValue={this.rpcNode}
                             onChange={this.handleSelectRPCNode}
                         >
                             {$STM_Config.steemd_rpc_list.map(rpc => (
@@ -323,10 +323,7 @@ class Settings extends React.Component {
 
                         <label>
                             {tt('settings_jsx.selected_rpc', {
-                                rpc:
-                                    (user_preferences &&
-                                        user_preferences.selectedRpc) ||
-                                    global.$STM_Config.steemd_connection_client,
+                                rpc: this.rpcNode,
                             })}
                         </label>
 

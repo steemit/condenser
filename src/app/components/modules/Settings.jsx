@@ -304,23 +304,32 @@ class Settings extends React.Component {
                         <br />
                         <h4>{tt('settings_jsx.rpc_title')}</h4>
 
-                        <label>
-                            {tt('settings_jsx.rpc_select')}
+                        <label>{tt('settings_jsx.rpc_select')}</label>
 
-                            <select
-                                defaultValue={
-                                    user_preferences.selectedRpc ||
-                                    global.$STM_Config.steemd_connection_client
-                                }
-                                onChange={this.handleSelectRPCNode}
-                            >
-                                {$STM_Config.steemd_rpc_list.map(rpc => (
-                                    <option key={rpc} value={rpc}>
-                                        {rpc}
-                                    </option>
-                                ))}
-                            </select>
+                        <select
+                            defaultValue={
+                                (user_preferences &&
+                                    user_preferences.selectedRpc) ||
+                                global.$STM_Config.steemd_connection_client
+                            }
+                            onChange={this.handleSelectRPCNode}
+                        >
+                            {$STM_Config.steemd_rpc_list.map(rpc => (
+                                <option key={rpc} value={rpc}>
+                                    {rpc}
+                                </option>
+                            ))}
+                        </select>
+
+                        <label>
+                            {tt('settings_jsx.selected_rpc', {
+                                rpc:
+                                    (user_preferences &&
+                                        user_preferences.selectedRpc) ||
+                                    global.$STM_Config.steemd_connection_client,
+                            })}
                         </label>
+
                         <br />
                         <br />
                     </div>

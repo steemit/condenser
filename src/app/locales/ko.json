@@ -626,7 +626,8 @@
         "profile_website": "웹사이트",
         "saved": "저장됨!",
         "rpc_title": "RPC Node List",
-        "rpc_select": "RPC Node 선택"
+        "rpc_select": "RPC Node 선택",
+        "selected_rpc": "선택된 RPC Node : %(rpc)s"
     },
     "transfer_jsx": {
         "amount_is_in_form": "Amount is in the form 99999.999",

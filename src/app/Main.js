@@ -93,7 +93,7 @@ function runApp(initial_state) {
 
     const steemSelectedRpc = localStorage.getItem('steemSelectedRpc');
 
-    if (steemSelectedRpc) {
+    if (!steemSelectedRpc) {
         localStorage.setItem(
             'steemSelectedRpc',
             config.steemd_connection_client

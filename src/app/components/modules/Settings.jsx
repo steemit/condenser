@@ -20,6 +20,11 @@ class Settings extends React.Component {
             errorMessage: '',
             successMessage: '',
             progress: {},
+            rpcNode:
+                (this.props.user_preferences &&
+                    this.props.user_preferences.selectedRpc) ||
+                $STM_Config.steemd_connection_client,
+            rpcError: '',
         };
         this.initForm(props);
         this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this);
@@ -88,10 +93,6 @@ class Settings extends React.Component {
         this.handleSubmitForm = this.state.accountSettings.handleSubmit(args =>
             this.handleSubmit(args)
         );
-        this.rpcNode =
-            (this.props.user_preferences &&
-                this.props.user_preferences.selectedRpc) ||
-            $STM_Config.steemd_connection_client;
     }
 
     onDrop = (acceptedFiles, rejectedFiles) => {
@@ -249,6 +250,11 @@ class Settings extends React.Component {
                 rpcError: tt('settings_jsx.invalid_url'),
             });
             return;
+        } else {
+            this.setState({
+                rpcNode: selectedUrl,
+                rpcError: '',
+            });
         }
 
         this.props.setUserPreferences({
@@ -298,6 +304,8 @@ class Settings extends React.Component {
             location,
             website,
             progress,
+            rpcNode,
+            rpcError,
         } = this.state;
 
         return (
@@ -311,7 +319,7 @@ class Settings extends React.Component {
                         <label>{tt('settings_jsx.rpc_select')}</label>
 
                         <select
-                            defaultValue={this.rpcNode}
+                            defaultValue={rpcNode}
                             onChange={this.handleSelectRPCNode}
                         >
                             {$STM_Config.steemd_rpc_list.map(rpc => (
@@ -322,9 +330,10 @@ class Settings extends React.Component {
                         </select>
 
                         <label>
-                            {tt('settings_jsx.selected_rpc', {
-                                rpc: this.rpcNode,
-                            })}
+                            {rpcError ||
+                                tt('settings_jsx.selected_rpc', {
+                                    rpc: rpcNode,
+                                })}
                         </label>
 
                         <br />

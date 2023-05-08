@@ -155,7 +155,8 @@ class Post extends React.Component {
                             Not to worry. You can head back to{' '}
                             <a style={{ fontWeight: 800 }} href="/">
                                 our homepage
-                            </a>, or check out some great posts.
+                            </a>
+                            , or check out some great posts.
                         </p>
                         <ul className="NotFound__menu">
                             <li>
@@ -184,7 +185,8 @@ class Post extends React.Component {
                                 <p onClick={this.showAnywayClick}>
                                     {tt(
                                         'promote_post_jsx.this_post_was_hidden_due_to_low_ratings'
-                                    )}.{' '}
+                                    )}
+                                    .{' '}
                                     <button
                                         style={{ marginBottom: 0 }}
                                         className="button hollow tiny float-right"
@@ -249,7 +251,8 @@ class Post extends React.Component {
                         ? tt('post_jsx.now_showing_comments_with_low_ratings')
                         : tt(
                               'post_jsx.comments_were_hidden_due_to_low_ratings'
-                          )}.{' '}
+                          )}
+                    .{' '}
                     <button
                         className="button hollow tiny float-right"
                         onClick={e => this.toggleNegativeReplies(e)}
@@ -326,7 +329,8 @@ class Post extends React.Component {
                                         <div className="Post__promo">
                                             {tt(
                                                 'g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post'
-                                            )}.
+                                            )}
+                                            .
                                             <br />
                                             {tt(
                                                 'g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount'
@@ -388,7 +392,7 @@ class Post extends React.Component {
                                                             .showPostCommentClick
                                                     }
                                                 >
-                                                    LOAD COMMENT
+                                                    LOAD COMMENTS
                                                 </button>
                                             </div>
                                         </div>

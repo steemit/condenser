@@ -6,6 +6,7 @@ import tt from 'counterpart';
 import { fromJS } from 'immutable';
 
 import * as userActions from 'app/redux/UserReducer';
+import DraftSummary from '../cards/DraftSummary';
 
 class PostDrafts extends Component {
     static propTypes = {
@@ -44,20 +45,21 @@ class PostDrafts extends Component {
         const disabled =
             submitting || !(valid || payoutType !== initialPayoutType);
 
-        const draftList = JSON.parse(localStorage.getItem('draft-list')) || [];
-
+        let draftList = JSON.parse(localStorage.getItem('draft-list')) || [];
+        draftList = draftList.filter(data => data.author === username);
         const drafts = draftList.map((draft, idx) => (
-            <div key={idx} className="beneficiary-option">
-                {draft.author} {draft.permlink} {draft.title}
+            <div key={idx} className="drafts-option">
+                <DraftSummary post={draft} />
             </div>
         ));
+
         return (
             <div>
                 <div className="row">
                     <h3 className="column">{tt('reply_editor.draft')}</h3>
                 </div>
                 <hr />
-                {drafts}
+                <div className="drafts-list">{drafts}</div>
             </div>
         );
     }

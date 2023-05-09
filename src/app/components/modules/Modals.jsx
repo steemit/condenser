@@ -21,6 +21,7 @@ import TermsAgree from 'app/components/modules/TermsAgree';
 import PostAdvancedSettings from 'app/components/modules/PostAdvancedSettings';
 import TronCreateOne from 'app/components/modules/TronCreateOne';
 import TronCreateTwo from 'app/components/modules/TronCreateTwo';
+import PostDrafts from './PostDrafts';
 
 class Modals extends React.Component {
     static propTypes = {
@@ -31,12 +32,14 @@ class Modals extends React.Component {
         show_bandwidth_error_modal: PropTypes.bool,
         show_promote_post_modal: PropTypes.bool,
         show_post_advanced_settings_modal: PropTypes.string,
+        show_post_drafts_modal: PropTypes.string,
         hideLogin: PropTypes.func.isRequired,
         username: PropTypes.string,
         hideConfirm: PropTypes.func.isRequired,
         hidePromotePost: PropTypes.func.isRequired,
         hideBandwidthError: PropTypes.func.isRequired,
         hidePostAdvancedSettings: PropTypes.func.isRequired,
+        hidePostDrafts: PropTypes.func.isRequired,
         notifications: PropTypes.object,
         show_terms_modal: PropTypes.bool,
         removeNotification: PropTypes.func,
@@ -59,6 +62,7 @@ class Modals extends React.Component {
         show_confirm_modal: false,
         show_login_modal: false,
         show_post_advanced_settings_modal: '',
+        show_post_drafts_modal: '',
         loginBroadcastOperation: undefined,
         show_tron_create_modal: false,
         show_tron_create_success_modal: false,
@@ -78,6 +82,7 @@ class Modals extends React.Component {
             show_confirm_modal,
             show_bandwidth_error_modal,
             show_post_advanced_settings_modal,
+            show_post_drafts_modal,
             hideLogin,
             hideConfirm,
             show_terms_modal,
@@ -87,6 +92,7 @@ class Modals extends React.Component {
             show_promote_post_modal,
             hideBandwidthError,
             hidePostAdvancedSettings,
+            hidePostDrafts,
             username,
             loginBroadcastOperation,
             hideTronCreate,
@@ -199,6 +205,15 @@ class Modals extends React.Component {
                         />
                     </Reveal>
                 )}
+                {show_post_drafts_modal && (
+                    <Reveal
+                        onHide={hidePostDrafts}
+                        show={show_post_drafts_modal ? true : false}
+                    >
+                        <CloseButton onClick={hidePostDrafts} />
+                        <PostDrafts formId={show_post_drafts_modal} />
+                    </Reveal>
+                )}
                 <NotificationStack
                     style={false}
                     notifications={notifications_array}
@@ -241,6 +256,7 @@ export default connect(
             show_post_advanced_settings_modal: state.user.get(
                 'show_post_advanced_settings_modal'
             ),
+            show_post_drafts_modal: state.user.get('show_post_drafts_modal'),
             loginBroadcastOperation,
             show_tron_create_modal: state.user.get('show_tron_create_modal'),
             show_tron_create_success_modal: state.user.get(
@@ -279,6 +295,10 @@ export default connect(
         hidePostAdvancedSettings: e => {
             if (e) e.preventDefault();
             dispatch(userActions.hidePostAdvancedSettings());
+        },
+        hidePostDrafts: e => {
+            if (e) e.preventDefault();
+            dispatch(userActions.hidePostDrafts());
         },
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
         removeNotification: key =>

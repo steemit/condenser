@@ -327,6 +327,45 @@ class ReplyEditor extends React.Component {
         }
     }
 
+    showDrafts = e => {
+        e.preventDefault();
+        this.props.showDrafts(this.props.formId);
+    };
+
+    saveDraft = e => {
+        e.preventDefault();
+        debugger;
+        const editingDraft = JSON.parse(localStorage.getItem('editingDraft'));
+        const draftList = JSON.parse(localStorage.getItem('draft-list')) || [];
+
+        const editedDraft = {
+            author: this.props.username,
+            title: this.state.title.value,
+            body: this.state.body.value,
+            tags: this.state.tags.value,
+        };
+        if (editingDraft) {
+            const draftIdx = draftList.indexOf(
+                data =>
+                    data.author === editingDraft.author &&
+                    data.permlink === editingDraft.perlink
+            );
+
+            if (draftIdx > -1) {
+                editedDraft.permlink = draftList[draftIdx].pemrlink;
+                draftList[draftIdx] = editedDraft;
+            }
+        } else {
+            editedDraft.pemrlink = `${this.props.username}-${new Date()
+                .toISOString()
+                .split('.')[0]
+                .replace(':', '-')}`;
+            draftList.push(editedDraft);
+        }
+
+        localStorage.setItem('draft-list', JSON.stringify(draftList));
+    };
+
     showAdvancedSettings = e => {
         e.preventDefault();
         this.props.setPayoutType(this.props.formId, this.props.payoutType);
@@ -715,7 +754,8 @@ class ReplyEditor extends React.Component {
                                         {tt('reply_editor.or_by')}{' '}
                                         <a onClick={this.onOpenClick}>
                                             {tt('reply_editor.selecting_them')}
-                                        </a>.
+                                        </a>
+                                        .
                                     </p>
                                     {progress.message && (
                                         <div className="info">
@@ -755,7 +795,8 @@ class ReplyEditor extends React.Component {
                                     />
                                     <div className="error">
                                         {(tags.touched || tags.value) &&
-                                            tags.error}&nbsp;
+                                            tags.error}
+                                        &nbsp;
                                     </div>
                                 </span>
                             )}
@@ -866,6 +907,25 @@ class ReplyEditor extends React.Component {
                                         {tt('g.clear')}
                                     </button>
                                 )}
+                            {!loading && (
+                                <button
+                                    className="button"
+                                    tabIndex={6}
+                                    onClick={this.showDrafts}
+                                >
+                                    {tt('reply_editor.draft')}
+                                </button>
+                            )}
+                            {!loading && (
+                                <button
+                                    className="button"
+                                    tabIndex={7}
+                                    disabled={disabled}
+                                    onClick={this.saveDraft}
+                                >
+                                    {tt('reply_editor.draft_save')}
+                                </button>
+                            )}
                             {!isStory &&
                                 !isEdit &&
                                 this.props.payoutType != '50%' && (
@@ -1060,6 +1120,8 @@ export default formId =>
                 dispatch(userActions.uploadImage({ file, progress })),
             showAdvancedSettings: formId =>
                 dispatch(userActions.showPostAdvancedSettings({ formId })),
+            showDrafts: formId =>
+                dispatch(userActions.showPostDrafts({ formId })),
             setPayoutType: (formId, payoutType) =>
                 dispatch(
                     userActions.set({

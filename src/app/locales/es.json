@@ -299,7 +299,12 @@
         "update_post": "Actualizar Publicación",
         "markdown_not_supported": "Markdown no soportado aquí",
         "advanced_settings": "Advanced settings",
-        "beneficiaries_set": "%(count)s set"
+        "beneficiaries_set": "%(count)s set",
+        "draft": "Draft",
+        "draft_save": "Draft Save",
+        "draft_update": "Draft Update",
+        "tag": "#tag",
+        "tips": "Please enter the title, content and tags."
     },
     "beneficiary_selector_jsx": {
         "header": "Who should receive any rewards?",

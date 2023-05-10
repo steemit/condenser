@@ -10,7 +10,6 @@ class PostDrafts extends Component {
     }
 
     render() {
-        debugger;
         const { username, onDraftsClose } = this.props;
 
         let draftList = JSON.parse(localStorage.getItem('draft-list')) || [];

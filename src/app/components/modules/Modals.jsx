@@ -33,7 +33,7 @@ class Modals extends React.Component {
         show_promote_post_modal: PropTypes.bool,
         show_post_advanced_settings_modal: PropTypes.string,
         show_post_drafts_modal: PropTypes.string,
-        on_close_post_drafts_modal: PropTypes.func,
+        on_post_drafts_close_modal: PropTypes.func,
         hideLogin: PropTypes.func.isRequired,
         username: PropTypes.string,
         hideConfirm: PropTypes.func.isRequired,
@@ -64,7 +64,7 @@ class Modals extends React.Component {
         show_login_modal: false,
         show_post_advanced_settings_modal: '',
         show_post_drafts_modal: '',
-        on_close_post_drafts_modal: null,
+        on_post_drafts_close_modal: () => {},
         loginBroadcastOperation: undefined,
         show_tron_create_modal: false,
         show_tron_create_success_modal: false,
@@ -85,7 +85,7 @@ class Modals extends React.Component {
             show_bandwidth_error_modal,
             show_post_advanced_settings_modal,
             show_post_drafts_modal,
-            on_close_post_drafts_modal,
+            on_post_drafts_close_modal,
             hideLogin,
             hideConfirm,
             show_terms_modal,
@@ -216,7 +216,7 @@ class Modals extends React.Component {
                         <CloseButton onClick={hidePostDrafts} />
                         <PostDrafts
                             formId={show_post_drafts_modal}
-                            onDraftsClose={on_close_post_drafts_modal}
+                            onDraftsClose={on_post_drafts_close_modal}
                         />
                     </Reveal>
                 )}
@@ -263,8 +263,8 @@ export default connect(
                 'show_post_advanced_settings_modal'
             ),
             show_post_drafts_modal: state.user.get('show_post_drafts_modal'),
-            on_close_post_drafts_modal: state.user.get(
-                'on_close_post_drafts_modal'
+            on_post_drafts_close_modal: state.user.get(
+                'on_post_drafts_close_modal'
             ),
             loginBroadcastOperation,
             show_tron_create_modal: state.user.get('show_tron_create_modal'),

@@ -327,9 +327,20 @@ class ReplyEditor extends React.Component {
         }
     }
 
+    onDraftsClose = draft => {
+        this.state.title.value = draft.title;
+        this.state.body.value = draft.body;
+        this.state.tags.value = draft.tags;
+        this.setState({
+            ...this.state,
+            title: { ...this.state.title, value: draft.title },
+        });
+        this.setState(this.state);
+    };
+
     showDrafts = e => {
         e.preventDefault();
-        this.props.showDrafts(this.props.formId);
+        this.props.showDrafts(this.props.formId, this.onDraftsClose);
     };
 
     saveDraft = e => {
@@ -1120,8 +1131,8 @@ export default formId =>
                 dispatch(userActions.uploadImage({ file, progress })),
             showAdvancedSettings: formId =>
                 dispatch(userActions.showPostAdvancedSettings({ formId })),
-            showDrafts: formId =>
-                dispatch(userActions.showPostDrafts({ formId })),
+            showDrafts: (formId, onDraftsClose) =>
+                dispatch(userActions.showPostDrafts({ formId, onDraftsClose })),
             setPayoutType: (formId, payoutType) =>
                 dispatch(
                     userActions.set({

@@ -55,6 +55,7 @@ const defaultState = fromJS({
     show_promote_post_modal: false,
     show_post_advanced_settings_modal: '', // formId
     show_post_drafts_modal: '',
+    on_close_post_drafts_modal: null,
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
     show_side_panel: false,
@@ -234,7 +235,9 @@ export default function reducer(state = defaultState, action) {
             return state.set('show_post_advanced_settings_modal', '');
 
         case SHOW_POST_DRAFTS:
-            return state.set('show_post_drafts_modal', payload.formId);
+            state.set('show_post_drafts_modal', payload.formId);
+            state.set('on_close_post_drafts_modal', payload.onDraftsClose);
+            return state;
 
         case HIDE_POST_DRAFTS:
             return state.set('show_post_drafts_modal', '');

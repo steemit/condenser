@@ -1,31 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
-import Reblog from 'app/components/elements/Reblog';
-import Voting from 'app/components/elements/Voting';
-import { immutableAccessor } from 'app/utils/Accessors';
 import {
     extractBodySummary,
     extractImageLink,
     highlightKeyword,
 } from 'app/utils/ExtractContent';
-import VotesAndComments from 'app/components/elements/VotesAndComments';
-import { List, Map } from 'immutable';
-import Author from 'app/components/elements/Author';
-import Tag from 'app/components/elements/Tag';
-import UserNames from 'app/components/elements/UserNames';
-import tt from 'counterpart';
-import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
-import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
-import SearchUserList from 'app/components/cards/SearchUserList';
-import { SIGNUP_URL } from 'shared/constants';
-import { hasNsfwTag } from 'app/utils/StateFunctions';
-
-const CURATOR_VESTS_THRESHOLD = 1.0 * 1000.0 * 1000.0;
+import * as userActions from 'app/redux/UserReducer';
 
 // TODO: document why ` ` => `%20` is needed, and/or move to base fucntion
 const proxify = (url, size) => proxifyImageUrl(url, size).replace(/ /g, '%20');
@@ -33,7 +16,7 @@ const proxify = (url, size) => proxifyImageUrl(url, size).replace(/ /g, '%20');
 class DraftSummary extends React.Component {
     static propTypes = {
         post: PropTypes.object.isRequired,
-        onClose: PropTypes.func,
+        onDraftsClose: PropTypes.object.isRequired,
     };
 
     constructor() {
@@ -47,17 +30,20 @@ class DraftSummary extends React.Component {
         );
     }
 
-    onRevealNsfw(e) {
-        e.preventDefault();
+    clickContent(post) {
+        localStorage.setItem('editingDraft', JSON.stringify(post));
+        this.props.hidePostDrafts();
     }
 
     render() {
-        const { post, onClose } = this.props;
+        const { post, onDraftsClose } = this.props;
         if (!post) return null;
 
-        const author = post.author;
-        const permlink = post.permlink;
-        const post_url = `/draft/@${author}/${permlink}`;
+        const onClickContent = e => {
+            e.preventDefault();
+            onDraftsClose(post);
+            this.clickContent(post);
+        };
 
         const summary = extractBodySummary(post.body, false);
         const keyWord = process.env.BROWSER
@@ -66,8 +52,8 @@ class DraftSummary extends React.Component {
         const highlightColor = '#00FFC8';
         const content_body = (
             <div className="DraftSummary__body entry-content">
-                <Link
-                    to={post_url}
+                <span
+                    onClick={onClickContent}
                     dangerouslySetInnerHTML={{
                         __html: highlightKeyword(
                             summary,
@@ -81,17 +67,16 @@ class DraftSummary extends React.Component {
 
         const content_title = (
             <h2 className="articles__h2 entry-title">
-                <Link to={post_url}>
-                    <span
-                        dangerouslySetInnerHTML={{
-                            __html: highlightKeyword(
-                                post.title,
-                                keyWord,
-                                highlightColor
-                            ),
-                        }}
-                    />
-                </Link>
+                <span
+                    onClick={onClickContent}
+                    dangerouslySetInnerHTML={{
+                        __html: highlightKeyword(
+                            post.title,
+                            keyWord,
+                            highlightColor
+                        ),
+                    }}
+                />
             </h2>
         );
 
@@ -145,9 +130,7 @@ class DraftSummary extends React.Component {
                 >
                     {thumb ? (
                         <div className="articles__content-block articles__content-block--img">
-                            <Link className="articles__link" to={post_url}>
-                                {thumb}
-                            </Link>
+                            {thumb}
                         </div>
                     ) : null}
                     <div className="articles__content-block articles__content-block--text">
@@ -160,13 +143,17 @@ class DraftSummary extends React.Component {
     }
 }
 
-export default connect((state, props) => {
-    const { post } = props;
-    const net_vests = state.user.getIn(['current', 'effective_vests'], 0.0);
-    return {
-        post,
-        username:
-            state.user.getIn(['current', 'username']) ||
-            state.offchain.get('account'),
-    };
-})(DraftSummary);
+export default connect(
+    (state, props) => {
+        const { post } = props;
+        return {
+            post,
+            username:
+                state.user.getIn(['current', 'username']) ||
+                state.offchain.get('account'),
+        };
+    },
+    dispatch => ({
+        hidePostDrafts: () => dispatch(userActions.hidePostDrafts()),
+    })
+)(DraftSummary);

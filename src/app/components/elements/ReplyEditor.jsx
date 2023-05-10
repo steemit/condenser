@@ -328,14 +328,18 @@ class ReplyEditor extends React.Component {
     }
 
     onDraftsClose = draft => {
-        this.state.title.value = draft.title;
-        this.state.body.value = draft.body;
-        this.state.tags.value = draft.tags;
+        const { title, body, tags } = this.state;
+        title.value = draft.title;
+        body.value = draft.body;
+        tags.value = draft.tags;
+
         this.setState({
             ...this.state,
-            title: { ...this.state.title, value: draft.title },
+            title,
+            body,
+            tags,
         });
-        this.setState(this.state);
+        console.log('onDraftsClose success');
     };
 
     showDrafts = e => {
@@ -345,7 +349,6 @@ class ReplyEditor extends React.Component {
 
     saveDraft = e => {
         e.preventDefault();
-        debugger;
         const editingDraft = JSON.parse(localStorage.getItem('editingDraft'));
         const draftList = JSON.parse(localStorage.getItem('draft-list')) || [];
 

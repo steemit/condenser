@@ -347,6 +347,8 @@ class ReplyEditor extends React.Component {
 
         // console.log("initial reply body:", raw || '(empty)')
         body.props.onChange(raw);
+        debugger;
+        this.props.permlink = draft.permlink;
     };
 
     showDrafts = e => {
@@ -356,7 +358,7 @@ class ReplyEditor extends React.Component {
 
     saveDraft = e => {
         e.preventDefault();
-        const editingDraft = JSON.parse(localStorage.getItem('editingDraft'));
+        debugger;
         const draftList = JSON.parse(localStorage.getItem('draft-list')) || [];
 
         const editedDraft = {
@@ -364,20 +366,21 @@ class ReplyEditor extends React.Component {
             title: this.state.title.value,
             body: this.state.body.value,
             tags: this.state.tags.value,
+            permlink: this.props.permlink,
         };
-        if (editingDraft) {
-            const draftIdx = draftList.indexOf(
+        if (this.props.permlink) {
+            const draftIdx = draftList.findIndex(
                 data =>
                     data.author === editingDraft.author &&
-                    data.permlink === editingDraft.perlink
+                    data.permlink === editingDraft.permlink
             );
 
             if (draftIdx > -1) {
-                editedDraft.permlink = draftList[draftIdx].pemrlink;
+                editedDraft.permlink = draftList[draftIdx].permlink;
                 draftList[draftIdx] = editedDraft;
             }
         } else {
-            editedDraft.pemrlink = `${this.props.username}-${new Date()
+            editedDraft.permlink = `${this.props.username}-${new Date()
                 .toISOString()
                 .split('.')[0]
                 .replace(':', '-')}`;
@@ -944,7 +947,9 @@ class ReplyEditor extends React.Component {
                                     disabled={disabled}
                                     onClick={this.saveDraft}
                                 >
-                                    {tt('reply_editor.draft_save')}
+                                    {this.state.permlink
+                                        ? tt('reply_editor.draft_update')
+                                        : tt('reply_editor.draft_save')}
                                 </button>
                             )}
                             {!isStory &&

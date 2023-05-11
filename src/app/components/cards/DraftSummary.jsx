@@ -30,8 +30,7 @@ class DraftSummary extends React.Component {
         );
     }
 
-    clickContent(post) {
-        localStorage.setItem('editingDraft', JSON.stringify(post));
+    clickContent() {
         this.props.hidePostDrafts();
     }
 
@@ -41,8 +40,8 @@ class DraftSummary extends React.Component {
 
         const onClickContent = e => {
             e.preventDefault();
+            this.clickContent();
             onDraftsClose(post);
-            this.clickContent(post);
         };
 
         const summary = extractBodySummary(post.body, false);

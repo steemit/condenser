@@ -36,13 +36,12 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const username = state.user.getIn(['current', 'username']);
-        const onDraftsClose = state.user.getIn('onDraftsClose');
         return {
             ...ownProps,
             fields: [],
             username,
             initialValues: {},
-            onDraftsClose,
+            onDraftsClose: ownProps.onDraftsClose,
         };
     }
 )(PostDrafts);

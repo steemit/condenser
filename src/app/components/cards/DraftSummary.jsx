@@ -16,7 +16,7 @@ const proxify = (url, size) => proxifyImageUrl(url, size).replace(/ /g, '%20');
 class DraftSummary extends React.Component {
     static propTypes = {
         post: PropTypes.object.isRequired,
-        onDraftsClose: PropTypes.object.isRequired,
+        onDraftsClose: PropTypes.func,
     };
 
     constructor() {

@@ -328,18 +328,25 @@ class ReplyEditor extends React.Component {
     }
 
     onDraftsClose = draft => {
-        const { title, body, tags } = this.state;
-        title.value = draft.title;
-        body.value = draft.body;
-        tags.value = draft.tags;
+        const { body, tags, title } = this.state;
+        let raw;
 
-        this.setState({
-            ...this.state,
-            title,
-            body,
-            tags,
-        });
-        console.log('onDraftsClose success');
+        if (body.value) {
+            raw = body.value;
+        }
+
+        if (tags) {
+            this.checkTagsCommunity(draft.tags);
+            tags.props.onChange(draft.tags);
+        }
+
+        if (title) title.props.onChange(draft.title);
+        raw = draft.body;
+
+        // If we have an initial body, check if it's html or markdown
+
+        // console.log("initial reply body:", raw || '(empty)')
+        body.props.onChange(raw);
     };
 
     showDrafts = e => {

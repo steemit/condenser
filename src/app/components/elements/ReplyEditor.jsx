@@ -88,7 +88,7 @@ class ReplyEditor extends React.Component {
 
     constructor(props) {
         super();
-        this.state = { progress: {}, imagesUploadCount: 0 };
+        this.state = { progress: {}, imagesUploadCount: 0, draft_permlink: '' };
         this.initForm(props);
     }
 
@@ -181,7 +181,18 @@ class ReplyEditor extends React.Component {
             else if (this.props.isStory) this.refs.titleRef.focus();
             else if (this.refs.postRef) this.refs.postRef.focus();
         }, 300);
+        window.addEventListener('beforeunload', this.handleBeforeUnload);
     }
+
+    componentWillUnmount() {
+        window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    }
+
+    handleBeforeUnload = () => {
+        if (this.state.draft_permlink) {
+            this.saveDraft();
+        }
+    };
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor');
 
@@ -296,6 +307,8 @@ class ReplyEditor extends React.Component {
             this.props.setBeneficiaries(formId, []);
             if (onCancel) onCancel(e);
         }
+
+        this.setState({ draft_permlink: '' });
     };
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
@@ -347,8 +360,7 @@ class ReplyEditor extends React.Component {
 
         // console.log("initial reply body:", raw || '(empty)')
         body.props.onChange(raw);
-        debugger;
-        this.props.permlink = draft.permlink;
+        this.setState({ draft_permlink: draft.permlink });
     };
 
     showDrafts = e => {
@@ -356,9 +368,12 @@ class ReplyEditor extends React.Component {
         this.props.showDrafts(this.props.formId, this.onDraftsClose);
     };
 
-    saveDraft = e => {
+    onClickSaveDraft = e => {
         e.preventDefault();
-        debugger;
+        this.saveDraft();
+    };
+
+    saveDraft = () => {
         const draftList = JSON.parse(localStorage.getItem('draft-list')) || [];
 
         const editedDraft = {
@@ -366,25 +381,30 @@ class ReplyEditor extends React.Component {
             title: this.state.title.value,
             body: this.state.body.value,
             tags: this.state.tags.value,
-            permlink: this.props.permlink,
+            permlink: this.state.draft_permlink
+                ? this.state.draft_permlink
+                : `${this.props.username}-${
+                      new Date()
+                          .toISOString()
+                          .replace(':', '-')
+                          .split('.')[0]
+                  }`,
+            timestamp: new Date().toISOString(),
         };
-        if (this.props.permlink) {
+
+        if (this.state.draft_permlink) {
             const draftIdx = draftList.findIndex(
                 data =>
-                    data.author === editingDraft.author &&
-                    data.permlink === editingDraft.permlink
+                    data.author === editedDraft.author &&
+                    data.permlink === editedDraft.permlink
             );
 
             if (draftIdx > -1) {
-                editedDraft.permlink = draftList[draftIdx].permlink;
                 draftList[draftIdx] = editedDraft;
             }
         } else {
-            editedDraft.permlink = `${this.props.username}-${new Date()
-                .toISOString()
-                .split('.')[0]
-                .replace(':', '-')}`;
             draftList.push(editedDraft);
+            this.setState({ draft_permlink: editedDraft.permlink });
         }
 
         localStorage.setItem('draft-list', JSON.stringify(draftList));
@@ -945,9 +965,9 @@ class ReplyEditor extends React.Component {
                                     className="button"
                                     tabIndex={7}
                                     disabled={disabled}
-                                    onClick={this.saveDraft}
+                                    onClick={this.onClickSaveDraft}
                                 >
-                                    {this.state.permlink
+                                    {this.state.draft_permlink
                                         ? tt('reply_editor.draft_update')
                                         : tt('reply_editor.draft_save')}
                                 </button>

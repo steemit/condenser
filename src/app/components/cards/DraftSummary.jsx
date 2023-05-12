@@ -9,6 +9,7 @@ import {
 } from 'app/utils/ExtractContent';
 import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import * as userActions from 'app/redux/UserReducer';
+import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 
 // TODO: document why ` ` => `%20` is needed, and/or move to base fucntion
 const proxify = (url, size) => proxifyImageUrl(url, size).replace(/ /g, '%20');
@@ -17,6 +18,7 @@ class DraftSummary extends React.Component {
     static propTypes = {
         post: PropTypes.object.isRequired,
         onDraftsClose: PropTypes.func,
+        onDeleteDraft: PropTypes.func,
     };
 
     constructor() {
@@ -35,13 +37,17 @@ class DraftSummary extends React.Component {
     }
 
     render() {
-        const { post, onDraftsClose } = this.props;
+        const { idx, post, onDraftsClose, onDeleteDraft } = this.props;
         if (!post) return null;
 
         const onClickContent = e => {
             e.preventDefault();
             this.clickContent();
             onDraftsClose(post);
+        };
+
+        const clickDeleteDraft = () => {
+            onDeleteDraft(post);
         };
 
         const summary = extractBodySummary(post.body, false);
@@ -83,9 +89,9 @@ class DraftSummary extends React.Component {
         const summary_header = (
             <div className="articles__summary-header">
                 <div className="user">
-                    <div className="user__col user__col--right">
-                        <span className="user__name">{post.author}</span>
-                    </div>
+                    <span>
+                        {idx} . {post.timestamp}
+                    </span>
                 </div>
             </div>
         );
@@ -136,6 +142,7 @@ class DraftSummary extends React.Component {
                         {content_title}
                         {content_body}
                     </div>
+                    <a onClick={clickDeleteDraft}>삭제</a>
                 </div>
             </div>
         );

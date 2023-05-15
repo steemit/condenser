@@ -9,8 +9,9 @@ import {
 } from 'app/utils/ExtractContent';
 import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import * as userActions from 'app/redux/UserReducer';
+import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
-
+import tt from 'counterpart';
 // TODO: document why ` ` => `%20` is needed, and/or move to base fucntion
 const proxify = (url, size) => proxifyImageUrl(url, size).replace(/ /g, '%20');
 
@@ -89,8 +90,26 @@ class DraftSummary extends React.Component {
         const summary_header = (
             <div className="articles__summary-header">
                 <div className="user">
-                    <span>
-                        {idx} . {post.timestamp}
+                    <div className="user__col user__col--left">
+                        <Userpic account={post.author} size={SIZE_SMALL} />
+                    </div>
+                    <span className="user__name">
+                        <span
+                            itemProp="author"
+                            itemScope
+                            itemType="http://schema.org/Person"
+                        >
+                            <strong>{post.author}</strong>
+                            &nbsp;•&nbsp;
+                        </span>
+                    </span>
+
+                    <span className="timestamp__time">
+                        {this.props.order == 'payout' && <span>payout </span>}
+                        <TimeAgoWrapper
+                            date={post.timestamp}
+                            className="updated"
+                        />
                     </span>
                 </div>
             </div>
@@ -99,24 +118,9 @@ class DraftSummary extends React.Component {
         const image_link = extractImageLink(post.json_metadata, post.body);
         let thumb = null;
         if (image_link) {
-            // on mobile, we always use blog layout style -- there's no toggler
-            // on desktop, we offer a choice of either blog or list
-            // if blogmode is false, output an image with a srcset
-            // which has the 256x512 for whatever the large breakpoint is where the list layout is used
-            // and the 640 for lower than that
-            const blogImg = proxify(image_link, '640x480');
+            const blogImg = proxify(image_link, '160x120');
 
-            if (this.props.blogmode) {
-                thumb = <img className="articles__feature-img" src={blogImg} />;
-            } else {
-                const listImg = proxify(image_link, '256x512');
-                thumb = (
-                    <picture className="articles__feature-img">
-                        <source srcSet={listImg} media="(min-width: 1000px)" />
-                        <img srcSet={blogImg} />
-                    </picture>
-                );
-            }
+            thumb = <img className="articles__feature-img" src={blogImg} />;
             thumb = (
                 <span className="articles__feature-img-container">{thumb}</span>
             );
@@ -142,7 +146,7 @@ class DraftSummary extends React.Component {
                         {content_title}
                         {content_body}
                     </div>
-                    <a onClick={clickDeleteDraft}>삭제</a>
+                    <a onClick={clickDeleteDraft}>{tt('g.delete')}</a>
                 </div>
             </div>
         );

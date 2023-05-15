@@ -297,9 +297,9 @@
         "markdown_not_supported": "Markdown은 지원되지 않습니다.",
         "advanced_settings": "Advanced settings",
         "beneficiaries_set": "%(count)s set",
-        "draft": "Draft",
-        "draft_save": "Draft Save",
-        "draft_update": "Draft Update",
+        "draft": "초안",
+        "draft_save": "초안 저장",
+        "draft_update": "초안 갱신",
         "tag": "#tag",
         "tips": "Please enter the title, content and tags."
     },

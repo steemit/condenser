@@ -8,19 +8,6 @@
     border-bottom: 1px solid #ccc;
 }
 
-.drafts.row.layout-list {
-    max-width: none;
-    @include MQ(L) {
-        max-width: 1600px;
-    }
-}
-
-.layout-list .user > .user__col > .user__link > .Userpic {
-    width: 24px !important;
-    height: 24px !important;
-    margin-right: 8px;
-}
-
 ul.Drafts__summaries {
     margin-left: 0;
 }

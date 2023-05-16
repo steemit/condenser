@@ -946,77 +946,86 @@ class ReplyEditor extends React.Component {
                             )}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {!loading && (
-                                <button
-                                    type="submit"
-                                    className="button"
-                                    disabled={disabled}
-                                    tabIndex={4}
-                                >
-                                    {isEdit
-                                        ? tt('reply_editor.update_post')
-                                        : postLabel}
-                                </button>
-                            )}
-                            {loading && (
-                                <span>
-                                    <br />
-                                    <LoadingIndicator type="circle" />
-                                </span>
-                            )}
-                            &nbsp;{' '}
-                            {!loading &&
-                                this.props.onCancel && (
-                                    <button
-                                        type="button"
-                                        className="secondary hollow button no-border"
-                                        tabIndex={5}
-                                        onClick={onCancel}
-                                    >
-                                        {tt('g.cancel')}
-                                    </button>
-                                )}
-                            {!loading &&
-                                !this.props.onCancel && (
-                                    <button
-                                        className="button hollow no-border"
-                                        tabIndex={5}
-                                        disabled={submitting}
-                                        onClick={onCancel}
-                                    >
-                                        {tt('g.clear')}
-                                    </button>
-                                )}
-                            {!loading && (
-                                <button
-                                    className="button right-button"
-                                    tabIndex={8}
-                                    onClick={this.showTempletes}
-                                >
-                                    {tt('reply_editor.templete')}
-                                </button>
-                            )}
-                            {!loading && (
-                                <button
-                                    className="button right-button"
-                                    tabIndex={7}
-                                    disabled={disabled}
-                                    onClick={this.onClickSaveDraft}
-                                >
-                                    {this.state.draft_permlink
-                                        ? tt('reply_editor.draft_update')
-                                        : tt('reply_editor.draft_save')}
-                                </button>
-                            )}
-                            {!loading && (
-                                <button
-                                    className="button right-button"
-                                    tabIndex={6}
-                                    onClick={this.showDrafts}
-                                >
-                                    {tt('reply_editor.draft')}
-                                </button>
-                            )}
+                            <div className="button-container">
+                                <div className="item ">
+                                    {!loading && (
+                                        <button
+                                            type="submit"
+                                            className="button"
+                                            disabled={disabled}
+                                            tabIndex={4}
+                                        >
+                                            {isEdit
+                                                ? tt('reply_editor.update_post')
+                                                : postLabel}
+                                        </button>
+                                    )}
+                                    {loading && (
+                                        <span>
+                                            <br />
+                                            <LoadingIndicator type="circle" />
+                                        </span>
+                                    )}
+                                    &nbsp;{' '}
+                                    {!loading &&
+                                        this.props.onCancel && (
+                                            <button
+                                                type="button"
+                                                className="secondary hollow button no-border"
+                                                tabIndex={5}
+                                                onClick={onCancel}
+                                            >
+                                                {tt('g.cancel')}
+                                            </button>
+                                        )}
+                                    {!loading &&
+                                        !this.props.onCancel && (
+                                            <button
+                                                className="button hollow no-border"
+                                                tabIndex={5}
+                                                disabled={submitting}
+                                                onClick={onCancel}
+                                            >
+                                                {tt('g.clear')}
+                                            </button>
+                                        )}
+                                </div>
+                                <div className="item">
+                                    {!loading && (
+                                        <button
+                                            className="button"
+                                            tabIndex={6}
+                                            onClick={this.showDrafts}
+                                        >
+                                            {tt('reply_editor.draft')}
+                                        </button>
+                                    )}
+
+                                    {!loading && (
+                                        <button
+                                            className="button"
+                                            tabIndex={7}
+                                            disabled={disabled}
+                                            onClick={this.onClickSaveDraft}
+                                        >
+                                            {this.state.draft_permlink
+                                                ? tt(
+                                                      'reply_editor.draft_update'
+                                                  )
+                                                : tt('reply_editor.draft_save')}
+                                        </button>
+                                    )}
+                                    {!loading && (
+                                        <button
+                                            className="button"
+                                            tabIndex={8}
+                                            onClick={this.showTempletes}
+                                        >
+                                            {tt('reply_editor.templete')}
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
                             {!isStory &&
                                 !isEdit &&
                                 this.props.payoutType != '50%' && (

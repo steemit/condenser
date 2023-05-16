@@ -373,6 +373,27 @@ class ReplyEditor extends React.Component {
         this.saveDraft();
     };
 
+    onTempletesClose = templete => {
+        const { body } = this.state;
+        let raw = '';
+
+        if (body.value) {
+            raw = body.value;
+        }
+
+        raw += `\n` + templete;
+
+        // If we have an initial body, check if it's html or markdown
+
+        // console.log("initial reply body:", raw || '(empty)')
+        body.props.onChange(raw);
+        console.log(templete);
+    };
+
+    showTempletes = e => {
+        e.preventDefault();
+        this.props.showTempletes(this.props.formId, this.onTempletesClose);
+    };
     saveDraft = () => {
         const draftList = JSON.parse(localStorage.getItem('draft-list')) || [];
 
@@ -972,6 +993,15 @@ class ReplyEditor extends React.Component {
                                         : tt('reply_editor.draft_save')}
                                 </button>
                             )}
+                            {!loading && (
+                                <button
+                                    className="button"
+                                    tabIndex={8}
+                                    onClick={this.showTempletes}
+                                >
+                                    {tt('reply_editor.templete')}
+                                </button>
+                            )}
                             {!isStory &&
                                 !isEdit &&
                                 this.props.payoutType != '50%' && (
@@ -1168,6 +1198,10 @@ export default formId =>
                 dispatch(userActions.showPostAdvancedSettings({ formId })),
             showDrafts: (formId, onDraftsClose) =>
                 dispatch(userActions.showPostDrafts({ formId, onDraftsClose })),
+            showTempletes: (formId, onTempletesClose) =>
+                dispatch(
+                    userActions.showPostTempletes({ formId, onTempletesClose })
+                ),
             setPayoutType: (formId, payoutType) =>
                 dispatch(
                     userActions.set({

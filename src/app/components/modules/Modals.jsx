@@ -22,6 +22,7 @@ import PostAdvancedSettings from 'app/components/modules/PostAdvancedSettings';
 import TronCreateOne from 'app/components/modules/TronCreateOne';
 import TronCreateTwo from 'app/components/modules/TronCreateTwo';
 import PostDrafts from './PostDrafts';
+import PostTempletes from './PostTempletes';
 
 class Modals extends React.Component {
     static propTypes = {
@@ -34,6 +35,8 @@ class Modals extends React.Component {
         show_post_advanced_settings_modal: PropTypes.string,
         show_post_drafts_modal: PropTypes.string,
         on_post_drafts_close_modal: PropTypes.func,
+        show_post_templetes_modal: PropTypes.string,
+        on_post_templetes_close_modal: PropTypes.func,
         hideLogin: PropTypes.func.isRequired,
         username: PropTypes.string,
         hideConfirm: PropTypes.func.isRequired,
@@ -41,6 +44,7 @@ class Modals extends React.Component {
         hideBandwidthError: PropTypes.func.isRequired,
         hidePostAdvancedSettings: PropTypes.func.isRequired,
         hidePostDrafts: PropTypes.func.isRequired,
+        hidePostTempletes: PropTypes.func.isRequired,
         notifications: PropTypes.object,
         show_terms_modal: PropTypes.bool,
         removeNotification: PropTypes.func,
@@ -65,6 +69,8 @@ class Modals extends React.Component {
         show_post_advanced_settings_modal: '',
         show_post_drafts_modal: '',
         on_post_drafts_close_modal: () => {},
+        show_post_templetes_modal: '',
+        on_post_templetes_close_modal: () => {},
         loginBroadcastOperation: undefined,
         show_tron_create_modal: false,
         show_tron_create_success_modal: false,
@@ -86,6 +92,8 @@ class Modals extends React.Component {
             show_post_advanced_settings_modal,
             show_post_drafts_modal,
             on_post_drafts_close_modal,
+            show_post_templetes_modal,
+            on_post_templetes_close_modal,
             hideLogin,
             hideConfirm,
             show_terms_modal,
@@ -96,6 +104,7 @@ class Modals extends React.Component {
             hideBandwidthError,
             hidePostAdvancedSettings,
             hidePostDrafts,
+            hidePostTempletes,
             username,
             loginBroadcastOperation,
             hideTronCreate,
@@ -220,6 +229,18 @@ class Modals extends React.Component {
                         />
                     </Reveal>
                 )}
+                {show_post_templetes_modal && (
+                    <Reveal
+                        onHide={hidePostTempletes}
+                        show={show_post_templetes_modal ? true : false}
+                    >
+                        <CloseButton onClick={hidePostTempletes} />
+                        <PostTempletes
+                            formId={show_post_templetes_modal}
+                            onTempletesClose={on_post_templetes_close_modal}
+                        />
+                    </Reveal>
+                )}
                 <NotificationStack
                     style={false}
                     notifications={notifications_array}
@@ -266,6 +287,12 @@ export default connect(
             on_post_drafts_close_modal: state.user.get(
                 'on_post_drafts_close_modal'
             ),
+            show_post_templetes_modal: state.user.get(
+                'show_post_templetes_modal'
+            ),
+            on_post_templetes_close_modal: state.user.get(
+                'on_post_templetes_close_modal'
+            ),
             loginBroadcastOperation,
             show_tron_create_modal: state.user.get('show_tron_create_modal'),
             show_tron_create_success_modal: state.user.get(
@@ -308,6 +335,10 @@ export default connect(
         hidePostDrafts: e => {
             if (e) e.preventDefault();
             dispatch(userActions.hidePostDrafts());
+        },
+        hidePostTempletes: e => {
+            if (e) e.preventDefault();
+            dispatch(userActions.hidePostTempletes());
         },
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
         removeNotification: key =>

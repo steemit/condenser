@@ -313,6 +313,7 @@
         "draft": "Draft",
         "draft_save": "Draft Save",
         "draft_update": "Draft Update",
+        "templete": "Templete",
         "tag": "#tag",
         "tips": "Please enter the title, content and tags."
     },

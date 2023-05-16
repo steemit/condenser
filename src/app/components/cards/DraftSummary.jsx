@@ -105,7 +105,6 @@ class DraftSummary extends React.Component {
                     </span>
 
                     <span className="timestamp__time">
-                        {this.props.order == 'payout' && <span>payout </span>}
                         <TimeAgoWrapper
                             date={post.timestamp}
                             className="updated"
@@ -146,6 +145,8 @@ class DraftSummary extends React.Component {
                         {content_title}
                         {content_body}
                     </div>
+                </div>
+                <div className="articles__summary-footer">
                     <a onClick={clickDeleteDraft}>{tt('g.delete')}</a>
                 </div>
             </div>

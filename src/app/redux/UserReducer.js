@@ -58,6 +58,7 @@ const defaultState = fromJS({
     show_post_advanced_settings_modal: '', // formId
     show_post_drafts_modal: '',
     on_post_drafts_close_modal: () => {},
+    clear_draft_modal: () => {},
     show_post_templetes_modal: '',
     on_post_templetes_close_modal: () => {},
     pub_keys_used: null,
@@ -244,11 +245,13 @@ export default function reducer(state = defaultState, action) {
                 'on_post_drafts_close_modal',
                 payload.onDraftsClose
             );
+            state = state.set('clear_draft_modal', payload.clearDraft);
             return state;
 
         case HIDE_POST_DRAFTS:
             state = state.set('show_post_drafts_modal', '');
             state = state.set('on_post_drafts_close_modal', () => {});
+            state = state.set('clear_draft_modal', () => {});
             return state;
 
         case SHOW_POST_TEMPLETES:

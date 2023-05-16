@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
 import * as userActions from 'app/redux/UserReducer';
+import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 
 class PostTempletes extends Component {
     constructor(props) {
@@ -10,7 +11,40 @@ class PostTempletes extends Component {
         this.state = {
             templeteList: [
                 {
-                    content: `~~~ \n ~~~`,
+                    title: 'Code',
+                    content: `~~~\n\n~~~\n`,
+                },
+                {
+                    title: 'Link',
+                    content: `[Link title](https://upvu.org)\n`,
+                },
+                {
+                    title: 'Table',
+                    content: `| column 1 | column 2 | column 3 |\n| --- | --- | --- |\n| cell 1 | cell 2 | cell 3 |\n| cell 4 | cell 5 | cell 6 |\n`,
+                },
+                {
+                    title: 'Footnote',
+                    content: `footnote text[^name]\n[^name]: footnote content\n`,
+                },
+                {
+                    title: 'Numbered List',
+                    content: `1. content 1\n2. content 2\n3. content 3\n`,
+                },
+                {
+                    title: 'Unnumbered List',
+                    content: `- content 1\n- content 2\n- content 3\n`,
+                },
+                {
+                    title: 'Header',
+                    content: `# header 1\n## header 2\n### header 3\n`,
+                },
+                {
+                    title: 'Highlight',
+                    content: `**highlighted text**\n`,
+                },
+                {
+                    title: 'Italic',
+                    content: `*italic text*\n`,
                 },
             ],
         };
@@ -38,6 +72,13 @@ class PostTempletes extends Component {
         const templetes = templeteList.map((templete, idx) => (
             <div key={idx} className="templetes-option">
                 <div className="articles__summary">
+                    <div className="articles__summary-header">
+                        <span>
+                            <strong>
+                                {idx + 1}. {templete.title}
+                            </strong>
+                        </span>
+                    </div>
                     <div
                         className={
                             'articles__content hentry' +
@@ -46,17 +87,11 @@ class PostTempletes extends Component {
                         itemScope
                         itemType="http://schema.org/blogPost"
                     >
-                        {/* {thumb ? (
-                            <div className="articles__content-block articles__content-block--img">
-                                {thumb}
-                            </div>
-                        ) : null} */}
                         <div
                             className="articles__content-block articles__content-block--text"
                             onClick={() => onClickContent(idx)}
                         >
-                            {/* {content_title} */}
-                            {templete.content}
+                            <MarkdownViewer text={templete.content} />
                         </div>
                     </div>
                 </div>

@@ -35,6 +35,7 @@ class Modals extends React.Component {
         show_post_advanced_settings_modal: PropTypes.string,
         show_post_drafts_modal: PropTypes.string,
         on_post_drafts_close_modal: PropTypes.func,
+        clear_draft_modal: PropTypes.func,
         show_post_templetes_modal: PropTypes.string,
         on_post_templetes_close_modal: PropTypes.func,
         hideLogin: PropTypes.func.isRequired,
@@ -69,6 +70,7 @@ class Modals extends React.Component {
         show_post_advanced_settings_modal: '',
         show_post_drafts_modal: '',
         on_post_drafts_close_modal: () => {},
+        clear_draft_modal: () => {},
         show_post_templetes_modal: '',
         on_post_templetes_close_modal: () => {},
         loginBroadcastOperation: undefined,
@@ -92,6 +94,7 @@ class Modals extends React.Component {
             show_post_advanced_settings_modal,
             show_post_drafts_modal,
             on_post_drafts_close_modal,
+            clear_draft_modal,
             show_post_templetes_modal,
             on_post_templetes_close_modal,
             hideLogin,
@@ -226,6 +229,7 @@ class Modals extends React.Component {
                         <PostDrafts
                             formId={show_post_drafts_modal}
                             onDraftsClose={on_post_drafts_close_modal}
+                            clearDraft={clear_draft_modal}
                         />
                     </Reveal>
                 )}
@@ -287,6 +291,7 @@ export default connect(
             on_post_drafts_close_modal: state.user.get(
                 'on_post_drafts_close_modal'
             ),
+            clear_draft_modal: state.user.get('clear_draft_modal'),
             show_post_templetes_modal: state.user.get(
                 'show_post_templetes_modal'
             ),

@@ -25,7 +25,8 @@ class PostDrafts extends Component {
     };
 
     onDeleteDraft = post => {
-        let draftList = JSON.parse(localStorage.getItem('draft-list')) || [];
+        const { clearDraft } = this.props;
+        const draftList = JSON.parse(localStorage.getItem('draft-list')) || [];
         const draftIdx = draftList.findIndex(
             data =>
                 data.author === post.author && data.permlink === post.permlink
@@ -33,10 +34,11 @@ class PostDrafts extends Component {
         draftList.splice(draftIdx, 1);
         localStorage.setItem('draft-list', JSON.stringify(draftList));
         this.getDraftList(); // state 업데이트
+        clearDraft(`${post.author}^${post.permlink}`);
     };
 
     render() {
-        const { username, onDraftsClose } = this.props;
+        const { username, onDraftsClose, clearDraft } = this.props;
         const { draftList } = this.state;
 
         const drafts = draftList.map((draft, idx) => (
@@ -72,6 +74,7 @@ export default connect(
             username,
             initialValues: {},
             onDraftsClose: ownProps.onDraftsClose,
+            clearDraft: ownProps.clearDraft,
         };
     }
 )(PostDrafts);

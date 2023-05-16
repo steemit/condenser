@@ -304,6 +304,8 @@
         "draft": "Draft",
         "draft_save": "Draft Save",
         "draft_update": "Draft Update",
+        "draft_save_message":
+            "Draft saved successfully. To view your saved drafts, simply click the Drafts button.",
         "templete": "Templete",
         "tag": "#tag",
         "tips": "Please enter the title, content and tags."

@@ -289,6 +289,8 @@
         "draft": "Draft",
         "draft_save": "Draft Save",
         "draft_update": "Draft Update",
+        "draft_save_message":
+            "Draft saved successfully. To view your saved drafts, simply click the Drafts button.",
         "templete": "Templete",
         "tag": "#标签",
         "tips": "请输入标题、内容、标签"

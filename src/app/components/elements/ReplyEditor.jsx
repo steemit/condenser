@@ -311,6 +311,12 @@ class ReplyEditor extends React.Component {
         this.setState({ draft_permlink: '' });
     };
 
+    clearDraft = deletedDraftPermlink => {
+        const { draft_permlink } = this.state;
+        if (draft_permlink === deletedDraftPermlink)
+            this.setState({ draft_permlink: '' });
+    };
+
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
     onChange = rte_value => {
         this.refs.rte.setState({ state: rte_value });
@@ -341,7 +347,7 @@ class ReplyEditor extends React.Component {
     }
 
     onDraftsClose = draft => {
-        const { body, tags, title } = this.state;
+        const { username, body, tags, title } = this.state;
         let raw;
 
         if (body.value) {
@@ -360,12 +366,16 @@ class ReplyEditor extends React.Component {
 
         // console.log("initial reply body:", raw || '(empty)')
         body.props.onChange(raw);
-        this.setState({ draft_permlink: draft.permlink });
+        this.setState({ draft_permlink: `${username}^${draft.permlink}` });
     };
 
     showDrafts = e => {
         e.preventDefault();
-        this.props.showDrafts(this.props.formId, this.onDraftsClose);
+        this.props.showDrafts(
+            this.props.formId,
+            this.onDraftsClose,
+            this.clearDraft
+        );
     };
 
     onClickSaveDraft = e => {
@@ -403,7 +413,7 @@ class ReplyEditor extends React.Component {
             body: this.state.body.value,
             tags: this.state.tags.value,
             permlink: this.state.draft_permlink
-                ? this.state.draft_permlink
+                ? this.state.draft_permlink.split('^')[1]
                 : `${this.props.username}-${
                       new Date()
                           .toISOString()
@@ -425,10 +435,15 @@ class ReplyEditor extends React.Component {
             }
         } else {
             draftList.push(editedDraft);
-            this.setState({ draft_permlink: editedDraft.permlink });
+            this.setState({
+                draft_permlink: `${this.props.username}^${
+                    editedDraft.permlink
+                }`,
+            });
         }
 
         localStorage.setItem('draft-list', JSON.stringify(draftList));
+        alert(`${tt('reply_editor.draft_save_message')}`);
     };
 
     showAdvancedSettings = e => {
@@ -974,16 +989,16 @@ class ReplyEditor extends React.Component {
                                 )}
                             {!loading && (
                                 <button
-                                    className="button"
-                                    tabIndex={6}
-                                    onClick={this.showDrafts}
+                                    className="button right-button"
+                                    tabIndex={8}
+                                    onClick={this.showTempletes}
                                 >
-                                    {tt('reply_editor.draft')}
+                                    {tt('reply_editor.templete')}
                                 </button>
                             )}
                             {!loading && (
                                 <button
-                                    className="button"
+                                    className="button right-button"
                                     tabIndex={7}
                                     disabled={disabled}
                                     onClick={this.onClickSaveDraft}
@@ -995,11 +1010,11 @@ class ReplyEditor extends React.Component {
                             )}
                             {!loading && (
                                 <button
-                                    className="button"
-                                    tabIndex={8}
-                                    onClick={this.showTempletes}
+                                    className="button right-button"
+                                    tabIndex={6}
+                                    onClick={this.showDrafts}
                                 >
-                                    {tt('reply_editor.templete')}
+                                    {tt('reply_editor.draft')}
                                 </button>
                             )}
                             {!isStory &&
@@ -1196,8 +1211,14 @@ export default formId =>
                 dispatch(userActions.uploadImage({ file, progress })),
             showAdvancedSettings: formId =>
                 dispatch(userActions.showPostAdvancedSettings({ formId })),
-            showDrafts: (formId, onDraftsClose) =>
-                dispatch(userActions.showPostDrafts({ formId, onDraftsClose })),
+            showDrafts: (formId, onDraftsClose, clearDraft) =>
+                dispatch(
+                    userActions.showPostDrafts({
+                        formId,
+                        onDraftsClose,
+                        clearDraft,
+                    })
+                ),
             showTempletes: (formId, onTempletesClose) =>
                 dispatch(
                     userActions.showPostTempletes({ formId, onTempletesClose })

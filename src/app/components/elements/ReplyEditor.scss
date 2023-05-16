@@ -125,17 +125,23 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
+
 .item {
-    flex-grow: 1;
-}
-.item:first-child {
     display: flex;
     flex-direction: row;
 }
 
-.item:last-child {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
+@media screen and (max-width: 39.9375em) {
+    .button-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+
+    .item {
+        margin-bottom: 10px;
+    }
 }

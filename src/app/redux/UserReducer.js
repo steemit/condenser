@@ -33,6 +33,8 @@ const SHOW_POST_ADVANCED_SETTINGS = 'user/SHOW_POST_ADVANCED_SETTINGS';
 const HIDE_POST_ADVANCED_SETTINGS = 'user/HIDE_POST_ADVANCED_SETTINGS';
 const SHOW_POST_DRAFTS = 'user/SHOW_POST_DRAFTS';
 const HIDE_POST_DRAFTS = 'user/HIDE_POST_DRAFTS';
+const SHOW_POST_TEMPLETES = 'user/SHOW_POST_TEMPLETES';
+const HIDE_POST_TEMPLETES = 'user/HIDE_POST_TEMPLETES';
 const HIDE_ANNOUNCEMENT = 'user/HIDE_ANNOUNCEMENT';
 const SHOW_ANNOUNCEMENT = 'user/SHOW_ANNOUNCEMENT';
 const SHOW_TRON_CREATE = 'user/SHOW_TRON_CREATE';
@@ -56,6 +58,8 @@ const defaultState = fromJS({
     show_post_advanced_settings_modal: '', // formId
     show_post_drafts_modal: '',
     on_post_drafts_close_modal: () => {},
+    show_post_templetes_modal: '',
+    on_post_templetes_close_modal: () => {},
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
     show_side_panel: false,
@@ -247,6 +251,19 @@ export default function reducer(state = defaultState, action) {
             state = state.set('on_post_drafts_close_modal', () => {});
             return state;
 
+        case SHOW_POST_TEMPLETES:
+            state = state.set('show_post_templetes_modal', payload.formId);
+            state = state.set(
+                'on_post_templetes_close_modal',
+                payload.onTempletesClose
+            );
+            return state;
+
+        case HIDE_POST_TEMPLETES:
+            state = state.set('show_post_templetes_modal', '');
+            state = state.set('on_post_templetes_close_modal', () => {});
+            return state;
+
         case SHOW_ANNOUNCEMENT:
             typeof sessionStorage !== 'undefined' &&
                 sessionStorage.setItem('hideAnnouncement', 'false');
@@ -425,6 +442,13 @@ export const showPostDrafts = payload => ({
 });
 export const hidePostDrafts = () => ({
     type: HIDE_POST_DRAFTS,
+});
+export const showPostTempletes = payload => ({
+    type: SHOW_POST_TEMPLETES,
+    payload,
+});
+export const hidePostTempletes = () => ({
+    type: HIDE_POST_TEMPLETES,
 });
 export const showPostAdvancedSettings = payload => ({
     type: SHOW_POST_ADVANCED_SETTINGS,

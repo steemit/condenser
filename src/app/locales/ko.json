@@ -300,6 +300,7 @@
         "draft": "초안",
         "draft_save": "초안 저장",
         "draft_update": "초안 갱신",
+        "templete": "템플릿",
         "tag": "#tag",
         "tips": "Please enter the title, content and tags."
     },

@@ -13,11 +13,6 @@
         @extend .e-btn;
         margin-bottom: 0em;
     }
-    .right-button {
-        @extend .e-btn;
-        margin-bottom: 0em;
-        float: right;
-    }
 
     .button.hollow.no-border {
         background-color: transparent;
@@ -124,4 +119,23 @@
 
 .Dropdown__root___1B9ta {
     color: black !important;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.item {
+    flex-grow: 1;
+}
+.item:first-child {
+    display: flex;
+    flex-direction: row;
+}
+
+.item:last-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }

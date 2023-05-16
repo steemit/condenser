@@ -19,7 +19,7 @@
         "reportOnly": false,
         "setAllHeaders": true
     },
-    "img_proxy_prefix": "https://steemitimages.com/",
+    "img_proxy_prefix": "https://steemit-dev-imagehoster-001.us-east-1.elasticbeanstalk.com/",
     "ipfs_prefix": false,
     "mixpanel": false,
     "notify": {

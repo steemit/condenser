@@ -591,7 +591,11 @@
         "profile_name": "显示名称",
         "profile_about": "关于",
         "profile_location": "位置",
-        "profile_website": "网站"
+        "profile_website": "网站",
+        "saved": "已保存",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "RPC Node 选择",
+        "selected_rpc": "选择 RPC Node : %(rpc)s"
     },
     "transfer_jsx": {
         "amount_is_in_form": "金额以99999.999的形式出现",

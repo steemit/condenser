@@ -627,7 +627,11 @@
         "profile_name": "Mostra nome",
         "profile_about": "About",
         "profile_location": "Località",
-        "profile_website": "Sito"
+        "profile_website": "Sito",
+        "saved": "salvato!",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "RPC Node Selezionare",
+        "selected_rpc": "Selezionare RPC Node : %(rpc)s"
     },
     "transfer_jsx": {
         "amount_is_in_form": "La quantita deve essere della forma 99999.999",

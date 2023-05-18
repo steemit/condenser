@@ -620,7 +620,11 @@
         "profile_name": "Nombre de visualización",
         "profile_about": "Sobre",
         "profile_location": "Localización",
-        "profile_website": "Página Web"
+        "profile_website": "Página Web",
+        "saved": "salvado!",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "RPC Node seleccionar",
+        "selected_rpc": "seleccionar RPC Node : %(rpc)s"
     },
     "transfer_jsx": {
         "amount_is_in_form": "La cantidad está en el formato 99999.999",

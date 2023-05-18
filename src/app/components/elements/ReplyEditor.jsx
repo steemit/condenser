@@ -749,6 +749,7 @@ class ReplyEditor extends React.Component {
                                         <a
                                             href="#"
                                             onClick={this.showTempletes}
+                                            style={{ color: '#1FBF8F' }}
                                         >
                                             {tt('reply_editor.templete')}
                                         </a>

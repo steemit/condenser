@@ -4,12 +4,12 @@ import tt from 'counterpart';
 import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 
-class PostTempletes extends Component {
+class PostTemplates extends Component {
     constructor(props) {
         super();
 
         this.state = {
-            templeteList: [
+            templateList: [
                 {
                     title: 'Markdown Basic Template 01',
                     image: `![](https://cdn.steemitimages.com/DQmYdjFdAGVTHVF2kq5uh8RFYAPJdtY7vsJzVtn6ksYEtyw/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-18%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.19.17.png)`,
@@ -282,7 +282,7 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
     }
 
     // clickContent() {
-    //     this.props.hidePostTempletes();
+    //     this.props.hidePostTemplates();
     // }
 
     componentDidMount() {
@@ -290,23 +290,23 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
     }
 
     render() {
-        const { username, onTempletesClose, hidePostTempletes } = this.props;
-        const { templeteList } = this.state;
+        const { username, onTemplatesClose, hidePostTemplates } = this.props;
+        const { templateList } = this.state;
         const thumb = '';
         const onClickContent = idx => {
             console.log(idx);
             // this.clickContent();
-            onTempletesClose(templeteList[idx].content);
-            hidePostTempletes();
+            onTemplatesClose(templateList[idx].content);
+            hidePostTemplates();
         };
 
-        const templetes = templeteList.map((templete, idx) => (
-            <div key={idx} className="templetes-option">
+        const templates = templateList.map((template, idx) => (
+            <div key={idx} className="templates-option">
                 <div className="articles__summary">
                     <div className="articles__summary-header">
                         <span>
                             <strong>
-                                {idx + 1}. {templete.title}
+                                {idx + 1}. {template.title}
                             </strong>
                         </span>
                     </div>
@@ -323,7 +323,7 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
                             onClick={() => onClickContent(idx)}
                         >
                             <MarkdownViewer
-                                text={`<center>${templete.image}</center>`}
+                                text={`<center>${template.image}</center>`}
                             />
                         </div>
                     </div>
@@ -334,10 +334,10 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
         return (
             <div>
                 <div className="row">
-                    <h3 className="column">{tt('reply_editor.templete')}</h3>
+                    <h3 className="column">{tt('reply_editor.template')}</h3>
                 </div>
                 <hr />
-                <div className="templetes-list">{templetes}</div>
+                <div className="templates-list">{templates}</div>
             </div>
         );
     }
@@ -352,10 +352,10 @@ export default connect(
             fields: [],
             username,
             initialValues: {},
-            onTempletesClose: ownProps.onTempletesClose,
+            onTemplatesClose: ownProps.onTemplatesClose,
         };
     },
     dispatch => ({
-        hidePostTempletes: () => dispatch(userActions.hidePostTempletes()),
+        hidePostTemplates: () => dispatch(userActions.hidePostTemplates()),
     })
-)(PostTempletes);
+)(PostTemplates);

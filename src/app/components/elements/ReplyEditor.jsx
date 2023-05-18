@@ -383,7 +383,7 @@ class ReplyEditor extends React.Component {
         this.saveDraft();
     };
 
-    onTempletesClose = templete => {
+    onTemplatesClose = template => {
         const { body } = this.state;
         let raw = '';
 
@@ -391,18 +391,18 @@ class ReplyEditor extends React.Component {
             raw = body.value;
         }
 
-        raw += `\n` + templete;
+        raw += `\n` + template;
 
         // If we have an initial body, check if it's html or markdown
 
         // console.log("initial reply body:", raw || '(empty)')
         body.props.onChange(raw);
-        console.log(templete);
+        console.log(template);
     };
 
-    showTempletes = e => {
+    showTemplates = e => {
         e.preventDefault();
-        this.props.showTempletes(this.props.formId, this.onTempletesClose);
+        this.props.showTemplates(this.props.formId, this.onTemplatesClose);
     };
     saveDraft = () => {
         const draftList = JSON.parse(localStorage.getItem('draft-list')) || [];
@@ -748,10 +748,10 @@ class ReplyEditor extends React.Component {
                                     >
                                         <a
                                             href="#"
-                                            onClick={this.showTempletes}
+                                            onClick={this.showTemplates}
                                             style={{ color: '#1FBF8F' }}
                                         >
-                                            {tt('reply_editor.templete')}
+                                            {tt('reply_editor.template')}
                                         </a>
                                         {rte && (
                                             <a
@@ -1229,9 +1229,9 @@ export default formId =>
                         clearDraft,
                     })
                 ),
-            showTempletes: (formId, onTempletesClose) =>
+            showTemplates: (formId, onTemplatesClose) =>
                 dispatch(
-                    userActions.showPostTempletes({ formId, onTempletesClose })
+                    userActions.showPostTemplates({ formId, onTemplatesClose })
                 ),
             setPayoutType: (formId, payoutType) =>
                 dispatch(

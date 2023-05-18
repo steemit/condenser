@@ -302,7 +302,7 @@
         "draft_update": "초안 갱신",
         "draft_save_message":
             "초안이 저장되었습니다. 저장된 초안을 확인하려면 초안 버튼을 클릭하시면 됩니다.",
-        "templete": "템플릿",
+        "template": "템플릿",
         "tag": "#tag",
         "tips": "Please enter the title, content and tags."
     },

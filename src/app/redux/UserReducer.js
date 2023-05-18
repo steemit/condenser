@@ -59,8 +59,8 @@ const defaultState = fromJS({
     show_post_drafts_modal: '',
     on_post_drafts_close_modal: () => {},
     clear_draft_modal: () => {},
-    show_post_templetes_modal: '',
-    on_post_templetes_close_modal: () => {},
+    show_post_templates_modal: '',
+    on_post_templates_close_modal: () => {},
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
     show_side_panel: false,
@@ -255,16 +255,16 @@ export default function reducer(state = defaultState, action) {
             return state;
 
         case SHOW_POST_TEMPLETES:
-            state = state.set('show_post_templetes_modal', payload.formId);
+            state = state.set('show_post_templates_modal', payload.formId);
             state = state.set(
-                'on_post_templetes_close_modal',
-                payload.onTempletesClose
+                'on_post_templates_close_modal',
+                payload.onTemplatesClose
             );
             return state;
 
         case HIDE_POST_TEMPLETES:
-            state = state.set('show_post_templetes_modal', '');
-            state = state.set('on_post_templetes_close_modal', () => {});
+            state = state.set('show_post_templates_modal', '');
+            state = state.set('on_post_templates_close_modal', () => {});
             return state;
 
         case SHOW_ANNOUNCEMENT:
@@ -446,11 +446,11 @@ export const showPostDrafts = payload => ({
 export const hidePostDrafts = () => ({
     type: HIDE_POST_DRAFTS,
 });
-export const showPostTempletes = payload => ({
+export const showPostTemplates = payload => ({
     type: SHOW_POST_TEMPLETES,
     payload,
 });
-export const hidePostTempletes = () => ({
+export const hidePostTemplates = () => ({
     type: HIDE_POST_TEMPLETES,
 });
 export const showPostAdvancedSettings = payload => ({

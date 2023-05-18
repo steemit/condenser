@@ -32,7 +32,7 @@ const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 const RTE_DEFAULT = false;
 const MAX_TAGS = 8;
 const MAX_FILE_TO_UPLOAD = 10;
-let imagesToUpload = [];
+const imagesToUpload = [];
 
 function allTags(userInput, originalCategory, hashtags) {
     // take space-delimited user input
@@ -739,9 +739,19 @@ class ReplyEditor extends React.Component {
                                         {...title.props}
                                     />
                                     <div
-                                        className="float-right secondary"
-                                        style={{ marginRight: '1rem' }}
+                                        className=" secondary"
+                                        style={{
+                                            marginRight: '1rem',
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                        }}
                                     >
+                                        <a
+                                            href="#"
+                                            onClick={this.showTempletes}
+                                        >
+                                            {tt('reply_editor.templete')}
+                                        </a>
                                         {rte && (
                                             <a
                                                 href="#"
@@ -994,16 +1004,6 @@ class ReplyEditor extends React.Component {
                                     {!loading && (
                                         <button
                                             className="button"
-                                            tabIndex={6}
-                                            onClick={this.showDrafts}
-                                        >
-                                            {tt('reply_editor.draft')}
-                                        </button>
-                                    )}
-
-                                    {!loading && (
-                                        <button
-                                            className="button"
                                             tabIndex={7}
                                             disabled={disabled}
                                             onClick={this.onClickSaveDraft}
@@ -1018,10 +1018,10 @@ class ReplyEditor extends React.Component {
                                     {!loading && (
                                         <button
                                             className="button"
-                                            tabIndex={8}
-                                            onClick={this.showTempletes}
+                                            tabIndex={6}
+                                            onClick={this.showDrafts}
                                         >
-                                            {tt('reply_editor.templete')}
+                                            {tt('reply_editor.draft')}
                                         </button>
                                     )}
                                 </div>

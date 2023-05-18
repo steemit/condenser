@@ -650,7 +650,11 @@
         "profile_name": "Nom à afficher",
         "profile_about": "A propos",
         "profile_location": "Lieu",
-        "profile_website": "Site internet"
+        "profile_website": "Site internet",
+        "saved": "enregistré!",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "RPC Node sélectionner",
+        "selected_rpc": "sélectionner RPC Node : %(rpc)s"
     },
     "transfer_jsx": {
         "amount_is_in_form": "Montant dans le format 99999.999",

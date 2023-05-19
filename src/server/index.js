@@ -20,6 +20,7 @@ global.$STM_Config = {
     fb_app: config.get('facebook_app_id'),
     steemd_connection_client: config.get('steemd_connection_client'),
     steemd_connection_server: config.get('steemd_connection_server'),
+    steemd_rpc_list: config.get('rpc_list'),
     steemd_use_appbase: config.get('steemd_use_appbase'),
     chain_id: config.get('chain_id'),
     address_prefix: config.get('address_prefix'),

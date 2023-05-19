@@ -735,7 +735,10 @@
         "profile_about": "About",
         "profile_location": "Location",
         "profile_website": "Website",
-        "saved": "Saved!"
+        "saved": "Saved!",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "Select RPC Node",
+        "selected_rpc": "Selected RPC Node : %(rpc)s"
     },
     "transfer_jsx": {
         "amount_is_in_form": "Amount is in the form 99999.999",

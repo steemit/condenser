@@ -1,30 +1,31 @@
 .ReplyEditor {
-  max-width: 54rem;
-  .vframe {
-    display: block;
-    padding-bottom: 2em;
-    .public-DraftEditor-content {
-      height: 20em;
-      resize: vertical;
-      color: #333;
+    max-width: 54rem;
+    .vframe {
+        display: block;
+        padding-bottom: 2em;
+        .public-DraftEditor-content {
+            height: 20em;
+            resize: vertical;
+            color: #333;
+        }
     }
-  }
-  .button {
-    @extend .e-btn;
-    margin-bottom: 0em;
-  }
-  .button.hollow.no-border {
-    background-color: transparent;
-    box-shadow: 0 0 0 rgba(0,0,0,0.0);
-    text-decoration: none;
-    @extend .link;
-    @extend .link--secondary;
-    font-weight: normal;
-    @include font-size(14px);
-    outline: none;
-    text-shadow: 0 0 0 rgba(0,0,0,0.0);
-    border: transparent;
-  }
+    .button {
+        @extend .e-btn;
+        margin-bottom: 0em;
+    }
+
+    .button.hollow.no-border {
+        background-color: transparent;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        text-decoration: none;
+        @extend .link;
+        @extend .link--secondary;
+        font-weight: normal;
+        @include font-size(14px);
+        outline: none;
+        text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        border: transparent;
+    }
 }
 
 .upload-enabled {
@@ -47,75 +48,99 @@
 }
 
 .PostFull .ReplyEditor__body {
-  margin: 1rem 0 0;
+    margin: 1rem 0 0;
 }
 
 .ReplyEditor form {
-  max-width: 52rem;
+    max-width: 52rem;
 }
 
 .ReplyEditor__title {
-  font-size: 1rem;
-  font-weight: bold;
-  padding: 0.5rem;
-  height: auto;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem;
+    height: auto;
 }
 
 .ReplyEditor__draft {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background: rgba(255,255,255,0.9);
-  border-radius: 5px;
-  color: #BBB;
-  font-size: 1.2em;
-  text-align: center;
-  z-index: 1;
-  padding: 0.5rem 1rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
+    color: #bbb;
+    font-size: 1.2em;
+    text-align: center;
+    z-index: 1;
+    padding: 0.5rem 1rem;
 }
 .ReplyEditor__draft-hide {
-  opacity: 0;
+    opacity: 0;
 }
 .ReplyEditor__draft-saved {
-  -webkit-transition: opacity 3s ease-in-out;
-  -moz-transition: opacity 3s ease-in-out;
-  -ms-transition: opacity 3s ease-in-out;
-  -o-transition: opacity 3s ease-in-out;
-  transition: opacity 3s ease-in-out;
-  opacity: 0;
+    -webkit-transition: opacity 3s ease-in-out;
+    -moz-transition: opacity 3s ease-in-out;
+    -ms-transition: opacity 3s ease-in-out;
+    -o-transition: opacity 3s ease-in-out;
+    transition: opacity 3s ease-in-out;
+    opacity: 0;
 }
 
 .ReplyEditor .Preview {
-  max-width: 42.125rem;
-  margin-left: auto;
-  margin-right: auto;
+    max-width: 42.125rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .ReplyEditor .Preview .Markdown {
-  border: 1px solid $light-gray;
-  padding: 0.5rem 1rem;
+    border: 1px solid $light-gray;
+    padding: 0.5rem 1rem;
 }
 
 .ReplyEditor__body {
-  margin-top: 1rem;
-  clear: both;
+    clear: both;
 }
 
 .ReplyEditor__options {
-  font-size: 85%;
-  select {
-    font-size: 100%;
-    width: 10rem;
-    height: auto;
-    padding: 0.25rem 0.5rem;
-    margin-left: 0.25rem;
-  }
-  label {
-    font-size: 100%;
-    text-transform: none;
-  }
+    font-size: 85%;
+    select {
+        font-size: 100%;
+        width: 10rem;
+        height: auto;
+        padding: 0.25rem 0.5rem;
+        margin-left: 0.25rem;
+    }
+    label {
+        font-size: 100%;
+        text-transform: none;
+    }
 }
 
 .Dropdown__root___1B9ta {
-  color: black!important;
+    color: black !important;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.item {
+    display: flex;
+    flex-direction: row;
+}
+
+@media screen and (max-width: 39.9375em) {
+    .button-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+
+    .item {
+        margin-bottom: 10px;
+    }
 }

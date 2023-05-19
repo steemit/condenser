@@ -32,7 +32,7 @@ const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 const RTE_DEFAULT = false;
 const MAX_TAGS = 8;
 const MAX_FILE_TO_UPLOAD = 10;
-let imagesToUpload = [];
+const imagesToUpload = [];
 
 function allTags(userInput, originalCategory, hashtags) {
     // take space-delimited user input
@@ -88,7 +88,7 @@ class ReplyEditor extends React.Component {
 
     constructor(props) {
         super();
-        this.state = { progress: {}, imagesUploadCount: 0 };
+        this.state = { progress: {}, imagesUploadCount: 0, draft_permlink: '' };
         this.initForm(props);
     }
 
@@ -181,7 +181,18 @@ class ReplyEditor extends React.Component {
             else if (this.props.isStory) this.refs.titleRef.focus();
             else if (this.refs.postRef) this.refs.postRef.focus();
         }, 300);
+        window.addEventListener('beforeunload', this.handleBeforeUnload);
     }
+
+    componentWillUnmount() {
+        window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    }
+
+    handleBeforeUnload = () => {
+        if (this.state.draft_permlink) {
+            this.saveDraft();
+        }
+    };
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor');
 
@@ -296,6 +307,14 @@ class ReplyEditor extends React.Component {
             this.props.setBeneficiaries(formId, []);
             if (onCancel) onCancel(e);
         }
+
+        this.setState({ draft_permlink: '' });
+    };
+
+    clearDraft = deletedDraftPermlink => {
+        const { draft_permlink } = this.state;
+        if (draft_permlink === deletedDraftPermlink)
+            this.setState({ draft_permlink: '' });
     };
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
@@ -326,6 +345,106 @@ class ReplyEditor extends React.Component {
             draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved';
         }
     }
+
+    onDraftsClose = draft => {
+        const { username, body, tags, title } = this.state;
+        let raw;
+
+        if (body.value) {
+            raw = body.value;
+        }
+
+        if (tags) {
+            this.checkTagsCommunity(draft.tags);
+            tags.props.onChange(draft.tags);
+        }
+
+        if (title) title.props.onChange(draft.title);
+        raw = draft.body;
+
+        // If we have an initial body, check if it's html or markdown
+
+        // console.log("initial reply body:", raw || '(empty)')
+        body.props.onChange(raw);
+        this.setState({ draft_permlink: `${username}^${draft.permlink}` });
+    };
+
+    showDrafts = e => {
+        e.preventDefault();
+        this.props.showDrafts(
+            this.props.formId,
+            this.onDraftsClose,
+            this.clearDraft
+        );
+    };
+
+    onClickSaveDraft = e => {
+        e.preventDefault();
+        this.saveDraft();
+    };
+
+    onTemplatesClose = template => {
+        const { body } = this.state;
+        let raw = '';
+
+        if (body.value) {
+            raw = body.value;
+        }
+
+        raw += `\n` + template;
+
+        // If we have an initial body, check if it's html or markdown
+
+        // console.log("initial reply body:", raw || '(empty)')
+        body.props.onChange(raw);
+        console.log(template);
+    };
+
+    showTemplates = e => {
+        e.preventDefault();
+        this.props.showTemplates(this.props.formId, this.onTemplatesClose);
+    };
+    saveDraft = () => {
+        const draftList = JSON.parse(localStorage.getItem('draft-list')) || [];
+
+        const editedDraft = {
+            author: this.props.username,
+            title: this.state.title.value,
+            body: this.state.body.value,
+            tags: this.state.tags.value,
+            permlink: this.state.draft_permlink
+                ? this.state.draft_permlink.split('^')[1]
+                : `${this.props.username}-${
+                      new Date()
+                          .toISOString()
+                          .replace(':', '-')
+                          .split('.')[0]
+                  }`,
+            timestamp: new Date().toISOString(),
+        };
+
+        if (this.state.draft_permlink) {
+            const draftIdx = draftList.findIndex(
+                data =>
+                    data.author === editedDraft.author &&
+                    data.permlink === editedDraft.permlink
+            );
+
+            if (draftIdx > -1) {
+                draftList[draftIdx] = editedDraft;
+            }
+        } else {
+            draftList.push(editedDraft);
+            this.setState({
+                draft_permlink: `${this.props.username}^${
+                    editedDraft.permlink
+                }`,
+            });
+        }
+
+        localStorage.setItem('draft-list', JSON.stringify(draftList));
+        alert(`${tt('reply_editor.draft_save_message')}`);
+    };
 
     showAdvancedSettings = e => {
         e.preventDefault();
@@ -620,9 +739,20 @@ class ReplyEditor extends React.Component {
                                         {...title.props}
                                     />
                                     <div
-                                        className="float-right secondary"
-                                        style={{ marginRight: '1rem' }}
+                                        className=" secondary"
+                                        style={{
+                                            marginRight: '1rem',
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                        }}
                                     >
+                                        <a
+                                            href="#"
+                                            onClick={this.showTemplates}
+                                            style={{ color: '#1FBF8F' }}
+                                        >
+                                            {tt('reply_editor.template')}
+                                        </a>
                                         {rte && (
                                             <a
                                                 href="#"
@@ -715,7 +845,8 @@ class ReplyEditor extends React.Component {
                                         {tt('reply_editor.or_by')}{' '}
                                         <a onClick={this.onOpenClick}>
                                             {tt('reply_editor.selecting_them')}
-                                        </a>.
+                                        </a>
+                                        .
                                     </p>
                                     {progress.message && (
                                         <div className="info">
@@ -755,7 +886,8 @@ class ReplyEditor extends React.Component {
                                     />
                                     <div className="error">
                                         {(tags.touched || tags.value) &&
-                                            tags.error}&nbsp;
+                                            tags.error}
+                                        &nbsp;
                                     </div>
                                 </span>
                             )}
@@ -825,47 +957,76 @@ class ReplyEditor extends React.Component {
                             )}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {!loading && (
-                                <button
-                                    type="submit"
-                                    className="button"
-                                    disabled={disabled}
-                                    tabIndex={4}
-                                >
-                                    {isEdit
-                                        ? tt('reply_editor.update_post')
-                                        : postLabel}
-                                </button>
-                            )}
-                            {loading && (
-                                <span>
-                                    <br />
-                                    <LoadingIndicator type="circle" />
-                                </span>
-                            )}
-                            &nbsp;{' '}
-                            {!loading &&
-                                this.props.onCancel && (
-                                    <button
-                                        type="button"
-                                        className="secondary hollow button no-border"
-                                        tabIndex={5}
-                                        onClick={onCancel}
-                                    >
-                                        {tt('g.cancel')}
-                                    </button>
-                                )}
-                            {!loading &&
-                                !this.props.onCancel && (
-                                    <button
-                                        className="button hollow no-border"
-                                        tabIndex={5}
-                                        disabled={submitting}
-                                        onClick={onCancel}
-                                    >
-                                        {tt('g.clear')}
-                                    </button>
-                                )}
+                            <div className="button-container">
+                                <div className="item ">
+                                    {!loading && (
+                                        <button
+                                            type="submit"
+                                            className="button"
+                                            disabled={disabled}
+                                            tabIndex={4}
+                                        >
+                                            {isEdit
+                                                ? tt('reply_editor.update_post')
+                                                : postLabel}
+                                        </button>
+                                    )}
+                                    {loading && (
+                                        <span>
+                                            <br />
+                                            <LoadingIndicator type="circle" />
+                                        </span>
+                                    )}
+                                    &nbsp;{' '}
+                                    {!loading &&
+                                        this.props.onCancel && (
+                                            <button
+                                                type="button"
+                                                className="secondary hollow button no-border"
+                                                tabIndex={5}
+                                                onClick={onCancel}
+                                            >
+                                                {tt('g.cancel')}
+                                            </button>
+                                        )}
+                                    {!loading &&
+                                        !this.props.onCancel && (
+                                            <button
+                                                className="button hollow no-border"
+                                                tabIndex={5}
+                                                disabled={submitting}
+                                                onClick={onCancel}
+                                            >
+                                                {tt('g.clear')}
+                                            </button>
+                                        )}
+                                </div>
+                                <div className="item">
+                                    {!loading && (
+                                        <button
+                                            className="button"
+                                            tabIndex={7}
+                                            disabled={disabled}
+                                            onClick={this.onClickSaveDraft}
+                                        >
+                                            {this.state.draft_permlink
+                                                ? tt(
+                                                      'reply_editor.draft_update'
+                                                  )
+                                                : tt('reply_editor.draft_save')}
+                                        </button>
+                                    )}
+                                    {!loading && (
+                                        <button
+                                            className="button"
+                                            tabIndex={6}
+                                            onClick={this.showDrafts}
+                                        >
+                                            {tt('reply_editor.draft')}
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
                             {!isStory &&
                                 !isEdit &&
                                 this.props.payoutType != '50%' && (
@@ -1060,6 +1221,18 @@ export default formId =>
                 dispatch(userActions.uploadImage({ file, progress })),
             showAdvancedSettings: formId =>
                 dispatch(userActions.showPostAdvancedSettings({ formId })),
+            showDrafts: (formId, onDraftsClose, clearDraft) =>
+                dispatch(
+                    userActions.showPostDrafts({
+                        formId,
+                        onDraftsClose,
+                        clearDraft,
+                    })
+                ),
+            showTemplates: (formId, onTemplatesClose) =>
+                dispatch(
+                    userActions.showPostTemplates({ formId, onTemplatesClose })
+                ),
             setPayoutType: (formId, payoutType) =>
                 dispatch(
                     userActions.set({

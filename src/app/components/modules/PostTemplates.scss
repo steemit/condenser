@@ -1,0 +1,227 @@
+.templates-list {
+    height: 60vh;
+    overflow-y: auto;
+}
+
+.templates-option {
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+}
+
+ul.Templates__summaries {
+    margin-left: 0;
+}
+
+ul.Templates__summaries > li {
+    padding: 0.1em 0.5em 0 0.5em;
+    margin-bottom: 0.8em;
+
+    @include themify($themes) {
+        border-radius: themed('roundedCorners');
+        border: themed('border');
+        background-color: themed('moduleBackgroundColor');
+    }
+
+    &:hover {
+        @include MQ(L) {
+            @include themify($themes) {
+                box-shadow: 2px 2px 3px 0 themed('contentBorderAccent');
+            }
+        }
+    }
+}
+
+.articles__summary {
+    position: relative;
+
+    .articles__content {
+        display: flex;
+        padding: 5px;
+    }
+}
+
+ul.PostsList__summaries {
+    margin-left: 0;
+}
+
+ul.PostsList__summaries > li {
+    padding: 0.1em 0.5em 0 0.5em;
+    margin-bottom: 0.8em;
+
+    @include themify($themes) {
+        border-radius: themed('roundedCorners');
+        border: themed('border');
+        background-color: themed('moduleBackgroundColor');
+    }
+
+    &:hover {
+        @include MQ(L) {
+            @include themify($themes) {
+                box-shadow: 2px 2px 3px 0 themed('contentBorderAccent');
+            }
+        }
+    }
+}
+
+.TemplateSummary {
+    // padding: 0 0 0.5rem;
+    margin: 0 0 1.25vw;
+    clear: left;
+    @include clearfix;
+
+    .TemplateSummary__nsfw-warning {
+        border: 1px solid $color-border-light;
+        padding: 0.75rem 2rem;
+        min-height: 80px;
+        .TemplateSummary__footer {
+            margin-top: 0.2rem;
+            .Reblog__button {
+                display: none;
+            }
+            .Voting__button {
+                display: none;
+            }
+        }
+        .TemplateSummary__time_author_category_small {
+            margin-bottom: 0.2rem;
+        }
+    }
+}
+
+.TemplateSummary__image {
+    cursor: pointer;
+    float: left;
+    width: 130px;
+    height: 4.5rem;
+    background-color: #eee;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: 50% 20%;
+    border: 1px solid #eee;
+}
+
+.TemplateSummary__image-mobile {
+    display: block;
+    background: #f8f8f8;
+
+    img {
+        margin: 0 auto;
+        display: block;
+        max-width: 100%;
+        max-height: 80vw;
+        background: white;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.TemplateSummary.with-image .TemplateSummary__content {
+    margin-left: 8.25rem;
+}
+
+.TemplateSummary__header {
+    > h3 {
+        font: 600 100% 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans',
+            Geneva, Arial, sans-serif;
+        margin: 0;
+        overflow: hidden;
+        > a {
+            color: #333;
+        }
+        > a:visited {
+            color: #777;
+        }
+        .Icon {
+            margin: 0 0.25rem;
+            svg {
+                width: 0.85rem;
+                height: 0.85rem;
+                vertical-align: 5%;
+            }
+        }
+    }
+    .nsfw-flag {
+        margin-right: 0.25rem;
+    }
+}
+
+.TemplateSummary__body {
+    width: auto;
+    padding: 0 0 0.15rem;
+    font-size: 0.9rem;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial,
+        sans-serif;
+    @include themify($themes) {
+        color: themed('textColorPrimary');
+    }
+    overflow: hidden;
+    line-height: 1.4;
+    text-overflow: ellipsis;
+
+    a {
+        display: inline;
+        @include themify($themes) {
+            color: themed('textColorPrimary');
+        }
+    }
+}
+
+.layout-list .TemplateSummary__body {
+    @include MQ(M) {
+        white-space: nowrap;
+    }
+}
+
+.TemplateSummary__footer {
+    color: $dark-gray;
+    font-weight: 400;
+    path {
+        fill: $dark-gray;
+    }
+    a {
+        color: $dark-gray;
+    }
+    .Icon {
+        position: relative;
+        top: -1px;
+    }
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+    .TemplateSummary {
+        // padding: 1rem 0.5rem;
+        margin-bottom: 0;
+        border: none;
+        // border-top: 1px solid $light-gray;
+    }
+    .TemplateSummary__image {
+        float: none;
+        margin-top: 0.5rem;
+        // background-size: contain;
+        display: block;
+        width: 100%;
+        height: 40vw;
+    }
+    .TemplateSummary__body {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        hyphens: auto;
+        white-space: normal;
+        text-overflow: initial;
+        padding-bottom: 0.3rem;
+        a {
+            display: block;
+        }
+    }
+    .TemplateSummary.with-image .TemplateSummary__content {
+        margin-left: 0;
+    }
+}
+
+.userlist-footer {
+    font-size: 14px;
+    .userlist-footer-followers {
+        margin-right: 2rem;
+    }
+}

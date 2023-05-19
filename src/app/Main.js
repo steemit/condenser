@@ -90,8 +90,18 @@ function runApp(initial_state) {
     }
 
     const config = initial_state.offchain.config;
+
+    const steemSelectedRpc = localStorage.getItem('steemSelectedRpc');
+
+    if (!steemSelectedRpc) {
+        localStorage.setItem(
+            'steemSelectedRpc',
+            config.steemd_connection_client
+        );
+    }
+
     steem.api.setOptions({
-        url: config.steemd_connection_client,
+        url: steemSelectedRpc || config.steemd_connection_client,
         retry: true,
         useAppbaseApi: !!config.steemd_use_appbase,
     });

@@ -1001,31 +1001,35 @@ class ReplyEditor extends React.Component {
                                             </button>
                                         )}
                                 </div>
-                                <div className="item">
-                                    {!loading && (
-                                        <button
-                                            className="button"
-                                            tabIndex={7}
-                                            disabled={disabled}
-                                            onClick={this.onClickSaveDraft}
-                                        >
-                                            {this.state.draft_permlink
-                                                ? tt(
-                                                      'reply_editor.draft_update'
-                                                  )
-                                                : tt('reply_editor.draft_save')}
-                                        </button>
-                                    )}
-                                    {!loading && (
-                                        <button
-                                            className="button"
-                                            tabIndex={6}
-                                            onClick={this.showDrafts}
-                                        >
-                                            {tt('reply_editor.draft')}
-                                        </button>
-                                    )}
-                                </div>
+                                {isStory && (
+                                    <div className="item">
+                                        {!loading && (
+                                            <button
+                                                className="button"
+                                                tabIndex={7}
+                                                disabled={disabled}
+                                                onClick={this.onClickSaveDraft}
+                                            >
+                                                {this.state.draft_permlink
+                                                    ? tt(
+                                                          'reply_editor.draft_update'
+                                                      )
+                                                    : tt(
+                                                          'reply_editor.draft_save'
+                                                      )}
+                                            </button>
+                                        )}
+                                        {!loading && (
+                                            <button
+                                                className="button"
+                                                tabIndex={6}
+                                                onClick={this.showDrafts}
+                                            >
+                                                {tt('reply_editor.draft')}
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                             {!isStory &&
                                 !isEdit &&

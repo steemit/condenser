@@ -12,18 +12,18 @@ import MuteList from 'app/components/elements/MuteList';
 import { isLoggedIn } from 'app/utils/UserUtil';
 import { userActionRecord } from 'app/utils/ServerApiClient';
 import * as steem from '@steemit/steem-js';
+import { getCurrentRPCNode, changeRPCNodeToDefault } from 'app/utils/RPCNode';
 
 class Settings extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             errorMessage: '',
             successMessage: '',
             progress: {},
             rpcNode:
-                (this.props.user_preferences &&
-                    this.props.user_preferences.selectedRpc) ||
-                $STM_Config.steemd_connection_client,
+                getCurrentRPCNode() || $STM_Config.steemd_connection_client,
             rpcError: '',
         };
         this.initForm(props);
@@ -263,18 +263,7 @@ class Settings extends React.Component {
             });
         }
 
-        this.props.setUserPreferences({
-            ...this.props.user_preferences,
-            selectedRpc: selectedUrl,
-        });
-
-        // Store RPC Node in localStorage
-        localStorage.setItem('steemSelectedRpc', selectedUrl);
-
-        // Set at the same time as selection
-        steem.api.setOptions({
-            url: selectedUrl,
-        });
+        changeRPCNodeToDefault(selectedUrl);
     };
 
     handleLanguageChange = event => {

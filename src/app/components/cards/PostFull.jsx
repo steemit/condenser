@@ -383,7 +383,8 @@ class PostFull extends React.Component {
                     <div>
                         {tt(
                             'postfull_jsx.you_are_viewing_a_single_comments_thread_from'
-                        )}:
+                        )}
+                        :
                     </div>
                     <h4>{post.get('title')}</h4>
                     <ul>

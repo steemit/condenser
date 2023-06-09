@@ -217,7 +217,7 @@ class ReplyEditorNew extends React.Component {
                         'replyEditorData-' + formId,
                         JSON.stringify(data, null, 0)
                     );
-                    this.showDraftSaved();
+                    this.draftListaved();
                 }, 500);
             }
 
@@ -309,7 +309,7 @@ class ReplyEditorNew extends React.Component {
         body.props.onChange(rte_value);
     };
 
-    showDraftSaved() {
+    draftListaved() {
         const { draft } = this.refs;
         if (draft) {
             draft.className = 'ReplyEditor__draft';
@@ -679,7 +679,8 @@ class ReplyEditorNew extends React.Component {
                                     />
                                     <div className="error">
                                         {(tags.touched || tags.value) &&
-                                            tags.error}&nbsp;
+                                            tags.error}
+                                        &nbsp;
                                     </div>
                                 </span>
                             )}

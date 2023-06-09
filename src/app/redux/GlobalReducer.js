@@ -135,9 +135,7 @@ export default function reducer(state = defaultState, action = {}) {
         case RECEIVE_COMMUNITIES: {
             const map = Map(payload.map(c => [c.name, fromJS(c)]));
             const idx = List(payload.map(c => c.name));
-            if (map.length <= 0) {
-                debugger;
-            }
+
             return state
                 .setIn(['community'], map)
                 .setIn(['community_idx'], idx);

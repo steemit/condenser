@@ -31,6 +31,10 @@ const SHOW_SIDE_PANEL = 'user/SHOW_SIDE_PANEL';
 const HIDE_SIDE_PANEL = 'user/HIDE_SIDE_PANEL';
 const SHOW_POST_ADVANCED_SETTINGS = 'user/SHOW_POST_ADVANCED_SETTINGS';
 const HIDE_POST_ADVANCED_SETTINGS = 'user/HIDE_POST_ADVANCED_SETTINGS';
+const SHOW_POST_DRAFTS = 'user/SHOW_POST_DRAFTS';
+const HIDE_POST_DRAFTS = 'user/HIDE_POST_DRAFTS';
+const SHOW_POST_TEMPLETES = 'user/SHOW_POST_TEMPLETES';
+const HIDE_POST_TEMPLETES = 'user/HIDE_POST_TEMPLETES';
 const HIDE_ANNOUNCEMENT = 'user/HIDE_ANNOUNCEMENT';
 const SHOW_ANNOUNCEMENT = 'user/SHOW_ANNOUNCEMENT';
 const SHOW_TRON_CREATE = 'user/SHOW_TRON_CREATE';
@@ -52,6 +56,11 @@ const defaultState = fromJS({
     show_login_modal: false,
     show_promote_post_modal: false,
     show_post_advanced_settings_modal: '', // formId
+    show_post_drafts_modal: '',
+    on_post_drafts_close_modal: () => {},
+    clear_draft_modal: () => {},
+    show_post_templates_modal: '',
+    on_post_templates_close_modal: () => {},
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
     show_side_panel: false,
@@ -230,6 +239,34 @@ export default function reducer(state = defaultState, action) {
         case HIDE_POST_ADVANCED_SETTINGS:
             return state.set('show_post_advanced_settings_modal', '');
 
+        case SHOW_POST_DRAFTS:
+            state = state.set('show_post_drafts_modal', payload.formId);
+            state = state.set(
+                'on_post_drafts_close_modal',
+                payload.onDraftsClose
+            );
+            state = state.set('clear_draft_modal', payload.clearDraft);
+            return state;
+
+        case HIDE_POST_DRAFTS:
+            state = state.set('show_post_drafts_modal', '');
+            state = state.set('on_post_drafts_close_modal', () => {});
+            state = state.set('clear_draft_modal', () => {});
+            return state;
+
+        case SHOW_POST_TEMPLETES:
+            state = state.set('show_post_templates_modal', payload.formId);
+            state = state.set(
+                'on_post_templates_close_modal',
+                payload.onTemplatesClose
+            );
+            return state;
+
+        case HIDE_POST_TEMPLETES:
+            state = state.set('show_post_templates_modal', '');
+            state = state.set('on_post_templates_close_modal', () => {});
+            return state;
+
         case SHOW_ANNOUNCEMENT:
             typeof sessionStorage !== 'undefined' &&
                 sessionStorage.setItem('hideAnnouncement', 'false');
@@ -402,7 +439,20 @@ export const hideSidePanel = () => {
         type: HIDE_SIDE_PANEL,
     };
 };
-
+export const showPostDrafts = payload => ({
+    type: SHOW_POST_DRAFTS,
+    payload,
+});
+export const hidePostDrafts = () => ({
+    type: HIDE_POST_DRAFTS,
+});
+export const showPostTemplates = payload => ({
+    type: SHOW_POST_TEMPLETES,
+    payload,
+});
+export const hidePostTemplates = () => ({
+    type: HIDE_POST_TEMPLETES,
+});
 export const showPostAdvancedSettings = payload => ({
     type: SHOW_POST_ADVANCED_SETTINGS,
     payload,

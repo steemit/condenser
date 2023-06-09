@@ -309,7 +309,15 @@
         "update_post": "Mettre l'article à jour",
         "markdown_not_supported": "Le format Markdown n'est pas supporté ici",
         "advanced_settings": "Advanced settings",
-        "beneficiaries_set": "%(count)s set"
+        "beneficiaries_set": "%(count)s set",
+        "draft": "Load Draft",
+        "draft_save": "Save Draft",
+        "draft_update": "Update Draft",
+        "draft_save_message":
+            "Draft saved successfully. To view your saved drafts, simply click the Drafts button.",
+        "template": "Template",
+        "tag": "#tag",
+        "tips": "Please enter the title, content and tags."
     },
     "beneficiary_selector_jsx": {
         "header": "Who should receive any rewards?",

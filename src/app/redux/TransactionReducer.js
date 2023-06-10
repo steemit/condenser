@@ -100,7 +100,10 @@ export default function reducer(state = defaultState, action) {
                 msg = 'You already voted on this post.';
             } else if (/transaction tapos exception/.test(key)) {
                 // TODO: document full error string, simplify `msg`
-                msg = 'Unable to complete transaction.  Try again later. (Cause: ' + key + ')';
+                msg =
+                    'Unable to complete transaction.  Try again later. (Cause: ' +
+                    key +
+                    ')';
             } else {
                 msg = 'Transaction broadcast error: ' + last_part(key, ':');
                 console.error('unhandled error:', key, 'msg:', error.message);

@@ -188,12 +188,6 @@ class ReplyEditor extends React.Component {
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
     }
 
-    handleBeforeUnload = () => {
-        if (this.state.draft_permlink) {
-            this.saveDraft();
-        }
-    };
-
     shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor');
 
     componentWillUpdate(nextProps, nextState) {
@@ -347,12 +341,9 @@ class ReplyEditor extends React.Component {
     }
 
     onDraftsClose = draft => {
-        const { username, body, tags, title } = this.state;
+        const { username } = this.props;
+        const { body, tags, title, rte } = this.state;
         let raw;
-
-        if (body.value) {
-            raw = body.value;
-        }
 
         if (tags) {
             this.checkTagsCommunity(draft.tags);
@@ -360,6 +351,7 @@ class ReplyEditor extends React.Component {
         }
 
         if (title) title.props.onChange(draft.title);
+
         raw = draft.body;
 
         // If we have an initial body, check if it's html or markdown

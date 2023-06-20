@@ -951,6 +951,7 @@ function* updateTronAddr() {
         username,
         auth_type: privateKeyType === 'active_private' ? 'active' : 'posting',
         tron_addr: tronPubKey,
+        from: 'condenser',
     };
     const result = yield updateTronUser(
         data,

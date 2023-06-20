@@ -126,11 +126,11 @@ class DraftSummary extends React.Component {
         }
 
         return (
-            <div className="articles__summary">
+            <div className="drafts__summary">
                 {summary_header}
                 <div
                     className={
-                        'articles__content hentry' +
+                        'drafts__content hentry' +
                         (thumb ? ' with-image ' : ' ')
                     }
                     itemScope

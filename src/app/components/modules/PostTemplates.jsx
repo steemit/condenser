@@ -302,7 +302,7 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
 
         const templates = templateList.map((template, idx) => (
             <div key={idx} className="templates-option">
-                <div className="articles__summary">
+                <div className="templates__summary">
                     <div className="articles__summary-header">
                         <span>
                             <strong>
@@ -312,7 +312,7 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
                     </div>
                     <div
                         className={
-                            'articles__content hentry' +
+                            'templates__content hentry' +
                             (thumb ? ' with-image ' : ' ')
                         }
                         itemScope

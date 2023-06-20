@@ -358,6 +358,12 @@
         "markdown_not_supported": "Markdown is not supported here",
         "advanced_settings": "Advanced settings",
         "beneficiaries_set": "%(count)s set",
+        "draft": "Load Draft",
+        "draft_save": "Save Draft",
+        "draft_update": "Update Draft",
+        "draft_save_message":
+            "Draft saved successfully. To view your saved drafts, simply click the Drafts button.",
+        "template": "Template",
         "tag": "#tag",
         "tips": "Please enter the title, content and tags."
     },
@@ -729,7 +735,10 @@
         "profile_about": "About",
         "profile_location": "Location",
         "profile_website": "Website",
-        "saved": "Saved!"
+        "saved": "Saved!",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "Select RPC Node",
+        "selected_rpc": "Selected RPC Node : %(rpc)s"
     },
     "transfer_jsx": {
         "amount_is_in_form": "Amount is in the form 99999.999",

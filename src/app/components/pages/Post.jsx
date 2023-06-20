@@ -49,6 +49,7 @@ class Post extends React.Component {
         this.state = {
             showNegativeComments: false,
             timeOut: false,
+            showPostComments: false,
         };
         this.showSignUp = () => {
             serverApiRecordEvent('SignUp', 'Post Promo');
@@ -60,6 +61,21 @@ class Post extends React.Component {
         const { subscriptions, getSubscriptions, uname, dis } = this.props;
         this.props.setRouteTag(dis.get('url'));
         if (!subscriptions && uname) getSubscriptions(uname);
+        this.setState({
+            showPostComments: false,
+        });
+    }
+
+    componentDidMount() {
+        const _this = this;
+        setTimeout(() => {
+            if (_this.props.dis === undefined) {
+                _this.setState({
+                    timeOut: true,
+                    showPostComments: false,
+                });
+            }
+        }, 2000);
     }
 
     componentWillUpdate(nextProps) {
@@ -73,17 +89,6 @@ class Post extends React.Component {
         const { subscriptions, getSubscriptions, uname } = this.props;
         if (!subscriptions && uname && uname != prevProps.uname)
             getSubscriptions(uname);
-    }
-
-    componentDidMount() {
-        const _this = this;
-        setTimeout(() => {
-            if (_this.props.dis === undefined) {
-                _this.setState({
-                    timeOut: true,
-                });
-            }
-        }, 2000);
     }
 
     componentWillUnmount() {
@@ -107,6 +112,10 @@ class Post extends React.Component {
         this.setState({ showAnyway: true });
     };
 
+    showPostCommentClick = () => {
+        this.setState({ showPostComments: true });
+    };
+
     render() {
         const { showSignUp } = this;
         const {
@@ -126,9 +135,11 @@ class Post extends React.Component {
         const {
             showNegativeComments,
             commentHidden,
+            showPostComments,
             showAnyway,
             timeOut,
         } = this.state;
+
         if (dis === undefined && !timeOut) {
             return null;
         }
@@ -144,7 +155,8 @@ class Post extends React.Component {
                             Not to worry. You can head back to{' '}
                             <a style={{ fontWeight: 800 }} href="/">
                                 our homepage
-                            </a>, or check out some great posts.
+                            </a>
+                            , or check out some great posts.
                         </p>
                         <ul className="NotFound__menu">
                             <li>
@@ -173,7 +185,8 @@ class Post extends React.Component {
                                 <p onClick={this.showAnywayClick}>
                                     {tt(
                                         'promote_post_jsx.this_post_was_hidden_due_to_low_ratings'
-                                    )}.{' '}
+                                    )}
+                                    .{' '}
                                     <button
                                         style={{ marginBottom: 0 }}
                                         className="button hollow tiny float-right"
@@ -238,7 +251,8 @@ class Post extends React.Component {
                         ? tt('post_jsx.now_showing_comments_with_low_ratings')
                         : tt(
                               'post_jsx.comments_were_hidden_due_to_low_ratings'
-                          )}.{' '}
+                          )}
+                    .{' '}
                     <button
                         className="button hollow tiny float-right"
                         onClick={e => this.toggleNegativeReplies(e)}
@@ -315,7 +329,8 @@ class Post extends React.Component {
                                         <div className="Post__promo">
                                             {tt(
                                                 'g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post'
-                                            )}.
+                                            )}
+                                            .
                                             <br />
                                             {tt(
                                                 'g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount'
@@ -346,7 +361,8 @@ class Post extends React.Component {
                         <div id="#comments" className="Post_comments row hfeed">
                             <div className="column large-12">
                                 <div className="Post_comments__content">
-                                    {positiveComments.length ? (
+                                    {showPostComments &&
+                                    positiveComments.length ? (
                                         <div className="Post__comments_sort_order float-right">
                                             {tt('post_jsx.sort_order')}: &nbsp;
                                             <DropdownMenu
@@ -357,7 +373,30 @@ class Post extends React.Component {
                                             />
                                         </div>
                                     ) : null}
-                                    {positiveComments}
+                                    {showPostComments && positiveComments.length
+                                        ? positiveComments
+                                        : null}
+                                    {!showPostComments ? (
+                                        <div>
+                                            <div className="hentry Comment root Post_comments__count">
+                                                <div>
+                                                    View {dis.get('children')}{' '}
+                                                    comments on this post.
+                                                </div>
+                                            </div>
+                                            <div className="hentry Comment root Post_comments__count">
+                                                <button
+                                                    className="comment-button"
+                                                    onClick={
+                                                        this
+                                                            .showPostCommentClick
+                                                    }
+                                                >
+                                                    LOAD COMMENTS
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ) : null}
                                     {negativeGroup}
                                 </div>
                             </div>

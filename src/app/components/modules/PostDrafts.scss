@@ -1,0 +1,32 @@
+.drafts-list {
+    max-height: 800px;
+    overflow-y: auto;
+}
+
+.drafts-option {
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+}
+
+ul.Drafts__summaries {
+    margin-left: 0;
+}
+
+ul.Drafts__summaries > li {
+    padding: 0.1em 0.5em 0 0.5em;
+    margin-bottom: 0.8em;
+
+    @include themify($themes) {
+        border-radius: themed('roundedCorners');
+        border: themed('border');
+        background-color: themed('moduleBackgroundColor');
+    }
+
+    &:hover {
+        @include MQ(L) {
+            @include themify($themes) {
+                box-shadow: 2px 2px 3px 0 themed('contentBorderAccent');
+            }
+        }
+    }
+}

@@ -286,6 +286,12 @@
         "markdown_not_supported": "这里不支持Markdown标记语言",
         "advanced_settings": "Advanced settings",
         "beneficiaries_set": "%(count)s set",
+        "draft": "Load Draft",
+        "draft_save": "Save Draft",
+        "draft_update": "Update Draft",
+        "draft_save_message":
+            "Draft saved successfully. To view your saved drafts, simply click the Drafts button.",
+        "template": "Template",
         "tag": "#标签",
         "tips": "请输入标题、内容、标签"
     },
@@ -591,7 +597,11 @@
         "profile_name": "显示名称",
         "profile_about": "关于",
         "profile_location": "位置",
-        "profile_website": "网站"
+        "profile_website": "网站",
+        "saved": "已保存",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "RPC Node 选择",
+        "selected_rpc": "选择 RPC Node : %(rpc)s"
     },
     "transfer_jsx": {
         "amount_is_in_form": "金额以99999.999的形式出现",

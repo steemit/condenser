@@ -300,7 +300,15 @@
         "update_post": "Aggiorna il Post",
         "markdown_not_supported": "Il Markdown non è supportato qui",
         "advanced_settings": "Advanced settings",
-        "beneficiaries_set": "%(count)s set"
+        "beneficiaries_set": "%(count)s set",
+        "draft": "Load Draft",
+        "draft_save": "Save Draft",
+        "draft_update": "Update Draft",
+        "draft_save_message":
+            "Draft saved successfully. To view your saved drafts, simply click the Drafts button.",
+        "template": "Template",
+        "tag": "#tag",
+        "tips": "Please enter the title, content and tags."
     },
     "beneficiary_selector_jsx": {
         "header": "Who should receive any rewards?",
@@ -627,7 +635,11 @@
         "profile_name": "Mostra nome",
         "profile_about": "About",
         "profile_location": "Località",
-        "profile_website": "Sito"
+        "profile_website": "Sito",
+        "saved": "salvato!",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "RPC Node Selezionare",
+        "selected_rpc": "Selezionare RPC Node : %(rpc)s"
     },
     "transfer_jsx": {
         "amount_is_in_form": "La quantita deve essere della forma 99999.999",

@@ -21,6 +21,8 @@ import TermsAgree from 'app/components/modules/TermsAgree';
 import PostAdvancedSettings from 'app/components/modules/PostAdvancedSettings';
 import TronCreateOne from 'app/components/modules/TronCreateOne';
 import TronCreateTwo from 'app/components/modules/TronCreateTwo';
+import PostDrafts from './PostDrafts';
+import PostTemplates from './PostTemplates';
 
 class Modals extends React.Component {
     static propTypes = {
@@ -31,12 +33,19 @@ class Modals extends React.Component {
         show_bandwidth_error_modal: PropTypes.bool,
         show_promote_post_modal: PropTypes.bool,
         show_post_advanced_settings_modal: PropTypes.string,
+        show_post_drafts_modal: PropTypes.string,
+        on_post_drafts_close_modal: PropTypes.func,
+        clear_draft_modal: PropTypes.func,
+        show_post_templates_modal: PropTypes.string,
+        on_post_templates_close_modal: PropTypes.func,
         hideLogin: PropTypes.func.isRequired,
         username: PropTypes.string,
         hideConfirm: PropTypes.func.isRequired,
         hidePromotePost: PropTypes.func.isRequired,
         hideBandwidthError: PropTypes.func.isRequired,
         hidePostAdvancedSettings: PropTypes.func.isRequired,
+        hidePostDrafts: PropTypes.func.isRequired,
+        hidePostTemplates: PropTypes.func.isRequired,
         notifications: PropTypes.object,
         show_terms_modal: PropTypes.bool,
         removeNotification: PropTypes.func,
@@ -59,6 +68,11 @@ class Modals extends React.Component {
         show_confirm_modal: false,
         show_login_modal: false,
         show_post_advanced_settings_modal: '',
+        show_post_drafts_modal: '',
+        on_post_drafts_close_modal: () => {},
+        clear_draft_modal: () => {},
+        show_post_templates_modal: '',
+        on_post_templates_close_modal: () => {},
         loginBroadcastOperation: undefined,
         show_tron_create_modal: false,
         show_tron_create_success_modal: false,
@@ -78,6 +92,11 @@ class Modals extends React.Component {
             show_confirm_modal,
             show_bandwidth_error_modal,
             show_post_advanced_settings_modal,
+            show_post_drafts_modal,
+            on_post_drafts_close_modal,
+            clear_draft_modal,
+            show_post_templates_modal,
+            on_post_templates_close_modal,
             hideLogin,
             hideConfirm,
             show_terms_modal,
@@ -87,6 +106,8 @@ class Modals extends React.Component {
             show_promote_post_modal,
             hideBandwidthError,
             hidePostAdvancedSettings,
+            hidePostDrafts,
+            hidePostTemplates,
             username,
             loginBroadcastOperation,
             hideTronCreate,
@@ -199,6 +220,31 @@ class Modals extends React.Component {
                         />
                     </Reveal>
                 )}
+                {show_post_drafts_modal && (
+                    <Reveal
+                        onHide={hidePostDrafts}
+                        show={show_post_drafts_modal ? true : false}
+                    >
+                        <CloseButton onClick={hidePostDrafts} />
+                        <PostDrafts
+                            formId={show_post_drafts_modal}
+                            onDraftsClose={on_post_drafts_close_modal}
+                            clearDraft={clear_draft_modal}
+                        />
+                    </Reveal>
+                )}
+                {show_post_templates_modal && (
+                    <Reveal
+                        onHide={hidePostTemplates}
+                        show={show_post_templates_modal ? true : false}
+                    >
+                        <CloseButton onClick={hidePostTemplates} />
+                        <PostTemplates
+                            formId={show_post_templates_modal}
+                            onTemplatesClose={on_post_templates_close_modal}
+                        />
+                    </Reveal>
+                )}
                 <NotificationStack
                     style={false}
                     notifications={notifications_array}
@@ -241,6 +287,17 @@ export default connect(
             show_post_advanced_settings_modal: state.user.get(
                 'show_post_advanced_settings_modal'
             ),
+            show_post_drafts_modal: state.user.get('show_post_drafts_modal'),
+            on_post_drafts_close_modal: state.user.get(
+                'on_post_drafts_close_modal'
+            ),
+            clear_draft_modal: state.user.get('clear_draft_modal'),
+            show_post_templates_modal: state.user.get(
+                'show_post_templates_modal'
+            ),
+            on_post_templates_close_modal: state.user.get(
+                'on_post_templates_close_modal'
+            ),
             loginBroadcastOperation,
             show_tron_create_modal: state.user.get('show_tron_create_modal'),
             show_tron_create_success_modal: state.user.get(
@@ -279,6 +336,14 @@ export default connect(
         hidePostAdvancedSettings: e => {
             if (e) e.preventDefault();
             dispatch(userActions.hidePostAdvancedSettings());
+        },
+        hidePostDrafts: e => {
+            if (e) e.preventDefault();
+            dispatch(userActions.hidePostDrafts());
+        },
+        hidePostTemplates: e => {
+            if (e) e.preventDefault();
+            dispatch(userActions.hidePostTemplates());
         },
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
         removeNotification: key =>

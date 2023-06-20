@@ -296,7 +296,15 @@
         "update_post": "저장",
         "markdown_not_supported": "Markdown은 지원되지 않습니다.",
         "advanced_settings": "Advanced settings",
-        "beneficiaries_set": "%(count)s set"
+        "beneficiaries_set": "%(count)s set",
+        "draft": "초안",
+        "draft_save": "초안 저장",
+        "draft_update": "초안 갱신",
+        "draft_save_message":
+            "초안이 저장되었습니다. 저장된 초안을 확인하려면 초안 버튼을 클릭하시면 됩니다.",
+        "template": "템플릿",
+        "tag": "#tag",
+        "tips": "Please enter the title, content and tags."
     },
     "beneficiary_selector_jsx": {
         "header": "Who should receive any rewards?",
@@ -623,7 +631,11 @@
         "profile_name": "닉네임",
         "profile_about": "한 줄 소개",
         "profile_location": "지역",
-        "profile_website": "웹사이트"
+        "profile_website": "웹사이트",
+        "saved": "저장됨!",
+        "rpc_title": "RPC Node List",
+        "rpc_select": "RPC Node 선택",
+        "selected_rpc": "선택된 RPC Node : %(rpc)s"
     },
     "transfer_jsx": {
         "amount_is_in_form": "Amount is in the form 99999.999",

@@ -1,6 +1,7 @@
 import { api } from '@steemit/steem-js';
 import { ifHive } from 'app/utils/Community';
 import stateCleaner from 'app/redux/stateCleaner';
+import { changeRPCNodeToDefault } from 'app/utils/RPCNode';
 import xhr from 'axios/index';
 
 export async function callBridge(method, params, pre = 'bridge.') {
@@ -12,8 +13,15 @@ export async function callBridge(method, params, pre = 'bridge.') {
 
     return new Promise(function(resolve, reject) {
         api.call(pre + method, params, function(err, data) {
-            if (err) reject(err);
-            else resolve(data);
+            if (err) {
+                console.error('~~ apii.calBridge error ~~~>', err);
+
+                if (err.message === 'Network request failed') {
+                    changeRPCNodeToDefault();
+                }
+
+                reject(err);
+            } else resolve(data);
         });
     });
 }
@@ -23,64 +31,74 @@ export const _list_temp = [];
 export const _user_list = [];
 
 export async function getStateAsync(url, observer, ssr = false) {
-    if (observer === undefined) observer = null;
+    try {
+        if (observer === undefined) observer = null;
 
-    const { page, tag, sort, key } = parsePath(url);
+        const { page, tag, sort, key } = parsePath(url);
 
-    console.log('GSA', url, observer, ssr);
-    let state = {
-        accounts: {},
-        community: {},
-        content: {},
-        discussion_idx: {},
-        profiles: {},
-    };
+        console.log('GSA', url, observer, ssr);
+        let state = {
+            accounts: {},
+            community: {},
+            content: {},
+            discussion_idx: {},
+            profiles: {},
+        };
 
-    // load `content` and `discussion_idx`
-    if (page == 'posts' || page == 'account') {
-        let posts = await loadPosts(sort, tag, observer, ssr);
+        // load `content` and `discussion_idx`
+        if (page == 'posts' || page == 'account') {
+            let posts = await loadPosts(sort, tag, observer, ssr);
 
-        state['content'] = posts['content'];
-        state['discussion_idx'] = posts['discussion_idx'];
-    } else if (page == 'thread') {
-        const posts = await loadThread(key[0], key[1]);
-        state['content'] = posts['content'];
-    } else {
-        // no-op
-    }
-
-    // append `community` key
-    if (tag && ifHive(tag)) {
-        try {
-            state['community'][tag] = await callBridge('get_community', {
-                name: tag,
-                observer: observer,
-            });
-        } catch (e) {}
-    }
-
-    // for SSR, load profile on any profile page or discussion thread author
-    const account =
-        tag && tag[0] == '@'
-            ? tag.slice(1)
-            : page == 'thread' ? key[0].slice(1) : null;
-    if (ssr && account) {
-        // TODO: move to global reducer?
-        const profile = await callBridge('get_profile', { account });
-        if (profile && profile['name']) {
-            state['profiles'][account] = profile;
+            state['content'] = posts['content'];
+            state['discussion_idx'] = posts['discussion_idx'];
+        } else if (page == 'thread') {
+            const posts = await loadThread(key[0], key[1]);
+            state['content'] = posts['content'];
+        } else {
+            // no-op
         }
-    }
 
-    if (ssr) {
-        // append `topics` key
-        state['topics'] = await callBridge('get_trending_topics', {
-            limit: 12,
-        });
-    }
+        // append `community` key
+        if (tag && ifHive(tag)) {
+            try {
+                state['community'][tag] = await callBridge('get_community', {
+                    name: tag,
+                    observer: observer,
+                });
+            } catch (e) {}
+        }
 
-    const cleansed = stateCleaner(state);
-    return cleansed;
+        // for SSR, load profile on any profile page or discussion thread author
+        const account =
+            tag && tag[0] == '@'
+                ? tag.slice(1)
+                : page == 'thread' ? key[0].slice(1) : null;
+        if (ssr && account) {
+            // TODO: move to global reducer?
+            const profile = await callBridge('get_profile', { account });
+            if (profile && profile['name']) {
+                state['profiles'][account] = profile;
+            }
+        }
+
+        if (ssr) {
+            // append `topics` key
+            state['topics'] = await callBridge('get_trending_topics', {
+                limit: 12,
+            });
+        }
+
+        const cleansed = stateCleaner(state);
+        return cleansed;
+    } catch (error) {
+        console.error('~~ getStateAsync error ~~~>', error);
+
+        if (error.message === 'Network request failed') {
+            changeRPCNodeToDefault();
+        }
+
+        throw error;
+    }
 }
 
 async function loadThread(account, permlink) {

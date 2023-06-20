@@ -11,14 +11,20 @@ import Dropzone from 'react-dropzone';
 import MuteList from 'app/components/elements/MuteList';
 import { isLoggedIn } from 'app/utils/UserUtil';
 import { userActionRecord } from 'app/utils/ServerApiClient';
+import * as steem from '@steemit/steem-js';
+import { getCurrentRPCNode, changeRPCNodeToDefault } from 'app/utils/RPCNode';
 
 class Settings extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             errorMessage: '',
             successMessage: '',
             progress: {},
+            rpcNode:
+                getCurrentRPCNode() || $STM_Config.steemd_connection_client,
+            rpcError: '',
         };
         this.initForm(props);
         this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this);
@@ -216,6 +222,18 @@ class Settings extends React.Component {
         });
     }
 
+    validateUrlFormat(url) {
+        if (!url) return false;
+        if (
+            !/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/.test(
+                url
+            )
+        )
+            return false;
+
+        return true;
+    }
+
     handleDefaultBlogPayoutChange = event => {
         this.props.setUserPreferences({
             ...this.props.user_preferences,
@@ -228,6 +246,24 @@ class Settings extends React.Component {
             ...this.props.user_preferences,
             defaultCommentPayout: event.target.value,
         });
+    };
+
+    handleSelectRPCNode = event => {
+        const selectedUrl = event.target.value;
+
+        if (this.validateUrlFormat(selectedUrl) === false) {
+            this.setState({
+                rpcError: tt('settings_jsx.invalid_url'),
+            });
+            return;
+        } else {
+            this.setState({
+                rpcNode: selectedUrl,
+                rpcError: '',
+            });
+        }
+
+        changeRPCNodeToDefault(selectedUrl);
     };
 
     handleLanguageChange = event => {
@@ -263,10 +299,42 @@ class Settings extends React.Component {
             location,
             website,
             progress,
+            rpcNode,
+            rpcError,
         } = this.state;
 
         return (
             <div className="Settings">
+                <div className="row">
+                    <div className="small-12 medium-4 large-4 columns">
+                        <br />
+                        <br />
+                        <h4>{tt('settings_jsx.rpc_title')}</h4>
+
+                        <label>{tt('settings_jsx.rpc_select')}</label>
+
+                        <select
+                            defaultValue={rpcNode}
+                            onChange={this.handleSelectRPCNode}
+                        >
+                            {$STM_Config.steemd_rpc_list.map((rpc, idx) => (
+                                <option key={idx} value={rpc}>
+                                    {rpc}
+                                </option>
+                            ))}
+                        </select>
+
+                        <label>
+                            {rpcError ||
+                                tt('settings_jsx.selected_rpc', {
+                                    rpc: rpcNode,
+                                })}
+                        </label>
+
+                        <br />
+                        <br />
+                    </div>
+                </div>
                 <div className="row">
                     {isLoggedIn() &&
                         isOwnAccount && (

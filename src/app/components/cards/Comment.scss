@@ -1,184 +1,186 @@
 .Comment {
-  position: relative;
-  clear: both;
-  margin-bottom: 1.2rem;
-  .Markdown {
-    p {
-      margin: 0.1rem 0 0.6rem 0;
-    }
+    position: relative;
+    clear: both;
+    margin-bottom: 1.2rem;
+    .Markdown {
+        p {
+            margin: 0.1rem 0 0.6rem 0;
+        }
 
-    p:last-child {
-      margin-bottom: 0.2rem;
+        p:last-child {
+            margin-bottom: 0.2rem;
+        }
     }
-  }
 }
 
 .Comment__Userpic {
-  float: left;
-  position: relative;
-  top: 0.4rem;
-  padding-right: 0.6rem;
-  @include MQ(M) {
-    top: 0.2rem;
-  }
+    float: left;
+    position: relative;
+    top: 0.4rem;
+    padding-right: 0.6rem;
+    @include MQ(M) {
+        top: 0.2rem;
+    }
 
-  .Userpic {
-    margin-left: 7px;
-  }
+    .Userpic {
+        margin-left: 7px;
+    }
 }
 
 .Comment__Userpic-small {
-  @include hide-for(medium);
-  .Userpic {
-    float: left;
-    position: relative;
-    top: 3px;
-    margin-right: 0.2rem;
-    width: 16px !important;
-    height: 16px !important;
-  }
+    @include hide-for(medium);
+    .Userpic {
+        float: left;
+        position: relative;
+        top: 3px;
+        margin-right: 0.2rem;
+        width: 16px !important;
+        height: 16px !important;
+    }
 }
 
 .Comment .highlighted {
-  padding: 14px;
-  @include themify($themes) {
-    border: themed('borderAccent');
-    background-color: themed('highlightBackgroundColor');
-  }
+    padding: 14px;
+    @include themify($themes) {
+        border: themed('borderAccent');
+        background-color: themed('highlightBackgroundColor');
+    }
 }
 
 .Comment.collapsed .Comment__block,
 .Comment .Comment__block.downvoted:not(.revealed) {
-  > .Comment__Userpic {
-    top: 0;
-    left: 26px;
-    .Userpic {
-      width: 24px !important;
-      height: 24px !important;
+    > .Comment__Userpic {
+        top: 0;
+        left: 26px;
+        .Userpic {
+            width: 24px !important;
+            height: 24px !important;
+        }
     }
-  }
-  .Comment__header {
-    overflow: hidden;
-    .Voting {
-      margin-left: 1rem;
-      border-right: none;
+    .Comment__header {
+        overflow: hidden;
+        .Voting {
+            margin-left: 1rem;
+            border-right: none;
+        }
+        a {
+            @include themify($themes) {
+                color: themed('textColorSecondary');
+            }
+        }
     }
-    a {
-      @include themify($themes) {
-        color: themed('textColorSecondary');
-      }
+    .Comment__body {
+        overflow: hidden;
+        @include themify($themes) {
+            padding: 0;
+            border: none;
+        }
     }
-  }
-  .Comment__body {
-    overflow: hidden;
-    @include themify($themes) {
-      padding: 0;
-      border: none;
+    .Comment__footer {
+        overflow: hidden;
+        @include themify($themes) {
+            padding: 0;
+            border: none;
+        }
     }
-  }
-  .Comment__footer {
-    overflow: hidden;
-    @include themify($themes) {
-      padding: 0;
-      border: none;
-    }
-  }
 }
 
 .Comment__header {
-  @include themify($themes) {
-    margin-left: 62px;
-    border-radius: themed('roundedCornersTop');
-    border: themed('border');
-    background: themed('moduleBackgroundColor');
-    padding: 3px 5px;
-  }
+    @include themify($themes) {
+        margin-left: 62px;
+        border-radius: themed('roundedCornersTop');
+        border: themed('border');
+        background: themed('moduleBackgroundColor');
+        padding: 3px 5px;
+    }
 }
 
 .Comment__header-user {
-  color: $black;
-  font-size: 100%;
-  a {
-    @extend .link;
-    @extend .link--primary;
-  }
+    color: $black;
+    font-size: 100%;
+    a {
+        @extend .link;
+        @extend .link--primary;
+    }
 }
 
 .Comment__header_collapse {
-  float: right;
-  > a {
-    color: $medium-gray;
-    letter-spacing: 0.1rem;
-    padding: 0 0.5rem;
-  }
-  .Icon {
-    top: 5px;
-  }
+    float: right;
+    > a {
+        color: $medium-gray;
+        letter-spacing: 0.1rem;
+        padding: 0 0.5rem;
+    }
+    .Icon {
+        top: 5px;
+    }
 }
 
 .Comment .Comment__block .Comment__body {
-  @include themify($themes) {
-    margin-left: 62px;
-    border: themed('border');
-    padding: 0 5px;
-    border-top: none;
-    border-bottom: none;
-    font-size: 90%;
-    background: themed('moduleBackgroundColor');
-  }
+    @include themify($themes) {
+        margin-left: 62px;
+        border: themed('border');
+        padding: 0 5px;
+        border-top: none;
+        border-bottom: none;
+        font-size: 90%;
+        background: themed('moduleBackgroundColor');
+    }
 }
 
 .Comment .Comment__block .Comment__footer {
-  @include themify($themes) {
-    margin-left: 62px;
-    border: themed('border');
-    border-radius: themed('roundedCornersBottom');
-    padding: 3px 10px 5px 10px;
-    background: themed('moduleBackgroundColor');
-  }
-
-  @include themify($themes) {
-    color: themed('textColorPrimary');
-  }
-  a {
-   @extend .link;
-   @extend .link--primary;
-  }
-  .Voting__voters_list {
     @include themify($themes) {
-      border-right: themed('border');
+        margin-left: 62px;
+        border: themed('border');
+        border-radius: themed('roundedCornersBottom');
+        padding: 3px 10px 5px 10px;
+        background: themed('moduleBackgroundColor');
     }
-    padding-right: 0.4rem;
-    margin-right: 0.4rem;
-    transition: 0.3s all ease-in-out;
-    .dropdown-arrow {
-      position: relative;
-      top: 3px;
-      left: -2px;
-    }
-    &:hover {
-      .Icon.dropdown-arrow polygon {
-          @include themify($themes) {
-            fill: themed('textColorAccent');
-          }
-      }
-    }
-  }
 
-  .Comment__footer__controls {
-    a {margin: 0 0.2rem;}
-  }
+    @include themify($themes) {
+        color: themed('textColorPrimary');
+    }
+    a {
+        @extend .link;
+        @extend .link--primary;
+    }
+    .Voting__voters_list {
+        @include themify($themes) {
+            border-right: themed('border');
+        }
+        padding-right: 0.4rem;
+        margin-right: 0.4rem;
+        transition: 0.3s all ease-in-out;
+        .dropdown-arrow {
+            position: relative;
+            top: 3px;
+            left: -2px;
+        }
+        &:hover {
+            .Icon.dropdown-arrow polygon {
+                @include themify($themes) {
+                    fill: themed('textColorAccent');
+                }
+            }
+        }
+    }
+
+    .Comment__footer__controls {
+        a {
+            margin: 0 0.2rem;
+        }
+    }
 }
 
 .Comment__replies {
-  margin-top: 1.4rem;
-  margin-left: 62px;
-  @include themify($themes) {
-    border-left: themed('borderDotted');
-  }
-  .Comment {
-    margin-bottom: 1.4rem;
-  }
+    margin-top: 1.4rem;
+    margin-left: 62px;
+    @include themify($themes) {
+        border-left: themed('borderDotted');
+    }
+    .Comment {
+        margin-bottom: 1.4rem;
+    }
 }
 
 .Comment__negative_group {
@@ -187,36 +189,38 @@
     padding-top: 1rem;
     clear: none;
     button {
-      opacity: 0.35;
-      &:hover {opacity: 0.5;}
+        opacity: 0.35;
+        &:hover {
+            opacity: 0.5;
+        }
     }
 }
 
 @media screen and (max-width: 39.9375em) {
-  .root {
-    .Comment__block .Comment__header,
-    .Comment__block .Comment__footer,
-    .Comment__block .Comment__body,
-    .Comment__replies {
-      @include themify($themes) {
-        margin-left: 0;
-      }
+    .root {
+        .Comment__block .Comment__header,
+        .Comment__block .Comment__footer,
+        .Comment__block .Comment__body,
+        .Comment__replies {
+            @include themify($themes) {
+                margin-left: 0;
+            }
+        }
     }
-  }
-  .reply {
-    .Comment__block .Comment__header,
-    .Comment__block .Comment__footer,
-    .Comment__block .Comment__body,
-    .Comment__replies {
-      @include themify($themes) {
-        margin-left: 10px;
-      }
+    .reply {
+        .Comment__block .Comment__header,
+        .Comment__block .Comment__footer,
+        .Comment__block .Comment__body,
+        .Comment__replies {
+            @include themify($themes) {
+                margin-left: 10px;
+            }
+        }
     }
-  }
 
-  .Comment .Comment__block .highlighted {
-    @include themify($themes) {
-      padding-left: 0;
+    .Comment .Comment__block .highlighted {
+        @include themify($themes) {
+            padding-left: 0;
+        }
     }
-  }
 }

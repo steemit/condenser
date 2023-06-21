@@ -362,7 +362,7 @@ class Post extends React.Component {
                             <div className="column large-12">
                                 <div className="Post_comments__content">
                                     {showPostComments &&
-                                    positiveComments.length ? (
+                                    positiveComments.length > 0 ? (
                                         <div className="Post__comments_sort_order float-right">
                                             {tt('post_jsx.sort_order')}: &nbsp;
                                             <DropdownMenu
@@ -373,10 +373,12 @@ class Post extends React.Component {
                                             />
                                         </div>
                                     ) : null}
-                                    {showPostComments && positiveComments.length
+                                    {showPostComments &&
+                                    positiveComments.length > 0
                                         ? positiveComments
                                         : null}
-                                    {!showPostComments ? (
+                                    {!showPostComments &&
+                                    positiveComments.length > 0 ? (
                                         <div>
                                             <div className="hentry Comment root Post_comments__count">
                                                 <div>

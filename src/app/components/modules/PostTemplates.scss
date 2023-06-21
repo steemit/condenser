@@ -1,3 +1,349 @@
+.templates {
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial,
+        sans-serif;
+    padding: 0em 1em;
+    transition: all 0.2s ease-out;
+    border: transparent;
+    min-width: 300px;
+    width: 100%;
+    margin: 0 auto;
+    background-color: transparent;
+    box-shadow: none;
+
+    h2 {
+        font-family: sans-serif;
+    }
+    @include MQ(M) {
+        padding: 0em 1em;
+        min-width: 500px;
+        max-width: 664px;
+        order: 2;
+    }
+    @include MQ(L) {
+        min-width: 550px;
+        max-width: 664px;
+        @include themify($themes) {
+            border: themed('borderTransparent');
+            background-color: themed('transparent');
+        }
+    }
+
+    &__hr {
+        margin-bottom: 20px;
+        margin-top: 0px;
+        @include themify($themes) {
+            border-bottom: themed('border');
+        }
+        @include MQ(M) {
+            display: none;
+        }
+    }
+
+    &__layout-selector {
+        display: none;
+        cursor: pointer;
+        @include MQ(FL) {
+            display: flex;
+            float: right;
+        }
+        @include MQ(FM) {
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
+    &__icon--layout {
+        width: 24px;
+        height: 24px;
+        position: relative;
+    }
+    &__summary {
+        margin: 0;
+        transition: 0.2s all ease-in-out;
+        border: transparent;
+        padding-bottom: 0;
+        @include themify($themes) {
+            background-color: themed('moduleBackgroundColor');
+        }
+        @include MQ(M) {
+            margin: 0 0 40px;
+            box-shadow: 0px 5px 10px 0 rgba(0, 0, 0, 0);
+            padding-bottom: 0;
+            @include themify($themes) {
+                border: themed('border');
+            }
+        }
+        &:hover {
+            @include MQ(M) {
+                box-shadow: 0px 5px 10px 0 rgba(0, 0, 0, 0.03);
+            }
+        }
+    }
+    &__resteem-icon {
+        position: relative;
+        top: -1px;
+        padding-right: 2px;
+    }
+    &__summary-header {
+        display: flex;
+        align-items: center;
+        padding: 6px 0 8px;
+        position: relative;
+        @include MQ(M) {
+            padding: 10px 16px 5px;
+            @include themify($themes) {
+                border-bottom: themed('border');
+            }
+        }
+        &--footer {
+            @include themify($themes) {
+                border-top: themed('border');
+                border-bottom: themed('border');
+            }
+            @include MQ(M) {
+                @include themify($themes) {
+                    border-bottom: transparent;
+                }
+            }
+        }
+    }
+    &__summary-footer {
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: 100%;
+        @include font-size(15px);
+        @include MQ(M) {
+            padding: 16px;
+            @include themify($themes) {
+                border-top: themed('border');
+            }
+        }
+        a {
+            @extend .link;
+            @extend .link--primary;
+            @include font-size(15px);
+        }
+    }
+    &__header {
+        padding-top: 5px;
+        padding-bottom: 10px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        line-height: 1;
+        min-height: 50px;
+        @include MQ(M) {
+            padding-top: 0;
+        }
+        &-select {
+            select {
+                max-width: 300px;
+            }
+        }
+    }
+    &__header-col {
+        &--right {
+            order: 1;
+            width: 100%;
+            @media only screen and (min-width: 370px) {
+                width: auto;
+                order: 2;
+            }
+        }
+    }
+    &__resteem {
+        padding-bottom: 0px;
+        margin-top: 6px;
+
+        @include MQ(M) {
+            padding-bottom: 5px;
+            @include themify($themes) {
+                border-bottom: themed('border');
+            }
+        }
+    }
+    &__resteem-text {
+        @include font-size(13px);
+        margin-bottom: 0px;
+        @include themify($themes) {
+            color: themed('textColorSecondary');
+        }
+        @include MQ(M) {
+            margin-bottom: 2px;
+            @include font-size(14px);
+        }
+    }
+    &__resteem-username {
+        @extend .link--secondary;
+        text-decoration: none;
+    }
+    &__icon-100 {
+        padding-left: 8px;
+        display: inline-block;
+        position: relative;
+        top: -1px;
+        transform: scale(0.9);
+        transform-origin: center;
+    }
+    &__h1 {
+        font-family: $font-primary;
+        font-weight: bold;
+        @include font-size(18px);
+        margin: 0;
+        @include MQ(M) {
+            @include font-size(18px);
+        }
+    }
+    &__h2 {
+        // @extend .h2;
+        margin: 0;
+        @include font-size(16px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        a {
+            font-weight: bold;
+            @include themify($themes) {
+                color: themed('textColorPrimary');
+            }
+            &:visited {
+                @include themify($themes) {
+                    color: themed('textColorSecondary');
+                }
+            }
+        }
+        @include MQ(M) {
+            @include font-size(18px);
+        }
+    }
+    &__h3 {
+        display: inline;
+    }
+
+    &__tag-selector {
+        display: inline-block;
+        select.Topics {
+            margin-bottom: 0 !important;
+            border: transparent;
+            background-color: transparent;
+            border-bottom: 1px solid #999;
+            border-radius: 0;
+            position: relative;
+            top: -4px;
+            margin-top: 12px;
+            @include themify($themes) {
+                color: themed('textColorSecondary');
+            }
+            @media only screen and (min-width: 370px) {
+                margin-top: 0;
+            }
+        }
+        @include MQ(L) {
+            display: none;
+        }
+    }
+    &__p {
+        // @extend .p;
+        margin: 0;
+        padding-top: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+    &__link {
+        text-decoration: none;
+        @include themify($themes) {
+            color: themed('textColorPrimary');
+        }
+    }
+    // &__profile-img {
+    //   display: none;
+    //   width: 54px;
+    //   height: auto;
+    // }
+    &__text-content {
+        @include MQ(M) {
+            padding: 0 1.2em;
+        }
+    }
+    &__tags {
+        @include themify($themes) {
+            color: themed('textColorSecondary');
+        }
+        @include font-size(14px);
+        margin-bottom: 18px;
+    }
+    &__tag-link {
+        @include font-size(14px);
+        @include themify($themes) {
+            color: themed('textColorSecondary');
+        }
+        a {
+            @extend .link;
+            @extend .link--secondary;
+        }
+    }
+    &__flag {
+        width: 24px;
+        height: auto;
+        position: absolute;
+        right: -4px;
+        top: 0px;
+        padding: 2px;
+        @include MQ(M) {
+            right: 10px;
+            top: 12px;
+        }
+
+        .icon-flag-svg {
+            @include themify($themes) {
+                fill: themed('textColorSecondary');
+            }
+            transition: 0.2s all ease-in-out;
+        }
+        &:hover {
+            cursor: pointer;
+            .icon-flag-svg {
+                @include themify($themes) {
+                    fill: themed('textColorError');
+                }
+            }
+        }
+    }
+    &__content-block {
+        margin-bottom: 16px;
+        @include MQ(M) {
+            &--text {
+                margin-top: 1em;
+            }
+        }
+    }
+
+    &__content-block--text {
+        -webkit-box-flex: 1;
+        box-flex: 1;
+        flex: 1;
+    }
+
+    &__content-block--img + &__content-block--text {
+        margin-top: 0;
+    }
+    &__resteem,
+    &__content-block--text,
+    &__metadata {
+        @include MQ(M) {
+            padding-left: 1.1em;
+            padding-right: 1.1em;
+        }
+    }
+}
+
 .templates-list {
     height: 60vh;
     overflow-y: auto;
@@ -40,11 +386,11 @@ ul.Templates__summaries > li {
     }
 }
 
-ul.PostsList__summaries {
+ul.TemplatesList__summaries {
     margin-left: 0;
 }
 
-ul.PostsList__summaries > li {
+ul.TemplatesList__summaries > li {
     padding: 0.1em 0.5em 0 0.5em;
     margin-bottom: 0.8em;
 
@@ -165,12 +511,6 @@ ul.PostsList__summaries > li {
     }
 }
 
-.layout-list .TemplateSummary__body {
-    @include MQ(M) {
-        white-space: nowrap;
-    }
-}
-
 .TemplateSummary__footer {
     color: $dark-gray;
     font-weight: 400;
@@ -216,12 +556,5 @@ ul.PostsList__summaries > li {
     }
     .TemplateSummary.with-image .TemplateSummary__content {
         margin-left: 0;
-    }
-}
-
-.userlist-footer {
-    font-size: 14px;
-    .userlist-footer-followers {
-        margin-right: 2rem;
     }
 }

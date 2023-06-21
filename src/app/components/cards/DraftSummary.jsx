@@ -72,7 +72,7 @@ class DraftSummary extends React.Component {
         );
 
         const content_title = (
-            <h2 className="articles__h2 entry-title">
+            <h2 className="drafts__h2 entry-title">
                 <span
                     onClick={onClickContent}
                     dangerouslySetInnerHTML={{
@@ -88,9 +88,9 @@ class DraftSummary extends React.Component {
 
         // New Post Summary heading
         const summary_header = (
-            <div className="articles__summary-header">
-                <div className="user">
-                    <div className="user__col user__col--left">
+            <div className="drafts__summary-header">
+                <div className="draft-user">
+                    <div className="draft-user__col user__col--left">
                         <Userpic account={post.author} size={SIZE_SMALL} />
                     </div>
                     <span className="user__name">
@@ -119,9 +119,9 @@ class DraftSummary extends React.Component {
         if (image_link) {
             const blogImg = proxify(image_link, '160x120');
 
-            thumb = <img className="articles__feature-img" src={blogImg} />;
+            thumb = <img className="drafts__feature-img" src={blogImg} />;
             thumb = (
-                <span className="articles__feature-img-container">{thumb}</span>
+                <span className="drafts__feature-img-container">{thumb}</span>
             );
         }
 
@@ -137,16 +137,16 @@ class DraftSummary extends React.Component {
                     itemType="http://schema.org/blogPost"
                 >
                     {thumb ? (
-                        <div className="articles__content-block articles__content-block--img">
+                        <div className="drafts__content-block drafts__content-block--img">
                             {thumb}
                         </div>
                     ) : null}
-                    <div className="articles__content-block articles__content-block--text">
+                    <div className="drafts__content-block drafts__content-block--text">
                         {content_title}
                         {content_body}
                     </div>
                 </div>
-                <div className="articles__summary-footer">
+                <div className="drafts__summary-footer">
                     <a onClick={clickDeleteDraft}>{tt('g.delete')}</a>
                 </div>
             </div>

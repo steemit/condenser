@@ -303,7 +303,7 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
         const templates = templateList.map((template, idx) => (
             <div key={idx} className="templates-option">
                 <div className="templates__summary">
-                    <div className="articles__summary-header">
+                    <div className="templates__summary-header">
                         <span>
                             <strong>
                                 {idx + 1}. {template.title}
@@ -319,7 +319,7 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
                         itemType="http://schema.org/blogPost"
                     >
                         <div
-                            className="articles__content-block articles__content-block--text"
+                            className="templates__content-block templates__content-block--text"
                             onClick={() => onClickContent(idx)}
                         >
                             <MarkdownViewer

@@ -210,12 +210,20 @@ class Post extends React.Component {
 
         // Don't render too many comments on server-side
         const commentLimit = 100;
-        if (global.process !== undefined && replies.length > commentLimit) {
-            replies = replies.slice(0, commentLimit);
+        const commentDefault = 10;
+
+        // if (global.process !== undefined && replies.length > commentLimit) {
+        //     replies = replies.slice(0, commentLimit);
+        // }
+
+        if (replies.length > 0 && !showPostComments) {
+            replies = replies.slice(0, commentDefault);
         }
+
         let commentCount = 0;
         const positiveComments = replies.map(reply => {
             commentCount++;
+
             const showAd =
                 commentCount % 5 === 0 &&
                 commentCount !== replies.length &&
@@ -361,8 +369,7 @@ class Post extends React.Component {
                         <div id="#comments" className="Post_comments row hfeed">
                             <div className="column large-12">
                                 <div className="Post_comments__content">
-                                    {showPostComments &&
-                                    positiveComments.length > 0 ? (
+                                    {positiveComments.length > 0 ? (
                                         <div className="Post__comments_sort_order float-right">
                                             {tt('post_jsx.sort_order')}: &nbsp;
                                             <DropdownMenu
@@ -373,30 +380,22 @@ class Post extends React.Component {
                                             />
                                         </div>
                                     ) : null}
-                                    {showPostComments &&
-                                    positiveComments.length > 0
+                                    {positiveComments.length > 0
                                         ? positiveComments
                                         : null}
-                                    {!showPostComments &&
-                                    positiveComments.length > 0 ? (
-                                        <div>
-                                            <div className="hentry Comment root Post_comments__count">
-                                                <div>
-                                                    View {dis.get('children')}{' '}
-                                                    comments on this post.
-                                                </div>
-                                            </div>
-                                            <div className="hentry Comment root Post_comments__count">
-                                                <button
-                                                    className="comment-button"
-                                                    onClick={
-                                                        this
-                                                            .showPostCommentClick
-                                                    }
-                                                >
-                                                    LOAD COMMENTS
-                                                </button>
-                                            </div>
+                                    {positiveComments.length > 0 &&
+                                    positiveComments.length > commentDefault &&
+                                    commentDefault < dis.get('children') &&
+                                    !showPostComments ? (
+                                        <div className="hentry Comment root Post_comments__count">
+                                            <button
+                                                className="comment-button"
+                                                onClick={
+                                                    this.showPostCommentClick
+                                                }
+                                            >
+                                                LOAD MORE COMMENTS
+                                            </button>
                                         </div>
                                     ) : null}
                                     {negativeGroup}

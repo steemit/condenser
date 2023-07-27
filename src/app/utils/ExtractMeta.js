@@ -27,8 +27,12 @@ function addSiteMeta(metas) {
     });
 }
 
-function addPostMeta(metas, content, profile) {
-    const { profile_image } = profile;
+function addPostMeta(metas, content, profile, store) {
+    const state = store.getState();
+    const site_domain = state.app.get('site_domain')
+        ? state.app.get('site_domain')
+        : 'steemit.com';
+    const profile_image = `https://${site_domain}/avatar/${content.author}`;
     const { category, created, body, json_metadata } = content;
     const isReply = content.depth > 0;
 
@@ -39,6 +43,10 @@ function addPostMeta(metas, content, profile) {
     const canonicalUrl = makeCanonicalLink(content, json_metadata);
     const localUrl = makeCanonicalLink(content, null);
     const image = image_link || profile_image;
+    let card_type = 'summary_large_image';
+    if (!image_link && profile_image) {
+        card_type = 'summary';
+    }
 
     // Standard meta
     metas.push({ title });
@@ -51,7 +59,7 @@ function addPostMeta(metas, content, profile) {
     metas.push({ name: 'og:url', content: localUrl });
     metas.push({
         name: 'og:image',
-        content: image || 'https://steemit.com/images/steemit.png',
+        content: image || `https://${site_domain}/images/steemit.png`,
     });
     metas.push({ name: 'og:description', content: desc });
     metas.push({ name: 'og:site_name', content: 'Steemit' });
@@ -65,14 +73,14 @@ function addPostMeta(metas, content, profile) {
     // Twitter card data
     metas.push({
         name: 'twitter:card',
-        content: image ? 'summary_large_image' : 'summary',
+        content: card_type,
     });
     metas.push({ name: 'twitter:site', content: '@steemit' });
     metas.push({ name: 'twitter:title', content: title });
     metas.push({ name: 'twitter:description', content: desc });
     metas.push({
         name: 'twitter:image',
-        content: image || 'https://steemit.com/images/steemit-twshare-2.png',
+        content: image || `https://${site_domain}/images/steemit-twshare-2.png`,
     });
 }
 
@@ -107,7 +115,7 @@ function readProfile(chain_data, account) {
     return chain_data.profiles[account]['metadata']['profile'];
 }
 
-export default function extractMeta(chain_data, rp) {
+export default function extractMeta(chain_data, rp, store) {
     let username;
     let content;
     if (rp.username && rp.slug) {
@@ -124,7 +132,7 @@ export default function extractMeta(chain_data, rp) {
 
     const metas = [];
     if (content) {
-        addPostMeta(metas, content, profile);
+        addPostMeta(metas, content, profile, store);
     } else if (username) {
         addAccountMeta(metas, username, profile);
     } else {

@@ -90,6 +90,12 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                     config.activity_tag !== ''
                         ? config.activity_tag.split(',')
                         : [],
+                image_host: config.get('img_proxy_prefix')
+                    ? config.get('img_proxy_prefix')
+                    : 'https://steemitimages.com/',
+                site_domain: config.get('site_domain')
+                    ? config.get('site_domain')
+                    : 'steemit.com',
             },
         };
 

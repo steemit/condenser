@@ -3,6 +3,7 @@ import Koa from 'koa';
 import mount from 'koa-mount';
 import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
+import koa_router from 'koa-router';
 import requestTime from './requesttimings';
 import StatsLoggerClient from './utils/StatsLoggerClient';
 import { SteemMarket } from './utils/SteemMarket';
@@ -29,6 +30,7 @@ import koaLocale from 'koa-locale';
 import { getSupportedLocales } from './utils/misc';
 import { specialPosts } from './utils/SpecialPosts';
 import fs from 'fs';
+import fetch from 'node-fetch';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -283,6 +285,41 @@ app.use(function*(next) {
         }
     }
     yield next;
+});
+
+// TODO: This is a temporary function to proxy users' avatar
+// to let twitter get it successfully.
+const router = koa_router({ prefix: '/' });
+app.use(router.routes());
+router.get('/avatar/:username', function*(next) {
+    try {
+        const image_host = config.get('img_proxy_prefix')
+            ? config.get('img_proxy_prefix')
+            : 'https://steemitimages.com/';
+        const image_url = `${image_host}u/${this.params.username}/avatar`;
+        const image_response = yield fetch(image_url);
+
+        if (!image_response.ok) {
+            this.body = JSON.stringify({
+                error: 'image_not_found',
+            });
+            console.error('error_in /avatar/:username', username);
+            return;
+        }
+
+        const image_buffer = yield image_response.buffer();
+        this.response.set(
+            'content-type',
+            image_response.headers.get('content-type')
+        );
+        this.response.set('content-length', image_buffer.length);
+        this.body = image_buffer;
+    } catch (error) {
+        console.error('error_in /avatar/:username', username, error);
+        this.body = JSON.stringify({
+            error: 'image_not_found',
+        });
+    }
 });
 
 useRedirects(app);

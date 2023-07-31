@@ -54,8 +54,21 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             login_challenge,
         };
 
+        const adSwipe = {
+            enabled: config.adswipe_enabled === 'true',
+        };
+
+        const tronAds = {
+            enabled: config.tronads_enabled === 'true',
+            env: config.tronads_env == 2 ? 2 : 1,
+            is_mock: config.tronads_env == 2 ? 0 : 1,
+            sidebar_ad_pid: config.tronads_sidebar_ad_pid,
+            content_pc_ad_pid: config.tronads_content_pc_ad_pid,
+            content_mobile_ad_pid: config.tronads_content_mobile_ad_pid,
+        };
+
         const googleAds = {
-            enabled: !!config.google_ad_enabled,
+            enabled: config.google_ad_enabled === 'true',
             test: !!config.google_ad_test,
             client: config.google_ad_client,
             adSlots: config.google_ad_slots,
@@ -75,7 +88,9 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         const initial_state = {
             app: {
                 viewMode: determineViewMode(ctx.request.search),
-                googleAds: googleAds,
+                adSwipe,
+                tronAds,
+                googleAds,
                 env: process.env.NODE_ENV,
                 walletUrl: config.wallet_url,
                 steemMarket: ctx.steemMarketData,

@@ -24,6 +24,7 @@ import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Topics from './Topics';
 import Icon from 'app/components/elements/Icon';
 import AdSwipe from 'app/components/elements/AdSwipe';
+import TronAd from 'app/components/elements/TronAd';
 import * as appActions from 'app/redux/AppReducer';
 import Announcement from './Announcement';
 
@@ -131,6 +132,9 @@ class Post extends React.Component {
             trackingId,
             postLeftSideAdList,
             bottomAdList,
+            adSwipeConf,
+            tronAdsConf,
+            locale,
         } = this.props;
         const {
             showNegativeComments,
@@ -139,6 +143,14 @@ class Post extends React.Component {
             showAnyway,
             timeOut,
         } = this.state;
+
+        const adSwipeEnabled = adSwipeConf.getIn(['enabled']);
+        const tronAdsEnabled = tronAdsConf.getIn(['enabled']);
+        const tronAdSidebyPid = tronAdsConf.getIn(['sidebar_ad_pid']);
+        const tronAdPcPid = tronAdsConf.getIn(['content_pc_ad_pid']);
+        const tronAdMobilePid = tronAdsConf.getIn(['content_mobile_ad_pid']);
+        const tronAdsEnv = tronAdsConf.getIn(['env']);
+        const tronAdsMock = tronAdsConf.getIn(['is_mock']);
 
         if (dis === undefined && !timeOut) {
             return null;
@@ -300,35 +312,80 @@ class Post extends React.Component {
                             subscriptions={subscriptions}
                             topics={topics}
                         />
-                        <div>
+                        {adSwipeEnabled && (
                             <AdSwipe
                                 adList={postLeftSideAdList}
                                 trackingId={trackingId}
                                 timer={5000}
                                 direction="horizontal"
                             />
-                        </div>
+                        )}
+                        {tronAdsEnabled && (
+                            <TronAd
+                                env={tronAdsEnv}
+                                trackingId={trackingId}
+                                wrapperName={'tron_ad_sideby'}
+                                pid={tronAdSidebyPid}
+                                isMock={tronAdsMock}
+                                lang={locale}
+                                adTag={'tron_ad_sideby'}
+                                ratioClass={'ratio-1-1'}
+                            />
+                        )}
                     </div>
                     <div className="post-main">
                         <div className="row">
                             <div className="column">{postBody}</div>
                         </div>
                         <div className="row">
-                            <div className="column">
-                                <div
-                                    style={{
-                                        margin: '0.5rem auto 0',
-                                        maxWidth: '54rem',
-                                    }}
-                                >
-                                    <AdSwipe
-                                        adList={bottomAdList}
-                                        trackingId={trackingId}
-                                        timer={5000}
-                                        direction="vertical"
-                                    />
+                            {adSwipeEnabled && (
+                                <div className="column">
+                                    <div
+                                        style={{
+                                            margin: '0.5rem auto 0',
+                                            maxWidth: '54rem',
+                                        }}
+                                    >
+                                        <AdSwipe
+                                            adList={bottomAdList}
+                                            trackingId={trackingId}
+                                            timer={5000}
+                                            direction="vertical"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            )}
+                            {tronAdsEnabled && (
+                                <div className="column">
+                                    <div
+                                        style={{
+                                            margin: '0.5rem auto 0',
+                                            maxWidth: '54rem',
+                                        }}
+                                    >
+                                        <TronAd
+                                            env={tronAdsEnv}
+                                            trackingId={trackingId}
+                                            wrapperName={'tron_ad_pc'}
+                                            pid={tronAdPcPid}
+                                            isMock={tronAdsMock}
+                                            lang={locale}
+                                            adTag={'tron_ad_pc'}
+                                            ratioClass={'ratio-10-1'}
+                                        />
+                                        <TronAd
+                                            env={tronAdsEnv}
+                                            trackingId={trackingId}
+                                            wrapperName={'tron_ad_mobile'}
+                                            pid={tronAdMobilePid}
+                                            isMock={tronAdsMock}
+                                            lang={locale}
+                                            adTag={'tron_ad_mobile'}
+                                            ratioClass={'ratio-375-80'}
+                                        />
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         {false &&
                             !isLoggedIn() && (
@@ -439,6 +496,9 @@ export default connect(
         const post = username + '/' + slug;
         const content = state.global.get('content');
         const dis = content.get(post);
+        const adSwipeConf = state.app.getIn(['adSwipe']);
+        const tronAdsConf = state.app.getIn(['tronAds']);
+        const locale = state.user.getIn(['locale']);
         const trackingId = state.app.getIn(['trackingId'], null);
         const steemMarketData = state.app.get('steemMarket');
         const uname =
@@ -455,6 +515,9 @@ export default connect(
             dis,
             sortOrder: currLocation.query.sort || 'trending',
             gptEnabled: false, //state.app.getIn(['googleAds', 'gptEnabled']),
+            adSwipeConf,
+            tronAdsConf,
+            locale,
             trackingId,
             steemMarketData,
             isBrowser: process.env.BROWSER,

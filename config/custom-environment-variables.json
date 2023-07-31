@@ -52,5 +52,11 @@
   "tron_create_node": "TRON_CREATE_NODE",
   "activity_tag": "ACTIVITY_TAG",
   "sdc_image_proxy_prefix":"SDC_IMAGE_PROXY_PREFIX",
-  "sdc_upload_image_url": "SDC_UPLOAD_IMAGE_URL"
+  "sdc_upload_image_url": "SDC_UPLOAD_IMAGE_URL",
+  "adswipe_enabled": "ADSWIPE_ENABLED",
+  "tronads_enabled": "TRONADS_ENABLED",
+  "tronads_env": "TRONADS_ENV",
+  "tronads_sidebar_ad_pid": "TRONADS_SIDEBAR_AD_PID",
+  "tronads_content_pc_ad_pid": "TRONADS_CONTENT_PC_AD_PID",
+  "tronads_content_mobile_ad_pid": "TRONADS_CONTENT_MOBILE_AD_PID"
 }

@@ -60,6 +60,7 @@ export default function ServerHTML({
                     rel="stylesheet"
                     href="/assets/plugins/editor.md/css/editormd.css"
                 />
+                <script src="/assets/js/tron-ads-sdk-1.0.49.js" />
                 <script src="/assets/js/jquery-3.6.0.min.js" />
                 <script src="/assets/plugins/editor.md/editormd.js" />
                 {locale !== 'zh' && (

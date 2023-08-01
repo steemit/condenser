@@ -29,7 +29,6 @@ class TronAd extends Component {
     }
 
     initAd() {
-        console.log('get in initAd', this.hasInit, this.state.heightState);
         if (this.hasInit) return;
         const { wrapperName, pid, isMock, lang, ratioClass } = this.props;
 
@@ -143,11 +142,8 @@ class TronAd extends Component {
 
     render() {
         const { wrapperName, ratioClass, pid } = this.props;
-
         const { heightState } = this.state;
-
         const classSetting = `ad-ratio-wrapper ${ratioClass}`;
-        const isInit = this.isInit();
 
         return (
             <div className="tron-ad-box">

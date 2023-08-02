@@ -30,7 +30,14 @@ class TronAd extends Component {
 
     initAd() {
         if (this.hasInit) return;
-        const { wrapperName, pid, isMock, lang, ratioClass } = this.props;
+        const {
+            wrapperName,
+            pid,
+            isMock,
+            lang,
+            ratioClass,
+            trackingId,
+        } = this.props;
 
         new initAds({
             env: 1,
@@ -38,6 +45,9 @@ class TronAd extends Component {
             pid,
             is_mock: isMock,
             lang: this.getLang(lang),
+            expand: {
+                uuid: trackingId,
+            },
             loadSuccessCallback: () => {
                 this.hasInit = true;
                 this.setState({

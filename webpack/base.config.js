@@ -112,6 +112,10 @@ module.exports = {
                     to: path.resolve(__dirname, '../dist/js/jquery-3.6.0.min.map')
                 },
                 {
+                    from: path.resolve(__dirname, '../src/app/assets/js/tron-ads-sdk-1.0.49.js'),
+                    to: path.resolve(__dirname, '../dist/js/tron-ads-sdk-1.0.49.js')
+                },
+                {
                     from: path.resolve(__dirname, '../src/app/assets/plugins'),
                     to: path.resolve(__dirname, '../dist/plugins/')
                 },

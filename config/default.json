@@ -308,5 +308,11 @@
     "steem_elastic_search_endpoint": "https://search-hive-dev-new-sbsqvjz2ct6onsxabnsde3qkgi.us-east-1.es.amazonaws.com",
     "wallet_api_host": "https://wallet.steemitdev.com",
     "tron_create_node": "https://api.shasta.trongrid.io",
-    "activity_tag": ""
+    "activity_tag": "",
+    "adswipe_enabled": false,
+    "tronads_enabled": false,
+    "tronads_env": 1,
+    "tronads_sidebar_ad_pid": "",
+    "tronads_content_pc_ad_pid": "",
+    "tronads_content_mobile_ad_pid": ""
 }

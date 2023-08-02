@@ -1,0 +1,31 @@
+.ad-carousel {
+    .hide {
+        visibility: hidden;
+    }
+    img {
+        border-radius: 5px;
+    }
+    overflow: hidden;
+}
+
+.tron-ad-box {
+    width: 100%;
+    .ad-ratio-wrapper {
+        width: 100%;
+    }
+    .ratio-10-1, .ratio-375-80 {
+        display: none;
+    }
+
+    @media (max-width: 760px) {
+        .ratio-375-80 {
+            display: block;
+        }
+    }
+
+    @media (min-width: 761px) {
+        .ratio-10-1 {
+            display: block;
+        }
+    }
+}

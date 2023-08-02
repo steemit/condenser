@@ -37,10 +37,11 @@ class TronAd extends Component {
             lang,
             ratioClass,
             trackingId,
+            env,
         } = this.props;
 
         new initAds({
-            env: 1,
+            env,
             wrapper: wrapperName,
             pid,
             is_mock: isMock,

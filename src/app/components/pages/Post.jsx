@@ -49,7 +49,7 @@ class Post extends React.Component {
         this.state = {
             showNegativeComments: false,
             timeOut: false,
-            showPostComments: false,
+            showPostComments: true,
         };
         this.showSignUp = () => {
             serverApiRecordEvent('SignUp', 'Post Promo');
@@ -62,7 +62,7 @@ class Post extends React.Component {
         this.props.setRouteTag(dis.get('url'));
         if (!subscriptions && uname) getSubscriptions(uname);
         this.setState({
-            showPostComments: false,
+            showPostComments: true,
         });
     }
 
@@ -72,7 +72,7 @@ class Post extends React.Component {
             if (_this.props.dis === undefined) {
                 _this.setState({
                     timeOut: true,
-                    showPostComments: false,
+                    showPostComments: true,
                 });
             }
         }, 2000);
@@ -113,7 +113,7 @@ class Post extends React.Component {
     };
 
     showPostCommentClick = () => {
-        this.setState({ showPostComments: true });
+        this.setState({ showPostComments: false });
     };
 
     render() {
@@ -143,6 +143,7 @@ class Post extends React.Component {
         if (dis === undefined && !timeOut) {
             return null;
         }
+
         if (isEmptyPost(dis) || timeOut)
             return (
                 <div className="NotFound float-center">
@@ -216,7 +217,7 @@ class Post extends React.Component {
         //     replies = replies.slice(0, commentLimit);
         // }
 
-        if (replies.length > 0 && !showPostComments) {
+        if (replies.length > 0 && showPostComments) {
             replies = replies.slice(0, commentDefault);
         }
 
@@ -384,9 +385,10 @@ class Post extends React.Component {
                                         ? positiveComments
                                         : null}
                                     {positiveComments.length > 0 &&
-                                    positiveComments.length > commentDefault &&
+                                    positiveComments.length ===
+                                        commentDefault &&
                                     commentDefault < dis.get('children') &&
-                                    !showPostComments ? (
+                                    showPostComments ? (
                                         <div className="hentry Comment root Post_comments__count">
                                             <button
                                                 className="comment-button"

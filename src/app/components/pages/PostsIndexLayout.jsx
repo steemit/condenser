@@ -13,8 +13,8 @@ import Topics from './Topics';
 import Announcement from './Announcement';
 import CommunityPane from 'app/components/elements/CommunityPane';
 import CommunityPaneMobile from 'app/components/elements/CommunityPaneMobile';
-import { APP_DOMAIN } from 'app/client_config';
 import AdSwipe from 'app/components/elements/AdSwipe';
+import TronAd from 'app/components/elements/TronAd';
 
 class PostsIndexLayout extends React.Component {
     static propTypes = {
@@ -51,7 +51,16 @@ class PostsIndexLayout extends React.Component {
             category,
             indexLeftSideAdList,
             trackingId,
+            adSwipeConf,
+            tronAdsConf,
+            locale,
         } = this.props;
+        const adSwipeEnabled = adSwipeConf.getIn(['enabled']);
+        const tronAdsEnabled = tronAdsConf.getIn(['enabled']);
+        const tronAdSidebyPid = tronAdsConf.getIn(['sidebar_ad_pid']);
+        const tronAdsEnv = tronAdsConf.getIn(['env']);
+        const tronAdsMock = tronAdsConf.getIn(['is_mock']);
+
         return (
             <div
                 className={
@@ -113,12 +122,26 @@ class PostsIndexLayout extends React.Component {
                         subscriptions={subscriptions}
                         topics={topics}
                     />
-                    <AdSwipe
-                        adList={indexLeftSideAdList}
-                        trackingId={trackingId}
-                        timer={5000}
-                        direction="horizontal"
-                    />
+                    {adSwipeEnabled && (
+                        <AdSwipe
+                            adList={indexLeftSideAdList}
+                            trackingId={trackingId}
+                            timer={5000}
+                            direction="horizontal"
+                        />
+                    )}
+                    {tronAdsEnabled && (
+                        <TronAd
+                            env={tronAdsEnv}
+                            trackingId={trackingId}
+                            wrapperName={'tron_ad_sideby'}
+                            pid={tronAdSidebyPid}
+                            isMock={tronAdsMock}
+                            lang={locale}
+                            adTag={'tron_ad_sideby'}
+                            ratioClass={'ratio-1-1'}
+                        />
+                    )}
                     {enableAds && (
                         <div>
                             <div className="sidebar-ad">
@@ -149,6 +172,9 @@ export default connect(
         const username =
             state.user.getIn(['current', 'username']) ||
             state.offchain.get('account');
+        const adSwipeConf = state.app.getIn(['adSwipe']);
+        const tronAdsConf = state.app.getIn(['tronAds']);
+        const locale = state.user.getIn(['locale']);
         const trackingId = state.app.getIn(['trackingId'], null);
         const indexLeftSideAdList = state.ad.getIn(
             ['indexLeftSideAdList'],
@@ -165,6 +191,9 @@ export default connect(
             topics: state.global.getIn(['topics'], List()),
             isBrowser: process.env.BROWSER,
             username,
+            adSwipeConf,
+            tronAdsConf,
+            locale,
             trackingId,
             indexLeftSideAdList,
         };

@@ -174,7 +174,7 @@ export default connect(
             state.offchain.get('account');
         const adSwipeConf = state.app.getIn(['adSwipe']);
         const tronAdsConf = state.app.getIn(['tronAds']);
-        const locale = state.user.getIn(['locale']);
+        const locale = state.app.getIn(['user_preferences', 'locale']);
         const trackingId = state.app.getIn(['trackingId'], null);
         const indexLeftSideAdList = state.ad.getIn(
             ['indexLeftSideAdList'],

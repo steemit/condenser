@@ -498,7 +498,7 @@ export default connect(
         const dis = content.get(post);
         const adSwipeConf = state.app.getIn(['adSwipe']);
         const tronAdsConf = state.app.getIn(['tronAds']);
-        const locale = state.user.getIn(['locale']);
+        const locale = state.app.getIn(['user_preferences', 'locale']);
         const trackingId = state.app.getIn(['trackingId'], null);
         const steemMarketData = state.app.get('steemMarket');
         const uname =

@@ -21,12 +21,20 @@ and disclose information about you.
 
 ## 2. Eligibility
 
-The Service is not targeted toward, nor intended for use by, anyone under the
-age of 13. You must be at least 13 years of age to access or use of the
-Service. If you are between 13 and 18 years of age (or the age of legal
-majority where you reside), you may only access or use the Service under the
-supervision of a parent or legal guardian who agrees to be bound by this
-Agreement.
+You represent and warrant that you: (a) are of legal age to form a binding contract;
+(b) have not previously been suspended or removed from using our Services; (c) are
+not the the subject of economic or trade sanctions administered or enforced by any
+governmental authority or otherwise designated on any list of prohibited or restricted
+parties; (d) are not (including but not limited to the following) a citizen, resident, or
+organization of the Chinese Mainland, Taiwan (province of China), Hong Kong (SAR
+of China), the United States and Singapore; and (e) have full power and authority to
+enter into this agreement and in doing so will not violate any other agreement to
+which you are a party.
+
+If you are registering to use the Services on behalf of a legal entity, you further
+represent and warrant that (i) such legal entity is duly organized and validly existing
+under the applicable laws of the jurisdiction of its organization, and (ii) you are duly
+authorized by such legal entity to act on its behalf.
 
 ## 3. Copyright and Limited License
 

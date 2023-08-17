@@ -7,13 +7,14 @@ import ru from 'react-intl/locale-data/ru';
 import fr from 'react-intl/locale-data/fr';
 import it from 'react-intl/locale-data/it';
 import ko from 'react-intl/locale-data/ko';
-import zh from 'react-intl/locale-data/zh';
+// import zh from 'react-intl/locale-data/zh';
 import pl from 'react-intl/locale-data/pl';
 import ja from 'react-intl/locale-data/ja';
 import { DEFAULT_LANGUAGE } from 'app/client_config';
 import tt from 'counterpart';
 
-addLocaleData([...en, ...es, ...ru, ...fr, ...it, ...ko, ...zh, ...pl, ...ja]);
+// addLocaleData([...en, ...es, ...ru, ...fr, ...it, ...ko, ...zh, ...pl, ...ja]);
+addLocaleData([...en, ...es, ...ru, ...fr, ...it, ...ko, ...pl, ...ja]);
 
 tt.registerTranslations('en', require('counterpart/locales/en'));
 tt.registerTranslations('en', require('app/locales/en.json'));
@@ -33,8 +34,8 @@ tt.registerTranslations('it', require('app/locales/it.json'));
 tt.registerTranslations('ko', require('app/locales/counterpart/ko'));
 tt.registerTranslations('ko', require('app/locales/ko.json'));
 
-tt.registerTranslations('zh', require('app/locales/counterpart/zh'));
-tt.registerTranslations('zh', require('app/locales/zh.json'));
+// tt.registerTranslations('zh', require('app/locales/counterpart/zh'));
+// tt.registerTranslations('zh', require('app/locales/zh.json'));
 
 tt.registerTranslations('pl', require('app/locales/counterpart/pl'));
 tt.registerTranslations('pl', require('app/locales/pl.json'));

@@ -67,7 +67,6 @@ const SidePanel = ({
                         <option value="ko">Korean 한국어</option>
                         <option value="ja">Japanese 日本語</option>
                         <option value="pl">Polish</option>
-                        <option value="zh">Chinese 简体中文</option>
                     </select>
                 </li>
             );

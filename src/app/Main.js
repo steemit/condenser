@@ -11,7 +11,7 @@ import Iso from 'iso';
 import * as steem from '@steemit/steem-js';
 // import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from 'shared/constants';
 import frontendLogger from 'app/utils/FrontendLogger';
-import plugins from 'app/utils/JsPlugins';
+// import plugins from 'app/utils/JsPlugins';
 import { clientRender } from 'shared/UniversalRender';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { determineViewMode, determineActivityTag } from 'app/utils/Links';
@@ -108,7 +108,7 @@ function runApp(initial_state) {
     steem.config.set('address_prefix', config.address_prefix);
     steem.config.set('chain_id', config.chain_id);
     window.$STM_Config = config;
-    plugins(config);
+    // plugins(config);
     if (initial_state.offchain.serverBusy) {
         window.$STM_ServerBusy = true;
     }

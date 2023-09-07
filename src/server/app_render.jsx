@@ -163,6 +163,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             gptBidding: googleAds.gptBidding,
             shouldSeeCookieConsent: cookieConsent.enabled,
             cookieConsentApiKey: cookieConsent.api_key,
+            googleAnalyticsId: config.google_analytics_id,
         };
         ctx.status = statusCode;
         ctx.body =

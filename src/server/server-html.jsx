@@ -14,11 +14,32 @@ export default function ServerHTML({
     gptBidding,
     shouldSeeCookieConsent,
     cookieConsentApiKey,
+    googleAnalyticsId,
 }) {
     let page_title = title;
     return (
         <html lang="en">
             <head>
+                {googleAnalyticsId && (
+                    <script
+                        async
+                        src={`https://www.googletagmanager.com/gtag/js?id=${
+                            googleAnalyticsId
+                        }`}
+                    />
+                )}
+                {googleAnalyticsId && (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                                window.dataLayer = window.dataLayer || [];
+                                function gtag(){dataLayer.push(arguments);}
+                                gtag('js', new Date());
+                                gtag('config', '${googleAnalyticsId}');
+                            `,
+                        }}
+                    />
+                )}
                 <meta charSet="utf-8" />
                 <meta
                     name="viewport"

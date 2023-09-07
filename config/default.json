@@ -12,7 +12,7 @@
             "imgSrc": "* data:",
             "objectSrc": "'none'",
             "pluginTypes": "application/pdf",
-            "scriptSrc": "'unsafe-inline' 'unsafe-eval' data: https: 'self' www.google-analytics.com connect.facebook.net cdn.catchjs.com",
+            "scriptSrc": "'unsafe-inline' 'unsafe-eval' data: https: 'self' www.google-analytics.com www.googletagmanager.com connect.facebook.net cdn.catchjs.com",
             "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com",
             "reportUri": "/api/v1/csp_violation"
         },

@@ -7,35 +7,30 @@ export default function ServerHTML({
     locale,
     title,
     meta,
-    shouldSeeAds,
-    adClient,
-    gptEnabled,
-    gptBannedTags,
-    gptBidding,
-    shouldSeeCookieConsent,
-    cookieConsentApiKey,
-    googleAnalyticsId,
+    google_analytics_id,
+    csp_nonce,
 }) {
     let page_title = title;
     return (
         <html lang="en">
             <head>
-                {googleAnalyticsId && (
+                {google_analytics_id && (
                     <script
+                        nonce={csp_nonce}
                         async
                         src={`https://www.googletagmanager.com/gtag/js?id=${
-                            googleAnalyticsId
+                            google_analytics_id
                         }`}
                     />
                 )}
-                {googleAnalyticsId && (
+                {google_analytics_id && (
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `
                                 window.dataLayer = window.dataLayer || [];
                                 function gtag(){dataLayer.push(arguments);}
                                 gtag('js', new Date());
-                                gtag('config', '${googleAnalyticsId}');
+                                gtag('config', '${google_analytics_id}');
                             `,
                         }}
                     />
@@ -207,37 +202,6 @@ export default function ServerHTML({
                         type="text/css"
                     />
                 ))}
-                {gptEnabled ? (
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-                            (function() {
-                              var bsa_optimize = document.createElement('script');
-                              window.optimize = { queue: [] };
-                              bsa_optimize.type = 'text/javascript';
-                              bsa_optimize.async = true;
-                              bsa_optimize.src = 'https://cdn-s2s.buysellads.net/pub/steemit.js?' + (new Date() - new Date() % 3600000);
-                              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(bsa_optimize);
-                            })();
-                        `,
-                        }}
-                    />
-                ) : null}
-                {gptEnabled ? (
-                    <script
-                        src="//m.servedby-buysellads.com/monetization.js"
-                        type="text/javascript"
-                    />
-                ) : null}
-                {shouldSeeCookieConsent ? (
-                    <script
-                        id="Cookiebot"
-                        src="https://consent.cookiebot.com/uc.js"
-                        data-cbid={cookieConsentApiKey}
-                        type="text/javascript"
-                        async
-                    />
-                ) : null}
                 {process.env.NODE_ENV === 'production' &&
                     1 === 0 && <script src="//cdn.catchjs.com/catch.js" />}
                 <title>{page_title}</title>
@@ -252,19 +216,6 @@ export default function ServerHTML({
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}
-                {/* gptEnabled ? (
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-                            (function(){
-                              if(typeof _bsa !== 'undefined' && _bsa) {
-                                _bsa.init('fancybar', 'CE7D653L', 'placement:steemitcom');
-                              }
-                            })();
-                        `,
-                        }}
-                    />
-                      ) : null*/}
             </body>
         </html>
     );

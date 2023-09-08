@@ -69,7 +69,7 @@ TronPrice.prototype.refresh = async function() {
             });
         })
         .catch(err => {
-            console.error('Could not fetch tron price data', err);
+            console.error('Could not fetch tron price data:', err.message);
             return this.storeEmpty();
         });
 };

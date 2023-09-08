@@ -25,6 +25,7 @@ export default function ServerHTML({
                 )}
                 {google_analytics_id && (
                     <script
+                        nonce={csp_nonce}
                         dangerouslySetInnerHTML={{
                             __html: `
                                 window.dataLayer = window.dataLayer || [];
@@ -78,10 +79,13 @@ export default function ServerHTML({
                 />
                 <script src="/assets/js/tron-ads-sdk-1.0.49.js" />
                 <script src="/assets/js/jquery-3.6.0.min.js" />
-                <script src="/assets/plugins/editor.md/editormd.js" />
-                {locale !== 'zh' && (
-                    <script src="/assets/plugins/editor.md/languages/en.js" />
+                {false && (
+                    <script src="/assets/plugins/editor.md/editormd.js" />
                 )}
+                {false &&
+                    locale !== 'zh' && (
+                        <script src="/assets/plugins/editor.md/languages/en.js" />
+                    )}
                 <link rel="manifest" href="/static/manifest.json" />
                 <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
                 <link
@@ -202,8 +206,6 @@ export default function ServerHTML({
                         type="text/css"
                     />
                 ))}
-                {process.env.NODE_ENV === 'production' &&
-                    1 === 0 && <script src="//cdn.catchjs.com/catch.js" />}
                 <title>{page_title}</title>
             </head>
             <body>

@@ -143,19 +143,26 @@ csrf(app);
 koaLocale(app);
 
 function convertEntriesToArrays(obj) {
-    const tmp = Object.keys(obj).reduce((result, key) => {
+    const conf = Object.keys(obj).reduce((result, key) => {
         result[key] = obj[key].split(/\s+/);
         return result;
     }, {});
-    console.log('convertEntriesToArrays:', tmp);
+    console.log('convertEntriesToArrays:', JSON.stringify(conf));
+    // remove connect-src and plugin-types
+    delete conf.pluginTypes;
+    // add nonce support
     const nonceCb = (req, res) => {
         return `'nonce-${req.cspNonce}'`;
     };
-    if (!tmp.scriptSrc) {
-        tmp.scriptSrc = [];
+    if (!conf.scriptSrc) {
+        conf.scriptSrc = [];
     }
-    tmp.scriptSrc.push(nonceCb);
-    return tmp;
+    conf.scriptSrc.push(nonceCb);
+    if (!conf.defaultSrc) {
+        conf.defaultSrc = [];
+    }
+    conf.defaultSrc.push(nonceCb);
+    return conf;
 }
 
 // Fetch cached currency data for homepage

@@ -14,7 +14,6 @@ import tt from 'counterpart';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
-import GptAd from 'app/components/elements/GptAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
 import { recordAdsView } from 'app/utils/ServerApiClient';
 import SteemMarket from 'app/components/elements/SteemMarket';
@@ -251,16 +250,6 @@ class Post extends React.Component {
                         showNegativeComments={showNegativeComments}
                         onHide={this.onHideComment}
                     />
-
-                    {this.props.gptEnabled && showAd ? (
-                        <div className="Post_footer__ad">
-                            <GptAd
-                                tags={gptTags}
-                                type="Freestar"
-                                id="bsa-zone_1566494240874-7_123456"
-                            />
-                        </div>
-                    ) : null}
                 </div>
             );
         });
@@ -415,15 +404,6 @@ class Post extends React.Component {
                                     </div>
                                 </div>
                             )}
-                        {this.props.gptEnabled && commentCount >= 5 ? (
-                            <div className="Post_footer__ad">
-                                <GptAd
-                                    tags={gptTags}
-                                    type="Freestar"
-                                    id="bsa-zone_1566494147292-7_123456"
-                                />
-                            </div>
-                        ) : null}
                         <div id="#comments" className="Post_comments row hfeed">
                             <div className="column large-12">
                                 <div className="Post_comments__content">
@@ -461,15 +441,6 @@ class Post extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        {this.props.gptEnabled ? (
-                            <div className="Post_footer__ad">
-                                <GptAd
-                                    tags={gptTags}
-                                    type="Freestar"
-                                    id="bsa-zone_1566494371533-0_123456"
-                                />
-                            </div>
-                        ) : null}
                     </div>
                     <div className="c-sidebr-market">
                         {isBrowser && !uname && <SidebarNewUsers />}

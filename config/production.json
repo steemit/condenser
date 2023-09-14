@@ -5,14 +5,14 @@
         "directives": {
             "childSrc": "'self' 3speak.online emb.d.tube player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com *.tronads.io",
             "defaultSrc": "'self' img.3speakcontent.online emb.d.tube www.youtube.com staticxx.facebook.com player.vimeo.com *.streamrail.com",
-            "connectSrc": "'self' https://steemitimages.com https://api.steemit.com https://api.steemitdev.com www.googletagmanager.com www.google-analytics.com pagead2.googlesyndication.com googleads.g.doubleclick.net securepubads.g.doubleclick.net",
+            "connectSrc": "'self' https://steemitimages.com https://api.steemit.com https://api.steemitdev.com api.trongrid.io www.googletagmanager.com www.google-analytics.com pagead2.googlesyndication.com googleads.g.doubleclick.net securepubads.g.doubleclick.net",
             "fontSrc": "'self' data: fonts.gstatic.com steemitdev.com steemit.com steemitwallet.com",
             "frameAncestors": "'none'",
             "frameSrc": "'self' googleads.g.doubleclick.net https:",
             "imgSrc": "* data:",
             "objectSrc": "'self' application/pdf",
-            "scriptSrc": "'self' www.google-analytics.com www.googletagmanager.com connect.facebook.net",
-            "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com",
+            "scriptSrc": "'self' www.google-analytics.com www.googletagmanager.com connect.facebook.net *.tronads.io",
+            "styleSrc": "'self' fonts.googleapis.com",
             "reportUri": "/api/v1/csp_violation"
         },
         "reportOnly": false,

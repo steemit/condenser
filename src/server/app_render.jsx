@@ -156,14 +156,8 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             assets,
             title,
             meta,
-            shouldSeeAds: googleAds.enabled,
-            gptEnabled: googleAds.gptEnabled,
-            adClient: googleAds.client,
-            videoAdsEnabled: googleAds.videoAdsEnabled,
-            gptBidding: googleAds.gptBidding,
-            shouldSeeCookieConsent: cookieConsent.enabled,
-            cookieConsentApiKey: cookieConsent.api_key,
-            googleAnalyticsId: config.google_analytics_id,
+            google_analytics_id: config.google_analytics_id,
+            csp_nonce: ctx.session.cspNonce,
         };
         ctx.status = statusCode;
         ctx.body =

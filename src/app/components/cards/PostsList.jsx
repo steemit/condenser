@@ -11,7 +11,6 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import debounce from 'lodash.debounce';
 import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
-import GptAd from 'app/components/elements/GptAd';
 import VideoAd from 'app/components/elements/VideoAd';
 import SearchUserList from 'app/components/cards/SearchUserList';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -165,13 +164,7 @@ class PostsList extends React.Component {
                         <div
                             key={`ad-${i}`}
                             className="articles__content-block--ad"
-                        >
-                            <GptAd
-                                tags={[category]}
-                                type="Freestar"
-                                id="bsa-zone_1566495089502-1_123456"
-                            />
-                        </div>
+                        />
                     );
                 }
                 return summary;

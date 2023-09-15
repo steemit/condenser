@@ -8,7 +8,6 @@ import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
-import GptAd from 'app/components/elements/GptAd';
 import Topics from './Topics';
 import Announcement from './Announcement';
 import CommunityPane from 'app/components/elements/CommunityPane';
@@ -104,14 +103,6 @@ class PostsIndexLayout extends React.Component {
                                 : 'CoinMarketPlaceIndex'
                         }`}
                     />
-                    {enableAds && (
-                        <div className="sidebar-ad">
-                            <GptAd
-                                type="Freestar"
-                                id="bsa-zone_1566495004689-0_123456"
-                            />
-                        </div>
-                    )}
                 </aside>
 
                 <aside className="c-sidebar c-sidebar--left">
@@ -141,25 +132,6 @@ class PostsIndexLayout extends React.Component {
                             adTag={'tron_ad_sideby'}
                             ratioClass={'ratio-1-1'}
                         />
-                    )}
-                    {enableAds && (
-                        <div>
-                            <div className="sidebar-ad">
-                                <GptAd
-                                    type="Freestar"
-                                    slotName="bsa-zone_1566494461953-7_123456"
-                                />
-                            </div>
-                            <div
-                                className="sidebar-ad"
-                                style={{ marginTop: 20 }}
-                            >
-                                <GptAd
-                                    type="Freestar"
-                                    slotName="bsa-zone_1566494856923-9_123456"
-                                />
-                            </div>
-                        </div>
                     )}
                 </aside>
             </div>

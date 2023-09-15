@@ -26,7 +26,6 @@ import Userpic from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import Announcement from 'app/components/elements/Announcement';
-import GptAd from 'app/components/elements/GptAd';
 import { Map } from 'immutable';
 import ReactMutationObserver from '../../utils/ReactMutationObserver';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
@@ -48,7 +47,6 @@ class Header extends React.Component {
         super(props);
 
         this.state = {
-            gptAdRendered: false,
             showAd: false,
             showAnnouncement: this.props.showAnnouncement,
         };
@@ -68,20 +66,16 @@ class Header extends React.Component {
 
     componentDidMount() {
         if (
-            !this.props.gptEnabled ||
             !process.env.BROWSER ||
             !window.googletag ||
             !window.googletag.pubads
         ) {
             return null;
         }
-
-        window.addEventListener('gptadshown', e => this.gptAdRendered(e));
     }
 
     componentWillUnmount() {
         if (
-            !this.props.gptEnabled ||
             !process.env.BROWSER ||
             !window.googletag ||
             !window.googletag.pubads
@@ -127,10 +121,6 @@ class Header extends React.Component {
 
     headroomOnUnfix() {
         this.setState({ showAd: true });
-    }
-
-    gptAdRendered() {
-        this.setState({ showAd: true, gptAdRendered: true });
     }
 
     hideAnnouncement() {
@@ -318,10 +308,8 @@ class Header extends React.Component {
                 value: tt('g.logout'),
             },
         ];
-        showAd = false; // TODO: fix header ad overlap bug
         const headerMutated = (mutation, discconnectObserver) => {
             if (mutation.target.id.indexOf('google_ads_iframe_') !== -1) {
-                this.gptAdRendered();
                 if (typeof discconnectObserver === 'function') {
                     discconnectObserver();
                 }
@@ -345,14 +333,6 @@ class Header extends React.Component {
                             any time.
                         </div>*/}
                         {/* If announcement is shown, ad will not render unless it's in a parent div! */}
-                        <div style={showAd ? {} : { display: 'none' }}>
-                            <GptAd
-                                tags={gptTags}
-                                type="Freestar"
-                                id="bsa-zone_1566493796250-1_123456"
-                            />
-                        </div>
-
                         <nav className="row Header__nav">
                             <div className="small-6 medium-4 large-4 columns Header__logotype">
                                 <Link to={logo_link}>

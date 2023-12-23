@@ -363,9 +363,9 @@ class Header extends React.Component {
                                     />
                                 </span>
                                 <span className="Header__search">
-                                    <a href="/search">
+                                    <Link href="/search">
                                         <IconButton icon="magnifyingGlass" />
-                                    </a>
+                                    </Link>
                                 </span>
 
                                 {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}

@@ -26,6 +26,7 @@ import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
 import { userActionRecord } from 'app/utils/ServerApiClient';
+import { browserHistory } from 'react-router';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
@@ -173,6 +174,11 @@ class ReplyEditor extends React.Component {
     unshiftTagInput(tag) {
         const { tags } = this.state;
         tags.props.onChange(tag + ' ' + tags.value);
+
+        // if community not exist and request for to add new recieved
+        if (!this.state.community && tag) {
+            this.setState({ community: tag });
+        }
     }
 
     componentDidMount() {
@@ -585,6 +591,23 @@ class ReplyEditor extends React.Component {
         });
     };
 
+    onCommunityChange = tag => {
+        const { tags } = this.state;
+        const items = tags.value.split(' ');
+
+        // updating the url with the new community name
+        browserHistory.replace(`/submit.html?category=${tag}`);
+
+        // removing the old community name
+        items.shift();
+
+        // updating the tags with the new community name
+        tags.props.onChange(tag + ' ' + items.join(' '));
+
+        // updating the community state with new tags
+        this.setState({ community: tag });
+    };
+
     render() {
         const originalPost = {
             category: this.props.category,
@@ -688,7 +711,9 @@ class ReplyEditor extends React.Component {
                             disabledCommunity={disabledCommunity}
                             username={username}
                             onCancel={this.shiftTagInput.bind(this)}
+                            onCommunityChange={this.onCommunityChange}
                             onUndo={this.unshiftTagInput.bind(this)}
+                            posting={loading}
                         />
                     )}
                 <div className="column small-12">

@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.steempro.mobile",
+            "sha256_cert_fingerprints": [
+                "09:79:FD:6A:81:3C:5B:1F:25:3E:A3:BF:57:05:0F:D1:46:3E:47:5D:C0:7B:1F:1A:40:E7:08:FD:2E:EA:85:FE"
+            ]
+        }
+    }
+]

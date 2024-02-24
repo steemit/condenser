@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
+import FeedsNavigationMenu from 'app/components/cards/FeedsNavigationMenu';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
@@ -21,10 +22,6 @@ class PostsIndexLayout extends React.Component {
         blogmode: PropTypes.bool,
         topics: PropTypes.object,
     };
-
-    constructor() {
-        super();
-    }
 
     componentWillMount() {
         const { subscriptions, getSubscriptions, username } = this.props;
@@ -53,7 +50,9 @@ class PostsIndexLayout extends React.Component {
             adSwipeConf,
             tronAdsConf,
             locale,
+            routeTag,
         } = this.props;
+
         const adSwipeEnabled = adSwipeConf.getIn(['enabled']);
         const tronAdsEnabled = tronAdsConf.getIn(['enabled']);
         const tronAdSidebyPid = tronAdsConf.getIn(['sidebar_ad_pid']);
@@ -61,79 +60,90 @@ class PostsIndexLayout extends React.Component {
         const tronAdsMock = tronAdsConf.getIn(['is_mock']);
 
         return (
-            <div
-                className={
-                    'PostsIndex row ' +
-                    (blogmode ? 'layout-block' : 'layout-list')
-                }
-            >
-                <article className="articles">
-                    {community && (
-                        <span className="hide-for-mq-large articles__header-select">
-                            <CommunityPaneMobile
+            <div>
+                <nav className="FeedsNavigation">
+                    <FeedsNavigationMenu
+                        routeTag={routeTag.routeTag}
+                        category={routeTag.params.category}
+                        order={routeTag.params.order}
+                    />
+                </nav>
+                <div
+                    className={
+                        'PostsIndex row ' +
+                        (blogmode ? 'layout-block' : 'layout-list')
+                    }
+                >
+                    <article className="articles">
+                        {community && (
+                            <span className="hide-for-mq-large articles__header-select">
+                                <CommunityPaneMobile
+                                    community={community}
+                                    username={username}
+                                />
+                            </span>
+                        )}
+                        {children}
+                    </article>
+
+                    <aside className="c-sidebar c-sidebar--right">
+                        {community && (
+                            <CommunityPane
                                 community={community}
                                 username={username}
                             />
-                        </span>
-                    )}
-                    {children}
-                </article>
-
-                <aside className="c-sidebar c-sidebar--right">
-                    {community && (
-                        <CommunityPane
-                            community={community}
-                            username={username}
-                        />
-                    )}
-                    {isBrowser &&
-                        !community &&
-                        !username && <SidebarNewUsers />}
-                    {isBrowser &&
-                        !community &&
-                        username && (
-                            <SidebarLinks username={username} topics={topics} />
                         )}
-                    {false && !community && <Notices />}
-                    {/* {!community && <SteemMarket />} */}
-                    <SteemMarket
-                        page={`${
-                            category
-                                ? 'CoinMarketPlaceCommunity'
-                                : 'CoinMarketPlaceIndex'
-                        }`}
-                    />
-                </aside>
+                        {isBrowser &&
+                            !community &&
+                            !username && <SidebarNewUsers />}
+                        {isBrowser &&
+                            !community &&
+                            username && (
+                                <SidebarLinks
+                                    username={username}
+                                    topics={topics}
+                                />
+                            )}
+                        {false && !community && <Notices />}
+                        {/* {!community && <SteemMarket />} */}
+                        <SteemMarket
+                            page={`${
+                                category
+                                    ? 'CoinMarketPlaceCommunity'
+                                    : 'CoinMarketPlaceIndex'
+                            }`}
+                        />
+                    </aside>
 
-                <aside className="c-sidebar c-sidebar--left">
-                    <Announcement />
-                    <Topics
-                        compact={false}
-                        username={username}
-                        subscriptions={subscriptions}
-                        topics={topics}
-                    />
-                    {adSwipeEnabled && (
-                        <AdSwipe
-                            adList={indexLeftSideAdList}
-                            trackingId={trackingId}
-                            timer={5000}
-                            direction="horizontal"
+                    <aside className="c-sidebar c-sidebar--left">
+                        <Topics
+                            compact={false}
+                            username={username}
+                            subscriptions={subscriptions}
+                            topics={topics}
                         />
-                    )}
-                    {tronAdsEnabled && (
-                        <TronAd
-                            env={tronAdsEnv}
-                            trackingId={trackingId}
-                            wrapperName={'tron_ad_sideby'}
-                            pid={tronAdSidebyPid}
-                            isMock={tronAdsMock}
-                            lang={locale}
-                            adTag={'tron_ad_sideby'}
-                            ratioClass={'ratio-1-1'}
-                        />
-                    )}
-                </aside>
+                        {adSwipeEnabled && (
+                            <AdSwipe
+                                adList={indexLeftSideAdList}
+                                trackingId={trackingId}
+                                timer={5000}
+                                direction="horizontal"
+                            />
+                        )}
+                        {tronAdsEnabled && (
+                            <TronAd
+                                env={tronAdsEnv}
+                                trackingId={trackingId}
+                                wrapperName={'tron_ad_sideby'}
+                                pid={tronAdSidebyPid}
+                                isMock={tronAdsMock}
+                                lang={locale}
+                                adTag={'tron_ad_sideby'}
+                                ratioClass={'ratio-1-1'}
+                            />
+                        )}
+                    </aside>
+                </div>
             </div>
         );
     }
@@ -152,6 +162,9 @@ export default connect(
             ['indexLeftSideAdList'],
             List()
         );
+        const routeTag = state.app.has('routeTag')
+            ? state.app.get('routeTag')
+            : null;
         return {
             blogmode: props.blogmode,
             enableAds: props.enableAds,
@@ -168,6 +181,7 @@ export default connect(
             locale,
             trackingId,
             indexLeftSideAdList,
+            routeTag,
         };
     },
     dispatch => ({

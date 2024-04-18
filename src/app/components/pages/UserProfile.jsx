@@ -295,14 +295,6 @@ export default class UserProfile extends React.Component {
                 <div className="columns shrink">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
                         <li>
-                            <a href={'@' + accountname + '/feed'}>
-                                {accountname}'s {tt('g.feed')}
-                            </a>
-                        </li>
-                        {/*isMyAccount && (
-                            <li>{_tablink('feed', tt('g.my_feed'))}</li>
-                        )*/}
-                        <li>
                             <a href={walletUrl} target="_blank">
                                 Wallet
                             </a>

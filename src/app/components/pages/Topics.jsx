@@ -33,7 +33,7 @@ class Topics extends Component {
                 if (tag && tag[0] === '@')
                     return {
                         value: `/@${username}/feed`,
-                        label: 'My Friends' || `tt('g.my_feed')`,
+                        label: 'My friends' || `tt('g.my_feed')`,
                     };
                 if (tag === 'my')
                     return { value: `/trending/my`, label: 'My communities' };
@@ -122,6 +122,11 @@ class Topics extends Component {
 
         const list = (
             <ul className="c-sidebar__list">
+                <li>{link('/', tt('g.all_tags'))}</li>
+                {username && (
+                    <li>{link(`/@${username}/feed`, 'My friends')}</li>
+                )}
+                {username && <li>{link(`/trending/my`, 'My communities')}</li>}
                 {(subscriptions || topics).size > 0 && <li>{commsHead}</li>}
                 {username &&
                     subscriptions &&

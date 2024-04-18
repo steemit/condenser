@@ -18,7 +18,6 @@ import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
 import UserProfileHeader from 'app/components/cards/UserProfileHeader';
 import SubscriptionsList from '../cards/SubscriptionsList';
 import * as appActions from 'app/redux/AppReducer';
-import Icon from 'app/components/elements/Icon';
 
 const emptyPostsText = (section, account, isMyAccount) => {
     const name = '@' + account;
@@ -178,9 +177,6 @@ export default class UserProfile extends React.Component {
         }
 
         const isMyAccount = username === accountname;
-
-        const feedUrl = '/@' + accountname + '/feed';
-
         let tab_content = null;
         if (userIllegalContent.includes(accountname)) {
             // invalid users
@@ -270,11 +266,10 @@ export default class UserProfile extends React.Component {
             );
         }
 
-        const _tablink = (tab, label, logo = null) => {
+        const _tablink = (tab, label) => {
             const cls = tab === top_active ? 'active' : null;
             return (
                 <Link to={_url(tab)} className={cls}>
-                    {logo && <Icon name={logo} className="space-right" />}
                     {label}
                 </Link>
             );
@@ -284,64 +279,36 @@ export default class UserProfile extends React.Component {
             <div className="row UserProfile__top-menu">
                 <div className="columns small-9 medium-12 medium-expand">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
-                        <li>{_tablink('blog', tt('g.blog'), 'profile')}</li>
+                        <li>{_tablink('blog', tt('g.blog'))}</li>
+                        <li>{_tablink('posts', tt('g.posts'))}</li>
+                        <li>{_tablink('replies', tt('g.replies'))}</li>
+                        <li>{_tablink('communities', tt('g.communities'))}</li>
                         <li>
-                            {_tablink('posts', tt('g.posts'), 'library-books')}
+                            {_tablink('notifications', tt('g.notifications'))}
                         </li>
-                        <li>{_tablink('replies', tt('g.replies'), 'reply')}</li>
-                        <li>
-                            {_tablink(
-                                'communities',
-                                tt('g.communities'),
-                                'account-group'
-                            )}
-                        </li>
-                        <li>
-                            {_tablink(
-                                'notifications',
-                                tt('g.notifications'),
-                                'clock'
-                            )}
-                        </li>
+                        {/*
+                        <li>{_tablink('comments', tt('g.comments'))}</li>
+                        <li>{_tablink('payout', tt('voting_jsx.payout'))}</li>
+                        */}
                     </ul>
                 </div>
                 <div className="columns shrink">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
-                        {!isMyAccount && (
-                            <li>
-                                <a href={feedUrl}>
-                                    <Icon
-                                        name="account-heart"
-                                        className="space-right"
-                                    />@{accountname}'s {tt('g.feed')}
-                                </a>
-                            </li>
-                        )}
-                        {isMyAccount && (
-                            <li>
-                                <a href={feedUrl}>
-                                    <Icon
-                                        name="account-heart"
-                                        className="space-right"
-                                    />
-                                    {tt('g.my_feed')}
-                                </a>
-                            </li>
-                        )}
+                        <li>
+                            <a href={'@' + accountname + '/feed'}>
+                                {accountname}'s {tt('g.feed')}
+                            </a>
+                        </li>
+                        {/*isMyAccount && (
+                            <li>{_tablink('feed', tt('g.my_feed'))}</li>
+                        )*/}
                         <li>
                             <a href={walletUrl} target="_blank">
-                                <Icon name="wallet_2" className="space-right" />
                                 Wallet
                             </a>
                         </li>
                         {isMyAccount && (
-                            <li>
-                                {_tablink(
-                                    'settings',
-                                    tt('g.settings'),
-                                    'account-settings-variant'
-                                )}
-                            </li>
+                            <li>{_tablink('settings', tt('g.settings'))}</li>
                         )}
                     </ul>
                 </div>

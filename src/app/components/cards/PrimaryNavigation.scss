@@ -183,10 +183,9 @@
         left: 0;
         display: flex;
         flex-direction: row;
-        height: 60px;
+        height: auto;
 
         @include MQ(M) {
-            height: auto;
             display: block;  
         }
 

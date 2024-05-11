@@ -141,7 +141,7 @@
                         
         @include MQ(M) {
             display: inline-block;
-            padding-left: 10px;
+            padding-left: 0.6rem;
         }
     }
 
@@ -301,7 +301,7 @@
             }
     
             span.Label {
-                padding: 0 0.4rem;
+                padding: 0 0.4rem 0 0.6rem;
                 display: inline;
                 margin: 0;
             }

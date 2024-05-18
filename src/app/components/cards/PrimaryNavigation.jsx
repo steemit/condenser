@@ -41,17 +41,13 @@ class PrimaryNavigation extends React.PureComponent {
         window.addEventListener('resize', this.handleResize);
         this.renderVisible();
     }
-
-    componentWillUpdate(nextProps, nextState) {
-        const { subscriptions, getSubscriptions, username } = this.props;
-        if (!subscriptions && username) getSubscriptions(username);
-    }
-
     componentDidUpdate(prevProps, prevState) {
         const { pathname } = this.props;
         if (prevProps.pathname !== pathname) {
             this.renderVisible();
         }
+        const { subscriptions, getSubscriptions, username } = this.props;
+        if (!subscriptions && username) getSubscriptions(username);
     }
 
     componentWillUnmount() {

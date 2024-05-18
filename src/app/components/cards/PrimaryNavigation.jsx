@@ -46,6 +46,8 @@ class PrimaryNavigation extends React.PureComponent {
         if (prevProps.pathname !== pathname) {
             this.renderVisible();
         }
+        const { subscriptions, getSubscriptions, username } = this.props;
+        if (!subscriptions && username) getSubscriptions(username);
     }
 
     componentWillUnmount() {

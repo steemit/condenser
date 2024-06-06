@@ -237,7 +237,7 @@ class PrimaryNavigation extends React.PureComponent {
 
         let localPreviousUrl;
         if (process.env.BROWSER) {
-            localPreviousUrl = localStorage.getItem('previousUrl', pathname);
+            localPreviousUrl = localStorage.getItem('previousUrl');
         }
 
         if (routeTag === 'post' && localPreviousUrl) {

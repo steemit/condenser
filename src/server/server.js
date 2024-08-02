@@ -286,6 +286,13 @@ app.use(
 );
 
 app.use(
+    mount(
+        '/.well-known',
+        staticCache(path.join(__dirname, '../../.well-known'), cacheOpts)
+    )
+);
+
+app.use(
     mount('/robots.txt', function*() {
         this.set('Cache-Control', 'public, max-age=86400000');
         this.type = 'text/plain';

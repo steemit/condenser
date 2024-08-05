@@ -54,6 +54,14 @@ export const icons = [
     'pencil2',
     'pin',
     'pin-disabled',
+    'account-group',
+    'account-heart',
+    'account-settings-variant',
+    'library-books',
+    'wallet_2',
+    'compass-outline',
+    'currency-usd',
+    'person',
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`assets/icons/${i}.svg`);

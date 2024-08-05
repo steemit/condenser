@@ -398,7 +398,11 @@ class NotificationsList extends React.Component {
                     !isLastPage && (
                         <center>
                             <br />
-                            <a href="#" onClick={this.onClickLoadMore}>
+                            <a
+                                href="#"
+                                onClick={this.onClickLoadMore}
+                                className="LoadMore"
+                            >
                                 <strong>
                                     {tt('notificationslist_jsx.load_more')}
                                 </strong>

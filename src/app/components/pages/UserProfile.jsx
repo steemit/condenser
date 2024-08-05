@@ -16,8 +16,9 @@ import Callout from 'app/components/elements/Callout';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import { actions as UserProfilesSagaActions } from 'app/redux/UserProfilesSaga';
 import UserProfileHeader from 'app/components/cards/UserProfileHeader';
-import SubscriptionsList from '../cards/SubscriptionsList';
 import * as appActions from 'app/redux/AppReducer';
+import PrimaryNavigation from 'app/components/cards/PrimaryNavigation';
+import SubscriptionsList from '../cards/SubscriptionsList';
 
 const emptyPostsText = (section, account, isMyAccount) => {
     const name = '@' + account;
@@ -146,7 +147,6 @@ export default class UserProfile extends React.Component {
                 following,
                 followers,
                 accountname,
-                walletUrl,
                 category,
                 section,
                 order,
@@ -156,7 +156,6 @@ export default class UserProfile extends React.Component {
                 subscriptions,
             },
         } = this;
-        console.log(walletUrl);
         // Loading status
         const _state = status ? status.getIn([category, order]) : null;
         const fetching = (_state && _state.fetching) || this.props.loading;
@@ -241,95 +240,30 @@ export default class UserProfile extends React.Component {
             );
         }
 
-        const _url = tab => `/@${accountname}${tab == 'blog' ? '' : '/' + tab}`;
-
-        const _tablink2 = (tab, label) => {
-            const item =
-                tab == section ? (
-                    <strong>{label}</strong>
-                ) : (
-                    <Link to={_url(tab)}>{label}</Link>
-                );
-            return <div key={tab}>{item}</div>;
-        };
-
-        let tab_header;
-        let top_active = section;
-        if (['posts', 'comments', 'payout'].includes(section)) {
-            top_active = 'posts';
-            tab_header = (
-                <div className="UserProfile__postmenu">
-                    {_tablink2('posts', tt('g.posts'))}
-                    {_tablink2('comments', tt('g.comments'))}
-                    {_tablink2('payout', tt('g.payouts'))}
-                </div>
-            );
-        }
-
-        const _tablink = (tab, label) => {
-            const cls = tab === top_active ? 'active' : null;
-            return (
-                <Link to={_url(tab)} className={cls}>
-                    {label}
-                </Link>
-            );
-        };
-
-        const top_menu = (
-            <div className="row UserProfile__top-menu">
-                <div className="columns small-9 medium-12 medium-expand">
-                    <ul className="menu" style={{ flexWrap: 'wrap' }}>
-                        <li>{_tablink('blog', tt('g.blog'))}</li>
-                        <li>{_tablink('posts', tt('g.posts'))}</li>
-                        <li>{_tablink('replies', tt('g.replies'))}</li>
-                        <li>{_tablink('communities', tt('g.communities'))}</li>
-                        <li>
-                            {_tablink('notifications', tt('g.notifications'))}
-                        </li>
-                        {/*
-                        <li>{_tablink('comments', tt('g.comments'))}</li>
-                        <li>{_tablink('payout', tt('voting_jsx.payout'))}</li>
-                        */}
-                    </ul>
-                </div>
-                <div className="columns shrink">
-                    <ul className="menu" style={{ flexWrap: 'wrap' }}>
-                        <li>
-                            <a href={walletUrl} target="_blank">
-                                Wallet
-                            </a>
-                        </li>
-                        {isMyAccount && (
-                            <li>{_tablink('settings', tt('g.settings'))}</li>
-                        )}
-                    </ul>
-                </div>
-            </div>
-        );
-
         return (
-            <div className="UserProfile">
+            <div>
                 <UserProfileHeader
                     current_user={username}
                     accountname={accountname}
                     profile={profile}
                 />
-                <div className="UserProfile__top-nav row expanded">
-                    {top_menu}
-                </div>
-                <div className="row">
-                    <div
-                        className={classnames(
-                            'UserProfile__tab_content',
-                            'column',
-                            'layout-list'
-                        )}
-                    >
-                        <article className="articles">
-                            {tab_header}
-                            {tab_content}
-                        </article>
-                    </div>
+                <div
+                    className={classnames(
+                        'PostsIndex',
+                        'row',
+                        //'UserProfile__tab_content',
+                        //'column',
+                        'layout-list'
+                    )}
+                >
+                    <aside className="c-sidebar c-sidebar--right" />
+                    <aside className="c-sidebar c-sidebar--left">
+                        <PrimaryNavigation
+                            routeTag="user_index"
+                            category={category}
+                        />
+                    </aside>
+                    <article className="articles">{tab_content}</article>
                 </div>
             </div>
         );
@@ -342,7 +276,6 @@ module.exports = {
         (state, ownProps) => {
             const username = state.user.getIn(['current', 'username']);
             const accountname = ownProps.routeParams.accountname.toLowerCase();
-            const walletUrl = state.app.get('walletUrl');
 
             let { section } = ownProps.routeParams;
             if (!section) section = 'blog';
@@ -384,7 +317,6 @@ module.exports = {
                 ),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
                 profile: state.userProfiles.getIn(['profiles', accountname]),
-                walletUrl: walletUrl + '/@' + accountname + '/transfers',
                 section,
                 order,
                 category: '@' + accountname,

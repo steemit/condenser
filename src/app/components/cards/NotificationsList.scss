@@ -78,3 +78,11 @@
     }
 }
 
+.LoadMore {
+    display: block;
+    padding-bottom: 60px;
+
+    @include MQ(M) {
+        padding-bottom: 0;
+    }
+}

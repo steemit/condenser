@@ -120,6 +120,9 @@
     order: 1;
     @include MQ(M) {
       display: block;
+      width: 240px;
+      min-width: 240px;
+      max-width: 240px;
       margin-left: 1em;
     }
     .c-sidebr-ads{
@@ -128,6 +131,32 @@
           opacity: 0;
         }
       }
+    }
+  }
+
+  .c-sidebr-ads:has(div.App__navigation) {
+    @include MQ(M) {
+      display: block;
+      flex: none;
+      width: auto;
+    }
+  }
+
+  &--left:has(div.App__navigation) {
+    display: block;
+    flex: none;
+    width: auto;
+
+    > div {
+      display: none;
+
+      @include MQ(M) {
+        display: block;
+      }
+    }
+    
+    > div.App__navigation {
+      display: block;
     }
   }
   &--right {

@@ -3,15 +3,33 @@
   .post-content{
     display: flex;
     margin: 0 auto;
-    max-width: 1454px;
+    max-width: 1600px;
     .c-sidebr-ads{
       display: none;
-      width: 240px;
-      min-width: 240px;
-      max-width: 240px;
+
       @include MQ(M) {
         display: block;
+        width: 240px;
+        min-width: 240px;
+        max-width: 240px;
         margin-left: 1em;
+      }
+    }
+    .c-sidebr-ads:has(div.App__navigation) {
+      display: block;
+      flex: none;
+      width: auto;
+
+      > div {
+        display: none;
+  
+        @include MQ(M) {
+          display: block;
+        }
+      }
+      
+      > div.App__navigation {
+        display: block;
       }
     }
     .c-sidebr-market{
@@ -25,9 +43,7 @@
       }
     }
     .post-main {
-      @media only screen and (max-width: 450px) {
-        width: 100vw;
-      }
+      width: 100%;
     }
   }
   

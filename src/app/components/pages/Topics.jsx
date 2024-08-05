@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import tt from 'counterpart';
 import PropTypes from 'prop-types';
 import NativeSelect from 'app/components/elements/NativeSelect';
@@ -33,7 +32,7 @@ class Topics extends Component {
                 if (tag && tag[0] === '@')
                     return {
                         value: `/@${username}/feed`,
-                        label: 'My friends' || `tt('g.my_feed')`,
+                        label: 'My Friends' || `tt('g.my_feed')`,
                     };
                 if (tag === 'my')
                     return { value: `/trending/my`, label: 'My communities' };
@@ -99,7 +98,7 @@ class Topics extends Component {
             );
         }
 
-        const link = (url, label, className = 'c-sidebar__header') => (
+        const link = (url, label, className = '') => (
             <div className={className}>
                 <Link
                     to={url}
@@ -112,22 +111,10 @@ class Topics extends Component {
         );
 
         const moreLabel = <span>{tt('g.show_more_topics')}&hellip;</span>;
-        const title =
-            subscriptions && username
-                ? 'My subscriptions'
-                : 'Trending Communities';
-        const commsHead = (
-            <div style={{ color: '#aaa', paddingTop: '0em' }}>{title}</div>
-        );
 
         const list = (
-            <ul className="c-sidebar__list">
-                <li>{link('/', tt('g.all_tags'))}</li>
-                {username && (
-                    <li>{link(`/@${username}/feed`, 'My friends')}</li>
-                )}
-                {username && <li>{link(`/trending/my`, 'My communities')}</li>}
-                {(subscriptions || topics).size > 0 && <li>{commsHead}</li>}
+            <span>
+                {(subscriptions || topics).size > 0}
                 {username &&
                     subscriptions &&
                     subscriptions
@@ -152,13 +139,13 @@ class Topics extends Component {
                         'c-sidebar__link--emphasis'
                     )}
                 </li>
-            </ul>
+            </span>
         );
 
         return (
-            <div className="c-sidebar__module">
-                <div className="c-sidebar__content">{list}</div>
-            </div>
+            <ul id="Subscriptions" className="MySubscriptions">
+                {list}
+            </ul>
         );
     }
 }

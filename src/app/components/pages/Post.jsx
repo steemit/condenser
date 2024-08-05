@@ -1,29 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Comment from 'app/components/cards/Comment';
+import Comment, { sortComments } from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
-import { immutableAccessor } from 'app/utils/Accessors';
 import { connect } from 'react-redux';
-import { List } from 'immutable';
-import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
+import { List, Set } from 'immutable';
 import { parseJsonTags } from 'app/utils/StateFunctions';
-import { sortComments } from 'app/components/cards/Comment';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
-import { Set } from 'immutable';
 import tt from 'counterpart';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
-import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
 import { isLoggedIn } from 'app/utils/UserUtil';
-import { recordAdsView } from 'app/utils/ServerApiClient';
 import SteemMarket from 'app/components/elements/SteemMarket';
-import SvgImage from 'app/components/elements/SvgImage';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
-import Topics from './Topics';
 import Icon from 'app/components/elements/Icon';
 import AdSwipe from 'app/components/elements/AdSwipe';
 import TronAd from 'app/components/elements/TronAd';
+import PrimaryNavigation from 'app/components/cards/PrimaryNavigation';
 import * as appActions from 'app/redux/AppReducer';
 import Announcement from './Announcement';
 
@@ -58,9 +51,8 @@ class Post extends React.Component {
     }
 
     componentWillMount() {
-        const { subscriptions, getSubscriptions, uname, dis } = this.props;
+        const { dis } = this.props;
         this.props.setRouteTag(dis.get('url'));
-        if (!subscriptions && uname) getSubscriptions(uname);
         this.setState({
             showPostComments: true,
         });
@@ -83,12 +75,6 @@ class Post extends React.Component {
         if (dis.get('url') !== this.props.dis.get('url')) {
             this.props.setRouteTag(dis.get('url'));
         }
-    }
-
-    componentDidUpdate(prevProps) {
-        const { subscriptions, getSubscriptions, uname } = this.props;
-        if (!subscriptions && uname && uname != prevProps.uname)
-            getSubscriptions(uname);
     }
 
     componentWillUnmount() {
@@ -127,7 +113,6 @@ class Post extends React.Component {
             isBrowser,
             uname,
             topics,
-            subscriptions,
             trackingId,
             postLeftSideAdList,
             bottomAdList,
@@ -295,33 +280,10 @@ class Post extends React.Component {
             <div className="Post">
                 <div className="post-content">
                     <div className="c-sidebr-ads">
-                        <Announcement />
-                        <Topics
-                            compact={false}
-                            username={uname}
-                            subscriptions={subscriptions}
-                            topics={topics}
+                        <PrimaryNavigation
+                            routeTag="post"
+                            category={selflink}
                         />
-                        {adSwipeEnabled && (
-                            <AdSwipe
-                                adList={postLeftSideAdList}
-                                trackingId={trackingId}
-                                timer={5000}
-                                direction="horizontal"
-                            />
-                        )}
-                        {tronAdsEnabled && (
-                            <TronAd
-                                env={tronAdsEnv}
-                                trackingId={trackingId}
-                                wrapperName={'tron_ad_sideby'}
-                                pid={tronAdSidebyPid}
-                                isMock={tronAdsMock}
-                                lang={locale}
-                                adTag={'tron_ad_sideby'}
-                                ratioClass={'ratio-1-1'}
-                            />
-                        )}
                     </div>
                     <div className="post-main">
                         <div className="row">
@@ -444,6 +406,7 @@ class Post extends React.Component {
                     </div>
                     <div className="c-sidebr-market">
                         {isBrowser && !uname && <SidebarNewUsers />}
+                        {isBrowser && <Announcement />}
                         {isBrowser &&
                             uname && (
                                 <SidebarLinks
@@ -453,6 +416,26 @@ class Post extends React.Component {
                             )}
                         {!steemMarketData.isEmpty() && (
                             <SteemMarket page="CoinMarketPlacePost" />
+                        )}
+                        {adSwipeEnabled && (
+                            <AdSwipe
+                                adList={postLeftSideAdList}
+                                trackingId={trackingId}
+                                timer={5000}
+                                direction="horizontal"
+                            />
+                        )}
+                        {tronAdsEnabled && (
+                            <TronAd
+                                env={tronAdsEnv}
+                                trackingId={trackingId}
+                                wrapperName={'tron_ad_sideby'}
+                                pid={tronAdSidebyPid}
+                                isMock={tronAdsMock}
+                                lang={locale}
+                                adTag={'tron_ad_sideby'}
+                                ratioClass={'ratio-1-1'}
+                            />
                         )}
                     </div>
                 </div>
@@ -496,14 +479,11 @@ export default connect(
             isBrowser: process.env.BROWSER,
             uname,
             topics: state.global.getIn(['topics'], List()),
-            subscriptions: state.global.getIn(['subscriptions', uname], null),
             postLeftSideAdList,
             bottomAdList,
         };
     },
     dispatch => ({
-        getSubscriptions: account =>
-            dispatch(fetchDataSagaActions.getSubscriptions(account)),
         setRouteTag: permlink =>
             dispatch(
                 appActions.setRouteTag({

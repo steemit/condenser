@@ -26,11 +26,11 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
             {
                 label: tt('main_menu.trending'),
                 value: `/trending${tag}`,
-            } /*
+            },
             {
                 label: tt('main_menu.hot'),
                 value: `/hot${tag}`,
-            },*/,
+            },
         ];
 
         if (!topMenu) {

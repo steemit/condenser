@@ -157,7 +157,14 @@ class Header extends React.Component {
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
-                page_title = 'My Friends'; //tt('header_jsx.home');
+                const user = `${route.params[1]}`.replace('@', '');
+                if (user === username) {
+                    page_title = tt('g.my_friends');
+                } else if (user) {
+                    page_title = user + "'s " + tt('g.friends');
+                } else {
+                    page_title = tt('g.my_friends');
+                }
             } else {
                 topic = route.params.length > 1 ? route.params[1] || '' : '';
                 gptTags = [topic];
@@ -278,7 +285,7 @@ class Header extends React.Component {
         );
 
         const replies_link = `/@${username}/replies`;
-        const account_link = `/@${username}`;
+        const account_link = `/@${username}/posts`;
         const comments_link = `/@${username}/comments`;
         const notifs_link = `/@${username}/notifications`;
         const wallet_link = `${walletUrl}/@${username}`;
@@ -289,7 +296,7 @@ class Header extends React.Component {
                 : '');
 
         const user_menu = [
-            { link: account_link, icon: 'profile', value: tt('g.profile') },
+            { link: account_link, icon: 'person', value: tt('g.profile') },
             { link: notifs_link, icon: 'clock', value: notif_label },
             { link: comments_link, icon: 'chatbox', value: tt('g.comments') },
             { link: replies_link, icon: 'reply', value: tt('g.replies') },

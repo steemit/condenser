@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import reactForm from 'app/utils/ReactForm';
-import { Map } from 'immutable';
+import { Map, fromJS, OrderedSet } from 'immutable';
 import { connect } from 'react-redux';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
-import TagInput from 'app/components/cards/TagInput';
-import { validateTagInput } from 'app/components/cards/TagInput';
+import TagInput, { validateTagInput } from 'app/components/cards/TagInput';
 import SlateEditor, {
     serializeHtml,
     deserializeHtml,
@@ -20,12 +19,12 @@ import Tooltip from 'app/components/elements/Tooltip';
 import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
-import * as globalActions from 'app/redux/GlobalReducer';
-import { fromJS, Set, OrderedSet } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
 import { userActionRecord } from 'app/utils/ServerApiClient';
+import PrimaryNavigation from 'app/components/cards/PrimaryNavigation';
+import SteemMarket from 'app/components/elements/SteemMarket';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
@@ -607,6 +606,7 @@ class ReplyEditor extends React.Component {
             defaultPayoutType,
             payoutType,
             beneficiaries,
+            steemMarketData,
         } = this.props;
         const {
             submitting,
@@ -679,217 +679,396 @@ class ReplyEditor extends React.Component {
             : '';
 
         return (
-            <div className="ReplyEditor row">
-                {isStory &&
-                    !isEdit &&
-                    username && (
-                        <PostCategoryBanner
-                            communityName={community}
-                            disabledCommunity={disabledCommunity}
-                            username={username}
-                            onCancel={this.shiftTagInput.bind(this)}
-                            onUndo={this.unshiftTagInput.bind(this)}
-                        />
-                    )}
-                <div className="column small-12">
-                    <div
-                        ref="draft"
-                        className="ReplyEditor__draft ReplyEditor__draft-hide"
-                    >
-                        {tt('reply_editor.draft_saved')}
-                    </div>
-                    <form
-                        className={vframe_class}
-                        onSubmit={handleSubmit(({ data }) => {
-                            const startLoadingIndicator = () =>
-                                this.setState({
-                                    loading: true,
-                                    postError: undefined,
-                                });
-                            reply({
-                                ...data,
-                                ...replyParams,
-                                startLoadingIndicator,
-                            });
-                        })}
-                        onChange={() => {
-                            this.setState({ postError: null });
-                        }}
-                    >
-                        <div className={vframe_section_shrink_class}>
-                            {isStory && (
-                                <span>
-                                    <input
-                                        type="text"
-                                        className="ReplyEditor__title"
-                                        onChange={onTitleChange}
-                                        disabled={loading}
-                                        placeholder={tt('reply_editor.title')}
-                                        autoComplete="off"
-                                        ref="titleRef"
-                                        tabIndex={1}
-                                        {...title.props}
-                                    />
-                                    <div
-                                        className=" secondary"
-                                        style={{
-                                            marginRight: '1rem',
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                        }}
-                                    >
-                                        <a
-                                            href="#"
-                                            onClick={this.showTemplates}
-                                            style={{ color: '#1FBF8F' }}
-                                        >
-                                            {tt('reply_editor.template')}
-                                        </a>
-                                        {rte && (
-                                            <a
-                                                href="#"
-                                                onClick={this.toggleRte}
+            <div className="Post">
+                <div className="post-content">
+                    {isStory &&
+                        !isEdit && (
+                            <div className="c-sidebr-ads">
+                                <PrimaryNavigation
+                                    routeTag="post"
+                                    category="undefined"
+                                />
+                            </div>
+                        )}
+                    <div className="post-main">
+                        {isStory &&
+                            !isEdit &&
+                            username && (
+                                <PostCategoryBanner
+                                    communityName={community}
+                                    disabledCommunity={disabledCommunity}
+                                    username={username}
+                                    onCancel={this.shiftTagInput.bind(this)}
+                                    onUndo={this.unshiftTagInput.bind(this)}
+                                />
+                            )}
+                        <div className="column small-12">
+                            <div
+                                ref="draft"
+                                className="ReplyEditor__draft ReplyEditor__draft-hide"
+                            >
+                                {tt('reply_editor.draft_saved')}
+                            </div>
+                            <form
+                                className={vframe_class}
+                                onSubmit={handleSubmit(({ data }) => {
+                                    const startLoadingIndicator = () =>
+                                        this.setState({
+                                            loading: true,
+                                            postError: undefined,
+                                        });
+                                    reply({
+                                        ...data,
+                                        ...replyParams,
+                                        startLoadingIndicator,
+                                    });
+                                })}
+                                onChange={() => {
+                                    this.setState({ postError: null });
+                                }}
+                            >
+                                <div className={vframe_section_shrink_class}>
+                                    {isStory && (
+                                        <span>
+                                            <input
+                                                type="text"
+                                                className="ReplyEditor__title"
+                                                onChange={onTitleChange}
+                                                disabled={loading}
+                                                placeholder={tt(
+                                                    'reply_editor.title'
+                                                )}
+                                                autoComplete="off"
+                                                ref="titleRef"
+                                                tabIndex={1}
+                                                {...title.props}
+                                            />
+                                            <div
+                                                className=" secondary"
+                                                style={{
+                                                    marginRight: '1rem',
+                                                    display: 'flex',
+                                                    justifyContent:
+                                                        'space-between',
+                                                }}
                                             >
-                                                {body.value
-                                                    ? 'Raw HTML'
-                                                    : 'Markdown'}
-                                            </a>
-                                        )}
-                                        {!rte &&
-                                            (isHtml || !body.value) && (
                                                 <a
                                                     href="#"
-                                                    onClick={this.toggleRte}
+                                                    onClick={this.showTemplates}
+                                                    style={{ color: '#1FBF8F' }}
                                                 >
-                                                    {tt('reply_editor.editor')}
+                                                    {tt(
+                                                        'reply_editor.template'
+                                                    )}
                                                 </a>
-                                            )}
-                                    </div>
-                                    {titleError}
-                                </span>
-                            )}
-                        </div>
+                                                {rte && (
+                                                    <a
+                                                        href="#"
+                                                        onClick={this.toggleRte}
+                                                    >
+                                                        {body.value
+                                                            ? 'Raw HTML'
+                                                            : 'Markdown'}
+                                                    </a>
+                                                )}
+                                                {!rte &&
+                                                    (isHtml || !body.value) && (
+                                                        <a
+                                                            href="#"
+                                                            onClick={
+                                                                this.toggleRte
+                                                            }
+                                                        >
+                                                            {tt(
+                                                                'reply_editor.editor'
+                                                            )}
+                                                        </a>
+                                                    )}
+                                            </div>
+                                            {titleError}
+                                        </span>
+                                    )}
+                                </div>
 
-                        <div
-                            className={
-                                'ReplyEditor__body ' +
-                                (rte
-                                    ? `rte ${vframe_section_class}`
-                                    : vframe_section_shrink_class)
-                            }
-                        >
-                            {process.env.BROWSER && rte ? (
-                                <SlateEditor
-                                    ref="rte"
-                                    placeholder={
-                                        isStory
-                                            ? 'Write your story...'
-                                            : 'Reply'
+                                <div
+                                    className={
+                                        'ReplyEditor__body ' +
+                                        (rte
+                                            ? `rte ${vframe_section_class}`
+                                            : vframe_section_shrink_class)
                                     }
-                                    initialState={this.state.rte_value}
-                                    onChange={this.onChange}
-                                />
-                            ) : (
-                                <span>
-                                    <Dropzone
-                                        onDrop={this.onDrop}
-                                        className={
-                                            type === 'submit_story'
-                                                ? 'dropzone'
-                                                : 'none'
-                                        }
-                                        disableClick
-                                        multiple
-                                        accept="image/*"
-                                        ref={node => {
-                                            this.dropzone = node;
-                                        }}
-                                    >
-                                        <textarea
-                                            {...body.props}
-                                            ref="postRef"
-                                            onPasteCapture={this.onPasteCapture}
-                                            className={
-                                                type === 'submit_story'
-                                                    ? 'upload-enabled'
-                                                    : ''
-                                            }
-                                            disabled={loading}
-                                            rows={isStory ? 10 : 3}
+                                >
+                                    {process.env.BROWSER && rte ? (
+                                        <SlateEditor
+                                            ref="rte"
                                             placeholder={
                                                 isStory
-                                                    ? tt('g.write_your_story')
-                                                    : tt('g.reply')
+                                                    ? 'Write your story...'
+                                                    : 'Reply'
                                             }
-                                            autoComplete="off"
-                                            tabIndex={2}
+                                            initialState={this.state.rte_value}
+                                            onChange={this.onChange}
                                         />
-                                    </Dropzone>
-                                    <p className="drag-and-drop">
-                                        {tt(
-                                            'reply_editor.insert_images_by_dragging_dropping'
-                                        )}
-                                        {noClipboardData
-                                            ? ''
-                                            : tt(
-                                                  'reply_editor.pasting_from_the_clipboard'
-                                              )}
-                                        {tt('reply_editor.or_by')}{' '}
-                                        <a onClick={this.onOpenClick}>
-                                            {tt('reply_editor.selecting_them')}
-                                        </a>
-                                        .
-                                    </p>
-                                    {progress.message && (
-                                        <div className="info">
-                                            {progress.message}
-                                        </div>
+                                    ) : (
+                                        <span>
+                                            <Dropzone
+                                                onDrop={this.onDrop}
+                                                className={
+                                                    type === 'submit_story'
+                                                        ? 'dropzone'
+                                                        : 'none'
+                                                }
+                                                disableClick
+                                                multiple
+                                                accept="image/*"
+                                                ref={node => {
+                                                    this.dropzone = node;
+                                                }}
+                                            >
+                                                <textarea
+                                                    {...body.props}
+                                                    ref="postRef"
+                                                    onPasteCapture={
+                                                        this.onPasteCapture
+                                                    }
+                                                    className={
+                                                        type === 'submit_story'
+                                                            ? 'upload-enabled'
+                                                            : ''
+                                                    }
+                                                    disabled={loading}
+                                                    rows={isStory ? 10 : 3}
+                                                    placeholder={
+                                                        isStory
+                                                            ? tt(
+                                                                  'g.write_your_story'
+                                                              )
+                                                            : tt('g.reply')
+                                                    }
+                                                    autoComplete="off"
+                                                    tabIndex={2}
+                                                />
+                                            </Dropzone>
+                                            <p className="drag-and-drop">
+                                                {tt(
+                                                    'reply_editor.insert_images_by_dragging_dropping'
+                                                )}
+                                                {noClipboardData
+                                                    ? ''
+                                                    : tt(
+                                                          'reply_editor.pasting_from_the_clipboard'
+                                                      )}
+                                                {tt('reply_editor.or_by')}{' '}
+                                                <a onClick={this.onOpenClick}>
+                                                    {tt(
+                                                        'reply_editor.selecting_them'
+                                                    )}
+                                                </a>
+                                                .
+                                            </p>
+                                            {progress.message && (
+                                                <div className="info">
+                                                    {progress.message}
+                                                </div>
+                                            )}
+                                            {progress.error && (
+                                                <div className="error">
+                                                    {tt(
+                                                        'reply_editor.image_upload'
+                                                    )}{' '}
+                                                    : {progress.error}
+                                                </div>
+                                            )}
+                                        </span>
                                     )}
-                                    {progress.error && (
-                                        <div className="error">
-                                            {tt('reply_editor.image_upload')} :{' '}
-                                            {progress.error}
-                                        </div>
-                                    )}
-                                </span>
-                            )}
-                        </div>
-                        <div className={vframe_section_shrink_class}>
-                            <div className="error">
-                                {body.touched &&
-                                    body.error &&
-                                    body.error !== 'Required' &&
-                                    body.error}
-                            </div>
-                        </div>
-
-                        <div
-                            className={vframe_section_shrink_class}
-                            style={{ marginTop: '0.5rem' }}
-                        >
-                            {isStory && (
-                                <span>
-                                    <TagInput
-                                        {...tags.props}
-                                        onChange={tags.props.onChange}
-                                        disabled={loading}
-                                        isEdit={isEdit}
-                                        tabIndex={3}
-                                    />
+                                </div>
+                                <div className={vframe_section_shrink_class}>
                                     <div className="error">
-                                        {(tags.touched || tags.value) &&
-                                            tags.error}
-                                        &nbsp;
+                                        {body.touched &&
+                                            body.error &&
+                                            body.error !== 'Required' &&
+                                            body.error}
                                     </div>
-                                </span>
-                            )}
-                        </div>
-                        <div className={vframe_section_shrink_class}>
-                            {isStory &&
-                                !isEdit && (
-                                    <div className="ReplyEditor__options">
-                                        <div>
-                                            <div>
+                                </div>
+
+                                <div
+                                    className={vframe_section_shrink_class}
+                                    style={{ marginTop: '0.5rem' }}
+                                >
+                                    {isStory && (
+                                        <span>
+                                            <TagInput
+                                                {...tags.props}
+                                                onChange={tags.props.onChange}
+                                                disabled={loading}
+                                                isEdit={isEdit}
+                                                tabIndex={3}
+                                            />
+                                            <div className="error">
+                                                {(tags.touched || tags.value) &&
+                                                    tags.error}
+                                                &nbsp;
+                                            </div>
+                                        </span>
+                                    )}
+                                </div>
+                                <div className={vframe_section_shrink_class}>
+                                    {isStory &&
+                                        !isEdit && (
+                                            <div className="ReplyEditor__options">
+                                                <div>
+                                                    <div>
+                                                        {tt('g.rewards')}
+                                                        {': '}
+                                                        {this.props
+                                                            .payoutType ==
+                                                            '0%' &&
+                                                            tt(
+                                                                'reply_editor.decline_payout'
+                                                            )}
+                                                        {this.props
+                                                            .payoutType ==
+                                                            '50%' &&
+                                                            tt(
+                                                                'reply_editor.default_50_50'
+                                                            )}
+                                                        {this.props
+                                                            .payoutType ==
+                                                            '100%' &&
+                                                            tt(
+                                                                'reply_editor.power_up_100'
+                                                            )}
+                                                    </div>
+                                                    <div>
+                                                        {beneficiaries &&
+                                                            beneficiaries.length >
+                                                                0 && (
+                                                                <span>
+                                                                    {tt(
+                                                                        'g.beneficiaries'
+                                                                    )}
+                                                                    {': '}
+                                                                    {tt(
+                                                                        'reply_editor.beneficiaries_set',
+                                                                        {
+                                                                            count:
+                                                                                beneficiaries.length,
+                                                                        }
+                                                                    )}
+                                                                </span>
+                                                            )}
+                                                    </div>
+                                                    <a
+                                                        href="#"
+                                                        onClick={
+                                                            this
+                                                                .showAdvancedSettings
+                                                        }
+                                                    >
+                                                        {tt(
+                                                            'reply_editor.advanced_settings'
+                                                        )}
+                                                    </a>{' '}
+                                                    <br />
+                                                    &nbsp;
+                                                </div>
+                                            </div>
+                                        )}
+                                </div>
+                                <div className={vframe_section_shrink_class}>
+                                    {postError && (
+                                        <div className="error">{postError}</div>
+                                    )}
+                                </div>
+                                <div className={vframe_section_shrink_class}>
+                                    <div className="button-container">
+                                        <div className="item ">
+                                            {!loading && (
+                                                <button
+                                                    type="submit"
+                                                    className="button"
+                                                    disabled={disabled}
+                                                    tabIndex={4}
+                                                >
+                                                    {isEdit
+                                                        ? tt(
+                                                              'reply_editor.update_post'
+                                                          )
+                                                        : postLabel}
+                                                </button>
+                                            )}
+                                            {loading && (
+                                                <span>
+                                                    <br />
+                                                    <LoadingIndicator type="circle" />
+                                                </span>
+                                            )}
+                                            &nbsp;{' '}
+                                            {!loading &&
+                                                this.props.onCancel && (
+                                                    <button
+                                                        type="button"
+                                                        className="secondary hollow button no-border"
+                                                        tabIndex={5}
+                                                        onClick={onCancel}
+                                                    >
+                                                        {tt('g.cancel')}
+                                                    </button>
+                                                )}
+                                            {!loading &&
+                                                !this.props.onCancel && (
+                                                    <button
+                                                        className="button hollow no-border"
+                                                        tabIndex={5}
+                                                        disabled={submitting}
+                                                        onClick={onCancel}
+                                                    >
+                                                        {tt('g.clear')}
+                                                    </button>
+                                                )}
+                                        </div>
+                                        {isStory && (
+                                            <div className="item">
+                                                {!loading && (
+                                                    <button
+                                                        className="button"
+                                                        tabIndex={7}
+                                                        disabled={disabled}
+                                                        onClick={
+                                                            this
+                                                                .onClickSaveDraft
+                                                        }
+                                                    >
+                                                        {this.state
+                                                            .draft_permlink
+                                                            ? tt(
+                                                                  'reply_editor.draft_update'
+                                                              )
+                                                            : tt(
+                                                                  'reply_editor.draft_save'
+                                                              )}
+                                                    </button>
+                                                )}
+                                                {!loading && (
+                                                    <button
+                                                        className="button"
+                                                        tabIndex={6}
+                                                        onClick={
+                                                            this.showDrafts
+                                                        }
+                                                    >
+                                                        {tt(
+                                                            'reply_editor.draft'
+                                                        )}
+                                                    </button>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                    {!isStory &&
+                                        !isEdit &&
+                                        this.props.payoutType != '50%' && (
+                                            <div className="ReplyEditor__options float-right text-right">
                                                 {tt('g.rewards')}
                                                 {': '}
                                                 {this.props.payoutType ==
@@ -898,177 +1077,63 @@ class ReplyEditor extends React.Component {
                                                         'reply_editor.decline_payout'
                                                     )}
                                                 {this.props.payoutType ==
-                                                    '50%' &&
-                                                    tt(
-                                                        'reply_editor.default_50_50'
-                                                    )}
-                                                {this.props.payoutType ==
                                                     '100%' &&
                                                     tt(
                                                         'reply_editor.power_up_100'
                                                     )}
+                                                {'. '}
+                                                <a
+                                                    href={
+                                                        '/@' +
+                                                        username +
+                                                        '/settings'
+                                                    }
+                                                >
+                                                    Update settings
+                                                </a>
                                             </div>
-                                            <div>
-                                                {beneficiaries &&
-                                                    beneficiaries.length >
-                                                        0 && (
-                                                        <span>
-                                                            {tt(
-                                                                'g.beneficiaries'
-                                                            )}
-                                                            {': '}
-                                                            {tt(
-                                                                'reply_editor.beneficiaries_set',
-                                                                {
-                                                                    count:
-                                                                        beneficiaries.length,
-                                                                }
-                                                            )}
-                                                        </span>
-                                                    )}
-                                            </div>
-                                            <a
-                                                href="#"
-                                                onClick={
-                                                    this.showAdvancedSettings
-                                                }
-                                            >
-                                                {tt(
-                                                    'reply_editor.advanced_settings'
-                                                )}
-                                            </a>{' '}
-                                            <br />
-                                            &nbsp;
-                                        </div>
-                                    </div>
-                                )}
-                        </div>
-                        <div className={vframe_section_shrink_class}>
-                            {postError && (
-                                <div className="error">{postError}</div>
-                            )}
-                        </div>
-                        <div className={vframe_section_shrink_class}>
-                            <div className="button-container">
-                                <div className="item ">
-                                    {!loading && (
-                                        <button
-                                            type="submit"
-                                            className="button"
-                                            disabled={disabled}
-                                            tabIndex={4}
-                                        >
-                                            {isEdit
-                                                ? tt('reply_editor.update_post')
-                                                : postLabel}
-                                        </button>
-                                    )}
-                                    {loading && (
-                                        <span>
-                                            <br />
-                                            <LoadingIndicator type="circle" />
-                                        </span>
-                                    )}
-                                    &nbsp;{' '}
-                                    {!loading &&
-                                        this.props.onCancel && (
-                                            <button
-                                                type="button"
-                                                className="secondary hollow button no-border"
-                                                tabIndex={5}
-                                                onClick={onCancel}
-                                            >
-                                                {tt('g.cancel')}
-                                            </button>
-                                        )}
-                                    {!loading &&
-                                        !this.props.onCancel && (
-                                            <button
-                                                className="button hollow no-border"
-                                                tabIndex={5}
-                                                disabled={submitting}
-                                                onClick={onCancel}
-                                            >
-                                                {tt('g.clear')}
-                                            </button>
                                         )}
                                 </div>
-                                {isStory && (
-                                    <div className="item">
-                                        {!loading && (
-                                            <button
-                                                className="button"
-                                                tabIndex={7}
-                                                disabled={disabled}
-                                                onClick={this.onClickSaveDraft}
-                                            >
-                                                {this.state.draft_permlink
-                                                    ? tt(
-                                                          'reply_editor.draft_update'
-                                                      )
-                                                    : tt(
-                                                          'reply_editor.draft_save'
-                                                      )}
-                                            </button>
-                                        )}
-                                        {!loading && (
-                                            <button
-                                                className="button"
-                                                tabIndex={6}
-                                                onClick={this.showDrafts}
-                                            >
-                                                {tt('reply_editor.draft')}
-                                            </button>
-                                        )}
-                                    </div>
+                                {!loading &&
+                                    !rte &&
+                                    body.value && (
+                                        <div
+                                            className={
+                                                'Preview ' +
+                                                vframe_section_shrink_class
+                                            }
+                                        >
+                                            {!isHtml && (
+                                                <div className="float-right">
+                                                    <a
+                                                        target="_blank"
+                                                        href="https://guides.github.com/features/mastering-markdown/"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        {tt(
+                                                            'reply_editor.markdown_styling_guide'
+                                                        )}
+                                                    </a>
+                                                </div>
+                                            )}
+                                            <h6>{tt('g.preview')}</h6>
+                                            <MarkdownViewer
+                                                text={body.value}
+                                                large={isStory}
+                                            />
+                                        </div>
+                                    )}
+                            </form>
+                        </div>
+                    </div>
+                    {isStory &&
+                        !isEdit && (
+                            <div className="c-sidebr-market">
+                                {!steemMarketData.isEmpty() && (
+                                    <SteemMarket page="CoinMarketPlacePost" />
                                 )}
                             </div>
-                            {!isStory &&
-                                !isEdit &&
-                                this.props.payoutType != '50%' && (
-                                    <div className="ReplyEditor__options float-right text-right">
-                                        {tt('g.rewards')}
-                                        {': '}
-                                        {this.props.payoutType == '0%' &&
-                                            tt('reply_editor.decline_payout')}
-                                        {this.props.payoutType == '100%' &&
-                                            tt('reply_editor.power_up_100')}
-                                        {'. '}
-                                        <a href={'/@' + username + '/settings'}>
-                                            Update settings
-                                        </a>
-                                    </div>
-                                )}
-                        </div>
-                        {!loading &&
-                            !rte &&
-                            body.value && (
-                                <div
-                                    className={
-                                        'Preview ' + vframe_section_shrink_class
-                                    }
-                                >
-                                    {!isHtml && (
-                                        <div className="float-right">
-                                            <a
-                                                target="_blank"
-                                                href="https://guides.github.com/features/mastering-markdown/"
-                                                rel="noopener noreferrer"
-                                            >
-                                                {tt(
-                                                    'reply_editor.markdown_styling_guide'
-                                                )}
-                                            </a>
-                                        </div>
-                                    )}
-                                    <h6>{tt('g.preview')}</h6>
-                                    <MarkdownViewer
-                                        text={body.value}
-                                        large={isStory}
-                                    />
-                                </div>
-                            )}
-                    </form>
+                        )}
                 </div>
             </div>
         );
@@ -1175,6 +1240,7 @@ export default formId =>
                 'beneficiaries',
             ]);
             beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
+            const steemMarketData = state.app.get('steemMarket');
 
             // Post full
             /*
@@ -1208,6 +1274,7 @@ export default formId =>
                 beneficiaries,
                 initialValues: { title, body, tags },
                 formId,
+                steemMarketData,
             };
         },
 

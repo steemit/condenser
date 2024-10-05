@@ -266,7 +266,7 @@ export async function serverRender(
         // const tronConfig = await getTronConfig();
         const tronConfig = {
             tron_reward_switch: 'on',
-            vests_per_trx: 1913,
+            vests_per_trx: 0, // currently no trx rewards
             unbind_tip_limit: 5,
         };
         if (tronConfig !== false) {

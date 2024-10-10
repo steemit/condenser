@@ -158,27 +158,20 @@
                     
             &__content {
                 display: block !important;
-                //border: 5px solid black;
             }
             &__content-block {
-                //border: 5px solid coral;
                 display: block !important;
                 width: 100% !important;
                 flex: none;
                 &--img {
-                    //border: 5px solid red;
                     height: auto;
                     margin-bottom: 0.5rem !important;
-                    //margin-right: 14px;
                 }
                 &--text {
-                    //border: 5px solid orange;
                     flex: none;
                     min-width: 100px !important;
                     
                     .PostSummary__body {
-                        //-webkit-line-clamp: 3;
-                        //line-clamp: 3;
                         white-space: wrap;
                         padding-bottom: 0.5rem;
                     }
@@ -189,7 +182,6 @@
             }
 
             &__feature-img-container {
-                //border: 5px solid darkred;
                 display: flex !important;
                 width: 100% !important;
                 height: 250px !important;
@@ -203,21 +195,16 @@
                 position: absolute;
                 display: block;
                 bottom: 0;
-                //border: 5px solid cyan !important;
                 
                 .Voting {
-                    //border: 2px solid blue;
                     float: none;
                 }
                 .VotesAndComments {
-                    //border: 2px solid darkblue;
-
                     .VotesAndComments__votes {
                         padding-right: 0;
                     }
                 }
                 .PostSummary__time_author_category {
-                    //border: 2px solid black;
                     padding-left: 0;
 
                     .Reblog__button  {

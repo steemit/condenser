@@ -1,0 +1,155 @@
+.CommunityBanner {
+    //display: flex;
+    //align-items: start;
+    height: 200px;
+    padding: 0;
+    position: relative;
+    text-align: left;
+    
+    @include MQ(FM) {
+        height: 220px;
+    }
+    
+    @include MQ(L) {
+        height: 200px;
+    }
+
+    .CommunityTitle {
+        background-color: rgba(51,51,51,0.6);
+        //border-top-right-radius: 5px;
+        //border-bottom-right-radius: 5px;
+        //border-right: 1px solid rgba(238, 238, 238, 0.5);
+        border-bottom: 1px solid rgba(238, 238, 238, 0.5);
+        display: flex;
+        flex-basis: 100%;
+        align-items: start;
+        margin: 0;
+        padding: 0;
+    
+        .Userpic {
+            border: 2px solid rgb(238, 238, 238);
+            margin: 0.5rem;
+            width: 50px !important;
+            min-width: 50px;
+            height: 50px !important;
+            @include MQ(M) {
+                margin: 1rem;
+                width: 60px !important;
+                min-width: 60px;
+                height: 60px !important;
+            }
+        }
+
+        .TextContainer {
+            display: flex;
+            flex-direction: column;
+            margin: 0.5rem 0;
+            width: 100%;
+            
+            h1 {
+                margin: 0;
+                padding: 0 1rem 0.5rem 0;
+            }
+
+            p {
+                margin: 0;
+                padding: 0 1rem 0 0;
+            }
+        }
+    }
+
+    .AdditionalActions {
+        color: white;
+        border-left: 1px solid rgba(238, 238, 238, 0.5);
+        margin: 0.5rem 0;
+        padding: 0.5rem 1rem;
+        text-align: right;
+        white-space: nowrap;
+        
+        @include MQ(L) {
+            display: none;
+        }
+
+        .ActivityLog, .ModeratorRoles {
+            display: flex;
+            flex-direction: column;
+        }
+        .ActivityLog {
+            font-size: 0.8em;
+        }
+    }
+
+    .CommunityActions {
+        display: flex;
+        position: absolute;
+        right: 1rem;
+        bottom: 2rem;
+        @include MQ(L) {
+            bottom: 0;
+        }
+        gap: 1rem;
+
+        .button {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding-top: 0.4rem;
+            padding-bottom: 0.4rem;
+        }
+
+        .hollow {
+            background-color: white;
+        }
+        
+        .Icon {
+            margin: 0;
+            margin-left: -0.6rem;
+        }
+    }
+
+    .CommunityAttributes {    
+        display: flex;
+        gap: 0.5rem; 
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        margin-left: 0.5rem;
+        @include MQ(L) {
+            margin-left: 1rem;
+        }
+
+        .CommunitySubscribers {
+            cursor: pointer;
+            
+            &:hover {
+                @include themify($themes) {
+                    color: themed('colorAccent');
+                }
+            }
+        }
+
+        p {
+            margin: 0;
+            padding: 0.5rem;
+            background-color: rgba(51,51,51,0.6);
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border-top: 1px solid rgba(238, 238, 238, 0.5);
+            border-left: 1px solid rgba(238, 238, 238, 0.5);
+            border-right: 1px solid rgba(238, 238, 238, 0.5);
+            line-height: normal;
+            text-align: center;
+
+            .CommunityLabel {
+                padding-left: 5px;
+                font-size: 0.8em;
+            }
+            @include MQ(L) {
+                .CommunityLabel::before {
+                    content: "\a";
+                    white-space: pre;
+                }
+            }
+        }
+    }
+}

@@ -3,17 +3,14 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { Role } from 'app/utils/Community';
 import SettingsEditButton from 'app/components/elements/SettingsEditButton';
-import SubscribeButton from 'app/components/elements/SubscribeButton';
 import Icon from 'app/components/elements/Icon';
 import * as globalActions from 'app/redux/GlobalReducer';
-import * as userActions from 'app/redux/UserReducer';
-import { numberWithCommas } from 'app/utils/StateFunctions';
 
 const nl2br = text =>
     text.split('\n').map((item, key) => (
@@ -28,21 +25,11 @@ const nl2li = text =>
 class CommunityPane extends Component {
     static propTypes = {
         community: PropTypes.object.isRequired,
-        showRecentSubscribers: PropTypes.func.isRequired,
         showModerationLog: PropTypes.func.isRequired,
     };
 
     render() {
-        const {
-            community,
-            showRecentSubscribers,
-            showModerationLog,
-            loggedIn,
-            showLogin,
-        } = this.props;
-        const handleSubscriberClick = () => {
-            showRecentSubscribers(community);
-        };
+        const { community, showModerationLog } = this.props;
 
         const handleModerationLogCLick = e => {
             e.preventDefault();
@@ -74,89 +61,10 @@ class CommunityPane extends Component {
         const viewer_role = community.getIn(['context', 'role'], 'guest');
         const canPost = Role.canPost(category, viewer_role);
 
-        const checkIfLogin = () => {
-            if (!loggedIn) {
-                return showLogin();
-            }
-            return browserHistory.replace(`/submit.html?category=${category}`);
-        };
-
         return (
             <div>
                 <div className="c-sidebar__module">
-                    {Role.atLeast(viewer_role, 'admin') && (
-                        <div style={{ float: 'right', fontSize: '0.8em' }}>
-                            <SettingsEditButton
-                                community={community.get('name')}
-                            >
-                                Edit
-                            </SettingsEditButton>
-                        </div>
-                    )}
-                    <div className="c-sidebar__header">
-                        <h3 className="c-sidebar__h3">
-                            {community.get('title')}
-                        </h3>
-                        {community.get('is_nsfw') && (
-                            <span className="affiliation">nsfw</span>
-                        )}
-                    </div>
-                    <div style={{ margin: '-6px 0 12px' }}>
-                        {community.get('about')}
-                    </div>
-                    <div
-                        className="row"
-                        style={{ textAlign: 'center', lineHeight: '1em' }}
-                    >
-                        <div
-                            onClick={handleSubscriberClick}
-                            className="column small-4 pointer"
-                        >
-                            {numberWithCommas(community.get('subscribers'))}
-                            <br />
-                            <small>
-                                {community.get('subscribers') == 1
-                                    ? 'subscriber'
-                                    : 'subscribers'}
-                            </small>
-                        </div>
-                        <div className="column small-4">
-                            {'$'}
-                            {numberWithCommas(community.get('sum_pending'))}
-                            <br />
-                            <small>
-                                pending<br />rewards
-                            </small>
-                        </div>
-                        <div className="column small-4">
-                            {numberWithCommas(community.get('num_authors'))}
-                            <br />
-                            <small>
-                                active<br />posters
-                            </small>
-                        </div>
-                    </div>
-
-                    <div style={{ margin: '12px 0 0' }}>
-                        {community && (
-                            <SubscribeButton
-                                community={community.get('name')}
-                                display="block"
-                            />
-                        )}
-                        {canPost && (
-                            <Link
-                                className="button primary"
-                                style={{
-                                    minWidth: '6em',
-                                    display: 'block',
-                                    margin: '-6px 0 8px',
-                                }}
-                                onClick={checkIfLogin}
-                            >
-                                New Post
-                            </Link>
-                        )}
+                    <div>
                         {!canPost && (
                             <div
                                 className="text-center"
@@ -187,9 +95,21 @@ class CommunityPane extends Component {
                     </div>
                 </div>
                 <div className="c-sidebar__module">
+                    {Role.atLeast(viewer_role, 'admin') && (
+                        <div style={{ float: 'right', fontSize: '0.8em' }}>
+                            <SettingsEditButton
+                                community={community.get('name')}
+                            >
+                                Edit
+                            </SettingsEditButton>
+                        </div>
+                    )}
                     {community.get('description') && (
                         <div>
                             <strong>Description</strong>
+                            {community.get('is_nsfw') && (
+                                <span className="affiliation">nsfw</span>
+                            )}
                             <br />
                             {nl2br(community.get('description', 'empty'))}
                             <br />
@@ -218,23 +138,10 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => ({
         community: ownProps.community,
-        loggedIn: !!state.user.getIn(['current', 'username']),
     }),
     // mapDispatchToProps
     dispatch => {
         return {
-            showLogin: e => {
-                if (e) e.preventDefault();
-                dispatch(userActions.showLogin({ type: 'basic' }));
-            },
-            showRecentSubscribers: community => {
-                dispatch(
-                    globalActions.showDialog({
-                        name: 'communitySubscribers',
-                        params: { community },
-                    })
-                );
-            },
             showModerationLog: community => {
                 dispatch(
                     globalActions.showDialog({

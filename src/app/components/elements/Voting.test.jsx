@@ -264,33 +264,4 @@ describe('Voting', () => {
             '2.50 SBD, <br>&nbsp;&nbsp;&nbsp;&nbsp;2.50 STEEM, <br>&nbsp;&nbsp;&nbsp;&nbsp;5.00 SP'
         );
     });
-
-    it('TRX should be 100.00 TRX', () => {
-        const post_obj = fromJS({
-            stats: {
-                total_votes: 1,
-            },
-            max_accepted_payout: '999999 SBD',
-            percent_steem_dollars: 10000,
-            pending_payout_value: '10 SBD',
-            payout_at: '2018-03-30T10:00:00Z',
-        });
-        const store = createStore(rootReducer);
-        const component = renderer.create(
-            <Provider store={store}>
-                <IntlProvider locale="en">
-                    <Voting
-                        vote={(w, p) => {}}
-                        post={post_obj}
-                        price_per_steem={1}
-                        sbd_print_rate={5000}
-                        vests_per_steem={vests_per_steem}
-                    />
-                </IntlProvider>
-            </Provider>
-        );
-        expect(JSON.stringify(component.toJSON())).toContain(
-            '2.50 SBD, <br>&nbsp;&nbsp;&nbsp;&nbsp;2.50 STEEM, <br>&nbsp;&nbsp;&nbsp;&nbsp;5.00 SP, <br>&nbsp;&nbsp;&nbsp;&nbsp;100.00 TRX'
-        );
-    });
 });

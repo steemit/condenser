@@ -15,7 +15,6 @@ export const LIQUID_TOKEN_UPPERCASE = 'STEEM';
 export const VESTING_TOKEN = 'STEEM POWER';
 export const INVEST_TOKEN_UPPERCASE = 'STEEM POWER';
 export const INVEST_TOKEN_SHORT = 'SP';
-export const INVEST_TRON_SHORT = 'TRX';
 export const DEBT_TOKEN = 'STEEM DOLLAR';
 export const DEBT_TOKENS = 'STEEM DOLLARS';
 export const CURRENCY_SIGN = '$';

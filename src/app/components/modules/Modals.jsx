@@ -19,15 +19,11 @@ import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionFor
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import TermsAgree from 'app/components/modules/TermsAgree';
 import PostAdvancedSettings from 'app/components/modules/PostAdvancedSettings';
-import TronCreateOne from 'app/components/modules/TronCreateOne';
-import TronCreateTwo from 'app/components/modules/TronCreateTwo';
 import PostDrafts from './PostDrafts';
 import PostTemplates from './PostTemplates';
 
 class Modals extends React.Component {
     static propTypes = {
-        show_tron_create_modal: PropTypes.bool,
-        show_tron_create_success_modal: PropTypes.bool,
         show_login_modal: PropTypes.bool,
         show_confirm_modal: PropTypes.bool,
         show_bandwidth_error_modal: PropTypes.bool,
@@ -74,8 +70,6 @@ class Modals extends React.Component {
         show_post_templates_modal: '',
         on_post_templates_close_modal: () => {},
         loginBroadcastOperation: undefined,
-        show_tron_create_modal: false,
-        show_tron_create_success_modal: false,
         loading: false,
     };
 
@@ -86,8 +80,6 @@ class Modals extends React.Component {
 
     render() {
         const {
-            show_tron_create_modal,
-            show_tron_create_success_modal,
             show_login_modal,
             show_confirm_modal,
             show_bandwidth_error_modal,
@@ -110,8 +102,6 @@ class Modals extends React.Component {
             hidePostTemplates,
             username,
             loginBroadcastOperation,
-            hideTronCreate,
-            hideTronCreateSuccess,
         } = this.props;
 
         const notifications_array = notifications
@@ -129,29 +119,6 @@ class Modals extends React.Component {
         };
         return (
             <div>
-                {show_tron_create_modal && (
-                    <Reveal
-                        onHide={() => {
-                            if (this.props.loading === false) hideTronCreate();
-                        }}
-                        show={show_tron_create_modal}
-                    >
-                        <CloseButton onClick={hideTronCreate} />
-                        <TronCreateOne />
-                    </Reveal>
-                )}
-                {show_tron_create_success_modal && (
-                    <Reveal
-                        onHide={() => {
-                            if (this.props.loading === false)
-                                hideTronCreateSuccess();
-                        }}
-                        show={show_tron_create_success_modal}
-                    >
-                        <CloseButton onClick={hideTronCreateSuccess} />
-                        <TronCreateTwo />
-                    </Reveal>
-                )}
                 {show_login_modal && (
                     <Reveal
                         onHide={() => {
@@ -299,22 +266,10 @@ export default connect(
                 'on_post_templates_close_modal'
             ),
             loginBroadcastOperation,
-            show_tron_create_modal: state.user.get('show_tron_create_modal'),
-            show_tron_create_success_modal: state.user.get(
-                'show_tron_create_success_modal'
-            ),
             loading: state.app.get('modalLoading'),
         };
     },
     dispatch => ({
-        hideTronCreate: e => {
-            if (e) e.preventDefault();
-            dispatch(userActions.hideTronCreate());
-        },
-        hideTronCreateSuccess: e => {
-            if (e) e.preventDefault();
-            dispatch(userActions.hideTronCreateSuccess());
-        },
         hideLogin: e => {
             if (e) e.preventDefault();
             dispatch(userActions.hideLogin());

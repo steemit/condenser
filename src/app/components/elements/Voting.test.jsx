@@ -58,11 +58,6 @@ const marketPrice = fromJS([
     },
 ]);
 
-const tronPriceTronscan = fromJS({
-    price_in_usd: '0.001',
-});
-
-const vests_per_trx = 100;
 const vests_per_steem = 2000;
 
 describe('Voting', () => {
@@ -83,10 +78,7 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
-                vests_per_trx={vests_per_trx}
                 vests_per_steem={vests_per_steem}
-                tron_market_price={marketPrice}
-                tron_price_tronscan={tronPriceTronscan}
                 store={mockStore}
             />
         ).dive();
@@ -114,10 +106,7 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
-                vests_per_trx={vests_per_trx}
                 vests_per_steem={vests_per_steem}
-                tron_market_price={marketPrice}
-                tron_price_tronscan={tronPriceTronscan}
                 store={mockStore}
             />
         ).dive();
@@ -148,10 +137,7 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
-                vests_per_trx={vests_per_trx}
                 vests_per_steem={vests_per_steem}
-                tron_market_price={marketPrice}
-                tron_price_tronscan={tronPriceTronscan}
                 store={mockStore}
             />
         ).dive();
@@ -176,10 +162,7 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
-                vests_per_trx={vests_per_trx}
                 vests_per_steem={vests_per_steem}
-                tron_market_price={marketPrice}
-                tron_price_tronscan={tronPriceTronscan}
                 store={mockStore}
             />
         ).dive();
@@ -213,10 +196,7 @@ describe('Voting', () => {
                         vote={(w, p) => {}}
                         post={post_obj}
                         price_per_steem={1}
-                        vests_per_trx={vests_per_trx}
                         vests_per_steem={vests_per_steem}
-                        tron_market_price={marketPrice}
-                        tron_price_tronscan={tronPriceTronscan}
                         sbd_print_rate={10000}
                     />
                 </IntlProvider>
@@ -245,10 +225,7 @@ describe('Voting', () => {
                         vote={(w, p) => {}}
                         post={post_obj}
                         price_per_steem={1}
-                        vests_per_trx={vests_per_trx}
                         vests_per_steem={vests_per_steem}
-                        tron_market_price={marketPrice}
-                        tron_price_tronscan={tronPriceTronscan}
                         sbd_print_rate={10000}
                     />
                 </IntlProvider>
@@ -278,10 +255,7 @@ describe('Voting', () => {
                         post={post_obj}
                         price_per_steem={1}
                         sbd_print_rate={5000}
-                        vests_per_trx={vests_per_trx}
                         vests_per_steem={vests_per_steem}
-                        tron_market_price={marketPrice}
-                        tron_price_tronscan={tronPriceTronscan}
                     />
                 </IntlProvider>
             </Provider>
@@ -310,10 +284,7 @@ describe('Voting', () => {
                         post={post_obj}
                         price_per_steem={1}
                         sbd_print_rate={5000}
-                        vests_per_trx={vests_per_trx}
                         vests_per_steem={vests_per_steem}
-                        tron_market_price={marketPrice}
-                        tron_price_tronscan={tronPriceTronscan}
                     />
                 </IntlProvider>
             </Provider>

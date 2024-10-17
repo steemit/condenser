@@ -650,42 +650,5 @@
         "ownership_changed_on": "所有权变更",
         "deadline_for_recovery_is": "恢复的截止日期是",
         "i_understand_dont_show_again": "我明白，不要再显示"
-    },
-    "tron_jsx": {
-        "content0":
-            "使用TRX为节点投票,参与TRON生态建设, 您将享受最高百分之八年收益率.",
-        "content1": "投票前需要先将TRX进行冻结获得投票权",
-        "content2": "具体步骤如下:",
-        "step1": "Step1: 点击\"去投票\" 按钮 , 进入Tron scan 投票月面",
-        "step2": "Step2: 点击 \"链接钱包\",选择 \"倒入和登陆\"",
-        "step3": "Step3: 输入TRON账号私钥后 点击\"登陆\"",
-        "step4": "Step4: 点击 \"投票\" 按钮 并跟谁引导进行操作",
-        "vote_button": "去投票",
-        "step": "步骤",
-        "tron_tx_history": "TRON账号交易历史 >",
-        "update_tron_account": "更新TRON账号",
-        "update_tron_content":
-            "更新TRON账号请确认一下信息,以避免不必要的经济损失. \n 已经安全保持了此TRON账户私钥。活已将此TRON账户倒入其他支持TRON账号的钱包中",
-        "update_button": "更新并下载",
-        "update_success": "更新成功",
-        "update_success_content": "已经成功更新TRON账户。若下载失败 ",
-        "update_success_click": "点击下载",
-        "update_success_content2":
-            "请小心保管，丢失无法找回。不要与任何人共享此文件",
-        "safe_save_button": "安全保存",
-        "create_tron_account": "创建TRON账户领取奖励",
-        "create_tron_account_content":
-            "Steemit 将会为你发放额外的TRX奖励，此账户用来接收奖励。",
-        "create_tron_account_content1": "系统会自动为您免费创建TRON账户。",
-        "create_tron_account_content2":
-            "是否同意创建TRON账户并下载带有TRON账户公私钥的PDF？",
-        "create_tron_agree": "同意",
-        "create_tron_success": "创建成功",
-        "create_tron_success_content": "已经成功创建TRON账户。",
-        "create_tron_success_content2": "若下载失败，",
-        "create_tron_success_content3": "带有TRON账户公私钥的PDF。"
-    },
-    "tron_err_msg": {
-        "data_is_invalid": "数据异常.请确认你使用的私钥是正确的。"
     }
 }

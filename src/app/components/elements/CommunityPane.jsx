@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { Role } from 'app/utils/Community';
+import tt from 'counterpart';
 import SettingsEditButton from 'app/components/elements/SettingsEditButton';
 import Icon from 'app/components/elements/Icon';
 import * as globalActions from 'app/redux/GlobalReducer';
@@ -71,8 +72,8 @@ class CommunityPane extends Component {
                                 style={{ marginBottom: '8px' }}
                             >
                                 <small className="text-muted">
-                                    <Icon name="eye" />&nbsp; Only approved
-                                    members can post
+                                    <Icon name="eye" />&nbsp;{' '}
+                                    {tt('g.only_approved')}
                                 </small>
                             </div>
                         )}
@@ -81,15 +82,15 @@ class CommunityPane extends Component {
                         {Role.atLeast(viewer_role, 'mod') && (
                             <div style={{ float: 'right', fontSize: '0.8em' }}>
                                 <Link to={`/roles/${category}`}>
-                                    Edit Roles
+                                    {tt('g.edit_roles')}
                                 </Link>
                             </div>
                         )}
-                        <strong>Leadership</strong>
+                        <strong>{tt('g.leadership')}</strong>
                         {teamMembers(community.get('team', List()))}
                         <div style={{ float: 'right', fontSize: '0.8em' }}>
                             <a onClick={handleModerationLogCLick}>
-                                Activity Log
+                                {tt('g.activity_log')}
                             </a>
                         </div>
                     </div>
@@ -100,13 +101,13 @@ class CommunityPane extends Component {
                             <SettingsEditButton
                                 community={community.get('name')}
                             >
-                                Edit
+                                {tt('g.edit')}
                             </SettingsEditButton>
                         </div>
                     )}
                     {community.get('description') && (
                         <div>
-                            <strong>Description</strong>
+                            <strong>{tt('g.description')}</strong>
                             {community.get('is_nsfw') && (
                                 <span className="affiliation">nsfw</span>
                             )}
@@ -117,14 +118,14 @@ class CommunityPane extends Component {
                     )}
                     {community.get('flag_text') && (
                         <div>
-                            <strong>Rules</strong>
+                            <strong>{tt('g.rules')}</strong>
                             <br />
                             <ol>{nl2li(community.get('flag_text'))}</ol>
                             <br />
                         </div>
                     )}
                     <div>
-                        <strong>Language</strong>
+                        <strong>{tt('g.language')}</strong>
                         <br />
                         {community.get('lang')}
                     </div>

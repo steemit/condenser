@@ -4,6 +4,7 @@ import { Link, browserHistory } from 'react-router';
 import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 import { Role } from 'app/utils/Community';
+import tt from 'counterpart';
 import Userpic from 'app/components/elements/Userpic';
 import SubscribeButton from 'app/components/elements/SubscribeButton';
 import SettingsEditButton from 'app/components/elements/SettingsEditButton';
@@ -81,12 +82,12 @@ class CommunityBanner extends Component {
         }
 
         const roles = Role.atLeast(viewer_role, 'mod') && (
-            <Link to={`/roles/${category}`}>Roles</Link>
+            <Link to={`/roles/${category}`}>{tt('g.roles')}</Link>
         );
 
         const settings = Role.atLeast(viewer_role, 'admin') && (
             <SettingsEditButton community={community.get('name')}>
-                Settings
+                {tt('g.settings')}
             </SettingsEditButton>
         );
 
@@ -114,7 +115,8 @@ class CommunityBanner extends Component {
                                 <div className="ModeratorRoles">
                                     {roles && (
                                         <div>
-                                            Edit{': '}
+                                            {tt('g.edit')}
+                                            {': '}
                                             {roles}
                                             {settings && (
                                                 <span>
@@ -127,7 +129,7 @@ class CommunityBanner extends Component {
                                 </div>
                                 <div className="ActivityLog">
                                     <a onClick={handleModerationLogCLick}>
-                                        Activity Log
+                                        {tt('g.activity_log')}
                                     </a>
                                     {community.get('is_nsfw') && (
                                         <span className="affiliation">
@@ -149,7 +151,8 @@ class CommunityBanner extends Component {
                                     className="button primary"
                                     onClick={checkIfLogin}
                                 >
-                                    <Icon name="pencil" size="2x" /> New Post
+                                    <Icon name="pencil" size="2x" />{' '}
+                                    {tt('g.new_post')}
                                 </Link>
                             )}
                         </div>
@@ -167,8 +170,8 @@ class CommunityBanner extends Component {
                                     )}
                                     <span className="CommunityLabel">
                                         {community.get('subscribers') == 1
-                                            ? 'subscriber'
-                                            : 'subscribers'}
+                                            ? tt('g.subscriber')
+                                            : tt('g.subscribers')}
                                     </span>
                                 </p>
                             </div>
@@ -177,13 +180,13 @@ class CommunityBanner extends Component {
                                     community.get('sum_pending')
                                 )}
                                 <span className="CommunityLabel">
-                                    pending rewards
+                                    {tt('g.pending_rewards')}
                                 </span>
                             </p>
                             <p>
                                 {numberWithCommas(community.get('num_authors'))}
                                 <span className="CommunityLabel">
-                                    active posters
+                                    {tt('g.active_posters')}
                                 </span>
                             </p>
                         </div>

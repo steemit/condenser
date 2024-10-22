@@ -59,8 +59,7 @@ class CommunitySettings extends Component {
         if (field == 'title') {
             let formError = null;
             const rx = new RegExp('^[' + Unicode.L + ']');
-            if (value && !rx.test(value))
-                formError = 'Must start with a letter.';
+            if (value && !rx.test(value)) formError = tt('g.title_error');
             this.setState({ formError });
         }
     };
@@ -69,7 +68,7 @@ class CommunitySettings extends Component {
         if (!acceptedFiles.length) {
             if (rejectedFiles.length) {
                 this.setState({
-                    progress: { error: 'Please insert only image files.' },
+                    progress: { error: tt('settings_jsx.upload_error_image') },
                 });
                 console.log('onDrop Rejected files: ', rejectedFiles);
             }
@@ -156,7 +155,9 @@ class CommunitySettings extends Component {
                 <form onSubmit={this.onSubmit} className="communitySettings">
                     {formError && <span className="error">{formError}</span>}
                     <label className="input-group">
-                        <span className="input-group-label">Title </span>
+                        <span className="input-group-label">
+                            {tt('g.title')}{' '}
+                        </span>
                         <input
                             className="input-group-field"
                             type="text"
@@ -169,7 +170,9 @@ class CommunitySettings extends Component {
                         />
                     </label>
                     <label className="input-group">
-                        <span className="input-group-label">About </span>
+                        <span className="input-group-label">
+                            {tt('g.about')}{' '}
+                        </span>
                         <input
                             className="input-group-field"
                             type="text"
@@ -216,7 +219,9 @@ class CommunitySettings extends Component {
                     </label>
                     <label>
                         {tt('settings_jsx.cover_image_url')}{' '}
-                        <small>(Optimal: 2048 x 512 pixels)</small>
+                        <small>
+                            ({tt('g.optimal')}: 2048 x 512 {tt('g.pixels')})
+                        </small>
                         <input
                             type="url"
                             name="cover_url"
@@ -229,7 +234,7 @@ class CommunitySettings extends Component {
                         </a>
                     </label>
                     <AutocompleteInput
-                        label={'Language'}
+                        label={tt('g.language')}
                         values={languageOptions}
                         initialValue={currentLanguage}
                         onSelect={v => {
@@ -242,7 +247,8 @@ class CommunitySettings extends Component {
                         }}
                     />
                     <label>
-                        Description<br />
+                        {tt('g.description')}
+                        <br />
                         <textarea
                             style={{ whiteSpace: 'normal' }}
                             type="text"
@@ -254,7 +260,7 @@ class CommunitySettings extends Component {
                         />
                     </label>
                     <label>
-                        Rules (one per line)<br />
+                        {tt('g.rules')} ({tt('g.one_per_line')})<br />
                         <textarea
                             style={{ whiteSpace: 'normal' }}
                             type="text"
@@ -275,7 +281,11 @@ class CommunitySettings extends Component {
                         NSFW
                     </label>
                     <div className="text-right">
-                        <input className="button" type="submit" value="Save" />
+                        <input
+                            className="button"
+                            type="submit"
+                            value={tt('g.save')}
+                        />
                     </div>
                 </form>
             </span>

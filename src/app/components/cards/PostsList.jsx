@@ -8,6 +8,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import debounce from 'lodash.debounce';
 import VideoAd from 'app/components/elements/VideoAd';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import tt from 'counterpart';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -328,10 +329,11 @@ class PostsList extends React.Component {
                                     >
                                         {pinnedPostsCount == 2 &&
                                         arePinnedPostsCollapsed
-                                            ? 'View As List \u25BC'
+                                            ? tt('g.view_as_list') + ' \u25BC'
                                             : arePinnedPostsCollapsed
-                                              ? 'Show All Pinned \u25BC'
-                                              : 'Collapse Pinned \u25B2'}
+                                              ? tt('g.show_pinned') + ' \u25BC'
+                                              : tt('g.collapse_pinned') +
+                                                ' \u25B2'}
                                     </a>
                                 </div>
                             )}

@@ -282,7 +282,7 @@ class PostsList extends React.Component {
                     (order === 'trending' || order === 'created') && (
                         <div
                             className={`${
-                                arePinnedPostsCollapsed
+                                arePinnedPostsCollapsed && pinnedPostsCount > 2
                                     ? 'pinnedPostsContainer'
                                     : ''
                             }`}

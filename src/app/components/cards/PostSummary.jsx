@@ -304,7 +304,7 @@ class PostSummary extends React.Component {
             if (this.props.blogmode) {
                 thumb = <img className="articles__feature-img" src={blogImg} />;
             } else {
-                const listImg = proxify(image_link, '256x512');
+                const listImg = proxify(image_link, '640x0');
                 thumb = (
                     <picture className="articles__feature-img">
                         <source srcSet={listImg} media="(min-width: 1000px)" />

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-
+import tt from 'counterpart';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 
@@ -50,7 +50,9 @@ class SubscribeButton extends React.Component {
                 }}
             >
                 <span>
-                    {loading ? loader : subscribed ? 'Joined' : 'Subscribe'}
+                    {loading
+                        ? loader
+                        : subscribed ? tt('g.joined') : tt('g.subscribe')}
                 </span>
             </a>
         );

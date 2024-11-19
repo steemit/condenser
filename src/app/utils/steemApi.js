@@ -5,16 +5,17 @@ import { changeRPCNodeToDefault } from 'app/utils/RPCNode';
 import xhr from 'axios/index';
 
 export async function callBridge(method, params, pre = 'bridge.') {
-    console.log(
-        'call bridge',
-        method,
-        params && JSON.stringify(params).substring(0, 200)
-    );
+    //console.log('call bridge');
+    //console.log("Method: ", method);
+    //console.log("Params: ", JSON.stringify(params).substring(0, 200));
 
     return new Promise(function(resolve, reject) {
         api.call(pre + method, params, function(err, data) {
             if (err) {
-                console.error('~~ apii.calBridge error ~~~>', err);
+                console.error(
+                    '~~ apii.calBridge error ~~',
+                    method + ' ~~> ' + err
+                );
 
                 if (err.message === 'Network request failed') {
                     changeRPCNodeToDefault();

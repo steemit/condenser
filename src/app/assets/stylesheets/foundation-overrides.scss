@@ -89,11 +89,16 @@ table {
   box-shadow: inset 0 0 0 -1px red;
 }
 
+.MarkdownViewer table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+}
 
 thead, tbody, tfoot {
   @include themify($themes) {
     background-color: themed('backgroundColor');    
-  }     
+  }
 }
 
 thead {
@@ -120,6 +125,7 @@ tbody tr:nth-child(even) {
   border: transparent;
   transition: 0.2s all ease-in-out;
   outline: none;
+  padding-bottom: 50px !important;
   @include themify($themes) {
     background-color: themed('modalBackgroundColor');
     color: themed('modalTextColorPrimary');

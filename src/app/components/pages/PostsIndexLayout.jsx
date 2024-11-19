@@ -8,7 +8,6 @@ import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
 import CommunityPane from 'app/components/elements/CommunityPane';
-import CommunityPaneMobile from 'app/components/elements/CommunityPaneMobile';
 import AdSwipe from 'app/components/elements/AdSwipe';
 import TronAd from 'app/components/elements/TronAd';
 import PrimaryNavigation from 'app/components/cards/PrimaryNavigation';
@@ -52,17 +51,7 @@ class PostsIndexLayout extends React.Component {
                         (blogmode ? 'layout-block' : 'layout-list')
                     }
                 >
-                    <article className="articles">
-                        {community && (
-                            <span className="hide-for-mq-large articles__header-select">
-                                <CommunityPaneMobile
-                                    community={community}
-                                    username={username}
-                                />
-                            </span>
-                        )}
-                        {children}
-                    </article>
+                    <article className="articles">{children}</article>
 
                     <aside className="c-sidebar c-sidebar--right">
                         {community && (

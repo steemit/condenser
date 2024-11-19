@@ -90,9 +90,14 @@ export default connect(
             ['community', ownProps.community],
             {}
         );
+        const communityImages = {
+            avatar_url: community.getIn(['settings', 'avatar_url']),
+            cover_url: community.getIn(['settings', 'cover_url']),
+        };
         const settings = {
             title: community.get('title'),
             about: community.get('about'),
+            settings: communityImages,
             is_nsfw: community.get('is_nsfw'),
             lang: community.get('lang'),
             description: community.get('description'),

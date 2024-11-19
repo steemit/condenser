@@ -10,9 +10,7 @@
     z-index: 100000;
     height: 60px;
     
-    @include themify($themes) {
-        border-top: 1px solid themed('highlightBackgroundColor');
-        
+    @include themify($themes) {        
         @include MQ(M) {
             border-radius: 6px;
             border: themed('border');
@@ -313,7 +311,7 @@
         }
 
         .navigation-list {
-            transform: translateY(150%);
+            transform: translateY(100%);
             transition: transform 0.2s ease-in-out;
 
             @include MQ(M) {
@@ -348,6 +346,37 @@
 
     ul#FeedsNavigation > li.active > a {
         border-bottom: none !important;
+    }
+
+    .NavShowHide {
+        cursor: pointer;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.2rem 0.5rem;
+        white-space: nowrap;
+        transition: bottom 0.1s ease-in-out;
+        @include themify($themes) {
+            background-color: themed('navBackgroundColor');
+        }
+
+        &:hover {
+            @include themify($themes) {
+                color: themed('textColorAccent');
+            }
+        }
+        
+        p {
+            margin: 0;
+        }
+    }
+
+    .NavShowPrimary {
+        bottom: 60px;
+    }
+    .NavShowSecondary {
+        bottom: 120px;
     }
 }
         

@@ -23,6 +23,8 @@ class PrimaryNavigation extends React.PureComponent {
             navStartPos: 0,
             isScrollDown: false,
         };
+
+        this.toggleNavigation = this.toggleNavigation.bind(this);
     }
 
     componentWillMount() {
@@ -37,10 +39,23 @@ class PrimaryNavigation extends React.PureComponent {
             snapWidth: 760,
             navStartPos: document.getElementById('appNavigation').offsetTop,
         };
+
+        const isNavCollapsedStored = process.env.BROWSER
+            ? localStorage.getItem('isNavVisible')
+            : null;
+        const isNavCollapsed = isNavCollapsedStored
+            ? JSON.parse(isNavCollapsedStored)
+            : true;
+
+        if (isNavCollapsed !== this.state.isNavVisible) {
+            this.setState({ isNavVisible: isNavCollapsed });
+        }
+
         window.addEventListener('scroll', this.handleScroll);
         window.addEventListener('resize', this.handleResize);
         this.renderVisible();
     }
+
     componentDidUpdate(prevProps, prevState) {
         const { pathname } = this.props;
         if (prevProps.pathname !== pathname) {
@@ -64,6 +79,7 @@ class PrimaryNavigation extends React.PureComponent {
             prevScrollPos,
         } = this.state;
         const {
+            isNavVisible,
             isFeedsNavigationVisible,
             isProfileNavigationVisible,
             isMoreNavigationVisible,
@@ -160,6 +176,9 @@ class PrimaryNavigation extends React.PureComponent {
                 this.setState({ isMoreNavigationVisible: false });
             }
 
+            const navigationShowHide = document.getElementById(
+                'showHideNavigation'
+            );
             if (prevScrollPos > currentScrollPos || currentScrollPos < 100) {
                 // Show the secondary navigation when scrolling up
                 if (isFeedsNavigationVisible) {
@@ -167,10 +186,16 @@ class PrimaryNavigation extends React.PureComponent {
                 } else if (isProfileNavigationVisible) {
                     this.setNavigationVisibility('ProfileNavigation', true);
                 }
+                if (isNavVisible) {
+                    navigationShowHide.classList.add('NavShowSecondary');
+                }
             } else {
                 // Hide the secondary navigation when scrolling down
                 this.setNavigationVisibility('FeedsNavigation', false);
                 this.setNavigationVisibility('ProfileNavigation', false);
+                if (isNavVisible) {
+                    navigationShowHide.classList.remove('NavShowSecondary');
+                }
             }
         }
         this.setState({ prevScrollPos: currentScrollPos });
@@ -178,6 +203,9 @@ class PrimaryNavigation extends React.PureComponent {
 
     handleResize = () => {
         this.setState({ screenWidth: window.innerWidth });
+        if (this.state.screenWidth >= this.state.snapWidth) {
+            this.setState({ isNavVisible: true });
+        }
         this.clearMoreNavigation();
         this.renderVisible();
     };
@@ -217,6 +245,33 @@ class PrimaryNavigation extends React.PureComponent {
             this.setState({ isMoreNavigationVisible: false });
         }
     };
+
+    toggleNavigation() {
+        const navigationShowHide = document.getElementById(
+            'showHideNavigation'
+        );
+        if (navigationShowHide) {
+            if (this.state.isNavVisible) {
+                navigationShowHide.classList.remove('NavShowPrimary');
+                navigationShowHide.classList.remove('NavShowSecondary');
+            } else {
+                navigationShowHide.classList.add('NavShowSecondary');
+            }
+        }
+        this.setState(
+            prevState => ({
+                isNavVisible: !prevState.isNavVisible,
+            }),
+            () => {
+                if (process.env.BROWSER) {
+                    localStorage.setItem(
+                        'isNavVisible',
+                        this.state.isNavVisible
+                    );
+                }
+            }
+        );
+    }
 
     renderVisible = () => {
         const { screenWidth, snapWidth } = this.state;
@@ -355,6 +410,7 @@ class PrimaryNavigation extends React.PureComponent {
 
         const {
             navSection,
+            isNavVisible,
             isFeedsNavigationVisible,
             isProfileNavigationVisible,
             isMoreNavigationVisible,
@@ -384,344 +440,409 @@ class PrimaryNavigation extends React.PureComponent {
             );
         };
 
-        const primary_navigation = (
-            <ul className="PrimaryNavTabs">
-                <li
-                    className={`${
-                        isFeedsNavigationVisible || isOtherProfileVisible
-                            ? 'active'
+        /*const isNavVisibleState = (
+            <div>
+                <p>
+                    {isNavVisible ? '\u25BC IT IS TRUE' : '\u25B2 IT IS FALSE'}
+                </p>
+            </div>
+        )*/
+
+        const show_hide_link =
+            this.state.screenWidth > 0 &&
+            this.state.screenWidth < this.state.snapWidth &&
+            username ? (
+                <div
+                    id="showHideNavigation"
+                    className={`NavShowHide 
+                    ${isNavVisible ? 'NavShowPrimary' : ''} 
+                    ${
+                        isNavVisible &&
+                        (isFeedsNavigationVisible ||
+                            isProfileNavigationVisible ||
+                            isOtherProfileVisible)
+                            ? 'NavShowSecondary'
                             : ''
                     }`}
+                    onClick={this.toggleNavigation}
+                    role="button"
+                    tabIndex={0}
+                    onKeyPress={this.toggleNavigation}
                 >
-                    {tabLink('/trending', tt('g.explore'), 'compass-outline')}
-                    <ul
-                        id="FeedsNavigation"
-                        className={`navigation-list ${
-                            isFeedsNavigationVisible ? 'visible' : ''
-                        }`}
-                    >
-                        {username && (
-                            <li>
-                                {tabLink(
-                                    '/trending',
-                                    tt('g.posts_all'),
-                                    'library-books'
-                                )}
-                            </li>
-                        )}
-                        {username && (
-                            <li>
-                                {tabLink(
-                                    '/@' + username + '/feed',
-                                    tt('g.my_friends'),
-                                    'account-heart'
-                                )}
-                            </li>
-                        )}
-                        {username && (
-                            <li>
-                                {tabLink(
-                                    '/trending/my',
-                                    tt('g.my_subscriptions'),
-                                    'account-group'
-                                )}
-                                {(navSection === '/trending/my' ||
-                                    routeTag === 'community_index' ||
-                                    routeTag === 'more_communities') && (
-                                    <Topics
-                                        username={username}
-                                        current={category}
-                                        topics={topics}
-                                        subscriptions={subscriptions}
-                                        compact={false}
-                                    />
-                                )}
-                            </li>
-                        )}
-                        {navaccountname &&
-                            navaccountname !== username && (
-                                <li className="active">
-                                    {tabLink(
-                                        '/@' + navaccountname + '/posts',
-                                        '@' + navaccountname,
-                                        'person'
-                                    )}
-                                    <ul
-                                        id="ProfileNavigation"
-                                        className={`navigation-list ${
-                                            isProfileNavigationVisible
-                                                ? 'visible'
-                                                : ''
-                                        }`}
-                                    >
-                                        <li>
-                                            {tabLink(
-                                                '/@' + navaccountname + '/blog',
-                                                tt('g.blog')
-                                            )}
-                                        </li>
-                                        <li>
-                                            {tabLink(
-                                                '/@' +
-                                                    navaccountname +
-                                                    '/posts',
-                                                tt('g.posts')
-                                            )}
-                                        </li>
-                                        <li>
-                                            {tabLink(
-                                                '/@' +
-                                                    navaccountname +
-                                                    '/comments',
-                                                tt('g.comments')
-                                            )}
-                                        </li>
-                                        <li>
-                                            {tabLink(
-                                                '/@' +
-                                                    navaccountname +
-                                                    '/replies',
-                                                tt('g.replies')
-                                            )}
-                                        </li>
+                    <p>
+                        {isNavVisible
+                            ? '\u25BC Hide Navigation'
+                            : '\u25B2 Show Navigation'}
+                    </p>
+                </div>
+            ) : null;
 
-                                        <li>
-                                            <a
-                                                href="#"
-                                                onClick={event => {
-                                                    event.preventDefault();
-                                                    this.toggleMoreNavigation();
-                                                }}
-                                                className="More"
-                                            >
-                                                <span className="LogoWrapper">
-                                                    <Icon name="menu" />
-                                                </span>
-                                                <span className="Label">
-                                                    More...
-                                                </span>
-                                            </a>
-                                            <ul
-                                                id="MoreNavigation"
-                                                className={`navigation-list ${
-                                                    isMoreNavigationVisible
-                                                        ? 'visible'
-                                                        : ''
-                                                }`}
-                                            >
-                                                <li>
-                                                    {tabLink(
-                                                        '/@' +
-                                                            navaccountname +
-                                                            '/notifications',
-                                                        tt('g.notifications')
-                                                    )}
-                                                </li>
-                                                {false && (
-                                                    <li>
-                                                        {tabLink(
-                                                            '/@' +
-                                                                navaccountname +
-                                                                '/bookmarks',
-                                                            tt('g.bookmarks'),
-                                                            'bookmark'
-                                                        )}
-                                                    </li>
-                                                )}
-                                                <li>
-                                                    {tabLink(
-                                                        '/@' +
-                                                            navaccountname +
-                                                            '/communities',
-                                                        tt('g.subscriptions')
-                                                    )}
-                                                </li>
-                                                <li>
-                                                    {tabLink(
-                                                        '/@' +
-                                                            navaccountname +
-                                                            '/feed',
-                                                        tt('g.friends_feed')
-                                                    )}
-                                                </li>
-                                                <li>
-                                                    {tabLink(
-                                                        '/@' +
-                                                            navaccountname +
-                                                            '/payout',
-                                                        tt('g.payouts')
-                                                    )}
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        href={walletUrlOther}
-                                                        target="_blank"
-                                                    >
-                                                        <span className="Label">
-                                                            {tt('g.wallet')}
-                                                        </span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            )}
-                    </ul>
-                </li>
-                {username && (
+        const primary_navigation =
+            isNavVisible || this.state.screenWidth >= this.state.snapWidth ? (
+                <ul className="PrimaryNavTabs">
                     <li
                         className={`${
-                            isProfileNavigationVisible && !isOtherProfileVisible
+                            isFeedsNavigationVisible || isOtherProfileVisible
                                 ? 'active'
                                 : ''
                         }`}
                     >
                         {tabLink(
-                            '/@' + username + '/posts',
-                            tt('g.my_profile'),
-                            'person'
+                            '/trending',
+                            tt('g.explore'),
+                            'compass-outline'
                         )}
-                        {username === navaccountname && (
-                            <ul
-                                id="ProfileNavigation"
-                                className={`navigation-list ${
-                                    isProfileNavigationVisible ? 'visible' : ''
-                                }`}
-                            >
+                        <ul
+                            id="FeedsNavigation"
+                            className={`navigation-list ${
+                                isFeedsNavigationVisible ? 'visible' : ''
+                            }`}
+                        >
+                            {username && (
                                 <li>
                                     {tabLink(
-                                        '/@' + username + '/blog',
-                                        tt('g.blog'),
-                                        'profile'
-                                    )}
-                                </li>
-                                <li>
-                                    {tabLink(
-                                        '/@' + username + '/posts',
-                                        tt('g.posts'),
+                                        '/trending',
+                                        tt('g.posts_all'),
                                         'library-books'
                                     )}
                                 </li>
+                            )}
+                            {username && (
                                 <li>
                                     {tabLink(
-                                        '/@' + username + '/comments',
-                                        tt('g.comments'),
-                                        'chatbox'
+                                        '/@' + username + '/feed',
+                                        tt('g.my_friends'),
+                                        'account-heart'
                                     )}
                                 </li>
+                            )}
+                            {username && (
                                 <li>
                                     {tabLink(
-                                        '/@' + username + '/replies',
-                                        tt('g.replies'),
-                                        'reply'
+                                        '/trending/my',
+                                        tt('g.my_subscriptions'),
+                                        'account-group'
+                                    )}
+                                    {(navSection === '/trending/my' ||
+                                        routeTag === 'community_index' ||
+                                        routeTag === 'more_communities') && (
+                                        <Topics
+                                            username={username}
+                                            current={category}
+                                            topics={topics}
+                                            subscriptions={subscriptions}
+                                            compact={false}
+                                        />
                                     )}
                                 </li>
+                            )}
+                            {navaccountname &&
+                                navaccountname !== username && (
+                                    <li className="active">
+                                        {tabLink(
+                                            '/@' + navaccountname + '/posts',
+                                            '@' + navaccountname,
+                                            'person'
+                                        )}
+                                        <ul
+                                            id="ProfileNavigation"
+                                            className={`navigation-list ${
+                                                isProfileNavigationVisible
+                                                    ? 'visible'
+                                                    : ''
+                                            }`}
+                                        >
+                                            <li>
+                                                {tabLink(
+                                                    '/@' +
+                                                        navaccountname +
+                                                        '/blog',
+                                                    tt('g.blog')
+                                                )}
+                                            </li>
+                                            <li>
+                                                {tabLink(
+                                                    '/@' +
+                                                        navaccountname +
+                                                        '/posts',
+                                                    tt('g.posts')
+                                                )}
+                                            </li>
+                                            <li>
+                                                {tabLink(
+                                                    '/@' +
+                                                        navaccountname +
+                                                        '/comments',
+                                                    tt('g.comments')
+                                                )}
+                                            </li>
+                                            <li>
+                                                {tabLink(
+                                                    '/@' +
+                                                        navaccountname +
+                                                        '/replies',
+                                                    tt('g.replies')
+                                                )}
+                                            </li>
 
-                                <li>
-                                    <a
-                                        href="#"
-                                        onClick={event => {
-                                            event.preventDefault();
-                                            this.toggleMoreNavigation();
-                                        }}
-                                        className="More"
-                                    >
-                                        <span className="LogoWrapper">
-                                            <Icon name="menu" />
-                                        </span>
-                                        <span className="Label">More...</span>
-                                    </a>
-                                    <ul
-                                        id="MoreNavigation"
-                                        className={`navigation-list ${
-                                            isMoreNavigationVisible
-                                                ? 'visible'
-                                                : ''
-                                        }`}
-                                    >
-                                        <li>
-                                            {tabLink(
-                                                '/@' +
-                                                    username +
-                                                    '/notifications',
-                                                tt('g.notifications'),
-                                                'clock'
-                                            )}
-                                        </li>
-                                        {false && (
+                                            <li>
+                                                <a
+                                                    href="#"
+                                                    onClick={event => {
+                                                        event.preventDefault();
+                                                        this.toggleMoreNavigation();
+                                                    }}
+                                                    className="More"
+                                                >
+                                                    <span className="LogoWrapper">
+                                                        <Icon name="menu" />
+                                                    </span>
+                                                    <span className="Label">
+                                                        More...
+                                                    </span>
+                                                </a>
+                                                <ul
+                                                    id="MoreNavigation"
+                                                    className={`navigation-list ${
+                                                        isMoreNavigationVisible
+                                                            ? 'visible'
+                                                            : ''
+                                                    }`}
+                                                >
+                                                    <li>
+                                                        {tabLink(
+                                                            '/@' +
+                                                                navaccountname +
+                                                                '/notifications',
+                                                            tt(
+                                                                'g.notifications'
+                                                            )
+                                                        )}
+                                                    </li>
+                                                    {false && (
+                                                        <li>
+                                                            {tabLink(
+                                                                '/@' +
+                                                                    navaccountname +
+                                                                    '/bookmarks',
+                                                                tt(
+                                                                    'g.bookmarks'
+                                                                ),
+                                                                'bookmark'
+                                                            )}
+                                                        </li>
+                                                    )}
+                                                    <li>
+                                                        {tabLink(
+                                                            '/@' +
+                                                                navaccountname +
+                                                                '/communities',
+                                                            tt(
+                                                                'g.subscriptions'
+                                                            )
+                                                        )}
+                                                    </li>
+                                                    <li>
+                                                        {tabLink(
+                                                            '/@' +
+                                                                navaccountname +
+                                                                '/feed',
+                                                            tt('g.friends_feed')
+                                                        )}
+                                                    </li>
+                                                    <li>
+                                                        {tabLink(
+                                                            '/@' +
+                                                                navaccountname +
+                                                                '/payout',
+                                                            tt('g.payouts')
+                                                        )}
+                                                    </li>
+                                                    <li>
+                                                        <a
+                                                            href={
+                                                                walletUrlOther
+                                                            }
+                                                            target="_blank"
+                                                        >
+                                                            <span className="Label">
+                                                                {tt('g.wallet')}
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                )}
+                        </ul>
+                    </li>
+                    {username && (
+                        <li
+                            className={`${
+                                isProfileNavigationVisible &&
+                                !isOtherProfileVisible
+                                    ? 'active'
+                                    : ''
+                            }`}
+                        >
+                            {tabLink(
+                                '/@' + username + '/posts',
+                                tt('g.my_profile'),
+                                'person'
+                            )}
+                            {username === navaccountname && (
+                                <ul
+                                    id="ProfileNavigation"
+                                    className={`navigation-list ${
+                                        isProfileNavigationVisible
+                                            ? 'visible'
+                                            : ''
+                                    }`}
+                                >
+                                    <li>
+                                        {tabLink(
+                                            '/@' + username + '/blog',
+                                            tt('g.blog'),
+                                            'profile'
+                                        )}
+                                    </li>
+                                    <li>
+                                        {tabLink(
+                                            '/@' + username + '/posts',
+                                            tt('g.posts'),
+                                            'library-books'
+                                        )}
+                                    </li>
+                                    <li>
+                                        {tabLink(
+                                            '/@' + username + '/comments',
+                                            tt('g.comments'),
+                                            'chatbox'
+                                        )}
+                                    </li>
+                                    <li>
+                                        {tabLink(
+                                            '/@' + username + '/replies',
+                                            tt('g.replies'),
+                                            'reply'
+                                        )}
+                                    </li>
+
+                                    <li>
+                                        <a
+                                            href="#"
+                                            onClick={event => {
+                                                event.preventDefault();
+                                                this.toggleMoreNavigation();
+                                            }}
+                                            className="More"
+                                        >
+                                            <span className="LogoWrapper">
+                                                <Icon name="menu" />
+                                            </span>
+                                            <span className="Label">
+                                                More...
+                                            </span>
+                                        </a>
+                                        <ul
+                                            id="MoreNavigation"
+                                            className={`navigation-list ${
+                                                isMoreNavigationVisible
+                                                    ? 'visible'
+                                                    : ''
+                                            }`}
+                                        >
                                             <li>
                                                 {tabLink(
                                                     '/@' +
                                                         username +
-                                                        '/bookmarks',
-                                                    tt('g.bookmarks'),
-                                                    'bookmark'
+                                                        '/notifications',
+                                                    tt('g.notifications'),
+                                                    'clock'
                                                 )}
                                             </li>
-                                        )}
-                                        <li>
-                                            {tabLink(
-                                                '/@' +
-                                                    username +
-                                                    '/communities',
-                                                tt('g.subscriptions'),
-                                                'account-group'
+                                            {false && (
+                                                <li>
+                                                    {tabLink(
+                                                        '/@' +
+                                                            username +
+                                                            '/bookmarks',
+                                                        tt('g.bookmarks'),
+                                                        'bookmark'
+                                                    )}
+                                                </li>
                                             )}
-                                        </li>
-                                        <li>
-                                            {tabLink(
-                                                '/@' + username + '/payout',
-                                                tt('g.payouts'),
-                                                'currency-usd'
-                                            )}
-                                        </li>
-                                        <li>
-                                            {tabLink(
-                                                settingsURL,
-                                                tt('g.settings'),
-                                                'account-settings-variant'
-                                            )}
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        )}
-                    </li>
-                )}
-                {username && (
-                    <li>
-                        <a href={walletUrl} target="_blank">
-                            <span className="LogoWrapper">
+                                            <li>
+                                                {tabLink(
+                                                    '/@' +
+                                                        username +
+                                                        '/communities',
+                                                    tt('g.subscriptions'),
+                                                    'account-group'
+                                                )}
+                                            </li>
+                                            <li>
+                                                {tabLink(
+                                                    '/@' + username + '/payout',
+                                                    tt('g.payouts'),
+                                                    'currency-usd'
+                                                )}
+                                            </li>
+                                            <li>
+                                                {tabLink(
+                                                    settingsURL,
+                                                    tt('g.settings'),
+                                                    'account-settings-variant'
+                                                )}
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            )}
+                        </li>
+                    )}
+                    {username && (
+                        <li>
+                            <a href={walletUrl} target="_blank">
+                                <span className="LogoWrapper">
+                                    <Icon name="wallet_2" />
+                                </span>
+                                <span className="Label">
+                                    {tt('g.my_wallet')}
+                                </span>
+                            </a>
+                        </li>
+                    )}
+                    {!username && (
+                        <li>
+                            <a href="/login.html" onClick={showLogin}>
+                                <Icon name="person" />
+                                <span className="Label">
+                                    {tt('g.my_profile')}
+                                </span>
+                            </a>
+                        </li>
+                    )}
+                    {!username && (
+                        <li>
+                            <a href="/login.html" onClick={showLogin}>
                                 <Icon name="wallet_2" />
-                            </span>
-                            <span className="Label">{tt('g.my_wallet')}</span>
-                        </a>
-                    </li>
-                )}
-                {!username && (
-                    <li>
-                        <a href="/login.html" onClick={showLogin}>
-                            <Icon name="person" />
-                            <span className="Label">{tt('g.my_profile')}</span>
-                        </a>
-                    </li>
-                )}
-                {!username && (
-                    <li>
-                        <a href="/login.html" onClick={showLogin}>
-                            <Icon name="wallet_2" />
-                            <span className="Label">{tt('g.my_wallet')}</span>
-                        </a>
-                    </li>
-                )}
-            </ul>
-        );
+                                <span className="Label">
+                                    {tt('g.my_wallet')}
+                                </span>
+                            </a>
+                        </li>
+                    )}
+                </ul>
+            ) : null;
 
         return (
             <div id="appNavigation" className="App__navigation">
                 <nav>
                     <div className="PrimaryNavigation">
+                        {/*isNavVisibleState*/}
+                        {show_hide_link}
                         {primary_navigation}
                     </div>
                 </nav>

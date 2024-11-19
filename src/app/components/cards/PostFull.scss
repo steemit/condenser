@@ -80,6 +80,7 @@
   }
   > h1 {
     overflow: hidden;
+    overflow-wrap: break-word;
     font-family: $body-font-family;
     font-size: 240%;
     font-weight: 800;

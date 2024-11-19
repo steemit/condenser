@@ -11,11 +11,12 @@ import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import Callout from 'app/components/elements/Callout';
 import { GptUtils } from 'app/utils/GptUtils';
-import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import { ifHive } from 'app/utils/Community';
 import PostsIndexLayout from 'app/components/pages/PostsIndexLayout';
 import * as appActions from 'app/redux/AppReducer';
+import CommunityBanner from 'app/components/elements/CommunityBanner';
+import Topics from './Topics';
 // posts_index.empty_feed_1 [-5]
 const noFriendsText = (
     <div>
@@ -197,64 +198,59 @@ class PostsIndex extends React.Component {
                 enableAds={enableAds}
                 blogmode={this.props.blogmode}
             >
-                <div className="articles__header row">
-                    <div className="small-8 medium-7 large-8 column">
-                        <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
-                            {page_title}
-                        </h1>
-                        <div className="show-for-mq-large">
-                            {community && (
-                                <div
-                                    style={{
-                                        fontSize: '80%',
-                                        color: 'gray',
-                                    }}
-                                >
-                                    Community
+                <div>
+                    {community && <CommunityBanner category={category} />}
+                    <div className="articles__header row">
+                        <div className="small-8 medium-7 large-8 column">
+                            {!community && (
+                                <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
+                                    {page_title}
+                                </h1>
+                            )}
+                            <div className="show-for-mq-large">
+                                {!community &&
+                                    category &&
+                                    order !== 'feed' &&
+                                    category !== 'my' && (
+                                        <div
+                                            style={{
+                                                fontSize: '80%',
+                                                color: 'gray',
+                                            }}
+                                        >
+                                            Unmoderated tag
+                                        </div>
+                                    )}
+                            </div>
+                            <span className="hide-for-mq-large articles__header-select">
+                                <Topics
+                                    username={this.props.username}
+                                    current={category}
+                                    topics={topics}
+                                    subscriptions={subscriptions}
+                                    compact
+                                />
+                            </span>
+                        </div>
+                        {order != 'feed' &&
+                            !(category === 'my' && !posts.size) && (
+                                <div className="small-4 medium-5 large-4 column articles__header-select">
+                                    <SortOrder
+                                        sortOrder={order}
+                                        topic={category}
+                                        horizontal={false}
+                                    />
                                 </div>
                             )}
-                            {!community &&
-                                category &&
-                                order !== 'feed' &&
-                                category !== 'my' && (
-                                    <div
-                                        style={{
-                                            fontSize: '80%',
-                                            color: 'gray',
-                                        }}
-                                    >
-                                        Unmoderated tag
-                                    </div>
-                                )}
-                        </div>
-                        <span className="hide-for-mq-large articles__header-select">
-                            <Topics
-                                username={this.props.username}
-                                current={category}
-                                topics={topics}
-                                subscriptions={subscriptions}
-                                compact
-                            />
-                        </span>
+                        {/*
+                        medium-4 large-3
+                        <div className="medium-1 show-for-mq-medium column">
+                            <ArticleLayoutSelector />
+                        </div>*/}
                     </div>
-                    {order != 'feed' &&
-                        !(category === 'my' && !posts.size) && (
-                            <div className="small-4 medium-5 large-4 column articles__header-select">
-                                <SortOrder
-                                    sortOrder={order}
-                                    topic={category}
-                                    horizontal={false}
-                                />
-                            </div>
-                        )}
-                    {/*
-                    medium-4 large-3
-                    <div className="medium-1 show-for-mq-medium column">
-                        <ArticleLayoutSelector />
-                    </div>*/}
+                    <hr className="articles__hr" />
+                    {postsIndexDisplay}
                 </div>
-                <hr className="articles__hr" />
-                {postsIndexDisplay}
             </PostsIndexLayout>
         );
     }

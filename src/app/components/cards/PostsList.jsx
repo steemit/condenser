@@ -1,20 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import tt from 'counterpart';
 import { List } from 'immutable';
-import * as userActions from 'app/redux/UserReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import PostSummary from 'app/components/cards/PostSummary';
-import Post from 'app/components/pages/Post';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import debounce from 'lodash.debounce';
-import { findParent } from 'app/utils/DomUtils';
-import Icon from 'app/components/elements/Icon';
 import VideoAd from 'app/components/elements/VideoAd';
-import SearchUserList from 'app/components/cards/SearchUserList';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import xhr from 'axios/index';
+import tt from 'counterpart';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -42,16 +36,31 @@ class PostsList extends React.Component {
             thumbSize: 'desktop',
             showNegativeComments: false,
             blist: [],
+            currentSlide: 0,
+            arePinnedPostsCollapsed: false,
         };
         this.scrollListener = this.scrollListener.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList');
+        this.nextSlide = this.nextSlide.bind(this);
+        this.prevSlide = this.prevSlide.bind(this);
+        this.togglePinnedPosts = this.togglePinnedPosts.bind(this);
     }
-
-    async componentWillMount() {}
 
     componentDidMount() {
         this.attachScrollListener();
+        this.initiatePinnedCollapsedState();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (
+            this.props.category &&
+            this.props.category.startsWith('hive-') &&
+            this.props.category !== prevProps.category
+        ) {
+            this.updateSlide(0);
+            this.initiatePinnedCollapsedState();
+        }
     }
 
     componentWillUnmount() {
@@ -85,9 +94,8 @@ class PostsList extends React.Component {
             topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight <
             10
         ) {
-            const { loadMore, posts, total_result } = this.props;
-            if (loadMore && posts.size > 0 /*&& posts.size < total_result*/)
-                loadMore();
+            const { loadMore, posts } = this.props;
+            if (loadMore && posts.size > 0) loadMore();
         }
 
         // Detect if we're in mobile mode (renders larger preview imgs)
@@ -116,6 +124,74 @@ class PostsList extends React.Component {
         window.removeEventListener('resize', this.scrollListener);
     }
 
+    updateSlide(index) {
+        const filteredPosts = this.props.posts.filter(post =>
+            post.getIn(['stats', 'is_pinned'], false)
+        );
+        const totalSlides = filteredPosts.size - 1; // We reduce the slide count by 1 because we're displaying 2 on a screen and don't want an empty gap at the end
+        const pinnedPostsElement = document.querySelector('.pinnedPosts');
+        const sliderPosition = (index + totalSlides) % totalSlides;
+        this.setState({ currentSlide: sliderPosition });
+        if (pinnedPostsElement) {
+            requestAnimationFrame(() => {
+                pinnedPostsElement.style.setProperty(
+                    `--pinned`,
+                    `-${sliderPosition * 50}%`
+                );
+            });
+        }
+    }
+
+    nextSlide() {
+        this.updateSlide(this.state.currentSlide + 1);
+    }
+
+    prevSlide() {
+        this.updateSlide(this.state.currentSlide - 1);
+    }
+
+    initiatePinnedCollapsedState() {
+        const arePinnedPostsCollapsedStored = process.env.BROWSER
+            ? localStorage.getItem('collapsepinned-' + this.props.category)
+            : null;
+        const arePinnedPostsCollapsed = arePinnedPostsCollapsedStored
+            ? JSON.parse(arePinnedPostsCollapsedStored)
+            : false;
+
+        if (arePinnedPostsCollapsed !== this.state.arePinnedPostsCollapsed) {
+            this.setState({ arePinnedPostsCollapsed });
+        }
+    }
+
+    togglePinnedPosts() {
+        const { category } = this.props;
+        const { arePinnedPostsCollapsed } = this.state;
+        const updatedCollapsedState = !arePinnedPostsCollapsed;
+
+        this.setState(
+            prevState => ({
+                arePinnedPostsCollapsed: !prevState.arePinnedPostsCollapsed,
+            }),
+            () => {
+                if (process.env.BROWSER) {
+                    localStorage.setItem(
+                        'collapsepinned-' + category,
+                        updatedCollapsedState
+                    );
+                }
+
+                if (updatedCollapsedState) {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth',
+                    });
+                } else {
+                    this.updateSlide(0);
+                }
+            }
+        );
+    }
+
     render() {
         const {
             posts,
@@ -124,10 +200,14 @@ class PostsList extends React.Component {
             order,
             nsfwPref,
             hideCategory,
-            blacklist,
             depth,
         } = this.props;
-        const { thumbSize, blist } = this.state;
+        const { thumbSize, currentSlide, arePinnedPostsCollapsed } = this.state;
+
+        const pinnedPosts = posts.filter(post =>
+            post.getIn(['stats', 'is_pinned'], false)
+        );
+        const pinnedPostsCount = pinnedPosts.size;
 
         const renderSummary = items =>
             items.map((post, i) => {
@@ -143,7 +223,18 @@ class PostsList extends React.Component {
                 );
 
                 const summary = [];
-                summary.push(<li key={i}>{ps}</li>);
+                summary.push(
+                    <li
+                        key={i}
+                        className={
+                            post.getIn(['stats', 'is_pinned'], false)
+                                ? 'isPinned'
+                                : ''
+                        }
+                    >
+                        {ps}
+                    </li>
+                );
 
                 const every = this.props.adSlots.in_feed_1.every;
                 if (false && this.props.videoAdsEnabled && i === 4) {
@@ -170,14 +261,99 @@ class PostsList extends React.Component {
                 return summary;
             });
 
+        const renderDotLinks = totalItems => {
+            const adjustedTotalItems = totalItems - 1;
+            const dots = Array.from({ length: adjustedTotalItems }, (_, i) => (
+                <span
+                    key={i}
+                    className={currentSlide === i ? 'dot active' : 'dot'}
+                    role="button"
+                    onClick={() => this.updateSlide(i)}
+                />
+            ));
+            return dots;
+        };
+
         return (
             <div id="posts_list" className="PostsList">
+                {category &&
+                    category.startsWith('hive-') &&
+                    pinnedPostsCount > 0 &&
+                    (order === 'trending' || order === 'created') && (
+                        <div
+                            className={`${
+                                arePinnedPostsCollapsed && pinnedPostsCount > 2
+                                    ? 'pinnedPostsContainer'
+                                    : ''
+                            }`}
+                        >
+                            {arePinnedPostsCollapsed &&
+                                pinnedPostsCount > 2 && (
+                                    <button
+                                        className="prev"
+                                        onClick={this.prevSlide}
+                                    >
+                                        &#10094;
+                                    </button>
+                                )}
+                            <ul
+                                className="PostsList__summaries hfeed pinnedPosts"
+                                itemScope
+                                itemType="http://schema.org/blogPosts"
+                            >
+                                {renderSummary(pinnedPosts)}
+                            </ul>
+                            {arePinnedPostsCollapsed &&
+                                pinnedPostsCount > 2 && (
+                                    <button
+                                        className="next"
+                                        onClick={this.nextSlide}
+                                    >
+                                        &#10095;
+                                    </button>
+                                )}
+                            {arePinnedPostsCollapsed &&
+                                pinnedPostsCount > 2 && (
+                                    <div className="carouselDots">
+                                        {renderDotLinks(pinnedPostsCount)}
+                                    </div>
+                                )}
+                            {pinnedPostsCount >= 2 && (
+                                <div className="collapseShowPinned">
+                                    <a
+                                        href="#"
+                                        onClick={event => {
+                                            this.togglePinnedPosts();
+                                            event.preventDefault();
+                                        }}
+                                    >
+                                        {pinnedPostsCount == 2 &&
+                                        arePinnedPostsCollapsed
+                                            ? tt('g.view_as_list') + ' \u25BC'
+                                            : arePinnedPostsCollapsed
+                                              ? tt('g.show_pinned') + ' \u25BC'
+                                              : tt('g.collapse_pinned') +
+                                                ' \u25B2'}
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 <ul
                     className="PostsList__summaries hfeed"
                     itemScope
                     itemType="http://schema.org/blogPosts"
                 >
-                    {renderSummary(posts)}
+                    {category &&
+                    category.startsWith('hive-') &&
+                    (order === 'trending' || order === 'created')
+                        ? renderSummary(
+                              posts.filter(
+                                  post =>
+                                      !post.getIn(['stats', 'is_pinned'], false)
+                              )
+                          )
+                        : renderSummary(posts)}
                 </ul>
                 {loading && (
                     <center>

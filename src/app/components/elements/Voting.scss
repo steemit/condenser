@@ -153,6 +153,11 @@
     fill: #fff;
   }
 
+  > .dropdown-comp > .dropdown__content {
+    top: -270px;
+    margin-left: -36px;
+  }
+  
   &.Voting__button--downvoted {
     a path {
       fill: #fff;

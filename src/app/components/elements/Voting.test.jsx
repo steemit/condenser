@@ -58,11 +58,6 @@ const marketPrice = fromJS([
     },
 ]);
 
-const tronPriceTronscan = fromJS({
-    price_in_usd: '0.001',
-});
-
-const vests_per_trx = 100;
 const vests_per_steem = 2000;
 
 describe('Voting', () => {
@@ -83,10 +78,7 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
-                vests_per_trx={vests_per_trx}
                 vests_per_steem={vests_per_steem}
-                tron_market_price={marketPrice}
-                tron_price_tronscan={tronPriceTronscan}
                 store={mockStore}
             />
         ).dive();
@@ -114,10 +106,7 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
-                vests_per_trx={vests_per_trx}
                 vests_per_steem={vests_per_steem}
-                tron_market_price={marketPrice}
-                tron_price_tronscan={tronPriceTronscan}
                 store={mockStore}
             />
         ).dive();
@@ -148,10 +137,7 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
-                vests_per_trx={vests_per_trx}
                 vests_per_steem={vests_per_steem}
-                tron_market_price={marketPrice}
-                tron_price_tronscan={tronPriceTronscan}
                 store={mockStore}
             />
         ).dive();
@@ -176,10 +162,7 @@ describe('Voting', () => {
                 post={voteTestObj}
                 price_per_steem={1}
                 sbd_print_rate={10000}
-                vests_per_trx={vests_per_trx}
                 vests_per_steem={vests_per_steem}
-                tron_market_price={marketPrice}
-                tron_price_tronscan={tronPriceTronscan}
                 store={mockStore}
             />
         ).dive();
@@ -213,10 +196,7 @@ describe('Voting', () => {
                         vote={(w, p) => {}}
                         post={post_obj}
                         price_per_steem={1}
-                        vests_per_trx={vests_per_trx}
                         vests_per_steem={vests_per_steem}
-                        tron_market_price={marketPrice}
-                        tron_price_tronscan={tronPriceTronscan}
                         sbd_print_rate={10000}
                     />
                 </IntlProvider>
@@ -245,10 +225,7 @@ describe('Voting', () => {
                         vote={(w, p) => {}}
                         post={post_obj}
                         price_per_steem={1}
-                        vests_per_trx={vests_per_trx}
                         vests_per_steem={vests_per_steem}
-                        tron_market_price={marketPrice}
-                        tron_price_tronscan={tronPriceTronscan}
                         sbd_print_rate={10000}
                     />
                 </IntlProvider>
@@ -278,48 +255,13 @@ describe('Voting', () => {
                         post={post_obj}
                         price_per_steem={1}
                         sbd_print_rate={5000}
-                        vests_per_trx={vests_per_trx}
                         vests_per_steem={vests_per_steem}
-                        tron_market_price={marketPrice}
-                        tron_price_tronscan={tronPriceTronscan}
                     />
                 </IntlProvider>
             </Provider>
         );
         expect(JSON.stringify(component.toJSON())).toContain(
             '2.50 SBD, <br>&nbsp;&nbsp;&nbsp;&nbsp;2.50 STEEM, <br>&nbsp;&nbsp;&nbsp;&nbsp;5.00 SP'
-        );
-    });
-
-    it('TRX should be 100.00 TRX', () => {
-        const post_obj = fromJS({
-            stats: {
-                total_votes: 1,
-            },
-            max_accepted_payout: '999999 SBD',
-            percent_steem_dollars: 10000,
-            pending_payout_value: '10 SBD',
-            payout_at: '2018-03-30T10:00:00Z',
-        });
-        const store = createStore(rootReducer);
-        const component = renderer.create(
-            <Provider store={store}>
-                <IntlProvider locale="en">
-                    <Voting
-                        vote={(w, p) => {}}
-                        post={post_obj}
-                        price_per_steem={1}
-                        sbd_print_rate={5000}
-                        vests_per_trx={vests_per_trx}
-                        vests_per_steem={vests_per_steem}
-                        tron_market_price={marketPrice}
-                        tron_price_tronscan={tronPriceTronscan}
-                    />
-                </IntlProvider>
-            </Provider>
-        );
-        expect(JSON.stringify(component.toJSON())).toContain(
-            '2.50 SBD, <br>&nbsp;&nbsp;&nbsp;&nbsp;2.50 STEEM, <br>&nbsp;&nbsp;&nbsp;&nbsp;5.00 SP, <br>&nbsp;&nbsp;&nbsp;&nbsp;100.00 TRX'
         );
     });
 });

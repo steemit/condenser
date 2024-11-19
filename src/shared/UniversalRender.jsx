@@ -262,20 +262,6 @@ export async function serverRender(
         onchain = await apiFetchState(url);
         requestTimer.stopTimer('apiFetchState_ms');
 
-        requestTimer.startTimer('getTronConfig_ms');
-        // const tronConfig = await getTronConfig();
-        const tronConfig = {
-            tron_reward_switch: 'on',
-            vests_per_trx: 0, // currently no trx rewards
-            unbind_tip_limit: 5,
-        };
-        if (tronConfig !== false) {
-            initialState.app.tron_reward_switch = tronConfig.tron_reward_switch;
-            initialState.app.vests_per_trx = tronConfig.vests_per_trx;
-            initialState.app.unbind_tip_limit = tronConfig.unbind_tip_limit;
-        }
-        requestTimer.stopTimer('getTronConfig_ms');
-
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
         if (
@@ -492,20 +478,4 @@ async function apiFetchState(url) {
     }
 
     return onchain;
-}
-
-async function getTronConfig() {
-    const url = `${$STM_Config.wallet_url}/api/v1/tron/get_config`;
-    try {
-        const result = await axios.get(url).then(res => {
-            return res.data;
-        });
-        if (result.error) {
-            throw new Error(result.error);
-        }
-        return result.result;
-    } catch (e) {
-        console.error('Get TRON CONFIG failed!', e.message);
-        return false;
-    }
 }

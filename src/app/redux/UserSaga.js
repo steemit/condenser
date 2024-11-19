@@ -21,7 +21,6 @@ import { accountAuthLookup } from 'app/redux/AuthSaga';
 import { getAccount } from 'app/redux/SagaShared';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
-import * as globalActions from 'app/redux/GlobalReducer';
 import {
     hasCompatibleKeychain,
     isLoggedInWithKeychain,
@@ -35,15 +34,10 @@ import {
     serverApiRecordEvent,
     isTosAccepted,
     acceptTos,
-    checkTronUser,
-    getTronAccount,
-    updateTronUser,
-    getTronConfig,
 } from 'app/utils/ServerApiClient';
 import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
-import { createTronAccount } from 'app/utils/tronApi';
 
 const max_pop_window_count = 5;
 
@@ -58,8 +52,6 @@ export const userWatches = [
     takeLatest(userActions.LOGOUT, logout),
     takeLatest(userActions.LOGIN_ERROR, loginError),
     takeLatest(userActions.UPLOAD_IMAGE, uploadImage),
-    takeLatest(userActions.HIDE_TRON_CREATE, updateTronPopupTipCount),
-    takeLatest(userActions.UPDATE_TRON_ADDR, updateTronAddr),
     takeLatest(userActions.ACCEPT_TERMS, function*() {
         try {
             yield call(acceptTos);
@@ -244,12 +236,6 @@ function* usernamePasswordLogin2({
                 username,
                 login_with_keychain: true,
                 effective_vests: effectiveVests(account),
-                tip_count: account.get('tip_count'),
-                tron_addr: account.get('tron_addr'),
-                tron_balance: account.get('tron_balance'),
-                pending_claim_tron_reward: account.get(
-                    'pending_claim_tron_reward'
-                ),
             })
         );
         return;
@@ -408,12 +394,6 @@ function* usernamePasswordLogin2({
                     private_keys,
                     login_owner_pubkey,
                     effective_vests: effectiveVests(account),
-                    tip_count: account.get('tip_count'),
-                    tron_addr: account.get('tron_addr'),
-                    tron_balance: account.get('tron_balance'),
-                    pending_claim_tron_reward: account.get(
-                        'pending_claim_tron_reward'
-                    ),
                 })
             );
         } else {
@@ -423,12 +403,6 @@ function* usernamePasswordLogin2({
                     private_keys, // TODO: this is a temp way
                     login_owner_pubkey, // TODO: this is a temp way
                     effective_vests: effectiveVests(account),
-                    tip_count: account.get('tip_count'),
-                    tron_addr: account.get('tron_addr'),
-                    tron_balance: account.get('tron_balance'),
-                    pending_claim_tron_reward: account.get(
-                        'pending_claim_tron_reward'
-                    ),
                 })
             );
         }
@@ -471,12 +445,6 @@ function* usernamePasswordLogin2({
                         username,
                         login_with_keychain: true,
                         effective_vests: effectiveVests(account),
-                        tip_count: account.get('tip_count'),
-                        tron_addr: account.get('tron_addr'),
-                        tron_balance: account.get('tron_balance'),
-                        pending_claim_tron_reward: account.get(
-                            'pending_claim_tron_reward'
-                        ),
                     })
                 );
             } else {
@@ -499,12 +467,6 @@ function* usernamePasswordLogin2({
                     userActions.setUser({
                         username,
                         pass_auth: true,
-                        tip_count: account.get('tip_count'),
-                        tron_addr: account.get('tron_addr'),
-                        tron_balance: account.get('tron_balance'),
-                        pending_claim_tron_reward: account.get(
-                            'pending_claim_tron_reward'
-                        ),
                     })
                 );
             }
@@ -525,19 +487,6 @@ function* usernamePasswordLogin2({
     }
     // TOS acceptance
     yield fork(promptTosAcceptance, username);
-
-    // check if user binded tron address
-    const unbindTipLimit = yield select(state =>
-        state.app.get('unbind_tip_limit')
-    );
-    if (
-        account.has('tron_addr') &&
-        account.get('tron_addr') === '' &&
-        account.has('tip_count') &&
-        account.get('tip_count') < unbindTipLimit
-    ) {
-        yield put(userActions.showTronCreate());
-    }
 
     // Redirect user to the appropriate page after login.
     if (afterLoginRedirectToWelcome) {
@@ -858,134 +807,4 @@ function* uploadImage({
         }
     };
     xhr.send(formData);
-}
-
-/**
- *
- */
-function* updateTronPopupTipCount() {
-    const current = yield select(state => state.user.get('current'));
-    const username = current.get('username');
-    const tip_count = current.get('tip_count');
-    const private_keys = current.get('private_keys');
-
-    if (tip_count === undefined || private_keys === undefined) return;
-
-    // charge that which level private key we own.
-    let privateKeyType = null;
-    if (private_keys.has('posting_private')) privateKeyType = 'posting_private';
-    if (private_keys.has('memo_private')) privateKeyType = 'memo_private';
-    if (privateKeyType === null) {
-        console.log('there is no private key in browser cache.');
-        return;
-    }
-
-    let authType;
-    switch (privateKeyType) {
-        case 'active_private':
-            authType = 'active';
-            break;
-        case 'posting_private':
-            authType = 'posting';
-            break;
-        case 'owner_private':
-            authType = 'owner';
-            break;
-        case 'memo_private':
-            authType = 'memo';
-            break;
-        default:
-            throw Error('unexpected auth type.');
-    }
-
-    const data = {
-        username,
-        auth_type: authType,
-        tip_count: tip_count + 1,
-    };
-    yield put(
-        userActions.setUser({
-            tip_count: tip_count + 1,
-            tip_count_lock: true, // prevent tip popup multi times
-        })
-    );
-
-    // let updateTronUser executes in next event loop
-    setTimeout(() =>
-        updateTronUser(data, private_keys.get(privateKeyType).toWif())
-    );
-}
-
-function* updateTronAddr() {
-    const [username, private_keys] = yield select(state => [
-        state.user.getIn(['current', 'username']),
-        state.user.getIn(['current', 'private_keys']),
-    ]);
-
-    // charge that which level private key we own.
-    let privateKeyType = null;
-    if (private_keys && private_keys.has('active_private'))
-        privateKeyType = 'active_private';
-    if (private_keys && private_keys.has('posting_private'))
-        privateKeyType = 'posting_private';
-    if (privateKeyType === null) {
-        console.log('there is no private key in browser cache.');
-        yield put(
-            appActions.setTronErrMsg(
-                tt('loginform_jsx.there_is_no_private_key_in_browser_cache')
-            )
-        );
-        return;
-    }
-
-    // create tron account
-    const tronAccount = yield createTronAccount();
-    if (
-        tronAccount === null ||
-        tronAccount.address === undefined ||
-        tronAccount.address.base58 === undefined
-    ) {
-        yield put(
-            appActions.setTronErrMsg(tt('userwallet_jsx.create_trx_failed'))
-        );
-        return;
-    }
-
-    const tronPrivKey = tronAccount.privateKey;
-    const tronPubKey = tronAccount.address.base58;
-
-    // update steem user's tron_addr
-    const data = {
-        username,
-        auth_type: privateKeyType === 'active_private' ? 'active' : 'posting',
-        tron_addr: tronPubKey,
-        from: 'condenser',
-    };
-    const result = yield updateTronUser(
-        data,
-        private_keys.get(privateKeyType).toWif()
-    );
-    if (result.error !== undefined) {
-        yield put(appActions.setTronErrMsg(tt(`tron_err_msg.${result.error}`)));
-        return;
-    }
-
-    // update current login user's state
-    yield put(
-        userActions.setUser({
-            tron_addr: tronPubKey,
-            tron_private_key: tronPrivKey,
-        })
-    );
-
-    // update current route user's state
-    const state = {
-        accounts: {},
-    };
-    state.accounts[username] = {};
-    const tronInfo = yield call(checkTronUser, username);
-    Object.keys(tronInfo).forEach(k => {
-        state.accounts[username][k] = tronInfo[k];
-    });
-    yield put(globalActions.receiveState(state));
 }

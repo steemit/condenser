@@ -49,7 +49,6 @@
   "cookie_consent_api_key": "SDC_COOKIE_CONSENT_KEY",
   "steem_elastic_search_endpoint": "STEEM_ELASTIC_SEARCH_ENDPOINT",
   "wallet_api_host":"WALLET_API_HOST",
-  "tron_create_node": "TRON_CREATE_NODE",
   "activity_tag": "ACTIVITY_TAG",
   "sdc_image_proxy_prefix":"SDC_IMAGE_PROXY_PREFIX",
   "sdc_upload_image_url": "SDC_UPLOAD_IMAGE_URL",

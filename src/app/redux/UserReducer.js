@@ -37,11 +37,6 @@ const SHOW_POST_TEMPLETES = 'user/SHOW_POST_TEMPLETES';
 const HIDE_POST_TEMPLETES = 'user/HIDE_POST_TEMPLETES';
 const HIDE_ANNOUNCEMENT = 'user/HIDE_ANNOUNCEMENT';
 const SHOW_ANNOUNCEMENT = 'user/SHOW_ANNOUNCEMENT';
-const SHOW_TRON_CREATE = 'user/SHOW_TRON_CREATE';
-export const HIDE_TRON_CREATE = 'user/HIDE_TRON_CREATE';
-export const UPDATE_TRON_ADDR = 'user/UPDATE_TRON_ADDR';
-const SHOW_TRON_CREATE_SUCCESS = 'user/SHOW_TRON_CREATE_SUCCESS';
-const HIDE_TRON_CREATE_SUCCESS = 'user/HIDE_TRON_CREATE_SUCCESS';
 
 // Saga-related
 export const UPLOAD_IMAGE = 'user/UPLOAD_IMAGE';
@@ -67,8 +62,6 @@ const defaultState = fromJS({
     maybeLoggedIn: false,
     showAnnouncement: false,
     trackingId: '',
-    show_tron_create_modal: false,
-    show_tron_create_success_modal: false,
 });
 
 export default function reducer(state = defaultState, action) {
@@ -168,9 +161,6 @@ export default function reducer(state = defaultState, action) {
             return state.mergeDeep({
                 trackingId: generateTrackingId(),
             }); // saga
-        case UPDATE_TRON_ADDR:
-            return state; // saga
-        // saga
 
         case SET_USER:
             return state.mergeDeep({
@@ -276,14 +266,6 @@ export default function reducer(state = defaultState, action) {
             typeof sessionStorage !== 'undefined' &&
                 sessionStorage.setItem('hideAnnouncement', 'true');
             return state.set('showAnnouncement', false);
-        case SHOW_TRON_CREATE:
-            return state.set('show_tron_create_modal', true);
-        case HIDE_TRON_CREATE:
-            return state.set('show_tron_create_modal', false);
-        case SHOW_TRON_CREATE_SUCCESS:
-            return state.set('show_tron_create_success_modal', true);
-        case HIDE_TRON_CREATE_SUCCESS:
-            return state.set('show_tron_create_success_modal', false);
 
         default:
             return state;
@@ -291,24 +273,6 @@ export default function reducer(state = defaultState, action) {
 }
 
 // Action creators
-export const showTronCreate = payload => ({
-    type: SHOW_TRON_CREATE,
-    payload,
-});
-export const hideTronCreate = payload => ({
-    type: HIDE_TRON_CREATE,
-    payload,
-});
-
-export const showTronCreateSuccess = payload => ({
-    type: SHOW_TRON_CREATE_SUCCESS,
-    payload,
-});
-export const hideTronCreateSuccess = payload => ({
-    type: HIDE_TRON_CREATE_SUCCESS,
-    payload,
-});
-
 export const showLogin = payload => ({
     type: SHOW_LOGIN,
     payload,
@@ -423,10 +387,6 @@ export const set = payload => ({
 
 export const uploadImage = payload => ({
     type: UPLOAD_IMAGE,
-    payload,
-});
-export const updateTronAddr = payload => ({
-    type: UPDATE_TRON_ADDR,
     payload,
 });
 

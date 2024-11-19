@@ -307,6 +307,5 @@
     },
     "steem_elastic_search_endpoint": "https://search-hive-dev-new-sbsqvjz2ct6onsxabnsde3qkgi.us-east-1.es.amazonaws.com",
     "wallet_api_host": "https://wallet.steemitdev.com",
-    "tron_create_node": "https://api.shasta.trongrid.io",
     "activity_tag": ""
 }

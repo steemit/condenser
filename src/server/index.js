@@ -31,7 +31,6 @@ global.$STM_Config = {
     site_domain: config.get('site_domain'),
     google_analytics_id: config.get('google_analytics_id'),
     wallet_url: config.get('wallet_url'),
-    tron_host: config.get('tron_create_node'),
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');

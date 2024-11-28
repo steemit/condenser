@@ -38,6 +38,9 @@ class PostsList extends React.Component {
             blist: [],
             currentSlide: 0,
             arePinnedPostsCollapsed: false,
+            hideResteems: process.env.BROWSER
+                ? localStorage.getItem('hideResteems') === 'true'
+                : false,
         };
         this.scrollListener = this.scrollListener.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
@@ -45,6 +48,9 @@ class PostsList extends React.Component {
         this.nextSlide = this.nextSlide.bind(this);
         this.prevSlide = this.prevSlide.bind(this);
         this.togglePinnedPosts = this.togglePinnedPosts.bind(this);
+        this.handleToggleHideResteems = this.handleToggleHideResteems.bind(
+            this
+        );
     }
 
     componentDidMount() {
@@ -192,6 +198,17 @@ class PostsList extends React.Component {
         );
     }
 
+    handleToggleHideResteems() {
+        this.setState(prevState => {
+            const newHideResteems = !prevState.hideResteems;
+            if (process.env.BROWSER) {
+                localStorage.setItem('hideResteems', newHideResteems);
+                console.log('Storing HideResteems: ', newHideResteems);
+            }
+            return { hideResteems: newHideResteems };
+        });
+    }
+
     render() {
         const {
             posts,
@@ -201,8 +218,19 @@ class PostsList extends React.Component {
             nsfwPref,
             hideCategory,
             depth,
+            following,
         } = this.props;
-        const { thumbSize, currentSlide, arePinnedPostsCollapsed } = this.state;
+        const {
+            thumbSize,
+            currentSlide,
+            arePinnedPostsCollapsed,
+            hideResteems,
+        } = this.state;
+
+        //console.log('Category: ', category);
+        //console.log('Order: ', order);
+        //console.log('Following: ', following);
+        //console.log('Hide Resteems', hideResteems);
 
         const pinnedPosts = posts.filter(post =>
             post.getIn(['stats', 'is_pinned'], false)
@@ -222,14 +250,21 @@ class PostsList extends React.Component {
                     />
                 );
 
+                //console.log('Author: ', post.get('author'), following.includes(post.get('author')), post.get('reblogged_by'), post.getIn(['stats', 'is_pinned'], false));
+
                 const summary = [];
                 summary.push(
                     <li
                         key={i}
                         className={
-                            post.getIn(['stats', 'is_pinned'], false)
+                            (post.getIn(['stats', 'is_pinned'], false)
                                 ? 'isPinned'
-                                : ''
+                                : '') +
+                            (hideResteems &&
+                            post.get('reblogged_by') &&
+                            !following.includes(post.get('author'))
+                                ? ' hideResteems'
+                                : '')
                         }
                     >
                         {ps}
@@ -276,13 +311,24 @@ class PostsList extends React.Component {
 
         return (
             <div id="posts_list" className="PostsList">
+                {order === 'feed' && (
+                    <div>
+                        <input
+                            type="checkbox"
+                            checked={hideResteems}
+                            onChange={this.handleToggleHideResteems}
+                            id="hideResteems"
+                        />
+                        <label htmlFor="hideResteems">Hide Resteems</label>
+                    </div>
+                )}
                 {category &&
                     category.startsWith('hive-') &&
                     pinnedPostsCount > 0 &&
                     (order === 'trending' || order === 'created') && (
                         <div
                             className={`${
-                                arePinnedPostsCollapsed && pinnedPostsCount > 2
+                                arePinnedPostsCollapsed && pinnedPostsCount >= 2
                                     ? 'pinnedPostsContainer'
                                     : ''
                             }`}
@@ -387,6 +433,23 @@ export default connect(
             ['follow', 'getFollowingAsync', username, 'ignore_result'],
             List()
         );
+        let following = props.category;
+        if (
+            props.category &&
+            props.category.startsWith('@') &&
+            props.order === 'feed'
+        ) {
+            following = state.global.getIn(
+                [
+                    'follow',
+                    'getFollowingAsync',
+                    props.category.slice(1),
+                    'blog_result',
+                ],
+                List()
+            );
+        }
+
         const blacklist = state.global.get('blacklist');
         let { posts } = props;
         if (typeof posts === 'undefined') {
@@ -417,6 +480,7 @@ export default connect(
             videoAdsEnabled,
             adSlots,
             blacklist,
+            following,
         };
     },
     dispatch => ({

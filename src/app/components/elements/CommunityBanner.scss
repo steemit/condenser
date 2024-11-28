@@ -24,9 +24,9 @@
         .Userpic {
             border: 2px solid rgb(238, 238, 238);
             margin: 0.5rem;
-            width: 50px !important;
-            min-width: 50px;
-            height: 50px !important;
+            width: 40px !important;
+            min-width: 40px;
+            height: 40px !important;
             @include MQ(M) {
                 margin: 1rem;
                 width: 60px !important;
@@ -36,8 +36,6 @@
         }
 
         .TextContainer {
-            display: flex;
-            flex-direction: column;
             margin: 0.5rem 0;
             width: 100%;
             
@@ -53,21 +51,22 @@
                 @include MQ(L) {
                     font-size: 1em;
                 }
-                position: relative;
-                max-height: 3em;
-                overflow: hidden;
-                text-overflow: ellipsis;
             }
         }
     }
 
     .AdditionalActions {
+        float: right;
         color: white;
         border-left: 1px solid rgba(238, 238, 238, 0.5);
-        margin: 0.5rem 0;
+        margin: 0.5rem 0 0 0.5rem;
         padding: 0.5rem 1rem;
         text-align: right;
         white-space: nowrap;
+        font-size: 0.9em;
+        @include MQ(L) {
+            font-size: 1em;
+        }
         
         @include MQ(L) {
             display: none;
@@ -151,7 +150,6 @@
                 padding-left: 5px;
                 font-size: 0.8em;
                 white-space: nowrap;
-                text-overflow: ellipsis;
             }
             @include MQ(L) {
                 .CommunityLabel::before {

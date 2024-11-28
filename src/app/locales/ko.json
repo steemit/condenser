@@ -429,7 +429,7 @@
             "one": "하나의 게시글",
             "other": "%(count)s 게시글"
         },
-        "hide_resteems": "Hide Resteems",
+        "hide_resteems": "리스팀 숨기기",
         "show_all": "Show All"
     },
     "post_jsx": {

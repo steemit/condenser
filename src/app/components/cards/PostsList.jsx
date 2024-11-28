@@ -227,11 +227,6 @@ class PostsList extends React.Component {
             hideResteems,
         } = this.state;
 
-        //console.log('Category: ', category);
-        //console.log('Order: ', order);
-        //console.log('Following: ', following);
-        //console.log('Hide Resteems', hideResteems);
-
         const pinnedPosts = posts.filter(post =>
             post.getIn(['stats', 'is_pinned'], false)
         );
@@ -249,8 +244,6 @@ class PostsList extends React.Component {
                         depth={depth}
                     />
                 );
-
-                //console.log('Author: ', post.get('author'), following.includes(post.get('author')), post.get('reblogged_by'), post.getIn(['stats', 'is_pinned'], false));
 
                 const summary = [];
                 summary.push(
@@ -319,7 +312,9 @@ class PostsList extends React.Component {
                             onChange={this.handleToggleHideResteems}
                             id="hideResteems"
                         />
-                        <label htmlFor="hideResteems">Hide Resteems</label>
+                        <label htmlFor="hideResteems">
+                            {tt('user_profile.hide_resteems')}
+                        </label>
                     </div>
                 )}
                 {category &&

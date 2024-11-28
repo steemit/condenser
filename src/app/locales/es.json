@@ -426,7 +426,7 @@
             "one": "1 publicación",
             "other": "%(count)s posts"
         },
-        "hide_resteems": "Hide Resteems",
+        "hide_resteems": "Ocultar resteems",
         "show_all": "Show All"
     },
     "post_jsx": {

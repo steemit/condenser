@@ -428,22 +428,12 @@ export default connect(
             ['follow', 'getFollowingAsync', username, 'ignore_result'],
             List()
         );
-        let following = props.category;
-        if (
-            props.category &&
-            props.category.startsWith('@') &&
-            props.order === 'feed'
-        ) {
-            following = state.global.getIn(
-                [
-                    'follow',
-                    'getFollowingAsync',
-                    props.category.slice(1),
-                    'blog_result',
-                ],
-                List()
-            );
-        }
+        const pathname = state.global.get('pathname');
+        const [_, userFeed] = pathname.split('/');
+        const following = state.global.getIn(
+            ['follow', 'getFollowingAsync', userFeed.slice(1), 'blog_result'],
+            List()
+        );
 
         const blacklist = state.global.get('blacklist');
         let { posts } = props;

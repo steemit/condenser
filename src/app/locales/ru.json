@@ -441,7 +441,7 @@
             "many": "%(count)s постов",
             "other": "%(count)s постов"
         },
-        "hide_resteems": "Hide Resteems",
+        "hide_resteems": "Скрыть ристимы",
         "show_all": "Show All"
     },
     "post_jsx": {

@@ -108,35 +108,35 @@ class CommunityBanner extends Component {
                                 <Userpic account={category} />
                             )}
                             <div className="TextContainer">
+                                <div className="AdditionalActions">
+                                    <div className="ModeratorRoles">
+                                        {roles && (
+                                            <div>
+                                                {tt('g.edit')}
+                                                {': '}
+                                                {roles}
+                                                {settings && (
+                                                    <span>
+                                                        {' / '}
+                                                        {settings}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="ActivityLog">
+                                        <a onClick={handleModerationLogCLick}>
+                                            {tt('g.activity_log')}
+                                        </a>
+                                        {community.get('is_nsfw') && (
+                                            <span className="affiliation">
+                                                nsfw
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
                                 <h1>{community.get('title')}</h1>
                                 <p>{community.get('about')}</p>
-                            </div>
-                            <div className="AdditionalActions">
-                                <div className="ModeratorRoles">
-                                    {roles && (
-                                        <div>
-                                            {tt('g.edit')}
-                                            {': '}
-                                            {roles}
-                                            {settings && (
-                                                <span>
-                                                    {' / '}
-                                                    {settings}
-                                                </span>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="ActivityLog">
-                                    <a onClick={handleModerationLogCLick}>
-                                        {tt('g.activity_log')}
-                                    </a>
-                                    {community.get('is_nsfw') && (
-                                        <span className="affiliation">
-                                            nsfw
-                                        </span>
-                                    )}
-                                </div>
                             </div>
                         </div>
                         <div className="CommunityActions">

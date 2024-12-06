@@ -14,8 +14,19 @@ import * as userActions from 'app/redux/UserReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 
 class CommunityBanner extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            screenWidth: 0,
+        };
+    }
+
     componentDidMount() {
         const { category, profile, fetchProfile } = this.props;
+        this.state = {
+            screenWidth: window.innerWidth,
+            snapWidth: 760,
+        };
         if (!profile) fetchProfile(category);
     }
 
@@ -34,6 +45,8 @@ class CommunityBanner extends Component {
             showRecentSubscribers,
             showModerationLog,
         } = this.props;
+
+        const { screenWidth, snapWidth } = this.state;
 
         const viewer_role = community.getIn(['context', 'role'], 'guest');
         const canPost = Role.canPost(category, viewer_role);
@@ -90,6 +103,18 @@ class CommunityBanner extends Component {
                 {tt('g.settings')}
             </SettingsEditButton>
         );
+
+        const formatNumber = num => {
+            if (screenWidth > snapWidth) {
+                return numberWithCommas(num);
+            } else if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'm';
+            } else if (num >= 10000) {
+                return (num / 1000).toFixed(1) + 'k';
+            } else {
+                return numberWithCommas(num);
+            }
+        };
 
         return (
             <div>
@@ -165,9 +190,7 @@ class CommunityBanner extends Component {
                                 aria-label="View recent subscribers"
                             >
                                 <p>
-                                    {numberWithCommas(
-                                        community.get('subscribers')
-                                    )}
+                                    {formatNumber(community.get('subscribers'))}
                                     <span className="CommunityLabel">
                                         {community.get('subscribers') == 1
                                             ? tt('g.subscriber')
@@ -176,15 +199,13 @@ class CommunityBanner extends Component {
                                 </p>
                             </div>
                             <p>
-                                ${numberWithCommas(
-                                    community.get('sum_pending')
-                                )}
+                                ${formatNumber(community.get('sum_pending'))}
                                 <span className="CommunityLabel">
                                     {tt('g.pending_rewards')}
                                 </span>
                             </p>
                             <p>
-                                {numberWithCommas(community.get('num_authors'))}
+                                {formatNumber(community.get('num_authors'))}
                                 <span className="CommunityLabel">
                                     {tt('g.active_posters')}
                                 </span>

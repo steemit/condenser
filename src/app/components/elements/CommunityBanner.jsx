@@ -14,8 +14,19 @@ import * as userActions from 'app/redux/UserReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 
 class CommunityBanner extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            screenWidth: 0,
+        };
+    }
+
     componentDidMount() {
         const { category, profile, fetchProfile } = this.props;
+        this.state = {
+            screenWidth: window.innerWidth,
+            snapWidth: 760,
+        };
         if (!profile) fetchProfile(category);
     }
 
@@ -34,6 +45,8 @@ class CommunityBanner extends Component {
             showRecentSubscribers,
             showModerationLog,
         } = this.props;
+
+        const { screenWidth, snapWidth } = this.state;
 
         const viewer_role = community.getIn(['context', 'role'], 'guest');
         const canPost = Role.canPost(category, viewer_role);
@@ -91,6 +104,18 @@ class CommunityBanner extends Component {
             </SettingsEditButton>
         );
 
+        const formatNumber = num => {
+            if (screenWidth > snapWidth) {
+                return numberWithCommas(num);
+            } else if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'm';
+            } else if (num >= 10000) {
+                return (num / 1000).toFixed(1) + 'k';
+            } else {
+                return numberWithCommas(num);
+            }
+        };
+
         return (
             <div>
                 <div className="UserProfile__banner row expanded">
@@ -108,35 +133,35 @@ class CommunityBanner extends Component {
                                 <Userpic account={category} />
                             )}
                             <div className="TextContainer">
+                                <div className="AdditionalActions">
+                                    <div className="ModeratorRoles">
+                                        {roles && (
+                                            <div>
+                                                {tt('g.edit')}
+                                                {': '}
+                                                {roles}
+                                                {settings && (
+                                                    <span>
+                                                        {' / '}
+                                                        {settings}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="ActivityLog">
+                                        <a onClick={handleModerationLogCLick}>
+                                            {tt('g.activity_log')}
+                                        </a>
+                                        {community.get('is_nsfw') && (
+                                            <span className="affiliation">
+                                                nsfw
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
                                 <h1>{community.get('title')}</h1>
                                 <p>{community.get('about')}</p>
-                            </div>
-                            <div className="AdditionalActions">
-                                <div className="ModeratorRoles">
-                                    {roles && (
-                                        <div>
-                                            {tt('g.edit')}
-                                            {': '}
-                                            {roles}
-                                            {settings && (
-                                                <span>
-                                                    {' / '}
-                                                    {settings}
-                                                </span>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="ActivityLog">
-                                    <a onClick={handleModerationLogCLick}>
-                                        {tt('g.activity_log')}
-                                    </a>
-                                    {community.get('is_nsfw') && (
-                                        <span className="affiliation">
-                                            nsfw
-                                        </span>
-                                    )}
-                                </div>
                             </div>
                         </div>
                         <div className="CommunityActions">
@@ -165,9 +190,7 @@ class CommunityBanner extends Component {
                                 aria-label="View recent subscribers"
                             >
                                 <p>
-                                    {numberWithCommas(
-                                        community.get('subscribers')
-                                    )}
+                                    {formatNumber(community.get('subscribers'))}
                                     <span className="CommunityLabel">
                                         {community.get('subscribers') == 1
                                             ? tt('g.subscriber')
@@ -176,15 +199,13 @@ class CommunityBanner extends Component {
                                 </p>
                             </div>
                             <p>
-                                ${numberWithCommas(
-                                    community.get('sum_pending')
-                                )}
+                                ${formatNumber(community.get('sum_pending'))}
                                 <span className="CommunityLabel">
                                     {tt('g.pending_rewards')}
                                 </span>
                             </p>
                             <p>
-                                {numberWithCommas(community.get('num_authors'))}
+                                {formatNumber(community.get('num_authors'))}
                                 <span className="CommunityLabel">
                                     {tt('g.active_posters')}
                                 </span>

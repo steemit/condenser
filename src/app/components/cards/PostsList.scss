@@ -228,6 +228,12 @@
     }
 }
 
+input#hideResteems,
+.hideResteemsLabel {
+    padding-bottom: 0.5rem;
+    vertical-align: middle;
+}
+
 .hideResteems {
     display: none;
 }

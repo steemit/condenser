@@ -264,13 +264,9 @@
   }
 
   &__hr {
-    margin-bottom: 20px;
-    margin-top: 0px;
+    display: none;
     @include themify($themes) {
       border-bottom: themed('border');
-    }
-    @include MQ(M) {
-      display: none;
     }
   }
 

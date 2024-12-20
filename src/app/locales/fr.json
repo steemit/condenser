@@ -443,7 +443,7 @@
             "one": "1 article",
             "other": "%(count)s articles"
         },
-        "hide_resteems": "Hide Resteems",
+        "hide_resteems": "Masquer les resteems",
         "show_all": "Show All"
     },
     "post_jsx": {

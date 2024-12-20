@@ -414,7 +414,7 @@
             "one": "1 wpis",
             "other": "%(count)s wpisów"
         },
-        "hide_resteems": "Hide Resteems",
+        "hide_resteems": "Ukryj resteemy",
         "show_all": "Show All"
     },
     "post_jsx": {

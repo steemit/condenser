@@ -83,7 +83,6 @@
             width: auto;
             padding: 16px;
             margin-top: -31px;
-            color: white;
             font-weight: bold;
             transition: 0.2s ease;
             border-radius: 0 3px 3px 0;
@@ -92,7 +91,8 @@
             opacity: 30%;
             @include font-size(18px);
             @include themify($themes) {
-                background-color: themed('textColorPrimary');
+                background-color: themed('buttonBackground');
+                color: themed('buttonText');
             }
         }
         
@@ -104,7 +104,8 @@
         
         .prev:hover, .next:hover {
             @include themify($themes) {
-                background-color: themed('colorAccent');
+                background-color: themed('buttonBackgroundHover');
+                color: themed('buttonTextHover');
                 opacity: 80%;
             }
         }
@@ -225,4 +226,14 @@
             padding: 0.5rem 0 0.5rem 0.5rem;
         }
     }
+}
+
+input#hideResteems,
+.hideResteemsLabel {
+    padding-bottom: 0.5rem;
+    vertical-align: middle;
+}
+
+.hideResteems {
+    display: none;
 }

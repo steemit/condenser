@@ -431,7 +431,7 @@
             "one": "投稿1件",
             "other": "投稿%(count)s 件"
         },
-        "hide_resteems": "Hide Resteems",
+        "hide_resteems": "リスティームを非表示にする",
         "show_all": "Show All"
     },
     "post_jsx": {

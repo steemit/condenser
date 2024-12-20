@@ -432,7 +432,7 @@
             "one": "1 post",
             "other": "%(count)s post"
         },
-        "hide_resteems": "Hide Resteems",
+        "hide_resteems": "Nascondi resteem",
         "show_all": "Show All"
     },
     "post_jsx": {

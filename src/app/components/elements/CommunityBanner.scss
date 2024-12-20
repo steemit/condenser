@@ -1,6 +1,4 @@
 .CommunityBanner {
-    //display: flex;
-    //align-items: start;
     height: 200px;
     padding: 0;
     position: relative;
@@ -16,9 +14,6 @@
 
     .CommunityTitle {
         background-color: rgba(51,51,51,0.6);
-        //border-top-right-radius: 5px;
-        //border-bottom-right-radius: 5px;
-        //border-right: 1px solid rgba(238, 238, 238, 0.5);
         border-bottom: 1px solid rgba(238, 238, 238, 0.5);
         display: flex;
         flex-basis: 100%;
@@ -29,9 +24,9 @@
         .Userpic {
             border: 2px solid rgb(238, 238, 238);
             margin: 0.5rem;
-            width: 50px !important;
-            min-width: 50px;
-            height: 50px !important;
+            width: 40px !important;
+            min-width: 40px;
+            height: 40px !important;
             @include MQ(M) {
                 margin: 1rem;
                 width: 60px !important;
@@ -41,8 +36,6 @@
         }
 
         .TextContainer {
-            display: flex;
-            flex-direction: column;
             margin: 0.5rem 0;
             width: 100%;
             
@@ -54,17 +47,26 @@
             p {
                 margin: 0;
                 padding: 0 1rem 0 0;
+                font-size: 0.9em;
+                @include MQ(L) {
+                    font-size: 1em;
+                }
             }
         }
     }
 
     .AdditionalActions {
+        float: right;
         color: white;
         border-left: 1px solid rgba(238, 238, 238, 0.5);
-        margin: 0.5rem 0;
+        margin: 0.5rem 0 0 0.5rem;
         padding: 0.5rem 1rem;
         text-align: right;
         white-space: nowrap;
+        font-size: 0.9em;
+        @include MQ(L) {
+            font-size: 1em;
+        }
         
         @include MQ(L) {
             display: none;
@@ -139,10 +141,15 @@
             border-right: 1px solid rgba(238, 238, 238, 0.5);
             line-height: normal;
             text-align: center;
+            font-size: 0.9em;
+            @include MQ(L) {
+                font-size: 1em;
+            }
 
             .CommunityLabel {
                 padding-left: 5px;
                 font-size: 0.8em;
+                white-space: nowrap;
             }
             @include MQ(L) {
                 .CommunityLabel::before {

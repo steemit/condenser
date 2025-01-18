@@ -38,6 +38,10 @@
     "steemd_connection_server": "https://api.steemitdev.com",
     "rpc_list": [
         "https://api.steemit.com",
+        "https://api.steemitdev.com",
+        "https://api.steem.fans",
+        "https://steem.61bts.com",
+        "https://api.steems.top",        
         "https://api.justyy.com",
         "https://api2.justyy.com",
         "https://api.steemyy.com",
@@ -52,8 +56,7 @@
         "https://api.moecki.online",
         "https://api.campingclub.me",
         "https://api.steememory.com",
-        "https://api.futureshock.world",
-        "https://api.steemitdev.com"
+        "https://api.futureshock.world"
     ],
     "steemd_use_appbase": false,
     "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",

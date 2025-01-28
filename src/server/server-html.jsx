@@ -53,6 +53,7 @@ export default function ServerHTML({
                                     key="canonical"
                                     rel="canonical"
                                     href={m.canonical}
+                                    id="canonicalUrlID"
                                 />
                             );
                         if (m.name && m.content)

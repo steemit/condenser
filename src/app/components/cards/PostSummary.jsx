@@ -97,7 +97,39 @@ class PostSummary extends React.Component {
         const author = post.get('author');
         const permlink = post.get('permlink');
         const category = post.get('category');
-        const post_url = `/${category}/@${author}/${permlink}`;
+
+        let tempCategory = category || '';
+        const tags = post.getIn(['json_metadata', 'tags']) || [];
+
+        // Leave Options 1 and 2 uncommented for a combination of both approaches
+        // Option 1: Replace hive-xxxxxx in the URL with the community name.  This doesn't impact non-community posts
+        const communityTitle =
+            post.get('community_title', '#' + tempCategory) || '';
+        const sanitizedTitle = communityTitle
+            .replace(/[^a-zA-Z0-9 ]/g, '')
+            .trim();
+        const urlFriendlyTitle = sanitizedTitle
+            .replace(/\s+/g, '-')
+            .toLowerCase();
+        if (urlFriendlyTitle) {
+            tempCategory = urlFriendlyTitle;
+        }
+
+        // Option 2: Replace hive-xxxxxx in the URL with the first tag of a post
+        if (tempCategory.startsWith('hive-') && tags && tags.size > 0) {
+            const firstTag = tags.get(0).startsWith('#')
+                ? tags.get(0).substring(1)
+                : tags.get(0);
+            tempCategory =
+                firstTag.startsWith('hive-') && tags.size > 1
+                    ? tags.get(1)
+                    : firstTag; // Sometimes the first tag is still the community & need to check if there's a second tag
+            tempCategory = tempCategory.startsWith('#')
+                ? tempCategory.substring(1)
+                : tempCategory;
+        }
+
+        const post_url = `/${tempCategory}/@${author}/${permlink}`;
 
         const summary = extractBodySummary(post.get('body'), isReply);
         const keyWord = process.env.BROWSER

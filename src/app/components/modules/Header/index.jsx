@@ -14,7 +14,7 @@ import { parseJsonTags } from 'app/utils/StateFunctions';
 import Headroom from 'react-headroom';
 import resolveRoute from 'app/ResolveRoute';
 import tt from 'counterpart';
-import { APP_NAME } from 'app/client_config';
+import { APP_NAME, APP_DOMAIN } from 'app/client_config';
 import ElasticSearchInput from 'app/components/elements/ElasticSearchInput';
 import IconButton from 'app/components/elements/IconButton';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
@@ -249,6 +249,20 @@ class Header extends React.Component {
             (route.page !== 'Post' && route.page !== 'PostNoCategory')
         )
             document.title = page_title + ' — ' + APP_NAME;
+
+        if (process.env.BROWSER && route.page !== 'Post') {
+            const canonicalLink = document.getElementById('canonicalUrlID');
+            if (canonicalLink) {
+                canonicalLink.href = 'https://' + APP_DOMAIN + pathname;
+            } else {
+                const newCanonicalUrlID = document.createElement('link');
+                newCanonicalUrlID.rel = 'canonical';
+                newCanonicalUrlID.key = 'canonical';
+                newCanonicalUrlID.id = 'canonicalUrlID';
+                newCanonicalUrlID.href = 'https://' + APP_DOMAIN + pathname;
+                document.head.appendChild(newCanonicalUrlID);
+            }
+        }
 
         //const _feed = current_account_name && `/@${current_account_name}/feed`;
         //const logo_link = _feed && pathname != _feed ? _feed : '/';

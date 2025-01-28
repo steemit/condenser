@@ -131,12 +131,19 @@ class PostsList extends React.Component {
     }
 
     updateSlide(index) {
+        const screenWidth = window.innerWidth;
         const filteredPosts = this.props.posts.filter(post =>
             post.getIn(['stats', 'is_pinned'], false)
         );
-        const totalSlides = filteredPosts.size - 1; // We reduce the slide count by 1 because we're displaying 2 on a screen and don't want an empty gap at the end
+        let totalSlides = filteredPosts.size;
+        if (screenWidth >= 768) {
+            totalSlides -= 1; // We reduce the slide count by 1 because we're displaying 2 on a screen and don't want an empty gap at the end
+        }
         const pinnedPostsElement = document.querySelector('.pinnedPosts');
-        const sliderPosition = (index + totalSlides) % totalSlides;
+        let sliderPosition = 0;
+        if (totalSlides > 0) {
+            sliderPosition = (index + totalSlides) % totalSlides;
+        }
         this.setState({ currentSlide: sliderPosition });
         if (pinnedPostsElement) {
             requestAnimationFrame(() => {
@@ -191,9 +198,8 @@ class PostsList extends React.Component {
                         top: 0,
                         behavior: 'smooth',
                     });
-                } else {
-                    this.updateSlide(0);
                 }
+                this.updateSlide(0);
             }
         );
     }
@@ -231,6 +237,7 @@ class PostsList extends React.Component {
             post.getIn(['stats', 'is_pinned'], false)
         );
         const pinnedPostsCount = pinnedPosts.size;
+        const screenWidth = process.env.BROWSER ? window.innerWidth : 0;
 
         const renderSummary = items =>
             items.map((post, i) => {
@@ -290,7 +297,10 @@ class PostsList extends React.Component {
             });
 
         const renderDotLinks = totalItems => {
-            const adjustedTotalItems = totalItems - 1;
+            let adjustedTotalItems = totalItems;
+            if (screenWidth >= 768) {
+                adjustedTotalItems -= 1;
+            }
             const dots = Array.from({ length: adjustedTotalItems }, (_, i) => (
                 <span
                     key={i}
@@ -312,7 +322,10 @@ class PostsList extends React.Component {
                             onChange={this.handleToggleHideResteems}
                             id="hideResteems"
                         />
-                        <label htmlFor="hideResteems">
+                        <label
+                            htmlFor="hideResteems"
+                            className="hideResteemsLabel"
+                        >
                             {tt('user_profile.hide_resteems')}
                         </label>
                     </div>
@@ -329,7 +342,7 @@ class PostsList extends React.Component {
                             }`}
                         >
                             {arePinnedPostsCollapsed &&
-                                pinnedPostsCount > 2 && (
+                                (screenWidth < 768 || pinnedPostsCount > 2) && (
                                     <button
                                         className="prev"
                                         onClick={this.prevSlide}
@@ -345,7 +358,7 @@ class PostsList extends React.Component {
                                 {renderSummary(pinnedPosts)}
                             </ul>
                             {arePinnedPostsCollapsed &&
-                                pinnedPostsCount > 2 && (
+                                (screenWidth < 768 || pinnedPostsCount > 2) && (
                                     <button
                                         className="next"
                                         onClick={this.nextSlide}
@@ -354,7 +367,7 @@ class PostsList extends React.Component {
                                     </button>
                                 )}
                             {arePinnedPostsCollapsed &&
-                                pinnedPostsCount > 2 && (
+                                (screenWidth < 768 || pinnedPostsCount > 2) && (
                                     <div className="carouselDots">
                                         {renderDotLinks(pinnedPostsCount)}
                                     </div>

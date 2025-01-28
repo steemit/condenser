@@ -8,6 +8,7 @@ export async function callBridge(method, params, pre = 'bridge.') {
     //console.log('call bridge');
     //console.log("Method: ", method);
     //console.log("Params: ", JSON.stringify(params).substring(0, 200));
+    //console.log("Pre: ", pre);
 
     return new Promise(function(resolve, reject) {
         api.call(pre + method, params, function(err, data) {

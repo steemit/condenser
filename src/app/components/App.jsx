@@ -87,6 +87,13 @@ class App extends React.Component {
         this.setState({ showBanner: false });
     };
 
+    handleScrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    };
+
     render() {
         const {
             params,
@@ -209,6 +216,13 @@ class App extends React.Component {
                     ) : null}
                     {callout}
                     {children}
+                    <button
+                        onClick={this.handleScrollToTop}
+                        className="scroll-to-top"
+                        aria-label="Scroll to top"
+                    >
+                        &#8593;
+                    </button>
                 </div>
                 <Dialogs />
                 <Modals />

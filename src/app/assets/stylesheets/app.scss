@@ -154,6 +154,10 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2 !important;
 }
 
+h6 {
+  clear: both;
+}
+
 .c-sidebar {
   width: 100%;
   max-width: 240px;

@@ -237,3 +237,40 @@
     }
   }
 }
+
+/*:root {
+  --scrollButton: '1em';
+}*/
+
+.scroll-to-top {
+  display: none;
+  cursor: pointer;
+  position: fixed;
+  //bottom: var(--scrollButton);
+  bottom: 1em;
+  right: 0;
+  width: auto;
+  padding: 16px;
+  font-weight: bold;
+  transition: 0.2s ease;
+  border-radius: 3px;
+  user-select: none;
+  opacity: 30%;
+  z-index: 100;
+  @include font-size(18px);
+  @include themify($themes) {
+    background-color: themed('buttonBackground');
+    color: themed('buttonText');
+  }
+  @include MQ(M) {
+    display: block;
+    bottom: 1em;
+  }
+}
+.scroll-to-top:hover {
+  @include themify($themes) {
+    background-color: themed('buttonBackgroundHover');
+    color: themed('buttonTextHover');
+    opacity: 80%;
+  }
+}

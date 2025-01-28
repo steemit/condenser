@@ -23,6 +23,7 @@ const GET_COMMUNITY = 'fetchDataSaga/GET_COMMUNITY';
 const LIST_COMMUNITIES = 'fetchDataSaga/LIST_COMMUNITIES';
 const GET_SUBSCRIPTIONS = 'fetchDataSaga/GET_SUBSCRIPTIONS';
 const GET_NOTICES = 'fetchDataSaga/GET_NOTICES';
+const GET_TAGSLIST = 'global/GET_TAGSLIST';
 const GET_FOLLOWERS = 'fetchDataSaga/GET_FOLLOWERS';
 const UPDATE_FOLLPWERSLIST = 'fetchDataSaga/UPDATE_FOLLPWERSLIST';
 const GET_ACCOUNT_NOTIFICATIONS = 'fetchDataSaga/GET_ACCOUNT_NOTIFICATIONS';
@@ -40,6 +41,7 @@ export const fetchDataWatches = [
     takeEvery(GET_COMMUNITY, getCommunity),
     takeLatest(GET_SUBSCRIPTIONS, getSubscriptions),
     takeLatest(GET_NOTICES, getNotices),
+    takeLatest(GET_TAGSLIST, getTags),
     takeLatest(GET_FOLLOWERS, getFollowers),
     takeLatest(UPDATE_FOLLPWERSLIST, updateFollowersList),
     takeEvery(LIST_COMMUNITIES, listCommunities),
@@ -265,6 +267,21 @@ export function* getNotices(action) {
  * Request Notices
  * @param {string} name of account
  */
+
+export function* getTags() {
+    try {
+        const list = yield call(
+            callBridge,
+            'get_trending_tags',
+            [null, 250],
+            'condenser_api.'
+        );
+        yield put(globalActions.receiveTagsList(list));
+    } catch (error) {
+        console.log('Error Fetching receiveTagsList: ', error);
+    }
+}
+
 export function* getFollowers(action) {
     console.log(action.payload);
     const { title, accountname, currentPage, per_page } = action.payload;
@@ -277,7 +294,6 @@ export function* getFollowers(action) {
             [accountname, currentPage, per_page, 'blog'],
             'condenser_api.'
         );
-        console.log(list);
         yield put(globalActions.receiveFollowersList(list));
     } catch (error) {
         console.log('Error Fetching receiveFollowersList: ', error);
@@ -550,6 +566,11 @@ export const actions = {
 
     getNotices: payload => ({
         type: GET_NOTICES,
+        payload,
+    }),
+
+    getTags: payload => ({
+        type: GET_TAGSLIST,
         payload,
     }),
 

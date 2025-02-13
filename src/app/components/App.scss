@@ -5,7 +5,6 @@
 
 .App__content {
   margin-top: 1rem;
-  //overflow: hidden;
   margin-bottom: 60px;
   padding-bottom: 30px;
  
@@ -238,15 +237,10 @@
   }
 }
 
-/*:root {
-  --scrollButton: '1em';
-}*/
-
 .scroll-to-top {
   display: none;
   cursor: pointer;
   position: fixed;
-  //bottom: var(--scrollButton);
   bottom: 1em;
   right: 0;
   width: auto;

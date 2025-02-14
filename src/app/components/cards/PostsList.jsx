@@ -209,7 +209,6 @@ class PostsList extends React.Component {
             const newHideResteems = !prevState.hideResteems;
             if (process.env.BROWSER) {
                 localStorage.setItem('hideResteems', newHideResteems);
-                console.log('Storing HideResteems: ', newHideResteems);
             }
             return { hideResteems: newHideResteems };
         });

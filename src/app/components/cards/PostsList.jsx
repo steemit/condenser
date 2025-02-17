@@ -341,7 +341,8 @@ class PostsList extends React.Component {
                             }`}
                         >
                             {arePinnedPostsCollapsed &&
-                                (screenWidth < 768 || pinnedPostsCount > 2) && (
+                                ((pinnedPostsCount > 1 && screenWidth < 768) ||
+                                    pinnedPostsCount > 2) && (
                                     <button
                                         className="prev"
                                         onClick={this.prevSlide}
@@ -357,7 +358,8 @@ class PostsList extends React.Component {
                                 {renderSummary(pinnedPosts)}
                             </ul>
                             {arePinnedPostsCollapsed &&
-                                (screenWidth < 768 || pinnedPostsCount > 2) && (
+                                ((pinnedPostsCount > 1 && screenWidth < 768) ||
+                                    pinnedPostsCount > 2) && (
                                     <button
                                         className="next"
                                         onClick={this.nextSlide}
@@ -366,7 +368,8 @@ class PostsList extends React.Component {
                                     </button>
                                 )}
                             {arePinnedPostsCollapsed &&
-                                (screenWidth < 768 || pinnedPostsCount > 2) && (
+                                ((pinnedPostsCount > 1 && screenWidth < 768) ||
+                                    pinnedPostsCount > 2) && (
                                     <div className="carouselDots">
                                         {renderDotLinks(pinnedPostsCount)}
                                     </div>

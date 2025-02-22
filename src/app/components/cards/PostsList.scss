@@ -41,190 +41,199 @@
         }
     }
 }
-
-.prev, .next, .carouselDots, .collapseShowPinned {
-    display: none;
+   
+:root {
+    --pinned: '0';
 }
 
-@include MQ(M) {
+.prev, .next, .carouselDots, .collapseShowPinned {
+    display: block;
+}
+
+.pinnedPostsContainer {
+    position: relative;
+    margin: auto;
+    margin-bottom: 1em;
+    overflow-x: clip;
+    overflow-y: visible;
+    z-index: 1;
     
-    :root {
-        --pinned: '0';
-    }
-
-    .prev, .next, .carouselDots, .collapseShowPinned {
-        display: block;
-    }
-
-    .pinnedPostsContainer {
-        position: relative;
-        margin: auto;
-        margin-bottom: 1em;
-        overflow-x: clip;
-        overflow-y: visible;
-        z-index: 1;
-        
-        .pinnedPosts {
-            display: flex;
-            margin: 0;
-            padding: 0;
-            transition: transform 0.5s ease;
+    .pinnedPosts {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        transition: transform 0.5s ease;
+        transform: translateX(calc(var(--pinned)*2));
+        @include MQ(M) {
             transform: translateX(var(--pinned));
         }
-        .isPinned {
-            box-sizing: border-box;
+    }
+    .isPinned {
+        box-sizing: border-box;
+        flex: 0 0 calc(100% - 1rem);
+        @include MQ(M) {
             flex: 0 0 calc(50% - 1rem);
-            margin: 0 0.5rem;
         }
-        .prev, .next {
+        margin: 0 0.5rem;
+    }
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        padding: 16px;
+        margin-top: -31px;
+        font-weight: bold;
+        transition: 0.2s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+        z-index: 100;
+        opacity: 30%;
+        @include font-size(18px);
+        @include themify($themes) {
+            background-color: themed('buttonBackground');
+            color: themed('buttonText');
+        }
+    }
+    
+    .next {
+        right: 0;
+        margin-right: 0 !important;
+        border-radius: 3px 0 0 3px;
+    }
+    
+    .prev:hover, .next:hover {
+        @include themify($themes) {
+            background-color: themed('buttonBackgroundHover');
+            color: themed('buttonTextHover');
+            opacity: 80%;
+        }
+    }
+
+    .carouselDots {
+        margin: 0.2rem 0 0 0.5rem;
+
+        .dot {
             cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            padding: 16px;
-            margin-top: -31px;
-            font-weight: bold;
+            display: inline-block;
+            border-radius: 50%;
+            padding: 0.3rem;
+            margin: 0.5rem;
+            opacity: 80%;
             transition: 0.2s ease;
-            border-radius: 0 3px 3px 0;
-            user-select: none;
-            z-index: 100;
-            opacity: 30%;
-            @include font-size(18px);
             @include themify($themes) {
-                background-color: themed('buttonBackground');
-                color: themed('buttonText');
+                background-color: themed('textColorPrimary');
             }
         }
-        
-        .next {
-            right: 0;
-            margin-right: 0 !important;
-            border-radius: 3px 0 0 3px;
-        }
-        
-        .prev:hover, .next:hover {
+
+        .dot:hover {
+            opacity: 80%;
             @include themify($themes) {
-                background-color: themed('buttonBackgroundHover');
-                color: themed('buttonTextHover');
-                opacity: 80%;
+                background-color: themed('colorAccent');
             }
         }
 
-        .carouselDots {
-            margin: 0.2rem 0 0 0.5rem;
-            float: left;            
-
-            .dot {
-                cursor: pointer;
-                display: inline-block;
-                border-radius: 50%;
-                padding: 0.3rem;
-                margin: 0.5rem;
-                opacity: 80%;
-                transition: 0.2s ease;
-                @include themify($themes) {
-                    background-color: themed('textColorPrimary');
-                }
+        .dot.active {
+            @include themify($themes) {
+                background-color: themed('colorAccent');
             }
-
-            .dot:hover {
-                opacity: 80%;
-                @include themify($themes) {
-                    background-color: themed('colorAccent');
-                }
-            }
-
-            .dot.active {
-                @include themify($themes) {
-                    background-color: themed('colorAccent');
-                }
+            border-radius: 50%;
+            padding: 0.3rem;
+            @include MQ(M) {
                 border-radius: 25%;
                 padding: 0.3rem 1.3rem;
             }
         }
+    }
+    
+    .articles {
+
+        &__summary {
+            height: 100%;
+        }
         
-        .articles {
-
-            &__summary {
-                height: 100%;
+        &__summary-header {
+            padding: 0.5rem 0 !important;
+            a.timestamp__link::before {
+                content: "\a";
+                white-space: pre;
             }
-            
-            &__summary-header {
-                padding: 0.5rem 0 !important;
-                a.timestamp__link::before {
-                    content: "\a";
-                    white-space: pre;
-                }
-            }
-                    
-            &__content {
-                display: block !important;
-            }
-            &__content-block {
-                display: block !important;
-                width: 100% !important;
-                flex: none;
-                &--img {
+        }
+                
+        &__content {
+            display: block !important;
+        }
+        &__content-block {
+            display: block !important;
+            width: 100% !important;
+            flex: none;
+            &--img {
+                margin-bottom: 0.5rem !important;
+                height: 250px;
+                overflow: hidden;
+                @include MQ(M) {
                     height: auto;
-                    margin-bottom: 0.5rem !important;
-                }
-                &--text {
-                    flex: none;
-                    min-width: 100px !important;
-                    
-                    .PostSummary__body {
-                        white-space: wrap;
-                        padding-bottom: 0.5rem;
-                    }
                 }
             }
-            &__h2 {
-                margin-bottom: 0.5rem;
+            &--text {
+                flex: none;
+                min-width: 100px !important;
+                
+                .PostSummary__body {
+                    white-space: wrap;
+                    padding-bottom: 0.5rem;
+                }
             }
+        }
+        &__h2 {
+            margin-bottom: 0.5rem;
+        }
 
-            &__feature-img-container {
-                display: flex !important;
+        &__feature-img-container {
+            display: flex !important;
+            @include MQ(M) {
                 width: 100% !important;
                 height: 250px !important;
             }
+        }
 
-            &__footer {
-                padding-bottom: 20px;
+        &__footer {
+            padding-bottom: 20px;
+        }
+
+        &__summary-footer {
+            position: absolute;
+            display: block;
+            bottom: 0;
+            
+            .Voting {
+                float: none;
             }
-
-            &__summary-footer {
-                position: absolute;
-                display: block;
-                bottom: 0;
-                
-                .Voting {
-                    float: none;
+            .VotesAndComments {
+                .VotesAndComments__votes {
+                    padding-right: 0;
                 }
-                .VotesAndComments {
-                    .VotesAndComments__votes {
-                        padding-right: 0;
-                    }
-                }
-                .PostSummary__time_author_category {
-                    padding-left: 0;
+            }
+            .PostSummary__time_author_category {
+                padding-left: 0;
 
-                    .Reblog__button  {
-                        margin: 0;
-                        padding-right: 0;
-                    }
+                .Reblog__button  {
+                    margin: 0;
+                    padding-right: 0;
                 }
             }
         }
     }
+}
+    
+.collapseShowPinned {
+    text-align: right;
+    margin: 0.1rem 0.5rem 1rem 1rem;
+    display: block;
 
-    .collapseShowPinned {
-        text-align: right;
-        margin: 0.1rem 0.5rem 1rem 1rem;
-
-        a {
-            white-space: nowrap;
-            padding: 0.5rem 0 0.5rem 0.5rem;
-        }
+    a {
+        white-space: nowrap;
+        padding: 0.5rem 0 0.5rem 0.5rem;
     }
 }
 

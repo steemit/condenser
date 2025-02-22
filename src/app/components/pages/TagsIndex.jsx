@@ -1,21 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
 import { Map } from 'immutable';
+import * as appActions from 'app/redux/AppReducer';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 
 export default class TagsIndex extends React.Component {
-    static propTypes = {
-        tagsAll: PropTypes.object.isRequired,
-    };
-
     constructor(props) {
         super(props);
-        this.state = { order: props.order || 'name' };
+        this.state = {
+            order: props.order || 'posts',
+            tagsAll: [],
+        };
         this.onChangeSort = this.onChangeSort.bind(this);
+    }
+
+    componentDidMount() {
+        console.log('componentDidMount triggered');
+        // Only fetch tags if they are not already present in the state
+        if (!this.props.tagsAll || !this.props.tagsAll.size) {
+            console.log('Fetching tags...');
+            this.props.fetchTags();
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -60,14 +69,17 @@ export default class TagsIndex extends React.Component {
         const rows = tags
             .filter(
                 // there is a blank tag present, as well as some starting with #. filter them out.
-                tag => /^[a-z]/.test(tag.get('name'))
+                // also want to filter out community tags
+                tag =>
+                    /^[a-z]/.test(tag.get('name')) &&
+                    !/^hive-/.test(tag.get('name'))
             )
             .sort((a, b) => {
                 return this.compareTags(a, b, order);
             })
             .map(tag => {
                 const name = tag.get('name');
-                const link = `/trending/${name}`;
+                const link = `/created/${name}`;
                 return (
                     <tr key={name}>
                         <td>
@@ -126,9 +138,21 @@ export default class TagsIndex extends React.Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        tagsAll: state.global.get('tagsList', Map()),
+    };
+};
+
+const mapDispatchToProps = dispatch => ({
+    fetchTags: () => dispatch(fetchDataSagaActions.getTags()), // Dispatch the fetchTags action
+});
+
+const ConnectedTagsIndex = connect(mapStateToProps, mapDispatchToProps)(
+    TagsIndex
+);
+
 module.exports = {
     path: 'tags(/:order)',
-    component: connect(state => ({
-        tagsAll: state.global.get('tags', Map()),
-    }))(TagsIndex),
+    component: ConnectedTagsIndex,
 };

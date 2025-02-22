@@ -36,6 +36,7 @@ export const GET_DGP = 'global/GET_DGP';
 export const SET_DGP = 'global/SET_DGP';
 const SET_VESTS_PER_STEEM = 'global/SET_VESTS_PER_STEEM';
 const NOTICES = 'global/NOTICES';
+const TAGSLIST = 'global/TAGSLIST';
 const FOLLOWERSLIST = 'global/FOLLOWERSLIST';
 
 const postKey = (author, permlink) => {
@@ -160,6 +161,10 @@ export default function reducer(state = defaultState, action = {}) {
         }
         case NOTICES: {
             return state.set('notices', fromJS(payload));
+        }
+        case TAGSLIST: {
+            console.log('SETTING STATE OF TAGSLIST', payload);
+            return state.set('tagsList', fromJS(payload));
         }
         case FOLLOWERSLIST: {
             return state.set('followersList', fromJS(payload));
@@ -396,6 +401,11 @@ export const receiveRewards = payload => ({
 
 export const receiveNotices = payload => ({
     type: NOTICES,
+    payload,
+});
+
+export const receiveTagsList = payload => ({
+    type: TAGSLIST,
     payload,
 });
 

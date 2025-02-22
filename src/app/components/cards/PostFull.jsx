@@ -28,8 +28,8 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { allowDelete } from 'app/utils/StateFunctions';
-import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { Role } from 'app/utils/Community';
+import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 
 function TimeAuthorCategory({ post }) {
     return (
@@ -267,6 +267,51 @@ class PostFull extends React.Component {
 
         if (process.env.BROWSER && title)
             document.title = title + ' — ' + APP_NAME;
+
+        if (process.env.BROWSER) {
+            const canonicalLink = document.getElementById('canonicalUrlID');
+            if (!canonicalLink) {
+                const newCanonicalUrlID = document.createElement('link');
+                newCanonicalUrlID.rel = 'canonical';
+                newCanonicalUrlID.key = 'canonical';
+                newCanonicalUrlID.id = 'canonicalUrlID';
+                document.head.appendChild(newCanonicalUrlID);
+            }
+            if (canonicalLink) {
+                let tempCategory = category || '';
+                const tags = content.json_metadata.tags || [];
+
+                // Leave Options 1 and 2 uncommented for a combination of both approaches
+                // Option 1: Replace hive-xxxxxx in the URL with the community name. This doesn't impact non-community posts
+                const communityTitle =
+                    content.community_title || `#${tempCategory}` || '';
+                const sanitizedTitle = communityTitle
+                    .replace(/[^a-zA-Z0-9 ]/g, '')
+                    .trim();
+                const urlFriendlyTitle = sanitizedTitle
+                    .replace(/\s+/g, '-')
+                    .toLowerCase();
+                if (urlFriendlyTitle) {
+                    tempCategory = urlFriendlyTitle;
+                }
+
+                // Option 2: Replace hive-xxxxxx in the URL with the first tag of a post
+                if (tempCategory.startsWith('hive-') && tags.length > 0) {
+                    const firstTag = tags[0].startsWith('#')
+                        ? tags[0].substring(1)
+                        : tags[0];
+                    tempCategory =
+                        firstTag.startsWith('hive-') && tags.length > 1
+                            ? tags[1]
+                            : firstTag; // Sometimes the first tag is still the community & need to check if there's a second tag
+                    tempCategory = tempCategory.startsWith('#')
+                        ? tempCategory.substring(1)
+                        : tempCategory;
+                }
+                const canonicalURL = `/${tempCategory}/@${author}/${permlink}`;
+                canonicalLink.href = 'https://' + APP_DOMAIN + canonicalURL;
+            }
+        }
 
         let content_body = post.get('body');
         const bDMCAStop = DMCAList.includes(link);

@@ -123,6 +123,15 @@ class CommunitySettings extends Component {
                 // Skip these keys
             } else if (typeof this.state[k] === 'string') {
                 payload[k] = this.state[k].trim();
+            } else if (k === 'settings') {
+                const settingsCopy = { ...this.state[k] };
+                if (settingsCopy.avatar_url.trim() === '') {
+                    settingsCopy.avatar_url = '';
+                }
+                if (settingsCopy.cover_url.trim() === '') {
+                    settingsCopy.cover_url = '';
+                }
+                payload[k] = settingsCopy;
             } else {
                 payload[k] = this.state[k];
             }

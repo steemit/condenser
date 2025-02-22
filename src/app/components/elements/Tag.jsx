@@ -5,7 +5,7 @@ const Tag = ({ post }) => {
     const tag = post.get('category');
     const name = post.get('community_title', '#' + tag);
     return (
-        <Link to={`/trending/${tag}`} key={tag}>
+        <Link to={`/created/${tag}`} key={tag}>
             {name}
         </Link>
     );

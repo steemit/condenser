@@ -6,6 +6,7 @@ import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Voting from 'app/components/elements/Voting';
 import Reblog from 'app/components/elements/Reblog';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
@@ -102,13 +103,16 @@ class PostFull extends React.Component {
     }
 
     componentWillMount() {
-        const { postref } = this.props;
+        const { postref, community, category, getCommunity } = this.props;
         const formId = `postFull-${postref}`;
         this.setState({
             formId,
             PostFullReplyEditor: ReplyEditor(formId + '-reply'),
             PostFullEditEditor: ReplyEditor(formId + '-edit'),
         });
+        if (!community && category) {
+            getCommunity(category);
+        }
         if (process.env.BROWSER) {
             let showEditor = localStorage.getItem('showEditor-' + formId);
             if (showEditor) {
@@ -588,6 +592,7 @@ export default connect(
         return {
             post,
             postref,
+            category,
             community,
             username: state.user.getIn(['current', 'username']),
             viewer_role: state.global.getIn(
@@ -664,6 +669,9 @@ export default connect(
                     errorCallback,
                 })
             );
+        },
+        getCommunity: communityName => {
+            return dispatch(fetchDataSagaActions.getCommunity(communityName));
         },
     })
 )(PostFull);

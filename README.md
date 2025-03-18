@@ -26,6 +26,12 @@ can be set using environment variables (see configuration section below for
 more information). If you need to install docker, you can get it at
 https://get.docker.com
 
+To build a docker image:
+
+```bash
+docker build -t steemit/condenser -f Dockerfile .
+```
+
 To bring up a running container it's as simple as this:
 
 ```bash
@@ -35,7 +41,7 @@ docker run -it -p 8080:8080 steemit/condenser
 Environment variables can be added like this:
 
 ```bash
-docker run -it -p 8080:8080 steemit/condenser
+docker run -it -e SDC_CLIENT_STEEMD_URL="wss://steemd.steemit.com" -p 8080:8080 steemit/condenser
 ```
 
 If you would like to modify, build, and run condenser using docker, it's as

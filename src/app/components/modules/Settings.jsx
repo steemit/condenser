@@ -313,16 +313,17 @@ class Settings extends React.Component {
 
                         <label>{tt('settings_jsx.rpc_select')}</label>
 
-                        <select
+                        <input
+                            list="rpcNodes"
                             defaultValue={rpcNode}
                             onChange={this.handleSelectRPCNode}
-                        >
+                            className="rpc-input"
+                        />
+                        <datalist id="rpcNodes">
                             {$STM_Config.steemd_rpc_list.map((rpc, idx) => (
-                                <option key={idx} value={rpc}>
-                                    {rpc}
-                                </option>
+                                <option key={idx} value={rpc} />
                             ))}
-                        </select>
+                        </datalist>
 
                         <label>
                             {rpcError ||

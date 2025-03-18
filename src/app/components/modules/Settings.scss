@@ -62,4 +62,25 @@
         font-family: $font-primary;
         font-size: 1.125rem!important;
     }
+    .rpc-input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+        background-color: #fff;
+        color: #333;
+        transition: border-color 0.2s ease;
+
+        &:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+    }
+    datalist {
+        option {
+            font-size: 1rem;
+            color: #333;
+        }
+	}
 }

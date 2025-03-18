@@ -27,6 +27,10 @@
 .PostFull__time_author_category {
   font-weight: 400;
   border-right: none!important;
+  display: block;
+  @include MQ(M) {
+    display: inline;
+  }
   @include themify($themes) {
     border-right: themed('border');
     color: themed('textColorSecondary');

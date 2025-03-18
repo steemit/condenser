@@ -144,7 +144,17 @@ class ReplyEditor extends React.Component {
         // Overwrite category (even if draft loaded) if authoritative category was provided
         if (this.props.category) {
             if (this.state.tags) {
-                this.state.tags.props.onChange(this.props.initialValues.tags);
+                let draft = localStorage.getItem('replyEditorData-' + formId);
+                draft = JSON.parse(draft);
+                if (typeof draft.tags === 'string') {
+                    draft.tags = draft.tags
+                        .split(' ')
+                        .filter(tag => !tag.startsWith('hive-')) // Remove previous community ("hive-") tags
+                        .join(' ');
+                }
+                this.state.tags.props.onChange(
+                    this.props.initialValues.tags + ' ' + draft.tags
+                );
             }
             this.checkTagsCommunity(this.props.category);
         }

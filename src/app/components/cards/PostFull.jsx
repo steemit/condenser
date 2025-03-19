@@ -110,7 +110,7 @@ class PostFull extends React.Component {
             PostFullReplyEditor: ReplyEditor(formId + '-reply'),
             PostFullEditEditor: ReplyEditor(formId + '-edit'),
         });
-        if (!community && category) {
+        if (!community && category && category.startsWith('hive-')) {
             getCommunity(category);
         }
         if (process.env.BROWSER) {

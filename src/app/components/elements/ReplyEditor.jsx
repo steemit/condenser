@@ -92,8 +92,9 @@ class ReplyEditor extends React.Component {
     }
 
     componentWillMount() {
-        const { formId } = this.props;
-
+        const { isStory, type, formId } = this.props;
+        const isEdit = type === 'edit';
+        console.log('isEdit: ', isEdit);
         if (process.env.BROWSER) {
             // Check for rte editor preference
             let rte =

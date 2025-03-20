@@ -1261,7 +1261,7 @@ https://steem.io/SteemWhitePaper.pdf
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
- Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, Changelly, @cheetah, Coinbase, DTube, GOBADA, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemCreate, SteemStats, The Steemit Shop, UpBit, Utopian.io, and Vessel are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+ Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, Changelly, Coinbase, DTube, GOBADA, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, SteemCreate, SteemStats, The Steemit Shop, UpBit, and Vessel are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

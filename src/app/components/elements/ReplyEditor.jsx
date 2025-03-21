@@ -92,9 +92,9 @@ class ReplyEditor extends React.Component {
     }
 
     componentWillMount() {
-        const { isStory, type, formId } = this.props;
+        const { type, formId } = this.props;
         const isEdit = type === 'edit';
-        console.log('isEdit: ', isEdit);
+
         if (process.env.BROWSER) {
             // Check for rte editor preference
             let rte =
@@ -143,7 +143,7 @@ class ReplyEditor extends React.Component {
         }
 
         // Overwrite category (even if draft loaded) if authoritative category was provided
-        if (this.props.category) {
+        if (this.props.category && !isEdit) {
             if (this.state.tags) {
                 let draft = localStorage.getItem('replyEditorData-' + formId);
                 draft = JSON.parse(draft);

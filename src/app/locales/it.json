@@ -49,6 +49,8 @@
         "in": "in",
         "in_reply_to": "in risposta a",
         "insufficient_balance": "Credito insufficiente",
+        "internal_image_message":
+            "Questa immagine si aprirà in una nuova scheda",
         "invalid_amount": "Importo errato",
         "joined": "Connesso",
         "language": "Lingua",

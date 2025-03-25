@@ -95,6 +95,61 @@ table {
   width: 100%;
 }
 
+.MarkdownViewer a.postImage {
+  position: relative;
+  display: inline-block; /* Ensures proper positioning */
+}
+
+.MarkdownViewer a.postImage.popupImage:has(img)::after {
+  left: unset;
+  background-size: unset;
+  width: unset;
+  height: unset;
+  
+  content: "\f03e"; 
+  font-family: FontAwesome, "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: absolute;
+  top: 15px;
+  padding: 3px 11px 3px 10px;
+  right: 10px;
+  @include themify($themes) {
+      background-color: themed('modalBackgroundColor');
+      color: themed('modalTextColorPrimary');
+  }
+  border-radius: 1px;
+  font-size: 0.8rem;
+  transition: opacity 0.1s ease; /* Smooth transition */
+  opacity: 0.8;
+  display: inline-block;
+  
+  @include MQ(M) {
+    border-radius: 3px;
+    font-size: 1rem;
+    opacity: 0; /* Initially hidden */
+    display: none;
+  }
+}
+.MarkdownViewer a.postLink.popupImage:has(img)::after {
+  content: "\f08e"; 
+  padding: 3px 9px 0px 10px;
+  top: 14px;
+}
+
+.MarkdownViewer a.postImage:has(img)::after,
+.MarkdownViewer a.postImage:has(img):hover::after {
+  display: none;
+}
+
+.MarkdownViewer a.postImage.popupImage:has(img):hover::after {
+  @include themify($themes) {
+      background-color: themed('buttonBackgroundHover');
+      color: themed('buttonTextHover');
+  }
+  display: inline-block;
+  opacity: 1;
+}
+
+
 thead, tbody, tfoot {
   @include themify($themes) {
     background-color: themed('backgroundColor');    

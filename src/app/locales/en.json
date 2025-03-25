@@ -70,6 +70,7 @@
         "in": "in",
         "in_reply_to": "in reply to",
         "insufficient_balance": "Insufficient balance",
+        "internal_image_message": "This image will open in a new tab",
         "invalid_amount": "Invalid amount",
         "joined": "Joined",
         "language": "Language",

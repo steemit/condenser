@@ -127,6 +127,23 @@ class PostFull extends React.Component {
         }
     }
 
+    componentDidMount() {
+        document.querySelectorAll('a img').forEach(img => {
+            const anchor = img.closest('a');
+
+            if (anchor && !anchor.classList.contains('postImage')) {
+                anchor.classList.add('postImage');
+                anchor.classList.add('postLink');
+            }
+
+            img.onload = () => {
+                if (img.naturalHeight >= 50) {
+                    anchor.classList.add('popupImage');
+                }
+            };
+        });
+    }
+
     fbShare(e) {
         const href = this.share_params.url;
         e.preventDefault();

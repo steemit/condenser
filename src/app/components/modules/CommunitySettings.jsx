@@ -8,17 +8,18 @@ import Unicode from 'app/utils/Unicode';
 import tt from 'counterpart';
 
 const languageOptions = [
-    { abbr: 'en', name: 'English' },
-    { abbr: 'kr', name: 'Korean' },
     { abbr: 'zh', name: 'Chinese' },
+    { abbr: 'en', name: 'English' },
+    { abbr: 'de', name: 'German' },
+    { abbr: 'it', name: 'Italian' },
+    { abbr: 'kr', name: 'Korean' },
     { abbr: 'ms', name: 'Malay' },
     { abbr: 'pl', name: 'Polish' },
     { abbr: 'pt', name: 'Portuguese' },
     { abbr: 'ru', name: 'Russian' },
-    { abbr: 'it', name: 'Italian' },
-    { abbr: 'de', name: 'German' },
     { abbr: 'es', name: 'Spanish' },
     { abbr: 'sv', name: 'Swedish' },
+    { abbr: 'uk', name: 'Ukrainian' },
 ];
 
 class CommunitySettings extends Component {

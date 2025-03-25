@@ -444,7 +444,7 @@ Yes. You can see the list of followers or people you are following by clicking o
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_languages_are_supported">What languages are supported?</span>
 
-Currently steemit.com supports English, Spanish, Russian, French, Italian, Korean, Polish, and Chinese. There are also many communities using the platform that speak other languages. If you are interested in joining our translation team to add additional languages or help support the ones we have, please email us at translate@steemit.com.
+Currently steemit.com supports English, French, Italian, Korean, Polish, Russian, Spanish and Ukrainian. There are also many communities using the platform that speak other languages. If you are interested in joining our translation team to add additional languages or help support the ones we have, please email us at translate@steemit.com.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 # Posting

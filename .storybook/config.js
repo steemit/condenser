@@ -12,7 +12,7 @@ import zh from 'react-intl/locale-data/zh';
 import pl from 'react-intl/locale-data/pl';
 import uk from 'react-intl/locale-data/uk';
 
-addLocaleData([...en, ...es, ...ru, ...fr, ...it, ...ko, ...zh, ...pl, ..uk]);
+addLocaleData([...en, ...es, ...ru, ...fr, ...it, ...ko, ...zh, ...pl, ...uk]);
 
 tt.registerTranslations('en', require('counterpart/locales/en'));
 tt.registerTranslations('en', require('app/locales/en.json'));

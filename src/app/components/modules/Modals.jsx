@@ -144,7 +144,7 @@ class Modals extends React.Component {
         e.preventDefault();
         const x = e.pageX - this.imageContainer.offsetLeft;
         const y = e.pageY - this.imageContainer.offsetTop;
-        const walkX = (x - this.dragStartX) * 1; // scroll speed
+        const walkX = (x - this.dragStartX) * 1;
         const walkY = (y - this.dragStartY) * 1;
 
         this.imageContainer.scrollLeft = this.scrollLeft - walkX;
@@ -180,20 +180,6 @@ class Modals extends React.Component {
 
     handleTouchEnd = () => {
         this.isDragging = false;
-    };
-
-    getImageViewPercentage = () => {
-        if (!this.zoomImg) return;
-
-        const originalWidth = this.zoomImg.naturalWidth;
-        const originalHeight = this.zoomImg.naturalHeight;
-        const displayedWidth = this.zoomImg.clientWidth;
-        const displayedHeight = this.zoomImg.clientHeight;
-
-        const widthPercentage = displayedWidth / originalWidth * 100;
-        const heightPercentage = displayedHeight / originalHeight * 100;
-
-        return Math.min(widthPercentage, heightPercentage).toFixed(2) + '%'; // Show the minimum percentage for consistency
     };
 
     render() {

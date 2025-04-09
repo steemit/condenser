@@ -124,6 +124,11 @@ class CommunitySettings extends Component {
                 // Skip these keys
             } else if (typeof this.state[k] === 'string') {
                 payload[k] = this.state[k].trim();
+            } else if (k === 'settings') {
+                const settingsCopy = { ...this.state[k] };
+                settingsCopy.avatar_url = settingsCopy.avatar_url.trim();
+                settingsCopy.cover_url = settingsCopy.cover_url.trim();
+                payload[k] = settingsCopy;
             } else {
                 payload[k] = this.state[k];
             }
@@ -209,7 +214,6 @@ class CommunitySettings extends Component {
                             <input
                                 type="url"
                                 name="avatar_url"
-                                value={settings.avatar_url || ''}
                                 autoComplete="off"
                                 onChange={this.onInput}
                             />
@@ -226,7 +230,6 @@ class CommunitySettings extends Component {
                         <input
                             type="url"
                             name="cover_url"
-                            value={settings.cover_url || ''}
                             autoComplete="off"
                             onChange={this.onInput}
                         />

@@ -52,6 +52,9 @@ class Modals extends React.Component {
             errorCallback: PropTypes.func,
         }),
         loading: PropTypes.bool,
+        show_image_viewer_modal: PropTypes.bool,
+        image_viewer_url: PropTypes.string,
+        hideImageViewer: PropTypes.func,
     };
 
     static defaultProps = {
@@ -71,12 +74,127 @@ class Modals extends React.Component {
         on_post_templates_close_modal: () => {},
         loginBroadcastOperation: undefined,
         loading: false,
+        show_image_viewer_modal: false,
+        image_viewer_url: '',
+        hideImageViewer: () => {},
+        imageZoomed: false,
     };
 
     constructor() {
         super();
+        this.state = {
+            imageZoomed: false,
+            zoomLevel: 1,
+        };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Modals');
     }
+
+    handleZoomIn = () => {
+        const img = this.zoomImg;
+        if (!img.classList.contains('zoomed')) {
+            img.classList.add('zoomed');
+            this.setState({ imageZoomed: true });
+        }
+        this.setState(prevState => {
+            const newZoomLevel = prevState.zoomLevel + 0.5;
+            this.zoomImg.style.setProperty('--zoom-level', newZoomLevel);
+            console.log('Zoom Level: ', newZoomLevel);
+            return { zoomLevel: newZoomLevel };
+        });
+    };
+
+    handleZoomOut = () => {
+        const img = this.zoomImg;
+        this.setState(prevState => {
+            const newZoomLevel =
+                prevState.zoomLevel > 1
+                    ? prevState.zoomLevel - 0.5
+                    : prevState.zoomLevel;
+            this.zoomImg.style.setProperty('--zoom-level', newZoomLevel);
+            if (newZoomLevel == 1) {
+                img.classList.remove('zoomed');
+                this.setState({ imageZoomed: false });
+            }
+            console.log('Zoom Level: ', newZoomLevel);
+            return { zoomLevel: newZoomLevel };
+        });
+    };
+
+    handleResetZoom = () => {
+        this.setState({ zoomLevel: 1, imageZoomed: false });
+        if (this.zoomImg) {
+            this.zoomImg.classList.remove('zoomed');
+            this.zoomImg.style.setProperty('--zoom-level', 1);
+        }
+    };
+
+    handleDragStart = e => {
+        if (!this.state.imageZoomed) return;
+
+        this.isDragging = true;
+        this.dragStartX = e.pageX - this.imageContainer.offsetLeft;
+        this.dragStartY = e.pageY - this.imageContainer.offsetTop;
+        this.scrollLeft = this.imageContainer.scrollLeft;
+        this.scrollTop = this.imageContainer.scrollTop;
+    };
+
+    handleDragMove = e => {
+        if (!this.isDragging || !this.state.imageZoomed) return;
+
+        e.preventDefault();
+        const x = e.pageX - this.imageContainer.offsetLeft;
+        const y = e.pageY - this.imageContainer.offsetTop;
+        const walkX = (x - this.dragStartX) * 1; // scroll speed
+        const walkY = (y - this.dragStartY) * 1;
+
+        this.imageContainer.scrollLeft = this.scrollLeft - walkX;
+        this.imageContainer.scrollTop = this.scrollTop - walkY;
+    };
+
+    handleDragEnd = () => {
+        this.isDragging = false;
+    };
+
+    handleTouchStart = e => {
+        if (!this.state.imageZoomed || e.touches.length !== 1) return;
+        const touch = e.touches[0];
+        this.isDragging = true;
+        this.dragStartX = touch.pageX - this.imageContainer.offsetLeft;
+        this.dragStartY = touch.pageY - this.imageContainer.offsetTop;
+        this.scrollLeft = this.imageContainer.scrollLeft;
+        this.scrollTop = this.imageContainer.scrollTop;
+    };
+
+    handleTouchMove = e => {
+        if (!this.isDragging || !this.state.imageZoomed) return;
+
+        const touch = e.touches[0];
+        const x = touch.pageX - this.imageContainer.offsetLeft;
+        const y = touch.pageY - this.imageContainer.offsetTop;
+        const walkX = (x - this.dragStartX) * 1;
+        const walkY = (y - this.dragStartY) * 1;
+
+        this.imageContainer.scrollLeft = this.scrollLeft - walkX;
+        this.imageContainer.scrollTop = this.scrollTop - walkY;
+    };
+
+    handleTouchEnd = () => {
+        this.isDragging = false;
+    };
+
+    getImageViewPercentage = () => {
+        if (!this.zoomImg) return;
+
+        const originalWidth = this.zoomImg.naturalWidth;
+        const originalHeight = this.zoomImg.naturalHeight;
+        const displayedWidth = this.zoomImg.clientWidth;
+        const displayedHeight = this.zoomImg.clientHeight;
+
+        const widthPercentage = displayedWidth / originalWidth * 100;
+        const heightPercentage = displayedHeight / originalHeight * 100;
+
+        return Math.min(widthPercentage, heightPercentage).toFixed(2) + '%'; // Show the minimum percentage for consistency
+    };
 
     render() {
         const {
@@ -102,6 +220,9 @@ class Modals extends React.Component {
             hidePostTemplates,
             username,
             loginBroadcastOperation,
+            show_image_viewer_modal,
+            image_viewer_url,
+            hideImageViewer,
         } = this.props;
 
         const notifications_array = notifications
@@ -212,6 +333,74 @@ class Modals extends React.Component {
                         />
                     </Reveal>
                 )}
+                {show_image_viewer_modal && (
+                    <Reveal
+                        onHide={hideImageViewer}
+                        show={show_image_viewer_modal ? true : false}
+                    >
+                        <div className="modalImageOptions">
+                            <button
+                                className="modalImageZoomIn"
+                                onClick={this.handleZoomIn}
+                                alt="Zoom In"
+                            >
+                                <i className="fa fa-search-plus" />
+                            </button>
+                            <button
+                                className="modalImageZoomOut"
+                                onClick={this.handleZoomOut}
+                                alt="Zoome Out"
+                            >
+                                <i className="fa fa-search-minus" />
+                            </button>
+                            <button
+                                className="modalImageResetZoom"
+                                onClick={this.handleResetZoom}
+                                alt="Reset Zoom"
+                            >
+                                <i className="fa fa-refresh" />
+                            </button>
+                            <CloseButton
+                                className="modalImageCloseButton"
+                                onClick={() => {
+                                    this.handleResetZoom();
+                                    hideImageViewer();
+                                }}
+                            />
+                        </div>
+                        <div
+                            className="modalImageContainer"
+                            ref={el => (this.imageContainer = el)}
+                            onMouseDown={this.handleDragStart}
+                            onMouseMove={this.handleDragMove}
+                            onMouseUp={this.handleDragEnd}
+                            onMouseLeave={this.handleDragEnd}
+                            onTouchStart={this.handleTouchStart}
+                            onTouchMove={this.handleTouchMove}
+                            onTouchEnd={this.handleTouchEnd}
+                            role="button"
+                            tabIndex="0"
+                        >
+                            <center>
+                                <img
+                                    src={image_viewer_url}
+                                    alt="overlay"
+                                    className="modalImage"
+                                    onMouseDown={this.handleMouseDown}
+                                    onDragStart={e => e.preventDefault()}
+                                    style={{
+                                        cursor: this.state.imageZoomed
+                                            ? 'grab'
+                                            : 'default',
+                                    }}
+                                    ref={el => (this.zoomImg = el)}
+                                    role="button"
+                                    tabIndex="0"
+                                />
+                            </center>
+                        </div>
+                    </Reveal>
+                )}
                 <NotificationStack
                     style={false}
                     notifications={notifications_array}
@@ -267,6 +456,9 @@ export default connect(
             ),
             loginBroadcastOperation,
             loading: state.app.get('modalLoading'),
+            show_image_viewer_modal:
+                state.user.get('show_image_viewer') || false,
+            image_viewer_url: state.user.get('image_viewer_url') || '',
         };
     },
     dispatch => ({
@@ -303,5 +495,9 @@ export default connect(
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
         removeNotification: key =>
             dispatch(appActions.removeNotification({ key })),
+        hideImageViewer: e => {
+            if (e) e.preventDefault();
+            dispatch(userActions.hideImageViewer());
+        },
     })
 )(Modals);

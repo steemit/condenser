@@ -97,7 +97,16 @@ table {
 
 .MarkdownViewer a.postImage {
   position: relative;
-  display: inline-block; /* Ensures proper positioning */
+  display: inline-block;
+}
+
+.MarkdownViewer a.postImage img {
+  border-radius: 5px;
+  transition: filter 0.1s ease;
+}
+
+.MarkdownViewer a.postImage img:hover {
+  filter: brightness(1.1);
 }
 
 .MarkdownViewer a.postImage.popupImage:has(img)::after {

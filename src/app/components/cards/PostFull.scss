@@ -246,3 +246,63 @@ input.share-box {
     font-size: .8em;
   }
 }
+
+.modalImageOptions {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  padding: 0em 1em 1em;
+}
+
+.modalImageOptions .modalImageZoomIn,
+.modalImageOptions .modalImageZoomOut,
+.modalImageOptions .modalImageResetZoom {
+  border: none;
+  cursor: pointer;
+  @include themify($themes) {
+      color: themed('modalTextColorPrimary');
+  }
+}
+
+.modalImageOptions .modalImageZoomIn:hover,
+.modalImageOptions .modalImageZoomOut:hover,
+.modalImageOptions .modalImageResetZoom:hover {
+  @include themify($themes) {
+      color: themed('textColorAccent');
+  }
+}
+
+.modalImageOptions .modalImageZoomIn i,
+.modalImageOptions .modalImageZoomOut i,
+.modalImageOptions .modalImageResetZoom i {
+  font-size: 1.2em;
+}
+
+.reveal:has(div.modalImageContainer) {
+  height: auto;
+  min-height: unset;
+  max-height: 99vh;
+  overflow: visible;
+  padding-bottom: 0 !important;
+  top: 1em;
+  bottom: auto;
+  width: auto;
+}
+
+.modalImageContainer {
+  max-height: 80vh;
+  overflow: scroll;
+  display: block;
+  border-bottom: 1em solid transparent;
+  position: relative;
+}
+
+.modalImage {
+  border-radius: 5px;
+  transition: transform 0.3s ease;
+}
+
+.modalImage.zoomed {
+  transform: scale(var(--zoom-level, 1));
+  transform-origin: top left;
+}

@@ -304,5 +304,5 @@ input.share-box {
 
 .modalImage.zoomed {
   transform: scale(var(--zoom-level, 1));
-  transform-origin: top left;
+  transform-origin: center center;
 }

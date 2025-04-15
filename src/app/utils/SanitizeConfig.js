@@ -218,6 +218,7 @@ export default ({
                 attys.target = '_blank';
                 attys.rel = highQualityPost ? 'noopener' : 'nofollow noopener';
                 attys.title = getExternalLinkWarningMessage();
+                attys.class = 'postImage postLink';
             }
             return {
                 tagName,

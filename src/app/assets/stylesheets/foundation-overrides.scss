@@ -62,20 +62,32 @@ button, .button {
 }
 
 .close-button {
+  user-select: none;
   position: absolute;
   z-index: 999;
   cursor: pointer;
   transition: color 0.2s ease-in-out;
-  top: 0.5rem;
+  top: 12px;
+  right: -2px;
   font-size: 2em;
   line-height: 1;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 33px;
+  height: 33px;
+
   @include themify($themes) {
-    color: themed('textColorSecondary');  
-  } 
+    background-color: themed('textColorAccent');
+    color: themed('colorWhite');
+  }
+
   &:hover, &:focus {
     @include themify($themes) {
-      color: themed('textColorAccent');  
-    } 
+      background-color: themed('textColorAccent');
+      color: themed('colorWhite');
+    }
   }
 }
 
@@ -106,7 +118,7 @@ table {
 }
 
 .MarkdownViewer a.postImage img:hover {
-  filter: brightness(1.1);
+  filter: brightness(0.9);
 }
 
 .MarkdownViewer a.postImage.popupImage:has(img)::after {
@@ -115,29 +127,30 @@ table {
   width: unset;
   height: unset;
   
-  content: "\f03e"; 
+  content: "\f065"; 
   font-family: FontAwesome, "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   position: absolute;
-  top: 15px;
+  top: 12px;
   padding: 3px 11px 3px 10px;
   right: 10px;
   @include themify($themes) {
-      background-color: themed('modalBackgroundColor');
-      color: themed('modalTextColorPrimary');
+    background-color: themed('textColorAccent');
+    color: themed('colorWhite');  
   }
-  border-radius: 1px;
+  border-radius: 30px;
   font-size: 0.8rem;
-  transition: opacity 0.1s ease; /* Smooth transition */
-  opacity: 0.8;
+  transition: opacity 0.1s ease;
+  opacity: 1;
   display: inline-block;
   
   @include MQ(M) {
-    border-radius: 3px;
+    border-radius: 30px;
     font-size: 1rem;
-    opacity: 0; /* Initially hidden */
+    opacity: 0;
     display: none;
   }
 }
+
 .MarkdownViewer a.postLink.popupImage:has(img)::after {
   content: "\f08e"; 
   padding: 3px 9px 0px 10px;
@@ -151,8 +164,8 @@ table {
 
 .MarkdownViewer a.postImage.popupImage:has(img):hover::after {
   @include themify($themes) {
-      background-color: themed('buttonBackgroundHover');
-      color: themed('buttonTextHover');
+    background-color: themed('textColorAccent');
+    color: themed('colorWhite');  
   }
   display: inline-block;
   opacity: 1;
@@ -179,17 +192,17 @@ tbody tr:nth-child(even) {
 }
 
 .reveal-overlay {
-  background-color: rgba(0, 0, 0, 0.88);
+  background-color: rgba(0, 0, 0, 0.66);
   transition: 0.2s all ease-in-out;
 }
 
 .reveal {
-  box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-teal;   
-  border-radius: 0 30px;
+  box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 30px;
   border: transparent;
   transition: 0.2s all ease-in-out;
   outline: none;
-  padding-bottom: 50px !important;
+  padding-bottom: 1em !important;
   @include themify($themes) {
     background-color: themed('modalBackgroundColor');
     color: themed('modalTextColorPrimary');

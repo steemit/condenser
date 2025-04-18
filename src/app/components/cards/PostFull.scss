@@ -247,20 +247,69 @@ input.share-box {
   }
 }
 
+.reveal:has(div.modalImageContainer) {
+  height: auto;
+  min-height: unset;
+  width: auto;
+  display: inline-block;
+  text-align: center;
+  overflow: hidden;
+  top: 1em;
+  padding: 0;
+  @include MQ(M) {
+    width: var(--onload-width);
+    height: var(--onload-height);
+  }
+}
+
+
+.modalImageContainer {
+  position: relative;
+  max-height: 80vh;
+  overflow: auto;
+  display: inline-block;
+  text-align: center;
+  max-width: 100%;
+  @include MQ(M) {
+    max-height: 90vh;
+    overflow: hidden;
+  }
+}
+
+.modalImageContainer:has(.modalImage.zoomed) {
+  @include MQ(M) {
+    overflow: scroll;
+    max-height: calc(var(--original-height) * 1px);
+  }
+}
+
+.modalImage {
+  user-select: none;
+  width: 100%;
+  max-width: unset;
+  display: block;
+  margin: 0 auto;
+}
+
+.modalImage.zoomed {
+  width: calc(var(--original-width) * var(--zoom-level, 1) * 1px);
+  @include MQ(M) {
+    height: calc(var(--original-height) * var(--zoom-level, 1) * 1px);
+  }
+}
+
 .modalImageOptions {
   display: flex;
   justify-content: center;
   gap: 1em;
-  padding: 0em 1em 1em;
-}
-
-.modalImageOptions .modalImageZoomIn,
-.modalImageOptions .modalImageZoomOut,
-.modalImageOptions .modalImageResetZoom {
-  border: none;
-  cursor: pointer;
-  @include themify($themes) {
-      color: themed('modalTextColorPrimary');
+  padding: 0em 1em;
+  padding-top: 7px;
+  @include MQ(M) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: 0.5em;
   }
 }
 
@@ -272,37 +321,21 @@ input.share-box {
   }
 }
 
-.modalImageOptions .modalImageZoomIn i,
-.modalImageOptions .modalImageZoomOut i,
-.modalImageOptions .modalImageResetZoom i {
-  font-size: 1.2em;
-}
-
-.reveal:has(div.modalImageContainer) {
-  height: auto;
-  min-height: unset;
-  max-height: 99vh;
-  overflow: visible;
-  padding-bottom: 0 !important;
-  top: 1em;
-  bottom: auto;
-  width: auto;
-}
-
-.modalImageContainer {
-  max-height: 80vh;
-  overflow: scroll;
-  display: block;
-  border-bottom: 1em solid transparent;
-  position: relative;
-}
-
-.modalImage {
-  border-radius: 5px;
-  transition: transform 0.3s ease;
-}
-
-.modalImage.zoomed {
-  transform: scale(var(--zoom-level, 1));
-  transform-origin: center center;
+.modalImageOptions .modalImageZoomIn .Icon > svg,
+.modalImageOptions .modalImageZoomOut .Icon > svg,
+.modalImageOptions .modalImageResetZoom .Icon > svg {
+  cursor: pointer;
+  transition: fill 0.2s ease-in-out;
+  border-radius: 50%;
+  padding: 0.3rem;
+  @include themify($themes) {
+    background-color: themed('textColorAccent');
+    fill: themed('colorWhite');  
+  } 
+  &:hover, &:focus {
+    @include themify($themes) {
+      background-color: themed('textColorAccent');
+      fill: themed('colorWhite');  
+    } 
+  }
 }

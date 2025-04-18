@@ -111,9 +111,10 @@ class Modals extends React.Component {
         const scaleRatio = Math.min(widthRatio, heightRatio);
 
         const scaledWidth = naturalWidth * scaleRatio;
+        const scaledHeight = naturalHeight * scaleRatio;
         const controlsEl = revealEl.querySelector('.modalImageOptions');
         const controlsHeight = controlsEl ? controlsEl.offsetHeight : 0;
-        const scaledHeight = naturalHeight * scaleRatio + controlsHeight;
+        const adjustedHeight = naturalHeight * scaleRatio + controlsHeight;
 
         this.setState({
             originalheight: scaledHeight,
@@ -123,7 +124,7 @@ class Modals extends React.Component {
         });
 
         revealEl.style.setProperty('--onload-width', `${scaledWidth}px`);
-        revealEl.style.setProperty('--onload-height', `${scaledHeight}px`);
+        revealEl.style.setProperty('--onload-height', `${adjustedHeight}px`);
 
         this.wheelRef.addEventListener('wheel', this.preventDefault);
     };

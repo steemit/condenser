@@ -39,7 +39,7 @@ class Topics extends Component {
                 if (tag == 'explore')
                     return {
                         value: `/communities`,
-                        label: 'Explore Communities...',
+                        label: 'Explore Communities',
                     };
                 if (tag)
                     return {
@@ -52,6 +52,7 @@ class Topics extends Component {
             const options = [];
             // Add 'All Posts' link.
             options.push(opt(null));
+            options.push(opt('explore'));
             if (username && subscriptions) {
                 // Add 'My Friends' Link
                 options.push(opt('@' + username));
@@ -79,7 +80,6 @@ class Topics extends Component {
                 options.push(...topicsOptions);
             }
 
-            options.push(opt('explore'));
             const currOpt = opt(current);
             if (!options.find(opt => opt.value == currOpt.value)) {
                 options.push(
@@ -110,8 +110,6 @@ class Topics extends Component {
             </div>
         );
 
-        const moreLabel = <span>{tt('g.show_more_topics')}&hellip;</span>;
-
         const list = (
             <span>
                 {(subscriptions || topics).size > 0}
@@ -132,13 +130,6 @@ class Topics extends Component {
                                 {link(`/trending/${cat[0]}`, cat[1], '')}
                             </li>
                         ))}
-                <li>
-                    {link(
-                        `/communities`,
-                        moreLabel,
-                        'c-sidebar__link--emphasis'
-                    )}
-                </li>
             </span>
         );
 

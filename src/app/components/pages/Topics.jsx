@@ -32,14 +32,19 @@ class Topics extends Component {
                 if (tag && tag[0] === '@')
                     return {
                         value: `/@${username}/feed`,
-                        label: 'My Friends' || `tt('g.my_feed')`,
+                        label: tt('g.my_feed') || 'My Friends',
                     };
                 if (tag === 'my')
-                    return { value: `/trending/my`, label: 'My communities' };
+                    return {
+                        value: `/trending/my`,
+                        label: tt('g.my_communities') || 'My communities',
+                    };
                 if (tag == 'explore')
                     return {
                         value: `/communities`,
-                        label: 'Explore Communities',
+                        label:
+                            tt('g.explore_communities') ||
+                            'Explore Communities',
                     };
                 if (tag)
                     return {
@@ -63,7 +68,7 @@ class Topics extends Component {
                     .map(cat => opt(cat[0], cat[1]));
                 options.push({
                     value: 'Subscriptions',
-                    label: 'Community Subscriptions',
+                    label: tt('g.community_subscriptions'),
                     disabled: true,
                 });
                 options.push(...subscriptionOptions);
@@ -74,7 +79,7 @@ class Topics extends Component {
                     .map(cat => opt(cat[0], cat[1]));
                 options.push({
                     value: 'Topics',
-                    label: 'Trending Communities',
+                    label: tt('g.trending_communities'),
                     disabled: true,
                 });
                 options.push(...topicsOptions);

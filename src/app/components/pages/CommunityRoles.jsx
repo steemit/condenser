@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as communityActions from 'app/redux/CommunityReducer';
 import { Map, List } from 'immutable';
+import tt from 'counterpart';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Reveal from 'app/components/elements/Reveal';
 import CloseButton from 'app/components/elements/CloseButton';
@@ -132,9 +133,9 @@ class CommunityRoles extends React.Component {
             <table>
                 <thead>
                     <tr>
-                        <th>Account</th>
-                        <th>Role</th>
-                        <th>Title</th>
+                        <th>{tt('g.account')}</th>
+                        <th>{tt('g.role')}</th>
+                        <th>{tt('g.title')}</th>
                     </tr>
                 </thead>
                 <tbody>{tableRows}</tbody>
@@ -210,8 +211,8 @@ class CommunityRoles extends React.Component {
                     </h1>
                     <br />
                     <div className="c-sidebar__module">
-                        <h4>User Roles</h4>
-                        {updating && <div>Updating User...</div>}
+                        <h4>{tt('g.user_roles')}</h4>
+                        {updating && <div>{tt('g.updating_user')}</div>}
                         {this.state.updateRoleModal && editUserModal}
                         {this.state.addUserToCommunityModal && addUserModal}
                         <div>
@@ -222,7 +223,7 @@ class CommunityRoles extends React.Component {
                                 }}
                                 className="button slim hollow secondary"
                             >
-                                Add User
+                                {tt('g.add_user')}
                             </button>
                         </div>
                     </div>

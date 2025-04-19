@@ -218,7 +218,9 @@ class PostSummary extends React.Component {
                                 </span>
                             )}
                             {post.getIn(['stats', 'is_pinned'], false) && (
-                                <span className="FeaturedTag">Pinned</span>
+                                <span className="FeaturedTag">
+                                    {tt('g.pinned')}
+                                </span>
                             )}
                         </Link>
                     </div>

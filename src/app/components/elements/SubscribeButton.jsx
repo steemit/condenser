@@ -9,7 +9,10 @@ import * as globalActions from 'app/redux/GlobalReducer';
 class SubscribeButton extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { loading: false };
+        this.state = {
+            loading: false,
+            isHovered: false,
+        };
     }
 
     onClick = e => {
@@ -34,26 +37,35 @@ class SubscribeButton extends React.Component {
         );
     };
 
+    onHover = () => {
+        this.setState({ isHovered: true });
+    };
+
+    onLeave = () => {
+        this.setState({ isHovered: false });
+    };
+
     render() {
         const { subscribed } = this.props;
-        const { loading } = this.state;
+        const { loading, isHovered } = this.state;
         const loader = <LoadingIndicator type="dots" />;
         const hollowed = subscribed ? ' hollow' : '';
+        const buttonText = isHovered
+            ? subscribed ? tt('g.leave') : tt('g.subscribe')
+            : subscribed ? tt('g.joined') : tt('g.subscribe');
         return (
             <a
                 href="#"
                 onClick={this.onClick}
+                onMouseEnter={this.onHover}
+                onMouseLeave={this.onLeave}
                 className={'community--subscribe button primary' + hollowed}
                 style={{
                     minWidth: '7em',
                     display: this.props.display || 'inline-block',
                 }}
             >
-                <span>
-                    {loading
-                        ? loader
-                        : subscribed ? tt('g.joined') : tt('g.subscribe')}
-                </span>
+                <span>{loading ? loader : buttonText}</span>
             </a>
         );
     }

@@ -92,7 +92,9 @@ class Modals extends React.Component {
     }
 
     componentWillUnmount() {
-        this.wheelRef.removeEventListener('wheel', this.preventDefault);
+        if (this.wheelRef && this.preventDefault) {
+            this.wheelRef.removeEventListener('wheel', this.preventDefault);
+        }
     }
 
     setContainerDimensions = () => {

@@ -2,6 +2,7 @@
 import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import Tooltip from 'app/components/elements/Tooltip';
+import tt from 'counterpart';
 import { injectIntl } from 'react-intl';
 
 class ContentEditedWrapper extends React.Component {
@@ -18,7 +19,7 @@ class ContentEditedWrapper extends React.Component {
         )} ${this.props.intl.formatTime(dt)}`;
         return (
             <Tooltip t={date_time} className={className}>
-                (edited)
+                ({tt('g.edited')})
             </Tooltip>
         );
     }

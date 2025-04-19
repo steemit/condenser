@@ -30,13 +30,13 @@ class UserRole extends Component {
         if (this.props.addUser) {
             if (this.state.newUsername === '') {
                 this.setState({
-                    message: 'Please enter a valid username.',
+                    message: tt('user_roles.invalid_username'),
                 });
                 return;
             }
             if (this.state.newUsername[0] === '@') {
                 this.setState({
-                    message: 'Please enter a username without "@".',
+                    message: tt('user_roles.invalid_character'),
                 });
                 return;
             }
@@ -47,7 +47,7 @@ class UserRole extends Component {
         } else {
             if (this.props.role === this.state.newRole) {
                 this.setState({
-                    message: 'The user already has that role.',
+                    message: tt('user_roles.invalid_role'),
                 });
                 return;
             }
@@ -95,7 +95,9 @@ class UserRole extends Component {
             <span>
                 {addUser ? addUserModalHeader : editUserModalHeader}
                 <div className="input-group">
-                    <span className="input-group-label">Username</span>
+                    <span className="input-group-label">
+                        {tt('g.username')}
+                    </span>
                     <input
                         className="input-group-field"
                         type="text"
@@ -107,7 +109,7 @@ class UserRole extends Component {
                     />
                 </div>
                 <div className="input-group">
-                    <span className="input-group-label">Role</span>
+                    <span className="input-group-label">{tt('g.role')}</span>
                     <select value={newRole} onChange={this.onSelect} required>
                         {roleSelector}
                     </select>
@@ -118,23 +120,30 @@ class UserRole extends Component {
                         type="submit"
                         onClick={() => this.onSubmit()}
                     >
-                        Save
+                        {tt('g.save')}
                     </button>
                 </div>
                 <div>{message.length > 0 && message}</div>
                 <div>
-                    <h5>Role Permissions</h5>
+                    <h5>{tt('user_roles.role_permissions')}</h5>
                     <p>
-                        <strong>Owner</strong> - assign admins<br />
-                        <strong>Admin</strong> - edit settings, assign mods<br
-                        />
-                        <strong>Moderator</strong> - mute, pin, set user titles<br
-                        />
-                        <strong>Member</strong> - listed on leadership team<br
-                        />
-                        <strong>Guest</strong> - default; can post and comment<br
-                        />
-                        <strong>Muted</strong> - new posts automatically muted
+                        <strong>{tt('user_roles.owner')}</strong> -{' '}
+                        {tt('user_roles.owner_description')}
+                        <br />
+                        <strong>{tt('user_roles.admin')}</strong> -{' '}
+                        {tt('user_roles.admin_description')}
+                        <br />
+                        <strong>{tt('user_roles.moderator')}</strong> -{' '}
+                        {tt('user_roles.moderator_description')}
+                        <br />
+                        <strong>{tt('user_roles.member')}</strong> -{' '}
+                        {tt('user_roles.member_description')}
+                        <br />
+                        <strong>{tt('user_roles.guest')}</strong> -{' '}
+                        {tt('user_roles.guest_description')}
+                        <br />
+                        <strong>{tt('user_roles.muted')}</strong> -{' '}
+                        {tt('user_roles.muted_description')}
                     </p>
                 </div>
             </span>

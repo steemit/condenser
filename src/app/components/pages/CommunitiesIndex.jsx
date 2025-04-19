@@ -53,15 +53,15 @@ export default class CommunitiesIndex extends React.Component {
         const sortOptions = [
             {
                 value: 'rank',
-                label: 'Rank',
+                label: tt('g.rank'),
             },
             {
                 value: 'subs',
-                label: 'Subscribers',
+                label: tt('g.subscribers'),
             },
             {
                 value: 'new',
-                label: 'New',
+                label: tt('g.new'),
             },
         ];
 
@@ -107,9 +107,9 @@ export default class CommunitiesIndex extends React.Component {
                         <br />
                         {comm.about}
                         <small>
-                            {comm.subscribers} subscribers &bull;{' '}
-                            {comm.num_authors} posters &bull; {comm.num_pending}{' '}
-                            posts
+                            {comm.subscribers} {tt('g.subscribers')} &bull;{' '}
+                            {comm.num_authors} {tt('g.posters')} &bull;{' '}
+                            {comm.num_pending} {tt('g.posts')}
                             {admins}
                         </small>
                     </th>
@@ -130,7 +130,7 @@ export default class CommunitiesIndex extends React.Component {
                     {username && (
                         <div style={{ float: 'right' }}>
                             <a href={`${walletUrl}/@${username}/communities`}>
-                                Create a Community
+                                {tt('g.create_community')}
                             </a>
                         </div>
                     )}

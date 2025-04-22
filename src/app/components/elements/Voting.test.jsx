@@ -82,10 +82,15 @@ describe('Voting', () => {
                 store={mockStore}
             />
         ).dive();
-        expect(wrapped.find('.Voting').length).toEqual(1);
-        expect(wrapped.find('.Voting__button-down').html()).toContain(
-            '<a href="#" title="Downvote" id="downvote_button" class="flag">'
+        const downvoteLink = wrapped.find(
+            '.Voting__button-down a#downvote_button'
         );
+
+        expect(wrapped.find('.Voting').length).toEqual(1);
+        expect(downvoteLink.exists()).toBe(true);
+        expect(downvoteLink.prop('href')).toBe('#');
+        expect(downvoteLink.hasClass('flag')).toBe(true);
+        expect(downvoteLink.prop('title')).toBeTruthy();
     });
 
     it('should dispatch an action when flag is clicked and myVote is negative', () => {

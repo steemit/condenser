@@ -167,7 +167,7 @@ class Modals extends React.Component {
                 img.style.setProperty('--zoom-level', newZoom);
                 container.style.setProperty(
                     '--original-height',
-                    originalHeight - 50
+                    originalHeight
                 );
 
                 const newScrollLeft = zoomedWidth * relativeX - clientWidth / 2;

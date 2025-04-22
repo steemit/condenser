@@ -77,17 +77,16 @@ button, .button {
   align-items: center;
   width: 33px;
   height: 33px;
-  padding-top: 1px;
 
   @include themify($themes) {
-    background-color: themed('textColorAccent');
-    color: themed('colorWhite');
+    background-color: themed('modalButtonDefault');
+    color: themed('modalButtonIcon');
   }
 
   &:hover, &:focus {
     @include themify($themes) {
-      background-color: themed('textColorAccent');
-      color: themed('colorWhite');
+      background-color: themed('modalButtonHover');
+      color: themed('modalButtonIcon');
     }
   }
 }
@@ -135,8 +134,8 @@ table {
   padding: 3px 11px 3px 10px;
   right: 10px;
   @include themify($themes) {
-    background-color: themed('textColorAccent');
-    color: themed('colorWhite');  
+    background-color: themed('modalButtonDefault');
+    color: themed('modalButtonIcon');  
   }
   border-radius: 30px;
   font-size: 0.8rem;
@@ -165,8 +164,8 @@ table {
 
 .MarkdownViewer a.postImage.popupImage:has(img):hover::after {
   @include themify($themes) {
-    background-color: themed('textColorAccent');
-    color: themed('colorWhite');  
+    background-color: themed('modalButtonHover');
+    color: themed('modalButtonIcon');  
   }
   display: inline-block;
   opacity: 1;

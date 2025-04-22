@@ -329,13 +329,13 @@ input.share-box {
   border-radius: 50%;
   padding: 0.3rem;
   @include themify($themes) {
-    background-color: themed('textColorAccent');
-    fill: themed('colorWhite');  
+    background-color: themed('modalButtonDefault');
+    fill: themed('modalButtonIcon');
   } 
   &:hover, &:focus {
     @include themify($themes) {
-      background-color: themed('textColorAccent');
-      fill: themed('colorWhite');  
+      background-color: themed('modalButtonHover');
+      fill: themed('modalButtonIcon');  
     } 
   }
 }

@@ -131,12 +131,12 @@ class PostFull extends React.Component {
     componentDidMount() {
         document.querySelectorAll('a img').forEach(img => {
             const anchor = img.closest('a');
-            if (anchor && !anchor.classList.contains('postImage')) {
-                anchor.classList.add('postImage');
-            }
 
             const handleLoadedImage = () => {
-                if (img.naturalHeight >= 50) {
+                if (
+                    img.naturalHeight >= 50 &&
+                    anchor.classList.contains('postImage')
+                ) {
                     anchor.classList.add('popupImage');
                     if (!anchor.classList.contains('postLink')) {
                         anchor.addEventListener('click', e => {

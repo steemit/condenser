@@ -258,6 +258,7 @@ input.share-box {
   padding: 0;
   @include MQ(M) {
     width: var(--onload-width);
+    max-width: unset;
     height: var(--onload-height);
   }
 }
@@ -269,11 +270,12 @@ input.share-box {
   overflow: auto;
   display: inline-block;
   text-align: center;
-  max-width: 100%;
   @include MQ(M) {
-    max-height: 90vh;
+    max-height: unset;
     overflow: hidden;
+    height: 100%;
   }
+  width: 100%;
 }
 
 .modalImageContainer:has(.modalImage.zoomed) {

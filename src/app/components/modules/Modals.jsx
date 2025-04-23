@@ -436,27 +436,25 @@ class Modals extends React.Component {
                             onTouchStart={this.handleDragOrTouchStart}
                             onTouchMove={this.handleDragOrTouchMove}
                             onTouchEnd={this.handleDragOrTouchEnd}
-                            onLoad={this.setContainerDimensions}
                             role="button"
                             tabIndex="0"
                         >
-                            <center>
-                                <img
-                                    src={image_viewer_url}
-                                    alt="overlay"
-                                    className="modalImage"
-                                    onMouseDown={this.handleMouseDown}
-                                    onDragStart={e => e.preventDefault()}
-                                    style={{
-                                        cursor: this.state.imageZoomed
-                                            ? 'grab'
-                                            : 'default',
-                                    }}
-                                    ref={el => (this.zoomImg = el)}
-                                    role="button"
-                                    tabIndex="0"
-                                />
-                            </center>
+                            <img
+                                src={image_viewer_url}
+                                alt="overlay"
+                                className="modalImage"
+                                onLoad={this.setContainerDimensions}
+                                onMouseDown={this.handleMouseDown}
+                                onDragStart={e => e.preventDefault()}
+                                style={{
+                                    cursor: this.state.imageZoomed
+                                        ? 'grab'
+                                        : 'default',
+                                }}
+                                ref={el => (this.zoomImg = el)}
+                                role="button"
+                                tabIndex="0"
+                            />
                         </div>
                         <div className="modalImageOptions">
                             <span

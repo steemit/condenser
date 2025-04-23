@@ -214,7 +214,10 @@ export default ({
                 attys.rel = 'noopener';
                 attys.class = 'postImage';
                 attys.title = getInternalImageMessage();
-            } else if (!href.match(/^(\/(?!\/)|https:\/\/steemit.com)/)) {
+            } else if (
+                !href.match(/^(\/(?!\/)|https:\/\/steemit.com)/) &&
+                !href.startsWith('/')
+            ) {
                 attys.target = '_blank';
                 attys.rel = highQualityPost ? 'noopener' : 'nofollow noopener';
                 attys.title = getExternalLinkWarningMessage();

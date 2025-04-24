@@ -207,8 +207,8 @@ export default ({
 
             // If it's not a (relative or absolute) steemit URL...
             if (
-                href.match(/^(\/(?!\/)|https:\/\/cdn.steemitimages.com)/) ||
-                href.match(/^(\/(?!\/)|https:\/\/steemitimages.com)/)
+                href.startsWith('https://cdn.steemitimages.com') ||
+                href.startsWith('https://steemitimages.com')
             ) {
                 attys.target = '_blank';
                 attys.rel = 'noopener';

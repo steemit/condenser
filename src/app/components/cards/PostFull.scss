@@ -247,6 +247,13 @@ input.share-box {
   }
 }
 
+.modelImageLoading {
+  background-image: url('../images/loading.gif');
+  background-position: center 1em;
+  background-repeat: no-repeat;
+  background-size: 60px 60px;
+}
+
 .reveal:has(div.modalImageContainer) {
   height: auto;
   min-height: unset;
@@ -257,12 +264,11 @@ input.share-box {
   top: 1em;
   padding: 0;
   @include MQ(M) {
-    width: var(--onload-width);
+    width: var(--onload-width, 0);
     max-width: unset;
     height: var(--onload-height);
   }
 }
-
 
 .modalImageContainer {
   position: relative;

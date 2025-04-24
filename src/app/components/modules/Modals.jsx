@@ -415,6 +415,7 @@ class Modals extends React.Component {
                     <Reveal
                         onHide={hideImageViewer}
                         show={show_image_viewer_modal ? true : false}
+                        backdropClass="reveal-overlay modelImageLoading"
                     >
                         <CloseButton
                             onClick={() => {

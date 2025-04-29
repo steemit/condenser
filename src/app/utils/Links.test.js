@@ -266,6 +266,12 @@ describe('Performance', () => {
         );
         match(
             links.youTubeId,
+            'https://www.youtube.com/shorts/xG7ajrbj4zs',
+            'xG7ajrbj4zs',
+            1
+        );
+        match(
+            links.youTubeId,
             'https://www.youtube.com/watch?v=xG7ajrbj4zs&feature=youtu.be&t=14s',
             'xG7ajrbj4zs',
             1

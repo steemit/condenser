@@ -427,6 +427,7 @@ class Settings extends React.Component {
                                     <textarea
                                         {...about.props}
                                         maxLength="160"
+                                        rows="4"
                                         autoComplete="off"
                                     />
                                 </label>

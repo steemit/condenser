@@ -424,8 +424,7 @@ class Settings extends React.Component {
                                 </div>
                                 <label>
                                     {tt('settings_jsx.profile_about')}
-                                    <input
-                                        type="text"
+                                    <textarea
                                         {...about.props}
                                         maxLength="160"
                                         autoComplete="off"

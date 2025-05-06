@@ -38,6 +38,9 @@ $themes: (
     buttonBoxShadow: $color-transparent,
     modalBackgroundColor: $color-background-almost-white,
     modalTextColorPrimary: $color-text-dark,
+    modalButtonIcon: $color-white,
+    modalButtonDefault: $color-text-teal,
+    modalButtonHover: #259573,
   ),
   light: (
     colorAccent: $color-teal,
@@ -79,6 +82,9 @@ $themes: (
     buttonBoxShadowHover: $color-blue-black,
     modalBackgroundColor: $color-white,
     modalTextColorPrimary: $color-text-dark,
+    modalButtonIcon: $color-white,
+    modalButtonDefault: $color-text-teal,
+    modalButtonHover: #259573,
   ),
   dark: (
     colorAccent: $color-teal,
@@ -121,6 +127,9 @@ $themes: (
     inputPriceWarning: rgba(255, 153, 0, 0.83),
     modalBackgroundColor: $color-background-dark,
     modalTextColorPrimary: $color-text-white,
+    modalButtonIcon: #121517,
+    modalButtonDefault: #4DE2B6,
+    modalButtonHover: #82EBCC,
   ),
 );
 

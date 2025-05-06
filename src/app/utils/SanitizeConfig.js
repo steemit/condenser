@@ -6,6 +6,7 @@ import {
 import {
     getPhishingWarningMessage,
     getExternalLinkWarningMessage,
+    getInternalImageMessage,
 } from 'shared/HtmlReady'; // the only allowable title attributes for div and a tags
 
 const iframeWhitelist = [
@@ -105,7 +106,7 @@ export default ({
         img: ['src', 'srcset', 'alt', 'class'],
 
         // title is only set in the case of an external link warning
-        a: ['href', 'rel', 'title'],
+        a: ['href', 'rel', 'title', 'target', 'class'],
     },
     allowedSchemes: ['http', 'https', 'steem', 'esteem'],
     transformTags: {
@@ -202,11 +203,25 @@ export default ({
             if (!href) href = '#';
             href = href.trim();
             const attys = { href };
+            delete attribs.target; // This prevents any unexpected values being input into the target attribute
+
             // If it's not a (relative or absolute) steemit URL...
-            if (!href.match(/^(\/(?!\/)|https:\/\/steemit.com)/)) {
-                // attys.target = '_blank' // pending iframe impl https://mathiasbynens.github.io/rel-noopener/
+            if (
+                href.startsWith('https://cdn.steemitimages.com') ||
+                href.startsWith('https://steemitimages.com')
+            ) {
+                attys.target = '_blank';
+                attys.rel = 'noopener';
+                attys.class = 'postImage';
+                attys.title = getInternalImageMessage();
+            } else if (
+                !href.match(/^(\/(?!\/)|https:\/\/steemit.com)/) &&
+                !href.startsWith('/')
+            ) {
+                attys.target = '_blank';
                 attys.rel = highQualityPost ? 'noopener' : 'nofollow noopener';
                 attys.title = getExternalLinkWarningMessage();
+                attys.class = 'postImage postLink';
             }
             return {
                 tagName,

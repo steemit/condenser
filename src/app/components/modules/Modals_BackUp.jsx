@@ -8,8 +8,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import CloseButton from 'app/components/elements/CloseButton';
 import Reveal from 'app/components/elements/Reveal';
-import Icon from 'app/components/elements/Icon';
 import { NotificationStack } from 'react-notification';
+import { OrderedSet } from 'immutable';
 import tt from 'counterpart';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
@@ -82,8 +82,6 @@ class Modals extends React.Component {
 
     constructor() {
         super();
-        this.wheelRef = null;
-        this.preventDefault = e => e.preventDefault();
         this.state = {
             imageZoomed: false,
             zoomLevel: 1,
@@ -91,134 +89,33 @@ class Modals extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Modals');
     }
 
-    componentWillUnmount() {
-        if (this.wheelRef && this.preventDefault) {
-            this.wheelRef.removeEventListener('wheel', this.preventDefault);
-        }
-    }
-
-    setContainerDimensions = () => {
-        const img = this.zoomImg;
-        const revealEl = img.closest('.reveal');
-
-        if (!img || !revealEl) return;
-
-        const naturalWidth = img.naturalWidth;
-        const naturalHeight = img.naturalHeight;
-        const windowWidth = window.innerWidth * 0.75;
-        const windowHeight = window.innerHeight * 0.9;
-
-        const widthRatio = windowWidth / naturalWidth;
-        const heightRatio = windowHeight / naturalHeight;
-        const scaleRatio = Math.min(widthRatio, heightRatio);
-
-        const scaledWidth = naturalWidth * scaleRatio;
-        const scaledHeight = naturalHeight * scaleRatio;
-        const controlsEl = revealEl.querySelector('.modalImageOptions');
-        const controlsHeight = controlsEl ? controlsEl.offsetHeight : 0;
-        const adjustedHeight = naturalHeight * scaleRatio + controlsHeight;
-
-        this.setState({
-            originalheight: scaledHeight,
-            originalwidth: scaledWidth,
-            zoomLevel: 1,
-            imageZoomed: false,
-        });
-
-        revealEl.style.setProperty('--onload-width', `${scaledWidth}px`);
-        revealEl.style.setProperty('--onload-height', `${adjustedHeight}px`);
-
-        this.wheelRef.addEventListener('wheel', this.preventDefault);
-    };
-
     handleZoomIn = () => {
         const img = this.zoomImg;
-        const originalHeight = this.state.originalheight;
-        const originalWidth = this.state.originalwidth;
-
-        const container = img.closest('.modalImageContainer');
-        if (!img || !container) return;
-
-        const { scrollLeft, scrollTop, clientWidth, clientHeight } = container;
-
-        const viewCenterX = scrollLeft + clientWidth / 2;
-        const viewCenterY = scrollTop + clientHeight / 2;
-
-        const currentZoom = this.state.zoomLevel || 1;
-        const relativeX = viewCenterX / (originalWidth * currentZoom);
-        const relativeY = viewCenterY / (originalHeight * currentZoom);
-
         if (!img.classList.contains('zoomed')) {
             img.classList.add('zoomed');
             this.setState({ imageZoomed: true });
         }
-
-        this.setState(
-            prevState => ({
-                zoomLevel: prevState.zoomLevel + 0.5,
-            }),
-            () => {
-                const newZoom = this.state.zoomLevel;
-                const zoomedWidth = originalWidth * newZoom;
-                const zoomedHeight = originalHeight * newZoom;
-
-                img.style.setProperty('--original-height', originalHeight);
-                img.style.setProperty('--original-width', originalWidth);
-                img.style.setProperty('--zoom-level', newZoom);
-                container.style.setProperty(
-                    '--original-height',
-                    originalHeight
-                );
-
-                const newScrollLeft = zoomedWidth * relativeX - clientWidth / 2;
-                const newScrollTop =
-                    zoomedHeight * relativeY - clientHeight / 2;
-
-                container.scrollLeft = newScrollLeft;
-                container.scrollTop = newScrollTop;
-            }
-        );
+        this.setState(prevState => {
+            const newZoomLevel = prevState.zoomLevel + 0.5;
+            this.zoomImg.style.setProperty('--zoom-level', newZoomLevel);
+            console.log('Zoom Level: ', newZoomLevel);
+            return { zoomLevel: newZoomLevel };
+        });
     };
 
     handleZoomOut = () => {
         const img = this.zoomImg;
-        const originalHeight = this.state.originalheight;
-        const originalWidth = this.state.originalwidth;
-
-        const container = img.closest('.modalImageContainer');
-        if (!img || !container) return;
-
-        const { scrollLeft, scrollTop, clientWidth, clientHeight } = container;
-
-        const viewCenterX = scrollLeft + clientWidth / 2;
-        const viewCenterY = scrollTop + clientHeight / 2;
-
-        const currentZoom = this.state.zoomLevel || 1;
-        const relativeX = viewCenterX / (originalWidth * currentZoom);
-        const relativeY = viewCenterY / (originalHeight * currentZoom);
-
         this.setState(prevState => {
             const newZoomLevel =
                 prevState.zoomLevel > 1
                     ? prevState.zoomLevel - 0.5
                     : prevState.zoomLevel;
-
-            img.style.setProperty('--zoom-level', newZoomLevel);
-
-            if (newZoomLevel === 1) {
+            this.zoomImg.style.setProperty('--zoom-level', newZoomLevel);
+            if (newZoomLevel == 1) {
                 img.classList.remove('zoomed');
                 this.setState({ imageZoomed: false });
             }
-
-            const zoomedWidth = originalWidth * newZoomLevel;
-            const zoomedHeight = originalHeight * newZoomLevel;
-
-            const newScrollLeft = zoomedWidth * relativeX - clientWidth / 2;
-            const newScrollTop = zoomedHeight * relativeY - clientHeight / 2;
-
-            container.scrollLeft = newScrollLeft;
-            container.scrollTop = newScrollTop;
-
+            console.log('Zoom Level: ', newZoomLevel);
             return { zoomLevel: newZoomLevel };
         });
     };
@@ -231,38 +128,49 @@ class Modals extends React.Component {
         }
     };
 
-    onMouseWheel = e => {
-        e.stopPropagation();
-        if (e.deltaY < 0) {
-            this.handleZoomIn();
-        } else if (e.deltaY > 0) {
-            this.handleZoomOut();
-        }
-    };
-
-    handleDragOrTouchStart = e => {
-        const isTouchEvent = e.type === 'touchstart';
-        const pageX = isTouchEvent ? e.touches[0].pageX : e.pageX;
-        const pageY = isTouchEvent ? e.touches[0].pageY : e.pageY;
+    handleDragStart = e => {
+        if (!this.state.imageZoomed) return;
 
         this.isDragging = true;
-        this.dragStartX = pageX - this.imageContainer.offsetLeft;
-        this.dragStartY = pageY - this.imageContainer.offsetTop;
+        this.dragStartX = e.pageX - this.imageContainer.offsetLeft;
+        this.dragStartY = e.pageY - this.imageContainer.offsetTop;
         this.scrollLeft = this.imageContainer.scrollLeft;
         this.scrollTop = this.imageContainer.scrollTop;
     };
 
-    handleDragOrTouchMove = e => {
-        if (!this.isDragging) return;
+    handleDragMove = e => {
+        if (!this.isDragging || !this.state.imageZoomed) return;
 
         e.preventDefault();
+        const x = e.pageX - this.imageContainer.offsetLeft;
+        const y = e.pageY - this.imageContainer.offsetTop;
+        const walkX = (x - this.dragStartX) * 1; // scroll speed
+        const walkY = (y - this.dragStartY) * 1;
 
-        const isTouchEvent = e.type === 'touchmove';
-        const pageX = isTouchEvent ? e.touches[0].pageX : e.pageX;
-        const pageY = isTouchEvent ? e.touches[0].pageY : e.pageY;
+        this.imageContainer.scrollLeft = this.scrollLeft - walkX;
+        this.imageContainer.scrollTop = this.scrollTop - walkY;
+    };
 
-        const x = pageX - this.imageContainer.offsetLeft;
-        const y = pageY - this.imageContainer.offsetTop;
+    handleDragEnd = () => {
+        this.isDragging = false;
+    };
+
+    handleTouchStart = e => {
+        if (!this.state.imageZoomed || e.touches.length !== 1) return;
+        const touch = e.touches[0];
+        this.isDragging = true;
+        this.dragStartX = touch.pageX - this.imageContainer.offsetLeft;
+        this.dragStartY = touch.pageY - this.imageContainer.offsetTop;
+        this.scrollLeft = this.imageContainer.scrollLeft;
+        this.scrollTop = this.imageContainer.scrollTop;
+    };
+
+    handleTouchMove = e => {
+        if (!this.isDragging || !this.state.imageZoomed) return;
+
+        const touch = e.touches[0];
+        const x = touch.pageX - this.imageContainer.offsetLeft;
+        const y = touch.pageY - this.imageContainer.offsetTop;
         const walkX = (x - this.dragStartX) * 1;
         const walkY = (y - this.dragStartY) * 1;
 
@@ -270,8 +178,67 @@ class Modals extends React.Component {
         this.imageContainer.scrollTop = this.scrollTop - walkY;
     };
 
-    handleDragOrTouchEnd = () => {
+    handleTouchEnd = () => {
         this.isDragging = false;
+    };
+
+    handleImageClick = () => {
+        const img = this.zoomImg;
+        const { imageZoomed } = this.state;
+
+        if (!img) return;
+
+        if (imageZoomed) {
+            img.classList.remove('zoomed');
+            this.setState({ zoomLevel: 1 });
+            this.zoomImg.style.setProperty('--zoom-level', 1);
+        } else {
+            img.classList.add('zoomed');
+            this.setState({ zoomLevel: 2 });
+            this.zoomImg.style.setProperty('--zoom-level', 2);
+        }
+
+        this.setState({ imageZoomed: !imageZoomed });
+    };
+
+    handleImageMouseMove = e => {
+        const img = this.zoomImg;
+        if (!img || !this.state.imageZoomed) return;
+
+        const rect = img.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width * 100;
+        const y = (e.clientY - rect.top) / rect.height * 100;
+
+        img.style.transformOrigin = `${x}% ${y}%`;
+    };
+
+    handleImageTouchMove = e => {
+        const img = this.zoomImg;
+        if (!img || !this.state.imageZoomed) return;
+
+        // Ensure there's at least one touch point
+        if (e.touches.length > 0) {
+            const rect = img.getBoundingClientRect();
+            const touch = e.touches[0]; // Get the first touch point
+            const x = (touch.clientX - rect.left) / rect.width * 100;
+            const y = (touch.clientY - rect.top) / rect.height * 100;
+
+            // Adjust the transform-origin based on touch position
+            img.style.transformOrigin = `${x}% ${y}%`;
+
+            // Prevent default scrolling behavior
+            e.preventDefault();
+        }
+    };
+
+    resetZoom = () => {
+        const img = this.zoomImg;
+        if (img) {
+            img.classList.remove('zoomed');
+            this.setState({ zoomLevel: 1 });
+            this.zoomImg.style.setProperty('--zoom-level', 1);
+        }
+        this.setState({ imageZoomed: false });
     };
 
     render() {
@@ -415,73 +382,68 @@ class Modals extends React.Component {
                     <Reveal
                         onHide={hideImageViewer}
                         show={show_image_viewer_modal ? true : false}
-                        backdropClass="reveal-overlay modelImageLoading"
                     >
-                        <CloseButton
-                            onClick={() => {
-                                this.handleResetZoom();
-                                hideImageViewer();
-                            }}
-                        />
-                        <div
-                            className="modalImageContainer"
-                            ref={el => {
-                                this.imageContainer = el;
-                                this.wheelRef = el;
-                            }}
-                            onMouseDown={this.handleDragOrTouchStart}
-                            onMouseMove={this.handleDragOrTouchMove}
-                            onMouseUp={this.handleDragOrTouchEnd}
-                            onMouseLeave={this.handleDragOrTouchEnd}
-                            onWheel={this.onMouseWheel}
-                            onTouchStart={this.handleDragOrTouchStart}
-                            onTouchMove={this.handleDragOrTouchMove}
-                            onTouchEnd={this.handleDragOrTouchEnd}
-                            role="button"
-                            tabIndex="0"
-                        >
-                            <img
-                                src={image_viewer_url}
-                                alt="overlay"
-                                className="modalImage"
-                                onLoad={this.setContainerDimensions}
-                                onMouseDown={this.handleMouseDown}
-                                onDragStart={e => e.preventDefault()}
-                                style={{
-                                    cursor: this.state.imageZoomed
-                                        ? 'grab'
-                                        : 'default',
-                                }}
-                                ref={el => (this.zoomImg = el)}
-                                role="button"
-                                tabIndex="0"
-                            />
-                        </div>
                         <div className="modalImageOptions">
-                            <span
-                                className="modalImageZoomOut"
-                                onClick={this.handleZoomOut}
-                                role="button"
-                                tabIndex="0"
-                            >
-                                <Icon name="zoom-out" size="2x" />
-                            </span>
-                            <span
-                                className="modalImageResetZoom"
-                                onClick={this.handleResetZoom}
-                                role="button"
-                                tabIndex="0"
-                            >
-                                <Icon name="zoom-reset" size="2x" />
-                            </span>
-                            <span
+                            <button
                                 className="modalImageZoomIn"
                                 onClick={this.handleZoomIn}
-                                role="button"
-                                tabIndex="0"
+                                alt="Zoom In"
                             >
-                                <Icon name="zoom-in" size="2x" />
-                            </span>
+                                <i className="fa fa-search-plus" />
+                            </button>
+                            <button
+                                className="modalImageZoomOut"
+                                onClick={this.handleZoomOut}
+                                alt="Zoome Out"
+                            >
+                                <i className="fa fa-search-minus" />
+                            </button>
+                            <button
+                                className="modalImageResetZoom"
+                                onClick={this.handleResetZoom}
+                                alt="Reset Zoom"
+                            >
+                                <i className="fa fa-refresh" />
+                            </button>
+                            <CloseButton
+                                className="modalImageCloseButton"
+                                onClick={() => {
+                                    this.resetZoom();
+                                    hideImageViewer();
+                                }}
+                            />
+                        </div>
+                        <div
+                            className="modalImageContainer"
+                            ref={el => (this.imageContainer = el)}
+                            onMouseDown={this.handleDragStart}
+                            onMouseMove={this.handleDragMove}
+                            onMouseUp={this.handleDragEnd}
+                            onMouseLeave={this.handleDragEnd}
+                            onTouchStart={this.handleTouchStart}
+                            onTouchMove={this.handleTouchMove}
+                            onTouchEnd={this.handleTouchEnd}
+                        >
+                            <center>
+                                <img
+                                    src={image_viewer_url}
+                                    alt="overlay"
+                                    className="modalImage"
+                                    //onClick={this.handleImageClick}
+                                    //onMouseMove={this.handleImageMouseMove}
+                                    //onTouchMove={this.handleImageTouchMove} // Add touchmove event
+                                    //role="button"
+                                    //tabIndex="0"
+                                    onMouseDown={this.handleMouseDown}
+                                    onDragStart={e => e.preventDefault()}
+                                    style={{
+                                        cursor: this.state.imageZoomed
+                                            ? 'grab'
+                                            : 'default',
+                                    }}
+                                    ref={el => (this.zoomImg = el)}
+                                />
+                            </center>
                         </div>
                     </Reveal>
                 )}

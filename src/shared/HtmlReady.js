@@ -8,6 +8,7 @@ import * as Phishing from 'app/utils/Phishing';
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
 export const getExternalLinkWarningMessage = () =>
     tt('g.external_link_message');
+export const getInternalImageMessage = () => tt('g.internal_image_message');
 
 const noop = () => {};
 const DOMParser = new xmldom.DOMParser({
@@ -133,6 +134,29 @@ function preprocessHtml(html) {
 
     return html;
 }
+function detectImageLinksOrLinkify(textNode, state) {
+    const imageRegex = /(https?:\/\/\S+\.(?:jpg|jpeg|png|gif)(?:\?[^\s]*)?)/gi;
+    const match = textNode.data.match(imageRegex);
+
+    if (match) {
+        match.forEach(url => {
+            const linkURL = proxifyImageUrl(url, '0x0');
+
+            const imgElement = textNode.ownerDocument.createElement('img');
+            imgElement.setAttribute('src', linkURL);
+
+            const anchorElement = textNode.ownerDocument.createElement('a');
+            anchorElement.setAttribute('href', linkURL);
+            anchorElement.appendChild(imgElement);
+            textNode.parentNode.replaceChild(anchorElement, textNode);
+
+            link(state, anchorElement);
+            img(state, imgElement);
+        });
+    } else {
+        linkifyNode(textNode, state);
+    }
+}
 
 function traverse(node, state, depth = 0) {
     if (!node || !node.childNodes) return;
@@ -144,7 +168,8 @@ function traverse(node, state, depth = 0) {
         if (tag === 'img') img(state, child);
         else if (tag === 'iframe') iframe(state, child);
         else if (tag === 'a') link(state, child);
-        else if (child.nodeName === '#text') linkifyNode(child, state);
+        else if (child.nodeName === '#text')
+            detectImageLinksOrLinkify(child, state);
 
         traverse(child, state, depth + 1);
     });
@@ -225,6 +250,16 @@ function img(state, child) {
                 child.setAttribute('src', url2);
             }
         }
+    }
+    if (child.parentNode && child.parentNode.nodeName.toLowerCase() !== 'a') {
+        child.parentNode.replaceChild(
+            DOMParser.parseFromString(
+                `<a href="` +
+                    proxifyImageUrl(url, '0x0/') +
+                    `" target="_blank">${child}</a>`
+            ),
+            child
+        );
     }
 }
 

@@ -354,6 +354,10 @@ class PrimaryNavigation extends React.PureComponent {
                 section = `/${navUrlComponents[1]}/blog`;
             }
             accountname = navUrlComponents[1].substring(1);
+        } else if (navUrlComponents[1] === 'communities') {
+            // All Communities (Explore > Communities)
+            isFeedsNavigationVisible = true;
+            section = '/communities';
         } else if (
             navUrlComponents[1] !== `@${username}` &&
             navUrlComponents[2] === 'my'
@@ -440,14 +444,6 @@ class PrimaryNavigation extends React.PureComponent {
             );
         };
 
-        /*const isNavVisibleState = (
-            <div>
-                <p>
-                    {isNavVisible ? '\u25BC IT IS TRUE' : '\u25B2 IT IS FALSE'}
-                </p>
-            </div>
-        )*/
-
         const show_hide_link =
             this.state.screenWidth > 0 &&
             this.state.screenWidth < this.state.snapWidth &&
@@ -498,15 +494,20 @@ class PrimaryNavigation extends React.PureComponent {
                                 isFeedsNavigationVisible ? 'visible' : ''
                             }`}
                         >
-                            {username && (
-                                <li>
-                                    {tabLink(
-                                        '/trending',
-                                        tt('g.posts_all'),
-                                        'library-books'
-                                    )}
-                                </li>
-                            )}
+                            <li>
+                                {tabLink(
+                                    '/trending',
+                                    tt('g.posts_all'),
+                                    'library-books'
+                                )}
+                            </li>
+                            <li>
+                                {tabLink(
+                                    '/communities',
+                                    tt('g.communities'),
+                                    'communities'
+                                )}
+                            </li>
                             {username && (
                                 <li>
                                     {tabLink(
@@ -524,8 +525,7 @@ class PrimaryNavigation extends React.PureComponent {
                                         'account-group'
                                     )}
                                     {(navSection === '/trending/my' ||
-                                        routeTag === 'community_index' ||
-                                        routeTag === 'more_communities') && (
+                                        routeTag === 'community_index') && (
                                         <Topics
                                             username={username}
                                             current={category}

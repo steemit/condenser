@@ -31,7 +31,7 @@ const SidebarLinks = ({ username, topics }) => (
                 {topics && (
                     <li className="c-sidebar__list-item">
                         <div style={{ color: '#aaa', paddingTop: '0em' }}>
-                            Trending Communities
+                            {tt('g.trending_communities')}
                         </div>
                     </li>
                 )}

@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
+import * as userActions from 'app/redux/UserReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
@@ -125,6 +126,34 @@ class PostFull extends React.Component {
                 }
             }
         }
+    }
+
+    componentDidMount() {
+        document.querySelectorAll('a img').forEach(img => {
+            const anchor = img.closest('a');
+
+            const handleLoadedImage = () => {
+                if (
+                    img.naturalHeight >= 50 &&
+                    anchor.classList.contains('postImage')
+                ) {
+                    anchor.classList.add('popupImage');
+                    if (!anchor.classList.contains('postLink')) {
+                        anchor.addEventListener('click', e => {
+                            e.preventDefault();
+                            const url = anchor.href;
+                            this.props.showImageViewer(url);
+                        });
+                    }
+                }
+            };
+
+            if (img.complete) {
+                handleLoadedImage();
+            } else {
+                img.onload = handleLoadedImage;
+            }
+        });
     }
 
     fbShare(e) {
@@ -673,6 +702,7 @@ export default connect(
         getCommunity: communityName => {
             return dispatch(fetchDataSagaActions.getCommunity(communityName));
         },
+        showImageViewer: url => dispatch(userActions.showImageViewer({ url })),
     })
 )(PostFull);
 

@@ -1,0 +1,981 @@
+{
+    "g": {
+        "about": "Про спільноту",
+        "account": "Акаунт",
+        "active_posters": "Активні дописувачі",
+        "activity_log": "Журнал Активності",
+        "add_user": "Додати користувача",
+        "administrator": "адмін",
+        "administrators": "адміни",
+        "age": "вік",
+        "amount": "Сума",
+        "and": "і",
+        "are_you_sure": "Ви впевнені?",
+        "ask": "Продаж",
+        "balance": "Стан рахунку: %(balanceValue)s",
+        "balances": "Баланси",
+        "beneficiaries": "Одержувачі",
+        "bid": "Купівля",
+        "blog": "Блог",
+        "profile": "Профіль",
+        "browse": "Переглянути",
+        "buy": "Купити",
+        "buy_steem_power": "Купити Steem Power",
+        "buy_or_sell": "Купити або продати",
+        "by": "за",
+        "cancel": "Відмінити",
+        "change_password": "Змінити пароль",
+        "choose_language": "Обрати мову",
+        "clear": "Очистити",
+        "close": "Закрити",
+        "collapse_or_expand": "Згорнути/розгорнути",
+        "collapse_pinned": "Згорнути Закріплені",
+        "communities": "Спільноти",
+        "community_subscriptions": "Підписки На Спільноти",
+        "community_settings_header": "Налаштування спільноти",
+        "community_settings_description": "Що відстоює ваша спільнота?",
+        "community_list_header": "Спільноти",
+        "community_user_role_add_description":
+            "Встановіть роль користувача в цій спільноті.",
+        "community_user_role_edit_description": "Змінити роль @%(username)s.",
+        "community_user_role_add_header": "Додати роль користувача",
+        "community_user_role_edit_header": "Змінити роль користувача",
+        "community_user_title_edit_header": "Змінити підпис користувача",
+        "community_user_title_edit_description":
+            "Встановити підпис для @%(username)s",
+        "comments": "Коментарі",
+        "confirm": "Підтвердити",
+        "convert": "Конвертувати",
+        "create_community": "Створити спільноту",
+        "date": "Дата",
+        "delete": "Видалити",
+        "description": "Опис",
+        "dismiss": "Відхилити",
+        "downvote": "Голосування проти",
+        "edit": "Редагувати",
+        "edited": "відредаговано",
+        "edit_roles": "Редагувати Ролі",
+        "email": "Електронна пошта",
+        "explore": "Переглянути",
+        "explore_communities": "Дослідити Спільноти",
+        "external_link_message":
+            "За цим посиланням ви покинете сайт steemit.com",
+        "affiliation_steemit": "Команда Steemit",
+        "affiliation_sm": "Команда Steem Monsters",
+        "feed": "Стрічка",
+        "flag": "Прапорець",
+        "flag_this_post": "Встановити прапорець на цей %(type)s",
+        "flag_this_post_description":
+            "Будь ласка, зазначте примітку щодо вашого рішення позначити цей %(type)s, це буде розглянуто модераторами спільноти.",
+        "follow": "Слідкувати",
+        "for": " за ",
+        "friends": "Друзі",
+        "friends_feed": "Стрічка друзів",
+        "from": " від ",
+        "go_back": "Назад",
+        "hide": "Сховати",
+        "in": "у",
+        "in_reply_to": "у відповідь на",
+        "insufficient_balance": "Недостатній баланс",
+        "internal_image_message": "Це зображення відкриється в новій вкладці",
+        "invalid_amount": "Неправильна сума",
+        "links": "Посилання",
+        "joined": "Приєднався",
+        "language": "Мова",
+        "leadership": "Лідерство",
+        "leave": "Покинути",
+        "loading": "Завантажується",
+        "login": "Увійти",
+        "logout": "Вийти",
+        "memo": "Мемо",
+        "mute": "Приховати",
+        "muted": "Приглушено",
+        "my_blog": "Мій блог",
+        "my_comments": "Мої коментарі",
+        "my_communities": "Мої Спільноти",
+        "my_feed": "Моя стрічка",
+        "my_friends": "Мої друзі",
+        "my_profile": "Мій профіль",
+        "my_replies": "Відповіді мені",
+        "my_subscriptions": "Мої підписки",
+        "my_wallet": "Мій гаманець",
+        "new": "Нове",
+        "new_post": "Новий допис",
+        "newer": "Новіші",
+        "next": "Наступні",
+        "no": "Ні",
+        "notifications": "Сповіщення",
+        "ok": "Гаразд",
+        "older": "Старіші",
+        "one_per_line": "По одному в рядку",
+        "optimal": "Оптимальний",
+        "or": "або",
+        "order_placed": "Ордер встановлено: %(order)s",
+        "password": "Пароль",
+        "payouts": "Виплати",
+        "pending_rewards": "Нараховані винагороди",
+        "permissions": "Дозволи",
+        "phishy_message":
+            "Посилання розширено до простого тексту; остерігайтеся потенційної спроби фішингу",
+        "pin": "Закріпити",
+        "pinned": "Закріплено",
+        "pixels": "Пікселі",
+        "post": "Опублікувати",
+        "post_as_user": "Опублікувати як %(username)s",
+        "posts": "Дописи",
+        "posts_all": "Всі дописи",
+        "posters": "автори дописів",
+        "powered_up_100": "Підсилено 100%%",
+        "preview": "Попередній перегляд",
+        "previous": "Попередні",
+        "price": "Ціна",
+        "print": "Друкувати",
+        "promote": "Розкручувати",
+        "promoted": "Розкручений",
+        "rank": "Ранг",
+        "re": "НА",
+        "re_to": "НА: %(тему)sи",
+        "read_offical_blog": "Блог Steemit",
+        "recent_password": "Нещодавній пароль",
+        "receive": "Отримати ",
+        "remove": "Видалити",
+        "remove_vote": "Видалити голосування",
+        "replied_to": "відповісти %(account)s",
+        "replies": "Відповіді",
+        "reply": "Відповісти",
+        "reply_count": {
+            "zero": "немає відповідей",
+            "one": "1 відповідь",
+            "other": "%(count)s відповідей"
+        },
+        "reputation": "Репутація",
+        "reveal_comment": "Розкрити коментар",
+        "will_be_hidden_due_to_low_rating":
+            "Буде приховано через низький рейтинг",
+        "request": "запит",
+        "required": "Обов'язковий",
+        "rewards": "Винагороди",
+        "role": "Роль",
+        "roles": "Роли",
+        "rules": "Правила",
+        "save": "Зберегти",
+        "saved": "Збережено",
+        "search": "Пошук",
+        "sell": "Продати",
+        "settings": "Налаштування",
+        "share_this_post": "Поділитися цим дописом",
+        "mute_this_post": "Приховати допис/коментар",
+        "mute_this_post_description":
+            "Будь ласка, надайте примітку щодо вашого рішення приховати цей вміст.",
+        "unmute_this_post": "Скасувати приховування цього допису/коментаря",
+        "unmute_this_post_description":
+            "Будь ласка, надайте примітку щодо вашого рішення скасувати приховування цього вмісту.",
+        "show": "Показати",
+        "show_pinned": "Показати Закріплені",
+        "sign_in": "Увійти",
+        "sign_up": "Зареєструватися",
+        "since": "з %(date)s",
+        "submit": "Відправити",
+        "subscribe": "Підписатися",
+        "subscriber": "підписник",
+        "subscribers": "підписників",
+        "subscriptions": "Підписки",
+        "power_up": "Підсилити",
+        "submit_a_story": "Опублікувати",
+        "tag": "Тег",
+        "title": "Назва",
+        "to": " до ",
+        "topics": "Теми",
+        "toggle_nightmode": "Переключитися на нічний режим",
+        "toggle_daymode": "Закрити нічний режим",
+        "all_tags": "Всі дописи",
+        "all_tags_mobile": "Всі дописи",
+        "transfer": "Переказ",
+        "trending_communities": "Популярні Спільноти",
+        "trending_topics": "Трендові теми",
+        "try_again": "Спробуйте ще раз",
+        "type": "Тип",
+        "unfollow": "Відписатися",
+        "unmute": "Скасувати приховування",
+        "unpin": "Відкріпити",
+        "unknown": "невідомий",
+        "updating_user": "Оновлення користувача...",
+        "upvote": "Голосувати",
+        "upvote_post": "Голосувати за допис",
+        "user_roles": "Ролі Користувачів",
+        "username": "Ім'я користувача",
+        "version": "Версія",
+        "vote": "Голосувати",
+        "votes": "голосувань",
+        "wallet": "Гаманець",
+        "warning": "попередження",
+        "yes": "Так",
+        "posting": "Публікування",
+        "owner": "Власник",
+        "active": "Активний",
+        "account_not_found": "Обліковий запис не знайдено",
+        "this_is_wrong_password": "Це неправильний пароль",
+        "do_you_need_to": "Чи потрібно вам",
+        "account_name": "Ім'я облікового запису",
+        "recover_your_account": "відновити обліковий запис",
+        "reset_usernames_password": "Скинути %(username)s's пароль",
+        "this_will_update_usernames_authtype_key":
+            "Це оновить %(username)s %(authType)s ключ",
+        "passwords_do_not_match": "Паролі не збігаються",
+        "you_need_private_password_or_key_not_a_public_key":
+            "Вам потрібен приватний пароль або ключ (не публічний ключ)",
+        "the_rules_of_APP_NAME": {
+            "one": "Перше правило %(APP_NAME)s: Не втрачайте свій пароль.",
+            "decond": "Друге правило %(APP_NAME)s: Не втрачайте свій пароль.",
+            "third":
+                "Третє правило %(APP_NAME)s: Ми не можемо відновити ваш пароль.",
+            "fourth":
+                "Четверте правило: Якщо ви пам’ятаєте пароль, він не є безпечним.",
+            "fifth":
+                "П’яте правило: використовуйте лише випадково згенеровані паролі.",
+            "sixth": "шосте правило: Нікому не повідомляйте свій пароль.",
+            "seventh":
+                "Сьоме правило: Завжди створюйте резервну копію свого пароля."
+        },
+        "recover_password": "Відновити акаунт",
+        "current_password": "Поточний пароль",
+        "generated_password": "Згенерований пароль",
+        "backup_password_by_storing_it":
+            "Зробіть резервну копію, зберігши її в менеджері паролів або текстовому файлі",
+        "enter_account_show_password":
+            "Введіть дійсне ім’я облікового запису, щоб показати пароль",
+        "click_to_generate_password": "Натисніть, щоб створити пароль",
+        "re_enter_generate_password": "Повторно введіть згенерований пароль",
+        "understand_that_APP_NAME_cannot_recover_password":
+            "Я розумію, що %(APP_NAME)s не може відновити втрачений пароль",
+        "i_saved_password": "Я надійно зберіг свій створений пароль",
+        "update_password": "Оновити пароль",
+        "confirm_password": "Підтвердити пароль",
+        "account_updated": "Обліковий запис оновлено",
+        "password_must_be_characters_or_more":
+            "Пароль повинен містити %(amount)s символів або більше",
+        "need_password_or_key":
+            "Вам потрібен приватний пароль або ключ (не публічний ключ)",
+        "login_to_see_memo": "увійдіть щоб побачити memo",
+        "new_password": "Новий пароль",
+        "incorrect_password": "Неправильний пароль",
+        "username_does_not_exist": "Такого облікового запису не існує",
+        "account_name_should_start_with_a_letter":
+            "Назва облікового запису повинна починатися з букви.",
+        "account_name_should_be_shorter":
+            "Назва облікового запису повинна бути коротшою.",
+        "account_name_should_be_longer":
+            "Назва облікового запису повинна бути довшою.",
+        "account_name_should_have_only_letters_digits_or_dashes":
+            "Назва облікового запису має містити лише літери, цифри, крапки або тире.",
+        "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
+            "Неможливо збільшити винагороду за допис протягом останньої хвилини перед виплатою",
+        "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
+            "Дозволений лише один обліковий запис Steem на одну IP-адресу кожні 10 хвилин",
+        "resteem_this_post": "Рестімнути цей допис",
+        "reblog": "Рестім",
+        "write_your_story": "Напишіть свою розповідь...",
+        "remember_voting_and_posting_key":
+            "Запам’ятати ключ голосування та публікації",
+        "auto_login_question_mark": "Автоматичний вхід?",
+        "hide_private_key": "Приховати приватний ключ",
+        "show_private_key": "Показати приватний ключ",
+        "login_to_show": "Увійдіть, щоб показати",
+        "not_valid_email": "Недійсна електронна адреса",
+        "thank_you_for_being_an_early_visitor_to_APP_NAME":
+            "Дякуємо, що ви ранні відвідувачі %(APP_NAME)s. Ми зв’яжемося з вами якнайшвидше.",
+        "author_rewards": "Авторські винагороди",
+        "curation_rewards": "Кураторські винагороди",
+        "sorry_your_reddit_account_doesnt_have_enough_karma":
+            "На жаль, у вашому обліковому записі Reddit недостатньо карми, щоб отримати право на безкоштовну реєстрацію. Будь ласка, додайте свою електронну адресу для місця в списку очікування",
+        "register_with_facebook": "Зареєструватися за допомогою Facebook",
+        "or_click_the_button_below_to_register_with_facebook":
+            "Або натисніть кнопку нижче, щоб зареєструватися за допомогою Facebook",
+        "server_returned_error": "сервер повернув помилку",
+        "APP_NAME_support": "Підтримка %(APP_NAME)s",
+        "please_email_questions_to":
+            "Будь ласка, надішліть свої запитання на адресу",
+        "next_7_strings_single_block": {
+            "authors_get_paid_when_people_like_you_upvote_their_post":
+                "Автори отримують гроші, коли такі люди, як ви, голосують за їхні публікації",
+            "if_you_enjoyed_what_you_read_earn_amount":
+                "Якщо вам сподобалося те, що ви тут прочитали, створіть свій обліковий запис сьогодні та почніть БЕЗКОШТОВНО заробляти в STEEM!",
+            "free_steem": "STEEM ЗАДАРМА!",
+            "sign_up_earn_steem": "Зареєструйтеся зараз, щоб заробляти "
+        },
+        "next_3_strings_together": {
+            "show_more": "Показати більше",
+            "show_less": "Показати менше",
+            "value_posts": "малоцінні дописи"
+        },
+        "read_only_mode":
+            "Через технічне обслуговування сервера ми працюємо в режимі лише для читання. Просимо вибачення за незручності.",
+        "tags_and_topics": "Теги",
+        "show_more_topics": "Досліджуйте спільноти",
+        "basic": "Базовий",
+        "advanced": "Просунутий",
+        "views": {
+            "zero": "Немає переглядів",
+            "one": "%(count)s перегляд",
+            "other": "%(count)s переглядів"
+        },
+        "responses": {
+            "zero": "Немає відповідей",
+            "one": "%(count)s відповідь",
+            "other": "%(count)s ваідповідей"
+        },
+        "post_key_warning": {
+            "confirm":
+                "Ви збираєтеся опублікувати закритий ключ або головний пароль STEEM. Ймовірно, ви втратите контроль над пов’язаним рахунком і всіма його коштами.",
+            "warning":
+                "Чесні користувачі, включно зі співробітниками Steemit Inc., ніколи не запитуватимуть у вас закритий ключ або головний пароль.",
+            "checkbox": "Я розумію"
+        },
+        "tiezi": "Дописи",
+        "replies_to": "Відповіді",
+        "user": "Користувачі",
+        "sort_by_time": "Сортувати за часом",
+        "sort_by_reward": "Сортувати за виплатами",
+        "one_follower": "%(count)s підписник",
+        "one_post": "%(count)s допис",
+        "many_followers": "%(count)s підписники",
+        "many_posts": "%(count)s дописи",
+        "search_history": "Історія",
+        "announcement": "Оголошення"
+    },
+    "navigation": {
+        "about": "Про Steemit, Inc.",
+        "explore": "Дослідити",
+        "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper",
+        "third_party_exchanges": "Сторонні біржі:",
+        "buy_LIQUID_TOKEN": "Купити %(LIQUID_TOKEN)s",
+        "sell_LIQUID_TOKEN": "Продати %(LIQUID_TOKEN)s",
+        "currency_market": "Валютний ринок",
+        "stolen_account_recovery": "Відновлення вкрадених облікових записів",
+        "change_account_password": "Змінити пароль облікового запису",
+        "vote_for_witnesses": "Голосувати за Свідків",
+        "advertise": "Рекламувати",
+        "media_kit": "Медіакіт",
+        "privacy_policy": "Політика конфіденційності",
+        "terms_of_service": "Умови надання послуг",
+        "sign_up": "Зареєструватися",
+        "learn_more": "Дізнатися більше",
+        "welcome": "Вітаємо",
+        "faq": "Часті запитання",
+        "chat": "Steem чат",
+        "app_center": "Програми, створені на Steem",
+        "business_center": "Компанії, які приймають Steem",
+        "api_docs": "Портал розробника",
+        "bluepaper": "Steem Bluepaper",
+        "smt_whitepaper": "SMT Whitepaper",
+        "whitepaper": "Steem Whitepaper",
+        "intro_tagline": "Ваш голос чогось вартий",
+        "intro_paragraph":
+            "Отримуйте гроші за хороший контент. Публікуйте та голосуйте за статті на Steemit, щоб отримати свою частку щоденних винагород.",
+        "jobs": "Вакансії в Steemit",
+        "steem_proposals": "Пропозиції Steem"
+    },
+    "main_menu": {
+        "hot": "Гаряче",
+        "trending": "В тренді"
+    },
+    "reply_editor": {
+        "shorten_title": "Скоротіть назву",
+        "exceeds_maximum_length": "Перевищує максимальну довжину (%(maxKb)sKB)",
+        "including_the_category":
+            " (including the category '%(rootCategory)s')",
+        "use_limited_amount_of_tags":
+            "У вас %(tagsLength)s тегів %(iblingsCategory)s. Будь ласка, використовуйте лише 5 у своїй публікації та рядку категорії.",
+        "are_you_sure_you_want_to_clear_this_form":
+            "Ви впевнені, що бажаєте вийти з редактора коментарів?",
+        "uploading": "Завантаження...",
+        "draft_saved": "Чернетку збережено.",
+        "editor": "Редактор",
+        "insert_images_by_dragging_dropping":
+            "Вставте зображення шляхом перетягування,",
+        "pasting_from_the_clipboard": "вставлення з буфера обміну, ",
+        "selecting_them": "вибираючи їх",
+        "image_upload": "Завантаження зображення",
+        "power_up_100": "Power Up 100%%",
+        "default_50_50": "50%% SBD / 50%% SP",
+        "decline_payout": "Відхилити виплату",
+        "check_this_to_auto_upvote_your_post":
+            "Поставте прапорець, щоб автоматично проголосувати за свою публікацію",
+        "markdown_styling_guide": "Посібник з оформлення",
+        "or_by": "або через",
+        "title": "Заголовок",
+        "update_post": "Оновити допис",
+        "markdown_not_supported": "Тут не підтримується розмітка",
+        "advanced_settings": "Розширені налаштування",
+        "beneficiaries_set": "%(count)s встановлено",
+        "draft": "Завантажити чернетку",
+        "draft_save": "Зберегти чернетку",
+        "draft_update": "Оновити чернетку",
+        "draft_save_message":
+            "Чернетку успішно збережено. Щоб переглянути збережені чернетки, просто натисніть кнопку «Завантажити чернетку».",
+        "template": "Шаблон",
+        "tag": "#тег",
+        "tips": "Введіть назву, вміст і теги."
+    },
+    "beneficiary_selector_jsx": {
+        "header": "Хто повинен отримувати винагороди?",
+        "add": "Додати обліковий запис",
+        "exceeds_max_beneficiaries": "Може мати не більше 8 бенефіціарів",
+        "beneficiary_cannot_be_self": "Неможливо вказати себе як бенефіціара",
+        "beneficiary_cannot_be_duplicate":
+            "Одного і того ж бенефіціара не може вказувати двічі",
+        "beneficiary_percent_invalid":
+            "Відсоток бенефіціара має бути від 1 до 100",
+        "beneficiary_percent_total_invalid":
+            "Загальний відсоток бенефіціара має бути менше 100"
+    },
+    "category_selector_jsx": {
+        "tag_your_story":
+            "Тег (до 8 тегів), перший тег – ваша основна категорія.",
+        "select_a_tag": "Виберіть тег",
+        "maximum_tag_length_is_24_characters":
+            "Максимальна довжина тегу становить 24 символи",
+        "use_limited_amount_of_categories":
+            "Будь ласка, використовуйте лише %(amount)s кількість тегів",
+        "use_only_lowercase_letters": "Використовуйте лише малі літери",
+        "use_one_dash": "Використовуйте лише одне тире",
+        "use_spaces_to_separate_tags":
+            "Використовуйте пробіли для розділення тегів",
+        "use_only_allowed_characters":
+            "Використовуйте лише малі літери, цифри та одне тире",
+        "must_start_with_a_letter": "Має починатися з букви",
+        "must_end_with_a_letter_or_number":
+            "Має закінчуватися буквою або цифрою",
+        "must_not_include_hivemind_community_owner":
+            "Публікація вже має тег %(hive)s за замовчуванням, будь ласка, не включайте інший тег 'hive-'."
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Авторські винагороди",
+        "payout_option_description":
+            "Який тип токенів ви хочете отримати як винагороду за цю публікацію?",
+        "current_default": "За замовчуванням",
+        "update_default_in_settings": "Оновити"
+    },
+    "postfull_jsx": {
+        "this_post_is_not_available_due_to_a_copyright_claim":
+            "Ця публікація недоступна через претензію щодо авторських прав.",
+        "share_on_facebook": "Поділитися у Facebook",
+        "share_on_twitter": "Поділитися у Twitter",
+        "share_on_reddit": "Поділитися у Reddit",
+        "share_on_linkedin": "Поділитися у Linkedin",
+        "recent_password": "Останній пароль",
+        "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
+            "За 3,5 дні конвертуйте %(amount)s %(DEBT_TOKEN)s у %(LIQUID_TOKEN)s",
+        "view_the_full_context": "Переглянути повний контекст",
+        "view_the_direct_parent":
+            "Переглянути безпосереднє батьківське повідомлення ",
+        "you_are_viewing_a_single_comments_thread_from":
+            "Ви переглядаєте один ланцюжок коментарів із"
+    },
+    "recoveraccountstep1_jsx": {
+        "recover_account_intro":
+            "Час від часу ключ власника (owner key) стіміанина може бути зламано. Відновлення вкраденого облікового запису дає законному власнику 30 днів для відновлення свого облікового запису з моменту зміни ключа власника (owner key) злодієм. Відновлення вкраденого облікового запису можна застосувати лише в %(APP_URL)s, якщо власник облікового запису раніше вказав «%(APP_NAME)s» як довірену особу та дотримувався Умов використання %(APP_NAME)s."
+    },
+    "user_profile": {
+        "unknown_account": "Невідомий обліковий запис",
+        "user_hasnt_made_any_posts_yet":
+            "Схоже, %(name)s ще не опублікував жодного допису!",
+        "user_hasnt_started_bloggin_yet":
+            "Схоже, %(name)s ще не почав вести блог!",
+        "user_hasnt_followed_anything_yet":
+            "Схоже, %(name)s ще не стежить ні за ким! Якщо %(name)s нещодавно додав нових користувачів для підписки, їх персоналізована стрічка заповниться, щойно стане доступним новий вміст.",
+        "user_hasnt_had_any_replies_yet":
+            "%(name)s ще не отримав жодної відповіді",
+        "user_hasnt_had_any_notifications_yet":
+            "%(name)s ще не отримав сповіщень",
+        "looks_like_you_havent_posted_anything_yet":
+            "Схоже, ви ще нічого не опублікували.",
+        "create_a_post": "Створити допис",
+        "explore_trending_articles": "Досліджуйте популярні статті",
+        "read_the_quick_start_guide":
+            "Прочитайте Короткий посібник із початку роботи",
+        "browse_the_faq": "Перегляньте FAQ",
+        "followers": "Підписники",
+        "this_is_users_reputations_score_it_is_based_on_history_of_votes":
+            "Це рейтинг репутації %(name)s.\n\nОцінка репутації базується на історії голосів, отриманих обліковим записом, і використовується, щоб приховати вміст низької якості.",
+        "follower_count": {
+            "zero": "Немає підписників",
+            "one": "1 підписник",
+            "other": "%(count)s підписників"
+        },
+        "followed_count": {
+            "zero": "Ні за ким не стежить",
+            "one": "стежить за 1",
+            "other": "стежить за %(count)s"
+        },
+        "post_count": {
+            "zero": "Немає дописів",
+            "one": "1 допис",
+            "other": "%(count)s дописів"
+        },
+        "hide_resteems": "Приховати рестіми",
+        "show_all": "Показати все"
+    },
+    "post_jsx": {
+        "now_showing_comments_with_low_ratings":
+            "Зараз показано коментарі з низькими оцінками",
+        "sort_order": "Сортувати",
+        "comments_were_hidden_due_to_low_ratings":
+            "Коментарі були приховані через низький рейтинг",
+        "comment_sort_order": {
+            "trending": "В тренді",
+            "votes": "Голосів",
+            "age": "Вік",
+            "reputation": "Репутація"
+        }
+    },
+    "voting_jsx": {
+        "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
+            "Позначення публікації може призвести до скасування нагород і зробити цей матеріал менш помітним. Деякі поширені причини для позначення",
+        "disagreement_on_rewards": "Розбіжності щодо винагород",
+        "fraud_or_plagiarism": "Шахрайство або плагіат",
+        "hate_speech_or_internet_trolling":
+            "Мова ненависті чи інтернет-тролінг",
+        "intentional_miss_categorized_content_or_spam":
+            "Навмисно неправильно класифікований вміст або спам",
+        "pending_payout": "Очікувана виплата: $%(value)s",
+        "payout_declined": "Виплату відхилено",
+        "max_accepted_payout": "Максимальна прийнята виплата: $%(value)s",
+        "promotion_cost": "Вартість просування $%(value)s",
+        "past_payouts": "Минулі виплати $%(value)s",
+        "past_payouts_author": " - Авторські $%(value)s",
+        "past_payouts_curators": " - Кураториські $%(value)s",
+        "removing_your_vote": "Вилучення вашого голосу",
+        "removing_your_vote_will_reset_curation_rewards_for_this_post":
+            "Вилучення вашого голосу скасує ваші винагороди за кураторство для цієї публікації",
+        "changing_to_an_upvote": "Зміна на голосування за",
+        "changing_to_an_upvote_will_reset_curation_rewards_for_this_post":
+            "Зміна на голосування «за» скине ваші винагороди за кураторство для цієї публікації",
+        "changing_to_a_downvote": "Перехід на голосування проти",
+        "changing_to_a_downvote_will_reset_curation_rewards_for_this_post":
+            "Перехід на голосування проти скасує ваші винагороди за кураторство для цієї публікації",
+        "confirm_flag": "Підтвердити позначку",
+        "and_more": "і ще %(count)s",
+        "votes_plural": {
+            "one": "%(count)s голосів",
+            "other": "%(count)s голосів"
+        },
+        "must_reached_minimum_payout":
+            "(для виплати сума має досягати 0,02 дол)",
+        "payout": "Виплата",
+        "breakdown": "Розподіл"
+    },
+    "votesandcomments_jsx": {
+        "no_responses_yet_click_to_respond":
+            "Відповідей ще немає. Натисніть, щоб відповісти.",
+        "response_count_tooltip": {
+            "zero": "немає відповідей. Натисніть, щоб відповісти.",
+            "one": "1 відповідь. Натисніть, щоб відповісти.",
+            "other": "%(count)s відповідей. Натисніть, щоб відповісти."
+        },
+        "vote_count": {
+            "zero": "немає голосів",
+            "one": "1 голос",
+            "other": "%(count)s голосів"
+        }
+    },
+    "userkeys_jsx": {
+        "public": "Публічний",
+        "private": "Приватний",
+        "public_something_key": "Публічний ключ %(key)s",
+        "private_something_key": "Приватний ключ %(key)s",
+        "posting_key_is_required_it_should_be_different":
+            "Ключ для публікування (posting key) використовується для публікування дописів і голосування. Він має відрізнятися від активного ключа та ключа власника.",
+        "the_active_key_is_used_to_make_transfers_and_place_orders":
+            "Активний ключ використовується для здійснення переказів і розміщення замовлень на внутрішньому ринку.",
+        "the_owner_key_is_required_to_change_other_keys":
+            "Ключ власника є головним ключем облікового запису, і він потрібен для зміни інших ключів.",
+        "the_private_key_or_password_should_be_kept_offline":
+            "Приватний ключ або пароль для ключа власника слід зберігати якомога офлайн.",
+        "the_memo_key_is_used_to_create_and_read_memos":
+            "Ключ memo використовується для створення та читання нотаток."
+    },
+    "suggestpassword_jsx": {
+        "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location":
+            "%(APP_NAME)s не може відновити паролі. Зберігайте цю сторінку в безпечному місці, наприклад у вогнетривкому сейфі чи коробці.",
+        "APP_NAME_password_backup": "Резервна копія пароля %(APP_NAME)s",
+        "APP_NAME_password_backup_required":
+            "Резервна копія пароля %(APP_NAME)s (обов’язково)",
+        "after_printing_write_down_your_user_name":
+            "Після друку запишіть своє ім’я користувача"
+    },
+    "converttosteem_jsx": {
+        "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
+            "Ваші наявні %(DEBT_TOKEN)s є ліквідними та підлягають передачі. Замість цього ви можете торгувати %(DEBT_TOKEN)s безпосередньо на цьому сайті за %(link)s або перейти на зовнішній ринок.",
+        "this_is_a_price_feed_conversion":
+            "Це перетворення каналу цін. 3,5-денна затримка необхідна, щоб запобігти зловживанню, пов’язаному з перерахуванням середньої ціни.",
+        "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
+        "DEBT_TOKEN_will_be_unavailable":
+            "Ця дія відбудеться через 3,5 дні і не може бути скасована. Ці %(DEBT_TOKEN)s негайно стануть недоступними."
+    },
+    "tips_js": {
+        "liquid_token":
+            "Токени, які можна надсилати куди завгодно та будь-коли.<br/>%(LIQUID_TOKEN)s можна конвертувати в %(VESTING_TOKEN)s у процесі, що називається powerg up.",
+        "influence_token":
+            "Токени впливу, які дають вам більше контролю над виплатами публікацій і дозволяють заробляти на винагородах за кураторство.",
+        "estimated_value":
+            "Очікувана вартість базується на середній вартості %(LIQUID_TOKEN)s у доларах США.",
+        "non_transferable":
+            "%(VESTING_TOKEN)s не підлягає передачі та потребує 3 місяців (13 платежів), щоб конвертувати назад у %(LIQUID_TOKEN)s.",
+        "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
+            "Перетворений %(VESTING_TOKEN)s можна надіслати собі чи комусь іншому, але не можна перевести знову без конвертації назад у %(LIQUID_TOKEN)s.",
+        "part_of_your_steem_power_is_currently_delegated":
+            "Частина STEEM POWER %(user_name)s наразі делегована. Делегування надається для впливу або допомоги новим користувачам виконувати дії на steemit. Сума делегування може коливатися."
+    },
+    "promote_post_jsx": {
+        "promote_post": "Просувати допис",
+        "spend_your_DEBT_TOKEN_to_advertise_this_post":
+            "Витратьте свої %(DEBT_TOKEN)s на рекламу цієї публікації в розділі вмісту, що просувається",
+        "you_successfully_promoted_this_post": "Ви успішно просунули цей допис",
+        "this_post_was_hidden_due_to_low_ratings":
+            "Цей допис був прихований через низькі оцінки"
+    },
+    "about_jsx": {
+        "about_app": "Про %(APP_NAME)s",
+        "about_app_details":
+            "%(APP_NAME)s – це платформа соціальних мереж, де кожен отримує гроші за створення та курування вмісту. Вона використовує надійну систему цифрових балів під назвою Steem, яка підтримує реальну цінність цифрових винагород за допомогою визначення ринкової ціни та ліквідності.",
+        "learn_more_at_app_url": "Дізнайтеся більше на %(APP_URL)s",
+        "resources": "Ресурси"
+    },
+    "markdownviewer_jsx": {
+        "images_were_hidden_due_to_low_ratings":
+            "Зображення були приховані через низькі оцінки."
+    },
+    "postsummary_jsx": {
+        "resteemed": "рестімнуто",
+        "resteemed_by": "Рестімнуто ",
+        "reveal_it": "Розкрийте цей допис",
+        "adjust_your": "відкоригуйте свій",
+        "display_preferences": "відображення параметрів",
+        "create_an_account": "створити обліковий запис",
+        "to_save_your_preferences": "щоб зберегти ваші налаштування"
+    },
+    "posts_index": {
+        "empty_feed_1": "Схоже, ви ще ні на кого не підписалися",
+        "empty_feed_2":
+            "Якщо ви нещодавно додали нових користувачів для підписки, ваша персоналізована стрічка заповниться, щойно з’явиться новий вміст",
+        "empty_feed_3": "Досліджуйте трендові статті",
+        "empty_feed_4": "Прочитайте короткий посібник",
+        "empty_feed_5": "Перегляньте FAQ",
+        "my_feed": "Моя стрічка",
+        "accountnames_feed": "%(account_name)s's стрічка"
+    },
+    "explorepost_jsx": {
+        "copied": "Скопійовано успішно",
+        "copy": "КОПІЮВАТИ",
+        "alternative_sources": "Альтернативні джерела"
+    },
+    "header_jsx": {
+        "home": "додому",
+        "create_a_post": "Створити допис",
+        "change_account_password": "Змінити пароль облікового запису",
+        "create_account": "Створити обліковий запис",
+        "stolen_account_recovery": "Відновлення вкраденого облікового запису",
+        "people_following": "Користувачі, які стежать за %(username)s",
+        "people_followed_by": "Люди, за якими стежить %(username)s",
+        "curation_rewards_by": "Кураційні винагороди від %(username)s",
+        "author_rewards_by": "Авторські винагороди %(username)s",
+        "replies_to": "Відповіді %(username)s",
+        "posts_by": "Дописи %(username)s",
+        "comments_by": "Коментарі від %(username)s"
+    },
+    "loginform_jsx": {
+        "you_need_a_private_password_or_key":
+            "Вам потрібен приватний пароль або ключ (не відкритий (публічний) ключ)",
+        "cryptography_test_failed": "Криптографічний тест не вдався",
+        "unable_to_log_you_in":
+            "Ми не зможемо увійти за допомогою цього браузера.",
+        "the_latest_versions_of": "Останні версії ",
+        "are_well_tested_and_known_to_work_with":
+            "добре перевірені та, як відомо, працюють із %(APP_URL)s.",
+        "due_to_server_maintenance":
+            "Через технічне обслуговування сервера ми працюємо в режимі лише для читання. Просимо вибачення за незручності.",
+        "login_to_vote": "Увійдіть, щоб проголосувати",
+        "login_to_post": "Увійдіть, щоб опублікувати допис",
+        "login_to_comment": "Увійдіть, щоб коментувати",
+        "login_to_follow_users": "Увійдіть, щоб стежити за користувачами",
+        "login_to_reblog": "Увійдіть щоб поширювати дописи",
+        "posting": "Публікування дописів",
+        "active_or_owner": "Активний або власника",
+        "this_password_is_bound_to_your_account_owner_key":
+            "Цей пароль прив’язаний до ключа власника вашого облікового запису, і його не можна використовувати для входу на цей сайт.",
+        "however_you_can_use_it_to":
+            "Однак ви можете використовувати його для ",
+        "update_your_password": "оновлення свого паролю",
+        "to_obtain_a_more_secure_set_of_keys":
+            "щоб отримати більш безпечний набір ключів.",
+        "this_password_is_bound_to_your_account_active_key":
+            "Цей пароль прив’язаний до активного ключа вашого облікового запису, і його не можна використовувати для входу на цю сторінку.",
+        "you_may_use_this_active_key_on_other_more":
+            "Ви можете використовувати цей активний ключ на інших більш безпечних сторінках, таких як сторінки Wallet або Market.",
+        "you_account_has_been_successfully_created":
+            "Ваш обліковий запис успішно створено!",
+        "you_account_has_been_successfully_recovered":
+            "Ваш обліковий запис успішно відновлено!",
+        "password_update_succes": "Пароль для %(accountName)s успішно оновлено",
+        "password_info":
+            "Цей пароль або приватний ключ введено неправильно. Ймовірно ви його друкували вручну або ж це помилка введення даних. Підказка: пароль або закритий ключ, згенерований Steemit, ніколи не міститиме символи 0 (нуль), O (велика o), I (велика i) і l (нижній регістр L).",
+        "enter_your_username": "Введіть своє ім'я користувача",
+        "password_or_wif": "Пароль або WIF",
+        "this_operation_requires_your_key_or_master_password":
+            "Для цієї операції потрібен ключ %(authType)s або головний пароль.",
+        "keep_me_logged_in": "Залишити мене в системі",
+        "amazing_community": "дивовижна спільнота",
+        "to_comment_and_reward_others":
+            " коментувати та винагороджувати інших.",
+        "signup_button": "Зареєструйтеся зараз, щоб заробляти ",
+        "signup_button_emphasis": "БЕЗКОШТОВНИЙ STEEM!",
+        "sign_up_get_steem": "Зареєструватися. Отримайте STEEM!",
+        "returning_users": "Користувачі, що повернулися: ",
+        "login_warning_title":
+            "Вхід за допомогою ключа без права публікації (non-posting key)",
+        "login_warning_body":
+            "Ви намагаєтеся використати ключ із більшою кількістю дозволів, ніж потрібно для щоденного використання Steemit.com. Оскільки ключі та паролі мають більше шансів бути зламанити, коли вони частіше використовуються, наполегливо рекомендуємо використовувати для входу лише свій ключ публікації (posting key).",
+        "continue_anyway": "Все одно продовжити",
+        "login_warning_link_text":
+            "Відкрийте мій гаманець Steemit, щоб отримати доступ і переглянути мій ключ публікації (posting key)",
+        "join_our": "Приєднуйтесь до нашої",
+        "sign_transfer": "Підпишіть, щоб завершити передачу",
+        "use_keychain": "Використовуйте додаток keychain",
+        "not_a_steemit_user": "Ви не користувач Steemit?",
+        "free_register": "Безкоштовна реєстрація",
+        "there_is_no_private_key_in_browser_cache":
+            "У кеші браузера немає приватного ключа."
+    },
+    "chainvalidation_js": {
+        "account_name_should_not_be_empty":
+            "Назва облікового запису не повинна бути пустою.",
+        "account_name_should_be_longer":
+            "Назва облікового запису має бути довшою.",
+        "account_name_should_be_shorter":
+            "Назва облікового запису має бути коротшою.",
+        "each_account_segment_should_start_with_a_letter":
+            "Кожен сегмент облікового запису повинен починатися з літери.",
+        "each_account_segment_should_have_only_letters_digits_or_dashes":
+            "Кожен сегмент облікового запису має містити лише літери, цифри або тире.",
+        "each_account_segment_should_have_only_one_dash_in_a_row":
+            "Кожен сегмент облікового запису повинен мати лише одну риску в рядку.",
+        "each_account_segment_should_end_with_a_letter_or_digit":
+            "Кожен сегмент облікового запису має закінчуватися літерою або цифрою.",
+        "each_account_segment_should_be_longer":
+            "Кожен сегмент облікового запису має бути довшим.",
+        "verified_exchange_no_memo":
+            "Ви повинні включити нотатку (memo) для переказу на біржу.",
+        "badactor":
+            "Будьте обережні, надсилаючи на цей обліковий запис. Ще раз перевірте правопис на предмет можливого фішингу.",
+        "memo_has_privatekey":
+            "Будь ласка, не вказуйте те, що виглядає як приватний ключ або пароль.",
+        "memo_is_privatekey":
+            "Не використовуйте приватні ключі в нотатках (memos).",
+        "memo_is_password": "Не використовуйте паролі в нотатках (memos)."
+    },
+    "settings_jsx": {
+        "invalid_url": "Недійсний URL",
+        "name_is_too_long": "Назва задовга",
+        "name_must_not_begin_with": "Ім'я не повинно починатися з @",
+        "about_is_too_long": "Опис занадто довгий",
+        "location_is_too_long": "Розташування задовге",
+        "website_url_is_too_long": "URL-адреса веб-сайту задовга",
+        "public_profile_settings": "Налаштування публічного профілю",
+        "preferences": "Уподобання",
+        "not_safe_for_work_nsfw_content":
+            "Небезпечний для роботи вміст (NSFW).",
+        "always_hide": "Завжди приховувати",
+        "always_warn": "Завжди попереджати",
+        "always_show": "Завжди показувати",
+        "choose_default_blog_payout": "Винагороди за дописи",
+        "choose_default_comment_payout": "Винагороди за коментарі",
+        "muted_users": "Приховані користувачі",
+        "update": "Оновити",
+        "upload_image": "Завантажити зображення",
+        "uploading_image": "Завантаження зображення",
+        "profile_image_url": "URL-адреса зображення профілю",
+        "cover_image_url": "URL-адреса зображення обкладинки",
+        "profile_name": "Відображуване ім'я",
+        "profile_about": "Про себе",
+        "profile_location": "Розташування",
+        "profile_website": "Веб-сайт",
+        "saved": "Збережено!",
+        "rpc_title": "Список вузлів RPC",
+        "rpc_select": "Виберіть вузол RPC",
+        "selected_rpc": "Вибраний вузол RPC : %(rpc)s"
+    },
+    "transfer_jsx": {
+        "amount_is_in_form": "Сума представлена ​​у вигляді 99999.999",
+        "insufficient_funds": "Недостатньо коштів",
+        "use_only_3_digits_of_precison":
+            "Використовуйте лише з точнісю до 3 цифр",
+        "send_to_account": "Надіслати обліковому запису",
+        "asset": "Актив",
+        "this_memo_is_private": "Ця нотатка (memo) є приватною",
+        "this_memo_is_public": "Ця пнотатка (memo) є публічноюю",
+        "convert_to_VESTING_TOKEN": "Конвертувати в %(VESTING_TOKEN)s",
+        "balance_subject_to_3_day_withdraw_waiting_period":
+            "На залишки коштів поширюється 3-денний період очікування на виведення.",
+        "move_funds_to_another_account":
+            "Переведіть кошти на інший обліковий запис Steem.",
+        "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
+            "Захистіть кошти, вимагаючи 3-денного періоду очікування виводуя.",
+        "withdraw_funds_after_the_required_3_day_waiting_period":
+            "Кошти виводяться після необхідного 3-денного періоду очікування.",
+        "from": "Від",
+        "to": "До",
+        "asset_currently_collecting":
+            "%(asset)s зараз отримує %(interest)s%% APR.",
+        "beware_of_spam_and_phishing_links":
+            "Остерігайтеся спаму та фішингових посилань у нотатках до переказу. Не відкривайте посилання від користувачів, яким ви не довіряєте. Не надавайте свої особисті ключі стороннім веб-сайтам.",
+        "transactions_make_take_a_few_minutes":
+            "Транзакції не відображатимуться, доки вони не будуть підтверджені в блокчейні, що може зайняти кілька хвилин.",
+        "autocomplete_previous_transfers": "попередні перекази",
+        "autocomplete_user_following": "ви підписані",
+        "confirm_transfer": "Переказати %(суму)s від %(from)s до %(to)s?"
+    },
+    "userwallet_jsx": {
+        "transfer": "Переказати",
+        "conversion_complete_tip": "Буде здійснено %(date)s",
+        "in_conversion": "%(amount)s в перерахунку",
+        "transfer_to_savings": "Переказати на заощадження",
+        "power_up": "Power Up",
+        "power_down": "Power Down",
+        "market": "Ринок",
+        "convert_to_LIQUID_TOKEN": "Конвертувати в %(LIQUID_TOKEN)s",
+        "withdraw_LIQUID_TOKEN": "Вивести %(LIQUID_TOKEN)s",
+        "withdraw_DEBT_TOKENS": "Вивести %(DEBT_TOKENS)s",
+        "tokens_worth_about_1_of_LIQUID_TICKER":
+            "Токени вартістю близько $1,00 %(LIQUID_TICKER)s, зараз отримують %(sbdInterest)s%% APR.",
+        "tradeable_tokens_transferred":
+            "Токени, які можна переказувати будь-куди в будь-який час.",
+        "savings": "ЗАОЩАДЖЕННЯ",
+        "estimated_account_value": "Орієнтовна вартість облікового запису",
+        "next_power_down_is_scheduled_to_happen":
+            "Заплановано наступний power down",
+        "transfers_are_temporary_disabled": "Трансфери тимчасово відключені.",
+        "history": "ІСТОРІЯ",
+        "redeem_rewards": "Прийняти винагороди (перевести на баланс)",
+        "buy_steem_or_steem_power": "Купити STEEM або STEEM POWER"
+    },
+    "checkloginowner_jsx": {
+        "your_password_permissions_were_reduced":
+            "Ваші дозволи пароля було зменшено",
+        "if_you_did_not_make_this_change":
+            "Якщо ви не вносили цю зміну, будь ласка",
+        "ownership_changed_on": "Власника змінено ",
+        "deadline_for_recovery_is": "Кінцевий термін відновлення",
+        "i_understand_dont_show_again": "Я розумію, більше не показувати"
+    },
+    "termsagree_jsx": {
+        "please_review": "Перегляньте наші умови, щоб продовжити",
+        "hi_user": "Привіт %(username)s,",
+        "blurb":
+            "Наші Умови обслуговування встановлюють правила та рекомендації, які ви повинні прийняти та дотримуватися, щоб використовувати Steemit, а наша Політика конфіденційності пояснює тип інформації, яку ми збираємо, і що ми з нею робимо. Не хвилюйтеся, ми нікому не продаємо ваші дані. Ми використовуємо їх, щоб відповідати юридичним вимогам і навчитися покращувати Steemit.",
+        "i_agree_to_steemits": "Я погоджуюся з",
+        "terms_of_service": "умовами надання послуг Steemit",
+        "privacy_policy": "політикою конфіденційності Steemit",
+        "continue": "Продовжити",
+        "cancel": "Скасувати"
+    },
+    "confirmtransactionform_jsx": {
+        "confirm": "Підтвердити %(transactionType)s"
+    },
+    "modals_jsx": {
+        "your_transaction_failed": "Не вдалося обробити вашу транзакцію",
+        "out_of_bandwidth_title": "Чому? У вас закінчилися Ресурсні кредити",
+        "out_of_bandwidth_reason":
+            "Такі дії, як публікація та голосування, використовують обчислювальні ресурси, завдаючи реальних витрат членам спільноти, які керують блокчейном Steem для всіх.",
+        "out_of_bandwidth_reason_2":
+            "Щоб забезпечити безкоштовність, Steem розумно розподіляє Ресурсні кредити кожному користувачеві на основі їхньої кількості Steem Power, які можна використовувати для проведення обмеженої кількості небезкоштовних транзакцій. Коли у користувача закінчуються кредитні ресурси, йому доведеться або дочекатися, поки вони поповняться, або придбати додаткову Steem Power. Ця система визначає пріоритетність дій хороших членів спільноти, одночасно обмежуючи спам.",
+        "out_of_bandwidth_option_title": "Щоб продовжити взаємодію на Steemit:",
+        "out_of_bandwidth_option_1": "Купуйте та утримуйте більше Steem Power",
+        "out_of_bandwidth_option_2":
+            "Зачекайте, поки ваші Ресурсні кредити поповняться",
+        "out_of_bandwidth_option_3":
+            "Зачекайте, поки використання мережі зменшиться",
+        "out_of_bandwidth_option_4": "Power up більше Steem"
+    },
+    "sanitizedlink_jsx": {
+        "phishylink_caution": "Посилання приховано; спроба фішингу",
+        "phishylink_reveal": "показати посилання"
+    },
+    "notificationslist_jsx": {
+        "mark_all_as_read": "Позначити все як прочитане",
+        "load_more": "Завантажити більше...",
+        "all": "Все",
+        "replies": "Відповіді",
+        "follows": "Підписки",
+        "resteems": "Рестіми",
+        "upvotes": "Голоси за",
+        "mentions": "Згадки"
+    },
+    "tron_jsx": {
+        "content0":
+            "Використовуючи TRx, проголосуйте за вузол tron ​​і приєднайтеся до будівництва TRON ECOSYSTEM, де ви можете отримати не більше восьми відсотків прибутку",
+        "content1":
+            "Заморозьте TRX перед голосуванням, щоб отримати право голосу.",
+        "content2": "Виконайте наступне:",
+        "step1":
+            "Крок 1: натисніть кнопку \"Голосувати\", яка перенаправить на сторінку голосування Tron scan",
+        "step2":
+            "Крок 2: натисніть \"пов'язати гаманець\", виберіть \"імпорт\"",
+        "step3":
+            "Step3: Після завершення введення приватного ключа TRON натисніть кнопку \"Увійти\". ",
+        "step4":
+            "Крок 4: натисніть кнопку \"Голосувати\" та дотримуйтесь інструкцій",
+        "vote_button": "голосуйте",
+        "step": "крок",
+        "tron_tx_history": "Історія транзакцій TRON >",
+        "update_tron_account": "ОНОВИТИ ОБЛІКОВИЙ ЗАПИС TRON",
+        "update_tron_content":
+            "Для оновлення облікового запису TRON, підтвердьте наступну інформацію, щоб уникнути потенційного ризику. \n Збережіть приватний ключ TRON локально або імпортуйте цей обліковий запис TRON в інший гаманець, що підтримує TRON. Або ж переведіть актив tron ​​у інший обліковий запис tron. ",
+        "update_button": "ОНОВИТИ ТА ЗАВАНТАЖИТИ",
+        "update_success": "ОНОВЛЕНО УСПІШНО",
+        "update_success_content":
+            " Ви успішно оновили свій обліковий запис TRON. Якщо не вдається завантажити, будь ласка",
+        "update_success_click": "натисніть завантажити",
+        "update_success_content2":
+            "Будь ласка, зберігайте його в безпеці, інакше ми не зможемо відновити його для вас. Будь ласка, не діліться файлом з кимось.",
+        "safe_save_button": "PDF надійно збережено",
+        "create_tron_account":
+            "Створіть обліковий запис TRON і приймайте винагороди",
+        "create_tron_account_content":
+            "Steemit роздасть вам додаткові TRX як винагороду. Цей рахунок призначений для отримання таких винагород.",
+        "create_tron_account_content1":
+            "Система автоматично створить для вас обліковий запис TRON безкоштовно.",
+        "create_tron_account_content2":
+            "Чи згодні ви створити обліковий запис TRON і завантажити PDF-файл із вашим публічним і приватним ключами TRON?",
+        "create_tron_agree": "Погодитися",
+        "create_tron_success": "Ваш обліковий запис створено",
+        "create_tron_success_content": "Ви створили обліковий запис TRON.",
+        "create_tron_success_content2": "Якщо файл не було завантажено, ",
+        "create_tron_success_content3":
+            " щоб завантажити PDF-файл із вашим публічним і приватним ключами TRON."
+    },
+    "tron_err_msg": {
+        "data_is_invalid":
+            "Дані недійсні. Перевірте, чи ви використовуєте правильний приватний ключ."
+    },
+    "user_roles": {
+        "role_permissions": "Права Ролей",
+        "owner": "Власник (OWNER)",
+        "owner_description": "призначати адміністраторів",
+        "admin": "Адміністратор (ADMIN)",
+        "admin_description": "редагувати налаштування, призначати модераторів",
+        "moderator": "Модератор (MOD)",
+        "moderator_description":
+            "вимкнення звуку, фіксація, встановлення титулів користувачів",
+        "member": "Член",
+        "member_description": "включений у команду лідерів",
+        "guest": "Гість",
+        "guest_description":
+            "за замовчуванням; може публікувати та коментувати",
+        "muted": "Вимкнено",
+        "muted_description": "нові повідомлення автоматично вимикаються",
+        "invalid_username": "Будь ласка, введіть дійсне ім'я користувача.",
+        "invalid_character": "Будь ласка, введіть ім'я користувача без \"@\".",
+        "invalid_role": "Користувач вже має цю роль."
+    }
+}

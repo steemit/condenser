@@ -10,8 +10,9 @@ import it from 'react-intl/locale-data/it';
 import ko from 'react-intl/locale-data/ko';
 import zh from 'react-intl/locale-data/zh';
 import pl from 'react-intl/locale-data/pl';
+import uk from 'react-intl/locale-data/uk';
 
-addLocaleData([...en, ...es, ...ru, ...fr, ...it, ...ko, ...zh, ...pl]);
+addLocaleData([...en, ...es, ...ru, ...fr, ...it, ...ko, ...zh, ...pl, ...uk]);
 
 tt.registerTranslations('en', require('counterpart/locales/en'));
 tt.registerTranslations('en', require('app/locales/en.json'));
@@ -37,13 +38,16 @@ tt.registerTranslations('zh', require('app/locales/zh.json'));
 tt.registerTranslations('pl', require('app/locales/counterpart/pl'));
 tt.registerTranslations('pl', require('app/locales/pl.json'));
 
+tt.registerTranslations('uk', require('app/locales/counterpart/uk'));
+tt.registerTranslations('uk', require('app/locales/uk.json'));
+
 const getMessages = (locale) => {
     tt.setLocale(locale)
     return tt('g')
 }
 
 setIntlConfig({
-    locales: ['en', 'es', 'ru', 'fr', 'it', 'ko', 'zh', 'pl'],
+    locales: ['en', 'es', 'ru', 'fr', 'it', 'ko', 'zh', 'pl', 'uk'],
     defaultLocale: 'en',
     getMessages
 });

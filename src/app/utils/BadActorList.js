@@ -746,6 +746,7 @@ smatrsteem
 smmartsteem
 smratsteem
 smrtsteem
+spaminator
 ssmartsteem
 ssteemit2
 steampunks
@@ -754,6 +755,7 @@ steeimt
 steeimt2
 steeit
 steeit2
+steemcleaners
 steemi2
 steemi2t
 steemitpay

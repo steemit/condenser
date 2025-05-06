@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import Modal from 'react-overlays/lib/Modal';
 import Transition from 'react-overlays/lib/Transition';
 
-const Reveal = ({ children, onHide, show }) => {
+const Reveal = ({
+    children,
+    onHide,
+    show,
+    backdropClass = 'reveal-overlay',
+}) => {
     const modalStyle = {
         bottom: 0,
         left: 0,
@@ -21,7 +26,7 @@ const Reveal = ({ children, onHide, show }) => {
             transition={Transition}
             onHide={onHide}
             show={show}
-            backdropClassName={'reveal-overlay'}
+            backdropClassName={backdropClass}
             backdropStyle={{ display: 'block' }}
             style={modalStyle}
         >

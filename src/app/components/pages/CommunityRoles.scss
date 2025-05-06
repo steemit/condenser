@@ -6,12 +6,3 @@
 .community-user--role {
   cursor: pointer;
 }
-
-a.community--subscribe:hover {
-    &.hollow {
-        span {display: none}
-        &::after {
-            content: 'Leave';
-        }
-    }
-}

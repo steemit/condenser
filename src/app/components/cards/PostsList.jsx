@@ -260,6 +260,7 @@ class PostsList extends React.Component {
                                 ? 'isPinned'
                                 : '') +
                             (hideResteems &&
+                            order === 'feed' &&
                             post.get('reblogged_by') &&
                             !following.includes(post.get('author'))
                                 ? ' hideResteems'

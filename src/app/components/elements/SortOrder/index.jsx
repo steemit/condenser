@@ -52,7 +52,7 @@ const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
             });
 
             out.push({
-                label: 'Muted',
+                label: tt('g.muted'),
                 value: `/muted${tag}`,
             });
         }

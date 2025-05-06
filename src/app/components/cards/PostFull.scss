@@ -27,6 +27,10 @@
 .PostFull__time_author_category {
   font-weight: 400;
   border-right: none!important;
+  display: block;
+  @include MQ(M) {
+    display: inline;
+  }
   @include themify($themes) {
     border-right: themed('border');
     color: themed('textColorSecondary');
@@ -240,5 +244,106 @@ input.share-box {
   input.share-box {
     height: 2.8em;
     font-size: .8em;
+  }
+}
+
+.modelImageLoading {
+  background-image: url('../images/loading.gif');
+  background-position: center 1em;
+  background-repeat: no-repeat;
+  background-size: 60px 60px;
+}
+
+.reveal:has(div.modalImageContainer) {
+  height: auto;
+  min-height: unset;
+  width: auto;
+  display: inline-block;
+  text-align: center;
+  overflow: hidden;
+  top: 1em;
+  padding: 0;
+  @include MQ(M) {
+    width: var(--onload-width, 0);
+    max-width: unset;
+    height: var(--onload-height);
+  }
+}
+
+.modalImageContainer {
+  position: relative;
+  max-height: 70vh;
+  overflow: auto;
+  display: inline-block;
+  text-align: center;
+  @include MQ(M) {
+    max-height: unset;
+    overflow: hidden;
+    height: 100%;
+  }
+  width: 100%;
+}
+
+.modalImageContainer:has(.modalImage.zoomed) {
+  @include MQ(M) {
+    overflow: scroll;
+    max-height: calc(var(--original-height) * 1px);
+  }
+}
+
+.modalImage {
+  user-select: none;
+  width: 100%;
+  max-width: unset;
+  display: block;
+  margin: 0 auto;
+}
+
+.modalImage.zoomed {
+  width: calc(var(--original-width) * var(--zoom-level, 1) * 1px);
+  @include MQ(M) {
+    height: calc(var(--original-height) * var(--zoom-level, 1) * 1px);
+  }
+}
+
+.modalImageOptions {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  padding: 0em 1em;
+  padding-top: 7px;
+  @include MQ(M) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: 0.5em;
+  }
+}
+
+.modalImageOptions .modalImageZoomIn:hover,
+.modalImageOptions .modalImageZoomOut:hover,
+.modalImageOptions .modalImageResetZoom:hover {
+  @include themify($themes) {
+      color: themed('textColorAccent');
+  }
+}
+
+.modalImageOptions .modalImageZoomIn .Icon > svg,
+.modalImageOptions .modalImageZoomOut .Icon > svg,
+.modalImageOptions .modalImageResetZoom .Icon > svg {
+  cursor: pointer;
+  transition: fill 0.2s ease-in-out;
+  border-radius: 50%;
+  padding: 0.3rem;
+  @include themify($themes) {
+    background-color: themed('modalButtonDefault');
+    fill: themed('modalButtonIcon');
+  } 
+  &:hover, &:focus {
+    @include themify($themes) {
+      background-color: themed('modalButtonHover');
+      fill: themed('modalButtonIcon');  
+    } 
   }
 }

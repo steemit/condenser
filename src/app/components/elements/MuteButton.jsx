@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import tt from 'counterpart';
 
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -46,7 +47,7 @@ class MuteButton extends React.Component {
         return (
             <span>
                 <a onClick={() => this.showDialog()}>
-                    {isMuted ? 'Unmute' : 'Mute'}
+                    {isMuted ? tt('g.unmute') : tt('g.mute')}
                 </a>
                 {this.state.showDialog && (
                     <Reveal onHide={() => null} show>

@@ -276,9 +276,8 @@ storing, outside of the Services, a backup of any Account and Private Key that
 you maintain in your Account.
 
 12.2. If you do not maintain a backup of your Account data outside of the
-Services, you will be may not be able to access STEEM, Steem Dollars and Steem
-Power associated with any Account maintained in your Account if we discontinue
-or deprecate the Services.
+Services, you may not be able to access STEEM, Steem Dollars and Steem
+Power associated with your Account if we discontinue or deprecate the Services.
 
 ## 13. Suspension or Termination of Service.
 

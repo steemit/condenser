@@ -60,13 +60,14 @@ const SidePanel = ({
                         className="language"
                     >
                         <option value="en">English</option>
-                        <option value="es">Spanish Español</option>
-                        <option value="ru">Russian русский</option>
                         <option value="fr">French français</option>
                         <option value="it">Italian italiano</option>
-                        <option value="ko">Korean 한국어</option>
                         <option value="ja">Japanese 日本語</option>
+                        <option value="ko">Korean 한국어</option>
                         <option value="pl">Polish</option>
+                        <option value="ru">Russian русский</option>
+                        <option value="es">Spanish Español</option>
+                        <option value="uk">Ukranian Українська</option>
                     </select>
                 </li>
             );

@@ -163,7 +163,7 @@ class PostsIndex extends React.Component {
                 page_title = tt('g.my_friends');
             }
         } else if (category === 'my') {
-            page_title = 'My communities';
+            page_title = tt('g.my_communities');
         } else if (community) {
             page_title = community.get('title');
         } else if (category) {

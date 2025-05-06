@@ -8,17 +8,18 @@ import Unicode from 'app/utils/Unicode';
 import tt from 'counterpart';
 
 const languageOptions = [
-    { abbr: 'en', name: 'English' },
-    { abbr: 'kr', name: 'Korean' },
     { abbr: 'zh', name: 'Chinese' },
+    { abbr: 'en', name: 'English' },
+    { abbr: 'de', name: 'German' },
+    { abbr: 'it', name: 'Italian' },
+    { abbr: 'kr', name: 'Korean' },
     { abbr: 'ms', name: 'Malay' },
     { abbr: 'pl', name: 'Polish' },
     { abbr: 'pt', name: 'Portuguese' },
     { abbr: 'ru', name: 'Russian' },
-    { abbr: 'it', name: 'Italian' },
-    { abbr: 'de', name: 'German' },
     { abbr: 'es', name: 'Spanish' },
     { abbr: 'sv', name: 'Swedish' },
+    { abbr: 'uk', name: 'Ukrainian' },
 ];
 
 class CommunitySettings extends Component {
@@ -28,8 +29,8 @@ class CommunitySettings extends Component {
             title: this.props.title,
             about: this.props.about,
             settings: {
-                avatar_url: this.props.settings.avatar_url,
-                cover_url: this.props.settings.cover_url,
+                avatar_url: this.props.settings.avatar_url || '',
+                cover_url: this.props.settings.cover_url || '',
             },
             progress: {},
             is_nsfw: this.props.is_nsfw,
@@ -125,12 +126,8 @@ class CommunitySettings extends Component {
                 payload[k] = this.state[k].trim();
             } else if (k === 'settings') {
                 const settingsCopy = { ...this.state[k] };
-                if (settingsCopy.avatar_url.trim() === '') {
-                    settingsCopy.avatar_url = '';
-                }
-                if (settingsCopy.cover_url.trim() === '') {
-                    settingsCopy.cover_url = '';
-                }
+                settingsCopy.avatar_url = settingsCopy.avatar_url.trim();
+                settingsCopy.cover_url = settingsCopy.cover_url.trim();
                 payload[k] = settingsCopy;
             } else {
                 payload[k] = this.state[k];
@@ -217,7 +214,6 @@ class CommunitySettings extends Component {
                             <input
                                 type="url"
                                 name="avatar_url"
-                                value={settings.avatar_url || ''}
                                 autoComplete="off"
                                 onChange={this.onInput}
                             />
@@ -234,7 +230,6 @@ class CommunitySettings extends Component {
                         <input
                             type="url"
                             name="cover_url"
-                            value={settings.cover_url || ''}
                             autoComplete="off"
                             onChange={this.onInput}
                         />

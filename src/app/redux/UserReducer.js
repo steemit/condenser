@@ -37,6 +37,8 @@ const SHOW_POST_TEMPLETES = 'user/SHOW_POST_TEMPLETES';
 const HIDE_POST_TEMPLETES = 'user/HIDE_POST_TEMPLETES';
 const HIDE_ANNOUNCEMENT = 'user/HIDE_ANNOUNCEMENT';
 const SHOW_ANNOUNCEMENT = 'user/SHOW_ANNOUNCEMENT';
+const SHOW_IMAGE_VIEWER = 'SHOW_IMAGE_VIEWER';
+const HIDE_IMAGE_VIEWER = 'HIDE_IMAGE_VIEWER';
 
 // Saga-related
 export const UPLOAD_IMAGE = 'user/UPLOAD_IMAGE';
@@ -62,6 +64,8 @@ const defaultState = fromJS({
     maybeLoggedIn: false,
     showAnnouncement: false,
     trackingId: '',
+    show_image_viewer: false,
+    image_viewer_url: '',
 });
 
 export default function reducer(state = defaultState, action) {
@@ -267,6 +271,16 @@ export default function reducer(state = defaultState, action) {
                 sessionStorage.setItem('hideAnnouncement', 'true');
             return state.set('showAnnouncement', false);
 
+        case SHOW_IMAGE_VIEWER:
+            state = state.set('show_image_viewer', true);
+            state = state.set('image_viewer_url', payload.url);
+            return state;
+
+        case HIDE_IMAGE_VIEWER:
+            state = state.set('show_image_viewer', false);
+            state = state.set('image_viewer_url', '');
+            return state;
+
         default:
             return state;
     }
@@ -428,4 +442,12 @@ export const hideAnnouncement = () => ({
 
 export const showAnnouncement = () => ({
     type: SHOW_ANNOUNCEMENT,
+});
+export const showImageViewer = ({ url }) => ({
+    type: 'SHOW_IMAGE_VIEWER',
+    payload: { url },
+});
+
+export const hideImageViewer = () => ({
+    type: 'HIDE_IMAGE_VIEWER',
 });

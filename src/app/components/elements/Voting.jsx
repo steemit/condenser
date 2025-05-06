@@ -303,7 +303,7 @@ class Voting extends React.Component {
                     onClick={
                         enable_slider ? this.toggleWeightDown : this.voteDown
                     }
-                    title="Downvote"
+                    title={tt('g.downvote')}
                     id="downvote_button"
                     className="flag"
                 >
@@ -315,7 +315,7 @@ class Voting extends React.Component {
                 <a
                     href="#"
                     onClick={this.voteDown}
-                    title="Downvote"
+                    title={tt('g.downvote')}
                     className="flag"
                     id="revoke_downvote_button"
                 >
@@ -355,9 +355,9 @@ class Voting extends React.Component {
                                     href="#"
                                     onClick={this.voteDown}
                                     className="button outline"
-                                    title="Downvote"
+                                    title={tt('g.downvote')}
                                 >
-                                    Submit
+                                    {tt('g.submit')}
                                 </span>
                             </div>
                         </div>

@@ -12,7 +12,8 @@ class PostTemplates extends Component {
             templateList: [
                 {
                     title: 'Markdown Basic Template 01',
-                    image: `![](https://cdn.steemitimages.com/DQmYdjFdAGVTHVF2kq5uh8RFYAPJdtY7vsJzVtn6ksYEtyw/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-18%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.19.17.png)`,
+                    image:
+                        'https://cdn.steemitimages.com/DQmYdjFdAGVTHVF2kq5uh8RFYAPJdtY7vsJzVtn6ksYEtyw/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-18%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.19.17.png',
                     content: `# Main Title
 
 ## 01. Sub Title
@@ -33,7 +34,8 @@ to create a block of code
                 },
                 {
                     title: 'Markdown Basic Template 02',
-                    image: `![](https://cdn.steemitimages.com/DQmXy3EoyX2coFDF8mH5mAfwq43LhQz3anHhpa9JkArPjVU/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-18%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%204.03.18.png)`,
+                    image:
+                        'https://cdn.steemitimages.com/DQmXy3EoyX2coFDF8mH5mAfwq43LhQz3anHhpa9JkArPjVU/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-18%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%204.03.18.png',
                     content: `<center>✅https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/image%20preview.001.png✅</center>
 <center><sup>✅Description✅</sup></center>
 
@@ -52,7 +54,8 @@ to create a block of code
                 },
                 {
                     title: 'Photo Blog Template 01',
-                    image: `![](https://cdn.steemitimages.com/DQmU67mv7vkEKZBevteyMYpQRgSFdA8YS7cExLaCFc9QK2z/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-18%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.07.14.png)`,
+                    image:
+                        'https://cdn.steemitimages.com/DQmU67mv7vkEKZBevteyMYpQRgSFdA8YS7cExLaCFc9QK2z/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-18%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.07.14.png',
                     content: `<center><h2>✅Main Title✅</h2></center>
 
 <div class="pull-left">
@@ -83,7 +86,8 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
                 },
                 {
                     title: 'Photo Blog Template 02',
-                    image: `![](https://cdn.steemitimages.com/DQmavWiNcRVVpmVFZv2KrrNGc212JnQyewgzzCYPnccUjAJ/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-18%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.08.02.png)`,
+                    image:
+                        'https://cdn.steemitimages.com/DQmavWiNcRVVpmVFZv2KrrNGc212JnQyewgzzCYPnccUjAJ/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-18%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.08.02.png',
                     content: `<div class="pull-left">
 <div class="pull-left">
 ✅https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/image%20preview.001.png✅
@@ -145,8 +149,8 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
                 },
                 {
                     title: 'Photo Blog Template 03',
-                    image: `![](https://cdn.steemitimages.com/DQmUZ26QNmZGRWC1cVusKPEbwaUb68vN3165e1Wipxk3cXP/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-18%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.12.57.png)
-                    `,
+                    image:
+                        'https://cdn.steemitimages.com/DQmUZ26QNmZGRWC1cVusKPEbwaUb68vN3165e1Wipxk3cXP/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-18%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.12.57.png',
                     content: `---
 <div class=pull-left>
 <strong>✅01. SUB TITLE✅</strong>
@@ -186,14 +190,16 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
                 },
                 {
                     title: 'Table Template 01',
-                    image: `![image.png](https://cdn.steemitimages.com/DQmXnAKxeT42seqzYNqRLWwtZ78jbAcEQqBu3tyd2Avyo3i/image.png)`,
+                    image:
+                        'https://cdn.steemitimages.com/DQmXnAKxeT42seqzYNqRLWwtZ78jbAcEQqBu3tyd2Avyo3i/image.png',
                     content: `|	✅Header1✅	|	✅Header1✅	|	✅Header1✅	|
 |	------------	|	------------	|	------------	|
 |    ✅Text✅     	|     ✅Text✅     	|     ✅Text✅     	|`,
                 },
                 {
                     title: 'Table Template 02',
-                    image: `![image.png](https://cdn.steemitimages.com/DQmP48Ytssq1XN1a9Ab6UbSY8nvWHDTEjxLNaAuPMy13VY9/image.png)`,
+                    image:
+                        'https://cdn.steemitimages.com/DQmP48Ytssq1XN1a9Ab6UbSY8nvWHDTEjxLNaAuPMy13VY9/image.png',
                     content: `| ✅Header1✅ | ✅Header2✅ | ✅Header3✅ | ✅Header4✅ | ✅Header5✅ |
 |--|--:|--:|--:|--:|
 ✅Cell01✅ | ✅1112✅ | ✅1113✅ | ✅1114✅ | ✅1115✅ |
@@ -204,7 +210,8 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
                 },
                 {
                     title: 'Table Template 03',
-                    image: `![image.png](https://cdn.steemitimages.com/DQmdzz1iYUMZvp5m9qx51DEKmfim7VhbcYTzkk3Drc8atyb/image.png)`,
+                    image:
+                        'https://cdn.steemitimages.com/DQmdzz1iYUMZvp5m9qx51DEKmfim7VhbcYTzkk3Drc8atyb/image.png',
                     content: `| ✅Header1✅ | ✅Header2✅| ✅Header3✅ |
 |-|-|-|
 | ✅https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/image%20preview.001.png✅ | **✅Sub Title 01✅** | ✅Description✅      |
@@ -258,9 +265,13 @@ https://cdn.steemitimages.com/DQmdgm8o8njXdFpdDgF5kuTXjJuAhSg6uPfHgTZu3RkirBE/im
                             className="templates__content-block templates__content-block--text"
                             onClick={() => onClickContent(idx)}
                         >
-                            <MarkdownViewer
-                                text={`<center>${template.image}</center>`}
-                            />
+                            <center>
+                                <img
+                                    src={template.image}
+                                    className="postTemplateImage"
+                                    alt={`${template.title}`}
+                                />
+                            </center>
                         </div>
                     </div>
                 </div>

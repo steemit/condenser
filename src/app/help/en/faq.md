@@ -226,7 +226,7 @@ You can earn digital tokens on Steemit by:
 
 **Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of Steem Power you have.
 
-**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Huobi](https://www.huobi.pro/), [Poloniex](https://poloniex.com), [UpBit](https://upbit.com/), [probit](https://www.probit.com/), [bitribe](https://www.bitribe.com/), [GOPAX](https://www.gopax.co.kr/), [Lykke](https://www.lykke.com/).
+**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/en/trade/STEEM_USDT), [UpBit](https://upbit.com/exchange?code=CRIX.UPBIT.KRW-STEEM), [Bithumb](https://www.bithumb.com/react/trade/order/STEEM-KRW), [HTX](https://www.htx.com/trade/steem_usdt/), [Poloniex](https://poloniex.com/zh-CN/trade/STEEM_TRX), [MEXC](https://www.mexc.com/exchange/STEEM_USDT), [Gate.io](https://www.gate.io/zh/trade/STEEM_USDT), [Bingx](https://bingx.com/en/spot/STEEMUSDT/).
 
 **Vesting** - STEEM tokens that are powered up to Steem Power will earn a small amount of new tokens for holding.
 

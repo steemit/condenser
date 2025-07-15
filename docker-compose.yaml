@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  blaze-app:
+    image: node:10.0
+    container_name: blaze-app
+    working_dir: /var/app
+    volumes:
+      - .:/var/app
+      - /var/app/node_modules
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+    command: sh -c "yarn install && yarn run start"

@@ -359,20 +359,10 @@ class Header extends React.Component {
                                 <Link to={logo_link}>
                                     <SteemLogo />
                                 </Link>
+                                <a href="/@blaze.apps" style={{ color: 'blue', display: 'block',
+marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}>By blaze.apps</a>
                             </div>
-
-                            <div className="large-1 columns show-for-large large-centered Header__sort">
-                                {/*
-                                <SortOrder
-                                    sortOrder={order}
-                                    topic={category === 'feed' ? '' : category}
-                                    horizontal
-                                    pathname={pathname}
-                                />
-                                */}
-                            </div>
-
-                            <div className="small-6 medium-8 large-7 columns Header__buttons">
+                            <div className="small-6 medium-8 large-8 columns Header__buttons show-for-medium">
                                 {/*CUSTOM SEARCH*/}
                                 <span
                                     className="Header__search--desktop--new"

@@ -25,6 +25,7 @@ import tt from 'counterpart';
 import { userActionRecord } from 'app/utils/ServerApiClient';
 import PrimaryNavigation from 'app/components/cards/PrimaryNavigation';
 import SteemMarket from 'app/components/elements/SteemMarket';
+import AIPolishPopup from './AIPolishPopup'; // Import the new popup component
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 
@@ -87,10 +88,19 @@ class ReplyEditor extends React.Component {
 
     constructor(props) {
         super();
-        this.state = { progress: {}, imagesUploadCount: 0, draft_permlink: '' };
+        this.state = {
+            progress: {},
+            imagesUploadCount: 0,
+            draft_permlink: '',
+            // New state for AI Polish feature
+            showAIPolishPopup: false,
+            aiPolishedContent: '',
+            isAIPolishing: false,
+        };
         this.initForm(props);
     }
 
+    // ... (keep all existing lifecycle methods like componentWillMount, componentDidMount, etc.)
     componentWillMount() {
         const { type, formId } = this.props;
         const isEdit = type === 'edit';
@@ -595,6 +605,62 @@ class ReplyEditor extends React.Component {
         });
     };
 
+    // --- AI Polish Feature Functions ---
+
+    handlePolishWithAI = async () => {
+        const { body } = this.state;
+        if (!body.value || body.value.trim() === '') {
+            alert('Editor content is empty. Please write something to polish.');
+            return;
+        }
+
+        this.setState({ isAIPolishing: true });
+
+        try {
+            // Make the API call
+            const response = await fetch(`/LLM?body=${encodeURIComponent(body.value)}`);
+            if (!response.ok) {
+                const errorBody = await response.text();
+                throw new Error(`AI service failed with status: ${response.status}. ${errorBody}`);
+            }
+            const data = await response.json();
+            let polishedContent = data.response;
+
+            // **FIX:** Robustly remove the markdown code fences if they exist.
+            // This regex looks for ```md or ```markdown at the start and ``` at the end,
+            // and captures only the content in between.
+            const match = polishedContent.match(/^```(?:markdown|md)\n?([\s\S]*?)```$/);
+            if (match && match[1]) {
+                // If a match is found, use the captured group which is the clean content.
+                polishedContent = match[1];
+            }
+
+            this.setState({
+                aiPolishedContent: polishedContent,
+                showAIPolishPopup: true,
+            });
+        } catch (error) {
+            console.error('AI Polish Error:', error);
+            alert(`An error occurred while polishing with AI: ${error.message}`);
+        } finally {
+            this.setState({ isAIPolishing: false });
+        }
+    };
+
+    handleInsertPolishedContent = () => {
+        const { body } = this.state;
+        // Update the editor's content
+        body.props.onChange(this.state.aiPolishedContent);
+        // Close the popup
+        this.setState({ showAIPolishPopup: false, aiPolishedContent: '' });
+    };
+
+    handleCancelAIPolish = () => {
+        // Just close the popup
+        this.setState({ showAIPolishPopup: false, aiPolishedContent: '' });
+    };
+
+
     render() {
         const originalPost = {
             category: this.props.category,
@@ -626,9 +692,9 @@ class ReplyEditor extends React.Component {
             resetForm,
         } = this.state.replyForm;
         const { postError, titleWarn, rte } = this.state;
-        const { progress, noClipboardData } = this.state;
-        const disabled = submitting || !valid;
-        const loading = submitting || this.state.loading;
+        const { progress, noClipboardData, isAIPolishing } = this.state;
+        const disabled = submitting || !valid || isAIPolishing;
+        const loading = submitting || this.state.loading || isAIPolishing;
 
         const errorCallback = estr => {
             this.setState({ postError: estr, loading: false });
@@ -1008,6 +1074,19 @@ class ReplyEditor extends React.Component {
                                                         : postLabel}
                                                 </button>
                                             )}
+                                            {/* --- Updated Polish with AI Button --- */}
+                                            {!loading && isStory && (
+                                                <button
+                                                    type="button"
+                                                    className="button hollow"
+                                                    onClick={this.handlePolishWithAI}
+                                                    disabled={isAIPolishing || loading}
+                                                    tabIndex={4}
+                                                    style={{ marginLeft: '0.5rem' }}
+                                                >
+                                                    {isAIPolishing ? 'Polishing...' : 'Polish with AI ✨'}
+                                                </button>
+                                            )}
                                             {loading && (
                                                 <span>
                                                     <br />
@@ -1128,7 +1207,7 @@ class ReplyEditor extends React.Component {
                                                 <div className="float-right">
                                                     <a
                                                         target="_blank"
-                                                        href="https://guides.github.com/features/mastering-markdown/"
+                                                        href="[https://guides.github.com/features/mastering-markdown/](https://guides.github.com/features/mastering-markdown/)"
                                                         rel="noopener noreferrer"
                                                     >
                                                         {tt(
@@ -1156,6 +1235,14 @@ class ReplyEditor extends React.Component {
                             </div>
                         )}
                 </div>
+                {/* --- Render the AI Polish Popup Conditionally --- */}
+                {this.state.showAIPolishPopup && (
+                    <AIPolishPopup
+                        content={this.state.aiPolishedContent}
+                        onInsert={this.handleInsertPolishedContent}
+                        onCancel={this.handleCancelAIPolish}
+                    />
+                )}
             </div>
         );
     }
@@ -1263,25 +1350,6 @@ export default formId =>
             beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
             const steemMarketData = state.app.get('steemMarket');
 
-            // Post full
-            /*
-            const replyParams = {
-                author,
-                permlink,
-                parent_author,
-                parent_permlink,
-                category,
-                title,
-                body: post.get('body'),
-            }; */
-
-            //ownProps:
-            //  {...comment},
-            //  author, permlink,
-            //  body, title, category
-            //  parent_author, parent_permlink,
-            //  type, successCallback,
-            //  successCallBack, onCancel
             return {
                 ...ownProps,
                 type, //XX
@@ -1354,24 +1422,18 @@ export default formId =>
                 const isEdit = type === 'edit';
                 const isNew = /^submit_/.test(type);
 
-                // Wire up the current and parent props for either an Edit or a Submit (new post)
-                //'submit_story', 'submit_comment', 'edit'
                 const linkProps = isNew
                     ? {
-                          // submit new
                           parent_author: author,
                           parent_permlink: permlink,
                           author: username,
-                          // permlink,  assigned in TransactionSaga
                       }
-                    : // edit existing
-                      isEdit
+                    : isEdit
                       ? { author, permlink, parent_author, parent_permlink }
                       : null;
 
                 if (!linkProps) throw new Error('Unknown type: ' + type);
 
-                // If this is an HTML post, it MUST begin and end with the tag
                 if (isHtml && !body.match(/^<html>[\s\S]*<\/html>$/)) {
                     errorCallback(
                         'HTML posts must begin with <html> and end with </html>'
@@ -1388,7 +1450,7 @@ export default formId =>
                 allowedTags.forEach(tag => {
                     rtags.htmltags.delete(tag);
                 });
-                if (isHtml) rtags.htmltags.delete('html'); // html tag allowed only in HTML mode
+                if (isHtml) rtags.htmltags.delete('html');
                 if (rtags.htmltags.size) {
                     errorCallback(
                         'Please remove the following HTML elements from your post: ' +
@@ -1405,17 +1467,16 @@ export default formId =>
                     rtags.hashtags
                 );
 
-                // merge
                 const meta = isEdit ? jsonMetadata : {};
                 if (metaTags.size) meta.tags = metaTags.toJS();
                 else delete meta.tags;
                 if (rtags.usertags.size) meta.users = rtags.usertags;
                 else delete meta.users;
                 if (rtags.images.size)
-                    meta.image = rtags.images; // TODO: save first image
+                    meta.image = rtags.images;
                 else delete meta.image;
                 if (rtags.links.size)
-                    meta.links = rtags.links; // TODO: remove? save first?
+                    meta.links = rtags.links;
                 else delete meta.links;
 
                 meta.app = 'steemit/0.2';
@@ -1449,20 +1510,19 @@ export default formId =>
 
                 const originalBody = isEdit ? originalPost.body : null;
                 const __config = { originalBody };
-                // Avoid changing payout option during edits #735
                 if (!isEdit) {
                     switch (payoutType) {
-                        case '0%': // decline payout
+                        case '0%':
                             __config.comment_options = {
                                 max_accepted_payout: '0.000 SBD',
                             };
                             break;
-                        case '100%': // 100% steem power payout
+                        case '100%':
                             __config.comment_options = {
-                                percent_steem_dollars: 0, // 10000 === 100% (of 50%)
+                                percent_steem_dollars: 0,
                             };
                             break;
-                        default: // 50% steem power, 50% sd+steem
+                        default:
                     }
                     if (beneficiaries && beneficiaries.length > 0) {
                         if (!__config.comment_options) {
@@ -1516,3 +1576,4 @@ export default formId =>
             },
         })
     )(ReplyEditor);
+

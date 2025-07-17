@@ -1038,14 +1038,23 @@ class ReplyEditor extends React.Component {
                                                     </button>
                                                 )}
                                             {!loading && !isStory && !isEdit && (
-                                                <a
-                                                    href="#"
+                                                <button
+
+                                                    type="button"
+
+                                                    className="button hollow"
+
                                                     onClick={this.showAdvancedSettings}
-                                                    style={{ marginLeft: '1rem', verticalAlign: 'middle' }}
+
+                                                    
+
                                                 >
+
                                                     {tt('reply_editor.advanced_settings')}
-                                                </a>
-                                            )}   
+
+                                                </button>
+
+                                            )}
                                         </div>
                                         {isStory && (
                                             <div className="item">

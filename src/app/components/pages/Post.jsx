@@ -52,7 +52,15 @@ class Post extends React.Component {
 
     componentWillMount() {
         const { dis } = this.props;
-        this.props.setRouteTag(dis.get('url'));
+        try {
+            this.props.setRouteTag(dis.get('url'));
+        } catch (e) {
+            console.error(`error of dis on Post.jsx: ${e}`);
+            this.setState({
+                timeOut: true,
+            });
+            return;
+        }
         this.setState({
             showPostComments: true,
         });

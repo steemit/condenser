@@ -473,7 +473,7 @@ class Privacy extends React.Component {
                             effective upon our posting of the new terms and/or
                             upon implementation of the changes to the Site (or
                             as otherwise indicated at the time of posting). In
-                            all cases, your continued use of the the Site or
+                            all cases, your continued use of the Site or
                             Services after the posting of any modified Privacy
                             Policy indicates your acceptance of the terms of the
                             modified Privacy Policy.

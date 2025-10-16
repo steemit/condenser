@@ -3,6 +3,10 @@ import { ifHive } from 'app/utils/Community';
 import stateCleaner from 'app/redux/stateCleaner';
 import { changeRPCNodeToDefault } from 'app/utils/RPCNode';
 import xhr from 'axios/index';
+import {
+    safeConsoleTime,
+    safeConsoleTimeEnd,
+} from '../../server/utils/TimingUtils';
 
 export async function callBridge(method, params, pre = 'bridge.') {
     //console.log('call bridge');
@@ -49,12 +53,18 @@ export async function getStateAsync(url, observer, ssr = false) {
 
         // load `content` and `discussion_idx`
         if (page == 'posts' || page == 'account') {
+            const timerLabel = `DEBUG: loadPosts_${sort}_${tag}`;
+            safeConsoleTime(timerLabel);
             let posts = await loadPosts(sort, tag, observer, ssr);
+            safeConsoleTimeEnd(timerLabel);
 
             state['content'] = posts['content'];
             state['discussion_idx'] = posts['discussion_idx'];
         } else if (page == 'thread') {
+            const timerLabel = `DEBUG: loadThread_${key[0]}_${key[1]}`;
+            safeConsoleTime(timerLabel);
             const posts = await loadThread(key[0], key[1]);
+            safeConsoleTimeEnd(timerLabel);
             state['content'] = posts['content'];
         } else {
             // no-op
@@ -63,10 +73,13 @@ export async function getStateAsync(url, observer, ssr = false) {
         // append `community` key
         if (tag && ifHive(tag)) {
             try {
+                const timerLabel = `DEBUG: get_community_${tag}`;
+                safeConsoleTime(timerLabel);
                 state['community'][tag] = await callBridge('get_community', {
                     name: tag,
                     observer: observer,
                 });
+                safeConsoleTimeEnd(timerLabel);
             } catch (e) {}
         }
 
@@ -77,7 +90,10 @@ export async function getStateAsync(url, observer, ssr = false) {
                 : page == 'thread' ? key[0].slice(1) : null;
         if (ssr && account) {
             // TODO: move to global reducer?
+            const timerLabel = `DEBUG: get_profile_${account}`;
+            safeConsoleTime(timerLabel);
             const profile = await callBridge('get_profile', { account });
+            safeConsoleTimeEnd(timerLabel);
             if (profile && profile['name']) {
                 state['profiles'][account] = profile;
             }
@@ -85,12 +101,16 @@ export async function getStateAsync(url, observer, ssr = false) {
 
         if (ssr) {
             // append `topics` key
+            safeConsoleTime('DEBUG: get_trending_topics');
             state['topics'] = await callBridge('get_trending_topics', {
                 limit: 12,
             });
+            safeConsoleTimeEnd('DEBUG: get_trending_topics');
         }
 
+        safeConsoleTime('DEBUG: stateCleaner');
         const cleansed = stateCleaner(state);
+        safeConsoleTimeEnd('DEBUG: stateCleaner');
         return cleansed;
     } catch (error) {
         console.error('~~ getStateAsync error ~~~>', error);
@@ -105,7 +125,10 @@ export async function getStateAsync(url, observer, ssr = false) {
 
 async function loadThread(account, permlink) {
     const author = account.slice(1);
+    const timerLabel = `DEBUG: get_discussion_${author}_${permlink}`;
+    safeConsoleTime(timerLabel);
     const content = await callBridge('get_discussion', { author, permlink });
+    safeConsoleTimeEnd(timerLabel);
     return { content };
 }
 
@@ -114,11 +137,17 @@ async function loadPosts(sort, tag, observer, ssr) {
 
     let posts;
     if (account) {
+        const timerLabel = `DEBUG: get_account_posts_${account}_${sort}`;
+        safeConsoleTime(timerLabel);
         const params = { sort, account, observer };
         posts = await callBridge('get_account_posts', params);
+        safeConsoleTimeEnd(timerLabel);
     } else {
+        const timerLabel = `DEBUG: get_ranked_posts_${sort}_${tag}`;
+        safeConsoleTime(timerLabel);
         const params = { sort, tag, observer };
         posts = await callBridge('get_ranked_posts', params);
+        safeConsoleTimeEnd(timerLabel);
     }
     let content = {};
     let keys = [];

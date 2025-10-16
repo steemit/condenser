@@ -1,6 +1,7 @@
 import * as config from 'config';
 import * as https from 'https';
 import { callBridge } from 'app/utils/steemApi';
+import { safeConsoleTime, safeConsoleTimeEnd } from './TimingUtils';
 
 /**
  * Load special posts - including notices, featured, and promoted.
@@ -55,7 +56,9 @@ async function getPost(url) {
 export async function specialPosts() {
     console.info('Loading special posts');
 
+    safeConsoleTime('DEBUG: loadSpecialPosts');
     const postData = await loadSpecialPosts();
+    safeConsoleTimeEnd('DEBUG: loadSpecialPosts');
     //console.info('Loaded special posts', postData);
     let loadedPostData = {
         featured_posts: [],
@@ -63,18 +66,23 @@ export async function specialPosts() {
         notices: [],
     };
 
+    safeConsoleTime('DEBUG: loadFeaturedPosts');
     for (const url of postData.featured_posts) {
         let post = await getPost(url);
         post.special = true;
         loadedPostData.featured_posts.push(post);
     }
+    safeConsoleTimeEnd('DEBUG: loadFeaturedPosts');
 
+    safeConsoleTime('DEBUG: loadPromotedPosts');
     for (const url of postData.promoted_posts) {
         let post = await getPost(url);
         post.special = true;
         loadedPostData.promoted_posts.push(post);
     }
+    safeConsoleTimeEnd('DEBUG: loadPromotedPosts');
 
+    safeConsoleTime('DEBUG: loadNotices');
     for (const notice of postData.notices) {
         if (notice.permalink) {
             let post = await getPost(notice.permalink);
@@ -83,6 +91,7 @@ export async function specialPosts() {
             loadedPostData.notices.push(notice);
         }
     }
+    safeConsoleTimeEnd('DEBUG: loadNotices');
 
     console.info(
         `Loaded special posts: featured: ${

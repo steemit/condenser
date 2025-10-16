@@ -56,9 +56,7 @@ class Post extends React.Component {
             this.props.setRouteTag(dis.get('url'));
         } catch (e) {
             console.error(`error of dis on Post.jsx: ${e}`);
-            this.setState({
-                timeOut: true,
-            });
+            this.props.redirectPath('404');
             return;
         }
         this.setState({
@@ -499,5 +497,10 @@ export default connect(
                     params: { permlink },
                 })
             ),
+        redirectPath: pathname =>
+            dispatch({
+                type: '@@router/LOCATION_CHANGE',
+                payload: { pathname },
+            }),
     })
 )(Post);

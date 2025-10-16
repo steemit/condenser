@@ -203,6 +203,7 @@ const bindMiddleware = middleware => {
 };
 
 const runRouter = (location, routes) => {
+    console.log('test runRouter:', location, routes);
     return new Promise(resolve =>
         match({ routes, location }, (...args) => resolve(args))
     );
@@ -295,6 +296,7 @@ export async function serverRender(
                 const params = { author: postref[0], permlink: postref[1] };
                 header = await callBridge('get_post_header', params);
             }
+            console.log('DEBUG, DEBUG:', header);
             if (header && header.author && header.permlink && header.category) {
                 const { author, permlink, category } = header;
                 return { redirectUrl: `/${category}/@${author}/${permlink}` };

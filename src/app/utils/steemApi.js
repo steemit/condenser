@@ -17,10 +17,13 @@ export async function callBridge(method, params, pre = 'bridge.') {
     return new Promise(function(resolve, reject) {
         api.call(pre + method, params, function(err, data) {
             if (err) {
-                console.error(
-                    '~~ apii.calBridge error ~~',
-                    method + ' ~~> ' + err
-                );
+                const output_err = {
+                    msg: '~~ apii.calBridge error ~~',
+                    method: method,
+                    params: params,
+                    err: err,
+                };
+                console.error(JSON.stringify(output_err));
 
                 if (err.message === 'Network request failed') {
                     changeRPCNodeToDefault();
@@ -113,7 +116,19 @@ export async function getStateAsync(url, observer, ssr = false) {
         safeConsoleTimeEnd('DEBUG: stateCleaner');
         return cleansed;
     } catch (error) {
-        console.error('~~ getStateAsync error ~~~>', error);
+        console.error(
+            JSON.stringify({
+                msg: '~~ getStateAsync error ~~',
+                error: error,
+                url: url,
+                observer: observer,
+                ssr: ssr,
+                page: page,
+                tag: tag,
+                sort: sort,
+                key: key,
+            })
+        );
 
         if (error.message === 'Network request failed') {
             changeRPCNodeToDefault();

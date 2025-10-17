@@ -23,7 +23,7 @@ and disclose information about you.
 
 You represent and warrant that you: (a) are of legal age to form a binding contract;
 (b) have not previously been suspended or removed from using our Services; (c) are
-not the the subject of economic or trade sanctions administered or enforced by any
+not the subject of economic or trade sanctions administered or enforced by any
 governmental authority or otherwise designated on any list of prohibited or restricted
 parties; (d) are not (including but not limited to the following) a citizen, resident, or
 organization of the Chinese Mainland, Taiwan (province of China), Hong Kong (SAR

@@ -8,7 +8,13 @@ import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
 import { determineViewMode } from '../app/utils/Links';
 import { getSupportedLocales } from './utils/misc';
-import { safeStartTimer, safeStopTimer } from './utils/TimingUtils';
+import {
+    safeStartTimer,
+    safeStopTimer,
+    safeConsoleTime,
+    safeConsoleTimeEnd,
+} from './utils/TimingUtils';
+import { specialPosts } from './utils/SpecialPosts';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
@@ -61,7 +67,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             csrf: ctx.csrf,
             new_visit: ctx.session.new_visit,
             config: $STM_Config,
-            special_posts: await ctx.app.specialPostsPromise,
+            special_posts: await specialPosts(ctx.session.uid),
             login_challenge,
         };
         safeStopTimer(ctx.state.requestTimer, 'specialPosts_ms');
@@ -138,7 +144,8 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             ErrorPage,
             userPreferences,
             offchain,
-            ctx.state.requestTimer
+            ctx.state.requestTimer,
+            ctx.session.uid
         );
 
         if (redirectUrl) {

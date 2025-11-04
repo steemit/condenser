@@ -39,7 +39,12 @@ export const _list_temp = [];
 
 export const _user_list = [];
 
-export async function getStateAsync(url, observer, ssr = false) {
+export async function getStateAsync(
+    url,
+    observer,
+    ssr = false,
+    requestId = null
+) {
     try {
         if (observer === undefined) observer = null;
 
@@ -56,18 +61,18 @@ export async function getStateAsync(url, observer, ssr = false) {
 
         // load `content` and `discussion_idx`
         if (page == 'posts' || page == 'account') {
-            const timerLabel = `DEBUG: loadPosts_${sort}_${tag}`;
-            safeConsoleTime(timerLabel);
-            let posts = await loadPosts(sort, tag, observer, ssr);
-            safeConsoleTimeEnd(timerLabel);
+            const timerLabel = `timing_loadPosts_${sort}_${tag}`;
+            safeConsoleTime(timerLabel, requestId);
+            let posts = await loadPosts(sort, tag, observer, ssr, requestId);
+            safeConsoleTimeEnd(timerLabel, requestId);
 
             state['content'] = posts['content'];
             state['discussion_idx'] = posts['discussion_idx'];
         } else if (page == 'thread') {
-            const timerLabel = `DEBUG: loadThread_${key[0]}_${key[1]}`;
-            safeConsoleTime(timerLabel);
-            const posts = await loadThread(key[0], key[1]);
-            safeConsoleTimeEnd(timerLabel);
+            const timerLabel = `timing_loadThread_${key[0]}_${key[1]}`;
+            safeConsoleTime(timerLabel, requestId);
+            const posts = await loadThread(key[0], key[1], requestId);
+            safeConsoleTimeEnd(timerLabel, requestId);
             state['content'] = posts['content'];
         } else {
             // no-op
@@ -76,13 +81,13 @@ export async function getStateAsync(url, observer, ssr = false) {
         // append `community` key
         if (tag && ifHive(tag)) {
             try {
-                const timerLabel = `DEBUG: get_community_${tag}`;
-                safeConsoleTime(timerLabel);
+                const timerLabel = `timing_get_community_${tag}`;
+                safeConsoleTime(timerLabel, requestId);
                 state['community'][tag] = await callBridge('get_community', {
                     name: tag,
                     observer: observer,
                 });
-                safeConsoleTimeEnd(timerLabel);
+                safeConsoleTimeEnd(timerLabel, requestId);
             } catch (e) {}
         }
 
@@ -93,10 +98,10 @@ export async function getStateAsync(url, observer, ssr = false) {
                 : page == 'thread' ? key[0].slice(1) : null;
         if (ssr && account) {
             // TODO: move to global reducer?
-            const timerLabel = `DEBUG: get_profile_${account}`;
-            safeConsoleTime(timerLabel);
+            const timerLabel = `timing_get_profile_${account}`;
+            safeConsoleTime(timerLabel, requestId);
             const profile = await callBridge('get_profile', { account });
-            safeConsoleTimeEnd(timerLabel);
+            safeConsoleTimeEnd(timerLabel, requestId);
             if (profile && profile['name']) {
                 state['profiles'][account] = profile;
             }
@@ -104,29 +109,24 @@ export async function getStateAsync(url, observer, ssr = false) {
 
         if (ssr) {
             // append `topics` key
-            safeConsoleTime('DEBUG: get_trending_topics');
+            safeConsoleTime('timing_get_trending_topics', requestId);
             state['topics'] = await callBridge('get_trending_topics', {
                 limit: 12,
             });
-            safeConsoleTimeEnd('DEBUG: get_trending_topics');
+            safeConsoleTimeEnd('timing_get_trending_topics', requestId);
         }
 
-        safeConsoleTime('DEBUG: stateCleaner');
+        safeConsoleTime('timing_stateCleaner', requestId);
         const cleansed = stateCleaner(state);
-        safeConsoleTimeEnd('DEBUG: stateCleaner');
+        safeConsoleTimeEnd('timing_stateCleaner', requestId);
         return cleansed;
     } catch (error) {
         console.error(
             JSON.stringify({
                 msg: '~~ getStateAsync error ~~',
                 error: error,
-                url: url,
-                observer: observer,
-                ssr: ssr,
-                page: page,
-                tag: tag,
-                sort: sort,
-                key: key,
+                requestId,
+                url,
             })
         );
 
@@ -138,31 +138,31 @@ export async function getStateAsync(url, observer, ssr = false) {
     }
 }
 
-async function loadThread(account, permlink) {
+async function loadThread(account, permlink, requestId = null) {
     const author = account.slice(1);
-    const timerLabel = `DEBUG: get_discussion_${author}_${permlink}`;
-    safeConsoleTime(timerLabel);
+    const timerLabel = `timing_get_discussion_${author}_${permlink}`;
+    safeConsoleTime(timerLabel, requestId);
     const content = await callBridge('get_discussion', { author, permlink });
-    safeConsoleTimeEnd(timerLabel);
+    safeConsoleTimeEnd(timerLabel, requestId);
     return { content };
 }
 
-async function loadPosts(sort, tag, observer, ssr) {
+async function loadPosts(sort, tag, observer, ssr, requestId = null) {
     const account = tag && tag[0] == '@' ? tag.slice(1) : null;
 
     let posts;
     if (account) {
-        const timerLabel = `DEBUG: get_account_posts_${account}_${sort}`;
-        safeConsoleTime(timerLabel);
+        const timerLabel = `timing_get_account_posts_${account}_${sort}`;
+        safeConsoleTime(timerLabel, requestId);
         const params = { sort, account, observer };
         posts = await callBridge('get_account_posts', params);
-        safeConsoleTimeEnd(timerLabel);
+        safeConsoleTimeEnd(timerLabel, requestId);
     } else {
-        const timerLabel = `DEBUG: get_ranked_posts_${sort}_${tag}`;
-        safeConsoleTime(timerLabel);
+        const timerLabel = `timing_get_ranked_posts_${sort}_${tag}`;
+        safeConsoleTime(timerLabel, requestId);
         const params = { sort, tag, observer };
         posts = await callBridge('get_ranked_posts', params);
-        safeConsoleTimeEnd(timerLabel);
+        safeConsoleTimeEnd(timerLabel, requestId);
     }
     let content = {};
     let keys = [];

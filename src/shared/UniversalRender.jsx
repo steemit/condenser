@@ -226,6 +226,7 @@ const onRouterError = error => {
  * @param {*} userPreferences
  * @param {*} offchain
  * @param {RequestTimer} requestTimer
+ * @param {string} requestId
  * @returns promise
  */
 export async function serverRender(
@@ -234,17 +235,18 @@ export async function serverRender(
     ErrorPage,
     userPreferences,
     offchain,
-    requestTimer
+    requestTimer,
+    requestId = null
 ) {
-    safeConsoleTime('DEBUG: serverRender_total');
+    safeStartTimer(requestTimer, 'timing_serverRender_total');
     let error, redirect, renderProps;
 
     // Router matching time
-    safeStartTimer(requestTimer, 'routerMatch_ms');
+    safeStartTimer(requestTimer, 'timing_routerMatch_ms');
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
     } catch (e) {
-        safeStopTimer(requestTimer, 'routerMatch_ms');
+        safeStopTimer(requestTimer, 'timing_routerMatch_ms');
         console.error('Routing error:', e.toString(), location);
         return {
             title: 'Routing error - Steemit',
@@ -254,7 +256,7 @@ export async function serverRender(
             ),
         };
     }
-    safeStopTimer(requestTimer, 'routerMatch_ms');
+    safeStopTimer(requestTimer, 'timing_routerMatch_ms');
 
     if (error || !renderProps) {
         console.error('Router error [404]', error, 'props?', !!renderProps);
@@ -270,14 +272,12 @@ export async function serverRender(
         const url = location;
 
         // API state fetching time (includes all API calls)
-        safeConsoleTime('DEBUG: apiFetchState_total');
-        safeStartTimer(requestTimer, 'apiFetchState_ms');
-        onchain = await apiFetchState(url);
-        safeStopTimer(requestTimer, 'apiFetchState_ms');
-        safeConsoleTimeEnd('DEBUG: apiFetchState_total', url);
+        safeStartTimer(requestTimer, 'timing_apiFetchState_ms');
+        onchain = await apiFetchState(url, requestId);
+        safeStopTimer(requestTimer, 'timing_apiFetchState_ms');
 
         // Data post-processing time
-        safeStartTimer(requestTimer, 'dataProcessing_ms');
+        safeStartTimer(requestTimer, 'timing_dataProcessing_ms');
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
         if (
@@ -285,7 +285,7 @@ export async function serverRender(
             Object.getOwnPropertyNames(onchain.profiles).length === 0
         ) {
             // protect for invalid account
-            safeStopTimer(requestTimer, 'dataProcessing_ms');
+            safeStopTimer(requestTimer, 'timing_dataProcessing_ms');
             return {
                 title: 'User Not Found - Steemit',
                 statusCode: 404,
@@ -312,14 +312,14 @@ export async function serverRender(
                 const params = { author: postref[0], permlink: postref[1] };
                 header = await callBridge('get_post_header', params);
             }
-            console.log('DEBUG, DEBUG:', header);
+            console.log('DEBUG: get_post_header', header);
             if (header && header.author && header.permlink && header.category) {
                 const { author, permlink, category } = header;
-                safeStopTimer(requestTimer, 'dataProcessing_ms');
+                safeStopTimer(requestTimer, 'timing_dataProcessing_ms');
                 return { redirectUrl: `/${category}/@${author}/${permlink}` };
             } else {
                 // protect on invalid user pages (i.e /user/transferss)
-                safeStopTimer(requestTimer, 'dataProcessing_ms');
+                safeStopTimer(requestTimer, 'timing_dataProcessing_ms');
                 return {
                     title: 'Page Not Found - Steemit',
                     statusCode: 404,
@@ -337,10 +337,10 @@ export async function serverRender(
         offchain.special_posts.promoted_posts.forEach(post => {
             onchain.content[`${post.author}/${post.permlink}`] = post;
         });
-        safeStopTimer(requestTimer, 'dataProcessing_ms');
+        safeStopTimer(requestTimer, 'timing_dataProcessing_ms');
 
         // Redux Store creation and initialization time
-        safeStartTimer(requestTimer, 'storeCreation_ms');
+        safeStartTimer(requestTimer, 'timing_storeCreation_ms');
         server_store = createStore(rootReducer, {
             app: initialState.app,
             global: onchain,
@@ -352,7 +352,7 @@ export async function serverRender(
             payload: { pathname: location },
         });
         server_store.dispatch(appActions.setUserPreferences(userPreferences));
-        safeStopTimer(requestTimer, 'storeCreation_ms');
+        safeStopTimer(requestTimer, 'timing_storeCreation_ms');
     } catch (e) {
         // Ensure 404 page when username not found
         if (location.match(routeRegex.UserProfile)) {
@@ -377,8 +377,7 @@ export async function serverRender(
 
     let app, status, meta;
     try {
-        safeConsoleTime('DEBUG: ssr_total');
-        safeStartTimer(requestTimer, 'ssr_ms');
+        safeStartTimer(requestTimer, 'timing_ssr_ms');
         app = renderToString(
             <Provider store={server_store}>
                 <Translator>
@@ -386,8 +385,7 @@ export async function serverRender(
                 </Translator>
             </Provider>
         );
-        safeStopTimer(requestTimer, 'ssr_ms');
-        safeConsoleTimeEnd('DEBUG: ssr_total');
+        safeStopTimer(requestTimer, 'timing_ssr_ms');
         meta = extractMeta(onchain, renderProps.params, server_store);
         status = 200;
     } catch (re) {
@@ -396,7 +394,7 @@ export async function serverRender(
         status = 500;
     }
 
-    safeConsoleTimeEnd('DEBUG: serverRender_total');
+    safeStopTimer(requestTimer, 'timing_serverRender_total');
     return {
         title: 'Steemit',
         titleBase: 'Steemit - ',
@@ -479,7 +477,7 @@ export function clientRender(initialState) {
     );
 }
 
-async function apiFetchState(url) {
+async function apiFetchState(url, requestId = null) {
     let onchain;
 
     if (process.env.OFFLINE_SSR_TEST) {
@@ -487,28 +485,28 @@ async function apiFetchState(url) {
     }
 
     // Main state fetching time
-    safeConsoleTime('DEBUG: getStateAsync');
-    onchain = await getStateAsync(url, null, true);
-    safeConsoleTimeEnd('DEBUG: getStateAsync');
+    safeConsoleTime('timing_getStateAsync', requestId);
+    onchain = await getStateAsync(url, null, true, requestId);
+    safeConsoleTimeEnd('timing_getStateAsync', requestId);
 
     // Feed price fetching time
     try {
-        safeConsoleTime('DEBUG: getFeedHistoryAsync');
+        safeConsoleTime('timing_getFeedHistoryAsync', requestId);
         const history = await api.getFeedHistoryAsync();
         const feed = history.price_history;
         const last = feed[feed.length - 1];
         onchain['feed_price'] = last;
-        safeConsoleTimeEnd('DEBUG: getFeedHistoryAsync');
+        safeConsoleTimeEnd('timing_getFeedHistoryAsync', requestId);
     } catch (error) {
         console.error('Error fetching feed price:', error);
     }
 
     // Dynamic global properties fetching time
     try {
-        safeConsoleTime('DEBUG: getDynamicGlobalPropertiesAsync');
+        safeConsoleTime('timing_getDynamicGlobalPropertiesAsync', requestId);
         const dgpo = await api.getDynamicGlobalPropertiesAsync();
         onchain['props'] = { sbd_print_rate: dgpo['sbd_print_rate'] };
-        safeConsoleTimeEnd('DEBUG: getDynamicGlobalPropertiesAsync');
+        safeConsoleTimeEnd('timing_getDynamicGlobalPropertiesAsync', requestId);
     } catch (error) {
         console.error('Error fetching dgpo:', error);
     }

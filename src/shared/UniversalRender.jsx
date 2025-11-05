@@ -32,6 +32,12 @@ import Translator from 'app/Translator';
 import { routeRegex } from 'app/ResolveRoute';
 import ScrollBehavior from 'scroll-behavior';
 import { callBridge, getStateAsync } from 'app/utils/steemApi';
+import {
+    safeStartTimer,
+    safeStopTimer,
+    safeConsoleTime,
+    safeConsoleTimeEnd,
+} from '../server/utils/TimingUtils';
 
 let get_state_perf,
     get_content_perf = false;
@@ -220,6 +226,7 @@ const onRouterError = error => {
  * @param {*} userPreferences
  * @param {*} offchain
  * @param {RequestTimer} requestTimer
+ * @param {string} requestId
  * @returns promise
  */
 export async function serverRender(
@@ -228,13 +235,18 @@ export async function serverRender(
     ErrorPage,
     userPreferences,
     offchain,
-    requestTimer
+    requestTimer,
+    requestId = null
 ) {
+    safeStartTimer(requestTimer, 'timing_serverRender_total');
     let error, redirect, renderProps;
 
+    // Router matching time
+    safeStartTimer(requestTimer, 'timing_routerMatch_ms');
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
     } catch (e) {
+        safeStopTimer(requestTimer, 'timing_routerMatch_ms');
         console.error('Routing error:', e.toString(), location);
         return {
             title: 'Routing error - Steemit',
@@ -244,6 +256,7 @@ export async function serverRender(
             ),
         };
     }
+    safeStopTimer(requestTimer, 'timing_routerMatch_ms');
 
     if (error || !renderProps) {
         console.error('Router error [404]', error, 'props?', !!renderProps);
@@ -258,10 +271,13 @@ export async function serverRender(
     try {
         const url = location;
 
-        requestTimer.startTimer('apiFetchState_ms');
-        onchain = await apiFetchState(url);
-        requestTimer.stopTimer('apiFetchState_ms');
+        // API state fetching time (includes all API calls)
+        safeStartTimer(requestTimer, 'timing_apiFetchState_ms');
+        onchain = await apiFetchState(url, requestId);
+        safeStopTimer(requestTimer, 'timing_apiFetchState_ms');
 
+        // Data post-processing time
+        safeStartTimer(requestTimer, 'timing_dataProcessing_ms');
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
         if (
@@ -269,6 +285,7 @@ export async function serverRender(
             Object.getOwnPropertyNames(onchain.profiles).length === 0
         ) {
             // protect for invalid account
+            safeStopTimer(requestTimer, 'timing_dataProcessing_ms');
             return {
                 title: 'User Not Found - Steemit',
                 statusCode: 404,
@@ -295,11 +312,14 @@ export async function serverRender(
                 const params = { author: postref[0], permlink: postref[1] };
                 header = await callBridge('get_post_header', params);
             }
+            console.log('DEBUG: get_post_header', header);
             if (header && header.author && header.permlink && header.category) {
                 const { author, permlink, category } = header;
+                safeStopTimer(requestTimer, 'timing_dataProcessing_ms');
                 return { redirectUrl: `/${category}/@${author}/${permlink}` };
             } else {
                 // protect on invalid user pages (i.e /user/transferss)
+                safeStopTimer(requestTimer, 'timing_dataProcessing_ms');
                 return {
                     title: 'Page Not Found - Steemit',
                     statusCode: 404,
@@ -317,7 +337,10 @@ export async function serverRender(
         offchain.special_posts.promoted_posts.forEach(post => {
             onchain.content[`${post.author}/${post.permlink}`] = post;
         });
+        safeStopTimer(requestTimer, 'timing_dataProcessing_ms');
 
+        // Redux Store creation and initialization time
+        safeStartTimer(requestTimer, 'timing_storeCreation_ms');
         server_store = createStore(rootReducer, {
             app: initialState.app,
             global: onchain,
@@ -329,6 +352,7 @@ export async function serverRender(
             payload: { pathname: location },
         });
         server_store.dispatch(appActions.setUserPreferences(userPreferences));
+        safeStopTimer(requestTimer, 'timing_storeCreation_ms');
     } catch (e) {
         // Ensure 404 page when username not found
         if (location.match(routeRegex.UserProfile)) {
@@ -353,7 +377,7 @@ export async function serverRender(
 
     let app, status, meta;
     try {
-        requestTimer.startTimer('ssr_ms');
+        safeStartTimer(requestTimer, 'timing_ssr_ms');
         app = renderToString(
             <Provider store={server_store}>
                 <Translator>
@@ -361,7 +385,7 @@ export async function serverRender(
                 </Translator>
             </Provider>
         );
-        requestTimer.stopTimer('ssr_ms');
+        safeStopTimer(requestTimer, 'timing_ssr_ms');
         meta = extractMeta(onchain, renderProps.params, server_store);
         status = 200;
     } catch (re) {
@@ -370,6 +394,7 @@ export async function serverRender(
         status = 500;
     }
 
+    safeStopTimer(requestTimer, 'timing_serverRender_total');
     return {
         title: 'Steemit',
         titleBase: 'Steemit - ',
@@ -452,27 +477,36 @@ export function clientRender(initialState) {
     );
 }
 
-async function apiFetchState(url) {
+async function apiFetchState(url, requestId = null) {
     let onchain;
 
     if (process.env.OFFLINE_SSR_TEST) {
         onchain = get_state_perf;
     }
 
-    onchain = await getStateAsync(url, null, true);
+    // Main state fetching time
+    safeConsoleTime('timing_getStateAsync', requestId);
+    onchain = await getStateAsync(url, null, true, requestId);
+    safeConsoleTimeEnd('timing_getStateAsync', requestId);
 
+    // Feed price fetching time
     try {
+        safeConsoleTime('timing_getFeedHistoryAsync', requestId);
         const history = await api.getFeedHistoryAsync();
         const feed = history.price_history;
         const last = feed[feed.length - 1];
         onchain['feed_price'] = last;
+        safeConsoleTimeEnd('timing_getFeedHistoryAsync', requestId);
     } catch (error) {
         console.error('Error fetching feed price:', error);
     }
 
+    // Dynamic global properties fetching time
     try {
+        safeConsoleTime('timing_getDynamicGlobalPropertiesAsync', requestId);
         const dgpo = await api.getDynamicGlobalPropertiesAsync();
         onchain['props'] = { sbd_print_rate: dgpo['sbd_print_rate'] };
+        safeConsoleTimeEnd('timing_getDynamicGlobalPropertiesAsync', requestId);
     } catch (error) {
         console.error('Error fetching dgpo:', error);
     }

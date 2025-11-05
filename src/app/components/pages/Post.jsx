@@ -52,7 +52,13 @@ class Post extends React.Component {
 
     componentWillMount() {
         const { dis } = this.props;
-        this.props.setRouteTag(dis.get('url'));
+        try {
+            this.props.setRouteTag(dis.get('url'));
+        } catch (e) {
+            console.error(`error of dis on Post.jsx: ${e}`);
+            this.props.redirectPath('404');
+            return;
+        }
         this.setState({
             showPostComments: true,
         });
@@ -491,5 +497,10 @@ export default connect(
                     params: { permlink },
                 })
             ),
+        redirectPath: pathname =>
+            dispatch({
+                type: '@@router/LOCATION_CHANGE',
+                payload: { pathname },
+            }),
     })
 )(Post);

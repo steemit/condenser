@@ -1,6 +1,11 @@
 import * as config from 'config';
 import * as https from 'https';
 import { callBridge } from 'app/utils/steemApi';
+import {
+    safeConsoleTime,
+    safeConsoleTimeEnd,
+    safeTimedExecution,
+} from './TimingUtils';
 
 /**
  * Load special posts - including notices, featured, and promoted.
@@ -50,12 +55,22 @@ async function getPost(url) {
 /**
  * [async] Get special posts - including notices, featured, and promoted.
  *
+ * @param {string} requestId - Unique request identifier for thread-safe timing (optional)
  * @returns {object} object of {featured_posts:[], promoted_posts:[], notices:[]}
  */
-export async function specialPosts() {
+export async function specialPosts(requestId = null) {
     console.info('Loading special posts');
 
+    // Use provided requestId or generate a unique one
+    const uniqueRequestId =
+        requestId ||
+        `req_${Date.now()}_${Math.random()
+            .toString(36)
+            .substr(2, 9)}`;
+
+    safeConsoleTime('timing_loadSpecialPosts', uniqueRequestId);
     const postData = await loadSpecialPosts();
+    safeConsoleTimeEnd('timing_loadSpecialPosts', uniqueRequestId);
     //console.info('Loaded special posts', postData);
     let loadedPostData = {
         featured_posts: [],
@@ -63,18 +78,23 @@ export async function specialPosts() {
         notices: [],
     };
 
+    safeConsoleTime('timing_loadFeaturedPosts', uniqueRequestId);
     for (const url of postData.featured_posts) {
         let post = await getPost(url);
         post.special = true;
         loadedPostData.featured_posts.push(post);
     }
+    safeConsoleTimeEnd('timing_loadFeaturedPosts', uniqueRequestId);
 
+    safeConsoleTime('timing_loadPromotedPosts', uniqueRequestId);
     for (const url of postData.promoted_posts) {
         let post = await getPost(url);
         post.special = true;
         loadedPostData.promoted_posts.push(post);
     }
+    safeConsoleTimeEnd('timing_loadPromotedPosts', uniqueRequestId);
 
+    safeConsoleTime('timing_loadNotices', uniqueRequestId);
     for (const notice of postData.notices) {
         if (notice.permalink) {
             let post = await getPost(notice.permalink);
@@ -83,6 +103,7 @@ export async function specialPosts() {
             loadedPostData.notices.push(notice);
         }
     }
+    safeConsoleTimeEnd('timing_loadNotices', uniqueRequestId);
 
     console.info(
         `Loaded special posts: featured: ${

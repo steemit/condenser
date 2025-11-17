@@ -314,7 +314,7 @@ export function* updateFollowersList(list) {
  * @param {object} payload containing:
  *   - account (string)
  *   - last_id (string), optional, for pagination
- *   - limit (int), optional, defualt is 100
+ *   - limit (int), optional, default is 100
  */
 export function* getAccountNotifications(action) {
     if (!action.payload) throw 'no account specified';

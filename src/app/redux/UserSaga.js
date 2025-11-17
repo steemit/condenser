@@ -128,7 +128,7 @@ function* usernamePasswordLogin(action) {
         (typeof sessionStorage !== 'undefined' &&
             sessionStorage.getItem('hideAnnouncement') !== 'true')
     ) {
-        // Uncomment to re-enable announcment
+        // Uncomment to re-enable announcement
         // TODO: use config to enable/disable
         //yield put(userActions.showAnnouncement());
     }
@@ -384,7 +384,7 @@ function* usernamePasswordLogin2({
         }
         if (username) feedURL = '/@' + username + '/feed';
 
-        // If user is signing operation by operaion and has no saved login, don't save to RAM
+        // If user is signing operation by operation and has no saved login, don't save to RAM
         if (!operationType || saveLogin) {
             // Keep the posting key in RAM but only when not signing an operation.
             // No operation or the user has checked: Keep me logged in...
@@ -662,7 +662,7 @@ function* lookupPreviousOwnerAuthority({ payload: {} }) {
     );
     if (owner_history.count() === 0) return;
     owner_history = owner_history.sort((b, a) => {
-        // Sort decending
+        // Sort descending
         const aa = a.get('last_valid_time');
         const bb = b.get('last_valid_time');
         return aa < bb ? -1 : aa > bb ? 1 : 0;

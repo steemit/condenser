@@ -8,7 +8,7 @@ import * as globalActions from 'app/redux/GlobalReducer';
     This loadFollows both 'blog' and 'ignore'
 */
 
-// Test limit with 2 (not 1, infinate looping)
+// Test limit with 2 (not 1, infinite looping)
 export function* loadFollows(method, account, type, force = false) {
     if (
         yield select(state =>

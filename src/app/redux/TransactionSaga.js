@@ -119,7 +119,7 @@ export function* broadcastOperation({
         if (!isLoggedInWithKeychain()) {
             if (!keys || keys.length === 0) {
                 payload.keys = [];
-                // user may already be logged in, or just enterend a signing passowrd or wif
+                // user may already be logged in, or just enterend a signing password or wif
                 const signingKey = yield call(findSigningKey, {
                     opType: type,
                     username,

@@ -52,7 +52,6 @@ class ExplorePost extends Component {
     render() {
         const link = this.props.permlink;
         const title = this.props.title;
-        const steemscan = 'https://steemscan.com/' + link;
         const steemdb = 'https://steemdb.io' + link;
         // const busy = 'https://busy.org' + link;
         const steemit = 'https://steemit.com' + link;
@@ -103,16 +102,6 @@ class ExplorePost extends Component {
                 <ul>
                     <li>
                         <a
-                            href={steemscan}
-                            onClick={this.Steemd}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            steemscan.com <Icon name="extlink" />
-                        </a>
-                    </li>
-                    <li>
-                        <a
                             href={steemdb}
                             onClick={this.Steemdb}
                             target="_blank"
@@ -121,16 +110,6 @@ class ExplorePost extends Component {
                             steemdb.io <Icon name="extlink" />
                         </a>
                     </li>
-                    {/* <li>
-                        <a
-                            href={busy}
-                            onClick={this.Busy}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            busy.org <Icon name="extlink" />
-                        </a>
-                    </li> */}
                 </ul>
             </span>
         );

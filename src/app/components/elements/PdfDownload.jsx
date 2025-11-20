@@ -649,7 +649,7 @@ export default class PdfDownload extends Component {
             ctx,
             'Public keys are associated with usernames and are used to ' +
                 'encrypt and verify messages. Your public keys are not required ' +
-                'for login. You can view these anytime at: https://steemscan.com/account/' +
+                'for login. You can view these anytime at: https://steemdb.io/@' +
                 this.props.name,
             {
                 scale,

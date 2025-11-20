@@ -87,7 +87,7 @@ class SearchIndex extends React.Component {
                     sort: this.props.sort,
                 });
             }
-        }); //监听搜索文本改变事件
+        }); // Listen to search text change event
     }
 
     componentDidUpdate(prevProps, prevState) {

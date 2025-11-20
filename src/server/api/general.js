@@ -347,18 +347,18 @@ export default function useGeneralApi(app) {
 
             let searchEndpoint = null;
             console.log(params.depth);
-            // 回复
+            // Replies
             if (params.depth === 1) {
                 searchEndpoint = elasticSearchService.concat(
                     '/hive_replies/_search?scroll=1m'
                 );
             } else if (params.depth === 2) {
-                // 用户
+                // Users
                 searchEndpoint = elasticSearchService.concat(
                     '/hive_accounts/_search?scroll=1m'
                 );
             } else {
-                // 帖子
+                // Posts
                 searchEndpoint = elasticSearchService.concat(
                     '/hive_posts/_search?scroll=1m'
                 );

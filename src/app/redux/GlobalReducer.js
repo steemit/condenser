@@ -45,7 +45,7 @@ const postKey = (author, permlink) => {
 };
 
 /**
- * Transfrom nested JS object to appropriate immutable collection.
+ * Transform nested JS object to appropriate immutable collection.
  *
  * @param {Object} account
  */

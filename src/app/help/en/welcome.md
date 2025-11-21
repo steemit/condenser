@@ -58,5 +58,4 @@ currency used by the Steem Blockchain. More information
 - [Steem Bluepaper](https://steem.io/steem-bluepaper.pdf) - Explanation of how the platform works
 - [Steem Whitepaper](https://steem.io/SteemWhitePaper.pdf) - Technical details of the Steem blockchain
 -  Apps Built on Steem - Coming soon....
-- [Steem Block Explorer](https://steemscan.com/) - Shows the raw Steem blockchain data  
 - [Steem Block Explorer](https://steemdb.io/) - Shows the raw Steem blockchain data  

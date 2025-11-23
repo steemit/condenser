@@ -8,7 +8,7 @@ interface PostEditorProps {
   title?: string;
   body?: string;
   tags?: string[];
-  onSuccess?: (category?: string) => void;
+  onSuccess?: (category?: string, body?: string) => void;
   onCancel?: () => void;
 }
 
@@ -101,7 +101,7 @@ export default function PostEditor({
       }
 
       if (onSuccess) {
-        onSuccess(category);
+        onSuccess(category, body);
       }
     } catch (err) {
       console.error('Error submitting post:', err);

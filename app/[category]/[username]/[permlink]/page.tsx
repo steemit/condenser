@@ -5,7 +5,9 @@ import { useParams } from 'next/navigation';
 import { useAppDispatch } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
 import PostFull from '@/components/cards/PostFull';
+import CommentsList from '@/components/cards/CommentsList';
 import { Post, fetchPostByPermlink } from '@/lib/api/steem';
+import { Comment } from '@/components/cards/Comment';
 
 /**
  * Post page with category
@@ -21,6 +23,7 @@ export default function PostPage() {
   const username = params.username as string;
   const permlink = params.permlink as string;
   const [post, setPost] = useState<Post | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,7 +33,7 @@ export default function PostPage() {
     dispatch(setPathname(pathname));
   }, [category, username, permlink, dispatch]);
 
-  // Fetch post data
+  // Fetch post data and comments
   useEffect(() => {
     const loadPost = async () => {
       setLoading(true);
@@ -39,6 +42,10 @@ export default function PostPage() {
         const fetchedPost = await fetchPostByPermlink(category, username, permlink);
         if (fetchedPost) {
           setPost(fetchedPost);
+          
+          // TODO: Fetch comments for this post
+          // For now, use empty array
+          setComments([]);
         } else {
           setError('Post not found');
         }
@@ -52,6 +59,25 @@ export default function PostPage() {
 
     loadPost();
   }, [category, username, permlink]);
+
+  const handleReply = async (
+    parentAuthor: string,
+    parentPermlink: string,
+    body: string
+  ) => {
+    // TODO: Implement comment reply
+    console.log('Reply to comment:', { parentAuthor, parentPermlink, body });
+  };
+
+  const handleEdit = async (author: string, permlink: string, body: string) => {
+    // TODO: Implement comment edit
+    console.log('Edit comment:', { author, permlink, body });
+  };
+
+  const handleDelete = async (author: string, permlink: string) => {
+    // TODO: Implement comment delete
+    console.log('Delete comment:', { author, permlink });
+  };
 
   if (loading) {
     return (
@@ -76,7 +102,18 @@ export default function PostPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <PostFull post={post} />
-      {/* TODO: Add comments section */}
+      
+      {post && (
+        <CommentsList
+          comments={comments}
+          postAuthor={post.author}
+          postPermlink={post.permlink}
+          postCategory={post.category}
+          onReply={handleReply}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      )}
     </div>
   );
 }

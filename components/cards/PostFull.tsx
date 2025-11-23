@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Post } from '@/lib/api/steem';
 import MarkdownViewer from '@/components/elements/MarkdownViewer';
 import Voting from '@/components/elements/Voting';
+import Reblog from '@/components/elements/Reblog';
 import ShareMenu from '@/components/elements/ShareMenu';
 import TagList from '@/components/elements/TagList';
 
@@ -99,13 +100,7 @@ export default function PostFull({ post }: PostFullProps) {
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-4">
             <Voting post={post} />
-            
-            <button
-              className="px-3 py-1 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-              title="Reblog"
-            >
-              Reblog
-            </button>
+            <Reblog author={post.author} permlink={post.permlink} />
           </div>
 
           <ShareMenu

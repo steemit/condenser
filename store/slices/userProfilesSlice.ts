@@ -1,17 +1,31 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// Placeholder for UserProfilesSlice
-interface UserProfilesState {
+// Types
+interface UserProfile {
+  username: string;
   [key: string]: any;
 }
 
-const initialState: UserProfilesState = {};
+interface UserProfilesState {
+  profiles: Record<string, UserProfile>;
+}
+
+const initialState: UserProfilesState = {
+  profiles: {},
+};
 
 const userProfilesSlice = createSlice({
   name: 'userProfiles',
   initialState,
-  reducers: {},
+  reducers: {
+    addProfile: (state, action: PayloadAction<UserProfile>) => {
+      const profile = action.payload;
+      if (profile && profile.username) {
+        state.profiles[profile.username] = profile;
+      }
+    },
+  },
 });
 
+export const { addProfile } = userProfilesSlice.actions;
 export default userProfilesSlice.reducer;
-

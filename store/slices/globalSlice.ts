@@ -53,6 +53,17 @@ interface GlobalState {
   tagslist?: any[];
   followerslist?: any[];
   pathname?: string;
+  follow?: {
+    getFollowingAsync?: Record<string, {
+      blog_result?: string[];
+      ignore_result?: string[];
+      blog_count?: number;
+      ignore_count?: number;
+      blog_loading?: boolean;
+      ignore_loading?: boolean;
+    }>;
+    [key: string]: any;
+  };
   [key: string]: any;
 }
 
@@ -382,6 +393,59 @@ const globalSlice = createSlice({
     setFollowerslist: (state, action: PayloadAction<any[]>) => {
       state.followerslist = action.payload;
     },
+    updateFollowState: (state, action: PayloadAction<{
+      follower: string;
+      following: string;
+      what: string[];
+    }>) => {
+      const { follower, following, what } = action.payload;
+      
+      // Initialize follow state structure if needed
+      if (!state.follow) {
+        state.follow = {};
+      }
+      if (!state.follow.getFollowingAsync) {
+        state.follow.getFollowingAsync = {};
+      }
+      if (!state.follow.getFollowingAsync[follower]) {
+        state.follow.getFollowingAsync[follower] = {
+          blog_result: [],
+          ignore_result: [],
+          blog_count: 0,
+          ignore_count: 0,
+        };
+      }
+
+      const followData = state.follow.getFollowingAsync[follower];
+      
+      // Determine action based on what array
+      const hasBlog = what[0] === 'blog';
+      const hasIgnore = what[1] === 'ignore';
+      
+      // Update blog_result
+      if (!followData.blog_result) {
+        followData.blog_result = [];
+      }
+      if (hasBlog && !followData.blog_result.includes(following)) {
+        followData.blog_result.push(following);
+      } else if (!hasBlog && followData.blog_result.includes(following)) {
+        followData.blog_result = followData.blog_result.filter((u: string) => u !== following);
+      }
+      
+      // Update ignore_result
+      if (!followData.ignore_result) {
+        followData.ignore_result = [];
+      }
+      if (hasIgnore && !followData.ignore_result.includes(following)) {
+        followData.ignore_result.push(following);
+      } else if (!hasIgnore && followData.ignore_result.includes(following)) {
+        followData.ignore_result = followData.ignore_result.filter((u: string) => u !== following);
+      }
+      
+      // Update counts
+      followData.blog_count = followData.blog_result.length;
+      followData.ignore_count = followData.ignore_result.length;
+    },
     setPathname: (state, action: PayloadAction<string>) => {
       state.pathname = action.payload;
     },
@@ -421,6 +485,7 @@ export const {
   setNotices,
   setTagslist,
   setFollowerslist,
+  updateFollowState,
   setPathname,
 } = globalSlice.actions;
 

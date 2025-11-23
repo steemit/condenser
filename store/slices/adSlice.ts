@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// Types
 interface AdItem {
   enable: boolean;
   img: string;
@@ -76,9 +75,7 @@ const initialState: AdState = {
 const adSlice = createSlice({
   name: 'ad',
   initialState,
-  reducers: {
-    // No actions in original reducer, but structure is ready for future additions
-  },
+  reducers: {},
 });
 
 export default adSlice.reducer;

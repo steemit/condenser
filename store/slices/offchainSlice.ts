@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// Types
 interface OffchainState {
   user: Record<string, any>;
   account?: any;

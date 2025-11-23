@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// Types
 interface UserProfile {
   username: string;
   [key: string]: any;
@@ -18,10 +17,13 @@ const userProfilesSlice = createSlice({
   name: 'userProfiles',
   initialState,
   reducers: {
-    addProfile: (state, action: PayloadAction<UserProfile>) => {
-      const profile = action.payload;
-      if (profile && profile.username) {
-        state.profiles[profile.username] = profile;
+    addProfile: (state, action: PayloadAction<{
+      username: string;
+      account: any;
+    }>) => {
+      const { username, account } = action.payload;
+      if (username && account) {
+        state.profiles[username] = account;
       }
     },
   },

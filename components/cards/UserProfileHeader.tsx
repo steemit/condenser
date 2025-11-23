@@ -42,7 +42,7 @@ export default function UserProfileHeader({
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-start gap-6">
           {/* Profile image */}
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             {profile?.profile_image ? (
               <img
                 src={profile.profile_image}

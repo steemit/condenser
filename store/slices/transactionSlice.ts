@@ -58,8 +58,16 @@ const transactionSlice = createSlice({
       state.confirmBroadcastOperation = undefined;
       state.confirm = undefined;
     },
-    broadcastOperation: (state) => {
-      // Saga handles this, no state change
+    broadcastOperation: (state, action: PayloadAction<{
+      type: string;
+      operation: any;
+      confirm?: string | null;
+      warning?: any;
+      errorCallback?: (msg: string) => void;
+      successCallback?: () => void;
+      allowPostUnsafe?: boolean;
+    }>) => {
+      // Saga/thunk handles this, no state change
     },
     error: (state, action: PayloadAction<{
       operations?: any[];

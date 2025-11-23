@@ -45,11 +45,6 @@ export default function PostFull({ post }: PostFullProps) {
   const postUrl = `/${post.category}/@${post.author}/${post.permlink}`;
   const createdDate = new Date(post.created);
 
-  const handleVote = async (weight: number) => {
-    // TODO: Implement actual vote action
-    console.log('Vote:', { author: post.author, permlink: post.permlink, weight });
-  };
-
   return (
     <article className="post-full">
       <header className="post-full__header mb-6">
@@ -103,7 +98,7 @@ export default function PostFull({ post }: PostFullProps) {
       <footer className="post-full__footer mt-8 pt-6 border-t border-gray-200">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-4">
-            <Voting post={post} onVote={handleVote} />
+            <Voting post={post} />
             
             <button
               className="px-3 py-1 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"

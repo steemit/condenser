@@ -1,0 +1,83 @@
+{
+    "pathname": "trending",
+    "props": {
+        "id": "2.0.0",
+        "head_block_number": 38897,
+        "head_block_id": "000097f1d40a280e4758128e7b57d60cee9df36d",
+        "time": "2016-03-24T15:39:06",
+        "current_witness": "mottler-5",
+        "total_pow": "18446744048449238345",
+        "num_pow_witnesses": 79,
+        "virtual_supply": "156738.000 STEEM",
+        "current_supply": "156738.000 STEEM",
+        "confidential_supply": "0.000 STEEM",
+        "current_sbd_supply": "0.000 SBD",
+        "confidential_sbd_supply": "0.000 SBD",
+        "total_vesting_fund_steem": "274.000 STEEM",
+        "total_vesting_shares": "274.000000 VESTS",
+        "total_reward_fund_steem": "77794.000 STEEM",
+        "total_reward_shares2": "0",
+        "sbd_interest_rate": 1000,
+        "average_block_size": 117,
+        "maximum_block_size": 131072,
+        "current_aslot": 47582,
+        "recent_slots_filled": "329648522672200722443889453235959593423",
+        "last_irreversible_block_num": 38876,
+        "max_virtual_bandwidth": "2203586534107862357",
+        "current_reserve_ratio": 1945
+    },
+    "status": {},
+    "tag_idx": {
+        "trending": [],
+        "active": [],
+        "recent": [],
+        "best": []
+    },
+    "categories": {},
+    "content": {},
+    "accounts": {},
+    "pow_queue": [],
+    "witnesses": {
+        "id": "2.7.0",
+        "current_virtual_time": "0",
+        "next_shuffle_block_num": 38913,
+        "current_shuffled_witnesses": [
+            "mottler-6",
+            "alice1",
+            "mottler-4",
+            "faddy3",
+            "dumpthisjunk",
+            "dealthandtaxes",
+            "lambda",
+            "cloop3",
+            "mr11acdee3",
+            "dumpcoin",
+            "nxt",
+            "devshuster",
+            "nxt1",
+            "mottler-7",
+            "failcoin1",
+            "mottler-1",
+            "smooth",
+            "mottler-5",
+            "blizzt",
+            "rurikovich",
+            "woot"
+        ],
+        "median_props": {
+            "account_creation_fee": "100.000 STEEM",
+            "maximum_block_size": 131072,
+            "sbd_interest_rate": 1000
+        }
+    },
+    "discussion_idx": {
+        "": {
+            "category": "",
+            "trending": [],
+            "recent": [],
+            "active": [],
+            "maturing": [],
+            "best": []
+        }
+    }
+}

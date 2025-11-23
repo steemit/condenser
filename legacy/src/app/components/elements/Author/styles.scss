@@ -1,0 +1,23 @@
+.Author {
+  display: inline-block;
+
+  .dropdown-arrow {
+  	position: relative;
+  	top: 3px;
+  	left: -2px;
+  }
+
+  /* coax footer link to behave similarly */
+  > span > strong > a {
+      transition: 0.2s all ease-in-out;
+      @include themify($themes) {
+        color: themed('textColorPrimary');
+      }
+
+      &:hover, &:focus {
+        @include themify($themes) {
+            color: themed('textColorAccent');
+        }
+     }
+  }
+}

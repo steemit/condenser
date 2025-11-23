@@ -1,0 +1,22 @@
+.UserList {
+  .pag-active {
+    background-color:#e6e6e6;
+  }
+  a:focus {
+    outline: none !important;
+  }
+  .pagination {
+    position: relative;
+    text-align: right;
+    .previous {
+      position: absolute;
+      right: 50px
+    }
+    .disabled {
+      padding: 0 !important;
+    }
+  }
+  li:nth-last-child(2){
+    margin-right: 72px;
+  }
+}

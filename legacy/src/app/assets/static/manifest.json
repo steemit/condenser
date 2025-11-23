@@ -1,0 +1,32 @@
+{
+    "name": "Steemit",
+    "short_name": "Steemit",
+    "theme_color": "#FFFFFF",
+    "background_color": "#FFFFFF",
+    "start_url": "/",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "/images/favicons/favicon-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "/images/favicons/favicon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "/images/favicons/favicon-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "/images/favicons/favicon-196x196.png",
+            "sizes": "196x196",
+            "type": "image/png"
+        }
+    ],
+    "gcm_sender_id": "724829305784",
+    "gcm_user_visible_only": true
+}

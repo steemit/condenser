@@ -1,0 +1,78 @@
+form {
+  .error {
+    input, input:active, input:focus {
+      border-color: $alert-color;
+    }
+    label, .help-text {
+      color: $alert-color;
+    }
+    .help-text {
+      margin-top: 0.4rem;
+    }
+  }
+  .success {
+    color: $success-color;
+    transition: 0.3s all ease-in-out;
+  }
+}
+button {
+    margin-right: 15px !important;
+}
+input, textarea, select {
+    // Overwrite 16px margin-bottom, it was pushing error messages down away from the form element
+    margin-bottom: 0px !important;
+}
+.error {
+    color: $alert-color;
+    margin-bottom: 10px;
+    transition: 0.3s all ease-in-out;
+}
+p.error {
+  padding-top: 6px;
+  line-height: 1.1;
+}
+.warning {
+    color: darkgoldenrod;
+    margin-bottom: 10px;
+    transition: 0.3s all ease-in-out;
+}
+.darkred {
+    color: darkred;
+    margin-bottom: 10px;
+}
+.info {
+    color: dimgrey;
+    margin-bottom: 10px;
+}
+.hoverBackground:hover {
+    background-color: antiquewhite;
+}
+.de-emphasize {
+  color: $dark-gray;
+}
+.overflow-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.darkbtn {
+    padding: 12px;
+    background-color: #eeeeee;
+}
+
+// // what about touch-screen only?
+// .hoverShow {
+//     visibility: hidden;
+// }
+// // what about touch-screen only?
+// .hoverShowTrigger:hover > .hoverShow {
+//     visibility: visible;
+// }
+
+label {
+  @include themify($themes) {
+    color: themed('textColorPrimary');  
+  }    
+}
+
+$input-font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$input-font-size: 16px;

@@ -1,0 +1,17 @@
+{
+  "developmentStandards": {
+    "interactionLanguage": "chinese",
+    "codeComments": "english",
+    "documentation": "english",
+    "packageManager": "pnpm"
+  },
+  "testing": {
+    "unitTestCoverage": {
+      "functionTarget": 80,
+      "componentTarget": 70
+    },
+    "requireComponentTests": true,
+    "requireFunctionTests": true
+  }
+}
+

@@ -1,0 +1,7 @@
+<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg enable-background="new 0 0 33 33" height="33px" version="1.1" viewBox="0 0 33 33" width="33px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="Chevron_Down_Circle">
+    <circle cx="16" cy="16" r="15" stroke="#121313" fill="none" />
+    <path d="M22.3,12.393l-6.285,6.195l-6.285-6.196c-0.394-0.391-1.034-0.391-1.429,0   c-0.394,0.391-0.394,1.024,0,1.414l6.999,6.9c0.384,0.38,1.044,0.381,1.429,0l6.999-6.899c0.394-0.391,0.394-1.024,0-1.414   C23.334,12.003,22.695,12.003,22.3,12.393z" fill="#121313"/>
+  </g>
+</svg>

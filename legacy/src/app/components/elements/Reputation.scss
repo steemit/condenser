@@ -1,0 +1,14 @@
+.Reputation {
+  @include font-size(13px);
+  line-height: 1;
+  padding: 0;
+  margin-left: -1px;
+  font-weight: normal;
+  transition: 0.3s all ease-in-out;
+  @include themify($themes) {
+    color: themed('textColorPrimary');
+  }  
+  @include MQ(M) {
+    @include font-size(14px);
+  }
+}

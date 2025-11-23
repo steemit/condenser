@@ -1,0 +1,21 @@
+.UserWallet__claimbox {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  @include themify($themes) {
+    border: themed('border');
+    background-color: themed('highlightBackgroundColor');
+    color: themed('textColorPrimary');
+  }
+
+  .button {
+    @extend .e-btn;
+    @include font-size(14px);
+    margin: 0;
+  }
+}

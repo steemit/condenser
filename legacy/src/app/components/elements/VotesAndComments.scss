@@ -1,0 +1,35 @@
+.VotesAndComments {
+  path {
+    transition: 0.2s all ease-in-out;
+    @include themify($themes) {
+     fill: themed('iconColorSecondary'); 
+    }       
+  }
+  circle {
+    stroke: none;
+  }
+  a {
+    font-weight: normal;
+  }
+  white-space: nowrap;
+}
+
+.VotesAndComments__votes {
+  padding-right: 1rem;
+  @include themify($themes) {
+    border-right: themed('borderLight'); 
+  }   
+}
+
+.VotesAndComments__comments {
+  padding: 0 1rem;
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  .VotesAndComments {
+    display: block;
+    width: auto;
+    float: right;
+  }
+}

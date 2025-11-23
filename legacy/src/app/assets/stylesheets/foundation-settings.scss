@@ -1,0 +1,57 @@
+/// Font size attribute applied to `<html>` and `<body>`. We use 100% by default so the value is inherited from the user's browser settings.
+/// @type Number
+$global-font-size: 100% !default;
+
+/// Default line height for all type. `$global-lineheight` is 24px while `$global-font-size` is 16px
+/// @type Number
+$global-lineheight: 1.6 !default;
+
+/// Colors used for buttons, callouts, links, etc. There must always be a color called `primary`.
+/// @type Map
+$foundation-palette: (
+        primary: #1A5099,
+        secondary: #777,
+        success: #3adb76,
+        warning: #ffae00,
+        alert: #ec5840,
+) !default;
+
+/// Color used for light gray UI items.
+/// @type Color
+$light-gray: #e6e6e6 !default;
+
+/// Color used for medium gray UI items.
+/// @type Color
+$medium-gray: #cacaca !default;
+
+/// Color used for dark gray UI items.
+/// @type Color
+$dark-gray: #8a8a8a !default;
+
+//$dark-blue: #1A5099 !default; //not used yet
+
+$light-blue: #4ba2f2 !default;
+
+/// Color used for black ui items.
+/// @type Color
+$black: #333333 !default;
+
+/// Color used for white ui items.
+/// @type Color
+$white: #fefefe !default;
+
+/// Background color of the body.
+/// @type Color
+$body-background: $white !default;
+
+/// Text color of the body.
+/// @type Color
+$body-font-color: $black !default;
+
+/// Font stack of the body.
+/// @type List
+$body-font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
+
+/// Global value used for all elements that have a border radius.
+/// @type Number
+$global-radius: 3px !default;

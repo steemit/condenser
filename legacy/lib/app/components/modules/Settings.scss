@@ -1,0 +1,65 @@
+
+.Settings {
+	.button {
+		text-decoration: none;
+		font-weight: bold;
+		transition: 0.2s all ease-in-out;
+		text-transform: capitalize;
+		border-radius: 0;
+		@include font-size(18px);
+		@include themify($themes) {
+			background-color: themed('buttonBackground');
+			box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 themed('buttonBoxShadow');
+			color: themed('buttonText');
+		}
+		&:hover, &:focus {
+			@include themify($themes) {
+				background-color: themed('buttonBackgroundHover');
+				box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');
+				color: themed('buttonTextHover');
+			}
+		}
+		&:visited, &:active {
+			@include themify($themes) {
+				color: themed('ButtonText');
+			}
+		}
+	}
+	.button.disabled, .button[disabled] {
+	    opacity: 0.25;
+	    cursor: not-allowed;
+	    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+	    &:hover {
+			@include themify($themes) {
+				background-color: themed('buttonBackground');
+				box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+				color: themed('buttonText');
+			}
+	    }
+	}
+	.success, .error {
+		text-transform: capitalize;
+		padding-left: 8px;
+	}
+	.success {
+		@include themify($themes) {
+			color: themed('textColorAccent');
+		}
+	}
+	p.error {
+		position: relative;
+		top: 4px;
+		line-height: 1.2;
+	}
+	div.error {
+		padding-left: 0;
+	}
+    label {
+        text-transform: none!important;
+    }
+    h4 {
+        font-weight: bold;
+        font-family: $font-primary;
+        font-size: 1.125rem!important;
+    }
+}

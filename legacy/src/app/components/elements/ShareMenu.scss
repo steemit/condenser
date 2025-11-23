@@ -1,0 +1,20 @@
+.shareMenu {
+    display: inline-block;
+    vertical-align: middle;
+    height: 2em;
+
+    > ul {
+        list-style: none;
+        display: inline;
+        margin: 0;
+        li {
+            float: left;
+            padding: 2px;
+        }
+        li > a:hover svg {
+            @include themify($themes) {
+              fill: themed('colorAccent');
+            }
+        }
+    }
+}

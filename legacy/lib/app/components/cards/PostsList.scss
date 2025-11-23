@@ -1,0 +1,43 @@
+.PostsList__summaries {
+    .articles__summary {
+        position: relative;
+    }
+
+    .FeaturedTag, .PromotedTag {
+        font-weight: 400;
+        display: inline;
+        padding: 0.1rem 0.2rem;
+        margin: 0 1rem 0 0.5rem;
+        border-radius: 0.3rem;
+        font-size: 0.75rem;
+        @include themify($themes) {
+            background-color: themed('colorAccent');
+            color: themed('buttonText');
+        }
+    }
+    .PromotedTag {
+        @include themify($themes) {
+            background-color: themed('iconColorSecondary');
+        }
+    }
+
+    A.PostDismiss {
+        position: absolute;
+        right: 0.15rem;
+
+        svg {
+            @include themify($themes) {
+                width: 0.6rem;
+                height: 0.6rem;
+                opacity: 0.3;
+                fill: themed('textColorSecondary');
+            }
+        }
+
+        &:hover {
+            svg {
+                opacity: 1;
+            }
+        }
+    }
+}

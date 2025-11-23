@@ -1,0 +1,29 @@
+.nav__block-list {
+    margin: 0px;
+    display: flex;
+}
+
+li.nav__block-list-item {
+    margin: 0 10px;
+    list-style: none;
+    padding: 1.125rem 0.25rem;
+    transition: 0.3s all ease-in-out;
+    font-size: 1.125rem;
+    a {
+        @extend .link;
+        @extend .link--primary;
+        font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    &--active {
+        box-shadow: 0px 5px 0px -2px $color-teal;
+        a {
+            color: $color-teal;
+        }
+    }
+    &:hover, &:focus {
+        box-shadow: 0px 5px 0px -2px $color-teal;
+        a {
+            color: $color-teal;
+        }
+    }
+}

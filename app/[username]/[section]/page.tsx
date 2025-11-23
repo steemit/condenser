@@ -7,6 +7,7 @@ import { setPathname } from '@/store/slices/globalSlice';
 import { fetchAccountPosts, Post } from '@/lib/api/steem';
 import PostsList from '@/components/cards/PostsList';
 import UserProfileHeader from '@/components/cards/UserProfileHeader';
+import NotificationsList from '@/components/cards/NotificationsList';
 
 /**
  * User profile page with section
@@ -132,16 +133,14 @@ export default function UserProfileSectionPage() {
   }
 
   if (section === 'notifications') {
-    // TODO: Implement notifications list
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         <UserProfileHeader
           accountname={accountname}
           profile={profile}
           currentUser={username}
         />
-        <h2 className="text-2xl font-bold mt-6 mb-4">Notifications</h2>
-        <p className="text-gray-600">Notifications coming soon...</p>
+        <NotificationsList username={accountname} />
       </div>
     );
   }

@@ -11,8 +11,17 @@ export interface Post {
   title: string;
   body: string;
   created: string;
-  net_rshares: string;
-  children: number;
+  net_rshares?: string;
+  children?: number;
+  active_votes?: Array<{
+    voter: string;
+    weight: number;
+  }>;
+  pending_payout_value?: string;
+  json_metadata?: {
+    tags?: string[];
+    [key: string]: any;
+  };
   [key: string]: any;
 }
 

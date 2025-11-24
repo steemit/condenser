@@ -6,8 +6,9 @@ import { normalizeUsername } from '@/lib/utils/username';
 
 /**
  * User profile page (default to blog section)
- * Route: /[username] or /@[username]
- * Redirects to /[username]/blog
+ * Route: /@[username]
+ * Redirects to /@[username]/blog
+ * Note: proxy.ts ensures only @username format reaches here
  */
 export default function UserProfilePage() {
   const params = useParams();
@@ -16,7 +17,8 @@ export default function UserProfilePage() {
   const username = normalizeUsername(usernameRaw);
 
   useEffect(() => {
-    router.replace(`/${username}/blog`);
+    // Use @username format in URL
+    router.replace(`/@${username}/blog`);
   }, [username, router]);
 
   return (

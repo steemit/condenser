@@ -12,8 +12,9 @@ import NotificationsList from '@/components/cards/NotificationsList';
 
 /**
  * User profile page with section
- * Route: /[username]/[section]
+ * Route: /@[username]/[section]
  * Sections: blog, posts, comments, replies, payout, followers, followed, settings, notifications, communities
+ * Note: proxy.ts ensures only @username format reaches here
  * Equivalent to old route: UserProfile with params [@username, section]
  */
 export default function UserProfileSectionPage() {
@@ -30,9 +31,9 @@ export default function UserProfileSectionPage() {
   const [hasMore, setHasMore] = useState(true);
   const [profile, setProfile] = useState<any>(null);
 
-  // Set pathname in global state
+  // Set pathname in global state (use @username format)
   useEffect(() => {
-    const pathname = `/${accountname}${section !== 'blog' ? `/${section}` : ''}`;
+    const pathname = `/@${accountname}${section !== 'blog' ? `/${section}` : ''}`;
     dispatch(setPathname(pathname));
   }, [accountname, section, dispatch]);
 

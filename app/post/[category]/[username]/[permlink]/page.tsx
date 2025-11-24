@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useAppDispatch } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
+import { normalizeUsername, formatUsername } from '@/lib/utils/username';
 import PostFull from '@/components/cards/PostFull';
 import CommentsList from '@/components/cards/CommentsList';
 import { Post, fetchPostByPermlink, fetchCommentsByPermlink } from '@/lib/api/steem';
@@ -18,7 +19,8 @@ export default function PostPage() {
   const params = useParams();
   const dispatch = useAppDispatch();
   const category = params.category as string;
-  const username = params.username as string;
+  const usernameRaw = params.username as string;
+  const username = normalizeUsername(usernameRaw);
   const permlink = params.permlink as string;
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Post[]>([]);
@@ -27,7 +29,7 @@ export default function PostPage() {
 
   // Set pathname in global state
   useEffect(() => {
-    const pathname = `/${category}/@${username}/${permlink}`;
+    const pathname = `/${category}/${formatUsername(username)}/${permlink}`;
     dispatch(setPathname(pathname));
   }, [category, username, permlink, dispatch]);
 

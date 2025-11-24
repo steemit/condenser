@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { normalizeUsername, formatUsername } from '@/lib/utils/username';
 import { fetchPostByPermlink } from '@/lib/api/steem';
 
 /**
@@ -14,7 +15,8 @@ import { fetchPostByPermlink } from '@/lib/api/steem';
 export default function PostNoCategoryPage() {
   const router = useRouter();
   const params = useParams();
-  const username = params.username as string;
+  const usernameRaw = params.username as string;
+  const username = normalizeUsername(usernameRaw);
   const permlink = params.permlink as string;
   const [loading, setLoading] = useState(true);
 
@@ -23,14 +25,14 @@ export default function PostNoCategoryPage() {
       try {
         const post = await fetchPostByPermlink(null, username, permlink);
         if (post && post.category) {
-          router.replace(`/${post.category}/@${username}/${permlink}`);
+          router.replace(`/${post.category}/${formatUsername(username)}/${permlink}`);
         } else {
           // If post not found or category missing, redirect to a default category or 404
-          router.replace(`/general/@${username}/${permlink}`);
+          router.replace(`/general/${formatUsername(username)}/${permlink}`);
         }
       } catch (error) {
         console.error('Error fetching post:', error);
-        router.replace(`/general/@${username}/${permlink}`);
+        router.replace(`/general/${formatUsername(username)}/${permlink}`);
       } finally {
         setLoading(false);
       }

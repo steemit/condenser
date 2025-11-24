@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
 import { fetchAccountPosts, Post } from '@/lib/api/steem';
+import { normalizeUsername, formatUsername } from '@/lib/utils/username';
 import PostsList from '@/components/cards/PostsList';
 import UserProfileHeader from '@/components/cards/UserProfileHeader';
 import NotificationsList from '@/components/cards/NotificationsList';
@@ -20,7 +21,8 @@ export default function UserProfileSectionPage() {
   const dispatch = useAppDispatch();
   const username = useAppSelector((state) => state.user.current?.username);
   
-  const accountname = (params.username as string).toLowerCase();
+  const usernameRaw = params.username as string;
+  const accountname = normalizeUsername(usernameRaw).toLowerCase();
   const section = (params.section as string) || 'blog';
   
   const [posts, setPosts] = useState<Post[]>([]);

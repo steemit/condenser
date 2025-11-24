@@ -2,16 +2,18 @@
 
 import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { normalizeUsername } from '@/lib/utils/username';
 
 /**
  * User profile page (default to blog section)
- * Route: /[username]
+ * Route: /[username] or /@[username]
  * Redirects to /[username]/blog
  */
 export default function UserProfilePage() {
   const params = useParams();
   const router = useRouter();
-  const username = params.username as string;
+  const usernameRaw = params.username as string;
+  const username = normalizeUsername(usernameRaw);
 
   useEffect(() => {
     router.replace(`/${username}/blog`);

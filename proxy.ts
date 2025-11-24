@@ -27,7 +27,9 @@ export function proxy(request: NextRequest) {
   // Rewrite to: /post/category/username/permlink
   const postWithCategoryMatch = pathname.match(/^\/([^\/]+)\/@?([^\/]+)\/([^\/]+)$/);
   if (postWithCategoryMatch) {
-    const [, category, username, permlink] = postWithCategoryMatch;
+    const [, category, usernameRaw, permlink] = postWithCategoryMatch;
+    // Remove @ prefix from username if present
+    const username = usernameRaw.startsWith('@') ? usernameRaw.slice(1) : usernameRaw;
     // Check if category is not a reserved route
     const reservedRoutes = [
       'trending', 'hot', 'created', 'payout', 'payout_comments', 'muted',
@@ -50,7 +52,9 @@ export function proxy(request: NextRequest) {
   
   const postNoCategoryMatch = pathname.match(/^\/@?([^\/]+)\/([^\/]+)$/);
   if (postNoCategoryMatch) {
-    const [, username, secondSegment] = postNoCategoryMatch;
+    const [, usernameRaw, secondSegment] = postNoCategoryMatch;
+    // Remove @ prefix from username if present
+    const username = usernameRaw.startsWith('@') ? usernameRaw.slice(1) : usernameRaw;
     // If second segment is a section, let it go to [username]/[section] route
     if (sections.includes(secondSegment.toLowerCase())) {
       return NextResponse.next();
@@ -59,6 +63,26 @@ export function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = `/post-no-category/${username}/${secondSegment}`;
     return NextResponse.rewrite(url);
+  }
+
+  // Pattern: /@username or /username
+  // Handle user profile root route
+  const userProfileMatch = pathname.match(/^\/@?([^\/]+)$/);
+  if (userProfileMatch) {
+    const [, usernameRaw] = userProfileMatch;
+    // Remove @ prefix from username if present
+    const username = usernameRaw.startsWith('@') ? usernameRaw.slice(1) : usernameRaw;
+    // Check if it's not a reserved route
+    const reservedRoutes = [
+      'trending', 'hot', 'created', 'payout', 'payout_comments', 'muted',
+      'login', 'search', 'submit', 'about', 'faq', 'privacy', 'support', 'tos',
+      'communities', 'tags', 'rewards', 'roles', 'welcome', 'api', '_next'
+    ];
+    
+    if (!reservedRoutes.includes(username.toLowerCase())) {
+      // Let it go to [username] route (which will redirect to [username]/blog)
+      return NextResponse.next();
+    }
   }
 
   return NextResponse.next();

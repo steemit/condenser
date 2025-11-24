@@ -3,6 +3,8 @@
     "interactionLanguage": "chinese",
     "codeComments": "english",
     "documentation": "english",
+    "commitMessages": "english",
+    "rules": "english",
     "packageManager": "pnpm"
   },
   "testing": {
@@ -12,6 +14,22 @@
     },
     "requireComponentTests": true,
     "requireFunctionTests": true
+  },
+  "aiAssistantRules": {
+    "useEnglishFor": [
+      "code comments",
+      "commit messages",
+      "documentation",
+      "rules and configuration",
+      "error messages",
+      "log messages"
+    ],
+    "useChineseFor": [
+      "user interactions",
+      "conversation with user"
+    ],
+    "doNotCommit": true,
+    "maintainConsistency": true
   }
 }
 

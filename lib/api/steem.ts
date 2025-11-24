@@ -47,16 +47,27 @@ export async function fetchRankedPosts(params: FetchPostsParams): Promise<Post[]
     observer,
   } = params;
 
-  // TODO: Replace with actual API call
-  // This should call the Steem API bridge similar to the old FetchDataSaga
-  // For now, return empty array as placeholder
-  console.log('fetchRankedPosts', { order, category, start_author, start_permlink, limit, observer });
-  
-  // Placeholder: In real implementation, this would call:
-  // const api = await getSteemApi();
-  // return api.getRankedPosts({ sort: order, tag: category, limit, start_author, start_permlink, observer });
-  
-  return [];
+  try {
+    const searchParams = new URLSearchParams({
+      sort: order,
+      tag: category,
+      limit: limit.toString(),
+    });
+    if (start_author) searchParams.set('start_author', start_author);
+    if (start_permlink) searchParams.set('start_permlink', start_permlink);
+    if (observer) searchParams.set('observer', observer);
+
+    const response = await fetch(`/api/steem/posts?${searchParams.toString()}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch posts: ${response.statusText}`);
+    }
+
+    const posts = await response.json();
+    return posts as Post[];
+  } catch (error) {
+    console.error('Error fetching ranked posts:', error);
+    return [];
+  }
 }
 
 /**
@@ -72,14 +83,27 @@ export async function fetchAccountPosts(params: FetchPostsParams & { account: st
     observer,
   } = params;
 
-  // TODO: Replace with actual API call
-  console.log('fetchAccountPosts', { order, account, start_author, start_permlink, limit, observer });
-  
-  // Placeholder: In real implementation, this would call:
-  // const api = await getSteemApi();
-  // return api.getAccountPosts({ sort: order, account, limit, start_author, start_permlink, observer });
-  
-  return [];
+  try {
+    const searchParams = new URLSearchParams({
+      sort: order,
+      account,
+      limit: limit.toString(),
+    });
+    if (start_author) searchParams.set('start_author', start_author);
+    if (start_permlink) searchParams.set('start_permlink', start_permlink);
+    if (observer) searchParams.set('observer', observer);
+
+    const response = await fetch(`/api/steem/posts?${searchParams.toString()}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch account posts: ${response.statusText}`);
+    }
+
+    const posts = await response.json();
+    return posts as Post[];
+  } catch (error) {
+    console.error('Error fetching account posts:', error);
+    return [];
+  }
 }
 
 /**
@@ -90,13 +114,51 @@ export async function fetchPostByPermlink(
   author: string,
   permlink: string
 ): Promise<Post | null> {
-  // TODO: Replace with actual API call
-  console.log('fetchPostByPermlink', { category, author, permlink });
-  
-  // Placeholder: In real implementation, this would call:
-  // const api = await getSteemApi();
-  // return api.getContent(author, permlink);
-  
-  return null;
+  try {
+    const searchParams = new URLSearchParams({
+      author,
+      permlink,
+    });
+
+    const response = await fetch(`/api/steem/post?${searchParams.toString()}`);
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null;
+      }
+      throw new Error(`Failed to fetch post: ${response.statusText}`);
+    }
+
+    const post = await response.json();
+    return post as Post;
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    return null;
+  }
+}
+
+/**
+ * Fetch comments for a given post
+ */
+export async function fetchCommentsByPermlink(
+  author: string,
+  permlink: string
+): Promise<Post[]> {
+  try {
+    const searchParams = new URLSearchParams({
+      author,
+      permlink,
+    });
+
+    const response = await fetch(`/api/steem/comments?${searchParams.toString()}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch comments: ${response.statusText}`);
+    }
+
+    const comments = await response.json();
+    return comments as Post[];
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    return [];
+  }
 }
 

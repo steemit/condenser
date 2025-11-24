@@ -49,18 +49,25 @@ export default function NotificationsList({ username }: NotificationsListProps) 
   const loadNotifications = async (accountName: string, startId?: number) => {
     dispatch(notificationsLoading(true));
     try {
-      // TODO: Implement actual API call to fetch notifications
-      // const response = await fetch(`/api/notifications/${accountName}?start_id=${startId || ''}`);
-      // const data = await response.json();
-      
-      // Mock data for now
-      const mockNotifications: Notification[] = [];
+      const searchParams = new URLSearchParams({
+        account: accountName,
+        limit: '100',
+      });
+      if (startId) searchParams.set('last_id', startId.toString());
+
+      const response = await fetch(`/api/steem/notifications?${searchParams.toString()}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch notifications: ${response.statusText}`);
+      }
+
+      const notifications = await response.json();
+      const isLastPage = notifications.length < 100;
       
       dispatch(
         receiveNotifications({
           name: accountName,
-          notifications: mockNotifications,
-          isLastPage: true,
+          notifications,
+          isLastPage,
         })
       );
     } catch (error) {
@@ -81,10 +88,8 @@ export default function NotificationsList({ username }: NotificationsListProps) 
     const timeNow = new Date().toISOString().slice(0, 19);
     try {
       // TODO: Implement actual API call to mark notifications as read
-      // await fetch(`/api/notifications/${username}/mark-read`, {
-      //   method: 'POST',
-      //   body: JSON.stringify({ date: timeNow }),
-      // });
+      // This requires broadcasting a custom_json operation
+      // For now, just update the local state
       
       // Update unread notifications state
       dispatch(

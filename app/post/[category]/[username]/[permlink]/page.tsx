@@ -6,14 +6,12 @@ import { useAppDispatch } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
 import PostFull from '@/components/cards/PostFull';
 import CommentsList from '@/components/cards/CommentsList';
-import { Post, fetchPostByPermlink } from '@/lib/api/steem';
-import { Comment } from '@/components/cards/Comment';
+import { Post, fetchPostByPermlink, fetchCommentsByPermlink } from '@/lib/api/steem';
 
 /**
  * Post page with category
- * Route: /[category]/[username]/[permlink]
- * Note: In the old system, this was /[category]/@[username]/[permlink]
- * We'll handle the @ prefix in middleware or route handling
+ * Route: /post/[category]/[username]/[permlink]
+ * This is rewritten from /[category]/@[username]/[permlink] by middleware
  * Equivalent to old route: Post with params [category, @username, permlink]
  */
 export default function PostPage() {
@@ -23,7 +21,7 @@ export default function PostPage() {
   const username = params.username as string;
   const permlink = params.permlink as string;
   const [post, setPost] = useState<Post | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,48 +33,49 @@ export default function PostPage() {
 
   // Fetch post data and comments
   useEffect(() => {
-    const loadPost = async () => {
+    const loadData = async () => {
       setLoading(true);
       setError(null);
       try {
         const fetchedPost = await fetchPostByPermlink(category, username, permlink);
         if (fetchedPost) {
           setPost(fetchedPost);
-          
-          // TODO: Fetch comments for this post
-          // For now, use empty array
-          setComments([]);
+          const fetchedComments = await fetchCommentsByPermlink(username, permlink);
+          setComments(fetchedComments);
         } else {
           setError('Post not found');
         }
       } catch (err) {
-        console.error('Error fetching post:', err);
-        setError('Failed to load post');
+        console.error('Error fetching post or comments:', err);
+        setError('Failed to load post or comments');
       } finally {
         setLoading(false);
       }
     };
 
-    loadPost();
+    loadData();
   }, [category, username, permlink]);
 
-  const handleReply = async (
-    parentAuthor: string,
-    parentPermlink: string,
-    body: string
-  ) => {
-    // TODO: Implement comment reply
-    console.log('Reply to comment:', { parentAuthor, parentPermlink, body });
-  };
-
-  const handleEdit = async (author: string, permlink: string, body: string) => {
-    // TODO: Implement comment edit
-    console.log('Edit comment:', { author, permlink, body });
-  };
-
-  const handleDelete = async (author: string, permlink: string) => {
-    // TODO: Implement comment delete
-    console.log('Delete comment:', { author, permlink });
+  const handleNewComment = async (newCommentBody: string) => {
+    if (!post) return;
+    // TODO: Implement actual comment submission via API
+    // For now, just add to local state
+    const newComment: Post = {
+      author: 'currentuser', // Replace with actual logged-in user
+      permlink: `comment-${Date.now()}`,
+      category: post.category,
+      title: '',
+      body: newCommentBody,
+      created: new Date().toISOString(),
+      net_rshares: '0',
+      children: 0,
+      parent_author: post.author,
+      parent_permlink: post.permlink,
+      depth: 1,
+      active_votes: [],
+      pending_payout_value: '0.000 SBD',
+    };
+    setComments((prevComments) => [...prevComments, newComment]);
   };
 
   if (loading) {
@@ -102,18 +101,13 @@ export default function PostPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <PostFull post={post} />
-      
-      {post && (
-        <CommentsList
-          comments={comments}
-          postAuthor={post.author}
-          postPermlink={post.permlink}
-          postCategory={post.category}
-          onReply={handleReply}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      )}
+      <CommentsList
+        comments={comments}
+        postAuthor={post.author}
+        postPermlink={post.permlink}
+        postCategory={post.category}
+        onReply={handleNewComment}
+      />
     </div>
   );
 }

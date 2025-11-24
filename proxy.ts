@@ -1,14 +1,16 @@
 /**
- * Next.js Middleware
+ * Next.js Proxy
  * Handles route resolution for dynamic paths
  * Since Next.js doesn't allow different slug names at the same level,
- * we use middleware to rewrite routes to a unified structure
+ * we use proxy to rewrite routes to a unified structure
+ * 
+ * Note: This replaces the deprecated middleware.ts convention
  */
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip API routes and static files

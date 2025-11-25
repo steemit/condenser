@@ -24,7 +24,19 @@ const SECTIONS = [
 ];
 
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  // Get pathname and ensure it's decoded
+  // Next.js should decode it automatically, but we handle %40 (@) encoding explicitly
+  let { pathname } = request.nextUrl;
+  
+  // Decode URL-encoded @ symbols (%40) if present
+  // This handles cases where @ might be encoded in the URL
+  if (pathname.includes('%40')) {
+    try {
+      pathname = decodeURIComponent(pathname);
+    } catch (e) {
+      // If decoding fails, use original pathname
+    }
+  }
 
   // Skip API routes and static files
   if (

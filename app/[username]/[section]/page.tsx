@@ -178,7 +178,7 @@ export default function UserProfileSectionPage() {
           {['blog', 'posts', 'comments', 'replies', 'payout'].map((tab) => (
             <a
               key={tab}
-              href={`/${accountname}/${tab}`}
+              href={`/@${accountname}/${tab}`}
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 section === tab
                   ? 'border-blue-500 text-blue-600'

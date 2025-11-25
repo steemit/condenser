@@ -30,6 +30,19 @@
     ],
     "doNotCommit": true,
     "maintainConsistency": true
+  },
+  "git": {
+    "nonInteractive": true,
+    "autoAdd": false,
+    "commitFlags": [
+      "--no-verify"
+    ],
+    "rules": [
+      "Always use non-interactive mode for git commands",
+      "Use --no-verify flag for commits to skip hooks if needed",
+      "Never use interactive git commands that require user input",
+      "Use git add -A or specific file paths instead of interactive selection"
+    ]
   }
 }
 

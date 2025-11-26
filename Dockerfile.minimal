@@ -1,22 +1,8 @@
-# Minimal Dockerfile for testing - skips build dependencies
+# Minimal Dockerfile - skips build dependencies
 FROM node:20-alpine AS base
 
-# Set proxy environment variables
-ARG HTTPS_PROXY
-ARG HTTP_PROXY
-ENV HTTPS_PROXY=${HTTPS_PROXY}
-ENV HTTP_PROXY=${HTTP_PROXY}
-ENV http_proxy=${HTTP_PROXY}
-ENV https_proxy=${HTTPS_PROXY}
-
-# Configure npm registry
-RUN if [ -n "$HTTPS_PROXY" ]; then \
-        npm config set registry https://registry.npmmirror.com/; \
-    else \
-        npm config set registry https://registry.npmjs.org/; \
-    fi \
-    && if [ -n "$HTTPS_PROXY" ]; then npm config set proxy $HTTPS_PROXY; fi \
-    && if [ -n "$HTTPS_PROXY" ]; then npm config set https-proxy $HTTPS_PROXY; fi \
+# Configure npm registry and install pnpm
+RUN npm config set registry https://registry.npmjs.org/ \
     && npm install -g pnpm
 
 WORKDIR /app
@@ -46,13 +32,6 @@ RUN pnpm build || echo "Build failed - continuing anyway"
 
 # Production stage
 FROM node:20-alpine AS production
-
-ARG HTTPS_PROXY
-ARG HTTP_PROXY
-ENV HTTPS_PROXY=${HTTPS_PROXY}
-ENV HTTP_PROXY=${HTTP_PROXY}
-ENV http_proxy=${HTTP_PROXY}
-ENV https_proxy=${HTTPS_PROXY}
 
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nextjs -u 1001

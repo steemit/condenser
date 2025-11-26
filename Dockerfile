@@ -1,22 +1,6 @@
 # Multi-stage build for Next.js application
 FROM alpine:3.22 AS base
 
-# Set proxy environment variables for network issues (can be overridden)
-ARG HTTPS_PROXY
-ARG HTTP_PROXY
-ARG NO_PROXY
-ENV HTTPS_PROXY=${HTTPS_PROXY}
-ENV HTTP_PROXY=${HTTP_PROXY}
-ENV NO_PROXY=${NO_PROXY}
-ENV http_proxy=${HTTP_PROXY}
-ENV https_proxy=${HTTPS_PROXY}
-
-# Use mirror repositories for better connectivity in China
-RUN if [ -n "$HTTPS_PROXY" ]; then \
-        echo "http://mirrors.aliyun.com/alpine/v3.22/main" > /etc/apk/repositories && \
-        echo "http://mirrors.aliyun.com/alpine/v3.22/community" >> /etc/apk/repositories; \
-    fi
-
 # Update package index and install Node.js, pnpm, and other dependencies
 RUN apk update && apk add --no-cache \
     nodejs \
@@ -25,13 +9,7 @@ RUN apk update && apk add --no-cache \
     make \
     g++ \
     git \
-    && if [ -n "$HTTPS_PROXY" ]; then \
-        npm config set registry https://registry.npmmirror.com/; \
-    else \
-        npm config set registry https://registry.npmjs.org/; \
-    fi \
-    && if [ -n "$HTTPS_PROXY" ]; then npm config set proxy $HTTPS_PROXY; fi \
-    && if [ -n "$HTTPS_PROXY" ]; then npm config set https-proxy $HTTPS_PROXY; fi \
+    && npm config set registry https://registry.npmjs.org/ \
     && npm install -g pnpm
 
 # Set working directory
@@ -66,22 +44,6 @@ RUN pnpm build
 
 # Production stage
 FROM alpine:3.22 AS production
-
-# Set proxy environment variables for runtime (if needed)
-ARG HTTPS_PROXY
-ARG HTTP_PROXY
-ARG NO_PROXY
-ENV HTTPS_PROXY=${HTTPS_PROXY}
-ENV HTTP_PROXY=${HTTP_PROXY}
-ENV NO_PROXY=${NO_PROXY}
-ENV http_proxy=${HTTP_PROXY}
-ENV https_proxy=${HTTPS_PROXY}
-
-# Use mirror repositories for better connectivity in China
-RUN if [ -n "$HTTPS_PROXY" ]; then \
-        echo "http://mirrors.aliyun.com/alpine/v3.22/main" > /etc/apk/repositories && \
-        echo "http://mirrors.aliyun.com/alpine/v3.22/community" >> /etc/apk/repositories; \
-    fi
 
 # Install Node.js for production
 RUN apk update && apk add --no-cache nodejs

@@ -35,6 +35,7 @@
     "nonInteractive": true,
     "autoAdd": false,
     "autoCommit": false,
+    "requireUserConfirmation": true,
     "commitFlags": [
       "--no-verify"
     ],
@@ -44,7 +45,9 @@
       "Never use interactive git commands that require user input",
       "Use git add -A or specific file paths instead of interactive selection",
       "NEVER automatically create commits - always ask user for confirmation first",
-      "Only prepare git add commands, let user decide when to commit"
+      "Only prepare git add commands, let user decide when to commit",
+      "STRICTLY FORBIDDEN: Do not execute git commit without explicit user request",
+      "When task is complete, ask user if they want to commit changes"
     ]
   },
   "development": {

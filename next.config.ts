@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Enable standalone output for Docker
+  output: 'standalone',
+  
   // Enable React strict mode
   reactStrictMode: true,
   
@@ -17,6 +19,14 @@ const nextConfig: NextConfig = {
         hostname: 'steemit-dev-imagehoster-001.us-east-1.elasticbeanstalk.com',
       },
     ],
+  },
+  
+  // Server external packages (moved from experimental)
+  serverExternalPackages: ['@steemit/steem-js'],
+  
+  // Turbopack configuration (Next.js 16 default)
+  turbopack: {
+    // Empty config to silence warning
   },
   
   // Transpile packages if needed

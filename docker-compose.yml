@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  condenser-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+      args:
+        # Uncomment and set proxy if network issues occur
+        # HTTPS_PROXY: http://192.168.199.11:8001
+        # HTTP_PROXY: http://192.168.199.11:8001
+        # NO_PROXY: localhost,127.0.0.1
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      # Uncomment if proxy needed at runtime
+      # - HTTPS_PROXY=http://192.168.199.11:8001
+      # - HTTP_PROXY=http://192.168.199.11:8001
+    command: pnpm dev
+
+  condenser-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+      args:
+        # Uncomment and set proxy if network issues occur
+        # HTTPS_PROXY: http://192.168.199.11:8001
+        # HTTP_PROXY: http://192.168.199.11:8001
+        # NO_PROXY: localhost,127.0.0.1
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # Add your environment variables here
+      - STEEMD_CONNECTION_SERVER=https://api.steemit.com
+      - STEEMD_USE_APPBASE=true
+      - CHAIN_ID=0000000000000000000000000000000000000000000000000000000000000000
+      - ADDRESS_PREFIX=STM
+      # Uncomment if proxy needed at runtime
+      # - HTTPS_PROXY=http://192.168.199.11:8001
+      # - HTTP_PROXY=http://192.168.199.11:8001
+    restart: unless-stopped
+
+networks:
+  default:
+    name: condenser-network

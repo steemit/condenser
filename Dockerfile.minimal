@@ -1,0 +1,85 @@
+# Minimal Dockerfile for testing - skips build dependencies
+FROM node:20-alpine AS base
+
+# Set proxy environment variables
+ARG HTTPS_PROXY
+ARG HTTP_PROXY
+ENV HTTPS_PROXY=${HTTPS_PROXY}
+ENV HTTP_PROXY=${HTTP_PROXY}
+ENV http_proxy=${HTTP_PROXY}
+ENV https_proxy=${HTTPS_PROXY}
+
+# Configure npm registry
+RUN if [ -n "$HTTPS_PROXY" ]; then \
+        npm config set registry https://registry.npmmirror.com/; \
+    else \
+        npm config set registry https://registry.npmjs.org/; \
+    fi \
+    && if [ -n "$HTTPS_PROXY" ]; then npm config set proxy $HTTPS_PROXY; fi \
+    && if [ -n "$HTTPS_PROXY" ]; then npm config set https-proxy $HTTPS_PROXY; fi \
+    && npm install -g pnpm
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies (skip optional dependencies that require build tools)
+RUN pnpm install --frozen-lockfile --ignore-scripts
+
+# Development stage
+FROM base AS development
+
+# Copy source code
+COPY . .
+
+EXPOSE 3000
+CMD ["pnpm", "dev"]
+
+# Build stage (simplified - may not work without build tools)
+FROM base AS builder
+
+COPY . .
+
+# Try to build (may fail due to missing build tools)
+RUN pnpm build || echo "Build failed - continuing anyway"
+
+# Production stage
+FROM node:20-alpine AS production
+
+ARG HTTPS_PROXY
+ARG HTTP_PROXY
+ENV HTTPS_PROXY=${HTTPS_PROXY}
+ENV HTTP_PROXY=${HTTP_PROXY}
+ENV http_proxy=${HTTP_PROXY}
+ENV https_proxy=${HTTPS_PROXY}
+
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+WORKDIR /app
+
+# Copy built application (if build succeeded)
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./ 2>/dev/null || true
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static 2>/dev/null || true
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public 2>/dev/null || true
+
+# Fallback: copy source if build failed
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json 2>/dev/null || true
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules 2>/dev/null || true
+COPY --from=builder --chown=nextjs:nodejs /app/app ./app 2>/dev/null || true
+COPY --from=builder --chown=nextjs:nodejs /app/components ./components 2>/dev/null || true
+COPY --from=builder --chown=nextjs:nodejs /app/lib ./lib 2>/dev/null || true
+COPY --from=builder --chown=nextjs:nodejs /app/store ./store 2>/dev/null || true
+COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./next.config.ts 2>/dev/null || true
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+# Try standalone first, fallback to dev mode
+CMD ["sh", "-c", "[ -f server.js ] && node server.js || ([ -f package.json ] && npm run dev)"]

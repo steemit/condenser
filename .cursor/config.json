@@ -34,6 +34,7 @@
   "git": {
     "nonInteractive": true,
     "autoAdd": false,
+    "autoCommit": false,
     "commitFlags": [
       "--no-verify"
     ],
@@ -41,7 +42,9 @@
       "Always use non-interactive mode for git commands",
       "Use --no-verify flag for commits to skip hooks if needed",
       "Never use interactive git commands that require user input",
-      "Use git add -A or specific file paths instead of interactive selection"
+      "Use git add -A or specific file paths instead of interactive selection",
+      "NEVER automatically create commits - always ask user for confirmation first",
+      "Only prepare git add commands, let user decide when to commit"
     ]
   },
   "development": {

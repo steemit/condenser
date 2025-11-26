@@ -2,31 +2,22 @@
 
 This document describes how to build and run the Condenser application using Docker.
 
-## Available Dockerfiles
+## Dockerfile
 
-### 1. `Dockerfile` (Original)
-- Based on Alpine 3.22
-- Multi-stage build with full optimization
-- **Status**: Failing due to network issues
-
-### 2. `Dockerfile.simple`
-- Uses Node.js base image
-- Simplified dependency installation
-- **Status**: Failing due to network issues
-
-### 3. `Dockerfile.minimal`
-- Minimal dependencies
-- Skips build tools that require network access
-- **Status**: Failing at npm install step
+The main `Dockerfile` provides:
+- Multi-stage build based on Alpine 3.22
+- Development and production targets
+- Optimized layer caching
+- Minimal production image size
 
 ## Recommended Solutions
 
-### Alternative Solutions
+### Troubleshooting
 
 If you encounter build issues:
 
-1. **Use different Dockerfile**: Try `Dockerfile.minimal` for simpler builds
-2. **Check network connectivity**: Ensure internet access is available
+1. **Check network connectivity**: Ensure internet access is available
+2. **Clear Docker cache**: `docker system prune -a`
 3. **Use pre-built images**: Consider using official Node.js images
 4. **Build incrementally**: Build base images separately if needed
 
@@ -48,6 +39,6 @@ ping 8.8.8.8
 nslookup registry.npmjs.org
 
 # Build and test
-docker build -f Dockerfile.minimal -t condenser:test .
+docker build -t condenser:test .
 docker run -p 3000:3000 condenser:test
 ```

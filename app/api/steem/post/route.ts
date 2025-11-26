@@ -19,7 +19,18 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const post = await getDiscussion({ author, permlink });
+    const discussion = await getDiscussion({ author, permlink });
+
+    if (!discussion) {
+      return NextResponse.json(
+        { error: 'Post not found' },
+        { status: 404 }
+      );
+    }
+
+    // getDiscussion returns an object with posts keyed by "author/permlink"
+    const postKey = `${author}/${permlink}`;
+    const post = discussion[postKey];
 
     if (!post) {
       return NextResponse.json(

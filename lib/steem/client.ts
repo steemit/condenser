@@ -4,7 +4,9 @@
  * This should only be used in server-side code (API routes, Server Components)
  */
 
-import * as steem from '@steemit/steem-js';
+// @ts-ignore - steem is exported but TypeScript types may not reflect it
+import * as steemModule from '@steemit/steem-js';
+const steem = (steemModule as any).steem;
 
 // Initialize Steem API configuration
 let isInitialized = false;
@@ -27,10 +29,9 @@ export function initializeSteemApi() {
       randomize: true,
     },
     useAppbaseApi: useAppbase,
+    address_prefix: addressPrefix,
+    chain_id: chainId,
   });
-
-  steem.config.set('address_prefix', addressPrefix);
-  steem.config.set('chain_id', chainId);
 
   isInitialized = true;
 }
@@ -151,9 +152,16 @@ export async function getAccountNotifications(params: {
 /**
  * Get unread notifications
  */
+export interface UnreadNotificationsResponse {
+  error?: {
+    message: string;
+  };
+  [key: string]: unknown;
+}
+
 export async function getUnreadNotifications(params: {
   account: string;
-}): Promise<any> {
+}): Promise<UnreadNotificationsResponse> {
   return callBridge('unread_notifications', params);
 }
 
@@ -161,4 +169,5 @@ export async function getUnreadNotifications(params: {
  * Export steem API for direct access if needed
  */
 export { steem };
+export const PrivateKey = steem.auth.PrivateKey;
 

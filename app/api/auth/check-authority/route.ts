@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccount } from '@/lib/steem/client';
-import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
+import { PrivateKey } from '@/lib/steem/client';
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,13 +29,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Derive private keys
-    const isRole = (r: string, fn: () => PrivateKey) => (!role || role === r ? fn() : undefined);
+    const isRole = (r: string, fn: () => InstanceType<typeof PrivateKey>) => (!role || role === r ? fn() : undefined);
 
     let privateKeys: {
-      posting_private?: PrivateKey;
-      active_private?: PrivateKey;
-      owner_private?: PrivateKey;
-      memo_private: PrivateKey;
+      posting_private?: InstanceType<typeof PrivateKey>;
+      active_private?: InstanceType<typeof PrivateKey>;
+      owner_private?: InstanceType<typeof PrivateKey>;
+      memo_private: InstanceType<typeof PrivateKey>;
     };
 
     try {
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check authority (simplified version)
-    const toPub = (k?: PrivateKey) => (k ? k.toPublicKey().toString() : '-');
+    const toPub = (k?: InstanceType<typeof PrivateKey>) => (k ? k.toPublicKey().toString() : '-');
     const postingPub = toPub(privateKeys.posting_private);
     const activePub = toPub(privateKeys.active_private);
     const ownerPub = toPub(privateKeys.owner_private);

@@ -138,7 +138,10 @@ export default function LoginForm() {
 
   const handleSignup = () => {
     // TODO: Open signup URL in new window
-    const signupUrl = process.env.NEXT_PUBLIC_SIGNUP_URL || 'https://signup.steemit.com';
+    // Safe access to process.env for UMD compatibility
+    const signupUrl = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_SIGNUP_URL) 
+      ? process.env.NEXT_PUBLIC_SIGNUP_URL 
+      : 'https://signup.steemit.com';
     window.open(signupUrl, '_blank', 'noopener,noreferrer');
   };
 

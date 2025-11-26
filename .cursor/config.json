@@ -43,6 +43,18 @@
       "Never use interactive git commands that require user input",
       "Use git add -A or specific file paths instead of interactive selection"
     ]
+  },
+  "development": {
+    "serverManagement": {
+      "checkBeforeStart": true,
+      "rules": [
+        "Always check terminals folder for running processes before starting pnpm dev",
+        "Use list_dir on terminals folder to see current commands",
+        "Look for existing 'pnpm dev' processes in terminal metadata",
+        "If pnpm dev is already running, do not start another instance",
+        "Kill existing processes if restart is needed"
+      ]
+    }
   }
 }
 

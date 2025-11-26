@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",
-    "@steemit/steem-js": "0.8.0",
+    "@steemit/steem-js": "next",
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",

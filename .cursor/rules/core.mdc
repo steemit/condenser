@@ -2,73 +2,54 @@
 alwaysApply: true
 ---
 
-# Core AI Assistant Rules
+## Conversation Language Policy
 
-Universal rules and standards that can be shared across multiple projects.
+- **Let the user decide the conversation language at the start of each new chat**
+- **Default to Chinese (中文) if no preference is specified**
+- Ask the user: "Which language would you prefer for our conversation? (Default: 中文)"
+- Respect the user's choice throughout the entire chat session
+- This ensures comfortable communication for the user
 
-## Language Standards
+## Code Documentation and Comments
 
-### Language Usage
-**Use English for:**
-- Code comments
-- Commit messages
-- Documentation
-- Rules and configuration
-- Error messages
-- Log messages
+- All code comments, documentation, and rules must be written in English.
+- This includes:
+  - Inline code comments
+  - Function/class documentation (JSDoc comments)
+  - README files and other documentation
+  - Code review comments
+  - Error messages visible to developers
+  - Configuration file comments
 
-**Use Chinese for:**
-- User interactions
-- Conversation with user
+## Rationale
 
-### Behavior Rules
-- **Do Not Commit**: True
-- **Maintain Consistency**: True
+Using English for all technical documentation ensures:
+- Consistency across the codebase
+- Better collaboration with international developers
+- Easier maintenance and onboarding
+- Standard practice in open-source projects
 
-## Git Configuration
+## Package Management
 
-### Basic Settings
-- **Non-Interactive**: True
-- **Auto Add**: False
-- **Auto Commit**: False
-- **Require User Confirmation**: True
-- **Commit Flags**: `--no-verify`
+See `project.mdc` for detailed package management rules and guidelines.
 
-### Git Rules
-1. Always use non-interactive mode for git commands
-2. Use `--no-verify` flag for commits to skip hooks if needed
-3. Never use interactive git commands that require user input
-4. Use `git add -A` or specific file paths instead of interactive selection
-5. **NEVER automatically create commits** - always ask user for confirmation first
-6. Only prepare git add commands, let user decide when to commit
-7. **STRICTLY FORBIDDEN**: Do not execute git commit without explicit user request
-8. When task is complete, ask user if they want to commit changes
+## Git Commit Policy
 
-## Development Best Practices
+- **Never automatically commit changes without explicit user confirmation**
+- Before creating any commit:
+  1. Show the user what files will be committed (`git status`)
+  2. Present the proposed commit message
+  3. Wait for explicit user approval before executing `git commit`
+- Only use `git add` and prepare commits, but always ask for confirmation before committing
+- This ensures the user maintains full control over the git history and commit timing
 
-### Code Quality
-- Write clean, readable code
-- Follow consistent naming conventions
-- Add meaningful comments for complex logic
-- Maintain proper error handling
+## Documentation Update Policy
 
-### Testing Standards
-- Write unit tests for functions
-- Write component tests for UI components
-- Maintain good test coverage
-- Use descriptive test names
-
-### Documentation
-- Keep documentation up to date
-- Use clear, concise language
-- Provide examples where helpful
-- Document API changes
-
-## Implementation Notes
-
-These core rules ensure:
-- Safe, predictable AI behavior
-- Consistent development workflow
-- Prevention of accidental commits
-- Clear language boundaries for different contexts
-- Universal best practices across projects
+- **Always update related documentation when completing TODO tasks**
+- When marking TODO items as completed:
+  1. Review all related documentation files that may need updates
+  2. Update README files, API documentation, and usage guides as needed
+  3. Ensure documentation reflects the current state of the codebase
+  4. Update version numbers, examples, and feature lists if applicable
+- This ensures documentation stays synchronized with code changes and project progress
+- Documentation updates should be part of the same workflow as completing the actual tasks

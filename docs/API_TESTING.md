@@ -1,17 +1,17 @@
-# API 端点测试指南
+# API Endpoint Testing Guide
 
-本文档说明如何测试 Steem API 端点。
+This document explains how to test Steem API endpoints.
 
-## 前置条件
+## Prerequisites
 
-1. 确保开发服务器正在运行：
+1. Ensure the development server is running:
    ```bash
    pnpm dev
    ```
 
-2. 服务器应该在 `http://localhost:3000` 上运行
+2. Server should be running on `http://localhost:3000`
 
-3. 可选：配置环境变量（`.env.local`）：
+3. Optional: Configure environment variables (`.env.local`):
    ```bash
    STEEMD_CONNECTION_SERVER=https://api.steemit.com
    STEEMD_CONNECTION_CLIENT=https://api.steemit.com
@@ -20,99 +20,99 @@
    ADDRESS_PREFIX=STM
    ```
 
-## 测试方法
+## Testing Methods
 
-### 方法 1: 使用测试脚本（推荐）
+### Method 1: Using Test Scripts (Recommended)
 
-运行 TypeScript 测试脚本：
+Run TypeScript test script:
 ```bash
 pnpm test:api
 ```
 
-或使用简单的 bash 脚本：
+Or use simple bash script:
 ```bash
 ./scripts/test-api-simple.sh
 ```
 
-### 方法 2: 使用 curl
+### Method 2: Using curl
 
-#### 1. 获取账户信息
+#### 1. Get Account Information
 ```bash
 curl "http://localhost:3000/api/steem/account?username=steemit"
 ```
 
-#### 2. 获取排名文章（Trending）
+#### 2. Get Trending Posts
 ```bash
 curl "http://localhost:3000/api/steem/posts?sort=trending&limit=5"
 ```
 
-#### 3. 获取排名文章（Hot）
+#### 3. Get Hot Posts
 ```bash
 curl "http://localhost:3000/api/steem/posts?sort=hot&limit=5"
 ```
 
-#### 4. 获取账户文章
+#### 4. Get Account Posts
 ```bash
 curl "http://localhost:3000/api/steem/posts?sort=blog&account=steemit&limit=5"
 ```
 
-#### 5. 获取单篇文章
+#### 5. Get Single Post
 ```bash
-# 首先从 trending 获取一个文章的 author 和 permlink
+# First get author and permlink from trending posts
 curl "http://localhost:3000/api/steem/post?author=steemit&permlink=firstpost"
 ```
 
-#### 6. 获取评论
+#### 6. Get Comments
 ```bash
 curl "http://localhost:3000/api/steem/comments?author=steemit&permlink=firstpost"
 ```
 
-#### 7. 获取通知
+#### 7. Get Notifications
 ```bash
 curl "http://localhost:3000/api/steem/notifications?account=steemit&limit=10"
 ```
 
-#### 8. 获取未读通知
+#### 8. Get Unread Notifications
 ```bash
 curl "http://localhost:3000/api/steem/unread-notifications?account=steemit"
 ```
 
-#### 9. 检查权限（POST）
+#### 9. Check Authority (POST)
 ```bash
 curl -X POST "http://localhost:3000/api/auth/check-authority" \
   -H "Content-Type: application/json" \
   -d '{"username":"steemit","password":"test"}'
 ```
 
-### 方法 3: 使用浏览器
+### Method 3: Using Browser
 
-在浏览器中访问：
+Visit in browser:
 - `http://localhost:3000/api/steem/account?username=steemit`
 - `http://localhost:3000/api/steem/posts?sort=trending&limit=5`
 
-## API 端点列表
+## API Endpoints List
 
-### Steem API 端点
+### Steem API Endpoints
 
-| 端点 | 方法 | 描述 | 参数 |
-|------|------|------|------|
-| `/api/steem/account` | GET | 获取账户信息 | `username` (必需) |
-| `/api/steem/posts` | GET | 获取排名文章或账户文章 | `sort`, `tag`, `account`, `start_author`, `start_permlink`, `limit`, `observer` |
-| `/api/steem/post` | GET | 获取单篇文章 | `author` (必需), `permlink` (必需) |
-| `/api/steem/comments` | GET | 获取文章评论 | `author` (必需), `permlink` (必需) |
-| `/api/steem/notifications` | GET | 获取账户通知 | `account` (必需), `last_id`, `limit` |
-| `/api/steem/unread-notifications` | GET | 获取未读通知数量 | `account` (必需) |
+| Endpoint | Method | Description | Parameters |
+|----------|--------|-------------|------------|
+| `/api/steem/account` | GET | Get account information | `username` (required) |
+| `/api/steem/posts` | GET | Get ranked posts or account posts | `sort`, `tag`, `account`, `start_author`, `start_permlink`, `limit`, `observer` |
+| `/api/steem/post` | GET | Get single post | `author` (required), `permlink` (required) |
+| `/api/steem/comments` | GET | Get post comments | `author` (required), `permlink` (required) |
+| `/api/steem/notifications` | GET | Get account notifications | `account` (required), `last_id`, `limit` |
+| `/api/steem/unread-notifications` | GET | Get unread notification count | `account` (required) |
 
-### 认证 API 端点
+### Authentication API Endpoints
 
-| 端点 | 方法 | 描述 | 参数 |
-|------|------|------|------|
-| `/api/auth/check-authority` | POST | 检查账户权限 | `username` (必需), `password` (必需), `role` (可选) |
-| `/api/auth/login` | POST | 服务器端登录 | `username` (必需), `signatures` (必需) |
+| Endpoint | Method | Description | Parameters |
+|----------|--------|-------------|------------|
+| `/api/auth/check-authority` | POST | Check account authority | `username` (required), `password` (required), `role` (optional) |
+| `/api/auth/login` | POST | Server-side login | `username` (required), `signatures` (required) |
 
-## 预期响应格式
+## Expected Response Format
 
-### 成功响应
+### Success Response
 ```json
 {
   "author": "steemit",
@@ -123,55 +123,55 @@ curl -X POST "http://localhost:3000/api/auth/check-authority" \
 }
 ```
 
-### 错误响应
+### Error Response
 ```json
 {
   "error": "Error message"
 }
 ```
 
-## 常见问题
+## Common Issues
 
-### 1. 连接被拒绝
-- 确保开发服务器正在运行：`pnpm dev`
-- 检查端口是否正确（默认 3000）
+### 1. Connection Refused
+- Ensure development server is running: `pnpm dev`
+- Check if port is correct (default 3000)
 
-### 2. API 调用超时
-- 检查 Steem RPC 节点是否可访问
-- 检查网络连接
-- 尝试使用不同的 RPC 节点
+### 2. API Call Timeout
+- Check if Steem RPC node is accessible
+- Check network connection
+- Try using different RPC node
 
-### 3. 账户不存在错误
-- 确保使用有效的 Steem 账户名
-- 检查账户名拼写
+### 3. Account Not Found Error
+- Ensure using valid Steem account name
+- Check account name spelling
 
-### 4. 权限检查失败
-- 这是正常的，如果使用无效的密码/WIF
-- 使用有效的账户凭据进行测试
+### 4. Authority Check Failed
+- This is normal if using invalid password/WIF
+- Use valid account credentials for testing
 
-## 测试检查清单
+## Testing Checklist
 
-- [ ] 开发服务器正在运行
-- [ ] 可以访问 `/api/steem/account` 端点
-- [ ] 可以获取排名文章（trending, hot）
-- [ ] 可以获取账户文章
-- [ ] 可以获取单篇文章
-- [ ] 可以获取评论
-- [ ] 可以获取通知
-- [ ] 权限检查端点正常工作
-- [ ] 错误处理正确（404, 500 等）
+- [ ] Development server is running
+- [ ] Can access `/api/steem/account` endpoint
+- [ ] Can get trending posts (trending, hot)
+- [ ] Can get account posts
+- [ ] Can get single post
+- [ ] Can get comments
+- [ ] Can get notifications
+- [ ] Authority check endpoint works properly
+- [ ] Error handling is correct (404, 500, etc.)
 
-## 性能测试
+## Performance Testing
 
-使用 `time` 命令测试响应时间：
+Use `time` command to test response time:
 ```bash
 time curl "http://localhost:3000/api/steem/posts?sort=trending&limit=20"
 ```
 
-## 调试
+## Debugging
 
-如果遇到问题，检查：
-1. 服务器日志（终端输出）
-2. 浏览器开发者工具（Network 标签）
-3. API 路由日志（`app/api/**/route.ts` 中的 console.log）
+If you encounter issues, check:
+1. Server logs (terminal output)
+2. Browser developer tools (Network tab)
+3. API route logs (console.log in `app/api/**/route.ts`)
 

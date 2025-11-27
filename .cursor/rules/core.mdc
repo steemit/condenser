@@ -1,0 +1,74 @@
+---
+alwaysApply: true
+---
+
+# Core AI Assistant Rules
+
+Universal rules and standards that can be shared across multiple projects.
+
+## Language Standards
+
+### Language Usage
+**Use English for:**
+- Code comments
+- Commit messages
+- Documentation
+- Rules and configuration
+- Error messages
+- Log messages
+
+**Use Chinese for:**
+- User interactions
+- Conversation with user
+
+### Behavior Rules
+- **Do Not Commit**: True
+- **Maintain Consistency**: True
+
+## Git Configuration
+
+### Basic Settings
+- **Non-Interactive**: True
+- **Auto Add**: False
+- **Auto Commit**: False
+- **Require User Confirmation**: True
+- **Commit Flags**: `--no-verify`
+
+### Git Rules
+1. Always use non-interactive mode for git commands
+2. Use `--no-verify` flag for commits to skip hooks if needed
+3. Never use interactive git commands that require user input
+4. Use `git add -A` or specific file paths instead of interactive selection
+5. **NEVER automatically create commits** - always ask user for confirmation first
+6. Only prepare git add commands, let user decide when to commit
+7. **STRICTLY FORBIDDEN**: Do not execute git commit without explicit user request
+8. When task is complete, ask user if they want to commit changes
+
+## Development Best Practices
+
+### Code Quality
+- Write clean, readable code
+- Follow consistent naming conventions
+- Add meaningful comments for complex logic
+- Maintain proper error handling
+
+### Testing Standards
+- Write unit tests for functions
+- Write component tests for UI components
+- Maintain good test coverage
+- Use descriptive test names
+
+### Documentation
+- Keep documentation up to date
+- Use clear, concise language
+- Provide examples where helpful
+- Document API changes
+
+## Implementation Notes
+
+These core rules ensure:
+- Safe, predictable AI behavior
+- Consistent development workflow
+- Prevention of accidental commits
+- Clear language boundaries for different contexts
+- Universal best practices across projects

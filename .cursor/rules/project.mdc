@@ -1,0 +1,93 @@
+---
+alwaysApply: true
+---
+
+# Project-Specific Configuration
+
+Configuration and rules specific to the Condenser project.
+
+## Project Information
+- **Project**: Condenser (Steem Frontend)
+- **Technology Stack**: Next.js 16, React, TypeScript, Redux Toolkit
+- **Package Manager**: pnpm
+- **API**: Steem blockchain via @steemit/steem-js
+
+## Development Standards
+
+### Language Settings
+- **Interaction Language**: Chinese
+- **Code Comments**: English
+- **Documentation**: English
+- **Commit Messages**: English
+- **Rules**: English
+- **Package Manager**: pnpm
+
+### Testing Requirements
+- **Function Coverage Target**: 80%
+- **Component Coverage Target**: 70%
+- **Require Component Tests**: Yes
+- **Require Function Tests**: Yes
+
+## Server Management
+
+### Development Server Rules
+- **Check Before Start**: True
+
+### Server Management Rules
+1. Always check terminals folder for running processes before starting `pnpm dev`
+2. Use `list_dir` on terminals folder to see current commands
+3. Look for existing 'pnpm dev' processes in terminal metadata
+4. If `pnpm dev` is already running, do not start another instance
+5. Kill existing processes if restart is needed
+
+## Steem API Integration
+
+### Configuration
+- Use `@steemit/steem-js` for blockchain interaction
+- Configure via environment variables:
+  - `STEEMD_CONNECTION_SERVER`
+  - `STEEMD_USE_APPBASE`
+  - `CHAIN_ID`
+  - `ADDRESS_PREFIX`
+  - `NEXT_PUBLIC_SIGNUP_URL`
+
+### API Usage
+- Initialize Steem API in server-side code only
+- Use proper error handling for API calls
+- Implement retry logic for network failures
+- Cache responses when appropriate
+
+## Next.js Specific Rules
+
+### Configuration
+- Use `output: 'standalone'` for Docker compatibility
+- Configure `serverExternalPackages` for Next.js 16
+- Set up proper image domains for Steem content
+
+### Routing
+- Follow Steem URL patterns: `/@username/permlink`
+- Handle category routes: `/category/@username/permlink`
+- Implement proper 404 handling for invalid routes
+
+### Components
+- Use Server Components for data fetching when possible
+- Use Client Components for interactive features
+- Implement proper loading states
+- Handle error boundaries
+
+## Docker Configuration
+
+### Multi-stage Build
+- Use Alpine Linux base image
+- Separate development and production stages
+- Optimize for size and security
+- Handle proxy configurations when needed
+
+## Implementation Notes
+
+This project-specific configuration ensures:
+- Proper Steem blockchain integration
+- Efficient Next.js development workflow
+- Consistent URL routing patterns
+- Optimal Docker deployment
+- Proper process management for development

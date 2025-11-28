@@ -68,10 +68,27 @@ export async function POST(request: NextRequest) {
     const memoPub = toPub(privateKeys.memo_private);
 
     // Simplified authority check
-    const checkKeyAuth = (pubkey: string, authority: any): 'full' | 'partial' | 'none' => {
+    /**
+     * Checks the authority of a given public key against an account authority object.
+     * @param pubkey The public key to check.
+     * @param authority The account authority object with key_auths and weight_threshold.
+     * @returns 'full' if the key meets the threshold, 'none' otherwise.
+     */
+    type KeyAuth = [string, number] | { key: string; weight: number };
+    type Authority = {
+      key_auths: KeyAuth[];
+      weight_threshold: number;
+    };
+
+    const checkKeyAuth = (
+      pubkey: string,
+      authority: Authority | undefined | null
+    ): 'full' | 'partial' | 'none' => {
       if (!authority || !authority.key_auths) return 'none';
       for (const keyAuth of authority.key_auths) {
-        const [key, weight] = Array.isArray(keyAuth) ? keyAuth : [keyAuth.key, keyAuth.weight];
+        const [key, weight] = Array.isArray(keyAuth)
+          ? keyAuth
+          : [keyAuth.key, keyAuth.weight];
         if (key === pubkey && weight >= (authority.weight_threshold || 1)) {
           return 'full';
         }
@@ -93,10 +110,11 @@ export async function POST(request: NextRequest) {
     };
 
     return NextResponse.json({ auth, account });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error checking authority:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to check authority';
     return NextResponse.json(
-      { error: error.message || 'Failed to check authority' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

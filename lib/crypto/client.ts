@@ -4,13 +4,25 @@
  * Only supports posting key authentication for security
  */
 
-// @ts-expect-error - steem is exported but TypeScript types may not reflect it
 import * as steemModule from '@steemit/steem-js';
-const steem = (steemModule as { steem: any }).steem;
 
-const PrivateKey = steem.PrivateKey;
-const PublicKey = steem.PublicKey;
-const Signature = steem.Signature;
+// Get steem object - it's exported as a named export
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const steem = (steemModule as any).steem;
+
+// Import types directly from dist (these are TypeScript definition files)
+// @ts-expect-error - TypeScript can't resolve these paths, but they exist at runtime
+import type { PrivateKey } from '@steemit/steem-js/dist/auth/ecc/src/key_private';
+// @ts-expect-error - TypeScript can't resolve these paths, but they exist at runtime
+import type { PublicKey } from '@steemit/steem-js/dist/auth/ecc/src/key_public';
+// @ts-expect-error - TypeScript can't resolve these paths, but they exist at runtime
+import type { Signature } from '@steemit/steem-js/dist/auth/ecc/src/signature';
+
+// Get classes from steem object at runtime
+// Use type aliases for cleaner code
+const PrivateKey = steem.auth.PrivateKey;
+const PublicKey = steem.auth.PublicKey;
+const Signature = steem.auth.ecc.Signature;
 
 export interface KeyValidationResult {
   isValid: boolean;

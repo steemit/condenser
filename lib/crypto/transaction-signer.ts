@@ -3,18 +3,30 @@
  * Signs transactions locally before sending to API
  */
 
-// @ts-expect-error - steem is exported but TypeScript types may not reflect it
 import * as steemModule from '@steemit/steem-js';
-const steem = (steemModule as { steem: any }).steem;
 
-const PrivateKey = steem.PrivateKey;
+// Import types directly from dist (these are TypeScript definition files)
+// @ts-expect-error - TypeScript can't resolve these paths, but they exist at runtime
+import type { Transaction } from '@steemit/steem-js/dist/types';
 
-export interface SignedTransaction {
-  ref_block_num: number;
-  ref_block_prefix: number;
-  expiration: string;
-  operations: any[];
-  extensions: any[];
+// Get steem object and extract classes/functions
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const steem = (steemModule as any).steem;
+
+// Get classes and functions from steem object at runtime
+const PrivateKeyClass = steem.auth.PrivateKey;
+const SignatureClass = steem.auth.ecc.Signature;
+const serializeTransaction = steem.serializer.serializeTransaction;
+const createComment = steem.operations.createComment;
+const createVote = steem.operations.createVote;
+const createCustomJson = steem.operations.createCustomJson;
+
+/**
+ * Signed transaction with signatures
+ * Operations can be in tuple format (as created by operations module) or Operation[] format
+ */
+export interface SignedTransaction extends Omit<Transaction, 'operations'> {
+  operations: Transaction['operations'] | Array<[string, Record<string, unknown>]>;
   signatures: string[];
 }
 
@@ -26,9 +38,11 @@ export async function signTransaction(
   privateKeyWif: string
 ): Promise<SignedTransaction> {
   try {
-    const privateKey = PrivateKey.fromWif(privateKeyWif);
+    const privateKey = PrivateKeyClass.fromWif(privateKeyWif);
 
     // Create transaction object
+    // Note: serializer accepts operations in tuple format, but Transaction type expects Operation[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const tx: any = {
       ref_block_num: transaction.ref_block_num,
       ref_block_prefix: transaction.ref_block_prefix,
@@ -38,14 +52,16 @@ export async function signTransaction(
     };
 
     // Serialize transaction
-    const serializedTx = steem.transaction.toBuffer(tx);
+    const serializedTx = serializeTransaction(tx as Transaction);
 
-    // Sign transaction
-    const signature = privateKey.sign(serializedTx);
-    const signatureString = signature.toString();
+    // Sign transaction using Signature.signBufferSha256
+    const signature = SignatureClass.signBufferSha256(serializedTx, privateKey);
+    const signatureString = signature.toHex();
 
     return {
       ...transaction,
+      operations: transaction.operations,
+      extensions: transaction.extensions || [],
       signatures: [signatureString],
     };
   } catch (error: unknown) {
@@ -88,21 +104,18 @@ export async function signCommentOperation(
     const expirationStr = expiration.toISOString().slice(0, -5);
 
     // Create comment operation
-    const operation = [
-      'comment',
-      {
-        parent_author: params.parentAuthor || '',
-        parent_permlink: params.parentPermlink,
-        author: params.author,
-        permlink: params.permlink,
-        title: params.title,
-        body: params.body,
-        json_metadata: params.jsonMetadata,
-      },
-    ];
+    const operation = createComment(
+      params.parentAuthor || '',
+      params.parentPermlink,
+      params.author,
+      params.permlink,
+      params.title,
+      params.body,
+      params.jsonMetadata
+    );
 
     // Create transaction
-    const transaction = {
+    const transaction: Omit<SignedTransaction, 'signatures'> = {
       ref_block_num: refBlockNum,
       ref_block_prefix: refBlockPrefix,
       expiration: expirationStr,
@@ -149,18 +162,15 @@ export async function signVoteOperation(
     const expirationStr = expiration.toISOString().slice(0, -5);
 
     // Create vote operation
-    const operation = [
-      'vote',
-      {
-        voter: params.voter,
-        author: params.author,
-        permlink: params.permlink,
-        weight: params.weight,
-      },
-    ];
+    const operation = createVote(
+      params.voter,
+      params.author,
+      params.permlink,
+      params.weight
+    );
 
     // Create transaction
-    const transaction = {
+    const transaction: Omit<SignedTransaction, 'signatures'> = {
       ref_block_num: refBlockNum,
       ref_block_prefix: refBlockPrefix,
       expiration: expirationStr,
@@ -207,18 +217,15 @@ export async function signCustomJsonOperation(
     const expirationStr = expiration.toISOString().slice(0, -5);
 
     // Create custom_json operation
-    const operation = [
-      'custom_json',
-      {
-        required_auths: params.requiredAuths || [],
-        required_posting_auths: params.requiredPostingAuths || [],
-        id: params.id,
-        json: params.json,
-      },
-    ];
+    const operation = createCustomJson(
+      params.requiredAuths || [],
+      params.requiredPostingAuths || [],
+      params.id,
+      params.json
+    );
 
     // Create transaction
-    const transaction = {
+    const transaction: Omit<SignedTransaction, 'signatures'> = {
       ref_block_num: refBlockNum,
       ref_block_prefix: refBlockPrefix,
       expiration: expirationStr,

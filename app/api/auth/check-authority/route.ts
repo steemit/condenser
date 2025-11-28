@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         active_private: isRole('active', () => privateKey),
         memo_private: privateKey,
       };
-    } catch (e) {
+    } catch {
       // Not a WIF, treat as password and derive keys
       privateKeys = {
         posting_private: isRole('posting', () =>

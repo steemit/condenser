@@ -57,18 +57,31 @@ export default function SearchContent() {
     dispatch(searchDispatch());
 
     try {
-      // TODO: Implement actual search API call
-      // This should call the Elasticsearch endpoint
-      console.log('Searching:', { q: searchQuery, sort: searchSort, depth: searchDepth });
-      
-      // Placeholder: In real implementation, this would call:
-      // const results = await searchAPI({ q: searchQuery, sort: searchSort, depth: searchDepth });
-      // dispatch(searchResult({ hits: results, _scroll_id: results.scroll_id }));
-      
-      // For now, return empty results
-      dispatch(searchResult({ hits: { hits: [], total: { value: 0 } } }));
+      const response = await fetch('/api/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          q: searchQuery,
+          s: searchSort,
+          depth: searchDepth,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Search request failed: ${response.statusText}`);
+      }
+
+      const results = await response.json();
+      dispatch(searchResult({ 
+        hits: results.hits || { hits: [], total: { value: 0 } },
+        _scroll_id: results._scroll_id,
+      }));
     } catch (error) {
       console.error('Search error:', error);
+      // Dispatch empty results on error
+      dispatch(searchResult({ hits: { hits: [], total: { value: 0 } } }));
     } finally {
       dispatch(searchPending({ pending: false }));
     }
@@ -103,9 +116,33 @@ export default function SearchContent() {
 
     try {
       dispatch(searchPending({ pending: true }));
-      // TODO: Implement scroll-based pagination
-      // const results = await searchAPI({ q: query, sort, depth, scroll_id: searchState.scrollId });
-      // dispatch(searchResult({ hits: results, _scroll_id: results.scroll_id, append: true }));
+      
+      const response = await fetch('/api/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          q: query,
+          s: sort,
+          depth: depth,
+          scroll_id: searchState.scrollId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Search request failed: ${response.statusText}`);
+      }
+
+      const results = await response.json();
+      dispatch(searchResult({ 
+        hits: {
+          hits: [...(searchState.hits?.hits || []), ...(results.hits?.hits || [])],
+          total: results.hits?.total || { value: 0 },
+        },
+        _scroll_id: results._scroll_id,
+        append: true,
+      }));
     } catch (error) {
       console.error('Error loading more results:', error);
     } finally {

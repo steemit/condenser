@@ -66,7 +66,7 @@ export default function PostFull({ post }: PostFullProps) {
             <span className="post-full__category">
               in{' '}
               <Link
-                href={`/${post.category}`}
+                href={`/trending/${post.category}`}
                 className="text-blue-600 hover:underline"
               >
                 #{post.category}

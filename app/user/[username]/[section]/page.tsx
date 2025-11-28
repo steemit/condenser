@@ -4,11 +4,14 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
-import { fetchAccountPosts, Post } from '@/lib/api/steem';
+import { fetchAccountPosts, fetchUserProfile, Post, UserProfile } from '@/lib/api/steem';
 import { normalizeUsername, formatUsername } from '@/lib/utils/username';
 import PostsList from '@/components/cards/PostsList';
 import UserProfileHeader from '@/components/cards/UserProfileHeader';
 import NotificationsList from '@/components/cards/NotificationsList';
+import FollowList from '@/components/cards/FollowList';
+import CommunitiesList from '@/components/cards/CommunitiesList';
+import UserSettings from '@/components/modules/UserSettings';
 
 /**
  * User profile page with section
@@ -29,7 +32,8 @@ export default function UserProfileSectionPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
 
   // Set pathname in global state (use @username format)
   useEffect(() => {
@@ -44,13 +48,20 @@ export default function UserProfileSectionPage() {
 
   // Fetch user profile
   useEffect(() => {
-    // TODO: Implement fetchProfile action
-    // For now, create a placeholder profile
-    setProfile({
-      name: accountname,
-      // TODO: Fetch actual profile data
-    });
-  }, [accountname]);
+    const loadProfile = async () => {
+      setProfileLoading(true);
+      try {
+        const fetchedProfile = await fetchUserProfile(accountname, username);
+        setProfile(fetchedProfile);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      } finally {
+        setProfileLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [accountname, username]);
 
   // Fetch posts
   useEffect(() => {
@@ -107,30 +118,90 @@ export default function UserProfileSectionPage() {
 
   const isMyAccount = username === accountname;
 
-  // Handle different sections
-  if (section === 'settings') {
-    // TODO: Implement settings page
+  // Show loading state if profile is still loading
+  if (profileLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-4">Settings</h1>
-        <p className="text-gray-600">Settings page coming soon...</p>
+        <div className="flex justify-center items-center py-12">
+          <p className="text-gray-500">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if profile not found
+  if (!profile) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-center items-center py-12">
+          <p className="text-red-500">User not found</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle different sections
+  if (section === 'settings') {
+    if (!isMyAccount) {
+      return (
+        <div className="container mx-auto px-4 py-8">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <p className="text-yellow-800">You can only view your own settings.</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <UserProfileHeader
+          accountname={accountname}
+          profile={profile?.metadata?.profile || null}
+          currentUser={username}
+          stats={profile?.stats}
+          reputation={profile?.reputation}
+          postCount={profile?.post_count}
+          created={profile?.created}
+        />
+        <div className="mt-8">
+          <UserSettings 
+            accountname={accountname} 
+            profile={profile?.metadata?.profile || null}
+            onProfileUpdate={(updatedProfile) => {
+              // Update local profile state
+              if (profile) {
+                setProfile({
+                  ...profile,
+                  metadata: {
+                    ...profile.metadata,
+                    profile: updatedProfile,
+                  },
+                });
+              }
+            }}
+          />
+        </div>
       </div>
     );
   }
 
   if (section === 'followers' || section === 'followed') {
-    // TODO: Implement followers/following lists
+    const followType = section === 'followers' ? 'followers' : 'following';
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         <UserProfileHeader
           accountname={accountname}
-          profile={profile}
+          profile={profile?.metadata?.profile || null}
           currentUser={username}
+          stats={profile?.stats}
+          reputation={profile?.reputation}
+          postCount={profile?.post_count}
+          created={profile?.created}
         />
-        <h2 className="text-2xl font-bold mt-6 mb-4">
+        <h2 className="text-2xl font-bold mt-6 mb-6">
           {section === 'followers' ? 'Followers' : 'Following'}
         </h2>
-        <p className="text-gray-600">User list coming soon...</p>
+        <FollowList accountname={accountname} type={followType} />
       </div>
     );
   }
@@ -140,8 +211,12 @@ export default function UserProfileSectionPage() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <UserProfileHeader
           accountname={accountname}
-          profile={profile}
+          profile={profile?.metadata?.profile || null}
           currentUser={username}
+          stats={profile?.stats}
+          reputation={profile?.reputation}
+          postCount={profile?.post_count}
+          created={profile?.created}
         />
         <NotificationsList username={accountname} />
       </div>
@@ -149,16 +224,19 @@ export default function UserProfileSectionPage() {
   }
 
   if (section === 'communities') {
-    // TODO: Implement communities list
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         <UserProfileHeader
           accountname={accountname}
-          profile={profile}
+          profile={profile?.metadata?.profile || null}
           currentUser={username}
+          stats={profile?.stats}
+          reputation={profile?.reputation}
+          postCount={profile?.post_count}
+          created={profile?.created}
         />
-        <h2 className="text-2xl font-bold mt-6 mb-4">Communities</h2>
-        <p className="text-gray-600">Communities coming soon...</p>
+        <h2 className="text-2xl font-bold mt-6 mb-6">Communities</h2>
+        <CommunitiesList accountname={accountname} />
       </div>
     );
   }
@@ -168,8 +246,12 @@ export default function UserProfileSectionPage() {
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <UserProfileHeader
         accountname={accountname}
-        profile={profile}
+        profile={profile?.metadata?.profile || null}
         currentUser={username}
+        stats={profile?.stats}
+        reputation={profile?.reputation}
+        postCount={profile?.post_count}
+        created={profile?.created}
       />
 
       {/* Tab navigation */}

@@ -14,6 +14,14 @@ interface UserProfileHeaderProps {
     [key: string]: any;
   } | null;
   currentUser?: string;
+  stats?: {
+    rank: number;
+    following: number;
+    followers: number;
+  };
+  reputation?: string;
+  postCount?: number;
+  created?: string;
 }
 
 /**
@@ -25,9 +33,32 @@ export default function UserProfileHeader({
   accountname,
   profile,
   currentUser,
+  stats,
+  reputation,
+  postCount,
+  created,
 }: UserProfileHeaderProps) {
   const isMyAccount = currentUser === accountname;
   const displayName = profile?.name || accountname;
+
+  // Helper function to format reputation
+  const formatReputation = (rep?: string) => {
+    if (!rep) return '25';
+    const repNum = parseInt(rep);
+    if (repNum === 0) return '25';
+    const score = Math.log10(Math.abs(repNum)) - 9;
+    return Math.max(score * 9 + 25, 1).toFixed(0);
+  };
+
+  // Helper function to format date
+  const formatJoinDate = (dateStr?: string) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long' 
+    });
+  };
 
   return (
     <div className="user-profile-header mb-8">
@@ -67,7 +98,32 @@ export default function UserProfileHeader({
               <p className="text-gray-700 mb-4">{profile.about}</p>
             )}
 
-            <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+            {/* Stats */}
+            <div className="flex flex-wrap gap-6 text-sm text-gray-600 mb-4">
+              {stats && (
+                <>
+                  <span>
+                    <strong className="text-gray-900">{stats.followers}</strong> followers
+                  </span>
+                  <span>
+                    <strong className="text-gray-900">{stats.following}</strong> following
+                  </span>
+                </>
+              )}
+              {postCount !== undefined && (
+                <span>
+                  <strong className="text-gray-900">{postCount}</strong> posts
+                </span>
+              )}
+              {reputation && (
+                <span>
+                  Reputation: <strong className="text-gray-900">{formatReputation(reputation)}</strong>
+                </span>
+              )}
+            </div>
+
+            {/* Location, website, join date */}
+            <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
               {profile?.location && (
                 <span className="flex items-center gap-1">
                   📍 {profile.location}
@@ -82,6 +138,11 @@ export default function UserProfileHeader({
                 >
                   🔗 Website
                 </a>
+              )}
+              {created && (
+                <span className="flex items-center gap-1">
+                  📅 Joined {formatJoinDate(created)}
+                </span>
               )}
             </div>
 

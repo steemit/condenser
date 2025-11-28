@@ -150,6 +150,81 @@ export async function getAccountNotifications(params: {
 }
 
 /**
+ * Get user profile from bridge API
+ */
+export async function getProfile(params: {
+  account: string;
+  observer?: string;
+}): Promise<any> {
+  return callBridge('get_profile', params);
+}
+
+/**
+ * Get followers list by page
+ */
+export async function getFollowersByPage(params: {
+  account: string;
+  page: number;
+  limit: number;
+  type?: string;
+}): Promise<any[]> {
+  const { account, page, limit, type = 'blog' } = params;
+  return callBridge('get_followers_by_page', [account, page, limit, type], 'condenser_api.');
+}
+
+/**
+ * Get following list by page
+ */
+export async function getFollowingByPage(params: {
+  account: string;
+  page: number;
+  limit: number;
+  type?: string;
+}): Promise<any[]> {
+  const { account, page, limit, type = 'blog' } = params;
+  return callBridge('get_following_by_page', [account, page, limit, type], 'condenser_api.');
+}
+
+/**
+ * Get user subscriptions (communities)
+ */
+export async function getUserSubscriptions(params: {
+  account: string;
+}): Promise<any[]> {
+  return callBridge('list_all_subscriptions', params);
+}
+
+/**
+ * List communities
+ */
+export async function listCommunities(params: {
+  observer?: string;
+  query?: string;
+  sort?: string;
+  limit?: number;
+}): Promise<any[]> {
+  return callBridge('list_communities', params);
+}
+
+/**
+ * Get community roles
+ */
+export async function getCommunityRoles(params: {
+  community: string;
+}): Promise<any[]> {
+  return callBridge('list_community_roles', params);
+}
+
+/**
+ * Get community subscribers
+ */
+export async function getCommunitySubscribers(params: {
+  community: string;
+}): Promise<any[]> {
+  return callBridge('list_subscribers', params);
+}
+
+/**
  * Get unread notifications
  */
 export interface UnreadNotificationsResponse {
@@ -163,6 +238,101 @@ export async function getUnreadNotifications(params: {
   account: string;
 }): Promise<UnreadNotificationsResponse> {
   return callBridge('unread_notifications', params);
+}
+
+/**
+ * Create a unique permlink for a post
+ */
+export function createPermlink(title: string, author: string): string {
+  const slug = title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single
+    .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
+  
+  const timestamp = Date.now().toString(36);
+  return `${slug}-${timestamp}`;
+}
+
+/**
+ * Broadcast a comment operation (post or reply)
+ */
+export async function broadcastComment(params: {
+  author: string;
+  title: string;
+  body: string;
+  category: string;
+  tags: string[];
+  parent_author?: string;
+  parent_permlink?: string;
+  permlink?: string;
+  json_metadata?: any;
+  privateKey: string;
+}): Promise<any> {
+  initializeSteemApi();
+
+  const {
+    author,
+    title,
+    body,
+    category,
+    tags,
+    parent_author = '',
+    parent_permlink = category,
+    permlink = createPermlink(title, author),
+    json_metadata = { tags, app: 'condenser/0.1' },
+    privateKey,
+  } = params;
+
+  const commentOp = {
+    parent_author,
+    parent_permlink,
+    author,
+    permlink: permlink.toLowerCase(),
+    title: title.trim(),
+    body: body.trim(),
+    json_metadata: typeof json_metadata === 'string' 
+      ? json_metadata 
+      : JSON.stringify(json_metadata),
+  };
+
+  const operations = [['comment', commentOp]];
+
+  // Add comment_options for posts (not replies)
+  if (!parent_author) {
+    operations.push([
+      'comment_options',
+      {
+        author,
+        permlink: permlink.toLowerCase(),
+        max_accepted_payout: '1000000.000 SBD',
+        percent_steem_dollars: 10000, // 100%
+        allow_votes: true,
+        allow_curation_rewards: true,
+        extensions: [],
+      },
+    ]);
+  }
+
+  return new Promise((resolve, reject) => {
+    const key = steem.auth.PrivateKey.fromString(privateKey);
+    steem.broadcast.send(
+      {
+        extensions: [],
+        operations,
+      },
+      [key],
+      (err: any, result: any) => {
+        if (err) {
+          console.error('Broadcast error:', err);
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
 }
 
 /**

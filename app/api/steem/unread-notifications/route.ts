@@ -1,5 +1,5 @@
 /**
- * Steem API Route: Get Unread Notifications
+ * Steem API Route: Get Unread Notifications Count
  * GET /api/steem/unread-notifications?account=username
  */
 
@@ -18,15 +18,26 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const unreadNotifications = await getUnreadNotifications({ account });
+    const result = await getUnreadNotifications({ account });
 
-    return NextResponse.json(unreadNotifications);
+    // The bridge API returns unread notifications data
+    // Extract the count from the result
+    const unreadCount = result?.unread_count || 0;
+
+    return NextResponse.json({ 
+      account,
+      unread_count: unreadCount,
+      result: result || {},
+    });
   } catch (error: any) {
     console.error('Error fetching unread notifications:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch unread notifications' },
+      { 
+        account: request.nextUrl.searchParams.get('account'),
+        unread_count: 0,
+        error: error.message || 'Failed to fetch unread notifications',
+      },
       { status: 500 }
     );
   }
 }
-

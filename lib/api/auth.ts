@@ -10,7 +10,6 @@
 export interface LoginParams {
   username: string;
   password: string;
-  useKeychain?: boolean;
   saveLogin?: boolean;
   operationType?: string;
 }

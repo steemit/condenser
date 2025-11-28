@@ -5,40 +5,49 @@ import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { hideLogin, loginError } from '@/store/slices/userSlice';
 import { loginThunk } from '@/store/thunks/authThunks';
+import { 
+  validatePostingKey, 
+  signAuthData, 
+  isWifFormat,
+  isPublicKeyFormat 
+} from '@/lib/crypto/client';
+import { encryptAndStoreKey, initializeKeyLifecycle } from '@/lib/crypto/key-storage';
 
 /**
  * LoginForm component
  * Handles user authentication and login
  * Migrated from legacy/src/app/components/modules/LoginForm.jsx
- * TODO: Implement full SteemKeychain support
+ * Note: Steem Keychain support has been removed as per project requirements
  * TODO: Implement password validation and checksum checking
  * TODO: Implement account name validation
  */
 export default function LoginForm() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { login_error, show_login_modal } = useAppSelector((state) => state.user);
+  const { login_error } = useAppSelector((state) => state.user);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [saveLogin, setSaveLogin] = useState(true);
-  const [useKeychain, setUseKeychain] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [validatingKey, setValidatingKey] = useState(false);
 
   // Load saved login preference
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('saveLogin');
       setSaveLogin(saved !== 'no');
+      
+      // Initialize key lifecycle management
+      const cleanup = initializeKeyLifecycle();
+      return cleanup;
     }
   }, []);
 
   // Clear error when form changes
   useEffect(() => {
-    if (error) {
-      setError(null);
-    }
+    setError(null);
   }, [username, password]);
 
   // Display Redux login error
@@ -59,21 +68,18 @@ export default function LoginForm() {
       return 'Invalid username format';
     }
 
-    if (!useKeychain && !password.trim()) {
-      return 'Password is required';
+    if (!password.trim()) {
+      return 'Posting private key (WIF) is required';
+    }
+
+    // Only accept WIF format private keys
+    if (!isWifFormat(password.trim())) {
+      return 'Invalid format. Please enter your posting private key in WIF format (starts with 5...)';
     }
 
     // Check if password is a public key (should not be)
-    if (password.trim()) {
-      try {
-        // This would throw if it's not a valid public key format
-        // For now, we'll do a basic check
-        if (password.startsWith('STM') && password.length > 50) {
-          return 'You need a private password or key, not a public key';
-        }
-      } catch (e) {
-        // Not a public key, which is good
-      }
+    if (isPublicKeyFormat(password.trim())) {
+      return 'You need a posting private key (WIF), not a public key';
     }
 
     return null;
@@ -89,45 +95,105 @@ export default function LoginForm() {
     }
 
     setSubmitting(true);
+    setValidatingKey(true);
     setError(null);
 
     try {
       // Normalize username (lowercase, remove @ prefix if present)
       const normalizedUsername = username.toLowerCase().replace(/^@/, '');
 
-      // Check for role specification (e.g., "alice/active")
-      let userProvidedRole: string | undefined;
-      let finalUsername = normalizedUsername;
-      if (normalizedUsername.includes('/')) {
-        [finalUsername, userProvidedRole] = normalizedUsername.split('/');
+      // Step 1: Get account info to retrieve posting public key
+      const accountResponse = await fetch(`/api/steem/account?username=${encodeURIComponent(normalizedUsername)}`);
+      if (!accountResponse.ok) {
+        throw new Error('Account not found');
+      }
+      const account = await accountResponse.json();
+      
+      if (!account || !account.posting || !account.posting.key_auths || account.posting.key_auths.length === 0) {
+        throw new Error('Invalid account or posting authority not found');
       }
 
-      // Dispatch login thunk
-      const result = await dispatch(
+      // Get the posting public key (first key in posting authority)
+      const postingPublicKey = account.posting.key_auths[0][0];
+
+      // Step 2: Validate that input is a WIF format private key
+      const privateKeyWif = password.trim();
+      if (!isWifFormat(privateKeyWif)) {
+        throw new Error('Invalid format. Only posting private keys in WIF format are allowed.');
+      }
+
+      // Step 3: Validate private key matches posting public key
+      setValidatingKey(true);
+      const validation = validatePostingKey(privateKeyWif, postingPublicKey);
+      if (!validation.isValid) {
+        throw new Error(validation.error || 'Invalid posting key');
+      }
+
+      // Step 4: Get login challenge from server
+      const challengeResponse = await fetch('/api/auth/challenge');
+      if (!challengeResponse.ok) {
+        throw new Error('Failed to get login challenge');
+      }
+      const { challenge } = await challengeResponse.json();
+
+      // Step 5: Sign authentication data
+      const signatureResult = signAuthData(privateKeyWif, normalizedUsername, challenge);
+
+      // Step 6: Submit signature for verification and login
+      const loginResponse = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: normalizedUsername,
+          signature: signatureResult.signature,
+          publicKey: signatureResult.publicKey,
+          data: signatureResult.data,
+          challenge,
+        }),
+      });
+
+      if (!loginResponse.ok) {
+        const errorData = await loginResponse.json();
+        throw new Error(errorData.error || 'Login failed');
+      }
+
+      await loginResponse.json();
+      
+      // Step 7: Store encrypted private key for subsequent operations
+      // The key is encrypted using application-level key material and stored in sessionStorage
+      // It will be cleared when the tab is closed
+      if (saveLogin) {
+        try {
+          // Encrypt and store the private key
+          // Encryption uses application identifier + username for key derivation
+          await encryptAndStoreKey(privateKeyWif, normalizedUsername);
+        } catch (storageError) {
+          console.error('Failed to store encrypted key:', storageError);
+          // Don't fail login if storage fails, but log the error
+        }
+      }
+      
+      // Step 8: Update Redux state
+      dispatch(
         loginThunk({
-          username: finalUsername,
-          password,
-          useKeychain,
+          username: normalizedUsername,
+          password: '', // Don't store password in Redux
           saveLogin,
-          operationType: userProvidedRole,
         })
       );
 
-      // Check if login was successful
-      if (loginThunk.fulfilled.match(result)) {
-        // Login successful, redirect will happen via useEffect
-        router.push('/trending');
-      } else {
-        // Login failed, error is already set in Redux state
-        const errorMessage = result.payload as string || 'Login failed. Please try again.';
-        setError(errorMessage);
-      }
-    } catch (err: any) {
+      // Login successful
+      router.push('/trending');
+    } catch (err: unknown) {
       console.error('Login error:', err);
-      setError(err.message || 'Login failed. Please try again.');
-      dispatch(loginError({ error: err.message || 'Login failed' }));
+      const errorMessage = err instanceof Error ? err.message : 'Login failed. Please try again.';
+      setError(errorMessage);
+      dispatch(loginError({ error: errorMessage }));
     } finally {
       setSubmitting(false);
+      setValidatingKey(false);
     }
   };
 
@@ -173,34 +239,34 @@ export default function LoginForm() {
           </div>
         </div>
 
-        {/* Password input or Keychain option */}
-        {useKeychain ? (
-          <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-            <p className="text-sm text-blue-800">
-              You will be prompted to authorize via Steem Keychain
+        {/* Posting Private Key input */}
+        <div>
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            Posting Private Key (WIF)
+          </label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your posting private key (WIF format, starts with 5...)"
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            autoComplete="off"
+            disabled={submitting}
+            required
+          />
+          <p className="mt-1 text-xs text-gray-500">
+            Only posting private keys in WIF format are accepted. Master passwords are not supported.
+          </p>
+          <p className="mt-1 text-xs text-gray-500">
+            Your private key starts with &quot;5&quot; and is typically 51-52 characters long.
+          </p>
+          {validatingKey && (
+            <p className="mt-1 text-xs text-blue-600">
+              Validating posting private key...
             </p>
-          </div>
-        ) : (
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password or Private Key
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password or private key"
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              autoComplete="current-password"
-              disabled={submitting}
-              required
-            />
-            <p className="mt-1 text-xs text-gray-500">
-              Use your master password or a private posting key
-            </p>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Error message */}
         {error && (
@@ -209,21 +275,6 @@ export default function LoginForm() {
           </div>
         )}
 
-        {/* Keychain option */}
-        {typeof window !== 'undefined' && (window as any).steem_keychain && (
-          <div>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={useKeychain}
-                onChange={(e) => setUseKeychain(e.target.checked)}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                disabled={submitting}
-              />
-              <span className="ml-2 text-sm text-gray-700">Use Steem Keychain</span>
-            </label>
-          </div>
-        )}
 
         {/* Save login option */}
         <div>
@@ -254,7 +305,7 @@ export default function LoginForm() {
             disabled={submitting}
             className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {submitting ? 'Logging in...' : 'Login'}
+{submitting ? (validatingKey ? 'Validating key...' : 'Logging in...') : 'Login'}
           </button>
           <button
             type="button"

@@ -80,20 +80,46 @@ export default function PostEditor({
       return;
     }
 
+    // For now, we need a private key to submit posts
+    // In a real implementation, this would come from user authentication
+    const privateKey = prompt('Enter your posting private key (this is temporary for testing):');
+    if (!privateKey) {
+      setError('Private key is required to submit posts');
+      return;
+    }
+
     setSubmitting(true);
     try {
-      // TODO: Implement actual post submission
-      // This should dispatch a Redux action to broadcast the post
-      console.log('Submitting post:', {
-        type,
-        title,
-        body,
-        category,
-        tags,
+      const operation = {
+        author: 'testuser', // TODO: Get from authenticated user
+        title: title.trim(),
+        body: body.trim(),
+        category: category.trim(),
+        tags: tags.length > 0 ? tags : [category.trim()],
+        json_metadata: {
+          tags: tags.length > 0 ? tags : [category.trim()],
+          app: 'condenser/0.1',
+          format: 'markdown',
+        },
+      };
+
+      const response = await fetch('/api/steem/broadcast', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'comment',
+          operation,
+          privateKey,
+        }),
       });
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit post');
+      }
 
       // Clear draft
       if (typeof window !== 'undefined') {
@@ -101,7 +127,7 @@ export default function PostEditor({
       }
 
       if (onSuccess) {
-        onSuccess(category, body);
+        onSuccess(category, result.permlink);
       }
     } catch (err) {
       console.error('Error submitting post:', err);

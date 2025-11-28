@@ -7,11 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:api": "tsx scripts/test-api.ts"
+    "test:api": "tsx scripts/test-api.ts",
+    "test:proxy": "tsx scripts/test-proxy-routes.ts"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",
     "@steemit/steem-js": "next",
+    "ioredis": "^5.8.2",
+    "jose": "^5.10.0",
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",

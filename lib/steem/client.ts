@@ -4,9 +4,9 @@
  * This should only be used in server-side code (API routes, Server Components)
  */
 
-// @ts-ignore - steem is exported but TypeScript types may not reflect it
-import * as steemModule from '@steemit/steem-js';
-const steem = (steemModule as any).steem;
+// Import steem object directly as a named export
+// @ts-expect-error - TypeScript can't resolve the named export, but it exists at runtime
+import { steem } from '@steemit/steem-js';
 
 // Initialize Steem API configuration
 let isInitialized = false;
@@ -14,7 +14,8 @@ let isInitialized = false;
 export function initializeSteemApi() {
   if (isInitialized) return;
 
-  const steemdUrl = process.env.STEEMD_CONNECTION_SERVER || process.env.STEEMD_CONNECTION_CLIENT || 'https://api.steemit.com';
+  // Use unified environment variable for Steem API URL
+  const steemdUrl = process.env.STEEM_API_URL || 'https://api.steemit.com';
   const useAppbase = process.env.STEEMD_USE_APPBASE === 'true';
   const chainId = process.env.CHAIN_ID || '0000000000000000000000000000000000000000000000000000000000000000';
   const addressPrefix = process.env.ADDRESS_PREFIX || 'STM';
@@ -40,11 +41,11 @@ export function initializeSteemApi() {
  * Call Steem API bridge method
  * Similar to legacy callBridge function
  */
-export async function callBridge(method: string, params: any, pre = 'bridge.'): Promise<any> {
+export async function callBridge<T = unknown>(method: string, params: unknown, pre = 'bridge.'): Promise<T> {
   initializeSteemApi();
 
-  return new Promise((resolve, reject) => {
-    steem.api.call(pre + method, params, (err: any, data: any) => {
+  return new Promise<T>((resolve, reject) => {
+    steem.api.call(pre + method, params, (err: unknown, data: unknown) => {
       if (err) {
         console.error('Steem API call error:', {
           method: pre + method,
@@ -53,7 +54,7 @@ export async function callBridge(method: string, params: any, pre = 'bridge.'): 
         });
         reject(err);
       } else {
-        resolve(data);
+        resolve(data as T);
       }
     });
   });
@@ -69,8 +70,8 @@ export async function getRankedPosts(params: {
   start_permlink?: string;
   limit?: number;
   observer?: string;
-}): Promise<any[]> {
-  return callBridge('get_ranked_posts', params);
+}): Promise<unknown[]> {
+  return callBridge<unknown[]>('get_ranked_posts', params);
 }
 
 /**
@@ -83,8 +84,8 @@ export async function getAccountPosts(params: {
   start_permlink?: string;
   limit?: number;
   observer?: string;
-}): Promise<any[]> {
-  return callBridge('get_account_posts', params);
+}): Promise<unknown[]> {
+  return callBridge<unknown[]>('get_account_posts', params);
 }
 
 /**
@@ -93,14 +94,14 @@ export async function getAccountPosts(params: {
 export async function getDiscussion(params: {
   author: string;
   permlink: string;
-}): Promise<any> {
-  return callBridge('get_discussion', params);
+}): Promise<unknown> {
+  return callBridge<unknown>('get_discussion', params);
 }
 
 /**
  * Get account information
  */
-export async function getAccount(username: string): Promise<any> {
+export async function getAccount(username: string): Promise<unknown | null> {
   initializeSteemApi();
   const accounts = await steem.api.getAccountsAsync([username]);
   return accounts && accounts.length > 0 ? accounts[0] : null;
@@ -109,7 +110,7 @@ export async function getAccount(username: string): Promise<any> {
 /**
  * Get accounts information
  */
-export async function getAccounts(usernames: string[]): Promise<any[]> {
+export async function getAccounts(usernames: string[]): Promise<unknown[]> {
   initializeSteemApi();
   return steem.api.getAccountsAsync(usernames);
 }
@@ -117,7 +118,7 @@ export async function getAccounts(usernames: string[]): Promise<any[]> {
 /**
  * Get dynamic global properties
  */
-export async function getDynamicGlobalProperties(): Promise<any> {
+export async function getDynamicGlobalProperties(): Promise<unknown> {
   initializeSteemApi();
   return steem.api.getDynamicGlobalPropertiesAsync();
 }
@@ -125,7 +126,7 @@ export async function getDynamicGlobalProperties(): Promise<any> {
 /**
  * Get following list
  */
-export async function getFollowing(account: string, start: string, type: string, limit: number): Promise<any[]> {
+export async function getFollowing(account: string, start: string, type: string, limit: number): Promise<unknown[]> {
   initializeSteemApi();
   return steem.api.getFollowingAsync(account, start, type, limit);
 }
@@ -133,7 +134,7 @@ export async function getFollowing(account: string, start: string, type: string,
 /**
  * Get followers list
  */
-export async function getFollowers(account: string, start: string, type: string, limit: number): Promise<any[]> {
+export async function getFollowers(account: string, start: string, type: string, limit: number): Promise<unknown[]> {
   initializeSteemApi();
   return steem.api.getFollowersAsync(account, start, type, limit);
 }
@@ -145,8 +146,8 @@ export async function getAccountNotifications(params: {
   account: string;
   last_id?: number;
   limit?: number;
-}): Promise<any[]> {
-  return callBridge('account_notifications', params);
+}): Promise<unknown[]> {
+  return callBridge<unknown[]>('account_notifications', params);
 }
 
 /**
@@ -155,8 +156,8 @@ export async function getAccountNotifications(params: {
 export async function getProfile(params: {
   account: string;
   observer?: string;
-}): Promise<any> {
-  return callBridge('get_profile', params);
+}): Promise<unknown> {
+  return callBridge<unknown>('get_profile', params);
 }
 
 /**
@@ -167,9 +168,9 @@ export async function getFollowersByPage(params: {
   page: number;
   limit: number;
   type?: string;
-}): Promise<any[]> {
+}): Promise<unknown[]> {
   const { account, page, limit, type = 'blog' } = params;
-  return callBridge('get_followers_by_page', [account, page, limit, type], 'condenser_api.');
+  return callBridge<unknown[]>('get_followers_by_page', [account, page, limit, type], 'condenser_api.');
 }
 
 /**
@@ -180,9 +181,9 @@ export async function getFollowingByPage(params: {
   page: number;
   limit: number;
   type?: string;
-}): Promise<any[]> {
+}): Promise<unknown[]> {
   const { account, page, limit, type = 'blog' } = params;
-  return callBridge('get_following_by_page', [account, page, limit, type], 'condenser_api.');
+  return callBridge<unknown[]>('get_following_by_page', [account, page, limit, type], 'condenser_api.');
 }
 
 /**
@@ -190,8 +191,8 @@ export async function getFollowingByPage(params: {
  */
 export async function getUserSubscriptions(params: {
   account: string;
-}): Promise<any[]> {
-  return callBridge('list_all_subscriptions', params);
+}): Promise<unknown[]> {
+  return callBridge<unknown[]>('list_all_subscriptions', params);
 }
 
 /**
@@ -202,8 +203,8 @@ export async function listCommunities(params: {
   query?: string;
   sort?: string;
   limit?: number;
-}): Promise<any[]> {
-  return callBridge('list_communities', params);
+}): Promise<unknown[]> {
+  return callBridge<unknown[]>('list_communities', params);
 }
 
 /**
@@ -211,8 +212,8 @@ export async function listCommunities(params: {
  */
 export async function getCommunityRoles(params: {
   community: string;
-}): Promise<any[]> {
-  return callBridge('list_community_roles', params);
+}): Promise<unknown[]> {
+  return callBridge<unknown[]>('list_community_roles', params);
 }
 
 /**
@@ -220,8 +221,8 @@ export async function getCommunityRoles(params: {
  */
 export async function getCommunitySubscribers(params: {
   community: string;
-}): Promise<any[]> {
-  return callBridge('list_subscribers', params);
+}): Promise<unknown[]> {
+  return callBridge<unknown[]>('list_subscribers', params);
 }
 
 /**
@@ -243,7 +244,7 @@ export async function getUnreadNotifications(params: {
 /**
  * Create a unique permlink for a post
  */
-export function createPermlink(title: string, author: string): string {
+export function createPermlink(title: string): string {
   const slug = title
     .toLowerCase()
     .replace(/[^\w\s-]/g, '') // Remove special characters
@@ -267,9 +268,9 @@ export async function broadcastComment(params: {
   parent_author?: string;
   parent_permlink?: string;
   permlink?: string;
-  json_metadata?: any;
+  json_metadata?: unknown;
   privateKey: string;
-}): Promise<any> {
+}): Promise<unknown> {
   initializeSteemApi();
 
   const {
@@ -280,7 +281,7 @@ export async function broadcastComment(params: {
     tags,
     parent_author = '',
     parent_permlink = category,
-    permlink = createPermlink(title, author),
+    permlink = createPermlink(title),
     json_metadata = { tags, app: 'condenser/0.1' },
     privateKey,
   } = params;
@@ -297,7 +298,7 @@ export async function broadcastComment(params: {
       : JSON.stringify(json_metadata),
   };
 
-  const operations = [['comment', commentOp]];
+  const operations: Array<[string, Record<string, unknown>]> = [['comment', commentOp]];
 
   // Add comment_options for posts (not replies)
   if (!parent_author) {
@@ -323,7 +324,7 @@ export async function broadcastComment(params: {
         operations,
       },
       [key],
-      (err: any, result: any) => {
+      (err: unknown, result: unknown) => {
         if (err) {
           console.error('Broadcast error:', err);
           reject(err);

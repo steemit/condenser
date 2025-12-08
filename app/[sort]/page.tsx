@@ -6,6 +6,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
 import { fetchRankedPosts, Post } from '@/lib/api/steem';
 import PostsList from '@/components/cards/PostsList';
+import NotFoundPage from '@/app/404/page';
 
 const VALID_SORTS = ['hot', 'trending', 'promoted', 'payout', 'payout_comments', 'muted', 'created'];
 
@@ -25,6 +26,12 @@ export default function SortPage({ params }: SortPageProps) {
 
   // Validate sort parameter
   const sortString = Array.isArray(sort) ? sort[0] : sort;
+  
+  // Handle /404 route - render custom 404 page
+  if (sortString?.toLowerCase() === '404') {
+    return <NotFoundPage />;
+  }
+  
   const isValidSort = VALID_SORTS.includes(sortString?.toLowerCase());
 
   useEffect(() => {

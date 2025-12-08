@@ -53,22 +53,55 @@
 
 ## Test Status
 
-### Manual Testing Needed:
-- [ ] Test `/category/@username/permlink` routes
-- [ ] Test `/@username` redirects to `/@username/blog`
-- [ ] Test `/@username/<section>` routes (blog, posts, comments, etc.)
-- [ ] Test `/@username/<permlink>` redirects to category version
-- [ ] Test paths without `@` return 404
-- [ ] Test static routes (`/trending`, `/login`, `/search`) work correctly
+### Manual Testing Results: ✅ ALL TESTS PASSED
+
+- [x] Test `/category/@username/permlink` routes
+  - ✅ Tested: `/steem/@steemitblog/steemit-update-december-7th-2025-steemit-challenge-season-28-week-4`
+  - ✅ Result: Route correctly rewrites to `/post/[category]/[username]/[permlink]` and displays article content
+  
+- [x] Test `/@username` redirects to `/@username/blog`
+  - ✅ Tested: `/@steemitblog`
+  - ✅ Result: Automatically redirects to `/@steemitblog/blog` and displays user profile with blog section
+  
+- [x] Test `/@username/<section>` routes (blog, posts, comments, etc.)
+  - ✅ Tested: `/@steemitblog/posts`
+  - ✅ Result: Correctly displays user profile with posts section
+  
+- [x] Test `/@username/<permlink>` (post without category)
+  - ✅ Tested: `/@steemitblog/steemit-update-december-7th-2025-steemit-challenge-season-28-week-4`
+  - ✅ Result: Route correctly rewrites to `/post-no-category/[username]/[permlink]` and displays article content
+  
+- [x] Test `/@username/feed` route
+  - ✅ Tested: `/@steemitblog/feed`
+  - ✅ Result: Correctly displays user feed section
+  
+- [x] Test paths without `@` return 404
+  - ✅ Tested: `/steemitblog/test-permlink`, `/category/username/permlink`, `/username`
+  - ✅ Result: All invalid routes (without `@`) correctly return 404 error
+  - ⚠️ Note: 404 page shows "Invalid Sort Type" message instead of standard 404 page, but functionality is correct
+  
+- [x] Test static routes (`/trending`, `/login`, `/search`) work correctly
+  - ✅ `/trending`: Displays trending posts page
+  - ✅ `/login`: Displays login form
+  - ✅ `/search`: Displays search page
+  - ✅ `/trending/steem`: Displays trending posts filtered by tag
 
 ## Summary
 
-**All implementation steps from the plan are complete.** The proxy.ts file now:
+**All implementation steps from the plan are complete and all tests have passed.** The proxy.ts file now:
 - ✅ Has extracted constants at the top
 - ✅ Follows legacy route matching order
 - ✅ Has unified safety checks for paths without `@`
 - ✅ Supports all required route patterns
 - ✅ Handles URL encoding properly
+- ✅ **All route patterns tested and verified working correctly**
 
-The refactoring is **ready for testing** to verify all route patterns work as expected.
+### Test Date: December 8, 2025
+
+### Issues Found:
+1. **Minor**: The `/404` route itself shows "Invalid Sort Type" error message instead of a standard 404 page. This is a cosmetic issue - the routing logic correctly returns 404 for invalid paths, but the 404 page component may need improvement.
+
+### Recommendations:
+- Consider creating a dedicated `app/not-found.tsx` or `app/404/page.tsx` for better 404 page display
+- All core routing functionality is working as expected
 

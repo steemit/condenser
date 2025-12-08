@@ -12,8 +12,8 @@ importers:
         specifier: ^2.10.1
         version: 2.10.1(react-redux@9.2.0(@types/react@19.2.6)(react@19.2.0)(redux@5.0.1))(react@19.2.0)
       '@steemit/steem-js':
-        specifier: ^1.0.8
-        version: 1.0.8
+        specifier: ^1.0.9
+        version: 1.0.9
       ioredis:
         specifier: ^5.8.2
         version: 5.8.2
@@ -617,8 +617,8 @@ packages:
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
-  '@steemit/steem-js@1.0.8':
-    resolution: {integrity: sha512-E5lI6C1Wg72jKI/qK3wlmKvam2uengC/xPqB8+0rJfELQKKBwm3Hh3+XnO/BCiImLDEdwkkmjAvjOPPiQ9+U4A==}
+  '@steemit/steem-js@1.0.9':
+    resolution: {integrity: sha512-3JKsNVXQz6dlU+snUx53QnDeFntUOq1GFC9hwozIKQ7t/2eNLtbGVcgQx2sBoxqiyTQhT/rch4z7QZfoyK+QLA==}
     engines: {node: '>=18.0.0'}
 
   '@swc/helpers@0.5.15':
@@ -2772,7 +2772,7 @@ snapshots:
 
   '@standard-schema/utils@0.3.0': {}
 
-  '@steemit/steem-js@1.0.8':
+  '@steemit/steem-js@1.0.9':
     dependencies:
       '@noble/ciphers': 2.0.1
       '@noble/hashes': 2.0.1

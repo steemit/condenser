@@ -25,7 +25,7 @@ services:
     environment:
       - NODE_ENV=production
       # Add your environment variables here
-      - STEEMD_CONNECTION_SERVER=https://api.steemit.com
+      - STEEM_API_URL=https://api.steemit.com
       - STEEMD_USE_APPBASE=true
       - CHAIN_ID=0000000000000000000000000000000000000000000000000000000000000000
       - ADDRESS_PREFIX=STM

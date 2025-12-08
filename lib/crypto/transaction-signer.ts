@@ -3,19 +3,17 @@
  * Signs transactions locally before sending to API
  */
 
-import * as steemModule from '@steemit/steem-js';
+// Import steem object directly as a named export
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+import { steem } from '@steemit/steem-js';
 
 // Import types directly from dist (these are TypeScript definition files)
 // @ts-expect-error - TypeScript can't resolve these paths, but they exist at runtime
 import type { Transaction } from '@steemit/steem-js/dist/types';
 
-// Get steem object and extract classes/functions
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const steem = (steemModule as any).steem;
-
 // Get classes and functions from steem object at runtime
 const PrivateKeyClass = steem.auth.PrivateKey;
-const SignatureClass = steem.auth.ecc.Signature;
+const SignatureClass = steem.auth.Signature;
 const serializeTransaction = steem.serializer.serializeTransaction;
 const createComment = steem.operations.createComment;
 const createVote = steem.operations.createVote;

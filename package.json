@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",
-    "@steemit/steem-js": "^1.0.8",
+    "@steemit/steem-js": "^1.0.9",
     "ioredis": "^5.8.2",
     "jose": "^5.10.0",
     "next": "16.0.7",

@@ -4,12 +4,20 @@
 
 ### Steem API Configuration
 ```bash
-STEEMD_CONNECTION_SERVER=https://api.steemit.com
-STEEMD_CONNECTION_CLIENT=https://api.steemit.com
+# Unified API URL
+STEEM_API_URL=https://api.steemit.com
+
 STEEMD_USE_APPBASE=true
 CHAIN_ID=0000000000000000000000000000000000000000000000000000000000000000
 ADDRESS_PREFIX=STM
 ```
+
+**Note**: 
+- You can configure these variables in `.env.local` file (for local development) or `.env.production` (for production). Next.js automatically loads environment variables from `.env*` files.
+- A template file `.env.example` is provided in the project root. Copy it to `.env.local` and customize the values:
+  ```bash
+  cp .env.example .env.local
+  ```
 
 ### Authentication
 ```bash

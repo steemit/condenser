@@ -13,8 +13,9 @@ This document explains how to test Steem API endpoints.
 
 3. Optional: Configure environment variables (`.env.local`):
    ```bash
-   STEEMD_CONNECTION_SERVER=https://api.steemit.com
-   STEEMD_CONNECTION_CLIENT=https://api.steemit.com
+   # Unified API URL
+   STEEM_API_URL=https://api.steemit.com
+   
    STEEMD_USE_APPBASE=false
    CHAIN_ID=0000000000000000000000000000000000000000000000000000000000000000
    ADDRESS_PREFIX=STM

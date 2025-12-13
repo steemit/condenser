@@ -43,11 +43,12 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // Skip API routes and static files
+  // Skip API routes, static files, and the 404 page
   if (
     pathname.startsWith('/api/') ||
     pathname.startsWith('/_next/') ||
     pathname.startsWith('/static/') ||
+    pathname === '/404' ||
     pathname.includes('.')
   ) {
     return NextResponse.next();
@@ -148,6 +149,10 @@ export function proxy(request: NextRequest) {
   const sortOnlyMatch = pathname.match(/^\/([^\/]+)$/);
   if (sortOnlyMatch) {
     const [, sort] = sortOnlyMatch;
+    // Exclude '404' from being matched as a sort type
+    if (sort.toLowerCase() === '404') {
+      return NextResponse.rewrite(new URL('/404', request.url));
+    }
     if (SORT_TYPES.includes(sort.toLowerCase())) {
       // Pass through to [sort] route
       return NextResponse.next();

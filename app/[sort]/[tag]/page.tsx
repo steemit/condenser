@@ -6,6 +6,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
 import { fetchRankedPosts, Post } from '@/lib/api/steem';
 import PostsList from '@/components/cards/PostsList';
+import NotFound from '@/components/NotFound';
 
 const VALID_SORTS = ['hot', 'trending', 'promoted', 'payout', 'payout_comments', 'muted', 'created'];
 
@@ -28,6 +29,11 @@ export default function SortTagPage({ params }: SortTagPageProps) {
   const sortString = Array.isArray(sort) ? sort[0] : sort;
   const tagString = Array.isArray(tag) ? tag[0] : tag;
   const isValidSort = VALID_SORTS.includes(sortString?.toLowerCase());
+
+  // If sort is invalid, show not-found page
+  if (!isValidSort) {
+    return <NotFound />;
+  }
 
   useEffect(() => {
     dispatch(setPathname(`/${sortString}/${tagString}`));
@@ -80,19 +86,6 @@ export default function SortTagPage({ params }: SortTagPageProps) {
       loadPosts();
     }
   };
-
-  if (!isValidSort) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-          <h1 className="text-2xl font-bold text-red-800 mb-2">Invalid Sort Type</h1>
-          <p className="text-red-600">
-            "{sortString}" is not a valid sort type. Valid options are: {VALID_SORTS.join(', ')}.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   const sortDisplayName = sortString.charAt(0).toUpperCase() + sortString.slice(1).replace('_', ' ');
   const isHiveCommunity = tagString?.startsWith('hive-');

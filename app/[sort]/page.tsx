@@ -6,7 +6,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
 import { fetchRankedPosts, Post } from '@/lib/api/steem';
 import PostsList from '@/components/cards/PostsList';
-import NotFoundPage from '@/app/404/page';
+import NotFound from '@/components/NotFound';
 
 const VALID_SORTS = ['hot', 'trending', 'promoted', 'payout', 'payout_comments', 'muted', 'created'];
 
@@ -26,13 +26,12 @@ export default function SortPage({ params }: SortPageProps) {
 
   // Validate sort parameter
   const sortString = Array.isArray(sort) ? sort[0] : sort;
-  
-  // Handle /404 route - render custom 404 page
-  if (sortString?.toLowerCase() === '404') {
-    return <NotFoundPage />;
-  }
-  
   const isValidSort = VALID_SORTS.includes(sortString?.toLowerCase());
+
+  // If sort is invalid or is '404', show not-found page
+  if (!isValidSort || sortString?.toLowerCase() === '404') {
+    return <NotFound />;
+  }
 
   useEffect(() => {
     dispatch(setPathname(`/${sortString}`));
@@ -84,19 +83,6 @@ export default function SortPage({ params }: SortPageProps) {
       loadPosts();
     }
   };
-
-  if (!isValidSort) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-          <h1 className="text-2xl font-bold text-red-800 mb-2">Invalid Sort Type</h1>
-          <p className="text-red-600">
-            "{sortString}" is not a valid sort type. Valid options are: {VALID_SORTS.join(', ')}.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   const sortDisplayName = sortString.charAt(0).toUpperCase() + sortString.slice(1).replace('_', ' ');
 

@@ -100,20 +100,46 @@ export async function getStateAsync(
             // TODO: move to global reducer?
             const timerLabel = `timing_get_profile_${account}`;
             safeConsoleTime(timerLabel, requestId);
-            const profile = await callBridge('get_profile', { account });
-            safeConsoleTimeEnd(timerLabel, requestId);
-            if (profile && profile['name']) {
-                state['profiles'][account] = profile;
+            try {
+                const profile = await callBridge('get_profile', { account });
+                safeConsoleTimeEnd(timerLabel, requestId);
+                if (profile && profile['name']) {
+                    state['profiles'][account] = profile;
+                }
+            } catch (error) {
+                safeConsoleTimeEnd(timerLabel, requestId);
+                console.error(
+                    JSON.stringify({
+                        msg: '~~ get_profile callBridge error ~~',
+                        account,
+                        error: error.message || error,
+                        requestId,
+                    })
+                );
+                // Continue without profile data
             }
         }
 
         if (ssr) {
             // append `topics` key
             safeConsoleTime('timing_get_trending_topics', requestId);
-            state['topics'] = await callBridge('get_trending_topics', {
-                limit: 12,
-            });
-            safeConsoleTimeEnd('timing_get_trending_topics', requestId);
+            try {
+                state['topics'] = await callBridge('get_trending_topics', {
+                    limit: 12,
+                });
+                safeConsoleTimeEnd('timing_get_trending_topics', requestId);
+            } catch (error) {
+                safeConsoleTimeEnd('timing_get_trending_topics', requestId);
+                console.error(
+                    JSON.stringify({
+                        msg: '~~ get_trending_topics callBridge error ~~',
+                        error: error.message || error,
+                        requestId,
+                    })
+                );
+                // Continue without topics data
+                state['topics'] = [];
+            }
         }
 
         safeConsoleTime('timing_stateCleaner', requestId);
@@ -142,8 +168,25 @@ async function loadThread(account, permlink, requestId = null) {
     const author = account.slice(1);
     const timerLabel = `timing_get_discussion_${author}_${permlink}`;
     safeConsoleTime(timerLabel, requestId);
-    const content = await callBridge('get_discussion', { author, permlink });
-    safeConsoleTimeEnd(timerLabel, requestId);
+    let content;
+    try {
+        content = await callBridge('get_discussion', { author, permlink });
+        safeConsoleTimeEnd(timerLabel, requestId);
+    } catch (error) {
+        // Log error but don't throw - return empty content instead
+        console.error(
+            JSON.stringify({
+                msg: '~~ loadThread callBridge error ~~',
+                method: 'get_discussion',
+                params: { author, permlink },
+                error: error.message || error,
+                requestId,
+            })
+        );
+        safeConsoleTimeEnd(timerLabel, requestId);
+        // Return empty object to indicate no content loaded
+        content = {};
+    }
     return { content };
 }
 
@@ -151,19 +194,40 @@ async function loadPosts(sort, tag, observer, ssr, requestId = null) {
     const account = tag && tag[0] == '@' ? tag.slice(1) : null;
 
     let posts;
-    if (account) {
-        const timerLabel = `timing_get_account_posts_${account}_${sort}`;
-        safeConsoleTime(timerLabel, requestId);
-        const params = { sort, account, observer };
-        posts = await callBridge('get_account_posts', params);
-        safeConsoleTimeEnd(timerLabel, requestId);
-    } else {
-        const timerLabel = `timing_get_ranked_posts_${sort}_${tag}`;
-        safeConsoleTime(timerLabel, requestId);
-        const params = { sort, tag, observer };
-        posts = await callBridge('get_ranked_posts', params);
-        safeConsoleTimeEnd(timerLabel, requestId);
+    try {
+        if (account) {
+            const timerLabel = `timing_get_account_posts_${account}_${sort}`;
+            safeConsoleTime(timerLabel, requestId);
+            const params = { sort, account, observer };
+            posts = await callBridge('get_account_posts', params);
+            safeConsoleTimeEnd(timerLabel, requestId);
+        } else {
+            const timerLabel = `timing_get_ranked_posts_${sort}_${tag}`;
+            safeConsoleTime(timerLabel, requestId);
+            const params = { sort, tag, observer };
+            posts = await callBridge('get_ranked_posts', params);
+            safeConsoleTimeEnd(timerLabel, requestId);
+        }
+    } catch (error) {
+        // Log error but don't throw - return empty data structure instead
+        console.error(
+            JSON.stringify({
+                msg: '~~ loadPosts callBridge error ~~',
+                method: account ? 'get_account_posts' : 'get_ranked_posts',
+                params: account ? { sort, account, observer } : { sort, tag, observer },
+                error: error.message || error,
+                requestId,
+            })
+        );
+        // Return empty array to indicate no posts loaded
+        posts = [];
     }
+
+    // Ensure posts is an array
+    if (!Array.isArray(posts)) {
+        posts = [];
+    }
+
     let content = {};
     let keys = [];
     for (var idx in posts) {

@@ -1,9 +1,9 @@
 FROM node:10.0
 
 ARG SOURCE_COMMIT
-ENV SOURCE_COMMIT ${SOURCE_COMMIT}
+ENV SOURCE_COMMIT=${SOURCE_COMMIT}
 ARG DOCKER_TAG
-ENV DOCKER_TAG ${DOCKER_TAG}
+ENV DOCKER_TAG=${DOCKER_TAG}
 
 # yarn > npm
 #RUN npm install --global yarn
@@ -28,8 +28,8 @@ COPY . /var/app
 RUN mkdir tmp && \
     yarn test && yarn build
 
-ENV PORT 8080
-ENV NODE_ENV production
+ENV PORT=8080
+ENV NODE_ENV=production
 
 EXPOSE 8080
 

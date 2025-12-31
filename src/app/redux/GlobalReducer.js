@@ -17,6 +17,7 @@ const RECEIVE_COMMUNITY = 'global/RECEIVE_COMMUNITY';
 const RECEIVE_COMMUNITIES = 'global/RECEIVE_COMMUNITIES';
 const LOADING_SUBSCRIPTIONS = 'global/LOADING_SUBSCRIPTIONS';
 const RECEIVE_SUBSCRIPTIONS = 'global/RECEIVE_SUBSCRIPTIONS';
+const SUBSCRIPTIONS_ERROR = 'global/SUBSCRIPTIONS_ERROR';
 const SYNC_SPECIAL_POSTS = 'global/SYNC_SPECIAL_POSTS';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -151,9 +152,18 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_SUBSCRIPTIONS: {
+            return state
+                .setIn(
+                    ['subscriptions', payload.username],
+                    fromJS(payload.subscriptions)
+                )
+                .deleteIn(['subscriptions', payload.username, 'error']);
+        }
+
+        case SUBSCRIPTIONS_ERROR: {
             return state.setIn(
-                ['subscriptions', payload.username],
-                fromJS(payload.subscriptions)
+                ['subscriptions', payload.username, 'error'],
+                fromJS(payload.error)
             );
         }
         case RECEIVE_REWARDS: {
@@ -445,6 +455,11 @@ export const receiveSubscriptions = payload => ({
 });
 export const loadingSubscriptions = payload => ({
     type: LOADING_SUBSCRIPTIONS,
+    payload,
+});
+
+export const subscriptionsError = payload => ({
+    type: SUBSCRIPTIONS_ERROR,
     payload,
 });
 

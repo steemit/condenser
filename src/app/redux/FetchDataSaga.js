@@ -226,19 +226,56 @@ export function* getCommunity(action) {
  */
 export function* getSubscriptions(action) {
     if (!action.payload) throw 'no account specified';
+    const username = action.payload;
+    
+    // Check if already loading or has recent error to prevent duplicate requests
+    const state = yield select(state => state.global);
+    const loading = state.getIn(['subscriptions', 'loading']);
+    const hasError = state.getIn(['subscriptions', username, 'error']);
+    
+    // If already loading, skip the request
+    if (loading) {
+        console.log('Skipping duplicate subscription request for', username, '- already loading');
+        return;
+    }
+    
+    // If has a recent error (within last 30 seconds), skip the request
+    if (hasError) {
+        const errorTime = hasError.get('timestamp');
+        if (errorTime && Date.now() - errorTime < 30000) {
+            console.log('Skipping duplicate subscription request for', username, '- recent error');
+            return;
+        }
+    }
+    
     yield put(globalActions.loadingSubscriptions(true));
     try {
         const subscriptions = yield call(callBridge, 'list_all_subscriptions', {
-            account: action.payload,
+            account: username,
         });
         yield put(
             globalActions.receiveSubscriptions({
                 subscriptions,
-                username: action.payload,
+                username,
             })
         );
     } catch (error) {
         console.log('Error Fetching Account Subscriptions: ', error);
+        // Extract error information from JSON-RPC error response
+        const errorCode = error.code || (error.error && error.error.code);
+        const errorMessage = error.message || (error.error && error.error.message) || 'Request failed';
+        
+        // Set error state with timestamp to prevent duplicate requests
+        yield put(
+            globalActions.subscriptionsError({
+                username,
+                error: {
+                    message: errorMessage,
+                    code: errorCode,
+                    timestamp: Date.now(),
+                },
+            })
+        );
     }
     yield put(globalActions.loadingSubscriptions(false));
 }

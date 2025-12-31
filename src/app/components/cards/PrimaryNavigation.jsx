@@ -28,8 +28,22 @@ class PrimaryNavigation extends React.PureComponent {
     }
 
     componentWillMount() {
-        const { subscriptions, getSubscriptions, username } = this.props;
-        if (!subscriptions && username) getSubscriptions(username);
+        const {
+            subscriptions,
+            getSubscriptions,
+            username,
+            subscriptionsLoading,
+            subscriptionsError,
+        } = this.props;
+        // Only request subscriptions if not already loading, no recent error, and subscriptions don't exist
+        if (
+            !subscriptions &&
+            username &&
+            !subscriptionsLoading &&
+            !subscriptionsError
+        ) {
+            getSubscriptions(username);
+        }
     }
 
     componentDidMount() {
@@ -61,8 +75,22 @@ class PrimaryNavigation extends React.PureComponent {
         if (prevProps.pathname !== pathname) {
             this.renderVisible();
         }
-        const { subscriptions, getSubscriptions, username } = this.props;
-        if (!subscriptions && username) getSubscriptions(username);
+        const {
+            subscriptions,
+            getSubscriptions,
+            username,
+            subscriptionsLoading,
+            subscriptionsError,
+        } = this.props;
+        // Only request subscriptions if not already loading, no recent error, and subscriptions don't exist
+        if (
+            !subscriptions &&
+            username &&
+            !subscriptionsLoading &&
+            !subscriptionsError
+        ) {
+            getSubscriptions(username);
+        }
     }
 
     componentWillUnmount() {
@@ -859,6 +887,15 @@ const mapStateToProps = state => {
     const pathname = state.global.get('pathname');
     const topics = state.global.getIn(['topics'], List());
     const subscriptions = state.global.getIn(['subscriptions', username]);
+    const subscriptionsLoading = state.global.getIn([
+        'subscriptions',
+        'loading',
+    ]);
+    const subscriptionsError = state.global.getIn([
+        'subscriptions',
+        username,
+        'error',
+    ]);
 
     return {
         walletUrl,
@@ -866,6 +903,8 @@ const mapStateToProps = state => {
         pathname,
         topics,
         subscriptions,
+        subscriptionsLoading,
+        subscriptionsError,
     };
 };
 

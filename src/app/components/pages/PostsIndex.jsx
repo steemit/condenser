@@ -70,9 +70,19 @@ class PostsIndex extends React.Component {
             username,
             category,
             order,
+            subscriptionsLoading,
+            subscriptionsError,
         } = this.props;
         this.props.setRouteTag(ifHive(category), category, order);
-        if (!subscriptions && username) getSubscriptions(username);
+        // Only request subscriptions if not already loading, no recent error, and subscriptions don't exist
+        if (
+            !subscriptions &&
+            username &&
+            !subscriptionsLoading &&
+            !subscriptionsError
+        ) {
+            getSubscriptions(username);
+        }
     }
 
     componentWillUpdate(nextProps) {
@@ -298,8 +308,20 @@ module.exports = {
                 state.user.getIn(['current', 'username']) ||
                 state.offchain.get('account');
 
+            const subscriptionsLoading = state.global.getIn([
+                'subscriptions',
+                'loading',
+            ]);
+            const subscriptionsError = state.global.getIn([
+                'subscriptions',
+                username,
+                'error',
+            ]);
+
             return {
                 subscriptions: state.global.getIn(['subscriptions', username]),
+                subscriptionsLoading,
+                subscriptionsError,
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 account_name,

@@ -78,8 +78,30 @@ class Post extends React.Component {
 
     componentWillUpdate(nextProps) {
         const { dis } = nextProps;
-        if (dis.get('url') !== this.props.dis.get('url')) {
+        if (dis && dis.get('url') !== this.props.dis.get('url')) {
             this.props.setRouteTag(dis.get('url'));
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        const { dis } = this.props;
+        
+        // 当 dis 从 undefined 变为有值，或者 replies 从空变为有值时，确保 showPostComments 状态正确
+        if (dis && prevProps.dis === undefined) {
+            // dis 刚刚加载完成，确保 showPostComments 为 true 以触发隐藏逻辑
+            if (!this.state.showPostComments) {
+                this.setState({ showPostComments: true });
+            }
+        } else if (dis && prevProps.dis) {
+            const prevReplies = prevProps.dis.get('replies');
+            const nextReplies = dis.get('replies');
+            const prevRepliesLength = prevReplies ? prevReplies.size : 0;
+            const nextRepliesLength = nextReplies ? nextReplies.size : 0;
+            
+            // 当 replies 从空变为有值时，确保 showPostComments 为 true
+            if (prevRepliesLength === 0 && nextRepliesLength > 0 && !this.state.showPostComments) {
+                this.setState({ showPostComments: true });
+            }
         }
     }
 
@@ -104,8 +126,14 @@ class Post extends React.Component {
         this.setState({ showAnyway: true });
     };
 
-    showPostCommentClick = () => {
-        this.setState({ showPostComments: false });
+    showPostCommentClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        try {
+            this.setState({ showPostComments: false });
+        } catch (error) {
+            console.error('Error in showPostCommentClick:', error);
+        }
     };
 
     render() {
@@ -207,7 +235,8 @@ class Post extends React.Component {
             postBody = <PostFull post={post} cont={content} />;
         }
 
-        let replies = dis.get('replies').toJS();
+        const repliesList = dis.get('replies');
+        let replies = repliesList ? repliesList.toJS() : [];
 
         sortComments(content, replies, sortOrder);
 
@@ -219,7 +248,8 @@ class Post extends React.Component {
         //     replies = replies.slice(0, commentLimit);
         // }
 
-        if (replies.length > 0 && showPostComments) {
+        // 确保当 showPostComments 为 true 时，限制显示的评论数量
+        if (replies && replies.length > 0 && showPostComments) {
             replies = replies.slice(0, commentDefault);
         }
 
@@ -392,6 +422,8 @@ class Post extends React.Component {
                                     {positiveComments.length > 0 &&
                                     positiveComments.length ===
                                         commentDefault &&
+                                    dis &&
+                                    dis.get('children') != null &&
                                     commentDefault < dis.get('children') &&
                                     showPostComments ? (
                                         <div className="hentry Comment root Post_comments__count">
@@ -400,6 +432,7 @@ class Post extends React.Component {
                                                 onClick={
                                                     this.showPostCommentClick
                                                 }
+                                                type="button"
                                             >
                                                 LOAD MORE COMMENTS
                                             </button>

@@ -12,7 +12,7 @@
             "imgSrc": "* data:",
             "objectSrc": "'self' application/pdf",
             "scriptSrc": "'self' www.google-analytics.com www.googletagmanager.com connect.facebook.net *.tronads.io",
-            "styleSrc": "'self' fonts.googleapis.com",
+            "styleSrc": "'self' fonts.googleapis.com 'unsafe-inline'",
             "reportUri": "/api/v1/csp_violation"
         },
         "reportOnly": false,

@@ -920,7 +920,7 @@ const mapDispatchToProps = dispatch => ({
             dispatch(userActions.showLogin({ type: 'basic' }));
         } catch (error) {
             console.error('Error in showLogin:', error);
-            // 即使出错，也尝试阻止默认行为
+            // Even if there's an error, try to prevent default behavior
             if (e && e.preventDefault) {
                 e.preventDefault();
             }

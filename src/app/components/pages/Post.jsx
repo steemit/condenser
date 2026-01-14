@@ -78,14 +78,15 @@ class Post extends React.Component {
 
     componentWillUpdate(nextProps) {
         const { dis } = nextProps;
-        if (dis && dis.get('url') !== this.props.dis.get('url')) {
+        const currentDis = this.props.dis;
+        if (dis && currentDis && dis.get('url') !== currentDis.get('url')) {
             this.props.setRouteTag(dis.get('url'));
         }
     }
 
     componentDidUpdate(prevProps) {
         const { dis } = this.props;
-        
+
         // Ensure showPostComments state is correct when dis changes from undefined to a value, or when replies changes from empty to having values
         if (dis && prevProps.dis === undefined) {
             // dis has just finished loading, ensure showPostComments is true to trigger hiding logic
@@ -97,9 +98,13 @@ class Post extends React.Component {
             const nextReplies = dis.get('replies');
             const prevRepliesLength = prevReplies ? prevReplies.size : 0;
             const nextRepliesLength = nextReplies ? nextReplies.size : 0;
-            
+
             // When replies changes from empty to having values, ensure showPostComments is true
-            if (prevRepliesLength === 0 && nextRepliesLength > 0 && !this.state.showPostComments) {
+            if (
+                prevRepliesLength === 0 &&
+                nextRepliesLength > 0 &&
+                !this.state.showPostComments
+            ) {
                 this.setState({ showPostComments: true });
             }
         }
@@ -126,7 +131,7 @@ class Post extends React.Component {
         this.setState({ showAnyway: true });
     };
 
-    showPostCommentClick = (e) => {
+    showPostCommentClick = e => {
         e.preventDefault();
         e.stopPropagation();
         try {

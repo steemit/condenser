@@ -1,0 +1,18 @@
+services:
+  condenser:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: condenser-dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - SDC_CLIENT_STEEMD_URL=https://api.steemit.com
+      - SDC_SERVER_STEEMD_URL=https://api.steemit.com
+    stdin_open: true
+    tty: true
+    restart: unless-stopped

@@ -53,7 +53,9 @@ class Post extends React.Component {
     componentWillMount() {
         const { dis } = this.props;
         try {
-            this.props.setRouteTag(dis.get('url'));
+            if (dis && dis.get) {
+                this.props.setRouteTag(dis.get('url'));
+            }
         } catch (e) {
             console.error(`error of dis on Post.jsx: ${e}`);
             this.props.redirectPath('404');

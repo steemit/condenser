@@ -141,6 +141,24 @@ describe('ProxifyUrl', () => {
             'https://steemitimages.com/640x0/https://example.com/img.png'
         );
     });
+    it('dimensions with trailing slash should not create double slash', () => {
+        // Test case for HtmlReady.js line 258 which calls proxifyImageUrl(url, '0x0/')
+        testCase(
+            'https://example.com/img.png',
+            '0x0/',
+            'https://steemitimages.com/640x0/https://example.com/img.png'
+        );
+        testCase(
+            'https://example.com/img.gif',
+            '0x0/',
+            'https://steemitimages.com/0x0/https://example.com/img.gif'
+        );
+        testCase(
+            'https://cdn.steemitimages.com/DQmNRRrBzgpYrFfwD8wWbyPqe5MScZx59gu4sZwkfkw44qu/20220219_125403.jpg',
+            '0x0/',
+            'https://steemitimages.com/640x0/https://cdn.steemitimages.com/DQmNRRrBzgpYrFfwD8wWbyPqe5MScZx59gu4sZwkfkw44qu/20220219_125403.jpg'
+        );
+    });
 });
 
 const testCase = (inputUrl, outputDims, expectedUrl) => {

@@ -37,7 +37,10 @@ export function proxifyImageUrl(url, dimensions = false) {
         respUrl = url.substring(url.lastIndexOf(lastProxy) + lastProxy.length);
     }
     if (dimensions && $STM_Config && $STM_Config.img_proxy_prefix) {
-        let dims = dimensions + '/';
+        let dims =
+            typeof dimensions === 'string' && dimensions.endsWith('/')
+                ? dimensions
+                : dimensions + '/';
         if (typeof dimensions !== 'string') {
             dims = proxyList
                 ? proxyList.shift().match(/([0-9]+x[0-9]+)\//g)[0]

@@ -10,6 +10,8 @@
  */
 const rProxyDomain = /^http(s)?:\/\/steemit(dev|stage)?images.com\//g;
 const rProxyDomainsDimensions = /http(s)?:\/\/steemit(dev|stage)?images.com\/([0-9]+x[0-9]+)\//g;
+/** Only URLs from this domain get the img_proxy_prefix applied */
+const rCdnSteemitImages = /^https?:\/\/cdn\.steemitimages\.com\//i;
 const NATURAL_SIZE = '0x0/';
 const CAPPED_SIZE = '640x0/';
 const DOUBLE_CAPPED_SIZE = '1280x0/';
@@ -53,10 +55,8 @@ export function proxifyImageUrl(url, dimensions = false) {
             dims = CAPPED_SIZE;
         }
 
-        if (
-            (NATURAL_SIZE !== dims && CAPPED_SIZE !== dims) ||
-            !rProxyDomain.test(respUrl)
-        ) {
+        // Only add proxy prefix for images from cdn.steemitimages.com
+        if (rCdnSteemitImages.test(respUrl)) {
             return $STM_Config.img_proxy_prefix + dims + respUrl;
         }
     }

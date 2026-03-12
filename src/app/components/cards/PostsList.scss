@@ -196,6 +196,12 @@
                 height: 250px !important;
             }
         }
+        &__feature-img {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+        }
 
         &__footer {
             padding-bottom: 20px;

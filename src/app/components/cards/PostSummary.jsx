@@ -330,19 +330,18 @@ class PostSummary extends React.Component {
         if (!gray && image_link && !ImageUserBlockList.includes(author)) {
             // on mobile, we always use blog layout style -- there's no toggler
             // on desktop, we offer a choice of either blog or list
-            // if blogmode is false, output an image with a srcset
-            // which has the 256x512 for whatever the large breakpoint is where the list layout is used
-            // and the 640 for lower than that
-            const blogImg = proxify(image_link, '640x480');
+            // Fixed width (640x0) for all layouts to avoid cropping/squashing tall images
+            const thumbImg = proxify(image_link, '640x0');
 
             if (this.props.blogmode) {
-                thumb = <img className="articles__feature-img" src={blogImg} />;
+                thumb = (
+                    <img className="articles__feature-img" src={thumbImg} />
+                );
             } else {
-                const listImg = proxify(image_link, '640x0');
                 thumb = (
                     <picture className="articles__feature-img">
-                        <source srcSet={listImg} media="(min-width: 1000px)" />
-                        <img srcSet={blogImg} />
+                        <source srcSet={thumbImg} media="(min-width: 1000px)" />
+                        <img srcSet={thumbImg} />
                     </picture>
                 );
             }

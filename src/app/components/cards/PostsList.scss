@@ -191,10 +191,18 @@
 
         &__feature-img-container {
             display: flex !important;
+            overflow: hidden;
             @include MQ(M) {
                 width: 100% !important;
                 height: 250px !important;
             }
+        }
+        &__feature-img {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            object-fit: cover;
+            object-position: center;
         }
 
         &__footer {

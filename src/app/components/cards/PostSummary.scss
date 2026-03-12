@@ -67,9 +67,9 @@ ul.PostsList__summaries > li {
   width: 130px;
   height: 4.5rem;
   background-color: #EEE;
-  background-size: 100%;
+  background-size: contain;
   background-repeat: no-repeat;
-  background-position: 50% 20%;
+  background-position: center;
   border: 1px solid #EEE;
 }
 
@@ -212,7 +212,7 @@ ul.PostsList__summaries > li {
   .PostSummary__image {
     float: none;
     margin-top: 0.5rem;
-    // background-size: contain;
+    background-size: contain;
     display: block;
     width: 100%;
     height: 40vw;

@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:phase1": "eslint app/layout.tsx next.config.ts components/ui/button.tsx",
+    "typecheck:phase1": "tsc --noEmit --project tsconfig.phase1.json",
     "test:api": "tsx scripts/test-api.ts",
     "test:proxy": "tsx scripts/test-proxy-routes.ts"
   },

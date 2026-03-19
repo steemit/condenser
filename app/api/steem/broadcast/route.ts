@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
 
     // Forward the signed transaction to Steem network
     // The API only forwards, it does not sign or modify the transaction
-    const result = await callSteemApi('broadcast_transaction', [signedTransaction]);
+    const result = await callSteemApi<{ id?: string }>('broadcast_transaction', [signedTransaction]);
 
     // Extract operation details for response
     const firstOperation = signedTransaction.operations[0];

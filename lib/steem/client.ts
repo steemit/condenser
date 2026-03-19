@@ -5,7 +5,6 @@
  */
 
 // Import steem object directly as a named export
-// @ts-expect-error - TypeScript can't resolve the named export, but it exists at runtime
 import { steem } from '@steemit/steem-js';
 
 // Initialize Steem API configuration
@@ -49,6 +48,29 @@ export async function callBridge<T = unknown>(method: string, params: unknown, p
       if (err) {
         console.error('Steem API call error:', {
           method: pre + method,
+          params,
+          error: err,
+        });
+        reject(err);
+      } else {
+        resolve(data as T);
+      }
+    });
+  });
+}
+
+/**
+ * Generic Steem API call helper for non-bridge methods.
+ * Keeps compatibility with API routes that call raw method names.
+ */
+export async function callSteemApi<T = unknown>(method: string, params: unknown): Promise<T> {
+  initializeSteemApi();
+
+  return new Promise<T>((resolve, reject) => {
+    steem.api.call(method, params, (err: unknown, data: unknown) => {
+      if (err) {
+        console.error('Steem API call error:', {
+          method,
           params,
           error: err,
         });

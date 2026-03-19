@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "app/layout.tsx",
+    "next.config.ts",
+    "components/ui/button.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "legacy",
+    ".next"
+  ]
+}

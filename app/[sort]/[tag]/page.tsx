@@ -26,9 +26,9 @@ export default function SortTagPage({ params }: SortTagPageProps) {
   const [lastPost, setLastPost] = useState<{ author: string; permlink: string } | null>(null);
 
   // Validate parameters
-  const sortString = Array.isArray(sort) ? sort[0] : sort;
-  const tagString = Array.isArray(tag) ? tag[0] : tag;
-  const isValidSort = VALID_SORTS.includes(sortString?.toLowerCase());
+  const sortString = (Array.isArray(sort) ? sort[0] : sort) ?? '';
+  const tagString = (Array.isArray(tag) ? tag[0] : tag) ?? '';
+  const isValidSort = VALID_SORTS.includes(sortString.toLowerCase());
 
   // If sort is invalid, show not-found page
   if (!isValidSort) {
@@ -46,7 +46,7 @@ export default function SortTagPage({ params }: SortTagPageProps) {
     try {
       const newPosts = await fetchRankedPosts({
         order: sortString as any,
-        tag: tagString,
+        category: tagString,
         limit: 20,
         start_author: lastPost?.author,
         start_permlink: lastPost?.permlink,
@@ -88,7 +88,7 @@ export default function SortTagPage({ params }: SortTagPageProps) {
   };
 
   const sortDisplayName = sortString.charAt(0).toUpperCase() + sortString.slice(1).replace('_', ' ');
-  const isHiveCommunity = tagString?.startsWith('hive-');
+  const isHiveCommunity = tagString.startsWith('hive-');
   const tagDisplayName = isHiveCommunity ? `Community ${tagString}` : `#${tagString}`;
 
   return (

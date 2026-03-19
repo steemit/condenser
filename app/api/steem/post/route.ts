@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const discussion = await getDiscussion({ author, permlink });
+    const discussion = (await getDiscussion({ author, permlink })) as Record<string, unknown> | null;
 
     if (!discussion) {
       return NextResponse.json(
@@ -40,10 +40,11 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(post);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching post:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch post';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch post' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

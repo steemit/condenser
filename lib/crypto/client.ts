@@ -5,7 +5,6 @@
  */
 
 // Import steem object directly as a named export
-// @ts-expect-error - TypeScript can't resolve the named export, but it exists at runtime
 import { steem } from '@steemit/steem-js';
 
 // Import types directly from dist (these are TypeScript definition files)

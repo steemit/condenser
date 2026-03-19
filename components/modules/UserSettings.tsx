@@ -234,7 +234,7 @@ export default function UserSettings({
               <p className="mt-1 text-sm text-red-600">{errors.name}</p>
             )}
             <p className="mt-1 text-sm text-gray-500">
-              {formData.name.length}/20 characters
+              {(formData.name ?? '').length}/20 characters
             </p>
           </div>
 
@@ -257,7 +257,7 @@ export default function UserSettings({
               <p className="mt-1 text-sm text-red-600">{errors.about}</p>
             )}
             <p className="mt-1 text-sm text-gray-500">
-              {formData.about.length}/160 characters
+              {(formData.about ?? '').length}/160 characters
             </p>
           </div>
 
@@ -280,7 +280,7 @@ export default function UserSettings({
               <p className="mt-1 text-sm text-red-600">{errors.location}</p>
             )}
             <p className="mt-1 text-sm text-gray-500">
-              {formData.location.length}/30 characters
+              {(formData.location ?? '').length}/30 characters
             </p>
           </div>
 
@@ -303,7 +303,7 @@ export default function UserSettings({
               <p className="mt-1 text-sm text-red-600">{errors.website}</p>
             )}
             <p className="mt-1 text-sm text-gray-500">
-              {formData.website.length}/100 characters
+              {(formData.website ?? '').length}/100 characters
             </p>
           </div>
 

@@ -25,11 +25,11 @@ export default function SortPage({ params }: SortPageProps) {
   const [lastPost, setLastPost] = useState<{ author: string; permlink: string } | null>(null);
 
   // Validate sort parameter
-  const sortString = Array.isArray(sort) ? sort[0] : sort;
-  const isValidSort = VALID_SORTS.includes(sortString?.toLowerCase());
+  const sortString = (Array.isArray(sort) ? sort[0] : sort) ?? '';
+  const isValidSort = VALID_SORTS.includes(sortString.toLowerCase());
 
   // If sort is invalid or is '404', show not-found page
-  if (!isValidSort || sortString?.toLowerCase() === '404') {
+  if (!isValidSort || sortString.toLowerCase() === '404') {
     return <NotFound />;
   }
 

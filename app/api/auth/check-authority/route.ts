@@ -79,6 +79,13 @@ export async function POST(request: NextRequest) {
       key_auths: KeyAuth[];
       weight_threshold: number;
     };
+    type AccountWithAuthorities = {
+      posting?: Authority;
+      active?: Authority;
+      owner?: Authority;
+      memo_key?: string;
+    };
+    const accountData = account as AccountWithAuthorities;
 
     const checkKeyAuth = (
       pubkey: string,
@@ -98,15 +105,15 @@ export async function POST(request: NextRequest) {
 
     const auth = {
       posting: privateKeys.posting_private
-        ? checkKeyAuth(postingPub, account.posting)
+        ? checkKeyAuth(postingPub, accountData.posting)
         : 'none',
       active: privateKeys.active_private
-        ? checkKeyAuth(activePub, account.active)
+        ? checkKeyAuth(activePub, accountData.active)
         : 'none',
       owner: privateKeys.owner_private
-        ? checkKeyAuth(ownerPub, account.owner)
+        ? checkKeyAuth(ownerPub, accountData.owner)
         : 'none',
-      memo: account.memo_key === memoPub ? 'full' : 'none',
+      memo: accountData.memo_key === memoPub ? 'full' : 'none',
     };
 
     return NextResponse.json({ auth, account });

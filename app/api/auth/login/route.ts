@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccount } from '@/lib/steem/client';
-import { getSession, loginUser, setSessionCookie, verifySession } from '@/lib/auth/session';
+import { getSession, loginUser, setSessionCookie } from '@/lib/auth/session';
 import { Signature, PublicKey } from '@steemit/steem-js';
 
 export async function POST(request: NextRequest) {
@@ -32,15 +32,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    type AccountPostingAuthority = {
+      key_auths?: Array<[string, number]>;
+    };
+    type AccountWithPosting = {
+      posting?: AccountPostingAuthority;
+    };
+    const accountData = account as AccountWithPosting;
+
     // Step 2: Verify the public key belongs to the account's posting authority
-    if (!account.posting || !account.posting.key_auths || account.posting.key_auths.length === 0) {
+    if (!accountData.posting || !accountData.posting.key_auths || accountData.posting.key_auths.length === 0) {
       return NextResponse.json(
         { error: 'Account has no posting authority' },
         { status: 400 }
       );
     }
 
-    const accountPostingKeys = account.posting.key_auths.map((auth: any) => auth[0]);
+    const accountPostingKeys = accountData.posting.key_auths.map((auth) => auth[0]);
     if (!accountPostingKeys.includes(publicKey)) {
       return NextResponse.json(
         { error: 'Public key is not authorized for posting on this account' },
@@ -83,7 +91,7 @@ export async function POST(request: NextRequest) {
           { status: 401 }
         );
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Signature verification error:', error);
       return NextResponse.json(
         { error: 'Signature verification failed' },
@@ -109,10 +117,11 @@ export async function POST(request: NextRequest) {
     setSessionCookie(response, sessionToken);
 
     return response;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Login error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Login failed';
     return NextResponse.json(
-      { error: error.message || 'Login failed' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get discussion which includes the post and all comments
-    const discussion = await getDiscussion({ author, permlink });
+    const discussion = (await getDiscussion({ author, permlink })) as { replies?: unknown[] } | null;
 
     if (!discussion) {
       return NextResponse.json(
@@ -34,10 +34,11 @@ export async function GET(request: NextRequest) {
     const comments = discussion.replies || [];
 
     return NextResponse.json(comments);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching comments:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch comments';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch comments' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

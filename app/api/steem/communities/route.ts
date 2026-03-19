@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const account = searchParams.get('account');
     const type = searchParams.get('type') || 'list'; // 'subscriptions' or 'list'
-    const observer = searchParams.get('observer');
+    const observer = searchParams.get('observer') || undefined;
     const query = searchParams.get('query') || '';
     const sort = searchParams.get('sort') || 'rank';
     const limit = parseInt(searchParams.get('limit') || '20');
@@ -39,10 +39,11 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(result || []);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching communities:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch communities';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch communities' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

@@ -137,7 +137,7 @@ export default function SearchContent() {
       const results = await response.json();
       dispatch(searchResult({ 
         hits: {
-          hits: [...(searchState.hits?.hits || []), ...(results.hits?.hits || [])],
+          hits: results.hits?.hits || [],
           total: results.hits?.total || { value: 0 },
         },
         _scroll_id: results._scroll_id,

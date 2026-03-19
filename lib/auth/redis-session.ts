@@ -29,7 +29,6 @@ function getRedisClient(): Redis | null {
           password: process.env.REDIS_PASSWORD,
           db: parseInt(process.env.REDIS_DB || '0'),
           keyPrefix: process.env.REDIS_KEY_PREFIX || 'steem:session:',
-          retryDelayOnFailover: 100,
           maxRetriesPerRequest: 3,
         });
       }

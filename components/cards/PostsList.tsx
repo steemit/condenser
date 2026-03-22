@@ -1,7 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { Post } from '@/lib/api/steem';
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import { Post } from "@/lib/api/steem";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from "@/components/ui/card";
 
 interface PostsListProps {
   posts: Post[];
@@ -12,9 +18,7 @@ interface PostsListProps {
 }
 
 /**
- * PostsList component
- * Displays a list of posts with infinite scroll support
- * Migrated from legacy/src/app/components/cards/PostsList.jsx
+ * Posts list with Legacy-style summary cards (border, hover shadow on md+).
  */
 export default function PostsList({
   posts,
@@ -23,21 +27,10 @@ export default function PostsList({
   category,
   order,
 }: PostsListProps) {
-  const [thumbSize, setThumbSize] = useState<'desktop' | 'mobile'>('desktop');
   const listRef = useRef<HTMLDivElement>(null);
   const scrollListenerRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    // Detect mobile mode
-    const mq = window.matchMedia('screen and (max-width: 39.9375em)');
-    const handleResize = () => {
-      setThumbSize(mq.matches ? 'mobile' : 'desktop');
-    };
-    
-    mq.addEventListener('change', handleResize);
-    handleResize();
-
-    // Infinite scroll listener
     const handleScroll = () => {
       if (!listRef.current || !onLoadMore) return;
 
@@ -45,7 +38,11 @@ export default function PostsList({
       const scrollTop =
         window.pageYOffset !== undefined
           ? window.pageYOffset
-          : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+          : (
+              document.documentElement ||
+              document.body.parentNode ||
+              document.body
+            ).scrollTop;
 
       const threshold = 10;
       const distanceToBottom =
@@ -56,73 +53,92 @@ export default function PostsList({
       }
     };
 
-    // Debounce scroll listener
-    let scrollTimeout: NodeJS.Timeout;
+    let scrollTimeout: ReturnType<typeof setTimeout>;
     scrollListenerRef.current = () => {
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(handleScroll, 150);
     };
 
-    window.addEventListener('scroll', scrollListenerRef.current, { passive: true });
+    window.addEventListener("scroll", scrollListenerRef.current, {
+      passive: true,
+    });
 
     return () => {
-      mq.removeEventListener('change', handleResize);
       if (scrollListenerRef.current) {
-        window.removeEventListener('scroll', scrollListenerRef.current);
+        window.removeEventListener("scroll", scrollListenerRef.current);
       }
       clearTimeout(scrollTimeout);
     };
   }, [posts.length, onLoadMore]);
 
+  const sortForTag = order?.trim() ? order : "trending";
+  void category;
+
   if (loading && posts.length === 0) {
     return (
-      <div className="flex justify-center items-center py-12">
-        <p className="text-gray-500">Loading posts...</p>
+      <div className="flex flex-col items-center justify-center gap-2 py-12">
+        <p className="text-muted-foreground">Loading posts...</p>
       </div>
     );
   }
 
   if (posts.length === 0) {
     return (
-      <div className="flex justify-center items-center py-12">
-        <p className="text-gray-500">No posts found.</p>
+      <div className="flex flex-col items-center justify-center gap-2 py-12">
+        <p className="text-muted-foreground">No posts found.</p>
       </div>
     );
   }
 
   return (
-    <div id="posts_list" ref={listRef} className="space-y-4">
-      {posts.map((post, index) => (
-        <div
-          key={`${post.author}/${post.permlink}`}
-          className="border-b border-gray-200 pb-4 last:border-b-0"
-        >
-          {/* TODO: Implement PostSummary component */}
-          <div className="post-summary-placeholder">
-            <h3 className="text-lg font-semibold">
-              <a
-                href={`/${post.category}/@${post.author}/${post.permlink}`}
-                className="text-blue-600 hover:underline"
-              >
-                {post.title || 'Untitled'}
-              </a>
-            </h3>
-            <p className="text-sm text-gray-600">
-              by <a href={`/@${post.author}`} className="text-blue-600 hover:underline">@{post.author}</a>
-              {' '}in <a href={`/${post.category}`} className="text-blue-600 hover:underline">#{post.category}</a>
-            </p>
-            <p className="text-xs text-gray-400 mt-1">
-              {new Date(post.created).toLocaleString()}
-            </p>
-          </div>
+    <div id="posts_list" ref={listRef} className="flex flex-col gap-10">
+      <ul className="flex flex-col gap-10">
+        {posts.map((post) => (
+          <li key={`${post.author}/${post.permlink}`} className="list-none">
+            <Card
+              className="rounded-[var(--radius)] border-transparent bg-transparent py-0 shadow-none md:border-border md:bg-card md:shadow-none md:transition-shadow md:duration-200 md:hover:shadow-[0px_5px_10px_0_rgba(0,0,0,0.03)]"
+              size="sm"
+            >
+              <CardHeader className="flex flex-col gap-1 border-0 px-0 py-2 md:border-b md:border-border md:px-4 md:py-2.5">
+                <h3 className="text-base font-semibold leading-snug text-foreground">
+                  <Link
+                    href={`/${post.category}/@${post.author}/${post.permlink}`}
+                    className="text-foreground transition-colors hover:text-accent-foreground"
+                  >
+                    {post.title || "Untitled"}
+                  </Link>
+                </h3>
+              </CardHeader>
+              <CardContent className="px-0 py-1 text-sm md:px-4">
+                <p className="text-muted-foreground">
+                  by{" "}
+                  <Link
+                    href={`/@${post.author}`}
+                    className="text-foreground hover:text-accent-foreground"
+                  >
+                    @{post.author}
+                  </Link>{" "}
+                  in{" "}
+                  <Link
+                    href={`/${sortForTag}/${post.category}`}
+                    className="text-foreground hover:text-accent-foreground"
+                  >
+                    #{post.category}
+                  </Link>
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {new Date(post.created).toLocaleString()}
+                </p>
+              </CardContent>
+            </Card>
+          </li>
+        ))}
+      </ul>
+      {loading && posts.length > 0 ? (
+        <div className="flex flex-col items-center justify-center gap-2 py-4">
+          <p className="text-muted-foreground">Loading more...</p>
         </div>
-      ))}
-      {loading && posts.length > 0 && (
-        <div className="flex justify-center items-center py-4">
-          <p className="text-gray-500">Loading more...</p>
-        </div>
-      )}
+      ) : null}
     </div>
   );
 }
-

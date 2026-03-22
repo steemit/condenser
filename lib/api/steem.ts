@@ -26,8 +26,33 @@ export interface Post {
 }
 
 export interface FetchPostsParams {
-  order: 'trending' | 'hot' | 'created' | 'payout' | 'payout_comments' | 'muted' | 'feed';
+  order:
+    | "trending"
+    | "hot"
+    | "created"
+    | "payout"
+    | "payout_comments"
+    | "muted"
+    | "feed"
+    | "promoted";
   category?: string;
+  start_author?: string;
+  start_permlink?: string;
+  limit?: number;
+  observer?: string;
+}
+
+/** Sort modes for `/api/steem/posts` when fetching a single account's history */
+export type AccountPostsOrder =
+  | "blog"
+  | "posts"
+  | "comments"
+  | "replies"
+  | "payout";
+
+export interface FetchAccountPostsParams {
+  account: string;
+  order?: AccountPostsOrder;
   start_author?: string;
   start_permlink?: string;
   limit?: number;
@@ -73,9 +98,11 @@ export async function fetchRankedPosts(params: FetchPostsParams): Promise<Post[]
 /**
  * Fetch account posts from Steem API
  */
-export async function fetchAccountPosts(params: FetchPostsParams & { account: string }): Promise<Post[]> {
+export async function fetchAccountPosts(
+  params: FetchAccountPostsParams
+): Promise<Post[]> {
   const {
-    order = 'blog',
+    order = "blog",
     account,
     start_author,
     start_permlink,

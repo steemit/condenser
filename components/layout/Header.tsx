@@ -37,7 +37,7 @@ function SteemitLogo() {
   return (
     <span className="flex items-center gap-2 font-semibold tracking-tight text-foreground">
       <span
-        className="flex size-9 items-center justify-center rounded-md bg-[color:var(--ring)] text-lg text-primary-foreground"
+        className="flex size-9 items-center justify-center rounded-md bg-ring text-lg text-primary-foreground"
         aria-hidden
       >
         S

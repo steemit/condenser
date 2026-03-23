@@ -47,7 +47,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Legacy "light" theme tokens (see legacy/src/app/assets/stylesheets/_themes.scss) */
+/* Light theme — values trace to _variables.scss / _themes.scss (light) in bundled SCSS sources */
 :root {
   --background: #f4f4f4;
   --foreground: #333333;
@@ -55,14 +55,16 @@
   --card-foreground: #333333;
   --popover: #ffffff;
   --popover-foreground: #333333;
+  /* Primary actions (dark buttons on light UI) */
   --primary: #171f24;
   --primary-foreground: #fcfcfc;
   --secondary: #fafafa;
   --secondary-foreground: #333333;
   --muted: #fafafa;
   --muted-foreground: #788187;
-  --accent: #f4f4f4;
-  --accent-foreground: #1fbf8f;
+  /* Nav highlight background + brand teal for links / focus accents */
+  --accent: #f3faf0;
+  --accent-foreground: #06d6a9;
   --destructive: oklch(0.577 0.245 27.325);
   --border: #eeeeee;
   --input: #eeeeee;
@@ -77,13 +79,13 @@
   --sidebar-foreground: #333333;
   --sidebar-primary: #171f24;
   --sidebar-primary-foreground: #fcfcfc;
-  --sidebar-accent: #f4f4f4;
-  --sidebar-accent-foreground: #1fbf8f;
+  --sidebar-accent: #f3faf0;
+  --sidebar-accent-foreground: #06d6a9;
   --sidebar-border: #eeeeee;
   --sidebar-ring: #06d6a9;
 }
 
-/* Legacy "dark" theme tokens */
+/* Dark theme — aligned with _themes.scss (dark) */
 .dark {
   --background: #1c252b;
   --foreground: #fcfcfc;
@@ -97,7 +99,7 @@
   --secondary-foreground: #fcfcfc;
   --muted: #212c33;
   --muted-foreground: #a6b2ba;
-  --accent: #283336;
+  --accent: #11161a;
   --accent-foreground: #06d6a9;
   --destructive: oklch(0.704 0.191 22.216);
   --border: #2b3a45;
@@ -112,7 +114,7 @@
   --sidebar-foreground: #fcfcfc;
   --sidebar-primary: #06d6a9;
   --sidebar-primary-foreground: #fcfcfc;
-  --sidebar-accent: #212c33;
+  --sidebar-accent: #11161a;
   --sidebar-accent-foreground: #06d6a9;
   --sidebar-border: #2b3a45;
   --sidebar-ring: #06d6a9;

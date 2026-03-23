@@ -122,8 +122,8 @@ export function PrimaryNavigation({
               <Link
                 href={href}
                 className={cn(
-                  "block rounded-md px-2 py-1.5 font-medium text-foreground transition-colors hover:bg-muted hover:text-accent-foreground",
-                  active && "bg-muted text-accent-foreground"
+                  "block rounded-md px-2 py-1.5 font-medium text-foreground transition-colors hover:bg-accent/80 hover:text-accent-foreground",
+                  active && "bg-accent font-semibold text-accent-foreground"
                 )}
               >
                 {label}
@@ -152,8 +152,8 @@ export function PrimaryNavigation({
                   <Link
                     href={href}
                     className={cn(
-                      "block rounded-md px-2 py-1.5 font-medium text-foreground transition-colors hover:bg-muted hover:text-accent-foreground",
-                      active && "bg-muted text-accent-foreground"
+                      "block rounded-md px-2 py-1.5 font-medium text-foreground transition-colors hover:bg-accent/80 hover:text-accent-foreground",
+                      active && "bg-accent font-semibold text-accent-foreground"
                     )}
                   >
                     {label}

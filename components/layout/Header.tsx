@@ -220,7 +220,7 @@ export function Header() {
 
           <Sheet>
             <SheetTrigger
-              nativeButton={false}
+              nativeButton
               render={
                 <Button
                   variant="ghost"

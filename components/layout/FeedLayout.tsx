@@ -22,11 +22,11 @@ export function FeedLayout({
   return (
     <div
       className={cn(
-        "mx-auto flex w-full max-w-[1600px] flex-wrap lg:flex-nowrap",
+        "mx-auto grid w-full max-w-[1600px] grid-cols-1 md:grid-cols-[240px_minmax(0,1fr)] lg:grid-cols-[240px_minmax(0,1fr)_320px]",
         className
       )}
     >
-      <aside className="order-1 hidden w-[240px] min-w-[240px] max-w-[240px] shrink-0 md:block md:pl-4">
+      <aside className="hidden w-[240px] min-w-[240px] max-w-[240px] md:block md:pl-4">
         <div className="sticky top-20">
           <PrimaryNavigation pathname={pathname} />
         </div>
@@ -34,14 +34,15 @@ export function FeedLayout({
 
       <article
         className={cn(
-          "order-2 min-w-[300px] flex-1 px-4 md:px-4",
-          centerClassName ?? "md:max-w-[664px]"
+          "min-w-0 w-full px-4 md:px-4",
+          centerClassName ?? "md:max-w-[664px]",
+          "mx-auto"
         )}
       >
         {children}
       </article>
 
-      <aside className="order-3 hidden w-[320px] min-w-[320px] max-w-[320px] shrink-0 lg:block lg:pr-4">
+      <aside className="hidden w-[320px] min-w-[320px] max-w-[320px] lg:block lg:pr-4">
         <div className="sticky top-20 py-1">
           <FeedSidebarWidgets />
         </div>

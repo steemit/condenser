@@ -32,20 +32,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleNightmode } from "@/store/slices/appSlice";
 import { showLogin } from "@/store/slices/userSlice";
 import { PrimaryNavigation } from "@/components/layout/PrimaryNavigation";
-
-function SteemitLogo() {
-  return (
-    <span className="flex items-center gap-2 font-semibold tracking-tight text-foreground">
-      <span
-        className="flex size-9 items-center justify-center rounded-md bg-ring text-lg text-primary-foreground"
-        aria-hidden
-      >
-        S
-      </span>
-      <span className="hidden text-xl sm:inline">Steemit</span>
-    </span>
-  );
-}
+import { SteemitLogo } from "@/components/layout/SteemitLogo";
 
 export function Header() {
   const pathname = usePathname();
@@ -80,7 +67,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border bg-card shadow-[0_2px_4px_0_rgba(0,0,0,0.05)]">
       <nav className="mx-auto flex h-16 max-w-[100vw] items-center gap-2 px-3 sm:px-4">
         <div className="flex min-w-0 flex-1 items-center md:max-w-[40%] lg:max-w-[33%]">
-          <Link href="/" className="shrink-0">
+          <Link href="/" className="shrink-0" aria-label="Steemit home">
             <SteemitLogo />
           </Link>
         </div>

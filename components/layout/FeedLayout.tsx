@@ -14,7 +14,7 @@ export function FeedLayout({
   children: React.ReactNode;
   /** Optional class on the outer row (e.g. align with legacy full-width sections). */
   className?: string;
-  /** Override center column max-width (default matches Legacy articles ~664px). */
+  /** Override center column max-width (default matches Legacy layout-list feed ~1056px; card grid used 664px). */
   centerClassName?: string;
 }) {
   const pathname = usePathname();
@@ -26,23 +26,23 @@ export function FeedLayout({
         className
       )}
     >
-      <aside className="hidden w-[240px] min-w-[240px] max-w-[240px] md:block md:pl-4">
-        <div className="sticky top-20 rounded-lg bg-muted/50 py-4 pr-2">
+      <aside className="hidden w-[240px] min-w-[240px] max-w-[240px] md:block md:pl-3">
+        <div className="sticky top-20 rounded-lg bg-muted/50 py-4 pr-1.5">
           <PrimaryNavigation pathname={pathname} />
         </div>
       </aside>
 
       <article
         className={cn(
-          "min-w-0 w-full px-4 md:px-4",
-          centerClassName ?? "md:max-w-[664px]",
+          "min-w-0 w-full px-3 md:px-3",
+          centerClassName ?? "md:max-w-[1056px]",
           "mx-auto"
         )}
       >
         {children}
       </article>
 
-      <aside className="hidden w-[320px] min-w-[320px] max-w-[320px] lg:block lg:pr-4">
+      <aside className="hidden w-[320px] min-w-[320px] max-w-[320px] lg:block lg:pr-3">
         <div className="sticky top-20 py-1">
           <FeedSidebarWidgets />
         </div>

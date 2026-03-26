@@ -27,7 +27,7 @@ export function FeedLayout({
       )}
     >
       <aside className="hidden w-[240px] min-w-[240px] max-w-[240px] md:block md:pl-4">
-        <div className="sticky top-20">
+        <div className="sticky top-20 rounded-lg bg-muted/50 py-4 pr-2">
           <PrimaryNavigation pathname={pathname} />
         </div>
       </aside>

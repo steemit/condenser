@@ -12,6 +12,7 @@ import {
 import PostsList from "@/components/cards/PostsList";
 import NotFound from "@/components/NotFound";
 import { FeedLayout } from "@/components/layout/FeedLayout";
+import { FeedListHeader } from "@/components/layout/FeedListHeader";
 
 const VALID_SORTS = [
   "hot",
@@ -101,21 +102,13 @@ export default function SortPage() {
     }
   }, [isValidSort, loading, hasMore, posts, sortString]);
 
-  const sortDisplayName =
-    sortString.charAt(0).toUpperCase() +
-    sortString.slice(1).replace("_", " ");
-
   if (showNotFound) {
     return <NotFound />;
   }
 
   return (
     <FeedLayout>
-      <header className="mb-6">
-        <h1 className="font-sans text-2xl font-bold text-foreground md:text-3xl">
-          {sortDisplayName} posts
-        </h1>
-      </header>
+      <FeedListHeader title="All posts" sort={sortString} />
       <PostsList
         posts={posts}
         loading={loading}

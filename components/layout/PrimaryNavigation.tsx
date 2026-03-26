@@ -2,17 +2,29 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
-import { cn } from "@/lib/utils";
+import {
+  BookMarkedIcon,
+  Building2Icon,
+  CompassIcon,
+  HeartIcon,
+  ListOrderedIcon,
+  UserRoundIcon,
+  WalletIcon,
+} from "lucide-react";
 
-const FEED_LINKS: { href: string; label: string }[] = [
-  { href: "/trending", label: "Trending" },
-  { href: "/hot", label: "Hot" },
-  { href: "/created", label: "New" },
-  { href: "/promoted", label: "Promoted" },
-  { href: "/payout", label: "Payout" },
-  { href: "/payout_comments", label: "Comment payout" },
-  { href: "/muted", label: "Muted" },
-];
+import { cn } from "@/lib/utils";
+import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
+import { useAppSelector } from "@/store/hooks";
+
+const GLOBAL_FEED_SORTS = new Set([
+  "trending",
+  "hot",
+  "created",
+  "promoted",
+  "payout",
+  "payout_comments",
+  "muted",
+]);
 
 /** Usernames that must not be treated as profile paths (aligned with proxy.ts). */
 const RESERVED_USERNAMES = new Set(
@@ -91,6 +103,119 @@ function isProfileSectionActive(
   return pathname === profileSectionHref(username, segment);
 }
 
+/** True when viewing global ranked feeds (/trending, /hot/food, …). */
+function isAllPostsExplore(pathname: string): boolean {
+  const seg = pathname.split("/").filter(Boolean);
+  if (seg.length === 0) return false;
+  const sort = seg[0].toLowerCase();
+  if (!GLOBAL_FEED_SORTS.has(sort)) return false;
+  if (seg.length === 1) return true;
+  const second = seg[1];
+  if (second.startsWith("@")) return false;
+  return true;
+}
+
+function isCommunitiesRoute(pathname: string) {
+  return pathname === "/communities" || pathname.startsWith("/communities/");
+}
+
+function isMyFriendsRoute(pathname: string, username: string | undefined) {
+  if (!username) return false;
+  return (
+    pathname === `/@${username}/feed` ||
+    pathname.startsWith(`/@${username}/feed/`)
+  );
+}
+
+function isMySubscriptionsRoute(pathname: string) {
+  if (pathname === "/trending/my") return true;
+  const m = pathname.match(/^\/(trending|hot|created|promoted|payout|payout_comments|muted)\/(.+)$/);
+  if (!m) return false;
+  return m[2].toLowerCase() === "my";
+}
+
+function isOwnProfileArea(pathname: string, username: string) {
+  if (
+    pathname === `/@${username}/feed` ||
+    pathname.startsWith(`/@${username}/feed/`)
+  ) {
+    return false;
+  }
+  if (pathname === `/@${username}` || pathname === `/@${username}/blog`) {
+    return true;
+  }
+  return PROFILE_SECTIONS.some(
+    (s) =>
+      s.segment !== "feed" &&
+      pathname === profileSectionHref(username, s.segment)
+  );
+}
+
+function NavExploreItem({
+  href,
+  label,
+  icon: Icon,
+  active,
+}: {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  active: boolean;
+}) {
+  return (
+    <li>
+      <Link
+        href={href}
+        className={cn(
+          "flex items-center gap-2 rounded-md py-1.5 pl-2 pr-2 text-sm font-medium transition-colors",
+          "border-l-[3px] -ml-px",
+          active
+            ? "border-accent-foreground text-accent-foreground"
+            : "border-transparent text-foreground hover:bg-accent/80 hover:text-accent-foreground"
+        )}
+      >
+        <Icon className="size-4 shrink-0 opacity-90" aria-hidden />
+        <span>{label}</span>
+      </Link>
+    </li>
+  );
+}
+
+function NavTopItem({
+  href,
+  label,
+  icon: Icon,
+  active,
+  external,
+}: {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  active?: boolean;
+  external?: boolean;
+}) {
+  const className = cn(
+    "flex items-center gap-2 rounded-md px-2 py-2 text-sm font-medium transition-colors",
+    active
+      ? "bg-accent/90 text-accent-foreground"
+      : "text-foreground hover:bg-accent/80 hover:text-accent-foreground"
+  );
+  if (external) {
+    return (
+      <a href={href} className={className} target="_blank" rel="noreferrer">
+        <Icon className="size-4 shrink-0 opacity-90" aria-hidden />
+        <span>{label}</span>
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={className}>
+      <Icon className="size-4 shrink-0 opacity-90" aria-hidden />
+      <span>{label}</span>
+    </Link>
+  );
+}
+
 export function PrimaryNavigation({
   pathname,
   compact = false,
@@ -102,40 +227,95 @@ export function PrimaryNavigation({
     () => parseProfileUsername(pathname),
     [pathname]
   );
+  const sessionUser = useAppSelector((s) => s.user.current?.username);
+  const walletBase = getSteemitWalletBaseUrl();
+
+  const allPostsActive = isAllPostsExplore(pathname);
+  const communitiesActive = isCommunitiesRoute(pathname);
+  const myFriendsActive = isMyFriendsRoute(pathname, sessionUser);
+  const mySubsActive = isMySubscriptionsRoute(pathname);
+
+  const myProfileTarget = sessionUser ? `/@${sessionUser}/posts` : "/login";
+  const myProfileActive = Boolean(
+    sessionUser && isOwnProfileArea(pathname, sessionUser)
+  );
+
+  const walletHref = sessionUser
+    ? `${walletBase}/@${sessionUser}`
+    : walletBase;
 
   return (
     <nav
       id="appNavigation"
       className={cn(
-        "App__navigation flex flex-col gap-1",
+        "App__navigation flex flex-col gap-5",
         compact ? "text-sm" : "text-sm md:text-base"
       )}
-      aria-label="Primary feeds"
+      aria-label="Primary navigation"
     >
-      <p className="mb-2 font-bold text-foreground">Feeds</p>
-      <ul className="flex flex-col gap-0.5">
-        {FEED_LINKS.map(({ href, label }) => {
-          const active =
-            pathname === href || pathname.startsWith(`${href}/`);
-          return (
-            <li key={href}>
-              <Link
-                href={href}
-                className={cn(
-                  "block rounded-md px-2 py-1.5 font-medium text-foreground transition-colors hover:bg-accent/80 hover:text-accent-foreground",
-                  active && "bg-accent font-semibold text-accent-foreground"
-                )}
-              >
-                {label}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      <section aria-labelledby="nav-explore-heading">
+        <div
+          id="nav-explore-heading"
+          className="mb-2 flex items-center gap-2 px-2 font-bold text-accent-foreground"
+        >
+          <CompassIcon className="size-[1.15rem] shrink-0" aria-hidden />
+          <span>Explore</span>
+        </div>
+        <ul className="ml-1 flex flex-col gap-0.5 border-l border-border pl-2">
+          <NavExploreItem
+            href="/trending"
+            label="All Posts"
+            icon={BookMarkedIcon}
+            active={allPostsActive}
+          />
+          <NavExploreItem
+            href="/communities"
+            label="Communities"
+            icon={Building2Icon}
+            active={communitiesActive}
+          />
+          {sessionUser ? (
+            <>
+              <NavExploreItem
+                href={`/@${sessionUser}/feed`}
+                label="My Friends"
+                icon={HeartIcon}
+                active={myFriendsActive}
+              />
+              <NavExploreItem
+                href="/trending/my"
+                label="My Subscriptions"
+                icon={ListOrderedIcon}
+                active={mySubsActive}
+              />
+            </>
+          ) : null}
+        </ul>
+      </section>
+
+      <section className="flex flex-col gap-1 border-t border-border pt-4">
+        <NavTopItem
+          href={myProfileTarget}
+          label="My Profile"
+          icon={UserRoundIcon}
+          active={Boolean(sessionUser) && Boolean(myProfileActive)}
+        />
+        <NavTopItem
+          href={walletHref}
+          label="My Wallet"
+          icon={WalletIcon}
+          external
+        />
+      </section>
 
       {profileUsername ? (
-        <>
-          <p className="mb-2 mt-6 font-bold text-foreground">Account</p>
+        <section aria-labelledby="nav-account-heading" className="border-t border-border pt-4">
+          <p
+            id="nav-account-heading"
+            className="mb-2 px-2 font-bold text-foreground"
+          >
+            Account
+          </p>
           <p className="mb-1 truncate px-2 text-xs text-muted-foreground">
             @{profileUsername}
           </p>
@@ -162,7 +342,7 @@ export function PrimaryNavigation({
               );
             })}
           </ul>
-        </>
+        </section>
       ) : null}
     </nav>
   );

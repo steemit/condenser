@@ -6,6 +6,7 @@ import { setPathname } from "@/store/slices/globalSlice";
 import { fetchRankedPosts, Post } from "@/lib/api/steem";
 import PostsList from "@/components/cards/PostsList";
 import { FeedLayout } from "@/components/layout/FeedLayout";
+import { FeedListHeader } from "@/components/layout/FeedListHeader";
 
 /**
  * Trending posts — Legacy PostsIndex with order trending.
@@ -75,11 +76,7 @@ export default function TrendingPage() {
 
   return (
     <FeedLayout>
-      <header className="mb-6">
-        <h1 className="font-sans text-2xl font-bold text-foreground md:text-3xl">
-          Trending posts
-        </h1>
-      </header>
+      <FeedListHeader title="All posts" sort="trending" />
       <PostsList
         posts={posts}
         loading={loading}

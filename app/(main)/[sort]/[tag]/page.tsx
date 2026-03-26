@@ -12,6 +12,7 @@ import {
 import PostsList from "@/components/cards/PostsList";
 import NotFound from "@/components/NotFound";
 import { FeedLayout } from "@/components/layout/FeedLayout";
+import { FeedListHeader } from "@/components/layout/FeedListHeader";
 
 const VALID_SORTS = [
   "hot",
@@ -106,13 +107,13 @@ export default function SortTagPage() {
     }
   }, [isValidSort, loading, hasMore, posts, sortString, tagString]);
 
-  const sortDisplayName =
-    sortString.charAt(0).toUpperCase() +
-    sortString.slice(1).replace("_", " ");
   const isHiveCommunity = tagString.startsWith("hive-");
-  const tagDisplayName = isHiveCommunity
-    ? `Community ${tagString}`
-    : `#${tagString}`;
+  const feedTitle =
+    tagString.toLowerCase() === "my"
+      ? "My communities"
+      : isHiveCommunity
+        ? tagString
+        : `#${tagString}`;
 
   if (showNotFound) {
     return <NotFound />;
@@ -120,22 +121,21 @@ export default function SortTagPage() {
 
   return (
     <FeedLayout>
-      <header className="mb-6 flex flex-col gap-2">
-        <h1 className="font-sans text-2xl font-bold text-foreground md:text-3xl">
-          {sortDisplayName} posts
-        </h1>
-        <div className="flex flex-wrap items-center gap-2 text-lg">
-          <span className="text-muted-foreground">in</span>
-          <span className="font-semibold text-accent-foreground">
-            {tagDisplayName}
-          </span>
-        </div>
-        {isHiveCommunity ? (
-          <p className="text-sm text-muted-foreground">
-            Showing posts from the {tagString} community
-          </p>
-        ) : null}
-      </header>
+      <FeedListHeader
+        title={feedTitle}
+        sort={sortString}
+        categoryTag={tagString}
+        unmoderatedTagHint={
+          !isHiveCommunity &&
+          Boolean(tagString) &&
+          tagString.toLowerCase() !== "my"
+        }
+      />
+      {isHiveCommunity ? (
+        <p className="-mt-2 mb-4 text-sm text-muted-foreground">
+          Showing posts from the {tagString} community
+        </p>
+      ) : null}
       <PostsList
         posts={posts}
         loading={loading}

@@ -28,6 +28,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleNightmode } from "@/store/slices/appSlice";
 import { showLogin } from "@/store/slices/userSlice";
@@ -42,8 +43,7 @@ export function Header() {
   const loggedIn = Boolean(username);
   const unread = 0;
 
-  const walletBase =
-    process.env.NEXT_PUBLIC_WALLET_URL ?? "https://wallet.hive.blog";
+  const walletBase = getSteemitWalletBaseUrl();
 
   const goSubmit = () => {
     if (!loggedIn) {

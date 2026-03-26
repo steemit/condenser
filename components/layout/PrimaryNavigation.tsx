@@ -14,7 +14,8 @@ import {
 
 import { cn } from "@/lib/utils";
 import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { showLogin } from "@/store/slices/userSlice";
 
 const GLOBAL_FEED_SORTS = new Set([
   "trending",
@@ -156,27 +157,36 @@ function NavExploreItem({
   label,
   icon: Icon,
   active,
+  useLoginPrompt,
+  onLoginPrompt,
 }: {
   href: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   active: boolean;
+  useLoginPrompt?: boolean;
+  onLoginPrompt?: () => void;
 }) {
+  const className = cn(
+    "flex w-full items-center gap-2 rounded-md py-1.5 pl-2 pr-2 text-sm font-medium transition-colors",
+    "border-l-[3px] -ml-px",
+    active
+      ? "border-accent-foreground text-accent-foreground"
+      : "border-transparent text-foreground hover:bg-accent/80 hover:text-accent-foreground"
+  );
   return (
     <li>
-      <Link
-        href={href}
-        className={cn(
-          "flex items-center gap-2 rounded-md py-1.5 pl-2 pr-2 text-sm font-medium transition-colors",
-          "border-l-[3px] -ml-px",
-          active
-            ? "border-accent-foreground text-accent-foreground"
-            : "border-transparent text-foreground hover:bg-accent/80 hover:text-accent-foreground"
-        )}
-      >
-        <Icon className="size-4 shrink-0 opacity-90" aria-hidden />
-        <span>{label}</span>
-      </Link>
+      {useLoginPrompt ? (
+        <button type="button" className={className} onClick={onLoginPrompt}>
+          <Icon className="size-4 shrink-0 opacity-90" aria-hidden />
+          <span>{label}</span>
+        </button>
+      ) : (
+        <Link href={href} className={className}>
+          <Icon className="size-4 shrink-0 opacity-90" aria-hidden />
+          <span>{label}</span>
+        </Link>
+      )}
     </li>
   );
 }
@@ -187,12 +197,17 @@ function NavTopItem({
   icon: Icon,
   active,
   external,
+  useLoginPrompt,
+  onLoginPrompt,
 }: {
   href: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   active?: boolean;
   external?: boolean;
+  /** When true, open login modal instead of following `href`. */
+  useLoginPrompt?: boolean;
+  onLoginPrompt?: () => void;
 }) {
   const className = cn(
     "flex items-center gap-2 rounded-md px-2 py-2 text-sm font-medium transition-colors",
@@ -200,6 +215,18 @@ function NavTopItem({
       ? "bg-accent/90 text-accent-foreground"
       : "text-foreground hover:bg-accent/80 hover:text-accent-foreground"
   );
+  if (useLoginPrompt) {
+    return (
+      <button
+        type="button"
+        className={cn(className, "w-full text-left")}
+        onClick={onLoginPrompt}
+      >
+        <Icon className="size-4 shrink-0 opacity-90" aria-hidden />
+        <span>{label}</span>
+      </button>
+    );
+  }
   if (external) {
     return (
       <a href={href} className={className} target="_blank" rel="noreferrer">
@@ -227,6 +254,7 @@ export function PrimaryNavigation({
     () => parseProfileUsername(pathname),
     [pathname]
   );
+  const dispatch = useAppDispatch();
   const sessionUser = useAppSelector((s) => s.user.current?.username);
   const walletBase = getSteemitWalletBaseUrl();
 
@@ -235,7 +263,7 @@ export function PrimaryNavigation({
   const myFriendsActive = isMyFriendsRoute(pathname, sessionUser);
   const mySubsActive = isMySubscriptionsRoute(pathname);
 
-  const myProfileTarget = sessionUser ? `/@${sessionUser}/posts` : "/login";
+  const myProfileTarget = sessionUser ? `/@${sessionUser}/posts` : "";
   const myProfileActive = Boolean(
     sessionUser && isOwnProfileArea(pathname, sessionUser)
   );
@@ -289,7 +317,26 @@ export function PrimaryNavigation({
                 active={mySubsActive}
               />
             </>
-          ) : null}
+          ) : (
+            <>
+              <NavExploreItem
+                href=""
+                label="My Friends"
+                icon={HeartIcon}
+                active={false}
+                useLoginPrompt
+                onLoginPrompt={() => dispatch(showLogin({}))}
+              />
+              <NavExploreItem
+                href=""
+                label="My Subscriptions"
+                icon={ListOrderedIcon}
+                active={false}
+                useLoginPrompt
+                onLoginPrompt={() => dispatch(showLogin({}))}
+              />
+            </>
+          )}
         </ul>
       </section>
 
@@ -299,6 +346,8 @@ export function PrimaryNavigation({
           label="My Profile"
           icon={UserRoundIcon}
           active={Boolean(sessionUser) && Boolean(myProfileActive)}
+          useLoginPrompt={!sessionUser}
+          onLoginPrompt={() => dispatch(showLogin({}))}
         />
         <NavTopItem
           href={walletHref}

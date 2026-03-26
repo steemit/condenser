@@ -44,11 +44,16 @@ export function Header() {
   const unread = 0;
 
   const walletBase = getSteemitWalletBaseUrl();
+  const signupUrl =
+    process.env.NEXT_PUBLIC_SIGNUP_URL ?? "https://signup.steemit.com";
+
+  const openLoginModal = () => {
+    dispatch(showLogin({}));
+  };
 
   const goSubmit = () => {
     if (!loggedIn) {
-      dispatch(showLogin({}));
-      router.push("/login");
+      openLoginModal();
       return;
     }
     router.push("/submit");
@@ -104,18 +109,21 @@ export function Header() {
 
           {!loggedIn ? (
             <span className="hidden items-center gap-2 text-sm sm:flex">
-              <Link
-                href="/login"
+              <button
+                type="button"
+                onClick={openLoginModal}
                 className="text-foreground transition-colors hover:text-accent-foreground"
               >
                 Login
-              </Link>
-              <Link
-                href="/login"
+              </button>
+              <a
+                href={signupUrl}
+                target="_blank"
+                rel="noreferrer"
                 className="text-foreground transition-colors hover:text-accent-foreground"
               >
                 Sign up
-              </Link>
+              </a>
             </span>
           ) : null}
 
@@ -236,8 +244,21 @@ export function Header() {
                 </Link>
                 {!loggedIn ? (
                   <div className="flex flex-col gap-2 border-t border-border pt-4">
-                    <Link href="/login">Login</Link>
-                    <Link href="/login">Sign up</Link>
+                    <button
+                      type="button"
+                      onClick={openLoginModal}
+                      className="w-fit text-left text-sm text-foreground hover:text-accent-foreground"
+                    >
+                      Login
+                    </button>
+                    <a
+                      href={signupUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-sm text-foreground hover:text-accent-foreground"
+                    >
+                      Sign up
+                    </a>
                   </div>
                 ) : null}
               </div>

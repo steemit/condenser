@@ -21,7 +21,7 @@ import { encryptAndStoreKey, initializeKeyLifecycle } from '@/lib/crypto/key-sto
  * TODO: Implement password validation and checksum checking
  * TODO: Implement account name validation
  */
-export default function LoginForm() {
+export default function LoginForm({ embedded = false }: { embedded?: boolean }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { login_error } = useAppSelector((state) => state.user);
@@ -176,16 +176,16 @@ export default function LoginForm() {
       }
       
       // Step 8: Update Redux state
-      dispatch(
+      await dispatch(
         loginThunk({
           username: normalizedUsername,
           password: '', // Don't store password in Redux
           saveLogin,
         })
-      );
+      ).unwrap();
 
-      // Login successful
-      router.push('/trending');
+      dispatch(hideLogin());
+      router.refresh();
     } catch (err: unknown) {
       console.error('Login error:', err);
       const errorMessage = err instanceof Error ? err.message : 'Login failed. Please try again.';
@@ -199,7 +199,6 @@ export default function LoginForm() {
 
   const handleCancel = () => {
     dispatch(hideLogin());
-    router.push('/trending');
   };
 
   const handleSignup = () => {
@@ -213,7 +212,9 @@ export default function LoginForm() {
 
   return (
     <div className="LoginForm">
-      <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
+      {!embedded ? (
+        <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
+      ) : null}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Username input */}

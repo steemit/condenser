@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
+import { showLogin } from '@/store/slices/userSlice';
 import PostEditor from '@/components/elements/PostEditor';
 import { FeedLayout } from '@/components/layout/FeedLayout';
 
@@ -21,13 +22,11 @@ export default function SubmitPostPage() {
     dispatch(setPathname('/submit'));
   }, [dispatch]);
 
-  // Redirect to login if not authenticated
   useEffect(() => {
     if (!username) {
-      // TODO: Show login modal or redirect to login page
-      console.log('User not logged in');
+      dispatch(showLogin({}));
     }
-  }, [username]);
+  }, [username, dispatch]);
 
   if (!username) {
     return (

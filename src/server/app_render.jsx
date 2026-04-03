@@ -14,7 +14,6 @@ import {
     safeConsoleTime,
     safeConsoleTimeEnd,
 } from './utils/TimingUtils';
-import { specialPosts } from './utils/SpecialPosts';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
@@ -67,7 +66,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             csrf: ctx.csrf,
             new_visit: ctx.session.new_visit,
             config: $STM_Config,
-            special_posts: await specialPosts(ctx.session.uid),
+            special_posts: await ctx.specialPostsPromise,
             login_challenge,
         };
         safeStopTimer(ctx.state.requestTimer, 'specialPosts_ms');

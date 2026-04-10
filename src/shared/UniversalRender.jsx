@@ -31,13 +31,21 @@ import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
 import { routeRegex } from 'app/ResolveRoute';
 import ScrollBehavior from 'scroll-behavior';
-import { callBridge, getStateAsync } from 'app/utils/steemApi';
+import { callBridge, getStateAsync, setApiCache } from 'app/utils/steemApi';
 import {
     safeStartTimer,
     safeStopTimer,
     safeConsoleTime,
     safeConsoleTimeEnd,
 } from '../server/utils/TimingUtils';
+
+// Cache is server-only (node-cache cannot run in browser)
+let globalApiCache = null;
+if (!process.env.BROWSER) {
+    const ApiCache = require('server/utils/ApiCache').default;
+    globalApiCache = new ApiCache();
+    setApiCache(globalApiCache);
+}
 
 let get_state_perf,
     get_content_perf = false;
@@ -484,31 +492,44 @@ async function apiFetchState(url, requestId = null) {
         onchain = get_state_perf;
     }
 
-    // Main state fetching time
-    safeConsoleTime('timing_getStateAsync', requestId);
-    onchain = await getStateAsync(url, null, true, requestId);
-    safeConsoleTimeEnd('timing_getStateAsync', requestId);
+    // Run all independent API calls in parallel
+    safeConsoleTime('timing_parallelApiFetch', requestId);
+    const [stateResult, feedResult, dgpoResult] = await Promise.all([
+        // Main state fetching
+        getStateAsync(url, null, true, requestId).catch(err => {
+            console.error('Error in getStateAsync:', err);
+            throw err;
+        }),
+        // Feed price fetching (cached)
+        globalApiCache
+            .getOrFetch('feed_history', {}, () => api.getFeedHistoryAsync())
+            .then(history => {
+                const feed = history.price_history;
+                return feed[feed.length - 1];
+            })
+            .catch(error => {
+                console.error('Error fetching feed price:', error);
+                return null;
+            }),
+        // Dynamic global properties (cached)
+        globalApiCache
+            .getOrFetch('dynamic_global_properties', {}, () =>
+                api.getDynamicGlobalPropertiesAsync()
+            )
+            .then(dgpo => ({ sbd_print_rate: dgpo['sbd_print_rate'] }))
+            .catch(error => {
+                console.error('Error fetching dgpo:', error);
+                return null;
+            }),
+    ]);
+    safeConsoleTimeEnd('timing_parallelApiFetch', requestId);
 
-    // Feed price fetching time
-    try {
-        safeConsoleTime('timing_getFeedHistoryAsync', requestId);
-        const history = await api.getFeedHistoryAsync();
-        const feed = history.price_history;
-        const last = feed[feed.length - 1];
-        onchain['feed_price'] = last;
-        safeConsoleTimeEnd('timing_getFeedHistoryAsync', requestId);
-    } catch (error) {
-        console.error('Error fetching feed price:', error);
+    onchain = stateResult;
+    if (feedResult) {
+        onchain['feed_price'] = feedResult;
     }
-
-    // Dynamic global properties fetching time
-    try {
-        safeConsoleTime('timing_getDynamicGlobalPropertiesAsync', requestId);
-        const dgpo = await api.getDynamicGlobalPropertiesAsync();
-        onchain['props'] = { sbd_print_rate: dgpo['sbd_print_rate'] };
-        safeConsoleTimeEnd('timing_getDynamicGlobalPropertiesAsync', requestId);
-    } catch (error) {
-        console.error('Error fetching dgpo:', error);
+    if (dgpoResult) {
+        onchain['props'] = dgpoResult;
     }
 
     return onchain;

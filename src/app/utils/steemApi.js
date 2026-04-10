@@ -8,12 +8,13 @@ import {
     safeConsoleTimeEnd,
 } from '../../server/utils/TimingUtils';
 
-export async function callBridge(method, params, pre = 'bridge.') {
-    //console.log('call bridge');
-    //console.log("Method: ", method);
-    //console.log("Params: ", JSON.stringify(params).substring(0, 200));
-    //console.log("Pre: ", pre);
+let _apiCache = null;
 
+export function setApiCache(cache) {
+    _apiCache = cache;
+}
+
+export async function callBridge(method, params, pre = 'bridge.') {
     return new Promise(function(resolve, reject) {
         api.call(pre + method, params, function(err, data) {
             if (err) {
@@ -33,6 +34,15 @@ export async function callBridge(method, params, pre = 'bridge.') {
             } else resolve(data);
         });
     });
+}
+
+async function callBridgeCached(method, params) {
+    if (!_apiCache) {
+        return callBridge(method, params);
+    }
+    return _apiCache.getOrFetch(method, params, () =>
+        callBridge(method, params)
+    );
 }
 
 export const _list_temp = [];
@@ -78,17 +88,29 @@ export async function getStateAsync(
             // no-op
         }
 
+        // Parallel fetch for community, profile, and trending topics
+        const parallelTasks = [];
+
         // append `community` key
         if (tag && ifHive(tag)) {
-            try {
-                const timerLabel = `timing_get_community_${tag}`;
-                safeConsoleTime(timerLabel, requestId);
-                state['community'][tag] = await callBridge('get_community', {
-                    name: tag,
-                    observer: observer,
-                });
-                safeConsoleTimeEnd(timerLabel, requestId);
-            } catch (e) {}
+            parallelTasks.push(
+                (async () => {
+                    safeConsoleTime(`timing_get_community_${tag}`, requestId);
+                    try {
+                        const data = await callBridgeCached('get_community', {
+                            name: tag,
+                            observer,
+                        });
+                        if (data) state['community'][tag] = data;
+                    } catch (e) {
+                    } finally {
+                        safeConsoleTimeEnd(
+                            `timing_get_community_${tag}`,
+                            requestId
+                        );
+                    }
+                })()
+            );
         }
 
         // for SSR, load profile on any profile page or discussion thread author
@@ -97,49 +119,69 @@ export async function getStateAsync(
                 ? tag.slice(1)
                 : page == 'thread' ? key[0].slice(1) : null;
         if (ssr && account) {
-            // TODO: move to global reducer?
-            const timerLabel = `timing_get_profile_${account}`;
-            safeConsoleTime(timerLabel, requestId);
-            try {
-                const profile = await callBridge('get_profile', { account });
-                safeConsoleTimeEnd(timerLabel, requestId);
-                if (profile && profile['name']) {
-                    state['profiles'][account] = profile;
-                }
-            } catch (error) {
-                safeConsoleTimeEnd(timerLabel, requestId);
-                console.error(
-                    JSON.stringify({
-                        msg: '~~ get_profile callBridge error ~~',
-                        account,
-                        error: error.message || error,
-                        requestId,
-                    })
-                );
-                // Continue without profile data
-            }
+            parallelTasks.push(
+                (async () => {
+                    safeConsoleTime(`timing_get_profile_${account}`, requestId);
+                    try {
+                        const profile = await callBridgeCached('get_profile', {
+                            account,
+                        });
+                        if (profile && profile['name']) {
+                            state['profiles'][account] = profile;
+                        }
+                    } catch (error) {
+                        console.error(
+                            JSON.stringify({
+                                msg: '~~ get_profile callBridge error ~~',
+                                account,
+                                error: error.message || error,
+                                requestId,
+                            })
+                        );
+                    } finally {
+                        safeConsoleTimeEnd(
+                            `timing_get_profile_${account}`,
+                            requestId
+                        );
+                    }
+                })()
+            );
         }
 
         if (ssr) {
-            // append `topics` key
-            safeConsoleTime('timing_get_trending_topics', requestId);
-            try {
-                state['topics'] = await callBridge('get_trending_topics', {
-                    limit: 12,
-                });
-                safeConsoleTimeEnd('timing_get_trending_topics', requestId);
-            } catch (error) {
-                safeConsoleTimeEnd('timing_get_trending_topics', requestId);
-                console.error(
-                    JSON.stringify({
-                        msg: '~~ get_trending_topics callBridge error ~~',
-                        error: error.message || error,
-                        requestId,
-                    })
-                );
-                // Continue without topics data
-                state['topics'] = [];
-            }
+            parallelTasks.push(
+                (async () => {
+                    safeConsoleTime('timing_get_trending_topics', requestId);
+                    try {
+                        const data = await callBridgeCached(
+                            'get_trending_topics',
+                            { limit: 12 }
+                        );
+                        state['topics'] = data || [];
+                    } catch (error) {
+                        console.error(
+                            JSON.stringify({
+                                msg:
+                                    '~~ get_trending_topics callBridge error ~~',
+                                error: error.message || error,
+                                requestId,
+                            })
+                        );
+                        state['topics'] = [];
+                    } finally {
+                        safeConsoleTimeEnd(
+                            'timing_get_trending_topics',
+                            requestId
+                        );
+                    }
+                })()
+            );
+        }
+
+        if (parallelTasks.length > 0) {
+            safeConsoleTime('timing_parallelFetch', requestId);
+            await Promise.all(parallelTasks);
+            safeConsoleTimeEnd('timing_parallelFetch', requestId);
         }
 
         safeConsoleTime('timing_stateCleaner', requestId);
@@ -166,14 +208,18 @@ export async function getStateAsync(
 
 async function loadThread(account, permlink, requestId = null) {
     const author = account.slice(1);
-    const timerLabel = `timing_get_discussion_${author}_${permlink}`;
-    safeConsoleTime(timerLabel, requestId);
     let content;
     try {
-        content = await callBridge('get_discussion', { author, permlink });
-        safeConsoleTimeEnd(timerLabel, requestId);
+        if (_apiCache) {
+            content = await _apiCache.getOrFetch(
+                'get_discussion',
+                { author, permlink },
+                () => callBridge('get_discussion', { author, permlink })
+            );
+        } else {
+            content = await callBridge('get_discussion', { author, permlink });
+        }
     } catch (error) {
-        // Log error but don't throw - return empty content instead
         console.error(
             JSON.stringify({
                 msg: '~~ loadThread callBridge error ~~',
@@ -183,8 +229,6 @@ async function loadThread(account, permlink, requestId = null) {
                 requestId,
             })
         );
-        safeConsoleTimeEnd(timerLabel, requestId);
-        // Return empty object to indicate no content loaded
         content = {};
     }
     return { content };
@@ -196,34 +240,43 @@ async function loadPosts(sort, tag, observer, ssr, requestId = null) {
     let posts;
     try {
         if (account) {
-            const timerLabel = `timing_get_account_posts_${account}_${sort}`;
-            safeConsoleTime(timerLabel, requestId);
             const params = { sort, account, observer };
-            posts = await callBridge('get_account_posts', params);
-            safeConsoleTimeEnd(timerLabel, requestId);
+            if (_apiCache) {
+                posts = await _apiCache.getOrFetch(
+                    'get_account_posts',
+                    params,
+                    () => callBridge('get_account_posts', params)
+                );
+            } else {
+                posts = await callBridge('get_account_posts', params);
+            }
         } else {
-            const timerLabel = `timing_get_ranked_posts_${sort}_${tag}`;
-            safeConsoleTime(timerLabel, requestId);
             const params = { sort, tag, observer };
-            posts = await callBridge('get_ranked_posts', params);
-            safeConsoleTimeEnd(timerLabel, requestId);
+            if (_apiCache) {
+                posts = await _apiCache.getOrFetch(
+                    'get_ranked_posts',
+                    params,
+                    () => callBridge('get_ranked_posts', params)
+                );
+            } else {
+                posts = await callBridge('get_ranked_posts', params);
+            }
         }
     } catch (error) {
-        // Log error but don't throw - return empty data structure instead
         console.error(
             JSON.stringify({
                 msg: '~~ loadPosts callBridge error ~~',
                 method: account ? 'get_account_posts' : 'get_ranked_posts',
-                params: account ? { sort, account, observer } : { sort, tag, observer },
+                params: account
+                    ? { sort, account, observer }
+                    : { sort, tag, observer },
                 error: error.message || error,
                 requestId,
             })
         );
-        // Return empty array to indicate no posts loaded
         posts = [];
     }
 
-    // Ensure posts is an array
     if (!Array.isArray(posts)) {
         posts = [];
     }

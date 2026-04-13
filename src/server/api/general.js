@@ -8,6 +8,9 @@ import Mixpanel from 'mixpanel';
 import { PublicKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 import { api } from '@steemit/steem-js';
 import fetch from 'node-fetch';
+import http from 'http';
+import https from 'https';
+import { URL } from 'url';
 
 const ACCEPTED_TOS_TAG = 'accepted_tos_20180614';
 
@@ -31,6 +34,69 @@ const _parse = params => {
         return params;
     }
 };
+
+// /search is backed by an external ES cluster. If ES DNS is broken or ES is down,
+// do not let requests pile up; fail fast and (briefly) short-circuit retries.
+let esDownUntilMs = 0;
+let esLastErr = null;
+const ES_FAILFAST_WINDOW_MS = 60 * 1000;
+const ES_FETCH_TIMEOUT_MS = 1200;
+
+const isEsConnectivityError = err => {
+    const code = err && (err.code || (err.cause && err.cause.code));
+    return (
+        code === 'ENOTFOUND' ||
+        code === 'EAI_AGAIN' ||
+        code === 'ECONNREFUSED' ||
+        code === 'ETIMEDOUT' ||
+        code === 'ESOCKETTIMEDOUT'
+    );
+};
+
+function httpJsonRequest(
+    urlString,
+    { method = 'GET', headers = {}, body },
+    timeoutMs
+) {
+    return new Promise((resolve, reject) => {
+        const url = new URL(urlString);
+        const isHttps = url.protocol === 'https:';
+        const lib = isHttps ? https : http;
+
+        const req = lib.request(
+            {
+                protocol: url.protocol,
+                hostname: url.hostname,
+                port: url.port,
+                path: `${url.pathname}${url.search}`,
+                method,
+                headers,
+            },
+            res => {
+                let raw = '';
+                res.setEncoding('utf8');
+                res.on('data', chunk => (raw += chunk));
+                res.on('end', () => {
+                    resolve({
+                        status: res.statusCode || 0,
+                        headers: res.headers,
+                        body: raw,
+                    });
+                });
+            }
+        );
+
+        req.on('error', reject);
+        req.setTimeout(timeoutMs, () => {
+            const err = new Error(`ES request timeout after ${timeoutMs}ms`);
+            err.code = 'ETIMEDOUT';
+            req.destroy(err);
+        });
+
+        if (body) req.write(body);
+        req.end();
+    });
+}
 
 function logRequest(path, ctx, extra) {
     let d = { ip: getRemoteIp(ctx.req) };
@@ -339,6 +405,16 @@ export default function useGeneralApi(app) {
                 : this.request.body;
         if (!checkCSRF(this, csrf)) return;
 
+        if (Date.now() < esDownUntilMs) {
+            this.status = 503;
+            this.body = JSON.stringify({
+                error: 'Search temporarily unavailable',
+                code: 'SEARCH_UNAVAILABLE',
+                reason: esLastErr ? esLastErr.message : 'ES unavailable',
+            });
+            return;
+        }
+
         try {
             const params = JSON.parse(this.request.body);
             const elasticSearchService = config.get(
@@ -346,7 +422,6 @@ export default function useGeneralApi(app) {
             );
 
             let searchEndpoint = null;
-            console.log(params.depth);
             // Replies
             if (params.depth === 1) {
                 searchEndpoint = elasticSearchService.concat(
@@ -379,12 +454,54 @@ export default function useGeneralApi(app) {
                 body: searchPayload,
             };
 
-            const searchResult = yield fetch(searchEndpoint, req);
-            const resultJson = yield searchResult.json();
-            this.body = JSON.stringify(resultJson);
-            this.status = 200;
+            // Prefer an abortable request with a short timeout to avoid CPU/socket exhaustion
+            // when ES DNS breaks (ENOTFOUND/EAI_AGAIN) or ES is down.
+            const res = yield httpJsonRequest(
+                searchEndpoint,
+                {
+                    method: req.method,
+                    headers: req.headers,
+                    body: req.body,
+                },
+                ES_FETCH_TIMEOUT_MS
+            );
+
+            if (res.status >= 200 && res.status < 300) {
+                this.body = res.body;
+                this.status = 200;
+                return;
+            }
+
+            // Pass through non-2xx from ES as 502 to make the failure explicit.
+            this.status = 502;
+            this.body = JSON.stringify({
+                error: 'Search backend error',
+                code: 'SEARCH_BACKEND_ERROR',
+                es_status: res.status,
+            });
         } catch (error) {
-            console.error('Error in /search api call', this.session.uid, error);
+            if (isEsConnectivityError(error)) {
+                esDownUntilMs = Date.now() + ES_FAILFAST_WINDOW_MS;
+                esLastErr = error;
+                console.error(
+                    'ES connectivity error in /search; entering fail-fast window',
+                    this.session && this.session.uid,
+                    error && (error.code || error.message),
+                    error
+                );
+                this.status = 503;
+                this.body = JSON.stringify({
+                    error: 'Search temporarily unavailable',
+                    code: 'SEARCH_UNAVAILABLE',
+                });
+                return;
+            }
+
+            console.error(
+                'Error in /search api call',
+                this.session && this.session.uid,
+                error
+            );
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }

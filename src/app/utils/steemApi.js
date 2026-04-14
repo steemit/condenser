@@ -13,8 +13,66 @@ let _apiCache = null;
 export function setApiCache(cache) {
     _apiCache = cache;
 }
+// Steem username validation regex: 3-16 chars, starts with lowercase letter
+const VALID_USERNAME_REGEX = /^[a-z][a-z0-9.-]{2,15}$/;
+
+// Methods that require account parameter validation
+const ACCOUNT_METHODS = ['get_account_posts', 'get_profile', 'get_followers', 'get_following'];
+
+/**
+ * Validate username format
+ * @param {string} username - username to validate
+ * @returns {boolean} - is valid
+ */
+function isValidUsername(username) {
+    if (!username || typeof username !== 'string') {
+        return false;
+    }
+    return VALID_USERNAME_REGEX.test(username);
+}
+
+/**
+ * Check if method needs account validation
+ * @param {string} method - API method name
+ * @param {object} params - params object
+ * @returns {boolean} - needs validation
+ */
+function shouldValidateAccount(method, params) {
+    if (!ACCOUNT_METHODS.includes(method)) {
+        return false;
+    }
+    return params && (params.account || params.author);
+}
+
+/**
+ * Get account name from params
+ * @param {object} params - params object
+ * @returns {string|null} - account name or null
+ */
+function getAccountFromParams(params) {
+    if (!params) return null;
+    return params.account || params.author || null;
+}
+
 
 export async function callBridge(method, params, pre = 'bridge.') {
+    // Pre-validate account parameter
+    if (shouldValidateAccount(method, params)) {
+        const account = getAccountFromParams(params);
+        if (account && !isValidUsername(account)) {
+            console.log('[callBridge] Skip invalid username: ' + account + ', method: ' + method);
+            // Return appropriate empty result based on method type
+            if (method === 'get_account_posts') {
+                return Promise.resolve([]);
+            } else if (method === 'get_profile') {
+                return Promise.resolve(null);
+            } else if (method === 'get_followers' || method === 'get_following') {
+                return Promise.resolve([]);
+            }
+            return Promise.resolve(null);
+        }
+    }
+
     return new Promise(function(resolve, reject) {
         api.call(pre + method, params, function(err, data) {
             if (err) {

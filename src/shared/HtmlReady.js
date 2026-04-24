@@ -109,7 +109,12 @@ export default function(
                     image.parentNode.replaceChild(pre, image);
                 }
             } else {
-                if (!isProxifyImages) proxifyImages(doc);
+                // Historical note: `isProxifyImages` is used by some callers to disable
+                // proxying/transforms. Even then, we still want to strip legacy proxy shells
+                // like `https://{imagehoster}/{dims}/https://...` so environments reading
+                // cross-env chain data don't accidentally keep a wrong proxy prefix.
+                if (isProxifyImages) stripLegacyProxyImages(doc);
+                else proxifyImages(doc);
             }
         }
         // console.log('state', state)
@@ -270,6 +275,17 @@ function proxifyImages(doc) {
         const url = node.getAttribute('src');
         if (!linksRe.local.test(url))
             node.setAttribute('src', proxifyImageUrl(url, true));
+    });
+}
+
+// Strip legacy proxy wrappers but do not add any new proxy/transform prefix.
+function stripLegacyProxyImages(doc) {
+    if (!doc) return;
+    [...doc.getElementsByTagName('img')].forEach(node => {
+        const url = node.getAttribute('src');
+        if (!url) return;
+        if (!linksRe.local.test(url))
+            node.setAttribute('src', proxifyImageUrl(url, false));
     });
 }
 

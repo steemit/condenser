@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 
 export default connect(
     (state, ownProps) => ownProps,
@@ -80,10 +81,6 @@ export default connect(
             const isFocused = state.selection.hasEdgeIn(node);
             const className = isFocused ? 'active' : null;
 
-            const prefix = $STM_Config.img_proxy_prefix
-                ? $STM_Config.img_proxy_prefix + '0x0/'
-                : '';
-
             const alt = node.data.get('alt');
             const src = node.data.get('src');
 
@@ -96,15 +93,17 @@ export default connect(
             if (!src)
                 return <small className="info">Loading Image&hellip;</small>;
 
-            if (/^https?:\/\//.test(src))
+            if (/^https?:\/\//.test(src)) {
+                const displaySrc = proxifyImageUrl(src, '0x0/');
                 return (
                     <img
                         {...attributes}
-                        src={prefix + src}
+                        src={displaySrc}
                         alt={alt}
                         className={className}
                     />
                 );
+            }
 
             const img = <img src={src} alt={alt} className={className} />;
 

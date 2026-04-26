@@ -314,7 +314,7 @@ describe('Performance', () => {
     it('threespeakImageLink', () => {
         match(
             links.threespeakImageLink,
-            '<a href="https://3speak.online/watch?v=artemislives/tvxkobat" rel="noopener" title="This link will take you away from steemit.com" class="steem-keychain-checked"><img src="https://steemitimages.com/640x0/https://img.3speakcontent.online/tvxkobat/post.png"></a>'
+            '<a href="https://3speak.online/watch?v=artemislives/tvxkobat" rel="noopener" title="This link will take you away from steemit.com" class="steem-keychain-checked"><img src="https://img.3speakcontent.online/tvxkobat/post.png"></a>'
         );
     });
 });

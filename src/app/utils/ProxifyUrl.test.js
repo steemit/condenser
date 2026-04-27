@@ -160,11 +160,43 @@ describe('ProxifyUrl', () => {
             )
         );
     });
+
+    it('already /p/ URL is idempotent and params are forced to match policy', () => {
+        const orig =
+            'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg';
+        const b58 = base58.encode(Buffer.from(orig, 'utf8'));
+
+        testCase(
+            `https://steemitimages.com/p/${
+                b58
+            }?width=123&height=456&mode=cover&format=png`,
+            true,
+            // dimensions=true -> NATURAL_SIZE -> CAPPED_SIZE -> width=640 only, and mode/format forced
+            `https://steemitimages.com/p/${b58}?mode=fit&format=match&width=640`
+        );
+
+        testCase(
+            `https://steemitimages.com/p/${
+                b58
+            }?width=123&height=456&mode=cover&format=png`,
+            '256x512',
+            `https://steemitimages.com/p/${
+                b58
+            }?mode=fit&format=match&width=256&height=512`
+        );
+
+        // height=0 must not be present after normalization
+        testCase(
+            `https://steemitimages.com/p/${b58}?height=0&mode=cover&format=png`,
+            true,
+            `https://steemitimages.com/p/${b58}?mode=fit&format=match&width=640`
+        );
+    });
 });
 
 const testCase = (inputUrl, outputDims, expectedUrl) => {
     const outputUrl = proxifyImageUrl(inputUrl, outputDims);
-    assert.equal(
+    assertUrlEqual(
         outputUrl,
         expectedUrl,
         `(${inputUrl}, ${outputDims}) should return ${
@@ -172,6 +204,24 @@ const testCase = (inputUrl, outputDims, expectedUrl) => {
         }. output was ${outputUrl}`
     );
 };
+
+function assertUrlEqual(actual, expected, message) {
+    try {
+        const a = new URL(actual);
+        const e = new URL(expected);
+
+        assert.equal(a.origin, e.origin, message);
+        assert.equal(a.pathname, e.pathname, message);
+
+        const aParams = [...a.searchParams.entries()].sort();
+        const eParams = [...e.searchParams.entries()].sort();
+        assert.deepEqual(aParams, eParams, message);
+        return;
+    } catch (err) {
+        // Fall back to string comparison when URL parsing is not applicable.
+    }
+    assert.equal(actual, expected, message);
+}
 
 const expectedP = (url, { width, height } = {}) => {
     const b58 = base58.encode(Buffer.from(url, 'utf8'));

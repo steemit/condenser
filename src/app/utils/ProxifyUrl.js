@@ -118,6 +118,25 @@ export function proxifyImageUrl(url, dimensions = false) {
             const width = Number.parseInt(wStr, 10);
             const height = Number.parseInt(hStr, 10);
 
+            // Idempotency: if the URL is already a /p/ URL, do not base58-encode again.
+            // Force query params to match the current /p/ policy (mode/format/width/height).
+            if (target.pathname.includes('/p/')) {
+                target.searchParams.set('mode', 'fit');
+                target.searchParams.set('format', 'match');
+                if (Number.isFinite(width) && width > 0) {
+                    target.searchParams.set('width', String(width));
+                } else {
+                    target.searchParams.delete('width');
+                }
+                // Important: omit height when 0, to preserve aspect ratio (e.g. 640x0).
+                if (Number.isFinite(height) && height > 0) {
+                    target.searchParams.set('height', String(height));
+                } else {
+                    target.searchParams.delete('height');
+                }
+                return target.toString();
+            }
+
             const b58 = base58.encode(Buffer.from(respUrl, 'utf8'));
             const pBase = `${ensureTrailingSlash(imageProxy())}p/${b58}`;
             const pUrl = new URL(pBase);

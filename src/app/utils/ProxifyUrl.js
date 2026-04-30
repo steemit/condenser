@@ -74,6 +74,30 @@ function isFirstPartyImageHost(hostname) {
     }
 }
 
+function normalizeFirstPartyUploadURL(targetUrl) {
+    try {
+        const proxyHost = new URL(imageProxy()).hostname;
+        const base = registrableDomain(proxyHost);
+        if (base !== 'steemitimages.com') return targetUrl;
+
+        const h = (targetUrl.hostname || '').toLowerCase();
+        if (h !== base) return targetUrl;
+
+        // For legacy profile cover_image values like https://steemitimages.com/D.../file.jpg,
+        // rewrite to the canonical CDN host before base58 encoding.
+        if (
+            typeof targetUrl.pathname === 'string' &&
+            targetUrl.pathname.startsWith('/D')
+        ) {
+            targetUrl.hostname = `cdn.${base}`;
+            return targetUrl;
+        }
+        return targetUrl;
+    } catch (e) {
+        return targetUrl;
+    }
+}
+
 /**
  * Strips all proxy domains from the beginning of the url. Adds the global proxy if dimension is specified
  * @param {string} url
@@ -113,6 +137,10 @@ export function proxifyImageUrl(url, dimensions = false) {
             const target = new URL(respUrl);
             if (!isFirstPartyImageHost(target.hostname)) return respUrl;
 
+            // Canonicalize first-party uploaded image host before encoding.
+            // This ensures profile cover_image values stored as steemitimages.com/D... use cdn.steemitimages.com.
+            normalizeFirstPartyUploadURL(target);
+
             const dimsNoSlash = dims.endsWith('/') ? dims.slice(0, -1) : dims;
             const [wStr, hStr] = String(dimsNoSlash).split('x');
             const width = Number.parseInt(wStr, 10);
@@ -137,7 +165,7 @@ export function proxifyImageUrl(url, dimensions = false) {
                 return target.toString();
             }
 
-            const b58 = base58.encode(Buffer.from(respUrl, 'utf8'));
+            const b58 = base58.encode(Buffer.from(target.toString(), 'utf8'));
             const pBase = `${ensureTrailingSlash(imageProxy())}p/${b58}`;
             const pUrl = new URL(pBase);
             pUrl.searchParams.set('mode', 'fit');

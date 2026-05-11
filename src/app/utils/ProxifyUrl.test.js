@@ -32,16 +32,24 @@ describe('ProxifyUrl', () => {
     it('naked steemit hosted URL (first-party domain: use /p/)', () => {
         const url =
             'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg';
-        testCase(url, '256x512', expectedP(url, { width: 256, height: 512 }));
+        const canonical =
+            'https://cdn.steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg';
+        testCase(
+            url,
+            '256x512',
+            expectedP(canonical, { width: 256, height: 512 })
+        );
         testCase(url, false, url);
     });
     it('proxied steemit hosted URL (strip proxy, then /p/ for first-party)', () => {
         const stripped =
             'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg';
+        const strippedCanonical =
+            'https://cdn.steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg';
         testCase(
             'https://steemitimages.com/0x0/https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
             '256x512',
-            expectedP(stripped, { width: 256, height: 512 })
+            expectedP(strippedCanonical, { width: 256, height: 512 })
         );
         testCase(
             'https://steemitimages.com/256x512/https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
@@ -105,7 +113,7 @@ describe('ProxifyUrl', () => {
             'https://steemitdevimages.com/1001x2001/https://steemitimages.com/0x0/https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
             true,
             expectedP(
-                'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
+                'https://cdn.steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
                 { width: 1001, height: 2001 }
             )
         );
@@ -115,7 +123,7 @@ describe('ProxifyUrl', () => {
             'https://steemitimages.com/0x0/https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
             true,
             expectedP(
-                'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
+                'https://cdn.steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
                 { width: 640 }
             )
         );
@@ -128,7 +136,7 @@ describe('ProxifyUrl', () => {
             'https://steemitimages.com/0x0/https://steemitimages.com/100x100/https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
             true,
             expectedP(
-                'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
+                'https://cdn.steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
                 { width: 640 }
             )
         );
@@ -164,7 +172,9 @@ describe('ProxifyUrl', () => {
     it('already /p/ URL is idempotent and params are forced to match policy', () => {
         const orig =
             'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg';
-        const b58 = base58.encode(Buffer.from(orig, 'utf8'));
+        const canonical =
+            'https://cdn.steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg';
+        const b58 = base58.encode(Buffer.from(canonical, 'utf8'));
 
         testCase(
             `https://steemitimages.com/p/${

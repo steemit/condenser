@@ -1,6 +1,6 @@
 # State management (Next.js stack)
 
-This document records how Redux state is structured in the refactored app and how it relates to the legacy Condenser Redux + Redux-Saga setup under `legacy/src/app/redux/`.
+This document records how Redux state is structured in the refactored app and how it relates to the historical Condenser Redux + Redux-Saga setup (formerly under the removed Webpack tree).
 
 ## Architecture decision
 
@@ -35,7 +35,7 @@ Legacy state used **Immutable.js** (`Map` / `fromJS`). New slices use **plain ob
 
 ## Legacy saga modules (reference only)
 
-These files live under `legacy/src/app/redux/`. They are **not** replicated as TypeScript sagas. The table below is a high-level map of responsibilities to the new stack patterns.
+These modules existed in historical Condenser (`*Saga.js` under the old Redux tree). They are **not** replicated as TypeScript sagas. The table below is a high-level map of responsibilities to the new stack patterns.
 
 | Legacy module | Responsibility (summary) | New-stack direction |
 |---------------|---------------------------|---------------------|
@@ -53,7 +53,7 @@ These files live under `legacy/src/app/redux/`. They are **not** replicated as T
 ## Functional parity and gaps
 
 - **Phase-two closure:** Structural parity for named legacy reducer domains is satisfied by the slices listed above. **Saga-level parity is not a goal** for the new stack unless a future ADR reintroduces orchestration tooling.
-- **Verification:** As features migrate from `legacy/`, compare critical user flows (login, vote, post, wallet) against legacy behavior; extend thunks or server endpoints where state or timing still diverges.
+- **Verification:** Compare critical user flows (login, vote, post, wallet) against historical Condenser behavior when extending features; extend thunks or server endpoints where state or timing still diverges.
 
 ## Optional future work
 

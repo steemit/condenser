@@ -1,2 +1,0 @@
-grep -rin $1 --color=always --exclude-dir=node_modules  --exclude-dir=dist --exclude-dir=tmp *
-find src | grep -i $1

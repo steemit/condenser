@@ -6,9 +6,38 @@
 
 // Import steem object directly as a named export
 import { steem } from '@steemit/steem-js';
+import { withCache, type WithCacheResult } from '@/lib/cache/server-cache';
 
 // Initialize Steem API configuration
 let isInitialized = false;
+
+/**
+ * Cache TTLs (seconds). These are initial values — tune after observing real
+ * freshness requirements in production. `ttl` is the fresh window; `staleTtl`
+ * is the grace window during which stale data may be served on RPC failure.
+ *
+ * Personalised endpoints (posts/post/profile/comments/followers) are cached
+ * ONLY when no observer is present (anonymous traffic). A logged-in observer
+ * bypasses Redis entirely to avoid leaking one user's vote/follow state to
+ * another. See the isAnonymous guard at each call site.
+ */
+const CACHE_TTL = {
+  // Global / non-personalised data
+  dynamicGlobalProperties: { ttl: 3, staleTtl: 30 },
+  communities: { ttl: 600, staleTtl: 1800 },
+  communityRoles: { ttl: 600, staleTtl: 1800 },
+  // Personalised — cached for anonymous traffic only
+  posts: { ttl: 3, staleTtl: 300 },
+  post: { ttl: 30, staleTtl: 600 },
+  comments: { ttl: 60, staleTtl: 600 },
+  profile: { ttl: 30, staleTtl: 300 },
+  followers: { ttl: 30, staleTtl: 300 },
+} as const;
+
+/** Extract the bare data value from a WithCacheResult wrapper. */
+function unwrap<T>(result: WithCacheResult<T>): T {
+  return result.data;
+}
 
 export function initializeSteemApi() {
   if (isInitialized) return;
@@ -83,6 +112,31 @@ export async function callSteemApi<T = unknown>(method: string, params: unknown)
 }
 
 /**
+ * Probe the Steem node health by fetching dynamic global properties.
+ * Used by /api/health to populate the shared health entry. Returns a result
+ * object rather than throwing so callers can record the failure reason.
+ */
+export async function checkSteemNodeHealth(): Promise<{
+  healthy: boolean;
+  blockNumber?: number;
+  latency?: number;
+  error?: string;
+}> {
+  try {
+    const start = Date.now();
+    const props = (await getDynamicGlobalProperties()) as { head_block_number?: number };
+    const latency = Date.now() - start;
+    return {
+      healthy: true,
+      blockNumber: props?.head_block_number,
+      latency,
+    };
+  } catch (error) {
+    return { healthy: false, error: (error as Error).message };
+  }
+}
+
+/**
  * Get ranked posts
  */
 export async function getRankedPosts(params: {
@@ -93,7 +147,16 @@ export async function getRankedPosts(params: {
   limit?: number;
   observer?: string;
 }): Promise<unknown[]> {
-  return callBridge<unknown[]>('get_ranked_posts', params);
+  const useCache = !params.observer && !params.start_author;
+  if (!useCache) {
+    return callBridge<unknown[]>('get_ranked_posts', params);
+  }
+
+  const key = `steem:posts:ranked:${params.sort}:${params.tag || ''}:${params.limit || 20}`;
+  const result = await withCache(key, CACHE_TTL.posts.ttl, CACHE_TTL.posts.staleTtl, () =>
+    callBridge<unknown[]>('get_ranked_posts', params)
+  );
+  return unwrap(result);
 }
 
 /**
@@ -107,7 +170,16 @@ export async function getAccountPosts(params: {
   limit?: number;
   observer?: string;
 }): Promise<unknown[]> {
-  return callBridge<unknown[]>('get_account_posts', params);
+  const useCache = !params.observer && !params.start_author;
+  if (!useCache) {
+    return callBridge<unknown[]>('get_account_posts', params);
+  }
+
+  const key = `steem:posts:account:${params.account}:${params.sort}:${params.limit || 20}`;
+  const result = await withCache(key, CACHE_TTL.posts.ttl, CACHE_TTL.posts.staleTtl, () =>
+    callBridge<unknown[]>('get_account_posts', params)
+  );
+  return unwrap(result);
 }
 
 /**
@@ -117,7 +189,11 @@ export async function getDiscussion(params: {
   author: string;
   permlink: string;
 }): Promise<unknown> {
-  return callBridge<unknown>('get_discussion', params);
+  const key = `steem:post:${params.author}:${params.permlink}`;
+  const result = await withCache(key, CACHE_TTL.post.ttl, CACHE_TTL.post.staleTtl, () =>
+    callBridge<unknown>('get_discussion', params)
+  );
+  return unwrap(result);
 }
 
 /**
@@ -141,24 +217,40 @@ export async function getAccounts(usernames: string[]): Promise<unknown[]> {
  * Get dynamic global properties
  */
 export async function getDynamicGlobalProperties(): Promise<unknown> {
-  initializeSteemApi();
-  return steem.api.getDynamicGlobalPropertiesAsync();
+  const result = await withCache(
+    'steem:dynamic-global-properties',
+    CACHE_TTL.dynamicGlobalProperties.ttl,
+    CACHE_TTL.dynamicGlobalProperties.staleTtl,
+    async () => {
+      initializeSteemApi();
+      return steem.api.getDynamicGlobalPropertiesAsync();
+    }
+  );
+  return unwrap(result);
 }
 
 /**
  * Get following list
  */
 export async function getFollowing(account: string, start: string, type: string, limit: number): Promise<unknown[]> {
-  initializeSteemApi();
-  return steem.api.getFollowingAsync(account, start, type, limit);
+  const key = `steem:following:${account}:${type}:${start || '0'}:${limit}`;
+  const result = await withCache(key, CACHE_TTL.followers.ttl, CACHE_TTL.followers.staleTtl, async () => {
+    initializeSteemApi();
+    return steem.api.getFollowingAsync(account, start, type, limit);
+  });
+  return unwrap(result);
 }
 
 /**
  * Get followers list
  */
 export async function getFollowers(account: string, start: string, type: string, limit: number): Promise<unknown[]> {
-  initializeSteemApi();
-  return steem.api.getFollowersAsync(account, start, type, limit);
+  const key = `steem:followers:${account}:${type}:${start || '0'}:${limit}`;
+  const result = await withCache(key, CACHE_TTL.followers.ttl, CACHE_TTL.followers.staleTtl, async () => {
+    initializeSteemApi();
+    return steem.api.getFollowersAsync(account, start, type, limit);
+  });
+  return unwrap(result);
 }
 
 /**
@@ -179,7 +271,16 @@ export async function getProfile(params: {
   account: string;
   observer?: string;
 }): Promise<unknown> {
-  return callBridge<unknown>('get_profile', params);
+  // observer personalises the result (e.g. follows-you) — bypass cache when set.
+  if (params.observer) {
+    return callBridge<unknown>('get_profile', params);
+  }
+
+  const key = `steem:profile:${params.account}`;
+  const result = await withCache(key, CACHE_TTL.profile.ttl, CACHE_TTL.profile.staleTtl, () =>
+    callBridge<unknown>('get_profile', params)
+  );
+  return unwrap(result);
 }
 
 /**
@@ -192,7 +293,11 @@ export async function getFollowersByPage(params: {
   type?: string;
 }): Promise<unknown[]> {
   const { account, page, limit, type = 'blog' } = params;
-  return callBridge<unknown[]>('get_followers_by_page', [account, page, limit, type], 'condenser_api.');
+  const key = `steem:followers-page:${account}:${type}:${page}:${limit}`;
+  const result = await withCache(key, CACHE_TTL.followers.ttl, CACHE_TTL.followers.staleTtl, () =>
+    callBridge<unknown[]>('get_followers_by_page', [account, page, limit, type], 'condenser_api.')
+  );
+  return unwrap(result);
 }
 
 /**
@@ -205,7 +310,11 @@ export async function getFollowingByPage(params: {
   type?: string;
 }): Promise<unknown[]> {
   const { account, page, limit, type = 'blog' } = params;
-  return callBridge<unknown[]>('get_following_by_page', [account, page, limit, type], 'condenser_api.');
+  const key = `steem:following-page:${account}:${type}:${page}:${limit}`;
+  const result = await withCache(key, CACHE_TTL.followers.ttl, CACHE_TTL.followers.staleTtl, () =>
+    callBridge<unknown[]>('get_following_by_page', [account, page, limit, type], 'condenser_api.')
+  );
+  return unwrap(result);
 }
 
 /**
@@ -226,7 +335,16 @@ export async function listCommunities(params: {
   sort?: string;
   limit?: number;
 }): Promise<unknown[]> {
-  return callBridge<unknown[]>('list_communities', params);
+  // observer personalises the list (e.g. subscribed-to flag) — bypass cache when set.
+  if (params.observer) {
+    return callBridge<unknown[]>('list_communities', params);
+  }
+
+  const key = `steem:communities:${params.sort || ''}:${params.query || ''}:${params.limit || 100}`;
+  const result = await withCache(key, CACHE_TTL.communities.ttl, CACHE_TTL.communities.staleTtl, () =>
+    callBridge<unknown[]>('list_communities', params)
+  );
+  return unwrap(result);
 }
 
 /**
@@ -235,7 +353,11 @@ export async function listCommunities(params: {
 export async function getCommunityRoles(params: {
   community: string;
 }): Promise<unknown[]> {
-  return callBridge<unknown[]>('list_community_roles', params);
+  const key = `steem:community-roles:${params.community}`;
+  const result = await withCache(key, CACHE_TTL.communityRoles.ttl, CACHE_TTL.communityRoles.staleTtl, () =>
+    callBridge<unknown[]>('list_community_roles', params)
+  );
+  return unwrap(result);
 }
 
 /**
@@ -244,7 +366,11 @@ export async function getCommunityRoles(params: {
 export async function getCommunitySubscribers(params: {
   community: string;
 }): Promise<unknown[]> {
-  return callBridge<unknown[]>('list_subscribers', params);
+  const key = `steem:community-subscribers:${params.community}`;
+  const result = await withCache(key, CACHE_TTL.communityRoles.ttl, CACHE_TTL.communityRoles.staleTtl, () =>
+    callBridge<unknown[]>('list_subscribers', params)
+  );
+  return unwrap(result);
 }
 
 /**

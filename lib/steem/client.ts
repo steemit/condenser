@@ -115,6 +115,11 @@ export async function callSteemApi<T = unknown>(method: string, params: unknown)
  * Probe the Steem node health by fetching dynamic global properties.
  * Used by /api/health to populate the shared health entry. Returns a result
  * object rather than throwing so callers can record the failure reason.
+ *
+ * IMPORTANT: this must bypass the cache and hit the RPC directly. The probe's
+ * entire purpose is to detect a node outage *now*; going through the cached
+ * getDynamicGlobalProperties() would return a fresh-window value and mask the
+ * very failure we are trying to observe.
  */
 export async function checkSteemNodeHealth(): Promise<{
   healthy: boolean;
@@ -124,7 +129,10 @@ export async function checkSteemNodeHealth(): Promise<{
 }> {
   try {
     const start = Date.now();
-    const props = (await getDynamicGlobalProperties()) as { head_block_number?: number };
+    initializeSteemApi();
+    const props = (await steem.api.getDynamicGlobalPropertiesAsync()) as {
+      head_block_number?: number;
+    };
     const latency = Date.now() - start;
     return {
       healthy: true,
@@ -184,6 +192,13 @@ export async function getAccountPosts(params: {
 
 /**
  * Get discussion (post with comments)
+ *
+ * Cached unconditionally. This is safe because the bridge `get_discussion`
+ * call is public-read-only and carries no `observer`: the result contains
+ * `active_votes` (public) but no per-observer fields (e.g. "have I voted"),
+ * so serving one user's cached copy to another cannot leak personal state.
+ * If this ever changes to pass an observer, the cache must be gated like
+ * getRankedPosts/getProfile (bypass when observer is present).
  */
 export async function getDiscussion(params: {
   author: string;

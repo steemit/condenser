@@ -62,12 +62,20 @@ export async function POST(request: NextRequest) {
     let actor: string | undefined;
 
     if (firstOperation && Array.isArray(firstOperation) && firstOperation.length >= 2) {
+      const opType = firstOperation[0];
       const opData = firstOperation[1];
       if (opData && typeof opData === 'object') {
         permlink = opData.permlink || opData.parent_permlink;
         // The actor varies by op type: vote/comment use `voter`/`author`,
-        // custom_json (reblog/follow) encodes it inside the json payload.
-        actor = opData.voter || opData.author;
+        // custom_json (reblog/follow/mute) carries the signer in
+        // `required_posting_auths[0]` and a nested payload — but not voter/author.
+        if (opType === 'custom_json') {
+          const postingAuths = (opData as Record<string, unknown>).required_posting_auths;
+          actor = Array.isArray(postingAuths) ? String(postingAuths[0] || '') : undefined;
+        } else {
+          actor = (opData as Record<string, unknown>).voter as string
+            || (opData as Record<string, unknown>).author as string;
+        }
       }
     }
 

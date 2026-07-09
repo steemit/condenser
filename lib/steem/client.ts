@@ -160,6 +160,7 @@ export async function getRankedPosts(params: {
     return callBridge<unknown[]>('get_ranked_posts', params);
   }
 
+  // Default 20 mirrors the posts route's fallback (app/api/steem/posts/route.ts:17).
   const key = `steem:posts:ranked:${params.sort}:${params.tag || ''}:${params.limit || 20}`;
   const result = await withCache(key, CACHE_TTL.posts.ttl, CACHE_TTL.posts.staleTtl, () =>
     callBridge<unknown[]>('get_ranked_posts', params)
@@ -183,6 +184,7 @@ export async function getAccountPosts(params: {
     return callBridge<unknown[]>('get_account_posts', params);
   }
 
+  // Default 20 mirrors the posts route's fallback (app/api/steem/posts/route.ts:17).
   const key = `steem:posts:account:${params.account}:${params.sort}:${params.limit || 20}`;
   const result = await withCache(key, CACHE_TTL.posts.ttl, CACHE_TTL.posts.staleTtl, () =>
     callBridge<unknown[]>('get_account_posts', params)
@@ -355,7 +357,9 @@ export async function listCommunities(params: {
     return callBridge<unknown[]>('list_communities', params);
   }
 
-  const key = `steem:communities:${params.sort || ''}:${params.query || ''}:${params.limit || 100}`;
+  // Default 20 mirrors the communities route's own fallback (app/api/steem/
+  // communities/route.ts:18), so the key matches what actually reaches the RPC.
+  const key = `steem:communities:${params.sort || ''}:${params.query || ''}:${params.limit || 20}`;
   const result = await withCache(key, CACHE_TTL.communities.ttl, CACHE_TTL.communities.staleTtl, () =>
     callBridge<unknown[]>('list_communities', params)
   );

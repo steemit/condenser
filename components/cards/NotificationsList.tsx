@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { receiveNotifications, receiveUnreadNotifications, notificationsLoading } from '@/store/slices/globalSlice';
+import { cachedFetch } from '@/lib/cache/client-fetch';
 import LoadingIndicator from '@/components/elements/LoadingIndicator';
 import Link from 'next/link';
 
@@ -55,14 +56,14 @@ export default function NotificationsList({ username }: NotificationsListProps) 
       });
       if (startId) searchParams.set('last_id', startId.toString());
 
-      const response = await fetch(`/api/steem/notifications?${searchParams.toString()}`);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch notifications: ${response.statusText}`);
-      }
-
-      const notifications = await response.json();
+      // Initial load is cacheable (SWR); pagination cursors bypass the cache
+      // to avoid stitching a stale page onto a shifted feed.
+      const { data: notifications } = await cachedFetch<Notification[]>(
+        `/api/steem/notifications?${searchParams.toString()}`,
+        { staleMs: 10_000, maxAgeMs: 30_000, noStore: Boolean(startId) }
+      );
       const isLastPage = notifications.length < 100;
-      
+
       dispatch(
         receiveNotifications({
           name: accountName,

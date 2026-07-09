@@ -17,6 +17,9 @@ const userProfilesSlice = createSlice({
   name: 'userProfiles',
   initialState,
   reducers: {
+    // @deprecated: this reducer has no dispatchers in the Next.js app. The
+    // browser SWR layer (lib/cache/client-fetch) is now the single source of
+    // truth for cached profile data. Kept only to avoid breaking imports.
     addProfile: (state, action: PayloadAction<{
       username: string;
       account: any;

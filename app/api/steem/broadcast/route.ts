@@ -20,6 +20,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { initializeSteemApi, callSteemApi } from '@/lib/steem/client';
+import { cacheDeleteByPrefix } from '@/lib/cache/redis';
 
 export async function POST(request: NextRequest) {
   try {
@@ -55,28 +56,52 @@ export async function POST(request: NextRequest) {
     // The API only forwards, it does not sign or modify the transaction
     const result = await callSteemApi<{ id?: string }>('broadcast_transaction', [signedTransaction]);
 
-    // Extract operation details for response
+    // Extract operation details for response + cache invalidation
     const firstOperation = signedTransaction.operations[0];
     let permlink: string | undefined;
-    
+    let actor: string | undefined;
+
     if (firstOperation && Array.isArray(firstOperation) && firstOperation.length >= 2) {
+      const opType = firstOperation[0];
       const opData = firstOperation[1];
       if (opData && typeof opData === 'object') {
         permlink = opData.permlink || opData.parent_permlink;
+        // The actor varies by op type: vote/comment use `voter`/`author`,
+        // custom_json (reblog/follow/mute) carries the signer in
+        // `required_posting_auths[0]` and a nested payload — but not voter/author.
+        if (opType === 'custom_json') {
+          const postingAuths = (opData as Record<string, unknown>).required_posting_auths;
+          actor = Array.isArray(postingAuths) ? String(postingAuths[0] || '') : undefined;
+        } else {
+          actor = (opData as Record<string, unknown>).voter as string
+            || (opData as Record<string, unknown>).author as string;
+        }
       }
     }
 
-    return NextResponse.json({
+    // Invalidate read caches affected by this write. We scope by the prefixes
+    // that could hold stale content rather than a blanket flush, mirroring the
+    // wallet project's per-route invalidation. Failures here are non-critical.
+    await invalidateAfterBroadcast(signedTransaction.operations);
+
+    const response = NextResponse.json({
       success: true,
       result,
       transactionId: result?.id,
       permlink,
     });
+
+    // Signal the browser (L1) cache to drop this user's entries. The value is
+    // consumed by client-fetch.ts in PR2; harmless until then.
+    if (actor) {
+      response.headers.set('X-Cache-Invalidate', actor);
+    }
+    return response;
   } catch (error: unknown) {
     console.error('Broadcast error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to broadcast transaction';
     const errorDetails = error instanceof Error ? error.toString() : String(error);
-    
+
     return NextResponse.json(
       {
         error: errorMessage,
@@ -84,5 +109,48 @@ export async function POST(request: NextRequest) {
       },
       { status: 500 }
     );
+  }
+}
+
+/**
+ * Drop read-cache entries that this transaction's operations may have made
+ * stale. Each invalidation targets a specific prefix set rather than flushing
+ * everything, so unrelated cached feeds stay warm.
+ */
+async function invalidateAfterBroadcast(operations: Array<[string, Record<string, unknown>]>): Promise<void> {
+  for (const [opName, opData] of operations) {
+    switch (opName) {
+      case 'vote': {
+        // A vote changes the post's ranking and the voter's profile.
+        const author = String(opData.author || '');
+        const permlink = String(opData.permlink || '');
+        const voter = String(opData.voter || '');
+        if (author && permlink) await cacheDeleteByPrefix(`steem:post:${author}:${permlink}`);
+        await cacheDeleteByPrefix('steem:posts:ranked:');
+        if (voter) await cacheDeleteByPrefix(`steem:profile:${voter}`);
+        if (author) await cacheDeleteByPrefix(`steem:profile:${author}`);
+        break;
+      }
+      case 'comment': {
+        // New post/reply invalidates feeds + the author's account posts + profile.
+        const author = String(opData.author || '');
+        if (author) {
+          await cacheDeleteByPrefix(`steem:posts:account:${author}:`);
+          await cacheDeleteByPrefix(`steem:profile:${author}`);
+        }
+        await cacheDeleteByPrefix('steem:posts:ranked:');
+        break;
+      }
+      case 'delete_comment':
+      case 'custom_json': {
+        // custom_json covers reblog/follow/mute — feeds & profiles may shift.
+        await cacheDeleteByPrefix('steem:posts:ranked:');
+        await cacheDeleteByPrefix('steem:profile:');
+        break;
+      }
+      default:
+        // Other ops (transfer, witness, etc.) don't touch feed/profile caches.
+        break;
+    }
   }
 }

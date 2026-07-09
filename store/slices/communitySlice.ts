@@ -24,6 +24,11 @@ const communitySlice = createSlice({
   name: 'community',
   initialState,
   reducers: {
+    // @deprecated: these reducers were ported from legacy expecting a
+    // redux-saga that no longer exists in the Next.js app, and have no
+    // dispatchers. The browser SWR layer (lib/cache/client-fetch) is now the
+    // single source of truth for cached community data. Kept only to avoid
+    // breaking imports.
     // Saga watcher - no state change
     getCommunitySubscribers: (state, action: PayloadAction<{ community: string }>) => {
       // Saga handles this

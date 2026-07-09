@@ -89,6 +89,13 @@ const globalSlice = createSlice({
   name: 'global',
   initialState,
   reducers: {
+    // NOTE on client-side data caching:
+    // The following reducers were ported from legacy as a cache skeleton but
+    // have NO dispatchers in the Next.js app: receiveContent, receiveAccount,
+    // receiveAccounts, receivePostHeader, receiveCommunities, receiveCommunity.
+    // They are @deprecated — the browser SWR layer (lib/cache/client-fetch) is
+    // now the single source of truth for cached read data. Do not add new
+    // dispatchers for them; leave them in place only to avoid breaking imports.
     setCollapsed: (state, action: PayloadAction<{ post: string; collapsed: boolean }>) => {
       const { post, collapsed } = action.payload;
       if (!state.content[post]) {

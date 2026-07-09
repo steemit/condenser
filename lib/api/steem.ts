@@ -2,7 +2,32 @@
  * Steem API client
  * This module provides functions to interact with the Steem blockchain API
  * Replaces the old FetchDataSaga functionality
+ *
+ * All read functions go through the browser-side stale-while-revalidate cache
+ * (lib/cache/client-fetch). Public signatures are unchanged so existing call
+ * sites keep working; the SWR behaviour is transparent. Writes/mutations are
+ * never cached.
  */
+
+import { cachedFetch, HttpError } from '@/lib/cache/client-fetch';
+
+/**
+ * Client-side staleMs / maxAgeMs per data type.
+ *   staleMs  — fresh window; within it, no network request is made.
+ *   maxAgeMs — hard expiry; beyond it a fetch blocks rather than serving stale.
+ * These mirror (loosely) the server-side Redis TTLs but are tuned for the
+ * browser (shorter, since users expect fresh content on explicit navigation).
+ */
+const SWR = {
+  posts: { staleMs: 10_000, maxAgeMs: 60_000 }, // 10s fresh / 1m max
+  post: { staleMs: 15_000, maxAgeMs: 120_000 }, // 15s fresh / 2m max
+  comments: { staleMs: 15_000, maxAgeMs: 120_000 },
+  profile: { staleMs: 15_000, maxAgeMs: 60_000 },
+  followers: { staleMs: 15_000, maxAgeMs: 120_000 },
+  communities: { staleMs: 30_000, maxAgeMs: 300_000 },
+  communityRoles: { staleMs: 30_000, maxAgeMs: 300_000 },
+  notifications: { staleMs: 10_000, maxAgeMs: 30_000 },
+} as const;
 
 export interface Post {
   author: string;
@@ -72,23 +97,25 @@ export async function fetchRankedPosts(params: FetchPostsParams): Promise<Post[]
     observer,
   } = params;
 
+  const searchParams = new URLSearchParams({
+    sort: order,
+    tag: category,
+    limit: limit.toString(),
+  });
+  if (start_author) searchParams.set('start_author', start_author);
+  if (start_permlink) searchParams.set('start_permlink', start_permlink);
+  if (observer) searchParams.set('observer', observer);
+
+  // Pagination cursors change the result set — bypass cache to avoid
+  // stitching a stale "load more" page onto a shifted feed.
+  const noStore = Boolean(start_author || start_permlink);
+
   try {
-    const searchParams = new URLSearchParams({
-      sort: order,
-      tag: category,
-      limit: limit.toString(),
+    const { data } = await cachedFetch<Post[]>(`/api/steem/posts?${searchParams.toString()}`, {
+      ...SWR.posts,
+      noStore,
     });
-    if (start_author) searchParams.set('start_author', start_author);
-    if (start_permlink) searchParams.set('start_permlink', start_permlink);
-    if (observer) searchParams.set('observer', observer);
-
-    const response = await fetch(`/api/steem/posts?${searchParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch posts: ${response.statusText}`);
-    }
-
-    const posts = await response.json();
-    return posts as Post[];
+    return data;
   } catch (error) {
     console.error('Error fetching ranked posts:', error);
     return [];
@@ -110,23 +137,23 @@ export async function fetchAccountPosts(
     observer,
   } = params;
 
+  const searchParams = new URLSearchParams({
+    sort: order,
+    account,
+    limit: limit.toString(),
+  });
+  if (start_author) searchParams.set('start_author', start_author);
+  if (start_permlink) searchParams.set('start_permlink', start_permlink);
+  if (observer) searchParams.set('observer', observer);
+
+  const noStore = Boolean(start_author || start_permlink);
+
   try {
-    const searchParams = new URLSearchParams({
-      sort: order,
-      account,
-      limit: limit.toString(),
+    const { data } = await cachedFetch<Post[]>(`/api/steem/posts?${searchParams.toString()}`, {
+      ...SWR.posts,
+      noStore,
     });
-    if (start_author) searchParams.set('start_author', start_author);
-    if (start_permlink) searchParams.set('start_permlink', start_permlink);
-    if (observer) searchParams.set('observer', observer);
-
-    const response = await fetch(`/api/steem/posts?${searchParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch account posts: ${response.statusText}`);
-    }
-
-    const posts = await response.json();
-    return posts as Post[];
+    return data;
   } catch (error) {
     console.error('Error fetching account posts:', error);
     return [];
@@ -141,23 +168,14 @@ export async function fetchPostByPermlink(
   author: string,
   permlink: string
 ): Promise<Post | null> {
+  const searchParams = new URLSearchParams({ author, permlink });
   try {
-    const searchParams = new URLSearchParams({
-      author,
-      permlink,
+    const { data } = await cachedFetch<Post>(`/api/steem/post?${searchParams.toString()}`, {
+      ...SWR.post,
     });
-
-    const response = await fetch(`/api/steem/post?${searchParams.toString()}`);
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error(`Failed to fetch post: ${response.statusText}`);
-    }
-
-    const post = await response.json();
-    return post as Post;
+    return data;
   } catch (error) {
+    if (error instanceof HttpError && error.status === 404) return null;
     console.error('Error fetching post:', error);
     return null;
   }
@@ -170,19 +188,12 @@ export async function fetchCommentsByPermlink(
   author: string,
   permlink: string
 ): Promise<Post[]> {
+  const searchParams = new URLSearchParams({ author, permlink });
   try {
-    const searchParams = new URLSearchParams({
-      author,
-      permlink,
+    const { data } = await cachedFetch<Post[]>(`/api/steem/comments?${searchParams.toString()}`, {
+      ...SWR.comments,
     });
-
-    const response = await fetch(`/api/steem/comments?${searchParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch comments: ${response.statusText}`);
-    }
-
-    const comments = await response.json();
-    return comments as Post[];
+    return data;
   } catch (error) {
     console.error('Error fetching comments:', error);
     return [];
@@ -227,23 +238,15 @@ export async function fetchUserProfile(
   account: string,
   observer?: string
 ): Promise<UserProfile | null> {
+  const searchParams = new URLSearchParams({ account });
+  if (observer) searchParams.set('observer', observer);
   try {
-    const searchParams = new URLSearchParams({
-      account,
+    const { data } = await cachedFetch<UserProfile>(`/api/steem/profile?${searchParams.toString()}`, {
+      ...SWR.profile,
     });
-    if (observer) searchParams.set('observer', observer);
-
-    const response = await fetch(`/api/steem/profile?${searchParams.toString()}`);
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error(`Failed to fetch profile: ${response.statusText}`);
-    }
-
-    const profile = await response.json();
-    return profile as UserProfile;
+    return data;
   } catch (error) {
+    if (error instanceof HttpError && error.status === 404) return null;
     console.error('Error fetching user profile:', error);
     return null;
   }
@@ -266,21 +269,17 @@ export async function fetchFollowers(
   page: number = 1,
   limit: number = 20
 ): Promise<FollowItem[]> {
+  const searchParams = new URLSearchParams({
+    account,
+    type: 'followers',
+    page: page.toString(),
+    limit: limit.toString(),
+  });
   try {
-    const searchParams = new URLSearchParams({
-      account,
-      type: 'followers',
-      page: page.toString(),
-      limit: limit.toString(),
+    const { data } = await cachedFetch<FollowItem[]>(`/api/steem/followers?${searchParams.toString()}`, {
+      ...SWR.followers,
     });
-
-    const response = await fetch(`/api/steem/followers?${searchParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch followers: ${response.statusText}`);
-    }
-
-    const followers = await response.json();
-    return followers as FollowItem[];
+    return data;
   } catch (error) {
     console.error('Error fetching followers:', error);
     return [];
@@ -295,21 +294,17 @@ export async function fetchFollowing(
   page: number = 1,
   limit: number = 20
 ): Promise<FollowItem[]> {
+  const searchParams = new URLSearchParams({
+    account,
+    type: 'following',
+    page: page.toString(),
+    limit: limit.toString(),
+  });
   try {
-    const searchParams = new URLSearchParams({
-      account,
-      type: 'following',
-      page: page.toString(),
-      limit: limit.toString(),
+    const { data } = await cachedFetch<FollowItem[]>(`/api/steem/followers?${searchParams.toString()}`, {
+      ...SWR.followers,
     });
-
-    const response = await fetch(`/api/steem/followers?${searchParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch following: ${response.statusText}`);
-    }
-
-    const following = await response.json();
-    return following as FollowItem[];
+    return data;
   } catch (error) {
     console.error('Error fetching following:', error);
     return [];
@@ -332,16 +327,13 @@ export interface UnreadNotificationsResponse {
 export async function fetchUnreadNotificationsCount(
   account: string
 ): Promise<UnreadNotificationsResponse> {
+  const searchParams = new URLSearchParams({ account });
   try {
-    const searchParams = new URLSearchParams({ account });
-    const response = await fetch(`/api/steem/unread-notifications?${searchParams.toString()}`);
-    
-    if (!response.ok) {
-      throw new Error(`Failed to fetch unread notifications: ${response.statusText}`);
-    }
-
-    const result = await response.json();
-    return result as UnreadNotificationsResponse;
+    const { data } = await cachedFetch<UnreadNotificationsResponse>(
+      `/api/steem/unread-notifications?${searchParams.toString()}`,
+      { ...SWR.notifications }
+    );
+    return data;
   } catch (error) {
     console.error('Error fetching unread notifications count:', error);
     return {
@@ -385,19 +377,13 @@ export interface CommunitySubscription {
 export async function fetchUserSubscriptions(
   account: string
 ): Promise<CommunitySubscription[]> {
+  const searchParams = new URLSearchParams({ account, type: 'subscriptions' });
   try {
-    const searchParams = new URLSearchParams({
-      account,
-      type: 'subscriptions',
-    });
-
-    const response = await fetch(`/api/steem/communities?${searchParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch subscriptions: ${response.statusText}`);
-    }
-
-    const subscriptions = await response.json();
-    return subscriptions as CommunitySubscription[];
+    const { data } = await cachedFetch<CommunitySubscription[]>(
+      `/api/steem/communities?${searchParams.toString()}`,
+      { ...SWR.communities }
+    );
+    return data;
   } catch (error) {
     console.error('Error fetching user subscriptions:', error);
     return [];
@@ -413,20 +399,17 @@ export async function fetchCommunities(params: {
   sort?: string;
   limit?: number;
 } = {}): Promise<CommunitySubscription[]> {
+  const searchParams = new URLSearchParams();
+  if (params.observer) searchParams.set('observer', params.observer);
+  if (params.query) searchParams.set('query', params.query);
+  if (params.sort) searchParams.set('sort', params.sort);
+  if (params.limit) searchParams.set('limit', params.limit.toString());
   try {
-    const searchParams = new URLSearchParams();
-    if (params.observer) searchParams.set('observer', params.observer);
-    if (params.query) searchParams.set('query', params.query);
-    if (params.sort) searchParams.set('sort', params.sort);
-    if (params.limit) searchParams.set('limit', params.limit.toString());
-
-    const response = await fetch(`/api/steem/communities?${searchParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch communities: ${response.statusText}`);
-    }
-
-    const communities = await response.json();
-    return communities as CommunitySubscription[];
+    const { data } = await cachedFetch<CommunitySubscription[]>(
+      `/api/steem/communities?${searchParams.toString()}`,
+      { ...SWR.communities }
+    );
+    return data;
   } catch (error) {
     console.error('Error fetching communities:', error);
     return [];
@@ -460,19 +443,13 @@ export interface CommunitySubscriber {
 export async function fetchCommunityRoles(
   community: string
 ): Promise<CommunityRole[]> {
+  const searchParams = new URLSearchParams({ community, type: 'roles' });
   try {
-    const searchParams = new URLSearchParams({
-      community,
-      type: 'roles',
-    });
-
-    const response = await fetch(`/api/steem/community-roles?${searchParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch community roles: ${response.statusText}`);
-    }
-
-    const roles = await response.json();
-    return roles as CommunityRole[];
+    const { data } = await cachedFetch<CommunityRole[]>(
+      `/api/steem/community-roles?${searchParams.toString()}`,
+      { ...SWR.communityRoles }
+    );
+    return data;
   } catch (error) {
     console.error('Error fetching community roles:', error);
     return [];
@@ -485,19 +462,13 @@ export async function fetchCommunityRoles(
 export async function fetchCommunitySubscribers(
   community: string
 ): Promise<CommunitySubscriber[]> {
+  const searchParams = new URLSearchParams({ community, type: 'subscribers' });
   try {
-    const searchParams = new URLSearchParams({
-      community,
-      type: 'subscribers',
-    });
-
-    const response = await fetch(`/api/steem/community-roles?${searchParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch community subscribers: ${response.statusText}`);
-    }
-
-    const subscribers = await response.json();
-    return subscribers as CommunitySubscriber[];
+    const { data } = await cachedFetch<CommunitySubscriber[]>(
+      `/api/steem/community-roles?${searchParams.toString()}`,
+      { ...SWR.communityRoles }
+    );
+    return data;
   } catch (error) {
     console.error('Error fetching community subscribers:', error);
     return [];

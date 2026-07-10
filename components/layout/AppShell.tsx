@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Header } from "@/components/layout/Header";
+import { DegradationBanner } from "@/components/layout/DegradationBanner";
 import { GlobalModals } from "@/components/modules/GlobalModals";
 import { ThemeSync } from "@/components/layout/ThemeSync";
 
@@ -19,6 +20,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <ThemeSync />
       <Header />
+      <DegradationBanner />
       <GlobalModals />
       <main className="flex flex-1 flex-col px-0 pb-8 pt-4 md:pb-0">
         {children}

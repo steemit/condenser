@@ -1,6 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useMemo } from 'react';
+import MarkdownIt from 'markdown-it';
+import sanitizeHtml from 'sanitize-html';
+import htmlReady from '@/lib/html-ready';
+import sanitizeConfig from '@/lib/sanitize-config';
 
 interface MarkdownViewerProps {
   text: string;
@@ -9,11 +13,28 @@ interface MarkdownViewerProps {
   hideImages?: boolean;
 }
 
+// Markdown→HTML renderer. html:true so author HTML passes through to sanitize;
+// breaks:true so single newlines render as <br> (Steemit's markdown dialect).
+// Uses markdown-it (actively maintained, CommonMark-spec) — replaces the
+// unmaintained remarkable, with an identical options surface.
+const md = new MarkdownIt({
+  html: true,
+  breaks: true,
+  linkify: false,
+  typographer: false,
+  quotes: '“”‘’',
+});
+
 /**
- * MarkdownViewer component
- * Renders markdown content as HTML
- * Simplified version migrated from legacy/src/app/components/cards/MarkdownViewer.jsx
- * TODO: Add full markdown rendering with remarkable, HtmlReady, and sanitize-html
+ * MarkdownViewer — renders post-body markdown as sanitized, proxied HTML.
+ *
+ * Pipeline (order is security-critical):
+ *   1. markdown-it: markdown → HTML
+ *   2. HtmlReady:  URL normalization + link/mention/#tag linkify + image proxy
+ *   3. sanitize-html (SanitizeConfig): XSS filter — allowedTags/Attributes,
+ *      iframe whitelist, link/image hardening.
+ *
+ * Ported from master's MarkdownViewer.jsx, adapted to the next branch.
  */
 export default function MarkdownViewer({
   text,
@@ -21,54 +42,56 @@ export default function MarkdownViewer({
   large = false,
   hideImages = false,
 }: MarkdownViewerProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const html = useMemo(() => {
+    if (!text) return '';
 
-  useEffect(() => {
-    if (!containerRef.current || !text) return;
+    let body = text;
 
-    // Basic markdown to HTML conversion
-    // TODO: Replace with proper markdown renderer (remarkable)
-    let html = text
-      // Headers
-      .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-      .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-      .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-      // Bold
-      .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-      .replace(/__(.*?)__/gim, '<strong>$1</strong>')
-      // Italic
-      .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-      .replace(/_(.*?)_/gim, '<em>$1</em>')
-      // Links
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-      // Line breaks
-      .replace(/\n\n/gim, '</p><p>')
-      .replace(/\n/gim, '<br>');
-
-    // Wrap in paragraph if not already wrapped
-    if (!html.startsWith('<')) {
-      html = `<p>${html}</p>`;
+    // Detect raw-HTML posts (wrapped in <html>…</html> or a leading <p>).
+    let isHtml = false;
+    const m = body.match(/^<html>([\S\s]*)<\/html>$/);
+    if (m && m.length === 2) {
+      isHtml = true;
+      body = m[1];
+    } else if (/^<p>[\S\s]*<\/p>/.test(body)) {
+      isHtml = true;
     }
 
-    // Handle images
-    if (hideImages) {
-      html = html.replace(/<img[^>]*>/gi, (match) => {
-        const srcMatch = match.match(/src="([^"]+)"/);
-        return srcMatch ? `<span>[Image: ${srcMatch[1]}]</span>` : match;
-      });
+    // Strip HTML comments ("JS-DOS" mitigation).
+    body = body.replace(/<!--([\s\S]+?)(-->|$)/g, '(html comment removed: $1)');
+
+    // 1. markdown → HTML (skip for raw-HTML posts).
+    let rendered = isHtml ? body : md.render(body);
+
+    // 2. HtmlReady mutation (linkify, proxify images, wrap iframes, …).
+    rendered = htmlReady(rendered, { hideImages }).html;
+
+    // 3. sanitize-html (XSS filter + iframe whitelist).
+    const sanitizeErrors: string[] = [];
+    const clean = sanitizeHtml(
+      rendered,
+      sanitizeConfig({ large, highQualityPost: true, sanitizeErrors })
+    );
+
+    if (sanitizeErrors.length > 0) {
+      console.warn('MarkdownViewer sanitize errors:', sanitizeErrors);
     }
 
-    containerRef.current.innerHTML = html;
-  }, [text, hideImages]);
+    // Secondary trap: refuse to render any <script> that slipped through.
+    if (/<\s*script/gi.test(clean)) {
+      console.error('Refusing to render script tag in post text');
+      return '';
+    }
+    return clean;
+  }, [text, large, hideImages]);
 
   const cn = `MarkdownViewer ${className} ${large ? '' : 'MarkdownViewer--small'}`;
 
   return (
     <div
-      ref={containerRef}
       className={cn}
       style={{ wordBreak: 'break-word' }}
+      dangerouslySetInnerHTML={{ __html: html }}
     />
   );
 }
-

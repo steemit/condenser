@@ -1,8 +1,8 @@
 /**
  * HtmlReady — HTML mutation/normalization layer for post bodies.
  *
- * Ported from master's src/shared/HtmlReady.js, scoped to the next branch MVP.
- * Runs AFTER remarkable (markdown→HTML) and BEFORE sanitize-html.
+ * Ported from master's src/shared/HtmlReady.js. Runs AFTER markdown-it
+ * (markdown→HTML) and BEFORE sanitize-html.
  *
  * What it does:
  *  - link():  normalize <a> href protocols, unlink obvious phishing.
@@ -10,18 +10,16 @@
  *  - img():   normalize IPFS prefixes, force https, wrap in clickable <a>.
  *  - linkify():convert #tags and @mentions in text to links; turn naked image
  *             URLs into <img>; linkify naked URLs.
+ *  - embed*Node(): replace naked YouTube/Vimeo/Twitch/DTube/3Speak URLs with
+ *             `~~~ embed: ~~~` placeholders (rendered as players downstream).
  *  - proxifyImages(): prepend the image proxy to non-local <img> src.
- *
- * NOT ported to MVP (video embed replacement chains): the `~~~ embed ~~~`
- * processing for YouTube/Vimeo/Twitch/DTube/3Speak. sanitize-config's iframe
- * whitelist already handles those safely; the rich-component rendering is a
- * separate enhancement. Phishing detection is reduced to a basic href/text
- * mismatch heuristic (master used an external Phishing module).
  */
 
 import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
 import linksRe, { any as linksAny } from '@/lib/media/links';
 import { proxifyImageUrl } from '@/lib/media/proxify-url';
+import { looksPhishy } from '@/lib/phishing';
+import { validateAccountName } from '@/lib/chain-validation';
 
 const PHISHY_MESSAGE = '(Warning: link is a possible phishing attempt)';
 
@@ -63,28 +61,6 @@ interface HtmlReadyOptions {
   isProxifyImages?: boolean;
 }
 
-/** Minimal account-name validation: 3-16 chars, lowercase, .-_ allowed. */
-function validateAccountName(name: string): string | null {
-  if (!name) return 'Account name should not be empty.';
-  const len = name.length;
-  if (len < 3) return 'Account name should be longer.';
-  if (len > 16) return 'Account name should be shorter.';
-  if (/[A-Z]/.test(name)) return 'Account name should be lowercase.';
-  if (/^[^a-z]/.test(name)) return 'Account name should start with a letter.';
-  if (/[0-9-]$/.test(name)) return 'Account name should end in a letter.';
-  const match = name.match(/[^\sa-z0-9.-]/);
-  if (match) return `Invalid character: ${match[0]}.`;
-  const dbl = name.match(/\.\.|\--|_-/);
-  if (dbl) return `Account name should have only one ${dbl[0][0]} in a row.`;
-  if (/\./.test(name)) {
-    const segments = name.split('.');
-    if (segments.length > 2) return 'Account name should have only one dot.';
-    const lastSegment = segments[1];
-    if (!lastSegment) return 'Account name should end with a letter.';
-  }
-  return null;
-}
-
 /**
  * Parse an HTML fragment string and return its root element (documentElement),
  * not the Document itself. domParser.parseFromString yields a Document
@@ -108,7 +84,10 @@ export default function htmlReady(
     links: new Set(),
   };
   try {
-    const doc = domParser.parseFromString(`<html>${html}</html>`, 'text/html');
+    const doc = domParser.parseFromString(
+      preprocessHtml(`<html>${html}</html>`),
+      'text/html'
+    );
     traverse(doc, state);
     if (mutate) {
       if (hideImages) {
@@ -119,6 +98,9 @@ export default function htmlReady(
           if (image.parentNode) image.parentNode.replaceChild(pre, image);
         }
       } else if (isProxifyImages) {
+        // Historical note (master): `isProxifyImages` disables proxying, but we
+        // still strip legacy proxy shells like `https://{imagehoster}/{dims}/…`
+        // so cross-environment chain data doesn't keep a wrong proxy prefix.
         stripLegacyProxyImages(doc);
       } else {
         proxifyImages(doc);
@@ -143,6 +125,12 @@ export default function htmlReady(
       links: new Set(),
     };
   }
+}
+
+function preprocessHtml(html: string): string {
+  // Replace 3Speak image/anchor combos (as produced by the 3Speak dApp)
+  // with an embed placeholder before parsing.
+  return embedThreeSpeakNode(html, null, null);
 }
 
 function traverse(node: AnyNode, state: HtmlReadyState, depth = 0): void {
@@ -172,12 +160,13 @@ function link(state: HtmlReadyState, child: AnyNode): void {
     child.setAttribute('href', 'https://' + url);
   }
 
-  // Unlink obvious phishing: text claims steemit.com but href doesn't.
+  // Unlink potential phishing attempts.
   const text = (child as unknown as { textContent?: string }).textContent || '';
   if (
-    url.indexOf('#') !== 0 &&
-    text.match(/(www\.)?steemit\.com/i) &&
-    !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/i)
+    (url.indexOf('#') !== 0 && // Allow in-page links
+      text.match(/(www\.)?steemit\.com/i) &&
+      !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/i)) ||
+    looksPhishy(url)
   ) {
     const phishyDiv = child.ownerDocument.createElement('div');
     phishyDiv.textContent = `${text} / ${url}`;
@@ -191,7 +180,11 @@ function link(state: HtmlReadyState, child: AnyNode): void {
 function iframe(state: HtmlReadyState, child: AnyNode): void {
   const url = child.getAttribute('src');
   if (url) {
-    state.links.add(url);
+    const yt = youTubeId(url);
+    if (yt) {
+      state.links.add(yt.url);
+      state.images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg');
+    }
   }
   if (!state.mutate) return;
 
@@ -284,8 +277,15 @@ function linkifyNode(child: AnyNode, state: HtmlReadyState): void {
       : '';
     if (tag === 'code' || tag === 'a') return;
 
-    const data = child.data;
-    if (!data) return;
+    const data0 = child.data;
+    if (!data0) return;
+
+    // Replace naked video URLs with `~~~ embed: ~~~` placeholders first.
+    child = embedYouTubeNode(child, state.links, state.images);
+    child = embedVimeoNode(child, state.links);
+    child = embedTwitchNode(child, state.links);
+    child = embedDTubeNode(child, state.links);
+    child = embedThreeSpeakNode(child, state.links, state.images);
 
     const serialized = xmlSerializer.serializeToString(child);
     const content = linkify(
@@ -314,14 +314,14 @@ function linkify(
   links: Set<string>
 ): string {
   // hashtag
-  content = content.replace(/(^|\s)(#[-a-z\d]+)/gi, (tagStr) => {
-    if (/#[\d]+$/.test(tagStr)) return tagStr; // Don't allow numbers-only tags
-    const space = /^\s/.test(tagStr) ? tagStr[0] : '';
-    const tag2 = tagStr.trim().substring(1);
+  content = content.replace(/(^|\s)(#[-a-z\d]+)/gi, (tag) => {
+    if (/#[\d]+$/.test(tag)) return tag; // Don't allow numbers-only tags
+    const space = /^\s/.test(tag) ? tag[0] : '';
+    const tag2 = tag.trim().substring(1);
     const tagLower = tag2.toLowerCase();
     if (hashtags) hashtags.add(tagLower);
-    if (!mutate) return tagStr;
-    return space + `<a href="/trending/${tagLower}">${tagStr.trim()}</a>`;
+    if (!mutate) return tag;
+    return space + `<a href="/trending/${tagLower}">${tag}</a>`;
   });
 
   // usertag (mention)
@@ -344,11 +344,275 @@ function linkify(
       if (images) images.add(ln);
       return `<img src="${ipfsPrefix(ln)}" />`;
     }
+
+    // do not linkify .exe or .zip urls
     if (/\.(zip|exe)$/i.test(ln)) return ln;
+
+    // do not linkify phishy links
+    if (looksPhishy(ln)) {
+      return `<div title='${PHISHY_MESSAGE}' class='phishy'>${ln}</div>`;
+    }
+
     if (links) links.add(ln);
     return `<a href="${ipfsPrefix(ln)}">${ln}</a>`;
   });
   return content;
+}
+
+// ---------------------------------------------------------------------------
+// Video embed chains — replace naked URLs in text nodes with
+// `~~~ embed:{id} {type} [{startTime}] ~~~` placeholders. MarkdownViewer
+// splits on these and renders the actual players.
+// ---------------------------------------------------------------------------
+
+interface YouTubeInfo {
+  id: string;
+  url: string;
+  startTime: string | number;
+  thumbnail: string;
+}
+
+/** @return {id, url, startTime, thumbnail} or null */
+function youTubeId(data: string): YouTubeInfo | null {
+  if (!data) return null;
+
+  const m1 = data.match(linksRe.youTube);
+  const url = m1 ? m1[0] : null;
+  if (!url) return null;
+
+  const m2 = url.match(linksRe.youTubeId);
+  const id = m2 && m2.length >= 2 ? m2[1] : null;
+  if (!id) return null;
+
+  const startTime = url.match(/t=(\d+)s?/);
+
+  return {
+    id,
+    url,
+    startTime: startTime ? startTime[1] : 0,
+    thumbnail: 'https://img.youtube.com/vi/' + id + '/0.jpg',
+  };
+}
+
+function embedYouTubeNode(
+  child: AnyNode,
+  links: Set<string> | null,
+  images: Set<string> | null
+): AnyNode {
+  try {
+    const data = child.data;
+    const yt = youTubeId(data);
+    if (!yt) return child;
+
+    if (yt.startTime) {
+      child.data = data.replace(
+        yt.url,
+        `~~~ embed:${yt.id} youtube ${yt.startTime} ~~~`
+      );
+    } else {
+      child.data = data.replace(yt.url, `~~~ embed:${yt.id} youtube ~~~`);
+    }
+
+    if (links) links.add(yt.url);
+    if (images) images.add(yt.thumbnail);
+  } catch (error) {
+    console.error('yt_node', error);
+  }
+  return child;
+}
+
+interface ThreeSpeakInfo {
+  id: string;
+  fullId: string;
+  url: string;
+  thumbnail: string;
+}
+
+/** @return {id, fullId, url, thumbnail} or null */
+function getThreeSpeakId(data: string): ThreeSpeakInfo | null {
+  if (!data) return null;
+
+  const match = data.match(linksRe.threespeak);
+  const url = match ? match[0] : null;
+  if (!match || !url) return null;
+  const fullId = match[1];
+  const id = fullId.split('/').pop() as string;
+
+  return {
+    id,
+    fullId,
+    url,
+    thumbnail: `https://img.3speakcontent.online/${id}/post.png`,
+  };
+}
+
+function embedThreeSpeakNode(
+  child: AnyNode,
+  links: Set<string> | null,
+  images: Set<string> | null
+): AnyNode {
+  try {
+    if (typeof child === 'string') {
+      // String input: preprocess HTML, replacing the image/anchor combo
+      // created by the 3Speak dApp.
+      const threespeakId = getThreeSpeakId(child);
+      if (threespeakId) {
+        child = child.replace(
+          linksRe.threespeakImageLink,
+          `~~~ embed:${threespeakId.fullId} threespeak ~~~`
+        );
+      }
+    } else {
+      // Text node input: replace a bare URL.
+      const data = child.data;
+      const threespeakId = getThreeSpeakId(data);
+      if (!threespeakId) return child;
+
+      child.data = data.replace(
+        threespeakId.url,
+        `~~~ embed:${threespeakId.fullId} threespeak ~~~`
+      );
+
+      if (links) links.add(threespeakId.url);
+      if (images) images.add(threespeakId.thumbnail);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  return child;
+}
+
+interface VimeoInfo {
+  id: string;
+  url: string;
+  startTime: string | number;
+  canonical: string;
+}
+
+/** @return {id, url, startTime, canonical} or null */
+function vimeoId(data: string): VimeoInfo | null {
+  if (!data) return null;
+  const m = data.match(linksRe.vimeo);
+  if (!m || m.length < 2) return null;
+
+  const startTime = (m.input as string).match(/t=(\d+)s?/);
+
+  return {
+    id: m[1],
+    url: m[0],
+    startTime: startTime ? startTime[1] : 0,
+    canonical: `https://player.vimeo.com/video/${m[1]}`,
+  };
+}
+
+function embedVimeoNode(
+  child: AnyNode,
+  links: Set<string> | null
+): AnyNode {
+  try {
+    const data = child.data;
+    const vimeo = vimeoId(data);
+    if (!vimeo) return child;
+
+    const vimeoRegex = new RegExp(`${vimeo.url}(#t=${vimeo.startTime}s?)?`);
+    if (Number(vimeo.startTime) > 0) {
+      child.data = data.replace(
+        vimeoRegex,
+        `~~~ embed:${vimeo.id} vimeo ${vimeo.startTime} ~~~`
+      );
+    } else {
+      child.data = data.replace(
+        vimeoRegex,
+        `~~~ embed:${vimeo.id} vimeo ~~~`
+      );
+    }
+
+    if (links) links.add(vimeo.canonical);
+  } catch (error) {
+    console.error('vimeo_embed', error);
+  }
+  return child;
+}
+
+interface TwitchInfo {
+  id: string;
+  url: string;
+  canonical: string;
+}
+
+/** @return {id, url, canonical} or null */
+function twitchId(data: string): TwitchInfo | null {
+  if (!data) return null;
+  const m = data.match(linksRe.twitch);
+  if (!m || m.length < 3) return null;
+
+  return {
+    id: m[1] === 'videos' ? `?video=${m[2]}` : `?channel=${m[2]}`,
+    url: m[0],
+    canonical:
+      m[1] === 'videos'
+        ? `https://player.twitch.tv/?video=${m[2]}`
+        : `https://player.twitch.tv/?channel=${m[2]}`,
+  };
+}
+
+function embedTwitchNode(
+  child: AnyNode,
+  links: Set<string> | null
+): AnyNode {
+  try {
+    const data = child.data;
+    const twitch = twitchId(data);
+    if (!twitch) return child;
+
+    child.data = data.replace(
+      twitch.url,
+      `~~~ embed:${twitch.id} twitch ~~~`
+    );
+
+    if (links) links.add(twitch.canonical);
+  } catch (error) {
+    console.error('twitch_error', error);
+  }
+  return child;
+}
+
+interface DTubeInfo {
+  id: string;
+  url: string;
+  canonical: string;
+}
+
+/** @return {id, url, canonical} or null */
+function dtubeId(data: string): DTubeInfo | null {
+  if (!data) return null;
+  const m = data.match(linksRe.dtube);
+  if (!m || m.length < 2) return null;
+
+  return {
+    id: m[1],
+    url: m[0],
+    canonical: `https://emb.d.tube/#!/${m[1]}`,
+  };
+}
+
+function embedDTubeNode(
+  child: AnyNode,
+  links: Set<string> | null
+): AnyNode {
+  try {
+    const data = child.data;
+    const dtube = dtubeId(data);
+    if (!dtube) return child;
+
+    child.data = data.replace(dtube.url, `~~~ embed:${dtube.id} dtube ~~~`);
+
+    if (links) links.add(dtube.canonical);
+  } catch (error) {
+    console.error('dtube_embed', error);
+  }
+  return child;
 }
 
 function ipfsPrefix(url: string): string {

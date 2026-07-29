@@ -46,6 +46,15 @@ export default function PostFull({ post }: PostFullProps) {
   const postUrl = `/${post.category}/@${post.author}/${post.permlink}`;
   const createdDate = new Date(post.created);
 
+  // Legacy parity (PostFull.jsx): high_quality_post = payout > 10.0;
+  // noImage = post.stats.gray (low-rated posts hide images behind a banner).
+  const payout =
+    typeof post.payout === 'number'
+      ? post.payout
+      : Number.parseFloat(post.pending_payout_value || '0') || 0;
+  const highQualityPost = payout > 10.0;
+  const noImage = Boolean(post.stats?.gray);
+
   return (
     <article className="post-full">
       <header className="post-full__header mb-6">
@@ -93,7 +102,12 @@ export default function PostFull({ post }: PostFullProps) {
       </header>
 
       <div className="post-full__body prose max-w-none mb-8">
-        <MarkdownViewer text={post.body || ''} large />
+        <MarkdownViewer
+          text={post.body || ''}
+          large
+          highQualityPost={highQualityPost}
+          noImage={noImage}
+        />
       </div>
 
       <footer className="post-full__footer mt-8 pt-6 border-t border-gray-200">

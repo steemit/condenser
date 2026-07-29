@@ -1,16 +1,24 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import MarkdownIt from 'markdown-it';
 import sanitizeHtml from 'sanitize-html';
 import htmlReady from '@/lib/html-ready';
-import sanitizeConfig from '@/lib/sanitize-config';
+import sanitizeConfig, { noImageText } from '@/lib/sanitize-config';
+import YoutubePreview from '@/components/elements/YoutubePreview';
 
 interface MarkdownViewerProps {
   text: string;
   className?: string;
   large?: boolean;
+  /** When false, external links get rel="nofollow noopener". */
+  highQualityPost?: boolean;
+  /** When true, images are replaced with a low-ratings notice until shown. */
+  noImage?: boolean;
+  /** Whether to replace images with just a span containing the src url. */
   hideImages?: boolean;
+  /** Strip legacy proxy shells without adding a new proxy prefix. */
+  isProxifyImages?: boolean;
 }
 
 // Markdown→HTML renderer. html:true so author HTML passes through to sanitize;
@@ -30,20 +38,29 @@ const md = new MarkdownIt({
  *
  * Pipeline (order is security-critical):
  *   1. markdown-it: markdown → HTML
- *   2. HtmlReady:  URL normalization + link/mention/#tag linkify + image proxy
+ *   2. HtmlReady:  video embed placeholders + URL normalization +
+ *      link/mention/#tag linkify + image proxy
  *   3. sanitize-html (SanitizeConfig): XSS filter — allowedTags/Attributes,
- *      iframe whitelist, link/image hardening.
+ *      iframe whitelist, link/image hardening
+ *   4. `~~~ embed: ~~~` placeholders are split out and rendered as players
+ *      (YoutubePreview for YouTube, iframes for the rest).
  *
- * Ported from master's MarkdownViewer.jsx, adapted to the next branch.
+ * Ported from master's src/app/components/cards/MarkdownViewer.jsx.
  */
 export default function MarkdownViewer({
   text,
   className = '',
   large = false,
+  highQualityPost = true,
+  noImage = false,
   hideImages = false,
+  isProxifyImages = false,
 }: MarkdownViewerProps) {
-  const html = useMemo(() => {
-    if (!text) return '';
+  // Low-ratings posts hide images until the user clicks the banner.
+  const [allowNoImage, setAllowNoImage] = useState(true);
+
+  const { html, isHtml } = useMemo(() => {
+    if (!text) return { html: '', isHtml: false };
 
     let body = text;
 
@@ -63,14 +80,19 @@ export default function MarkdownViewer({
     // 1. markdown → HTML (skip for raw-HTML posts).
     let rendered = isHtml ? body : md.render(body);
 
-    // 2. HtmlReady mutation (linkify, proxify images, wrap iframes, …).
-    rendered = htmlReady(rendered, { hideImages }).html;
+    // 2. HtmlReady mutation (embeds, linkify, proxify images, wrap iframes, …).
+    rendered = htmlReady(rendered, { hideImages, isProxifyImages }).html;
 
     // 3. sanitize-html (XSS filter + iframe whitelist).
     const sanitizeErrors: string[] = [];
     const clean = sanitizeHtml(
       rendered,
-      sanitizeConfig({ large, highQualityPost: true, sanitizeErrors })
+      sanitizeConfig({
+        large,
+        highQualityPost,
+        noImage: noImage && allowNoImage,
+        sanitizeErrors,
+      })
     );
 
     if (sanitizeErrors.length > 0) {
@@ -80,18 +102,113 @@ export default function MarkdownViewer({
     // Secondary trap: refuse to render any <script> that slipped through.
     if (/<\s*script/gi.test(clean)) {
       console.error('Refusing to render script tag in post text');
-      return '';
+      return { html: '', isHtml };
     }
-    return clean;
-  }, [text, large, hideImages]);
+    return { html: clean, isHtml };
+  }, [text, large, highQualityPost, noImage, hideImages, isProxifyImages, allowNoImage]);
 
-  const cn = `MarkdownViewer ${className} ${large ? '' : 'MarkdownViewer--small'}`;
+  const noImageActive = html.indexOf(noImageText) !== -1;
+
+  // In addition to inserting the youtube component, splitting sections allows
+  // react to compare separately, preventing excessive re-rendering.
+  let idx = 0;
+  const sections: React.ReactNode[] = [];
+
+  // HtmlReady inserts `~~~ embed:${id} ${type} [${startTime}] ~~~`
+  for (let section of html.split('~~~ embed:')) {
+    const match = section.match(
+      /^([A-Za-z0-9?=\_\-\/\.]+) (youtube|vimeo|twitch|dtube|threespeak)\s?(\d+)? ~~~/
+    );
+    if (match && match.length >= 3) {
+      const id = match[1];
+      const type = match[2];
+      const startTime = match[3] ? parseInt(match[3], 10) : 0;
+      const w = large ? 640 : 480;
+      const h = large ? 360 : 270;
+
+      if (type === 'youtube') {
+        sections.push(
+          <YoutubePreview
+            key={id}
+            width={w}
+            height={h}
+            youTubeId={id}
+            startTime={startTime}
+            frameBorder="0"
+            allowFullScreen="true"
+          />
+        );
+      } else {
+        let url: string | null = null;
+        let title = '';
+        if (type === 'threespeak') {
+          url = `https://3speak.online/embed?v=${id}`;
+          title = `ThreeSpeak video ${id}`;
+        } else if (type === 'vimeo') {
+          url = `https://player.vimeo.com/video/${id}#t=${startTime}s`;
+          title = `Vimeo video ${id}`;
+        } else if (type === 'twitch') {
+          url = `https://player.twitch.tv/${id}`;
+          title = `Twitch video ${id}`;
+        } else if (type === 'dtube') {
+          url = `https://emb.d.tube/#!/${id}`;
+          title = `DTube video ${id}`;
+        } else {
+          console.error('MarkdownViewer unknown embed type', type);
+        }
+        if (url) {
+          sections.push(
+            <div className="videoWrapper" key={id}>
+              <iframe
+                src={url}
+                width={w}
+                height={h}
+                frameBorder="0"
+                // @ts-expect-error legacy non-standard fullscreen attributes
+                webkitallowfullscreen="true"
+                mozallowfullscreen="true"
+                allowFullScreen
+                title={title}
+              />
+            </div>
+          );
+        }
+      }
+      if (match[3]) {
+        section = section.substring(`${id} ${type} ${startTime} ~~~`.length);
+      } else {
+        section = section.substring(`${id} ${type} ~~~`.length);
+      }
+      if (section === '') continue;
+    }
+    sections.push(
+      <div key={idx++} dangerouslySetInnerHTML={{ __html: section }} />
+    );
+  }
+
+  const cn =
+    'Markdown' +
+    (className ? ` ${className}` : '') +
+    (isHtml ? ' html' : '') +
+    (large ? '' : ' MarkdownViewer--small');
 
   return (
-    <div
-      className={cn}
-      style={{ wordBreak: 'break-word' }}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
+    <div className={'MarkdownViewer ' + cn} style={{ wordBreak: 'break-word' }}>
+      {sections}
+      {noImageActive && allowNoImage && (
+        <div
+          onClick={() => setAllowNoImage(false)}
+          className="MarkdownViewer__negative_group"
+        >
+          Images were hidden due to low ratings
+          <button
+            style={{ marginBottom: 0 }}
+            className="button hollow tiny float-right"
+          >
+            Show
+          </button>
+        </div>
+      )}
+    </div>
   );
 }

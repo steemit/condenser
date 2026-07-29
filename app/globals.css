@@ -131,3 +131,77 @@
     @apply font-sans;
   }
 }
+/* Post-body rendering styles (ported from legacy markdown.scss /
+   MarkdownViewer.scss / YoutubePreview.scss) */
+.MarkdownViewer {
+  height: 100%;
+  overflow: hidden;
+}
+
+.Markdown {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: none;
+}
+
+.Markdown div.videoWrapper {
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.2%;
+  position: relative;
+}
+
+.Markdown div.videoWrapper iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+/* used for comments */
+.Markdown.MarkdownViewer--small img {
+  max-width: 400px;
+  max-height: 400px;
+}
+
+.Markdown.MarkdownViewer--small div.videoWrapper {
+  max-width: 480px;
+  padding-bottom: 270px;
+}
+
+/* YoutubePreview thumbnail + play button */
+.youtube {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: all 200ms ease-out;
+  cursor: pointer;
+}
+
+.youtube .play {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0.8;
+  transition: all 0.2s ease-out;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='rgba(0,0,0,0.6)'/%3E%3Cpolygon points='26,20 46,32 26,44' fill='white'/%3E%3C/svg%3E") no-repeat center center;
+  background-size: 64px 64px;
+}
+
+.youtube .play:hover {
+  opacity: 1;
+}
+
+/* Low-ratings banner */
+.MarkdownViewer__negative_group {
+  color: crimson;
+  border-top: 1px solid #cacaca;
+  padding-top: 1rem;
+}
+
+/* Phishing warning */
+.phishy {
+  color: crimson;
+}

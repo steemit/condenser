@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useAppSelector } from '@/store/hooks';
 import Comment, { Comment as CommentType } from './Comment';
 import PostEditor from '@/components/elements/PostEditor';
+import { ChevronDown } from 'lucide-react';
 
 interface CommentsListProps {
   comments: CommentType[];
@@ -15,157 +17,146 @@ interface CommentsListProps {
   onDelete?: (author: string, permlink: string) => void;
 }
 
+const PAGE_SIZE = 10;
+
+/** Legacy comment ordering (trending = payout desc, then rshares; gray sinks). */
+function sortComments(list: CommentType[], order: 'votes' | 'new' | 'trending') {
+  const sorted = [...list].sort((a, b) => {
+    if (order === 'new') {
+      return new Date(b.created).getTime() - new Date(a.created).getTime();
+    } else if (order === 'votes') {
+      const aVotes = a.active_votes?.filter((v) => v.weight > 0).length || 0;
+      const bVotes = b.active_votes?.filter((v) => v.weight > 0).length || 0;
+      return bVotes - aVotes;
+    }
+    const aPayout = parseFloat(a.pending_payout_value || '0');
+    const bPayout = parseFloat(b.pending_payout_value || '0');
+    if (aPayout !== bPayout) return bPayout - aPayout;
+    const aRshares = parseFloat(a.net_rshares || '0');
+    const bRshares = parseFloat(b.net_rshares || '0');
+    return bRshares - aRshares;
+  });
+  // Gray comments sink to the bottom (legacy behavior).
+  return sorted.sort(
+    (a, b) => Number(Boolean(a.stats?.gray)) - Number(Boolean(b.stats?.gray))
+  );
+}
+
+/** Build the nested comment tree (repliesData on every level). */
+function buildCommentTree(allComments: CommentType[]): CommentType[] {
+  const map = new Map<string, CommentType>();
+  const roots: CommentType[] = [];
+
+  allComments.forEach((c) => {
+    map.set(`${c.author}/${c.permlink}`, { ...c, repliesData: [] });
+  });
+
+  allComments.forEach((c) => {
+    const node = map.get(`${c.author}/${c.permlink}`)!;
+    if (c.parent_author && c.parent_permlink) {
+      const parent = map.get(`${c.parent_author}/${c.parent_permlink}`);
+      if (parent) {
+        parent.repliesData!.push(node);
+        return;
+      }
+    }
+    roots.push(node);
+  });
+
+  return roots;
+}
+
 /**
- * CommentsList component
- * Displays a list of comments with sorting and reply functionality
+ * CommentsList — legacy Post comments section: sort dropdown at top-right,
+ * first 10 comments with a green "LOAD MORE COMMENTS" button, reply editor
+ * at the top when logged in.
  */
 export default function CommentsList({
   comments,
   postAuthor,
   postPermlink,
-  postCategory,
   sortOrder = 'trending',
   onReply,
   onEdit,
   onDelete,
 }: CommentsListProps) {
-  const [showNewComment, setShowNewComment] = useState(false);
+  const username = useAppSelector((s) => s.user.current?.username);
   const [currentSortOrder, setCurrentSortOrder] = useState(sortOrder);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  // Build reply tree structure
-  const buildCommentTree = (allComments: CommentType[]): CommentType[] => {
-    const commentMap = new Map<string, CommentType>();
-    const rootComments: CommentType[] = [];
-
-    // First pass: create map of all comments
-    allComments.forEach((comment) => {
-      commentMap.set(`${comment.author}/${comment.permlink}`, {
-        ...comment,
-        replies: [],
-      });
-    });
-
-    // Second pass: build tree structure
-    allComments.forEach((comment) => {
-      const commentKey = `${comment.author}/${comment.permlink}`;
-      const commentWithReplies = commentMap.get(commentKey)!;
-
-      if (comment.parent_author && comment.parent_permlink) {
-        const parentKey = `${comment.parent_author}/${comment.parent_permlink}`;
-        const parent = commentMap.get(parentKey);
-        if (parent) {
-          if (!parent.replies) parent.replies = [];
-          parent.replies.push(commentKey);
-        }
-      } else {
-        // Root comment
-        rootComments.push(commentWithReplies);
-      }
-    });
-
-    return rootComments;
-  };
-
-  const rootComments = buildCommentTree(comments);
-
-  // Sort root comments
-  const sortedRootComments = [...rootComments].sort((a, b) => {
-    if (currentSortOrder === 'new') {
-      return new Date(b.created).getTime() - new Date(a.created).getTime();
-    } else if (currentSortOrder === 'votes') {
-      const aVotes = a.active_votes?.filter((v) => v.weight > 0).length || 0;
-      const bVotes = b.active_votes?.filter((v) => v.weight > 0).length || 0;
-      return bVotes - aVotes;
-    } else {
-      // trending
-      const aPayout = parseFloat(a.pending_payout_value || '0');
-      const bPayout = parseFloat(b.pending_payout_value || '0');
-      if (aPayout !== bPayout) return bPayout - aPayout;
-      const aRshares = parseFloat(a.net_rshares || '0');
-      const bRshares = parseFloat(b.net_rshares || '0');
-      return bRshares - aRshares;
-    }
-  });
-
-  const getRepliesForComment = (comment: CommentType): CommentType[] => {
-    if (!comment.replies || comment.replies.length === 0) return [];
-    return comments.filter((c) =>
-      comment.replies!.includes(`${c.author}/${c.permlink}`)
-    );
-  };
+  const rootComments = sortComments(buildCommentTree(comments), currentSortOrder);
+  const visibleRoots = rootComments.slice(0, visibleCount);
 
   const handleNewComment = (category?: string, body?: string) => {
     if (onReply && body) {
       onReply(postAuthor, postPermlink, body);
-      setShowNewComment(false);
     }
   };
 
   return (
-    <div className="comments-list mt-8 pt-8 border-t border-gray-200">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">
-          Comments ({comments.length})
-        </h2>
-
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600">Sort by:</label>
-            <select
-              value={currentSortOrder}
-              onChange={(e) =>
-                setCurrentSortOrder(e.target.value as 'votes' | 'new' | 'trending')
-              }
-              className="px-3 py-1 border border-gray-300 rounded-lg text-sm"
-            >
-              <option value="trending">Trending</option>
-              <option value="votes">Votes</option>
-              <option value="new">New</option>
-            </select>
-          </div>
-
-          <button
-            onClick={() => setShowNewComment(!showNewComment)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+    <div
+      className="Post_comments__content mx-auto mb-14 mt-8 max-w-[54rem] text-[92%]"
+      id="comments"
+    >
+      {/* sort control (legacy: top-right, "Sort by: <bold>") */}
+      <div className="Post__comments_sort_order mb-2 flex items-center justify-end gap-1 text-[94%]">
+        <span className="text-muted-foreground">Sort by:</span>
+        <span className="relative inline-flex items-center">
+          <select
+            value={currentSortOrder}
+            onChange={(e) =>
+              setCurrentSortOrder(e.target.value as 'votes' | 'new' | 'trending')
+            }
+            aria-label="Comment sort order"
+            className="cursor-pointer appearance-none bg-transparent pr-4 font-bold text-foreground outline-none"
           >
-            {showNewComment ? 'Cancel' : 'Add Comment'}
-          </button>
-        </div>
+            <option value="trending">Trending</option>
+            <option value="votes">Votes</option>
+            <option value="new">New</option>
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-0 size-3.5" aria-hidden />
+        </span>
       </div>
 
-      {/* New comment editor */}
-      {showNewComment && (
+      {/* top-level reply editor (legacy shows it when logged in) */}
+      {username && (
         <div className="mb-6">
-          <PostEditor
-            type="submit_comment"
-            onSuccess={handleNewComment}
-            onCancel={() => setShowNewComment(false)}
-          />
+          <PostEditor type="submit_comment" onSuccess={handleNewComment} />
         </div>
       )}
 
-      {/* Comments list */}
-      {sortedRootComments.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">
+      {visibleRoots.length === 0 ? (
+        <div className="py-12 text-center text-muted-foreground">
           <p>No comments yet. Be the first to comment!</p>
         </div>
       ) : (
-        <div className="space-y-4">
-          {sortedRootComments.map((comment) => (
+        <>
+          {visibleRoots.map((comment) => (
             <Comment
               key={`${comment.author}/${comment.permlink}`}
               comment={comment}
               depth={1}
               sortOrder={currentSortOrder}
-              replies={getRepliesForComment(comment)}
+              replies={comment.repliesData ?? []}
               onReply={onReply}
               onEdit={onEdit}
               onDelete={onDelete}
             />
           ))}
-        </div>
+
+          {rootComments.length > visibleCount && (
+            <div className="mt-6 text-center">
+              <button
+                type="button"
+                onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                className="comment-button rounded-[10px] bg-[#06d6a9] px-8 py-[15px] font-bold text-white"
+              >
+                LOAD MORE COMMENTS
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
 }
-

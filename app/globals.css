@@ -342,3 +342,16 @@
 .phishy {
   color: crimson;
 }
+
+/* Account avatar (legacy Userpic.scss). Size overrides are applied inline
+   or via utility classes at the usage site (24px feed, 48px post/comment). */
+.Userpic {
+  display: inline-block;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}

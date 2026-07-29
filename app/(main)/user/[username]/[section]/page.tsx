@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
 import {
@@ -130,6 +131,20 @@ export default function UserProfileSectionPage() {
 
   const isMyAccount = username === accountname;
 
+  const profileHeader = (
+    <UserProfileHeader
+      accountname={accountname}
+      profile={profile?.metadata?.profile || null}
+      currentUser={username}
+      stats={profile?.stats}
+      reputation={profile?.reputation}
+      postCount={profile?.post_count}
+      created={profile?.created}
+      active={profile?.active}
+      blacklists={profile?.blacklists}
+    />
+  );
+
   // Show loading state if profile is still loading
   if (profileLoading) {
     return (
@@ -167,15 +182,7 @@ export default function UserProfileSectionPage() {
 
     return (
       <FeedLayout centerClassName="md:max-w-4xl">
-        <UserProfileHeader
-          accountname={accountname}
-          profile={profile?.metadata?.profile || null}
-          currentUser={username}
-          stats={profile?.stats}
-          reputation={profile?.reputation}
-          postCount={profile?.post_count}
-          created={profile?.created}
-        />
+        {profileHeader}
         <div className="mt-8">
           <UserSettings 
             accountname={accountname} 
@@ -202,19 +209,19 @@ export default function UserProfileSectionPage() {
     const followType = section === 'followers' ? 'followers' : 'following';
     return (
       <FeedLayout centerClassName="md:max-w-4xl">
-        <UserProfileHeader
-          accountname={accountname}
-          profile={profile?.metadata?.profile || null}
-          currentUser={username}
-          stats={profile?.stats}
-          reputation={profile?.reputation}
-          postCount={profile?.post_count}
-          created={profile?.created}
-        />
-        <h2 className="mt-6 mb-6 text-2xl font-bold text-foreground">
+        {profileHeader}
+        <h3 className="mt-6 mb-4 text-lg font-bold text-foreground">
           {section === 'followers' ? 'Followers' : 'Following'}
-        </h2>
-        <FollowList accountname={accountname} type={followType} />
+        </h3>
+        <FollowList
+          accountname={accountname}
+          type={followType}
+          total={
+            section === 'followers'
+              ? profile?.stats?.followers
+              : profile?.stats?.following
+          }
+        />
       </FeedLayout>
     );
   }
@@ -222,15 +229,7 @@ export default function UserProfileSectionPage() {
   if (section === 'notifications') {
     return (
       <FeedLayout centerClassName="md:max-w-4xl lg:max-w-6xl">
-        <UserProfileHeader
-          accountname={accountname}
-          profile={profile?.metadata?.profile || null}
-          currentUser={username}
-          stats={profile?.stats}
-          reputation={profile?.reputation}
-          postCount={profile?.post_count}
-          created={profile?.created}
-        />
+        {profileHeader}
         <NotificationsList username={accountname} />
       </FeedLayout>
     );
@@ -239,18 +238,7 @@ export default function UserProfileSectionPage() {
   if (section === 'communities') {
     return (
       <FeedLayout centerClassName="md:max-w-4xl lg:max-w-6xl">
-        <UserProfileHeader
-          accountname={accountname}
-          profile={profile?.metadata?.profile || null}
-          currentUser={username}
-          stats={profile?.stats}
-          reputation={profile?.reputation}
-          postCount={profile?.post_count}
-          created={profile?.created}
-        />
-        <h2 className="mt-6 mb-6 text-2xl font-bold text-foreground">
-          Communities
-        </h2>
+        {profileHeader}
         <CommunitiesList accountname={accountname} />
       </FeedLayout>
     );
@@ -258,45 +246,15 @@ export default function UserProfileSectionPage() {
 
   return (
     <FeedLayout>
-      <UserProfileHeader
-        accountname={accountname}
-        profile={profile?.metadata?.profile || null}
-        currentUser={username}
-        stats={profile?.stats}
-        reputation={profile?.reputation}
-        postCount={profile?.post_count}
-        created={profile?.created}
-      />
-
-      <div className="mb-6 border-b border-border">
-        <nav className="flex flex-wrap gap-6">
-          {['blog', 'posts', 'comments', 'replies', 'payout'].map((tab) => (
-            <a
-              key={tab}
-              href={`/@${accountname}/${tab}`}
-              className={`border-b-2 px-1 py-4 text-sm font-medium transition-colors ${
-                section === tab
-                  ? "border-ring text-accent-foreground"
-                  : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
-              }`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </a>
-          ))}
-        </nav>
-      </div>
+      {profileHeader}
 
       {loading && posts.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 py-12">
           <p className="text-muted-foreground">Loading posts...</p>
         </div>
       ) : posts.length === 0 ? (
-        <div className="rounded-lg border border-border bg-muted/40 p-8 text-center">
-          <p className="text-muted-foreground">
-            {isMyAccount
-              ? "You haven't posted anything yet."
-              : `@${accountname} hasn't posted anything yet.`}
-          </p>
+        <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
+          {emptySectionText(section, accountname, isMyAccount)}
         </div>
       ) : (
         <PostsList
@@ -309,5 +267,52 @@ export default function UserProfileSectionPage() {
       )}
     </FeedLayout>
   );
+}
+
+/** Legacy UserProfile empty-state copy per section (UserProfile.jsx:23-69). */
+function emptySectionText(
+  section: string,
+  accountname: string,
+  isMyAccount: boolean
+): React.ReactNode {
+  switch (section) {
+    case 'replies':
+      return `@${accountname} hasn't had any replies yet.`;
+    case 'payout':
+      return 'No pending payouts.';
+    case 'comments':
+      return `@${accountname} hasn't made any comments yet.`;
+    case 'posts':
+      return `@${accountname} hasn't made any posts yet.`;
+    default:
+      break;
+  }
+  if (isMyAccount) {
+    return (
+      <span className="flex flex-col items-center gap-2">
+        <span>You haven&apos;t posted anything yet.</span>
+        <span className="flex flex-wrap justify-center gap-3">
+          <Link href="/communities" className="text-accent-foreground underline">
+            Explore Communities
+          </Link>
+          <Link href="/submit" className="text-accent-foreground underline">
+            Create a post
+          </Link>
+          <Link href="/trending" className="text-accent-foreground underline">
+            Trending Articles
+          </Link>
+          <a
+            href="https://steemit.com/welcome"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent-foreground underline"
+          >
+            Welcome Guide
+          </a>
+        </span>
+      </span>
+    );
+  }
+  return `@${accountname} hasn't posted anything yet.`;
 }
 

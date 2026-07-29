@@ -1,7 +1,16 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { Facebook, Linkedin, Twitter } from 'lucide-react';
+
+/** Legacy reddit icon (assets/icons/reddit.svg). */
+function RedditIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 60 60" className={className} aria-hidden>
+      <circle cx="30.0074534" cy="30.0074534" r="29.9850932" />
+      <path d="M50.0049689,30.0074534 C49.915528,27.5925466 47.8881988,25.7068323 45.4658385,25.7888199 C44.3925466,25.826087 43.3714286,26.2658385 42.5962733,27.0037267 C39.1826087,24.6782609 35.1726708,23.4037267 31.0509317,23.3142857 L32.9962733,13.9602484 L39.4136646,15.3093168 C39.5925466,16.9565217 41.068323,18.1490683 42.715528,17.9701863 C44.3627329,17.7913043 45.5552795,16.315528 45.3763975,14.668323 C45.1975155,13.021118 43.7217391,11.8285714 42.0745342,12.0074534 C41.1279503,12.1043478 40.2782609,12.6559006 39.8086957,13.4757764 L32.4596273,12.0074534 C31.9602484,11.8956522 31.4608696,12.2086957 31.3490683,12.715528 C31.3490683,12.7229814 31.3490683,12.7229814 31.3490683,12.7304348 L29.1354037,23.1354037 C24.9614907,23.2024845 20.8993789,24.484472 17.4409938,26.8248447 C15.6819876,25.1701863 12.9093168,25.2521739 11.2546584,27.0186335 C9.6,28.7776398 9.68198758,31.5503106 11.4484472,33.2049689 C11.7913043,33.5254658 12.1863354,33.8012422 12.626087,33.9950311 C12.5962733,34.4347826 12.5962733,34.8745342 12.626087,35.3142857 C12.626087,42.0298137 20.4521739,47.4931677 30.1043478,47.4931677 C39.7565217,47.4931677 47.5826087,42.0372671 47.5826087,35.3142857 C47.6124224,34.8745342 47.6124224,34.4347826 47.5826087,33.9950311 C49.0881988,33.242236 50.0347826,31.6919255 50.0049689,30.0074534 Z M20.0198758,33.0111801 C20.0198758,31.3565217 21.3689441,30.0074534 23.0236025,30.0074534 C24.6782609,30.0074534 26.0273292,31.3565217 26.0273292,33.0111801 C26.0273292,34.6658385 24.6782609,36.0149068 23.0236025,36.0149068 C21.3614907,36 20.0198758,34.6658385 20.0198758,33.0111801 Z M34.1813665,33.0111801 C34.1813665,31.3565217 35.5304348,30.0074534 37.1850932,30.0074534 C38.8397516,30.0074534 40.1888199,31.3565217 40.1888199,33.0111801 C40.1888199,34.6658385 38.8397516,36.0149068 37.1850932,36.0149068 C35.5229814,36 34.1813665,34.6658385 34.1813665,33.0111801 Z M30.0298137,43.5652174 C27.3614907,43.6770186 24.752795,42.8571429 22.621118,41.2546584 C22.3378882,40.9118012 22.3900621,40.3975155 22.7329193,40.1142857 C23.0310559,39.868323 23.4559006,39.868323 23.7614907,40.1142857 C25.5652174,41.4335404 27.7639752,42.1043478 30,42 C32.2360248,42.1192547 34.442236,41.4782609 36.268323,40.173913 C36.5962733,39.8534161 37.1329193,39.8608696 37.4534161,40.1888199 C37.773913,40.5167702 37.7664596,41.0534161 37.4385093,41.373913 C35.3068323,42.9763975 32.6981366,43.6770186 30.0298137,43.5652174 Z" />
+    </svg>
+  );
+}
 
 interface ShareMenuProps {
   url: string;
@@ -10,85 +19,80 @@ interface ShareMenuProps {
 }
 
 /**
- * ShareMenu component
- * Provides sharing options for posts (Facebook, Twitter, Reddit, LinkedIn)
- * Migrated from legacy/src/app/components/elements/ShareMenu.jsx
+ * ShareMenu — legacy inline social icon row (ShareMenu.scss): four SVG
+ * icons side by side, each opening the share dialog in a popup window.
  */
-export default function ShareMenu({ url, title, description }: ShareMenuProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function ShareMenu({ url, title }: ShareMenuProps) {
+  const fullUrl =
+    typeof window !== 'undefined' ? `${window.location.origin}${url}` : url;
 
-  const fullUrl = typeof window !== 'undefined' 
-    ? `${window.location.origin}${url}`
-    : url;
-
-  const shareLinks = {
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`,
-    twitter: `https://twitter.com/share?text=${encodeURIComponent(title)}&url=${encodeURIComponent(fullUrl)}`,
-    reddit: `https://www.reddit.com/submit?title=${encodeURIComponent(title)}&url=${encodeURIComponent(fullUrl)}`,
-    linkedin: `https://www.linkedin.com/shareArticle?title=${encodeURIComponent(title)}&url=${encodeURIComponent(fullUrl)}&source=Steemit&mini=true`,
-  };
-
-  const handleShare = (platform: keyof typeof shareLinks) => {
-    const shareUrl = shareLinks[platform];
-    const width = 600;
-    const height = 400;
+  const open = (shareUrl: string, width: number, height: number) => {
     const left = (screen.width - width) / 2;
     const top = (screen.height - height) / 2;
-
     window.open(
       shareUrl,
       'Share',
       `width=${width},height=${height},left=${left},top=${top},toolbar=0,status=0`
     );
-    setIsOpen(false);
   };
 
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="px-3 py-1 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-      >
-        Share
-      </button>
+  const items = [
+    {
+      name: 'Facebook',
+      icon: Facebook,
+      onClick: () =>
+        open(
+          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`,
+          600,
+          400
+        ),
+    },
+    {
+      name: 'Twitter',
+      icon: Twitter,
+      onClick: () =>
+        open(
+          `https://twitter.com/share?text=${encodeURIComponent(title)}&url=${encodeURIComponent(fullUrl)}`,
+          640,
+          320
+        ),
+    },
+    {
+      name: 'LinkedIn',
+      icon: Linkedin,
+      onClick: () =>
+        open(
+          `https://www.linkedin.com/shareArticle?title=${encodeURIComponent(title)}&url=${encodeURIComponent(fullUrl)}&source=Steemit&mini=true`,
+          720,
+          480
+        ),
+    },
+    {
+      name: 'Reddit',
+      icon: RedditIcon,
+      onClick: () =>
+        open(
+          `https://www.reddit.com/submit?title=${encodeURIComponent(title)}&url=${encodeURIComponent(fullUrl)}`,
+          600,
+          400
+        ),
+    },
+  ];
 
-      {isOpen && (
-        <>
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setIsOpen(false)}
-          />
-          <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20 border border-gray-200">
-            <div className="py-1">
-              <button
-                onClick={() => handleShare('facebook')}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Facebook
-              </button>
-              <button
-                onClick={() => handleShare('twitter')}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Twitter
-              </button>
-              <button
-                onClick={() => handleShare('reddit')}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Reddit
-              </button>
-              <button
-                onClick={() => handleShare('linkedin')}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                LinkedIn
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
+  return (
+    <span className="shareMenu inline-block h-[2em]">
+      {items.map((item) => (
+        <button
+          key={item.name}
+          type="button"
+          onClick={item.onClick}
+          title={`Share on ${item.name}`}
+          aria-label={`Share on ${item.name}`}
+          className="p-[2px] text-muted-foreground transition-colors hover:text-accent-foreground"
+        >
+          <item.icon className="size-5 fill-current" aria-hidden />
+        </button>
+      ))}
+    </span>
   );
 }
-

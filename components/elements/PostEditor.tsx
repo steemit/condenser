@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 interface PostEditorProps {
   type: 'submit_story' | 'submit_comment' | 'edit';
@@ -75,8 +75,11 @@ export default function PostEditor({
       setError('Body is required');
       return;
     }
-    if (isStory && !category.trim()) {
-      setError('Category is required');
+    // Category = first tag (legacy ReplyEditor), unless a community
+    // category was forced by the caller.
+    const cat = (initialCategory || tags[0] || '').trim();
+    if (isStory && !cat) {
+      setError('At least one tag is required (the first tag is the category)');
       return;
     }
 
@@ -94,10 +97,10 @@ export default function PostEditor({
         author: 'testuser', // TODO: Get from authenticated user
         title: title.trim(),
         body: body.trim(),
-        category: category.trim(),
-        tags: tags.length > 0 ? tags : [category.trim()],
+        category: cat,
+        tags: tags.length > 0 ? tags : [cat],
         json_metadata: {
-          tags: tags.length > 0 ? tags : [category.trim()],
+          tags: tags.length > 0 ? tags : [cat],
           app: 'condenser/0.1',
           format: 'markdown',
         },
@@ -127,7 +130,7 @@ export default function PostEditor({
       }
 
       if (onSuccess) {
-        onSuccess(category, result.permlink);
+        onSuccess(cat, result.permlink);
       }
     } catch (err) {
       console.error('Error submitting post:', err);
@@ -163,63 +166,37 @@ export default function PostEditor({
       )}
 
       {isStory && (
-        <>
-          <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-              Title *
-            </label>
-            <input
-              id="title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter post title"
-              maxLength={255}
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
-              Category *
-            </label>
-            <input
-              id="category"
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value.toLowerCase().replace(/\s+/g, '-'))}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter category (e.g., technology, art)"
-              required
-            />
-          </div>
-        </>
+        <div>
+          <input
+            id="title"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full rounded-none border-0 border-b border-gray-300 px-2 py-2 text-[1rem] font-bold focus:border-gray-500 focus:outline-none"
+            placeholder="Title"
+            maxLength={255}
+            required
+          />
+        </div>
       )}
 
       <div>
-        <label htmlFor="body" className="block text-sm font-medium text-gray-700 mb-2">
-          Content *
-        </label>
         <textarea
           id="body"
           value={body}
           onChange={(e) => setBody(e.target.value)}
           rows={15}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
-          placeholder="Write your post content here (Markdown supported)"
+          placeholder="Write your story..."
           required
         />
-        <p className="mt-2 text-sm text-gray-500">
+        <p className="mt-1 border-l border-[#ccc] bg-[#fafafa] px-2 py-[3px] text-[85%] text-[#767676]">
           Markdown is supported. Use **bold**, *italic*, [links](url), etc.
         </p>
       </div>
 
       {isStory && (
         <div>
-          <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
-            Tags (up to 5)
-          </label>
           <div className="flex flex-wrap gap-2 mb-2">
             {tags.map((tag) => (
               <span
@@ -242,7 +219,7 @@ export default function PostEditor({
             type="text"
             onKeyDown={handleTagInput}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Add tags (press Enter or comma to add, max 5)"
+            placeholder="Add up to 5 tags (the first tag is the category)"
             disabled={tags.length >= 5}
           />
         </div>
@@ -254,9 +231,9 @@ export default function PostEditor({
           disabled={submitting}
           className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {submitting ? 'Submitting...' : isStory ? 'Publish Post' : 'Submit'}
+          {submitting ? 'Submitting...' : isStory ? 'Post' : 'Submit'}
         </button>
-        
+
         {onCancel && (
           <button
             type="button"
@@ -266,6 +243,21 @@ export default function PostEditor({
             Cancel
           </button>
         )}
+
+        <button
+          type="button"
+          onClick={() => {
+            setTitle('');
+            setBody('');
+            setTags([]);
+            if (typeof window !== 'undefined') {
+              localStorage.removeItem(`replyEditorData-${formId}`);
+            }
+          }}
+          className="px-6 py-2 text-gray-700 hover:text-black transition-colors"
+        >
+          Clear
+        </button>
 
         <span className="text-sm text-gray-500 ml-auto">
           Draft saved automatically

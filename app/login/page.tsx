@@ -1,36 +1,18 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-
-import { useAppDispatch } from "@/store/hooks";
-import { showLogin } from "@/store/slices/userSlice";
+import { FeedLayout } from "@/components/layout/FeedLayout";
+import LoginForm from "@/components/modules/LoginForm";
 
 /**
- * /login opens the login modal (Redux) and returns to app chrome.
- * Deep links and bookmarks stay valid without a standalone login screen.
+ * /login renders the login form itself (legacy pages/Login.jsx), rather
+ * than opening the modal and redirecting away.
  */
-function LoginOpenRedirect() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(showLogin({}));
-    const next =
-      searchParams.get("redirect") ??
-      searchParams.get("return") ??
-      "/trending";
-    router.replace(next.startsWith("/") ? next : "/trending");
-  }, [dispatch, router, searchParams]);
-
-  return null;
-}
-
 export default function LoginPage() {
   return (
-    <Suspense fallback={null}>
-      <LoginOpenRedirect />
-    </Suspense>
+    <FeedLayout centerClassName="md:max-w-4xl">
+      <div className="py-8">
+        <LoginForm />
+      </div>
+    </FeedLayout>
   );
 }

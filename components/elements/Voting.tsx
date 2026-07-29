@@ -1,11 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
 import { broadcastOperation } from '@/store/slices/transactionSlice';
 import { voted, set } from '@/store/slices/globalSlice';
 import { Post } from '@/lib/api/steem';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface VotingProps {
   post: Post;
@@ -15,14 +21,105 @@ interface VotingProps {
 }
 
 const MAX_WEIGHT = 10000;
-const MIN_WEIGHT = 1;
+const MIN_WEIGHT = 100;
+const MAX_VOTES_DISPLAY = 20;
+
+/** "$12.34" from "12.345 SBD" (legacy FormattedAsset). */
+function fmtPayout(value?: string | number): string {
+  if (value === undefined || value === null) return '$0.00';
+  const amount = typeof value === 'number' ? value : Number.parseFloat(value);
+  if (!Number.isFinite(amount)) return '$0.00';
+  return `$${amount.toFixed(2)}`;
+}
+
+/** Legacy chevron-up/down-circle icons (assets/icons/chevron-*-circle.svg). */
+function ChevronCircle({
+  dir,
+  className,
+}: {
+  dir: 'up' | 'down';
+  className?: string;
+}) {
+  return (
+    <svg viewBox="0 0 33 33" className={className} aria-hidden>
+      {dir === 'up' ? (
+        <path d="M16.699,11.293c-0.384-0.38-1.044-0.381-1.429,0l-6.999,6.899c-0.394,0.391-0.394,1.024,0,1.414 c0.395,0.391,1.034,0.391,1.429,0l6.285-6.195l6.285,6.196c0.394,0.391,1.034,0.391,1.429,0c0.394-0.391,0.394-1.024,0-1.414 L16.699,11.293z" />
+      ) : (
+        <path d="M22.3,12.393l-6.285,6.195l-6.285-6.196c-0.394-0.391-1.034-0.391-1.429,0 c-0.394,0.391-0.394,1.024,0,1.414l6.999,6.9c0.384,0.38,1.044,0.381,1.429,0l6.999-6.899c0.394-0.391,0.394-1.024,0-1.414 C23.334,12.003,22.695,12.003,22.3,12.393z" />
+      )}
+    </svg>
+  );
+}
+
+/** Circle outline + chevron, colored by direction/state (legacy Voting.scss). */
+function VoteCircle({
+  dir,
+  active,
+  voting,
+  onClick,
+  title,
+}: {
+  dir: 'up' | 'down';
+  active: boolean;
+  voting: boolean;
+  onClick: () => void;
+  title: string;
+}) {
+  const color = dir === 'up' ? 'text-[#1FBF8F] dark:text-[#06D6A9]' : 'text-[#f99]';
+  const hover =
+    dir === 'up'
+      ? 'hover:text-white hover:[&_.v-circle]:fill-[#004EFF] hover:[&_.v-circle]:stroke-[#004EFF] dark:hover:[&_.v-circle]:fill-[#06D6A9] dark:hover:[&_.v-circle]:stroke-[#06D6A9]'
+      : 'hover:text-white hover:[&_.v-circle]:fill-[#f66] hover:[&_.v-circle]:stroke-[#f66]';
+  const activeFill =
+    dir === 'up'
+      ? '[&_.v-circle]:fill-[#004EFF] [&_.v-circle]:stroke-[#004EFF] dark:[&_.v-circle]:fill-[#06D6A9] dark:[&_.v-circle]:stroke-[#06D6A9] text-white'
+      : '[&_.v-circle]:fill-[#f66] [&_.v-circle]:stroke-[#f66] text-white';
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={voting}
+      title={title}
+      className={`relative inline-flex rounded-full transition-colors ${color} ${hover} ${
+        active ? activeFill : ''
+      } ${voting ? 'cursor-not-allowed opacity-50' : ''}`}
+    >
+      {voting ? (
+        <span
+          className={`block size-[22px] animate-spin rounded-full border-2 ${
+            dir === 'up' ? 'border-[#06D6A9]' : 'border-[#f66]'
+          } border-t-transparent`}
+        />
+      ) : (
+        <span className="relative inline-flex size-[22px] items-center justify-center">
+          <svg viewBox="0 0 33 33" className="absolute inset-0 size-full" aria-hidden>
+            <circle
+              cx="16"
+              cy="16"
+              r="15"
+              fill="none"
+              stroke="currentColor"
+              className="v-circle"
+            />
+          </svg>
+          <ChevronCircle dir={dir} className="relative size-[14px] fill-current" />
+        </span>
+      )}
+    </button>
+  );
+}
 
 /**
- * Voting component
- * Handles upvoting and downvoting for posts/comments with weight slider
- * Migrated from legacy/src/app/components/elements/Voting.jsx
+ * Voting — legacy layout: circular up/down icons, $ payout with details
+ * dropdown, "N votes" dropdown listing voters (elements/Voting.jsx).
  */
-export default function Voting({ post, showList = true, enableSlider = false, isComment = false }: VotingProps) {
+export default function Voting({
+  post,
+  showList = true,
+  enableSlider = false,
+  isComment = false,
+}: VotingProps) {
   const dispatch = useAppDispatch();
   const username = useAppSelector((state) => state.user.current?.username);
   const voting = useAppSelector((state) => {
@@ -30,36 +127,37 @@ export default function Voting({ post, showList = true, enableSlider = false, is
     return state.global[key] || false;
   });
 
-  const [showWeight, setShowWeight] = useState(false);
+  const [showWeight, setShowWeight] = useState<'up' | 'down' | null>(null);
   const [sliderWeight, setSliderWeight] = useState({
     up: MAX_WEIGHT,
     down: MAX_WEIGHT,
   });
+  const sliderLoaded = useRef(false);
 
-  // Load saved slider weights from localStorage
-  useEffect(() => {
-    if (enableSlider && username && typeof window !== 'undefined') {
-      const savedUp = localStorage.getItem(`voteWeight-${username}${isComment ? '-comment' : ''}`);
-      const savedDown = localStorage.getItem(`voteWeightDown-${username}${isComment ? '-comment' : ''}`);
-      
-      if (savedUp) {
-        setSliderWeight(prev => ({ ...prev, up: Number(savedUp) }));
-      }
-      if (savedDown) {
-        setSliderWeight(prev => ({ ...prev, down: Number(savedDown) }));
-      }
-    }
-  }, [enableSlider, username, isComment]);
+  // Read saved slider weights on demand (when the slider opens) instead of
+  // in an effect, to keep this component SSR-safe without cascading renders.
+  const loadSliderWeights = () => {
+    if (!enableSlider || !username || typeof window === 'undefined') return;
+    if (sliderLoaded.current) return;
+    sliderLoaded.current = true;
+    const savedUp = localStorage.getItem(
+      `voteWeight-${username}${isComment ? '-comment' : ''}`
+    );
+    const savedDown = localStorage.getItem(
+      `voteWeightDown-${username}${isComment ? '-comment' : ''}`
+    );
+    setSliderWeight((prev) => ({
+      up: savedUp ? Number(savedUp) : prev.up,
+      down: savedDown ? Number(savedDown) : prev.down,
+    }));
+  };
 
   // Find user's vote
   const myVote = post.active_votes?.find((v) => v.voter === username);
   const myVoteWeight = myVote ? myVote.weight : 0;
-  const myVotePercent = myVoteWeight > 0 ? myVoteWeight : (myVoteWeight < 0 ? -myVoteWeight : 0);
 
-  // Calculate rshares (simplified, would need net_vests from user account)
   const calculateRshares = (weight: number): number => {
-    // Placeholder calculation - in real implementation, would use user's net_vests
-    const netVests = 1000000; // Mock value
+    const netVests = 1000000; // Mock value, as before
     return Math.floor(0.05 * netVests * 1e6 * (weight / 10000.0));
   };
 
@@ -68,28 +166,22 @@ export default function Voting({ post, showList = true, enableSlider = false, is
       dispatch(showLogin());
       return;
     }
-
     if (voting) return;
 
     let weight: number;
     if (myVoteWeight > 0 || myVoteWeight < 0) {
-      // If there is a current vote, we're clearing it
-      weight = 0;
+      weight = 0; // clearing an existing vote
     } else if (enableSlider && showWeight) {
-      // If slider is enabled and shown, read its value
       weight = up ? sliderWeight.up : -sliderWeight.down;
     } else {
-      // Otherwise, use max power
       weight = up ? MAX_WEIGHT : -MAX_WEIGHT;
     }
 
     const rshares = calculateRshares(Math.abs(weight));
     const isFlag = up ? null : true;
 
-    // Generate confirmation message
     const confirm = () => {
-      if (myVoteWeight == null) return null; // New vote, no confirmation needed
-
+      if (myVoteWeight == null) return null;
       if (weight === 0) {
         return isFlag
           ? 'Removing your vote'
@@ -108,7 +200,6 @@ export default function Voting({ post, showList = true, enableSlider = false, is
       return null;
     };
 
-    // Set voting state for immediate feedback
     dispatch(
       set({
         key: `transaction_vote_active_${post.author}_${post.permlink}`,
@@ -116,7 +207,6 @@ export default function Voting({ post, showList = true, enableSlider = false, is
       })
     );
 
-    // Update vote in global state immediately (optimistic update)
     dispatch(
       voted({
         voter: username!,
@@ -126,7 +216,6 @@ export default function Voting({ post, showList = true, enableSlider = false, is
       })
     );
 
-    // Dispatch vote operation
     dispatch(
       broadcastOperation({
         type: 'vote',
@@ -143,7 +232,6 @@ export default function Voting({ post, showList = true, enableSlider = false, is
         confirm: confirm(),
         errorCallback: (errorKey: string) => {
           console.error('Transaction Error:', errorKey);
-          // Reset voting state on error
           dispatch(
             set({
               key: `transaction_vote_active_${post.author}_${post.permlink}`,
@@ -154,71 +242,65 @@ export default function Voting({ post, showList = true, enableSlider = false, is
       })
     );
 
-    // Hide weight slider after voting
-    if (showWeight) {
-      setShowWeight(false);
-    }
+    if (showWeight) setShowWeight(null);
   };
 
-  const handleWeightChange = (up: boolean, weight: number) => {
-    if (up) {
-      setSliderWeight(prev => ({ ...prev, up: weight }));
-    } else {
-      setSliderWeight(prev => ({ ...prev, down: weight }));
+  const handleChevronClick = (up: boolean) => {
+    if (!username) {
+      dispatch(showLogin());
+      return;
     }
+    // Legacy: with the slider enabled and no existing vote, the chevron
+    // opens the weight dropdown; otherwise it votes directly.
+    if (enableSlider && myVoteWeight === 0) {
+      loadSliderWeights();
+      setShowWeight(showWeight === (up ? 'up' : 'down') ? null : up ? 'up' : 'down');
+      return;
+    }
+    handleVote(up);
   };
 
-  const saveSliderWeight = (up: boolean) => {
+  const saveSliderWeight = (up: boolean, weight: number) => {
     if (!username || !enableSlider) return;
-    
-    const weight = up ? sliderWeight.up : sliderWeight.down;
     const key = `voteWeight${up ? '' : 'Down'}-${username}${isComment ? '-comment' : ''}`;
-    
     if (typeof window !== 'undefined') {
       localStorage.setItem(key, weight.toString());
     }
   };
 
-  const toggleWeightSlider = () => {
-    setShowWeight(!showWeight);
-  };
-
   const upvoteActive = myVoteWeight > 0;
   const downvoteActive = myVoteWeight < 0;
 
-  // Format pending payout
-  const formatPayout = (payout: string | undefined): string => {
-    if (!payout) return '0.000 SBD';
-    return payout;
-  };
+  const totalVotes = post.stats?.total_votes ?? post.active_votes?.length ?? 0;
+  type Vote = { voter: string; weight: number; rshares?: number | string; percent?: number };
+  const votes = [...((post.active_votes ?? []) as Vote[])]
+    .sort(
+      (a, b) =>
+        Math.abs(Number(b.rshares ?? b.weight)) -
+        Math.abs(Number(a.rshares ?? a.weight))
+    )
+    .slice(0, MAX_VOTES_DISPLAY);
+  const extraVoters = Math.max(0, totalVotes - votes.length);
+
+  const payoutValue =
+    post.pending_payout_value ?? (post.payout !== undefined ? String(post.payout) : undefined);
 
   return (
-    <div className="Voting flex items-center gap-2">
-      {/* Upvote button */}
-      <div className="relative">
-        <button
-          onClick={() => handleVote(true)}
-          disabled={voting}
-          className={`flex items-center gap-1 px-3 py-1.5 rounded transition-colors ${
-            upvoteActive
-              ? 'bg-green-100 text-green-700 hover:bg-green-200'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          } ${voting ? 'opacity-50 cursor-not-allowed' : ''}`}
-          title={upvoteActive ? 'Remove upvote' : 'Upvote'}
-        >
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd" />
-          </svg>
-          {upvoteActive && <span className="text-xs">✓</span>}
-        </button>
-
-        {/* Weight slider for upvote */}
-        {enableSlider && showWeight && (
-          <div className="absolute bottom-full left-0 mb-2 p-3 bg-white border border-gray-300 rounded-lg shadow-lg z-10 min-w-[200px]">
-            <div className="mb-2">
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Vote Weight: {sliderWeight.up / 100}%
-              </label>
+    <span className="Voting inline-flex items-center">
+      <span className="Voting__inner inline-flex items-center gap-1 border-r border-border py-0.5 pr-[0.8rem] mr-[0.6rem]">
+        <span className="relative">
+          <VoteCircle
+            dir="up"
+            active={upvoteActive}
+            voting={Boolean(voting)}
+            onClick={() => handleChevronClick(true)}
+            title={upvoteActive ? 'Remove Vote' : 'Upvote'}
+          />
+          {enableSlider && showWeight === 'up' && (
+            <div className="absolute left-1/2 top-full z-[100] mt-1 w-[180px] -translate-x-1/2 rounded-[6px] border border-border bg-card p-3 shadow-lg">
+              <div className="mb-1 text-center font-bold text-accent-foreground">
+                {sliderWeight.up / 100}%
+              </div>
               <input
                 type="range"
                 min={MIN_WEIGHT}
@@ -226,59 +308,37 @@ export default function Voting({ post, showList = true, enableSlider = false, is
                 step={100}
                 value={sliderWeight.up}
                 onChange={(e) => {
-                  const weight = Number(e.target.value);
-                  handleWeightChange(true, weight);
-                  saveSliderWeight(true);
+                  const w = Number(e.target.value);
+                  setSliderWeight((prev) => ({ ...prev, up: w }));
+                  saveSliderWeight(true, w);
                 }}
                 className="w-full"
+                aria-label="Vote weight"
               />
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>1%</span>
-                <span>100%</span>
-              </div>
+              <button
+                type="button"
+                onClick={() => handleVote(true)}
+                className="mt-2 w-full rounded bg-[#06D6A9] px-2 py-1 text-sm font-bold text-white"
+              >
+                Vote {sliderWeight.up / 100}%
+              </button>
             </div>
-            <button
-              onClick={() => handleVote(true)}
-              className="w-full px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
-            >
-              Vote {sliderWeight.up / 100}%
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Pending payout */}
-      {post.pending_payout_value && (
-        <span className="text-sm text-gray-600">
-          {formatPayout(post.pending_payout_value)}
+          )}
         </span>
-      )}
 
-      {/* Downvote button */}
-      <div className="relative">
-        <button
-          onClick={() => handleVote(false)}
-          disabled={voting}
-          className={`flex items-center gap-1 px-3 py-1.5 rounded transition-colors ${
-            downvoteActive
-              ? 'bg-red-100 text-red-700 hover:bg-red-200'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          } ${voting ? 'opacity-50 cursor-not-allowed' : ''}`}
-          title={downvoteActive ? 'Remove downvote' : 'Downvote'}
-        >
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11a1 1 0 10-2 0v-3.586L7.707 10.707a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 9.414V13z" clipRule="evenodd" />
-          </svg>
-          {downvoteActive && <span className="text-xs">✓</span>}
-        </button>
-
-        {/* Weight slider for downvote */}
-        {enableSlider && showWeight && (
-          <div className="absolute bottom-full left-0 mb-2 p-3 bg-white border border-gray-300 rounded-lg shadow-lg z-10 min-w-[200px]">
-            <div className="mb-2">
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Downvote Weight: {sliderWeight.down / 100}%
-              </label>
+        <span className="relative">
+          <VoteCircle
+            dir="down"
+            active={downvoteActive}
+            voting={Boolean(voting)}
+            onClick={() => handleChevronClick(false)}
+            title={downvoteActive ? 'Remove Vote' : 'Downvote'}
+          />
+          {enableSlider && showWeight === 'down' && (
+            <div className="absolute left-1/2 top-full z-[100] mt-1 w-[180px] -translate-x-1/2 rounded-[6px] border border-border bg-card p-3 shadow-lg">
+              <div className="mb-1 text-center font-bold text-[#f66]">
+                -{sliderWeight.down / 100}%
+              </div>
               <input
                 type="range"
                 min={MIN_WEIGHT}
@@ -286,51 +346,92 @@ export default function Voting({ post, showList = true, enableSlider = false, is
                 step={100}
                 value={sliderWeight.down}
                 onChange={(e) => {
-                  const weight = Number(e.target.value);
-                  handleWeightChange(false, weight);
-                  saveSliderWeight(false);
+                  const w = Number(e.target.value);
+                  setSliderWeight((prev) => ({ ...prev, down: w }));
+                  saveSliderWeight(false, w);
                 }}
                 className="w-full"
+                aria-label="Downvote weight"
               />
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>1%</span>
-                <span>100%</span>
-              </div>
+              <button
+                type="button"
+                onClick={() => handleVote(false)}
+                className="mt-2 w-full rounded bg-[#f66] px-2 py-1 text-sm font-bold text-white"
+              >
+                Downvote {sliderWeight.down / 100}%
+              </button>
             </div>
-            <button
-              onClick={() => handleVote(false)}
-              className="w-full px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+          )}
+        </span>
+
+        {payoutValue !== undefined && (
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              nativeButton={false}
+              render={
+                <button
+                  type="button"
+                  className="flex items-center gap-0.5 px-1 text-foreground hover:text-accent-foreground"
+                  title="Payout details"
+                />
+              }
             >
-              Downvote {sliderWeight.down / 100}%
-            </button>
-          </div>
+              <span>{fmtPayout(payoutValue)}</span>
+              <svg viewBox="0 0 10 6" className="size-2 fill-current" aria-hidden>
+                <path d="M0 0l5 6 5-6z" />
+              </svg>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="min-w-56">
+              <DropdownMenuItem disabled>
+                Pending Payout {fmtPayout(post.pending_payout_value)}
+              </DropdownMenuItem>
+              {post.payout_at && (
+                <DropdownItemText text={`Payout Date ${new Date(post.payout_at + 'Z').toLocaleString()}`} />
+              )}
+              {post.author_payout_value && (
+                <DropdownItemText text={`Author Payout ${fmtPayout(post.author_payout_value)}`} />
+              )}
+              {post.curator_payout_value && (
+                <DropdownItemText text={`Curator Payout ${fmtPayout(post.curator_payout_value)}`} />
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
-      </div>
+      </span>
 
-      {/* Toggle weight slider button */}
-      {enableSlider && (
-        <button
-          onClick={toggleWeightSlider}
-          className="px-2 py-1 text-xs text-gray-600 hover:text-gray-800"
-          title="Adjust vote weight"
-        >
-          {showWeight ? 'Hide' : 'Weight'}
-        </button>
+      {showList && totalVotes > 0 && (
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            nativeButton={false}
+            render={
+              <button
+                type="button"
+                className="px-1 text-foreground hover:text-accent-foreground"
+                title="Voters"
+              />
+            }
+          >
+            {totalVotes} vote{totalVotes === 1 ? '' : 's'}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="min-w-[140px]">
+            {votes.map((v) => (
+              <DropdownItemText
+                key={v.voter}
+                text={`${Number(v.weight) < 0 ? '-' : '+'} ${v.voter}`}
+              />
+            ))}
+            {extraVoters > 0 && (
+              <DropdownItemText text={`and ${extraVoters} more`} />
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
+    </span>
+  );
+}
 
-      {/* Vote count */}
-      {showList && post.active_votes && post.active_votes.length > 0 && (
-        <span className="text-xs text-gray-500 ml-2">
-          ({post.active_votes.length} {post.active_votes.length === 1 ? 'vote' : 'votes'})
-        </span>
-      )}
-
-      {/* My vote percentage display */}
-      {myVotePercent > 0 && (
-        <span className="text-xs text-gray-600">
-          {myVotePercent / 100}%
-        </span>
-      )}
-    </div>
+function DropdownItemText({ text }: { text: string }) {
+  return (
+    <div className="px-2 py-1.5 text-sm text-foreground">{text}</div>
   );
 }

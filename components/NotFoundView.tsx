@@ -1,69 +1,62 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
+/** Legacy steem round icon (from SteemLogo), shown at 4x on the 404 page. */
+function SteemIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 40 40"
+      className="mx-auto mb-4 size-[4em] [&_path]:fill-[#06D6A9]"
+      aria-hidden
+    >
+      <path d="M32.7004951,11.3807248 C31.1310771,9.81140963 29.3043776,8.66313021 27.3619013,7.92312792 C28.4939405,4.59311764 32.5075339,3.38104493 32.5075339,3.38104493 C32.5075339,3.38104493 23.1424826,-1.48000457 12.7997611,0.459311764 C9.35218721,1.00793415 6.0461183,3.12587173 3.62767097,5.92001831 C-1.62087426,11.9803819 -0.926213868,21.1028239 5.18422484,26.3083572 C6.1233028,27.1121528 8.22014805,28.3625014 8.2587403,28.4262947 C6.8822836,31.9221676 2.48276772,32.8790671 2.48276772,32.8790671 C2.48276772,32.8790671 8.29733255,36.5152853 16.10583,37.4594261 C18.1769471,37.7145993 20.3767051,37.7783926 22.6536475,37.5359781 C26.2684544,37.2425289 29.8703972,35.3287299 32.6104465,32.6366526 C38.5407881,26.7931863 38.5922444,17.2752258 32.7004951,11.3807248 Z M30.0247661,30.3145765 C27.8121441,32.4835487 24.5060752,33.861484 21.9589871,34.0528639 C20.1580157,34.2314851 18.2284034,34.2570024 16.3759757,34.0273465 C13.6487905,33.6956214 11.680586,32.9428604 9.75097374,32.2156168 C10.7286439,31.271476 11.7063141,29.9700926 12.1051006,28.8473305 C12.3623823,28.1838802 12.3366541,27.4438779 12.0279162,26.7931863 C9.95679906,22.5317938 10.8572848,17.4283297 14.2662664,14.1110781 C16.73617,11.6996913 20.1322875,10.5641706 23.5798614,10.9852064 C26.1140854,11.2914142 28.416756,12.4014176 30.2177274,14.2003887 C34.5915151,18.5893678 34.4371461,26.014908 30.0247661,30.3145765 Z" />
+    </svg>
+  );
+}
+
+const MENU = [
+  { href: "/created", label: "new posts" },
+  { href: "/hot", label: "hot posts" },
+  { href: "/trending", label: "trending posts" },
+  { href: "/promoted", label: "promoted posts" },
+  { href: "/payout", label: "active posts" },
+];
 
 /**
- * Shared 404 body: typography and actions aligned with Legacy / shadcn tokens.
- * Wrap with FeedLayout (and optionally AppShell for root not-found).
+ * Legacy NotFound page: steem icon + "Sorry! This page doesn't exist." +
+ * pipe-separated feed links (pages/NotFound.jsx, app.scss .NotFound).
  */
 export function NotFoundView() {
-  const router = useRouter();
-
   return (
-    <div className="flex flex-col items-center py-8 text-center">
-      <h1 className="mb-4 font-sans text-8xl font-bold text-muted-foreground/40 md:text-9xl">
-        404
-      </h1>
-      <h2 className="mb-4 font-sans text-2xl font-bold text-foreground md:text-3xl">
-        Page Not Found
-      </h2>
-      <p className="mb-8 max-w-md text-lg text-muted-foreground">
-        The page you are looking for does not exist or has been moved.
+    <div className="NotFound mx-auto mt-[2em] w-[340px] text-center min-[640px]:w-[640px]">
+      <SteemIcon />
+      <h4 className="mb-4 text-lg font-bold text-foreground">
+        Sorry! This page doesn&apos;t exist.
+      </h4>
+      <p className="mb-4 text-foreground">
+        Not to worry. You can head back to{" "}
+        <Link href="/" className="font-bold text-accent-foreground">
+          our homepage
+        </Link>
+        , or check out some great posts below.
       </p>
-
-      <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-        <Button nativeButton={false} render={<Link href="/trending" />}>
-          Go to Trending
-        </Button>
-        <Button variant="outline" type="button" onClick={() => router.back()}>
-          Go Back
-        </Button>
-      </div>
-
-      <div className="mt-10 w-full border-t border-border pt-8">
-        <p className="mb-4 text-sm text-muted-foreground">
-          You might be looking for:
-        </p>
-        <div className="flex flex-wrap justify-center gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            nativeButton={false}
-            render={<Link href="/trending" />}
-          >
-            Trending
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            nativeButton={false}
-            render={<Link href="/search" />}
-          >
-            Search
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            nativeButton={false}
-            render={<Link href="/login" />}
-          >
-            Login
-          </Button>
-        </div>
-      </div>
+      <ul className="NotFound__menu mt-[1em]">
+        {MENU.map((item, i) => (
+          <li key={item.href} className="mr-[1%] inline-block list-none">
+            <Link
+              href={item.href}
+              className="text-accent-foreground hover:underline"
+            >
+              {item.label}
+            </Link>
+            {i < MENU.length - 1 && (
+              <span className="text-muted-foreground">&nbsp;|</span>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

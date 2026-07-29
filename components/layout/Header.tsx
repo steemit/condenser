@@ -2,14 +2,10 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  MenuIcon,
-  PenLineIcon,
-  SearchIcon,
-  UserRoundIcon,
-} from "lucide-react";
+import { useState } from "react";
+import { PenLineIcon, SearchIcon } from "lucide-react";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,21 +15,95 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
 import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleNightmode } from "@/store/slices/appSlice";
 import { showLogin } from "@/store/slices/userSlice";
-import { PrimaryNavigation } from "@/components/layout/PrimaryNavigation";
 import { SteemitLogo } from "@/components/layout/SteemitLogo";
+import { SidePanel } from "@/components/layout/SidePanel";
+import Userpic from "@/components/elements/Userpic";
+import NotificationBadge from "@/components/elements/NotificationBadge";
+
+const SEARCH_HISTORY_KEY = "steemit_search";
+
+function readHistory(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(localStorage.getItem(SEARCH_HISTORY_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function addHistory(q: string) {
+  if (typeof window === "undefined" || !q) return;
+  const list = [q, ...readHistory().filter((h) => h !== q)].slice(0, 10);
+  localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(list));
+}
+
+/** Desktop capsule search box with icon + localStorage history (legacy SearchInput). */
+function HeaderSearch() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const [history, setHistory] = useState<string[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
+
+  const submit = (q: string) => {
+    const term = q.trim();
+    if (!term) return;
+    addHistory(term);
+    setShowHistory(false);
+    router.push(`/search?q=${encodeURIComponent(term)}`);
+  };
+
+  return (
+    <div className="relative mr-5 hidden min-[766px]:block">
+      <form
+        className="group relative h-[42px] w-[240px]"
+        onSubmit={(e) => {
+          e.preventDefault();
+          submit(query);
+        }}
+      >
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => {
+            setHistory(readHistory());
+            setShowHistory(true);
+          }}
+          onBlur={() => setTimeout(() => setShowHistory(false), 150)}
+          placeholder="Search"
+          aria-label="Search"
+          className="h-[42px] w-full rounded-full border border-[#cacaca99] bg-transparent py-[9px] pl-8 pr-10 text-[16px] text-foreground outline-none transition-colors placeholder:text-muted-foreground hover:bg-[#06D6A9] hover:text-white hover:placeholder:text-white"
+        />
+        <button
+          type="submit"
+          aria-label="Submit search"
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-foreground group-hover:text-white"
+        >
+          <SearchIcon className="size-5" strokeWidth={1.2} />
+        </button>
+      </form>
+      {showHistory && history.length > 0 && (
+        <ul className="absolute left-0 top-full z-[100] mt-1 w-full rounded-[6px] border border-border bg-card py-1 shadow-md">
+          {history.map((h) => (
+            <li key={h}>
+              <button
+                type="button"
+                className="block w-full px-3 py-1.5 text-left text-sm text-foreground hover:bg-accent hover:text-accent-foreground"
+                onMouseDown={() => submit(h)}
+              >
+                {h}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 export function Header() {
   const pathname = usePathname();
@@ -41,11 +111,13 @@ export function Header() {
   const dispatch = useAppDispatch();
   const username = useAppSelector((s) => s.user.current?.username);
   const loggedIn = Boolean(username);
-  const unread = 0;
 
   const walletBase = getSteemitWalletBaseUrl();
   const signupUrl =
     process.env.NEXT_PUBLIC_SIGNUP_URL ?? "https://signup.steemit.com";
+
+  // legacy signup links carry a source tracker: #source=condenser|{routeTag}
+  const routeTag = pathname?.split("/")[1] || "trending";
 
   const openLoginModal = () => {
     dispatch(showLogin({}));
@@ -59,6 +131,14 @@ export function Header() {
     router.push("/submit");
   };
 
+  const handleSignup = () => {
+    const win = window.open(
+      `${signupUrl}/#source=condenser|${routeTag}`,
+      "_blank"
+    );
+    if (win) win.opener = null;
+  };
+
   const logout = async () => {
     await fetch("/api/auth/logout", {
       method: "POST",
@@ -69,10 +149,14 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-card shadow-[0_2px_4px_0_rgba(0,0,0,0.05)]">
+    <header className="sticky top-0 z-[100] w-full border-b border-border bg-card shadow-[0_2px_4px_0_rgba(0,0,0,0.05)]">
       <nav className="mx-auto flex h-16 max-w-[100vw] items-center gap-2 px-3 sm:px-4">
         <div className="flex min-w-0 flex-1 items-center md:max-w-[40%] lg:max-w-[33%]">
-          <Link href="/" className="shrink-0" aria-label="Steemit home">
+          <Link
+            href="/"
+            className="Header__logotype flex h-[37px] shrink-0 items-baseline"
+            aria-label="Steemit home"
+          >
             <SteemitLogo />
           </Link>
         </div>
@@ -80,61 +164,45 @@ export function Header() {
         <div className="hidden flex-1 justify-center lg:flex" aria-hidden />
 
         <div className="flex flex-1 items-center justify-end gap-2 md:gap-3">
-          <div className="hidden min-w-[140px] max-w-[240px] md:block">
-            <form
-              action="/search"
-              method="get"
-              className="flex w-full items-center gap-2"
-            >
-              <Input
-                type="search"
-                name="q"
-                placeholder="Search"
-                className="h-8"
-                aria-label="Search"
-              />
-            </form>
-          </div>
+          <HeaderSearch />
 
           <Link
             href="/search"
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "icon" }),
-              "md:hidden"
-            )}
+            className="text-foreground hover:text-accent-foreground min-[766px]:hidden"
             aria-label="Search"
           >
-            <SearchIcon />
+            <SearchIcon className="size-5" />
           </Link>
 
           {!loggedIn ? (
-            <span className="hidden items-center gap-2 text-sm sm:flex">
+            <span className="hidden items-center text-[1.125rem] sm:flex">
               <button
                 type="button"
                 onClick={openLoginModal}
-                className="text-foreground transition-colors hover:text-accent-foreground"
+                className="pr-1 text-foreground transition-colors hover:text-[#1FBF8F] dark:hover:text-[#06D6A9]"
               >
                 Login
               </button>
-              <a
-                href={signupUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="text-foreground transition-colors hover:text-accent-foreground"
+              <button
+                type="button"
+                onClick={handleSignup}
+                className="my-0 ml-2 mr-3 rounded-none bg-[#171F24] p-[0.6rem] font-bold text-[#fcfcfc] shadow-[0_0_0_0_transparent,2px_2px_0_0_#06D6A9] transition-all hover:bg-[#06D6A9] hover:shadow-[2px_2px_2px_rgba(0,0,0,0.1),4px_4px_0_0_#171F24]"
               >
                 Sign up
-              </a>
+              </button>
             </span>
           ) : null}
 
-          <Button
-            variant="ghost"
-            size="icon-sm"
+          {/* legacy circular pencil IconButton (36px, 42px ≥760px) */}
+          <button
+            type="button"
             onClick={goSubmit}
             aria-label="Create post"
+            title="Create post"
+            className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#171F24] hover:text-white min-[760px]:size-[42px] [&_svg]:size-5 min-[760px]:[&_svg]:size-6 [&_svg]:text-[#cacaca] hover:[&_svg]:text-white"
           >
             <PenLineIcon />
-          </Button>
+          </button>
 
           {loggedIn && username ? (
             <DropdownMenu>
@@ -144,16 +212,20 @@ export function Header() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="gap-2 px-1"
+                    className="relative px-1"
                     aria-label="Account menu"
                   />
                 }
               >
-                <span className="flex size-8 items-center justify-center overflow-hidden rounded-full bg-muted">
-                  <UserRoundIcon className="text-muted-foreground" />
-                </span>
-                <span className="hidden max-w-[7rem] truncate md:inline">
-                  {username}
+                <span className="relative inline-flex">
+                  <Userpic
+                    account={username}
+                    className="!size-9 min-[760px]:!size-10"
+                  />
+                  <NotificationBadge
+                    username={username}
+                    className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-[#ff0264] text-[11px] font-bold text-white"
+                  />
                 </span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-48">
@@ -173,7 +245,6 @@ export function Header() {
                     }
                   >
                     Notifications
-                    {unread > 0 ? ` (${unread})` : ""}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() =>
@@ -213,57 +284,19 @@ export function Header() {
             </DropdownMenu>
           ) : null}
 
-          <Sheet>
-            <SheetTrigger
-              nativeButton
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden"
-                  aria-label="Open menu"
-                />
-              }
+          {/* legacy hamburger: three 7px-spaced bars, opens the SidePanel at
+              every breakpoint */}
+          <SidePanel>
+            <button
+              type="button"
+              aria-label="Open menu"
+              className="group ml-1 flex size-4 flex-col items-start justify-center gap-[5px] sm:ml-2 md:ml-3"
             >
-              <MenuIcon />
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="flex w-[min(100%,20rem)] flex-col gap-4"
-            >
-              <SheetHeader>
-                <SheetTitle className="sr-only">Menu</SheetTitle>
-              </SheetHeader>
-              <div className="flex flex-col gap-4 overflow-y-auto pr-2">
-                <PrimaryNavigation pathname={pathname} compact />
-                <Link
-                  href="/search"
-                  className="text-sm text-foreground hover:text-accent-foreground"
-                >
-                  Search
-                </Link>
-                {!loggedIn ? (
-                  <div className="flex flex-col gap-2 border-t border-border pt-4">
-                    <button
-                      type="button"
-                      onClick={openLoginModal}
-                      className="w-fit text-left text-sm text-foreground hover:text-accent-foreground"
-                    >
-                      Login
-                    </button>
-                    <a
-                      href={signupUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-sm text-foreground hover:text-accent-foreground"
-                    >
-                      Sign up
-                    </a>
-                  </div>
-                ) : null}
-              </div>
-            </SheetContent>
-          </Sheet>
+              <span className="h-[2px] w-4 bg-foreground transition-colors group-hover:bg-[#06D6A9]" />
+              <span className="h-[2px] w-4 bg-foreground transition-colors group-hover:bg-[#06D6A9]" />
+              <span className="h-[2px] w-4 bg-foreground transition-colors group-hover:bg-[#06D6A9]" />
+            </button>
+          </SidePanel>
         </div>
       </nav>
     </header>

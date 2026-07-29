@@ -1,6 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import { Calendar, Link2, MapPin } from 'lucide-react';
+
+import { proxifyImageUrl } from '@/lib/media/proxify-url';
+import Userpic from '@/components/elements/Userpic';
+import Follow from '@/components/elements/Follow';
+import TimeAgo from '@/components/elements/TimeAgo';
 
 interface UserProfileHeaderProps {
   accountname: string;
@@ -11,23 +17,30 @@ interface UserProfileHeaderProps {
     website?: string;
     profile_image?: string;
     cover_image?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   } | null;
   currentUser?: string;
   stats?: {
     rank: number;
     following: number;
     followers: number;
+    sp?: number;
   };
   reputation?: string;
   postCount?: number;
   created?: string;
+  /** Last account activity (bridge `active`), for "Active x ago". */
+  active?: string;
+  blacklists?: string[];
 }
 
+const numberWithCommas = (x: number): string =>
+  String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
 /**
- * UserProfileHeader component
- * Displays user profile information header
- * Migrated from legacy/src/app/components/cards/UserProfileHeader.jsx
+ * UserProfileHeader — legacy full-bleed banner: cover image background,
+ * white text with shadow, centered, stats with divider links.
+ * (cards/UserProfileHeader.jsx + pages/UserProfile.scss)
  */
 export default function UserProfileHeader({
   accountname,
@@ -37,147 +50,142 @@ export default function UserProfileHeader({
   reputation,
   postCount,
   created,
+  active,
+  blacklists = [],
 }: UserProfileHeaderProps) {
-  const isMyAccount = currentUser === accountname;
   const displayName = profile?.name || accountname;
 
-  // Helper function to format reputation
-  const formatReputation = (rep?: string) => {
-    if (!rep) return '25';
-    const repNum = parseInt(rep);
-    if (repNum === 0) return '25';
-    const score = Math.log10(Math.abs(repNum)) - 9;
-    return Math.max(score * 9 + 25, 1).toFixed(0);
-  };
+  const coverImage = profile?.cover_image;
+  const coverStyle: React.CSSProperties = coverImage
+    ? { backgroundImage: `url(${proxifyImageUrl(coverImage, '2048x512')})` }
+    : {};
 
-  // Helper function to format date
-  const formatJoinDate = (dateStr?: string) => {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long' 
-    });
-  };
+  const websiteLabel = profile?.website
+    ? profile.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
+    : null;
+
+  const joinDate = created
+    ? new Date(created).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+      })
+    : null;
+
+  const rep =
+    reputation && !Number.isNaN(Number(reputation))
+      ? Math.floor(Number(reputation))
+      : null;
 
   return (
-    <div className="user-profile-header mb-8">
-      {/* Cover image */}
-      {profile?.cover_image && (
-        <div
-          className="h-48 bg-cover bg-center rounded-t-lg"
-          style={{ backgroundImage: `url(${profile.cover_image})` }}
-        />
-      )}
+    <div className="UserProfile__banner mb-4 text-center text-white [&_a]:text-white">
+      <div
+        className="bg-[#1C252B] bg-cover bg-center bg-no-repeat px-4 pb-4 [text-shadow:1px_1px_2px_black]"
+        style={{ ...coverStyle, minHeight: 155 }}
+      >
+        <div className="relative">
+          {/* desktop follow button (legacy .UserProfile__buttons) */}
+          <div className="absolute right-[5px] top-[15px] hidden min-[640px]:block [&_button]:!bg-white [&_button]:!text-black">
+            <Follow follower={currentUser} following={accountname} />
+          </div>
+        </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <div className="flex items-start gap-6">
-          {/* Profile image */}
-          <div className="shrink-0">
-            {profile?.profile_image ? (
-              <img
-                src={profile.profile_image}
-                alt={displayName}
-                className="w-24 h-24 rounded-full border-4 border-white shadow-lg"
-              />
-            ) : (
-              <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-400">
-                {accountname.charAt(0).toUpperCase()}
-              </div>
+        <h1 className="pt-[15px] text-[1.13095rem] font-semibold min-[640px]:text-[1.84524rem]">
+          <Userpic
+            account={accountname}
+            className="!mr-2 !inline-block !size-9 align-middle min-[640px]:!size-12"
+          />
+          {displayName}{' '}
+          {rep !== null && (
+            <span
+              className="UserProfile__rep text-[80%] font-extralight"
+              title={`This is ${accountname}'s reputation score. It is based on the history of votes.`}
+            >
+              ({rep})
+            </span>
+          )}
+          {blacklists.length > 0 && (
+            <span
+              className="account_warn ml-1 font-bold text-[#ff4d4f]"
+              title={`Blacklisted on: ${blacklists.join(', ')}`}
+            >
+              ({blacklists.length})
+            </span>
+          )}
+        </h1>
+
+        <div>
+          {profile?.about && (
+            <p className="UserProfile__bio mx-auto mb-2 mt-[-0.4rem] max-w-[420px] text-[95%] leading-[1.4]">
+              {profile.about}
+            </p>
+          )}
+
+          <div className="UserProfile__stats mb-[5px] pb-[5px] text-[90%]">
+            <span className="px-2.5">
+              <Link href={`/@${accountname}/followers`}>
+                <strong>{stats?.followers ?? 0}</strong> followers
+              </Link>
+            </span>
+            <span className="border-l border-[#ccc] px-2.5">
+              <Link href={`/@${accountname}`}>
+                <strong>{postCount ?? 0}</strong> posts
+              </Link>
+            </span>
+            <span className="border-l border-[#ccc] px-2.5">
+              <Link href={`/@${accountname}/followed`}>
+                <strong>{stats?.following ?? 0}</strong> following
+              </Link>
+            </span>
+            {typeof stats?.sp === 'number' && stats.sp > 0 && (
+              <span className="border-l border-[#ccc] px-2.5">
+                {numberWithCommas(Math.round(stats.sp))} SP
+              </span>
+            )}
+            {typeof stats?.rank === 'number' && stats.rank > 0 && (
+              <span className="border-l border-[#ccc] px-2.5">
+                #{numberWithCommas(stats.rank)}
+              </span>
             )}
           </div>
 
-          {/* Profile info */}
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-2">
-              {displayName}
-            </h1>
-            <p className="text-gray-600 mb-4">@{accountname}</p>
-
-            {profile?.about && (
-              <p className="text-gray-700 mb-4">{profile.about}</p>
+          <p className="UserProfile__info flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[90%]">
+            {profile?.location && (
+              <span className="inline-flex items-center gap-1">
+                <MapPin className="size-4" aria-hidden /> {profile.location}
+              </span>
             )}
-
-            {/* Stats */}
-            <div className="flex flex-wrap gap-6 text-sm text-gray-600 mb-4">
-              {stats && (
-                <>
-                  <span>
-                    <strong className="text-gray-900">{stats.followers}</strong> followers
-                  </span>
-                  <span>
-                    <strong className="text-gray-900">{stats.following}</strong> following
-                  </span>
-                </>
-              )}
-              {postCount !== undefined && (
-                <span>
-                  <strong className="text-gray-900">{postCount}</strong> posts
-                </span>
-              )}
-              {reputation && (
-                <span>
-                  Reputation: <strong className="text-gray-900">{formatReputation(reputation)}</strong>
-                </span>
-              )}
-            </div>
-
-            {/* Location, website, join date */}
-            <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-              {profile?.location && (
-                <span className="flex items-center gap-1">
-                  📍 {profile.location}
-                </span>
-              )}
-              {profile?.website && (
+            {profile?.website && websiteLabel && (
+              <span className="inline-flex items-center gap-1">
+                <Link2 className="size-4" aria-hidden />{' '}
                 <a
                   href={profile.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
+                  className="underline"
                 >
-                  🔗 Website
+                  {websiteLabel}
                 </a>
-              )}
-              {created && (
-                <span className="flex items-center gap-1">
-                  📅 Joined {formatJoinDate(created)}
-                </span>
-              )}
-            </div>
+              </span>
+            )}
+            {joinDate && (
+              <span className="inline-flex items-center gap-1">
+                <Calendar className="size-4" aria-hidden /> Joined {joinDate}
+              </span>
+            )}
+            {active && (
+              <span className="inline-flex items-center gap-1">
+                <Calendar className="size-4" aria-hidden /> Active{' '}
+                <TimeAgo date={active} />
+              </span>
+            )}
+          </p>
+        </div>
 
-            {/* Action buttons */}
-            <div className="mt-4 flex gap-2">
-              {isMyAccount ? (
-                <>
-                  <Link
-                    href={`/@${accountname}/settings`}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    Edit Profile
-                  </Link>
-                  <Link
-                    href="/submit"
-                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-                  >
-                    New Post
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                    Follow
-                  </button>
-                  <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
-                    Message
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
+        {/* mobile follow button (legacy .UserProfile__buttons_mobile) */}
+        <div className="UserProfile__buttons_mobile mt-2 min-[640px]:hidden [&_button]:!bg-white [&_button]:!text-black">
+          <Follow follower={currentUser} following={accountname} />
         </div>
       </div>
     </div>
   );
 }
-

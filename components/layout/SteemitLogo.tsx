@@ -8,7 +8,7 @@ export function SteemitLogo({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        "inline-flex cursor-pointer transition-[filter] duration-300 ease-in-out hover:brightness-110",
+        "logo inline-flex cursor-pointer transition-all duration-300 ease-in-out",
         className
       )}
     >
@@ -17,7 +17,7 @@ export function SteemitLogo({ className }: { className?: string }) {
         width={150}
         height={40}
         viewBox="0 0 150 40"
-        className="h-9 w-auto max-w-[min(100%,9.375rem)] [&_path]:fill-[var(--ring)]"
+        className="h-10 w-auto max-w-[min(100%,9.375rem)] [&_path]:fill-[#06D6A9]"
         aria-hidden
       >
         <title>Home</title>

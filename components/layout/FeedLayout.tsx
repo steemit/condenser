@@ -19,31 +19,34 @@ export function FeedLayout({
 }) {
   const pathname = usePathname();
 
+  // Breakpoints follow legacy _layout.scss: M = 760px (left sidebar),
+  // L = 1200px (right sidebar). Margins/padding are legacy 1em (16px).
   return (
     <div
       className={cn(
-        "mx-auto grid w-full max-w-[1600px] grid-cols-1 md:grid-cols-[240px_minmax(0,1fr)] lg:grid-cols-[240px_minmax(0,1fr)_320px]",
+        "mx-auto grid w-full max-w-[1600px] grid-cols-1 min-[760px]:grid-cols-[240px_minmax(0,1fr)] min-[1200px]:grid-cols-[240px_minmax(0,1fr)_320px]",
         className
       )}
     >
-      <aside className="hidden w-[240px] min-w-[240px] max-w-[240px] md:block md:pl-3">
-        <div className="sticky top-20 rounded-lg bg-muted/50 py-4 pr-1.5">
+      <aside className="hidden w-[240px] min-w-[240px] max-w-[240px] min-[760px]:block min-[760px]:ml-4">
+        <div className="sticky top-20 rounded-[6px] border border-border py-4 pr-1.5">
           <PrimaryNavigation pathname={pathname} />
         </div>
       </aside>
 
       <article
         className={cn(
-          "min-w-0 w-full px-3 md:px-3",
-          centerClassName ?? "md:max-w-[1056px]",
+          "min-w-0 w-full px-4",
+          centerClassName ?? "min-[760px]:max-w-[1056px]",
           "mx-auto"
         )}
       >
         {children}
       </article>
 
-      <aside className="hidden w-[320px] min-w-[320px] max-w-[320px] lg:block lg:pr-3">
-        <div className="sticky top-20 py-1">
+      {/* Legacy right rail is not sticky (modules fade in at page load). */}
+      <aside className="hidden w-[320px] min-w-[320px] max-w-[320px] min-[1200px]:block min-[1200px]:mr-4">
+        <div className="py-1">
           <FeedSidebarWidgets />
         </div>
       </aside>

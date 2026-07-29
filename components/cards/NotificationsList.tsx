@@ -5,7 +5,17 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { receiveNotifications, receiveUnreadNotifications, notificationsLoading } from '@/store/slices/globalSlice';
 import { cachedFetch } from '@/lib/cache/client-fetch';
 import LoadingIndicator from '@/components/elements/LoadingIndicator';
+import Userpic from '@/components/elements/Userpic';
+import TimeAgo from '@/components/elements/TimeAgo';
 import Link from 'next/link';
+import {
+  AtSign,
+  Bell,
+  ChevronUp,
+  MessageCircle,
+  Repeat,
+  UserPlus,
+} from 'lucide-react';
 
 interface Notification {
   id: number;
@@ -14,37 +24,78 @@ interface Notification {
   date: string;
   msg: string;
   url?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface NotificationsListProps {
   username: string;
 }
 
+const FILTERS = [
+  { key: 'all', label: 'All' },
+  { key: 'replies', label: 'Replies' },
+  { key: 'mentions', label: 'Mentions' },
+  { key: 'follows', label: 'Follows' },
+  { key: 'upvotes', label: 'Upvotes' },
+  { key: 'resteems', label: 'Resteems' },
+] as const;
+
+type FilterKey = (typeof FILTERS)[number]['key'];
+
+const TYPE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  reply: MessageCircle,
+  reply_post: MessageCircle,
+  reply_comment: MessageCircle,
+  follow: UserPlus,
+  vote: ChevronUp,
+  reblog: Repeat,
+  mention: AtSign,
+};
+
+/** First @account mentioned in a notification message (for the avatar). */
+function firstAccount(msg: string): string | null {
+  const m = msg.match(/@([a-z][a-z0-9.-]*)/);
+  return m ? m[1] : null;
+}
+
+/** Render the message with the first @mention bolded (legacy behavior). */
+function renderMsg(msg: string): React.ReactNode {
+  const m = msg.match(/@([a-z][a-z0-9.-]*)/);
+  if (!m || m.index === undefined) return msg;
+  return (
+    <>
+      {msg.slice(0, m.index)}
+      <strong>@{m[1]}</strong>
+      {msg.slice(m.index + m[0].length)}
+    </>
+  );
+}
+
 /**
- * NotificationsList component
- * Displays user notifications with filtering and pagination
- * Migrated from legacy/src/app/components/cards/NotificationsList.jsx
+ * NotificationsList — legacy layout: pipe-separated text filters, avatar +
+ * linked message + icon/time row, unread accent dot, score-tinted rows.
  */
 export default function NotificationsList({ username }: NotificationsListProps) {
   const dispatch = useAppDispatch();
-  const notificationsState = useAppSelector((state) => 
+  const notificationsState = useAppSelector((state) =>
     state.global.notifications?.[username]
   );
   const loading = useAppSelector((state) => state.global.notifications?.loading);
 
-  const [filter, setFilter] = useState<'all' | 'replies' | 'follows' | 'upvotes' | 'resteems' | 'mentions'>('all');
-  const [lastId, setLastId] = useState<number | null>(null);
+  const [filter, setFilter] = useState<FilterKey>('all');
 
   const notifications: Notification[] = notificationsState?.notifications || [];
   const isLastPage = notificationsState?.isLastPage || false;
-  const unreadCount = Object.keys(notificationsState?.unreadNotifications || {}).length;
+  const unreadMap: Record<string, unknown> =
+    notificationsState?.unreadNotifications || {};
+  const unreadCount = Object.keys(unreadMap).length;
 
   // Load notifications on mount
   useEffect(() => {
     if (username) {
       loadNotifications(username);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
 
   const loadNotifications = async (accountName: string, startId?: number) => {
@@ -86,13 +137,9 @@ export default function NotificationsList({ username }: NotificationsListProps) 
   };
 
   const handleMarkAsRead = async () => {
-    const timeNow = new Date().toISOString().slice(0, 19);
     try {
       // TODO: Implement actual API call to mark notifications as read
       // This requires broadcasting a custom_json operation
-      // For now, just update the local state
-      
-      // Update unread notifications state
       dispatch(
         receiveUnreadNotifications({
           name: username,
@@ -104,43 +151,11 @@ export default function NotificationsList({ username }: NotificationsListProps) 
     }
   };
 
-  const getNotificationIcon = (type: string) => {
-    const iconMap: Record<string, string> = {
-      reply: '💬',
-      reply_post: '💬',
-      reply_comment: '💬',
-      follow: '👥',
-      set_label: '✏️',
-      set_role: '✏️',
-      vote: '⬆️',
-      error: '⚙️',
-      reblog: '🔄',
-      mention: '💭',
-    };
-    return iconMap[type] || '🔔';
-  };
-
-  const getNotificationTypeLabel = (type: string) => {
-    const labelMap: Record<string, string> = {
-      reply: 'Reply',
-      reply_post: 'Reply',
-      reply_comment: 'Reply',
-      follow: 'Follow',
-      set_label: 'Label',
-      set_role: 'Role',
-      vote: 'Upvote',
-      error: 'Error',
-      reblog: 'Reblog',
-      mention: 'Mention',
-    };
-    return labelMap[type] || type;
-  };
-
   const filterNotifications = (notifs: Notification[]) => {
     if (filter === 'all') return notifs;
 
     const filterMap: Record<string, string[]> = {
-      replies: ['reply_comment', 'reply'],
+      replies: ['reply_comment', 'reply', 'reply_post'],
       follows: ['follow'],
       upvotes: ['vote'],
       resteems: ['reblog'],
@@ -153,105 +168,107 @@ export default function NotificationsList({ username }: NotificationsListProps) 
 
   const filteredNotifications = filterNotifications(notifications);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
-
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
-    return date.toLocaleDateString();
-  };
-
   return (
-    <div className="notifications-list">
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-3xl font-bold">Notifications</h1>
-          {unreadCount > 0 && (
+    <div className="notifications-list mt-4">
+      {/* Filter links (legacy: centered, pipe-separated, selected = bold) */}
+      <div className="mb-4 text-center">
+        {FILTERS.map((f, i) => (
+          <span key={f.key}>
             <button
-              onClick={handleMarkAsRead}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+              type="button"
+              onClick={() => setFilter(f.key)}
+              className={`px-[5px] text-foreground hover:text-accent-foreground ${
+                filter === f.key ? 'font-bold' : ''
+              } ${i > 0 ? 'border-l border-[#ababab]' : ''}`}
             >
-              Mark all as read ({unreadCount})
+              {f.label}
             </button>
-          )}
-        </div>
-
-        {/* Filter tabs */}
-        <div className="flex gap-2 border-b border-gray-200 mb-4">
-          {(['all', 'replies', 'follows', 'upvotes', 'resteems', 'mentions'] as const).map((filterType) => (
-            <button
-              key={filterType}
-              onClick={() => setFilter(filterType)}
-              className={`px-4 py-2 -mb-px border-b-2 transition-colors ${
-                filter === filterType
-                  ? 'border-blue-500 text-blue-600 font-medium'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
-            </button>
-          ))}
-        </div>
+          </span>
+        ))}
       </div>
 
-      {/* Notifications list */}
+      {unreadCount > 0 && (
+        <div className="mb-4 text-center">
+          <button
+            type="button"
+            onClick={handleMarkAsRead}
+            className="font-bold text-foreground hover:text-accent-foreground"
+          >
+            Mark all as read
+          </button>
+        </div>
+      )}
+
       {loading && notifications.length === 0 ? (
-        <div className="flex justify-center items-center py-12">
+        <div className="flex items-center justify-center py-12">
           <LoadingIndicator type="circle" />
         </div>
       ) : filteredNotifications.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">
-          <p>No notifications found.</p>
+        <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
+          Welcome! You don&apos;t have any notifications yet.
         </div>
       ) : (
-        <div className="space-y-2">
-          {filteredNotifications.map((notification) => (
-            <div
-              key={notification.id}
-              className={`notification-item p-4 border rounded-lg hover:bg-gray-50 transition-colors ${
-                notification.type ? `notification-${notification.type}` : ''
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                <span className="text-2xl mt-1">{getNotificationIcon(notification.type)}</span>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs text-gray-500">
-                      {getNotificationTypeLabel(notification.type)}
-                    </span>
-                    <span className="text-xs text-gray-400">
-                      {formatDate(notification.date)}
-                    </span>
-                  </div>
-                  {notification.url ? (
-                    <Link
-                      href={notification.url}
-                      className="text-gray-800 hover:text-blue-600"
-                    >
-                      {notification.msg}
+        <div>
+          {filteredNotifications.map((notification) => {
+            const account = firstAccount(notification.msg || '');
+            const TypeIcon = TYPE_ICONS[notification.type] || Bell;
+            const isUnread = Boolean(unreadMap[notification.id]);
+            const score = notification.score ?? 0;
+            return (
+              <div
+                key={notification.id}
+                className="relative border-b border-border px-4 py-2"
+                style={{
+                  background:
+                    score > 0
+                      ? `rgba(225,255,225,${Math.min(score, 100) / 100})`
+                      : undefined,
+                }}
+              >
+                {isUnread && (
+                  <span
+                    className="absolute right-4 top-3 text-[2em] leading-none text-accent-foreground"
+                    title="Unread"
+                  >
+                    •
+                  </span>
+                )}
+                <div className="flex items-start gap-3">
+                  {account && (
+                    <Link href={`/@${account}`} className="mt-0.5 shrink-0">
+                      <Userpic account={account} className="!size-10" />
                     </Link>
-                  ) : (
-                    <p className="text-gray-800">{notification.msg}</p>
                   )}
+                  <div className="min-w-0 flex-1">
+                    {notification.url ? (
+                      <Link
+                        href={notification.url}
+                        className="text-foreground hover:text-accent-foreground"
+                      >
+                        {renderMsg(notification.msg || '')}
+                      </Link>
+                    ) : (
+                      <p className="text-foreground">
+                        {renderMsg(notification.msg || '')}
+                      </p>
+                    )}
+                    <div className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                      <TypeIcon className="size-4" aria-hidden />
+                      <TimeAgo date={notification.date} />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
-          {/* Load more button */}
           {!isLastPage && (
-            <div className="text-center py-4">
+            <div className="py-4 text-center">
               <button
+                type="button"
                 onClick={handleLoadMore}
                 disabled={loading}
-                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                className="font-bold text-foreground hover:text-accent-foreground disabled:opacity-50"
               >
                 {loading ? 'Loading...' : 'Load more'}
               </button>
@@ -262,4 +279,3 @@ export default function NotificationsList({ username }: NotificationsListProps) 
     </div>
   );
 }
-

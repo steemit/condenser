@@ -14,8 +14,8 @@ import {
 import PostsList from "@/components/cards/PostsList";
 import { Post } from "@/lib/api/steem";
 import { FeedLayout } from "@/components/layout/FeedLayout";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { SearchIcon } from "lucide-react";
+import Userpic from "@/components/elements/Userpic";
 import { cn } from "@/lib/utils";
 
 /** Elasticsearch hit shape (minimal fields used for Post mapping). */
@@ -188,97 +188,95 @@ export default function SearchContent() {
 
   return (
     <FeedLayout centerClassName="md:max-w-4xl lg:max-w-6xl">
-      <h1 className="mb-6 font-sans text-2xl font-bold text-foreground md:text-3xl">
-        Search
-      </h1>
-
-      <div className="mb-6">
+      {/* legacy: the in-page search box only shows ≤765px (desktop uses the
+          header search) */}
+      <div className="mb-6 min-[766px]:hidden">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSearch(localQuery);
           }}
-          className="flex flex-col gap-2 sm:flex-row"
+          className="relative"
         >
-          <Input
-            type="text"
+          <input
+            type="search"
             value={localQuery}
             onChange={(e) => setLocalQuery(e.target.value)}
-            placeholder="Search posts, comments, and accounts..."
-            className="min-h-10 flex-1"
+            placeholder="Search"
+            aria-label="Search"
+            className="h-[42px] w-full border-none bg-transparent pr-10 text-[16px] text-foreground outline-none placeholder:text-muted-foreground"
           />
-          <Button type="submit" className="shrink-0">
-            Search
-          </Button>
+          <button
+            type="submit"
+            aria-label="Submit search"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-foreground"
+          >
+            <SearchIcon className="size-5" strokeWidth={1.2} />
+          </button>
         </form>
       </div>
 
       {query.trim() ? (
         <>
-          <div className="mb-4 flex flex-col flex-wrap gap-4 border-b border-border pb-4 md:flex-row md:items-center">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-              <span className="text-sm text-muted-foreground">Search in:</span>
-              <div className="flex flex-wrap gap-1">
-                {[
-                  { value: 0, label: "Posts" },
-                  { value: 1, label: "Comments" },
-                  { value: 2, label: "Accounts" },
-                ].map((tab) => (
-                  <Button
-                    key={tab.value}
-                    type="button"
-                    size="sm"
-                    variant={depth === tab.value ? "default" : "outline"}
-                    onClick={() => handleDepthChange(tab.value)}
-                  >
-                    {tab.label}
-                  </Button>
-                ))}
+          {/* legacy SearchTabs: module-bg bar, wide gaps, #00FFC8 active */}
+          <div className="mb-4 flex flex-wrap items-center gap-y-2 border-b border-border pb-2">
+            <div className="flex items-center">
+              {[
+                { value: 0, label: "Posts" },
+                { value: 1, label: "Comments" },
+                { value: 2, label: "Accounts" },
+              ].map((tab) => (
+                <button
+                  key={tab.value}
+                  type="button"
+                  onClick={() => handleDepthChange(tab.value)}
+                  className={cn(
+                    "mr-[1rem] border-b-4 px-1 py-1 text-sm transition-colors min-[457px]:mr-[2.8rem]",
+                    depth === tab.value
+                      ? "border-[#00FFC8] text-[#00FFC8]"
+                      : "border-transparent text-foreground hover:text-accent-foreground"
+                  )}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* legacy: sort only Newest / Highest Payout, hidden for Accounts */}
+            {depth !== 2 && (
+              <div className="ml-auto flex items-center gap-2">
+                <label
+                  htmlFor="search-sort"
+                  className="text-sm text-muted-foreground"
+                >
+                  Sort by:
+                </label>
+                <select
+                  id="search-sort"
+                  value={sort === "payout" ? "payout" : "created_at"}
+                  onChange={(e) => handleSortChange(e.target.value)}
+                  className={cn(
+                    "h-9 border border-input bg-background px-3 text-sm text-foreground outline-none",
+                    "focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+                  )}
+                >
+                  <option value="created_at">Newest</option>
+                  <option value="payout">Highest Payout</option>
+                </select>
               </div>
-            </div>
-
-            <div className="flex flex-col gap-2 sm:ml-auto sm:flex-row sm:items-center">
-              <label
-                htmlFor="search-sort"
-                className="text-sm text-muted-foreground"
-              >
-                Sort by:
-              </label>
-              <select
-                id="search-sort"
-                value={sort}
-                onChange={(e) => handleSortChange(e.target.value)}
-                className={cn(
-                  "h-9 rounded-md border border-input bg-background px-3 text-sm text-foreground shadow-xs outline-none",
-                  "focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
-                )}
-              >
-                <option value="created_at">Newest</option>
-                <option value="trending">Trending</option>
-                <option value="votes">Most Votes</option>
-                <option value="payout">Highest Payout</option>
-              </select>
-            </div>
+            )}
           </div>
-
-          {searchState.total_result > 0 ? (
-            <p className="mb-4 text-sm text-muted-foreground">
-              Found {searchState.total_result.toLocaleString()} results
-            </p>
-          ) : null}
 
           {searchState.pending && posts.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-2 py-12">
               <p className="text-muted-foreground">Searching...</p>
             </div>
           ) : posts.length === 0 ? (
-            <div className="rounded-lg border border-border bg-muted/40 p-8 text-center">
-              <p className="text-muted-foreground">
-                {query.trim()
-                  ? "No results found."
-                  : "Enter a search query to get started."}
-              </p>
+            <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
+              Nothing was found.
             </div>
+          ) : depth === 2 ? (
+            <SearchUserList hits={searchState.result} />
           ) : (
             <PostsList
               posts={posts}
@@ -290,13 +288,45 @@ export default function SearchContent() {
           )}
         </>
       ) : (
-        <div className="rounded-lg border border-border bg-muted/40 p-8 text-center">
-          <p className="text-muted-foreground">
-            Enter a search query above to find posts, comments, and accounts.
-          </p>
+        <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
+          Enter a search query above to find posts, comments, and accounts.
         </div>
       )}
     </FeedLayout>
+  );
+}
+
+/** Legacy SearchUserList: one row per account (avatar + name + about). */
+function SearchUserList({ hits }: { hits: SearchHitSource[] }) {
+  return (
+    <ul>
+      {hits.map((hit, i) => {
+        const account = (hit as { name?: string }).name || hit.author || "";
+        if (!account) return null;
+        const about = (hit as { about?: string }).about;
+        return (
+          <li
+            key={`${account}-${i}`}
+            className="flex items-center gap-3 border-b border-border py-2"
+          >
+            <a href={`/@${account}`} className="shrink-0">
+              <Userpic account={account} className="!size-10" />
+            </a>
+            <div className="min-w-0">
+              <a
+                href={`/@${account}`}
+                className="font-bold text-foreground hover:text-accent-foreground"
+              >
+                @{account}
+              </a>
+              {about && (
+                <p className="truncate text-sm text-muted-foreground">{about}</p>
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

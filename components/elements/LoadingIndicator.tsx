@@ -22,9 +22,9 @@ export default function LoadingIndicator({
     case 'dots':
       return (
         <div style={style} className="flex items-center justify-center gap-1">
-          <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-          <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-          <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+          <div className="w-2 h-2 bg-[#06D6A9] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+          <div className="w-2 h-2 bg-[#06D6A9] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+          <div className="w-2 h-2 bg-[#06D6A9] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
         </div>
       );
 
@@ -35,7 +35,7 @@ export default function LoadingIndicator({
           className={`flex items-center justify-center ${inline ? 'inline-block' : ''}`}
         >
           <svg
-            className="animate-spin h-5 w-5 text-blue-600"
+            className="animate-spin h-5 w-5 text-[#06D6A9]"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -62,7 +62,7 @@ export default function LoadingIndicator({
       return (
         <div style={style} className="flex items-center justify-center">
           <svg
-            className="animate-spin h-6 w-6 text-blue-600"
+            className="animate-spin h-6 w-6 text-[#06D6A9]"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -89,9 +89,9 @@ export default function LoadingIndicator({
       return (
         <div style={style} className="flex items-center justify-center">
           <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-            <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-            <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div className="w-2 h-2 bg-[#06D6A9] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+            <div className="w-2 h-2 bg-[#06D6A9] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+            <div className="w-2 h-2 bg-[#06D6A9] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
           </div>
         </div>
       );

@@ -83,6 +83,9 @@
   --sidebar-accent-foreground: #06d6a9;
   --sidebar-border: #eeeeee;
   --sidebar-ring: #06d6a9;
+  /* Legacy text links (_themes.scss light: textColorAccent/Hover) */
+  --link: #004eff;
+  --link-hover: #1a5099;
 }
 
 /* Dark theme — aligned with _themes.scss (dark) */
@@ -118,6 +121,9 @@
   --sidebar-accent-foreground: #06d6a9;
   --sidebar-border: #2b3a45;
   --sidebar-ring: #06d6a9;
+  /* Legacy text links (_themes.scss dark: textColorAccent/Hover) */
+  --link: #06d6a9;
+  --link-hover: #06d6a9;
 }
 
 @layer base {
@@ -138,11 +144,137 @@
   overflow: hidden;
 }
 
+/* Full typography port of legacy assets/stylesheets/markdown.scss */
 .Markdown {
+  font-family: 'Source Serif Pro', serif;
+  font-size: 120%;
+  line-height: 150%;
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
   hyphens: none;
+}
+
+.Markdown h1,
+.Markdown h2,
+.Markdown h3,
+.Markdown h4,
+.Markdown h5,
+.Markdown h6 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+.Markdown h1 { margin: 2.5rem 0 0.3rem; font-size: 160%; }
+.Markdown h2 { margin: 2.5rem 0 0.3rem; font-size: 140%; }
+.Markdown h3 { margin: 2rem 0 0.3rem; font-size: 120%; }
+.Markdown h4 { margin: 1.5rem 0 0.2rem; font-size: 110%; }
+.Markdown h5 { margin: 1rem 0 0.2rem; font-size: 100%; }
+.Markdown h6 { margin: 1rem 0 0.2rem; font-size: 90%; }
+
+.Markdown code {
+  padding: 0.2rem;
+  font-size: 85%;
+  border-radius: 3px;
+  border: none;
+  background-color: #f4f4f4;
+  font-weight: inherit;
+  overflow: scroll;
+}
+
+.dark .Markdown code {
+  background-color: #212c33;
+}
+
+.Markdown pre > code {
+  display: block;
+}
+
+.Markdown strong {
+  font-weight: 600;
+}
+
+.Markdown ol,
+.Markdown ul {
+  margin-left: 2rem;
+}
+
+.Markdown table td {
+  word-break: normal;
+}
+
+.Markdown table thead th {
+  word-break: normal;
+}
+
+.Markdown p {
+  font-size: 100%;
+  line-height: 150%;
+  margin: 0 0 1.5rem 0;
+}
+
+/* legacy .link--accent (light: blue #004EFF, dark: teal) */
+.Markdown a {
+  color: var(--link);
+  text-decoration: none;
+  transition: 0.2s all ease-in-out;
+}
+
+.Markdown a:visited,
+.Markdown a:active {
+  color: var(--link);
+}
+
+.Markdown a:hover,
+.Markdown a:focus {
+  color: var(--link-hover);
+}
+
+.Markdown img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: none;
+}
+
+@media only screen and (min-width: 768px) {
+  .Markdown img {
+    width: auto;
+  }
+}
+
+.Markdown iframe {
+  max-width: 100%;
+  max-height: 75vw;
+}
+
+.Markdown div.pull-right {
+  float: right;
+  padding-left: 1rem;
+  max-width: 50%;
+}
+
+.Markdown div.pull-left {
+  float: left;
+  padding-right: 1rem;
+  max-width: 50%;
+}
+
+.Markdown div.text-justify { text-align: justify; }
+.Markdown div.text-right { text-align: right; }
+.Markdown div.text-center { text-align: center; }
+.Markdown div.text-rtl { direction: rtl; }
+
+.Markdown blockquote {
+  border-left: 1px solid #788187;
+}
+
+.dark .Markdown blockquote {
+  border-left: 1px solid #a6b2ba;
+}
+
+.Markdown blockquote > p {
+  color: var(--muted-foreground);
 }
 
 .Markdown div.videoWrapper {
@@ -161,6 +293,11 @@
 }
 
 /* used for comments */
+.Markdown.MarkdownViewer--small {
+  font-family: inherit;
+  font-size: 110%;
+}
+
 .Markdown.MarkdownViewer--small img {
   max-width: 400px;
   max-height: 400px;
@@ -204,4 +341,30 @@
 /* Phishing warning */
 .phishy {
   color: crimson;
+}
+
+/* Account avatar (legacy Userpic.scss). Size overrides are applied inline
+   or via utility classes at the usage site (24px feed, 48px post/comment). */
+.Userpic {
+  display: inline-block;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+/* Header logo hover: fill flips to near-black (light) / white (dark),
+   matching legacy SteemLogo styles. */
+@media (hover: hover) {
+  .Header__logotype .logo:hover svg path,
+  .Header__logotype .logo:active svg path {
+    fill: #171f24;
+  }
+  .dark .Header__logotype .logo:hover svg path,
+  .dark .Header__logotype .logo:active svg path {
+    fill: #ffffff;
+  }
 }

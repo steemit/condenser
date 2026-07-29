@@ -197,10 +197,6 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
     }
   };
 
-  const handleCancel = () => {
-    dispatch(hideLogin());
-  };
-
   const handleSignup = () => {
     // TODO: Open signup URL in new window
     // Safe access to process.env for UMD compatibility
@@ -211,17 +207,14 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
   };
 
   return (
-    <div className="LoginForm">
+    <div className="LoginForm mx-auto mb-2 mt-4 max-w-[28rem]">
       {!embedded ? (
-        <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
+        <h3 className="mb-4 text-left text-xl font-bold">Login</h3>
       ) : null}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Username input */}
         <div>
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-            Username
-          </label>
           <div className="flex">
             <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
               @
@@ -242,26 +235,17 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
 
         {/* Posting Private Key input */}
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            Posting Private Key (WIF)
-          </label>
           <input
             id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your posting private key (WIF format, starts with 5...)"
+            placeholder="Enter your posting private key (WIF)"
             className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             autoComplete="off"
             disabled={submitting}
             required
           />
-          <p className="mt-1 text-xs text-gray-500">
-            Only posting private keys in WIF format are accepted. Master passwords are not supported.
-          </p>
-          <p className="mt-1 text-xs text-gray-500">
-            Your private key starts with &quot;5&quot; and is typically 51-52 characters long.
-          </p>
           {validatingKey && (
             <p className="mt-1 text-xs text-blue-600">
               Validating posting private key...
@@ -294,40 +278,28 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
             />
             <span className="ml-2 text-sm text-gray-700">Keep me logged in</span>
           </label>
-          <p className="mt-1 text-xs text-gray-500 ml-6">
-            Only for low-security keys (like posting keys). Never save owner or active keys.
-          </p>
         </div>
 
-        {/* Submit button */}
-        <div className="flex gap-3">
+        {/* Submit button + register link on one row (legacy login-modal-buttons) */}
+        <div className="flex items-center gap-3">
           <button
             type="submit"
             disabled={submitting}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-{submitting ? (validatingKey ? 'Validating key...' : 'Logging in...') : 'Login'}
+            {submitting ? (validatingKey ? 'Validating key...' : 'Logging in...') : 'Login'}
           </button>
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            disabled={submitting}
-          >
-            Cancel
-          </button>
-        </div>
-
-        {/* Sign up link */}
-        <div className="text-center pt-4 border-t border-gray-200">
-          <p className="text-sm text-gray-600 mb-2">Not a Steemit user?</p>
-          <button
-            type="button"
-            onClick={handleSignup}
-            className="text-sm text-blue-600 hover:text-blue-800 underline"
-          >
-            Sign up for free and get STEEM
-          </button>
+          <span className="register ml-auto text-right text-sm text-gray-600">
+            Not a Steemit user?
+            <br />
+            <button
+              type="button"
+              onClick={handleSignup}
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              Sign up for free and get STEEM
+            </button>
+          </span>
         </div>
       </form>
     </div>

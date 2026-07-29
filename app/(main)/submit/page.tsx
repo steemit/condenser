@@ -51,9 +51,6 @@ export default function SubmitPostPage() {
 
   return (
     <FeedLayout centerClassName="md:max-w-4xl">
-      <h1 className="mb-6 font-sans text-2xl font-bold text-foreground md:text-3xl">
-        Create Post
-      </h1>
       <PostEditor type="submit_story" onSuccess={handleSuccess} />
     </FeedLayout>
   );

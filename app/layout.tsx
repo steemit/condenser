@@ -28,6 +28,20 @@ export default function RootLayout({
       <body
         className={`${sourceSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
+        {/* Post-body serif font, same source as legacy (server-html.jsx).
+            Loaded via Google Fonts CDN because next/font/google does not
+            ship Source Serif Pro. */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap"
+        />
         <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>

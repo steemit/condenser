@@ -8,6 +8,8 @@ import { broadcastOperation } from '@/store/slices/transactionSlice';
 interface ReblogProps {
   author: string;
   permlink: string;
+  /** Icon-only rendering (legacy feed-card / post-footer style). */
+  iconOnly?: boolean;
 }
 
 /**
@@ -15,7 +17,7 @@ interface ReblogProps {
  * Allows users to reblog (repost) posts to their own blog
  * Migrated from legacy/src/app/components/elements/Reblog.jsx
  */
-export default function Reblog({ author, permlink }: ReblogProps) {
+export default function Reblog({ author, permlink, iconOnly = false }: ReblogProps) {
   const dispatch = useAppDispatch();
   const username = useAppSelector((state) => state.user.current?.username);
 
@@ -71,6 +73,38 @@ export default function Reblog({ author, permlink }: ReblogProps) {
       })
     );
   };
+
+  // Legacy icon-only style: gray reblog icon, teal when active, spinner while
+  // broadcasting (Reblog.scss).
+  if (iconOnly) {
+    return (
+      <button
+        onClick={handleReblog}
+        disabled={loading || active}
+        className={`inline-flex items-center p-0.5 transition-colors ${
+          loading ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
+        title={active ? 'Already reblogged' : 'Reblog this post'}
+        aria-label={active ? 'Already reblogged' : 'Reblog this post'}
+      >
+        {loading ? (
+          <svg
+            className="h-4 w-4 animate-spin rounded-full border-2 border-[#06D6A9] border-t-transparent"
+            viewBox="0 0 24 24"
+          />
+        ) : (
+          <svg
+            className={`h-4 w-4 ${active ? 'text-[#06D6A9]' : 'text-[#cacaca] hover:text-[#06D6A9]'}`}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          </svg>
+        )}
+      </button>
+    );
+  }
 
   return (
     <button

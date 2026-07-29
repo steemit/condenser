@@ -7,16 +7,16 @@ import { ChevronDownIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * Feed sort keys and labels — aligned with legacy SortOrder (vertical)
- * plus promoted / payout_comments used by this app’s /[sort] routes.
+ * Feed sort keys and labels — aligned with legacy SortOrder (vertical):
+ * Trending / Hot / New / Payouts / Muted. The /promoted and
+ * /payout_comments routes still exist but are not offered here (legacy
+ * does not list them).
  */
 const SORT_OPTIONS: { value: string; label: string }[] = [
   { value: "trending", label: "Trending" },
   { value: "hot", label: "Hot" },
   { value: "created", label: "New" },
-  { value: "promoted", label: "Promoted" },
   { value: "payout", label: "Payouts" },
-  { value: "payout_comments", label: "Comment payout" },
   { value: "muted", label: "Muted" },
 ];
 
@@ -37,6 +37,8 @@ export function FeedSortDropdown({
 }) {
   const router = useRouter();
   const normalized = sort.toLowerCase();
+  // Unknown sorts (promoted / payout_comments) fall back to "trending" in
+  // the dropdown, exactly like legacy when the sort isn't in the list.
   const value = SORT_OPTIONS.some((o) => o.value === normalized)
     ? normalized
     : "trending";
@@ -60,7 +62,7 @@ export function FeedSortDropdown({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={cn(
-          "h-10 w-full cursor-pointer appearance-none rounded-md border border-input bg-card py-2 pl-3 pr-9 text-sm font-medium text-foreground shadow-sm",
+          "h-10 w-full cursor-pointer appearance-none border border-input bg-card py-2 pl-3 pr-9 text-sm text-foreground",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         )}
       >

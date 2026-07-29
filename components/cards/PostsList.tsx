@@ -1,13 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Link from "next/link";
+
 import { Post } from "@/lib/api/steem";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
+import PostSummary from "@/components/cards/PostSummary";
+import LoadingIndicator from "@/components/elements/LoadingIndicator";
 
 interface PostsListProps {
   posts: Post[];
@@ -17,8 +14,25 @@ interface PostsListProps {
   order?: string;
 }
 
+/** Legacy PostsIndex empty-state copy (Callout), keyed by order/category. */
+function emptyText(order?: string, category?: string): string {
+  switch (order) {
+    case "payout":
+    case "payout_comments":
+      return "No pending posts found. This view only shows posts within 12-36 hours of payout.";
+    case "muted":
+      return "No muted posts found.";
+    case "feed":
+      return "You haven't followed anyone yet! Explore Trending to find people to follow.";
+    default:
+      break;
+  }
+  if (category && category !== "my") return `No posts in #${category} yet!`;
+  return "No posts found.";
+}
+
 /**
- * Posts list with Legacy-style summary cards (border, hover shadow on md+).
+ * Posts list — legacy PostsList: summaries as <li> cards with infinite scroll.
  */
 export default function PostsList({
   posts,
@@ -62,81 +76,52 @@ export default function PostsList({
     window.addEventListener("scroll", scrollListenerRef.current, {
       passive: true,
     });
+    window.addEventListener("resize", scrollListenerRef.current, {
+      passive: true,
+    });
+    // Legacy fires the listener once on mount so short first pages
+    // auto-fetch more.
+    scrollListenerRef.current();
 
     return () => {
       if (scrollListenerRef.current) {
         window.removeEventListener("scroll", scrollListenerRef.current);
+        window.removeEventListener("resize", scrollListenerRef.current);
       }
       clearTimeout(scrollTimeout);
     };
   }, [posts.length, onLoadMore]);
 
-  const sortForTag = order?.trim() ? order : "trending";
-  void category;
-
   if (loading && posts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-2 py-12">
-        <p className="text-muted-foreground">Loading posts...</p>
+        <LoadingIndicator type="circle" />
       </div>
     );
   }
 
   if (posts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-2 py-12">
-        <p className="text-muted-foreground">No posts found.</p>
+      <div className="my-8 rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
+        {emptyText(order, category)}
       </div>
     );
   }
 
   return (
-    <div id="posts_list" ref={listRef} className="flex flex-col gap-10">
-      <ul className="flex flex-col gap-10">
+    <div id="posts_list" ref={listRef}>
+      <ul className="PostsList__summaries flex flex-col gap-0 min-[760px]:gap-[0.8em]">
         {posts.map((post) => (
-          <li key={`${post.author}/${post.permlink}`} className="list-none">
-            <Card
-              className="rounded-[var(--radius)] border-transparent bg-transparent py-0 shadow-none md:border-border md:bg-card md:shadow-none md:transition-shadow md:duration-200 md:hover:shadow-[0px_5px_10px_0_rgba(0,0,0,0.03)]"
-              size="sm"
-            >
-              <CardHeader className="flex flex-col gap-1 border-0 px-0 py-2 md:border-b md:border-border md:px-4 md:py-2.5">
-                <h3 className="text-base font-semibold leading-snug text-foreground">
-                  <Link
-                    href={`/${post.category}/@${post.author}/${post.permlink}`}
-                    className="text-foreground transition-colors hover:text-accent-foreground"
-                  >
-                    {post.title || "Untitled"}
-                  </Link>
-                </h3>
-              </CardHeader>
-              <CardContent className="px-0 py-1 text-sm md:px-4">
-                <p className="text-muted-foreground">
-                  by{" "}
-                  <Link
-                    href={`/@${post.author}`}
-                    className="text-foreground hover:text-accent-foreground"
-                  >
-                    @{post.author}
-                  </Link>{" "}
-                  in{" "}
-                  <Link
-                    href={`/${sortForTag}/${post.category}`}
-                    className="text-foreground hover:text-accent-foreground"
-                  >
-                    #{post.category}
-                  </Link>
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {new Date(post.created).toLocaleString()}
-                </p>
-              </CardContent>
-            </Card>
-          </li>
+          <PostSummary
+            key={`${post.author}/${post.permlink}`}
+            post={post}
+            order={order}
+          />
         ))}
       </ul>
       {loading && posts.length > 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 py-4">
-          <p className="text-muted-foreground">Loading more...</p>
+          <LoadingIndicator type="circle" />
         </div>
       ) : null}
     </div>

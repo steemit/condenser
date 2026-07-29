@@ -16,16 +16,18 @@ interface UserpicProps {
   account: string;
   size?: string;
   hide?: boolean;
+  /** Extra classes, e.g. size overrides ("!h-6 !w-6"). */
+  className?: string;
 }
 
-export default function Userpic({ account, size, hide = false }: UserpicProps) {
+export default function Userpic({ account, size, hide = false, className }: UserpicProps) {
   if (hide) return null;
   const name = account === 'steemitblog' ? 'steemitdev' : account;
   const sizeSuffix = size && (sizeList as readonly string[]).includes(size) ? `/${size}` : '';
   const url = `${imageProxy()}u/${name}/avatar${sizeSuffix}`;
   return (
     <div
-      className="Userpic"
+      className={className ? `Userpic ${className}` : 'Userpic'}
       style={{ backgroundImage: `url(${url})` }}
       role="img"
       aria-label={name}

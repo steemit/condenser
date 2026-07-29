@@ -355,3 +355,16 @@
   height: 48px;
   flex-shrink: 0;
 }
+
+/* Header logo hover: fill flips to near-black (light) / white (dark),
+   matching legacy SteemLogo styles. */
+@media (hover: hover) {
+  .Header__logotype .logo:hover svg path,
+  .Header__logotype .logo:active svg path {
+    fill: #171f24;
+  }
+  .dark .Header__logotype .logo:hover svg path,
+  .dark .Header__logotype .logo:active svg path {
+    fill: #ffffff;
+  }
+}

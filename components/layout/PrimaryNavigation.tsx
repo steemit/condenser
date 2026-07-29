@@ -61,8 +61,6 @@ const PROFILE_SECTIONS: { segment: string; label: string }[] = [
   { segment: "replies", label: "Replies" },
   { segment: "payout", label: "Payout" },
   { segment: "feed", label: "Feed" },
-  { segment: "followers", label: "Followers" },
-  { segment: "followed", label: "Following" },
   { segment: "notifications", label: "Notifications" },
   { segment: "communities", label: "Communities" },
   { segment: "settings", label: "Settings" },
@@ -167,12 +165,13 @@ function NavExploreItem({
   useLoginPrompt?: boolean;
   onLoginPrompt?: () => void;
 }) {
+  // Legacy sub-item (ul#FeedsNavigation li): padding 0.6rem 0.8rem; active =
+  // teal bold text (no background, no side bar); hover = highlight bg + teal.
   const className = cn(
-    "flex w-full items-center gap-2 rounded-md py-1.5 pl-2 pr-2 text-sm font-medium transition-colors",
-    "border-l-[3px] -ml-px",
+    "flex w-full items-center gap-2 py-[0.6rem] pl-[0.8rem] pr-2 text-sm transition-colors",
     active
-      ? "border-accent-foreground text-accent-foreground"
-      : "border-transparent text-foreground hover:bg-accent/80 hover:text-accent-foreground"
+      ? "font-bold text-accent-foreground"
+      : "text-foreground hover:bg-accent hover:text-accent-foreground"
   );
   return (
     <li>
@@ -209,11 +208,13 @@ function NavTopItem({
   useLoginPrompt?: boolean;
   onLoginPrompt?: () => void;
 }) {
+  // Legacy top-level tab active: highlight bg + 2px teal bottom border +
+  // teal text; hover: highlight bg + teal text.
   const className = cn(
-    "flex items-center gap-2 rounded-md px-2 py-2 text-sm font-medium transition-colors",
+    "flex items-center gap-2 border-b-2 px-2 py-[1em] text-sm transition-colors",
     active
-      ? "bg-accent/90 text-accent-foreground"
-      : "text-foreground hover:bg-accent/80 hover:text-accent-foreground"
+      ? "border-[#06D6A9] bg-accent text-accent-foreground"
+      : "border-transparent text-foreground hover:bg-accent hover:text-accent-foreground"
   );
   if (useLoginPrompt) {
     return (
@@ -289,7 +290,7 @@ export function PrimaryNavigation({
           <CompassIcon className="size-[1.15rem] shrink-0" aria-hidden />
           <span>Explore</span>
         </div>
-        <ul className="ml-1 flex flex-col gap-0.5 border-l border-border pl-2">
+        <ul className="ml-1 flex flex-col gap-0 pl-2">
           <NavExploreItem
             href="/trending"
             label="All Posts"
@@ -381,8 +382,8 @@ export function PrimaryNavigation({
                   <Link
                     href={href}
                     className={cn(
-                      "block rounded-md px-2 py-1.5 font-medium text-foreground transition-colors hover:bg-accent/80 hover:text-accent-foreground",
-                      active && "bg-accent font-semibold text-accent-foreground"
+                      "block py-[0.6rem] pl-[1.6rem] pr-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
+                      active && "font-bold text-accent-foreground"
                     )}
                   >
                     {label}

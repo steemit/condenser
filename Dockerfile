@@ -63,12 +63,13 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 # Switch to non-root user
 USER nextjs
 
-# Expose port
-EXPOSE 3000
+# Expose port (8080 matches the EB openresty upstream for APP_TYPE=condenser;
+# can still be overridden with -e PORT=...)
+EXPOSE 8080
 
 # Set environment variables
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=8080
 ENV HOSTNAME=0.0.0.0
 
 # Start the application

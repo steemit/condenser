@@ -22,7 +22,7 @@ export function FeedListHeader({
   className?: string;
 }) {
   return (
-    <header className={cn("mb-0", className)}>
+    <header className={cn("mb-4 min-[760px]:mb-0", className)}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
           {/* legacy h1.articles__h1 is show-for-mq-large (≥1200px) only */}

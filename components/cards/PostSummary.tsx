@@ -69,7 +69,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
   // NSFW warn preference: show a warning bar until the user reveals it.
   if (isNsfw && !revealNsfw) {
     return (
-      <li className="list-none border-b border-border px-2 py-3 min-[760px]:rounded-[6px] min-[760px]:border min-[760px]:bg-card min-[760px]:px-2 min-[760px]:py-1">
+      <li className="list-none rounded-[6px] border border-border bg-card px-2 py-3 min-[760px]:px-2 min-[760px]:py-1">
         <div className="py-2 text-[15px] text-muted-foreground">
           This post is <span className="font-semibold text-[#ff0264]">nsfw</span>
           .{" "}
@@ -89,8 +89,8 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
   return (
     <li
       className={cn(
-        "list-none border-b border-border px-2 py-3",
-        "min-[760px]:rounded-[6px] min-[760px]:border min-[760px]:bg-card min-[760px]:px-2 min-[760px]:pb-1 min-[760px]:pt-0.5",
+        "list-none rounded-[6px] border border-border bg-card px-2 py-3",
+        "min-[760px]:px-2 min-[760px]:pb-1 min-[760px]:pt-0.5",
         "min-[1200px]:transition-shadow min-[1200px]:hover:shadow-[2px_2px_3px_0_rgba(0,0,0,0.06)]"
       )}
     >

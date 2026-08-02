@@ -15,6 +15,7 @@ import Userpic from "@/components/elements/Userpic";
 import TimeAgo from "@/components/elements/TimeAgo";
 import Reputation from "@/components/elements/Reputation";
 import Reblog from "@/components/elements/Reblog";
+import Voting from "@/components/elements/Voting";
 import { cn } from "@/lib/utils";
 
 interface PostSummaryProps {
@@ -23,18 +24,10 @@ interface PostSummaryProps {
   order?: string;
 }
 
-/** "$12.34" from "12.345 SBD" (legacy FormattedAsset). */
-function formatPayout(value?: string): string | null {
-  if (!value) return null;
-  const amount = Number.parseFloat(value);
-  if (!Number.isFinite(amount)) return null;
-  return `$${amount.toFixed(2)}`;
-}
-
 /**
  * PostSummary — legacy feed card (PostSummary.jsx, layout-list mode):
- * resteem row / author header / thumbnail + title + body excerpt / footer
- * with payout, votes, comments and a reblog button.
+ * resteem row / author header / thumbnail left + (title, excerpt, action
+ * bar) right / footer with voting, votes, comments and a reblog button.
  */
 export default function PostSummary({ post, order }: PostSummaryProps) {
   const [revealNsfw, setRevealNsfw] = useState(false);
@@ -58,13 +51,13 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
     ? null
     : extractImageLink(post.json_metadata, post.body);
   const thumb = summaryThumbnail(imageLink);
-  const summary = extractBodySummary(post.body || "", true);
+  // Feed cards are top-level posts, so legacy passes strip_quotes=false.
+  const summary = extractBodySummary(post.body || "");
 
   const rebloggedBy: string[] = Array.isArray(post.reblogged_by)
     ? post.reblogged_by
     : [];
   const totalVotes = post.stats?.total_votes ?? post.active_votes?.length ?? 0;
-  const payout = formatPayout(post.pending_payout_value);
 
   // NSFW warn preference: show a warning bar until the user reveals it.
   if (isNsfw && !revealNsfw) {
@@ -89,9 +82,9 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
   return (
     <li
       className={cn(
-        "list-none rounded-[6px] border border-border bg-card px-2 py-3",
-        "min-[760px]:px-2 min-[760px]:pb-1 min-[760px]:pt-0.5",
-        "min-[1200px]:transition-shadow min-[1200px]:hover:shadow-[2px_2px_3px_0_rgba(0,0,0,0.06)]"
+        // Legacy li: padding 0.1em 0.5em 0; teal hover shadow at MQ(L).
+        "list-none rounded-[6px] border border-border bg-card px-2 pb-1 pt-0.5",
+        "min-[1200px]:transition-shadow min-[1200px]:hover:shadow-[2px_2px_3px_0_#06D6A9]"
       )}
     >
       <div className="articles__summary">
@@ -152,33 +145,33 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
           </span>
         </div>
 
-        {/* content: thumbnail + title/excerpt */}
+        {/* content: thumbnail left; title + excerpt + action bar right
+            (legacy articles__content flex row at every breakpoint) */}
         <div
           className={cn(
-            "articles__content mt-1",
-            gray && "opacity-50",
-            "min-[760px]:flex min-[760px]:items-start"
+            "articles__content flex items-start",
+            gray && "opacity-50"
           )}
         >
           {thumb && (
-            <Link
-              href={postUrl}
-              className={cn(
-                "mb-2 block overflow-hidden",
-                "min-[760px]:mr-[14px] min-[760px]:mb-0 min-[760px]:inline-block min-[760px]:h-[77px] min-[760px]:w-[130px] min-[760px]:shrink-0"
-              )}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={thumb}
-                alt=""
-                loading="lazy"
-                className="max-h-[220px] w-full object-cover min-[760px]:h-[77px] min-[760px]:w-[130px]"
-              />
-            </Link>
+            <div className="articles__content-block articles__content-block--img mr-[14px] shrink-0">
+              <Link
+                href={postUrl}
+                className="block h-[77px] w-[130px] overflow-hidden"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={thumb}
+                  alt=""
+                  loading="lazy"
+                  className="h-[77px] w-[130px] object-cover"
+                />
+              </Link>
+            </div>
           )}
-          <div className="min-w-0 flex-1">
-            <h2 className="articles__h2 truncate text-[15px] font-bold leading-snug">
+          <div className="articles__content-block articles__content-block--text min-w-0 flex-1">
+            {/* legacy h2: line-clamp 3 on small screens, 1 at MQ(M)+ */}
+            <h2 className="articles__h2 line-clamp-3 text-[15px] font-bold leading-snug min-[760px]:truncate">
               {isNsfw && (
                 <span className="mr-1 rounded-[3px] border border-[#ff0264] px-[5px] py-[2px] align-middle font-[Arial] text-[75%] text-[#ff0264]">
                   nsfw
@@ -186,41 +179,43 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
               )}
               <Link
                 href={postUrl}
-                className="text-foreground visited:text-muted-foreground hover:text-accent-foreground"
+                className="text-foreground visited:text-muted-foreground"
               >
                 {post.title || "Untitled"}
               </Link>
             </h2>
+            {/* legacy PostSummary__body: the excerpt itself is a link */}
             {summary && (
-              <div className="PostSummary__body truncate text-[15px] leading-[1.4] text-muted-foreground">
-                {summary}
+              <div className="PostSummary__body pb-[0.15rem] text-[0.9rem] leading-[1.4] text-foreground min-[760px]:truncate">
+                <Link
+                  href={postUrl}
+                  className="block text-foreground min-[760px]:inline"
+                >
+                  {summary}
+                </Link>
               </div>
             )}
-          </div>
-        </div>
-
-        {/* footer: payout + votes + comments + reblog */}
-        <div className="articles__footer mt-1 border-t border-border">
-          <div className="articles__summary-footer flex items-center py-1 text-[15px]">
-            {payout && (
-              <span className="border-r border-border py-0.5 pr-3 font-semibold text-muted-foreground">
-                {payout}
-              </span>
-            )}
-            <span className="flex items-center gap-0.5 border-r border-border px-3 py-0.5 text-muted-foreground">
-              <ChevronUp className="size-4" aria-hidden />
-              {totalVotes}
-            </span>
-            <Link
-              href={`${postUrl}#comments`}
-              className="flex items-center gap-1 px-3 py-0.5 text-muted-foreground hover:text-accent-foreground"
-            >
-              <MessageCircle className="size-4" aria-hidden />
-              {post.children ?? 0}
-            </Link>
-            <span className="ml-auto">
-              <Reblog author={post.author} permlink={post.permlink} iconOnly />
-            </span>
+            {/* legacy articles__footer lives inside the text block, right
+                under the excerpt */}
+            <div className="articles__footer mt-[0.25em] border-t border-border">
+              <div className="articles__summary-footer flex items-center px-1 pb-1 pt-[3px] text-[15px]">
+                <Voting post={post} showList={false} />
+                <span className="flex items-center gap-0.5 border-r border-border px-3 py-0.5 text-muted-foreground">
+                  <ChevronUp className="size-4" aria-hidden />
+                  {totalVotes}
+                </span>
+                <Link
+                  href={`${postUrl}#comments`}
+                  className="flex items-center gap-1 px-3 py-0.5 text-muted-foreground hover:text-accent-foreground"
+                >
+                  <MessageCircle className="size-4" aria-hidden />
+                  {post.children ?? 0}
+                </Link>
+                <span className="ml-auto">
+                  <Reblog author={post.author} permlink={post.permlink} iconOnly />
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

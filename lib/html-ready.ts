@@ -23,17 +23,17 @@ import { validateAccountName } from '@/lib/chain-validation';
 
 const PHISHY_MESSAGE = '(Warning: link is a possible phishing attempt)';
 
-// @xmldom/xmldom v0.9 replaced the `errorHandler` object with an `onError`
-// callback (level, message). We swallow warnings/errors: malformed post HTML
-// should not crash rendering — HtmlReady returns '' on a thrown parse instead.
+// Pinned to @xmldom/xmldom 0.8.x on purpose: 0.9 reports tag mismatches as
+// fatal ParseErrors that abort parsing, while legacy (xmldom 0.1.27) and 0.8
+// tolerate them and keep parsing — malformed post HTML must still render.
+// Swallow warnings/errors via the errorHandler object like legacy did.
 // xmldom's typed surface clashes with lib.dom, so we treat nodes as `any`
 // internally (this is a self-contained transform layer, not public API).
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyNode = any;
+const noop = () => {};
 const domParser = new DOMParser({
-  onError: () => {
-    /* swallow: malformed HTML must not crash the render */
-  },
+  errorHandler: { warning: noop, error: noop },
 });
 const xmlSerializer = new XMLSerializer();
 

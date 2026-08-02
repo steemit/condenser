@@ -5,6 +5,7 @@ import { ExternalLink } from "lucide-react";
 
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetTitle,
   SheetTrigger,
@@ -13,6 +14,7 @@ import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleNightmode } from "@/store/slices/appSlice";
 import { showLogin } from "@/store/slices/userSlice";
+import { cn } from "@/lib/utils";
 
 interface SidePanelLink {
   label: string;
@@ -21,45 +23,61 @@ interface SidePanelLink {
   external?: boolean;
 }
 
+/** Link row — legacy .menu > li > a: hairline top border, teal bottom
+ *  border on hover; padding 0.3rem on small, 0.7rem above. */
+const linkClass =
+  "flex items-center gap-1 border-y border-t-[#232F38] border-b-transparent px-4 py-[0.3rem] text-sm text-white transition-colors hover:border-b-[#06D6A9] hover:bg-[#171F24] min-[640px]:py-[0.7rem]";
+
 /**
  * SidePanel — legacy right-side dark drawer (modules/SidePanel).
- * 250px, #11161A background, link groups with hairline separators.
+ * 250px, #11161A background, close button row (3rem), link groups with
+ * hairline separators and 2rem gaps between groups.
  */
 export function SidePanel({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();
   const username = useAppSelector((s) => s.user.current?.username);
   const loggedIn = Boolean(username);
+  const nightmode = useAppSelector((s) => s.app.user_preferences.nightmode);
   const walletBase = getSteemitWalletBaseUrl();
   const signupUrl =
     process.env.NEXT_PUBLIC_SIGNUP_URL ?? "https://signup.steemit.com";
 
-  const groups: { key: string; section?: string; items: SidePanelLink[] }[] = [
-    // extras — only when logged out (legacy hides this group when logged in)
-    ...(loggedIn
-      ? []
-      : [
-          {
-            key: "extras",
-            items: [
-              { label: "Sign in", onClick: () => dispatch(showLogin({})) },
-              { label: "Sign up", link: signupUrl, external: true },
-            ],
-          },
-        ]),
+  // extras stays mounted (hidden when logged in) so group indices match
+  // legacy ul:nth-of-type spacing.
+  const groups: {
+    key: string;
+    hidden?: boolean;
+    /** mt-8 on ≥640px (legacy ul:nth-of-type(n+3)); group 2 gets it below 640px. */
+    mt?: "always" | "small";
+    section?: string;
+    items: SidePanelLink[];
+  }[] = [
+    {
+      key: "extras",
+      hidden: loggedIn,
+      items: [
+        { label: "Sign in", onClick: () => dispatch(showLogin({})) },
+        { label: "Sign up", link: signupUrl, external: true },
+      ],
+    },
     {
       key: "internal",
+      mt: "small",
       items: [
-        // Legacy serves /faq.html itself; the rewrite does not host these
-        // static pages, so they point at the legacy site for now.
+        // The rewrite does not host /welcome; point at the legacy site for
+        // now (same treatment as faq/privacy/tos below).
+        { label: "Welcome", link: "https://steemit.com/welcome", external: true },
+        // Legacy's language switcher is not ported (no i18n in the rewrite).
         { label: "FAQ", link: "https://steemit.com/faq.html", external: true },
         {
-          label: "Toggle night mode",
+          label: nightmode ? "Toggle day mode" : "Toggle night mode",
           onClick: () => dispatch(toggleNightmode()),
         },
       ],
     },
     {
       key: "wallet",
+      mt: "always",
       items: [
         {
           label: "Stolen Account Recovery",
@@ -85,6 +103,7 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
     },
     {
       key: "exchanges",
+      mt: "always",
       section: "Third Party Exchanges",
       items: [
         {
@@ -96,6 +115,7 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
     },
     {
       key: "external",
+      mt: "always",
       items: [
         {
           label: "Advertise",
@@ -111,6 +131,7 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
     },
     {
       key: "organizational",
+      mt: "always",
       items: [
         {
           label: "API Docs",
@@ -132,6 +153,7 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
     },
     {
       key: "legal",
+      mt: "always",
       items: [
         {
           label: "Privacy Policy",
@@ -154,14 +176,30 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-[250px] gap-0 overflow-y-auto border-none bg-[#11161A] p-0 text-white [&>button]:text-white"
+        showCloseButton={false}
+        className="w-[250px] gap-0 overflow-y-auto border-none bg-[#11161A] p-0 pt-12 text-white"
       >
         <SheetTitle className="sr-only">Menu</SheetTitle>
+        {/* legacy CloseButton: sits in the 3rem top padding, own row */}
+        <SheetClose
+          aria-label="Close menu"
+          className="absolute right-4 top-2 text-[2rem] leading-none text-white transition-colors hover:text-[#06D6A9]"
+        >
+          ×
+        </SheetClose>
         {groups.map((group) => (
-          <ul key={group.key} className="flex flex-col py-1">
+          <ul
+            key={group.key}
+            className={cn(
+              "flex flex-col border-b border-[#232F38]",
+              group.mt === "always" && "mt-8",
+              group.mt === "small" && "max-[639px]:mt-8",
+              group.hidden && "hidden"
+            )}
+          >
             {group.section && (
               <li>
-                <span className="block px-4 py-2 text-sm text-[#a6b2ba]">
+                <span className="block border-t border-[#232F38] px-4 py-[0.3rem] text-sm text-[#a6b2ba] min-[640px]:py-[0.7rem]">
                   {group.section}
                 </span>
               </li>
@@ -173,7 +211,7 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
                     href={item.link}
                     target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noopener noreferrer" : undefined}
-                    className="flex items-center gap-1 border-t border-[#232F38] px-4 py-2.5 text-sm text-white transition-colors hover:border-b-[#06D6A9] hover:bg-[#171F24]"
+                    className={linkClass}
                   >
                     {item.label}
                     {item.external && (
@@ -187,7 +225,7 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
                   <button
                     type="button"
                     onClick={item.onClick}
-                    className="block w-full border-t border-[#232F38] px-4 py-2.5 text-left text-sm text-white transition-colors hover:border-b-[#06D6A9] hover:bg-[#171F24]"
+                    className={cn(linkClass, "w-full text-left")}
                   >
                     {item.label}
                   </button>

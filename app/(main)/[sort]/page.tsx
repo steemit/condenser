@@ -108,7 +108,7 @@ export default function SortPage() {
 
   return (
     <FeedLayout>
-      <FeedListHeader title="All posts" sort={sortString} />
+      <FeedListHeader sort={sortString} />
       <PostsList
         posts={posts}
         loading={loading}

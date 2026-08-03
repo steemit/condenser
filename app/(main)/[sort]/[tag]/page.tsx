@@ -108,17 +108,6 @@ export default function SortTagPage() {
   }, [isValidSort, loading, hasMore, posts, sortString, tagString]);
 
   const isHiveCommunity = tagString.startsWith("hive-");
-  // Legacy shows the community title (from bridge data) instead of the
-  // hive- id once posts have loaded.
-  const communityTitle = isHiveCommunity
-    ? posts.find((p) => p.community_title)?.community_title
-    : undefined;
-  const feedTitle =
-    tagString.toLowerCase() === "my"
-      ? "My communities"
-      : isHiveCommunity
-        ? (communityTitle ?? tagString)
-        : `#${tagString}`;
 
   if (showNotFound) {
     return <NotFound />;
@@ -127,7 +116,6 @@ export default function SortTagPage() {
   return (
     <FeedLayout>
       <FeedListHeader
-        title={feedTitle}
         sort={sortString}
         categoryTag={tagString}
         unmoderatedTagHint={

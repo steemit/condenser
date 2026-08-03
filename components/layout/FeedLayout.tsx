@@ -28,7 +28,10 @@ export function FeedLayout({
         className
       )}
     >
-      <aside className="hidden w-[240px] min-w-[240px] max-w-[240px] min-[760px]:block min-[760px]:ml-4">
+      {/* Column is 240px; width shrinks by the 1rem left margin so the
+          sidebar does not overflow into the center column (legacy 1em
+          margin was outside the float column, not inside a grid track). */}
+      <aside className="hidden min-[760px]:ml-4 min-[760px]:block min-[760px]:w-[calc(100%-1rem)]">
         <div className="sticky top-20">
           <PrimaryNavigation pathname={pathname} />
         </div>
@@ -45,7 +48,7 @@ export function FeedLayout({
       </article>
 
       {/* Legacy right rail is not sticky (modules fade in at page load). */}
-      <aside className="hidden w-[320px] min-w-[320px] max-w-[320px] min-[1200px]:block min-[1200px]:mr-4">
+      <aside className="hidden min-[1200px]:mr-4 min-[1200px]:block min-[1200px]:w-[calc(100%-1rem)]">
         <div className="py-1">
           <FeedSidebarWidgets />
         </div>

@@ -165,13 +165,13 @@ function NavExploreItem({
   useLoginPrompt?: boolean;
   onLoginPrompt?: () => void;
 }) {
-  // Legacy sub-item (ul#FeedsNavigation li): padding 0.6rem 0.8rem; active =
-  // teal bold text (no background, no side bar); hover = highlight bg + teal.
+  // Sidebar pill item: transparent container, rounded hover/active background
+  // with a 2px teal left indicator on the active item.
   const className = cn(
-    "flex w-full items-center gap-2 py-[0.6rem] pl-[0.8rem] pr-2 text-sm transition-colors",
+    "flex w-full items-center gap-2 rounded-md border-l-2 px-2 py-[0.6rem] text-sm transition-colors",
     active
-      ? "font-bold text-accent-foreground"
-      : "text-foreground hover:bg-accent hover:text-accent-foreground"
+      ? "border-accent-foreground bg-accent font-semibold text-accent-foreground"
+      : "border-transparent text-foreground hover:bg-accent hover:text-accent-foreground"
   );
   return (
     <li>
@@ -208,12 +208,11 @@ function NavTopItem({
   useLoginPrompt?: boolean;
   onLoginPrompt?: () => void;
 }) {
-  // Legacy top-level tab active: highlight bg + 2px teal bottom border +
-  // teal text; hover: highlight bg + teal text.
+  // Same pill treatment as NavExploreItem so all sidebar items align.
   const className = cn(
-    "flex items-center gap-2 border-b-2 px-2 py-[1em] text-sm transition-colors",
+    "flex items-center gap-2 rounded-md border-l-2 px-2 py-[0.6rem] text-sm transition-colors",
     active
-      ? "border-[#06D6A9] bg-accent text-accent-foreground"
+      ? "border-accent-foreground bg-accent font-semibold text-accent-foreground"
       : "border-transparent text-foreground hover:bg-accent hover:text-accent-foreground"
   );
   if (useLoginPrompt) {
@@ -290,7 +289,7 @@ export function PrimaryNavigation({
           <CompassIcon className="size-[1.15rem] shrink-0" aria-hidden />
           <span>Explore</span>
         </div>
-        <ul className="ml-1 flex flex-col gap-0 pl-2">
+        <ul className="flex flex-col gap-0.5">
           <NavExploreItem
             href="/trending"
             label="All Posts"
@@ -382,8 +381,9 @@ export function PrimaryNavigation({
                   <Link
                     href={href}
                     className={cn(
-                      "block py-[0.6rem] pl-[1.6rem] pr-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
-                      active && "font-bold text-accent-foreground"
+                      "block rounded-md border-l-2 border-transparent px-2 py-[0.6rem] text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
+                      active &&
+                        "border-accent-foreground bg-accent font-semibold text-accent-foreground"
                     )}
                   >
                     {label}

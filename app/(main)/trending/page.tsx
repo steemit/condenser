@@ -76,7 +76,7 @@ export default function TrendingPage() {
 
   return (
     <FeedLayout>
-      <FeedListHeader title="All posts" sort="trending" />
+      <FeedListHeader sort="trending" />
       <PostsList
         posts={posts}
         loading={loading}

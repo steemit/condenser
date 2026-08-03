@@ -8,13 +8,11 @@ import { cn } from "@/lib/utils";
  * h1 (18px bold, only shown ≥1200px) + SortOrder dropdown.
  */
 export function FeedListHeader({
-  title,
   sort,
   categoryTag,
   unmoderatedTagHint,
   className,
 }: {
-  title: string;
   sort: string;
   categoryTag?: string;
   /** Show when viewing a non-community tag (legacy “Unmoderated tag”) */
@@ -22,25 +20,24 @@ export function FeedListHeader({
   className?: string;
 }) {
   return (
-    <header className={cn("mb-0", className)}>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    // Legacy spacing: header padding-bottom 10px; articles__hr is
+    // display:none in layout-list (a later SCSS rule overrides the MQ(M)
+    // display:block), so no <hr> is rendered.
+    <header className={cn("mb-4 min-[760px]:mb-[10px] min-[760px]:pl-2", className)}>
+      {/* legacy articles__header: flex, align-items center, space-between */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0 flex-1">
-          {/* legacy h1.articles__h1 is show-for-mq-large (≥1200px) only */}
-          <h1 className="hidden font-sans text-[18px] font-bold text-foreground min-[1200px]:block">
-            {title}
-          </h1>
+          {/* legacy h1.articles__h1 removed: redundant with the sort dropdown */}
           {unmoderatedTagHint ? (
             <p className="mt-1 hidden text-[80%] text-muted-foreground min-[1200px]:block">
               Unmoderated tag
             </p>
           ) : null}
         </div>
-        <div className="shrink-0 sm:mt-1 sm:w-[300px] sm:max-w-[300px]">
+        <div className="shrink-0 sm:w-[300px] sm:max-w-[300px]">
           <FeedSortDropdown sort={sort} categoryTag={categoryTag} />
         </div>
       </div>
-      {/* legacy hr.articles__hr is hidden below the M (760px) breakpoint */}
-      <hr className="my-4 hidden border-border min-[760px]:block" />
     </header>
   );
 }

@@ -110,7 +110,7 @@ export default function PostsList({
 
   return (
     <div id="posts_list" ref={listRef}>
-      <ul className="PostsList__summaries flex flex-col gap-0 min-[760px]:gap-[0.8em]">
+      <ul className="PostsList__summaries flex flex-col gap-[0.8em]">
         {posts.map((post) => (
           <PostSummary
             key={`${post.author}/${post.permlink}`}

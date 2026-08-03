@@ -4,11 +4,16 @@
  */
 
 import MarkdownIt from 'markdown-it';
+import type Token from 'markdown-it/lib/token.mjs';
 import sanitizeHtml from 'sanitize-html';
 import htmlReady from '@/lib/html-ready';
 import { proxifyImageUrl } from '@/lib/media/proxify-url';
 
 const md = new MarkdownIt({ html: true, linkify: false });
+// Legacy RemarkableStripper used `new Remarkable()` with default options —
+// html disabled — so tags like <center> do NOT form html blocks and the
+// markdown inside them is still parsed (then sanitize drops the tags).
+const mdStrip = new MarkdownIt({ html: false, linkify: false });
 
 const getValidImage = (arr: unknown): string | null =>
   Array.isArray(arr) && arr.length >= 1 && typeof arr[0] === 'string'
@@ -57,15 +62,37 @@ export function extractImageLink(
   return imageLink;
 }
 
+/**
+ * Render markdown to plain text, 1:1 with legacy RemarkableStripper:
+ * inline tokens contribute their children's text; every other token
+ * contributes its raw content. Image tokens contribute nothing, so a post
+ * that starts with an image never leaks the URL/alt into the excerpt.
+ */
+function stripMarkdown(body: string): string {
+  let str = '';
+  const walk = (tokens: Token[]) => {
+    for (const t of tokens) {
+      if (t.type === 'inline') {
+        walk((t.children ?? []) as Token[]);
+      } else if (t.type !== 'image') {
+        // markdown-it puts alt text in image token content; remarkable did
+        // not, and legacy dropped it — keep parity by skipping images.
+        str += (t.content || '') + ' ';
+      }
+    }
+  };
+  walk(mdStrip.parse(body, {}));
+  return str;
+}
+
 /** Short plain-text description: strip markdown/html, URLs, truncate to ~140. */
 export function extractBodySummary(body: string, stripQuotes = false): string {
   let desc = body;
   if (stripQuotes) {
     desc = desc.replace(/(^(\n|\r|\s)*)>([\s\S]*?).*\s*/g, '');
   }
-  // Render markdown to HTML, then drop all tags, leaving text.
-  desc = md.render(desc);
-  desc = sanitizeHtml(desc, { allowedTags: [] });
+  desc = stripMarkdown(desc); // render markdown to plain text
+  desc = sanitizeHtml(desc, { allowedTags: [] }); // remove all html, leaving text
   desc = htmlDecode(desc);
 
   // Strip any raw URLs from preview text.

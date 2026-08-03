@@ -93,13 +93,15 @@ export default function Reblog({ author, permlink, iconOnly = false }: ReblogPro
             viewBox="0 0 24 24"
           />
         ) : (
+          // Legacy assets/icons/reblog.svg (share-arrow glyph, fill-based)
           <svg
             className={`h-4 w-4 ${active ? 'text-[#06D6A9]' : 'text-[#cacaca] hover:text-[#06D6A9]'}`}
-            viewBox="0 0 24 24"
+            viewBox="0 0 512 512"
             fill="currentColor"
             xmlns="http://www.w3.org/2000/svg"
+            aria-hidden
           >
-            <path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <path d="M448,192l-128,96v-64H128v128h248c4.4,0,8,3.6,8,8v48c0,4.4-3.6,8-8,8H72c-4.4,0-8-3.6-8-8V168c0-4.4,3.6-8,8-8h248V96 L448,192z" />
           </svg>
         )}
       </button>

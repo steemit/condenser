@@ -145,33 +145,35 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
           </span>
         </div>
 
-        {/* content: thumbnail left; title + excerpt + action bar right
-            (legacy articles__content flex row at every breakpoint) */}
+        {/* content: stacked on small screens (image full-width above the
+            text); thumbnail left + text right at ≥760px — legacy wraps all
+            layout-list card rules in @media(min-width:47.5em) */}
         <div
           className={cn(
-            "articles__content flex items-start",
+            "articles__content min-[760px]:flex min-[760px]:items-start",
             gray && "opacity-50"
           )}
         >
           {thumb && (
-            <div className="articles__content-block articles__content-block--img mr-[14px] shrink-0">
+            <div className="articles__content-block articles__content-block--img min-[760px]:mr-[14px] min-[760px]:shrink-0">
               <Link
                 href={postUrl}
-                className="block h-[77px] w-[130px] overflow-hidden"
+                className="mb-2 block overflow-hidden min-[760px]:mb-0 min-[760px]:h-[77px] min-[760px]:w-[130px]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={thumb}
                   alt=""
                   loading="lazy"
-                  className="h-[77px] w-[130px] object-cover"
+                  className="h-auto w-full min-[760px]:h-[77px] min-[760px]:w-[130px] min-[760px]:object-cover"
                 />
               </Link>
             </div>
           )}
           <div className="articles__content-block articles__content-block--text min-w-0 flex-1">
-            {/* legacy h2: line-clamp 3 on small screens, 1 at MQ(M)+ */}
-            <h2 className="articles__h2 line-clamp-3 text-[15px] font-bold leading-snug min-[760px]:truncate">
+            {/* legacy h2: 16px / line-clamp 3 on small screens,
+                15px / clamp 1 at ≥760px */}
+            <h2 className="articles__h2 line-clamp-3 text-[16px] font-bold leading-snug min-[760px]:truncate min-[760px]:text-[15px]">
               {isNsfw && (
                 <span className="mr-1 rounded-[3px] border border-[#ff0264] px-[5px] py-[2px] align-middle font-[Arial] text-[75%] text-[#ff0264]">
                   nsfw
@@ -198,20 +200,25 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
             {/* legacy articles__footer lives inside the text block, right
                 under the excerpt */}
             <div className="articles__footer mt-[0.25em] border-t border-border">
+              {/* legacy order: Voting | votes (pr-4, border-r) | comments
+                  (px-4) | reblog (pl-4, border-l) — no ml-auto spacer */}
               <div className="articles__summary-footer flex items-center px-1 pb-1 pt-[3px] text-[15px]">
                 <Voting post={post} showList={false} />
-                <span className="flex items-center gap-0.5 border-r border-border px-3 py-0.5 text-muted-foreground">
+                <span
+                  className="flex items-center gap-1 border-r border-border pr-4 text-muted-foreground"
+                  title={`${totalVotes} votes`}
+                >
                   <ChevronUp className="size-4" aria-hidden />
                   {totalVotes}
                 </span>
                 <Link
                   href={`${postUrl}#comments`}
-                  className="flex items-center gap-1 px-3 py-0.5 text-muted-foreground hover:text-accent-foreground"
+                  className="flex items-center gap-1 px-4 text-muted-foreground hover:text-accent-foreground"
                 >
                   <MessageCircle className="size-4" aria-hidden />
                   {post.children ?? 0}
                 </Link>
-                <span className="ml-auto">
+                <span className="border-l border-border pl-4">
                   <Reblog author={post.author} permlink={post.permlink} iconOnly />
                 </span>
               </div>

@@ -175,7 +175,7 @@ export function Header() {
           </Link>
 
           {!loggedIn ? (
-            <span className="hidden items-center text-[1.125rem] sm:flex">
+            <span className="hidden shrink-0 items-center text-[1.125rem] sm:flex">
               <button
                 type="button"
                 onClick={openLoginModal}
@@ -186,7 +186,7 @@ export function Header() {
               <button
                 type="button"
                 onClick={handleSignup}
-                className="my-0 ml-2 mr-3 rounded-none bg-[#171F24] p-[0.6rem] font-bold text-[#fcfcfc] shadow-[0_0_0_0_transparent,2px_2px_0_0_#06D6A9] transition-all hover:bg-[#06D6A9] hover:shadow-[2px_2px_2px_rgba(0,0,0,0.1),4px_4px_0_0_#171F24]"
+                className="my-0 ml-2 mr-3 whitespace-nowrap rounded-none bg-[#171F24] p-[0.6rem] font-bold text-[#fcfcfc] shadow-[0_0_0_0_transparent,2px_2px_0_0_#06D6A9] transition-all hover:bg-[#06D6A9] hover:shadow-[2px_2px_2px_rgba(0,0,0,0.1),4px_4px_0_0_#171F24]"
               >
                 Sign up
               </button>

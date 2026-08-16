@@ -178,6 +178,33 @@ function traverse(node, state, depth = 0) {
 function link(state, child) {
     const url = child.getAttribute('href');
     if (url) {
+        if (
+            state.mutate &&
+            child.textContent &&
+            child.textContent.trim() === 'IPFS Video'
+        ) {
+            let cidPath = url.trim();
+            // Limpieza segura de prefijos
+            cidPath = cidPath.replace(/^ipfs:\/\//i, '');
+            cidPath = cidPath.replace(/^\/?ipfs\//i, '');
+            cidPath = cidPath.replace(/^https?:\/\/[^\/]+\/ipfs\//i, '');
+
+            const parts = cidPath.split('/');
+            const cid = parts[0];
+            const path = parts.slice(1).join('/');
+
+            const isCIDv0 = /^Qm[1-9A-HJ-NP-Za-km-z]{44}$/.test(cid);
+            const isCIDv1 = /^b[a-z2-7]{58}$/.test(cid);
+
+            if (isCIDv0 || isCIDv1) {
+                const embedId = cid + (path ? '/' + path : '');
+                const embedText = `~~~ embed:${embedId} ipfs ~~~`;
+                const textNode = child.ownerDocument.createTextNode(embedText);
+                child.parentNode.replaceChild(textNode, child);
+                return;
+            }
+        }
+
         state.links.add(url);
         if (state.mutate) {
             // If this link is not relative, http, https, steem or esteem -- add https.

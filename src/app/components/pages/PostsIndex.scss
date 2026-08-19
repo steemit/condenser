@@ -778,9 +778,22 @@ a#changeLayout:focus {
       }
       &__feature-img {
         position: absolute;
-        width:100% !important;
+        width: 100% !important;
+        height: 100%;
         top: 50%;
-        transform:translateY(-50%)
+        transform: translateY(-50%);
+        object-fit: cover;
+        object-position: center;
+      }
+      &__feature-img img {
+        position: absolute;
+        width: 100% !important;
+        height: 100%;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        object-fit: cover;
+        object-position: center;
       }
       &__summary-header {
         padding: 2px 0;

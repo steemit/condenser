@@ -59,19 +59,36 @@ class Topics extends Component {
             options.push(opt(null));
             options.push(opt('explore'));
             if (username && subscriptions) {
-                // Add 'My Friends' Link
-                options.push(opt('@' + username));
-                // Add 'My Communities' Link
-                options.push(opt('my'));
-                const subscriptionOptions = subscriptions
-                    .toJS()
-                    .map(cat => opt(cat[0], cat[1]));
-                options.push({
-                    value: 'Subscriptions',
-                    label: tt('g.community_subscriptions'),
-                    disabled: true,
-                });
-                options.push(...subscriptionOptions);
+                // Check if subscriptions is a valid List/Array before processing
+                let subscriptionsList = [];
+                try {
+                    if (subscriptions && typeof subscriptions.toJS === 'function') {
+                        const js = subscriptions.toJS();
+                        if (Array.isArray(js)) {
+                            subscriptionsList = js;
+                        }
+                    } else if (Array.isArray(subscriptions)) {
+                        subscriptionsList = subscriptions;
+                    }
+                } catch (e) {
+                    console.warn('Error processing subscriptions:', e);
+                    subscriptionsList = [];
+                }
+                
+                if (subscriptionsList.length > 0) {
+                    // Add 'My Friends' Link
+                    options.push(opt('@' + username));
+                    // Add 'My Communities' Link
+                    options.push(opt('my'));
+                    const subscriptionOptions = subscriptionsList
+                        .map(cat => opt(cat[0], cat[1]));
+                    options.push({
+                        value: 'Subscriptions',
+                        label: tt('g.community_subscriptions'),
+                        disabled: true,
+                    });
+                    options.push(...subscriptionOptions);
+                }
             }
             if (topics) {
                 const topicsOptions = topics
@@ -115,26 +132,57 @@ class Topics extends Component {
             </div>
         );
 
+        // Safely get subscriptions list
+        let subscriptionsList = [];
+        if (username && subscriptions) {
+            try {
+                if (subscriptions && typeof subscriptions.toJS === 'function') {
+                    const js = subscriptions.toJS();
+                    if (Array.isArray(js)) {
+                        subscriptionsList = js;
+                    }
+                } else if (Array.isArray(subscriptions)) {
+                    subscriptionsList = subscriptions;
+                }
+            } catch (e) {
+                console.warn('Error processing subscriptions:', e);
+                subscriptionsList = [];
+            }
+        }
+
+        // Safely get topics list
+        let topicsList = [];
+        if (topics) {
+            try {
+                if (topics && typeof topics.toJS === 'function') {
+                    const js = topics.toJS();
+                    if (Array.isArray(js)) {
+                        topicsList = js;
+                    }
+                } else if (Array.isArray(topics)) {
+                    topicsList = topics;
+                }
+            } catch (e) {
+                console.warn('Error processing topics:', e);
+                topicsList = [];
+            }
+        }
+
         const list = (
             <span>
-                {(subscriptions || topics).size > 0}
-                {username &&
-                    subscriptions &&
-                    subscriptions
-                        .toJS()
-                        .map(cat => (
-                            <li key={cat[0]}>
-                                {link(`/trending/${cat[0]}`, cat[1], '')}
-                            </li>
-                        ))}
-                {(!username || !subscriptions) &&
-                    topics
-                        .toJS()
-                        .map(cat => (
-                            <li key={cat[0]}>
-                                {link(`/trending/${cat[0]}`, cat[1], '')}
-                            </li>
-                        ))}
+                {username && subscriptionsList.length > 0 &&
+                    subscriptionsList.map(cat => (
+                        <li key={cat[0]}>
+                            {link(`/trending/${cat[0]}`, cat[1], '')}
+                        </li>
+                    ))}
+                {(!username || subscriptionsList.length === 0) &&
+                    topicsList.length > 0 &&
+                    topicsList.map(cat => (
+                        <li key={cat[0]}>
+                            {link(`/trending/${cat[0]}`, cat[1], '')}
+                        </li>
+                    ))}
             </span>
         );
 

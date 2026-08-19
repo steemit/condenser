@@ -23,7 +23,7 @@ const operation = {
     type: 'comment',
     author: 'Alice',
     body:
-        "The Body is a pretty long chunck of text that represents the user's voice, it seems they have much to say, and this is one place where they can do that.",
+        "The Body is a pretty long chunk of text that represents the user's voice, it seems they have much to say, and this is one place where they can do that.",
     category: 'hi',
     json_metadata: JSON.stringify({
         tags: ['hi'],

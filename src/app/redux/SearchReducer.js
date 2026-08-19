@@ -100,7 +100,7 @@ export const searchPending = payload => ({
     payload,
 });
 export const searchError = payload => ({
-    type: SEARCH_PENDING,
+    type: SEARCH_ERROR,
     payload,
 });
 

@@ -94,6 +94,10 @@ export default {
             //cb(null, [require('app/components/pages/PostsIndex')]);
             cb(null, [PostsIndex]);
             //});
+        } else if (route.page === 'NotFound') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/NotFound')]);
+            //});
         } else {
             //require.ensure([], (require) => {
             cb(process.env.BROWSER ? null : Error(404), [

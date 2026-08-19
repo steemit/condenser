@@ -17,7 +17,7 @@ export const SIZE_LARGE = 'large';
 class SearchUserList extends Component {
     imgErrorFun(event) {
         event.target.src = USERLOGO;
-        event.target.οnerrοr = null; //控制图片显示区域不要一直跳动
+        event.target.οnerrοr = null; // Prevent image display area from constantly jumping
     }
 
     checkIfLogin = isFollow => {

@@ -771,7 +771,7 @@ You can exchange them. Visit the internal Market, found in the main menu. There 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_a_MVEST">What is a MVEST?</span>
 
-A VEST is a unit of measurement for Steem Power. A MVEST is one million VESTS. The amount of Steem Power in one MVEST can be found on <a href="https://steemscan.com/">steemscan.com</a> as `steem_per_mvests`. or <a href="https://steemdb.io//">steemdb.io</a> 
+A VEST is a unit of measurement for Steem Power. A MVEST is one million VESTS. The amount of Steem Power in one MVEST can be found on <a href="https://steemdb.io//">steemdb.io</a> 
  
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Can_I_sell_goods_and_services_on_Steemit">Can I sell goods and services on Steemit?</span>
@@ -847,7 +847,7 @@ Once you reach about 500 Steem Power, you will see a vote slider appear when you
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Where_can_I_check_my_voting_mana">Where can I check my voting mana?</span>
 
-You can view your current voting mana using third party tools such as https://steemscan.com/account/youraccount or https://steemdb.io/@youraccount
+You can view your current voting mana using third party tools such as https://steemdb.io/@youraccount
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">What determines how much of the curation reward goes to the author versus curators?</span>
@@ -1023,7 +1023,7 @@ Every user has a limited amount of Resource Credits to use each week. The more t
 When the blockchain becomes busy (due to heavy use), the Resource Credit cost of transactions may become higher than during times when the blockchain is less busy.
 
 You can check how many Resource Credits you currently have at:
-https://steemdb.io/@youraccount or https://steemscan.com/account/youraccount
+https://steemdb.io/@youraccount
 
 If users do not have enough Resource Credits, they will be unable to transact with the blockchain until their Resource Credits recharge or they acquire additional Steem Power to increase their Resource Credit balance.
 
@@ -1062,8 +1062,7 @@ The Steem blockchain schedules witnesses to produce a new block every 3 seconds.
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="Is_there_a_way_to_see_the_raw_data_that_is_stored_in_the_blockchain">Is there a way to see the raw data that is stored in the blockchain?</span>
 
-Yes. The blockchain data can be viewed in different ways with third-party tools such as <a href="https://https://steemscan.com/">steemscan.com</a> 
-and <a href="https://steemdb.io/">steemdb.io</a>
+Yes. The blockchain data can be viewed in different ways with third-party tools such as <a href="https://steemdb.io/">steemdb.io</a>.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="Where_can_I_find_the_information_for_the_official_launch_of_the_blockchain">Where can I find the information for the official launch of the blockchain?</span>

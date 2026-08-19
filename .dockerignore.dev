@@ -1,0 +1,39 @@
+# Dependencies (installed in container)
+node_modules
+
+# Build artifacts
+lib
+tmp
+.cache
+
+# Version control
+.git
+.gitignore
+
+# IDE/Editor
+.idea
+.vscode
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files (avoid recursion)
+Dockerfile*
+docker-compose*.yml
+.dockerignore*
+
+# Documentation
+*.md
+doc/
+
+# Tests (not needed for dev runtime)
+blackboxtest/

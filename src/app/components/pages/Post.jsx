@@ -52,7 +52,15 @@ class Post extends React.Component {
 
     componentWillMount() {
         const { dis } = this.props;
-        this.props.setRouteTag(dis.get('url'));
+        try {
+            if (dis && dis.get) {
+                this.props.setRouteTag(dis.get('url'));
+            }
+        } catch (e) {
+            console.error(`error of dis on Post.jsx: ${e}`);
+            this.props.redirectPath('404');
+            return;
+        }
         this.setState({
             showPostComments: true,
         });
@@ -72,8 +80,35 @@ class Post extends React.Component {
 
     componentWillUpdate(nextProps) {
         const { dis } = nextProps;
-        if (dis.get('url') !== this.props.dis.get('url')) {
+        const currentDis = this.props.dis;
+        if (dis && currentDis && dis.get('url') !== currentDis.get('url')) {
             this.props.setRouteTag(dis.get('url'));
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        const { dis } = this.props;
+
+        // Ensure showPostComments state is correct when dis changes from undefined to a value, or when replies changes from empty to having values
+        if (dis && prevProps.dis === undefined) {
+            // dis has just finished loading, ensure showPostComments is true to trigger hiding logic
+            if (!this.state.showPostComments) {
+                this.setState({ showPostComments: true });
+            }
+        } else if (dis && prevProps.dis) {
+            const prevReplies = prevProps.dis.get('replies');
+            const nextReplies = dis.get('replies');
+            const prevRepliesLength = prevReplies ? prevReplies.size : 0;
+            const nextRepliesLength = nextReplies ? nextReplies.size : 0;
+
+            // When replies changes from empty to having values, ensure showPostComments is true
+            if (
+                prevRepliesLength === 0 &&
+                nextRepliesLength > 0 &&
+                !this.state.showPostComments
+            ) {
+                this.setState({ showPostComments: true });
+            }
         }
     }
 
@@ -98,8 +133,14 @@ class Post extends React.Component {
         this.setState({ showAnyway: true });
     };
 
-    showPostCommentClick = () => {
-        this.setState({ showPostComments: false });
+    showPostCommentClick = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        try {
+            this.setState({ showPostComments: false });
+        } catch (error) {
+            console.error('Error in showPostCommentClick:', error);
+        }
     };
 
     render() {
@@ -201,7 +242,8 @@ class Post extends React.Component {
             postBody = <PostFull post={post} cont={content} />;
         }
 
-        let replies = dis.get('replies').toJS();
+        const repliesList = dis.get('replies');
+        let replies = repliesList ? repliesList.toJS() : [];
 
         sortComments(content, replies, sortOrder);
 
@@ -213,7 +255,8 @@ class Post extends React.Component {
         //     replies = replies.slice(0, commentLimit);
         // }
 
-        if (replies.length > 0 && showPostComments) {
+        // Ensure that when showPostComments is true, limit the number of displayed comments
+        if (replies && replies.length > 0 && showPostComments) {
             replies = replies.slice(0, commentDefault);
         }
 
@@ -386,6 +429,8 @@ class Post extends React.Component {
                                     {positiveComments.length > 0 &&
                                     positiveComments.length ===
                                         commentDefault &&
+                                    dis &&
+                                    dis.get('children') != null &&
                                     commentDefault < dis.get('children') &&
                                     showPostComments ? (
                                         <div className="hentry Comment root Post_comments__count">
@@ -394,6 +439,7 @@ class Post extends React.Component {
                                                 onClick={
                                                     this.showPostCommentClick
                                                 }
+                                                type="button"
                                             >
                                                 LOAD MORE COMMENTS
                                             </button>
@@ -491,5 +537,10 @@ export default connect(
                     params: { permlink },
                 })
             ),
+        redirectPath: pathname =>
+            dispatch({
+                type: '@@router/LOCATION_CHANGE',
+                payload: { pathname },
+            }),
     })
 )(Post);

@@ -1,0 +1,18 @@
+
+FROM node:12-alpine
+
+RUN apk add --no-cache python2 make g++ git
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+
+RUN yarn install --frozen-lockfile
+
+RUN mkdir -p tmp
+
+EXPOSE 8080
+
+ENV NODE_ENV=development
+
+CMD ["yarn", "start"]

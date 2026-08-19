@@ -49,11 +49,22 @@ class CommunityPaneMobile extends Component {
 
         const subs = community.get('subscribers');
 
-        const checkIfLogin = () => {
-            if (!this.props.loggedIn) {
-                return showLogin();
+        const checkIfLogin = (e) => {
+            try {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                if (!this.props.loggedIn) {
+                    return showLogin(e);
+                }
+                return browserHistory.replace(`/submit.html?category=${category}`);
+            } catch (error) {
+                console.error('Error in checkIfLogin:', error);
+                if (e && e.preventDefault) {
+                    e.preventDefault();
+                }
             }
-            return browserHistory.replace(`/submit.html?category=${category}`);
         };
 
         return (
@@ -164,8 +175,19 @@ export default connect(
     dispatch => {
         return {
             showLogin: e => {
-                if (e) e.preventDefault();
-                dispatch(userActions.showLogin({ type: 'basic' }));
+                try {
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                    dispatch(userActions.showLogin({ type: 'basic' }));
+                } catch (error) {
+                    console.error('Error in showLogin:', error);
+                    // Even if there's an error, try to prevent default behavior
+                    if (e && e.preventDefault) {
+                        e.preventDefault();
+                    }
+                }
             },
             showRecentSubscribers: community => {
                 dispatch(

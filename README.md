@@ -55,6 +55,41 @@ docker build -t="myname/condenser:mybranch" .
 docker run -it -p 8080:8080 myname/condenser:mybranch
 ```
 
+#### Docker for Development (with hot-reload)
+
+For local development with live code reloading, use the development Docker setup:
+
+```bash
+git clone https://github.com/steemit/condenser
+cd condenser
+
+# Build the development image (first time only)
+docker-compose -f docker-compose.dev.yml build
+
+# Start the development server
+docker-compose -f docker-compose.dev.yml up
+```
+
+The app will be available at http://localhost:8080. Changes to files in `src/`
+will automatically trigger a rebuild and refresh.
+
+**Key features of the development setup:**
+- Volume mounts for instant code synchronization
+- Hot-reload enabled via webpack-dev-server
+- Node 12 with Python 2 for node-sass compatibility
+
+**Common commands:**
+```bash
+# Stop the server
+docker-compose -f docker-compose.dev.yml down
+
+# Rebuild after package.json changes
+docker-compose -f docker-compose.dev.yml build --no-cache
+
+# View logs
+docker-compose -f docker-compose.dev.yml logs -f
+```
+
 ## Building from source without docker (the 'traditional' way):
 (better if you're planning to do condenser development)
 

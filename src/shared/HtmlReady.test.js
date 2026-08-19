@@ -30,6 +30,18 @@ describe('htmlready', () => {
         expect(externalDomainResult).toEqual(externalDomainDirty);
     });
 
+    it('should strip legacy proxy shells even when image proxying is disabled', () => {
+        global.$STM_Config = {
+            img_proxy_prefix: 'https://steemitdevimages.com/',
+        };
+        const legacy =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><img src="https://steemitdevimages.com/640x0/https://cdn.steemitimages.com/DQmNR3Y1QgLGEQtAPdvBchPzf6ijoJCjPKwHDq5Zt9cYR4k/1000005419.jpg" xmlns="http://www.w3.org/1999/xhtml"/></xml>';
+        const expected =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://cdn.steemitimages.com/DQmNR3Y1QgLGEQtAPdvBchPzf6ijoJCjPKwHDq5Zt9cYR4k/1000005419.jpg" target="_blank"><img src="https://cdn.steemitimages.com/DQmNR3Y1QgLGEQtAPdvBchPzf6ijoJCjPKwHDq5Zt9cYR4k/1000005419.jpg" xmlns="http://www.w3.org/1999/xhtml"/></a></xml>';
+        const res = HtmlReady(legacy, { isProxifyImages: true }).html;
+        expect(res).toEqual(expected);
+    });
+
     it('should not allow links where the text portion contains steemit.com but the link does not', () => {
         // There isn't an easy way to mock counterpart, even with proxyquire, so we just test for the missing translation message -- ugly but ok
 

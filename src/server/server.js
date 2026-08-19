@@ -387,6 +387,12 @@ if (env !== 'test') {
         });
     }, 300000);
 
+    // Pass cached special posts promise to request context
+    app.use(function*(next) {
+        this.specialPostsPromise = app.specialPostsPromise;
+        yield next;
+    });
+
     app.use(function*() {
         yield appRender(this, supportedLocales, resolvedAssets);
         const bot = this.state.isBot;

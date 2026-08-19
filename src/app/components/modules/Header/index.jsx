@@ -285,11 +285,22 @@ class Header extends React.Component {
         // Since navigate isn't set, defaultNavigate will always be used.
         const nav = navigate || defaultNavigate;
 
-        const checkIfLogin = () => {
-            if (!loggedIn) {
-                return showLogin();
+        const checkIfLogin = (e) => {
+            try {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                if (!loggedIn) {
+                    return showLogin(e);
+                }
+                return browserHistory.replace('/submit.html');
+            } catch (error) {
+                console.error('Error in checkIfLogin:', error);
+                if (e && e.preventDefault) {
+                    e.preventDefault();
+                }
             }
-            return browserHistory.replace('/submit.html');
         };
 
         const submit_story = $STM_Config.read_only_mode ? null : (
@@ -533,8 +544,19 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
     showLogin: e => {
-        if (e) e.preventDefault();
-        dispatch(userActions.showLogin({ type: 'basic' }));
+        try {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            dispatch(userActions.showLogin({ type: 'basic' }));
+        } catch (error) {
+            console.error('Error in showLogin:', error);
+            // Even if there's an error, try to prevent default behavior
+            if (e && e.preventDefault) {
+                e.preventDefault();
+            }
+        }
     },
     logout: e => {
         if (e) e.preventDefault();

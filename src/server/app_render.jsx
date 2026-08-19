@@ -8,6 +8,12 @@ import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
 import { determineViewMode } from '../app/utils/Links';
 import { getSupportedLocales } from './utils/misc';
+import {
+    safeStartTimer,
+    safeStopTimer,
+    safeConsoleTime,
+    safeConsoleTimeEnd,
+} from './utils/TimingUtils';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
@@ -17,10 +23,12 @@ const DB_RECONNECT_TIMEOUT =
 const supportedLocales = getSupportedLocales();
 
 async function appRender(ctx, locales = false, resolvedAssets = false) {
-    ctx.state.requestTimer.startTimer('appRender_ms');
+    safeStartTimer(ctx.state.requestTimer, 'appRender_ms');
     const store = {};
     // This is the part of SSR where we make session-specific changes:
     try {
+        // User preferences processing time
+        safeStartTimer(ctx.state.requestTimer, 'userPreferences_ms');
         let userPreferences = {};
         if (ctx.session.user_prefs) {
             try {
@@ -50,14 +58,21 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');
             ctx.session.login_challenge = login_challenge;
         }
+        safeStopTimer(ctx.state.requestTimer, 'userPreferences_ms');
+
+        // Special posts loading time
+        safeStartTimer(ctx.state.requestTimer, 'specialPosts_ms');
         const offchain = {
             csrf: ctx.csrf,
             new_visit: ctx.session.new_visit,
             config: $STM_Config,
-            special_posts: await ctx.app.specialPostsPromise,
+            special_posts: await ctx.specialPostsPromise,
             login_challenge,
         };
+        safeStopTimer(ctx.state.requestTimer, 'specialPosts_ms');
 
+        // Initial state construction time
+        safeStartTimer(ctx.state.requestTimer, 'initialState_ms');
         const adSwipe = {
             enabled: config.adswipe_enabled === 'true',
         };
@@ -113,7 +128,9 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                     : 'steemit.com',
             },
         };
+        safeStopTimer(ctx.state.requestTimer, 'initialState_ms');
 
+        // serverRender call (includes API fetching and SSR rendering)
         const {
             body,
             title,
@@ -126,7 +143,8 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             ErrorPage,
             userPreferences,
             offchain,
-            ctx.state.requestTimer
+            ctx.state.requestTimer,
+            ctx.session.uid
         );
 
         if (redirectUrl) {
@@ -136,6 +154,8 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             return;
         }
 
+        // Asset file processing time
+        safeStartTimer(ctx.state.requestTimer, 'assets_ms');
         let assets;
         // If resolvedAssets argument parameter is falsey we infer that we are in
         // development mode and therefore resolve the assets on each render.
@@ -147,6 +167,10 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         } else {
             assets = resolvedAssets;
         }
+        safeStopTimer(ctx.state.requestTimer, 'assets_ms');
+
+        // Final rendering time
+        safeStartTimer(ctx.state.requestTimer, 'finalRender_ms');
         const props = {
             body,
             assets,
@@ -158,6 +182,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         ctx.status = statusCode;
         ctx.body =
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);
+        safeStopTimer(ctx.state.requestTimer, 'finalRender_ms');
     } catch (err) {
         // Render 500 error page from server
         console.error('AppRender error', err, redirect);
@@ -173,7 +198,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         throw err;
     }
 
-    ctx.state.requestTimer.stopTimer('appRender_ms');
+    safeStopTimer(ctx.state.requestTimer, 'appRender_ms');
 }
 
 appRender.dbStatus = { ok: true };

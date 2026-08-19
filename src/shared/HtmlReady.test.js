@@ -283,4 +283,49 @@ describe('htmlready', () => {
         const res = HtmlReady(testString).html;
         expect(res).toEqual(htmlified);
     });
+
+    it('should convert valid IPFS Video anchor tags to placeholder (speak on steem compatibility)', () => {
+        const testString =
+            '<html><p><a href="ipfs://QmXoypizjW3WknFixtdKLw6RnM3vGPk7t8a6S5R367a123">IPFS Video</a></p></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:QmXoypizjW3WknFixtdKLw6RnM3vGPk7t8a6S5R367a123 ipfs ~~~</p></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
+
+    it('should convert valid IPFS CIDv1 base32 video link to placeholder', () => {
+        const testString =
+            '<html><p><a href="ipfs/bafybeigdyqzgxssfkauwtgxswffwfbswffwfbswffwfbswffwfbswffwfb">IPFS Video</a></p></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:bafybeigdyqzgxssfkauwtgxswffwfbswffwfbswffwfbswffwfbswffwfb ipfs ~~~</p></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
+
+    it('should not convert IPFS Video anchor tags with invalid/non-CID urls', () => {
+        const testString =
+            '<html><p><a href="https://youtube.com/watch?v=QmXoypi">IPFS Video</a></p></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p><a href="https://youtube.com/watch?v=QmXoypi">IPFS Video</a></p></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
+
+    it('should not convert adversarial javascript: url links', () => {
+        const testString =
+            '<html><p><a href="javascript:alert(1)">IPFS Video</a></p></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p><a href="https://javascript:alert(1)">IPFS Video</a></p></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
+
+    it('should not convert adversarial styles or non-IPFS links', () => {
+        const testString =
+            '<html><p><a href="https://evil.com/ipfs/invalid" style="position:fixed;">IPFS Video</a></p></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p><a href="https://evil.com/ipfs/invalid" style="position:fixed;">IPFS Video</a></p></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
 });

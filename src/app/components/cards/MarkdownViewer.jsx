@@ -141,7 +141,7 @@ class MarkdownViewer extends Component {
         // HtmlReady inserts ~~~ embed:${id} type ~~~
         for (let section of cleanText.split('~~~ embed:')) {
             const match = section.match(
-                /^([A-Za-z0-9\?\=\_\-\/\.]+) (youtube|vimeo|twitch|dtube|threespeak)\s?(\d+)? ~~~/
+                /^([A-Za-z0-9\?\=\_\-\/\.]+) (youtube|vimeo|twitch|dtube|threespeak|ipfs)\s?(\d+)? ~~~/
             );
             if (match && match.length >= 3) {
                 const id = match[1];
@@ -228,6 +228,42 @@ class MarkdownViewer extends Component {
                             />
                         </div>
                     );
+                } else if (type === 'ipfs') {
+                    const ipfsPrefix =
+                        (typeof $STM_Config !== 'undefined' &&
+                            $STM_Config.ipfs_prefix) ||
+                        'https://gateway.pinata.cloud/ipfs';
+                    const parts = id.split('/');
+                    const cid = parts[0];
+                    const path = parts.slice(1).join('/');
+                    const isCIDv0 = /^Qm[1-9A-HJ-NP-Za-km-z]{44}$/.test(cid);
+                    const isCIDv1 = /^b[a-z2-7]{58}$/.test(cid);
+                    if (isCIDv0 || isCIDv1) {
+                        const finalUrl = `${ipfsPrefix.replace(/\/$/, '')}/${
+                            cid
+                        }${path ? '/' + path : ''}`;
+                        sections.push(
+                            <div className="videoWrapper" key={id}>
+                                <video
+                                    controls
+                                    playsInline
+                                    crossOrigin="anonymous"
+                                    style={{
+                                        position: 'absolute',
+                                        width: '100%',
+                                        height: '100%',
+                                        left: 0,
+                                        top: 0,
+                                        objectFit: 'contain',
+                                        background: '#000',
+                                    }}
+                                >
+                                    <source src={finalUrl} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        );
+                    }
                 } else {
                     console.error('MarkdownViewer unknown embed type', type);
                 }

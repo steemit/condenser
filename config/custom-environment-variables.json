@@ -12,6 +12,7 @@
       "objectSrc": "SDC_HELMET_OBJECTSRC",
       "scriptSrc": "SDC_HELMET_SCRIPTSRC",
       "styleSrc": "SDC_HELMET_STYLESRC",
+      "mediaSrc": "SDC_HELMET_MEDIASRC",
       "reportUri": "SDC_HELMET_REPORTURI"
     }
   },

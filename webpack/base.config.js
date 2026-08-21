@@ -63,6 +63,10 @@ module.exports = {
         rules: [
             {test: /\.(jpe?g|png|gif)/, use: 'url-loader?limit=4096'},
             {test: /\.json$/, use: 'json-loader'},
+            // The sanitizer dependency tree (sanitize-html 2.x, @xmldom/xmldom)
+            // ships post-ES2017 syntax (e.g. object spread in postcss 8) that
+            // webpack 3's acorn 5 parser cannot read; run it through babel.
+            {test: /\.js$/, include: [/node_modules\/(sanitize-html|htmlparser2|postcss|@xmldom\/xmldom|entities|domutils|domhandler|domelementtype|launder|parse-srcset|deepmerge|escape-string-regexp|is-plain-object|nanoid|picocolors|source-map-js)\//], use: 'babel-loader'},
             {test: /\.js$|\.jsx$/, exclude: [/node_modules/, /\*\/app\/assets\/static\/\*\.js/], use: 'babel-loader'},
             {test: /\.svg$/, use: 'svg-inline-loader'},
             {
@@ -130,6 +134,10 @@ module.exports = {
         ),
     ],
     resolve: {
+        // Prefer the commonjs `main` entry: several sanitizer deps
+        // (htmlparser2 etc.) point `module` at ESM builds that webpack 3's
+        // acorn 5 parser cannot handle.
+        mainFields: ['browser', 'main'],
         alias: {
             react: path.join(__dirname, '../node_modules', 'react'),
             assets: path.join(__dirname, '../src/app/assets'),

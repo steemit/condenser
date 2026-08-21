@@ -7,6 +7,7 @@ import koa_router from 'koa-router';
 import requestTime from './requesttimings';
 import StatsLoggerClient from './utils/StatsLoggerClient';
 import { SteemMarket } from './utils/SteemMarket';
+import isSafeRedirectTarget from './utils/RedirectTarget';
 import hardwareStats from './hardwarestats';
 import cluster from 'cluster';
 import os from 'os';
@@ -238,6 +239,14 @@ app.use(function*(next) {
         });
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
+        // Only redirect to same-origin relative paths. A url like
+        // `//evil.com?ch=1` strips down to the protocol-relative `//evil.com`,
+        // which would send the user to an external host (open redirect).
+        // Decoding/scheme checks live in isSafeRedirectTarget.
+        if (!isSafeRedirectTarget(redir)) {
+            yield next;
+            return;
+        }
         console.log(`server redirect ${this.url} -> ${redir}`);
         this.status = 302;
         this.redirect(redir);

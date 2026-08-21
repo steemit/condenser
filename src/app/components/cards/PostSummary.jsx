@@ -10,7 +10,7 @@ import { immutableAccessor } from 'app/utils/Accessors';
 import {
     extractBodySummary,
     extractImageLink,
-    highlightKeyword,
+    highlightSegments,
 } from 'app/utils/ExtractContent';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import { List, Map } from 'immutable';
@@ -26,6 +26,22 @@ import { SIGNUP_URL } from 'shared/constants';
 import { hasNsfwTag } from 'app/utils/StateFunctions';
 
 const CURATOR_VESTS_THRESHOLD = 1.0 * 1000.0 * 1000.0;
+
+// Render keyword-highlighted text as React nodes. Titles/summaries are
+// user-controlled and must never pass through dangerouslySetInnerHTML.
+const renderHighlight = (text, keyword, color) =>
+    highlightSegments(text, keyword).map(
+        (seg, i) =>
+            typeof seg === 'string' ? (
+                seg
+            ) : (
+                // Segments have no stable identity; position is the key.
+                // eslint-disable-next-line react/no-array-index-key
+                <span key={i} style={{ background: color }}>
+                    {seg.match}
+                </span>
+            )
+    );
 
 // TODO: document why ` ` => `%20` is needed, and/or move to base fucntion
 const proxify = (url, size) => proxifyImageUrl(url, size).replace(/ /g, '%20');
@@ -138,16 +154,9 @@ class PostSummary extends React.Component {
         const highlightColor = '#00FFC8';
         const content_body = (
             <div className="PostSummary__body entry-content">
-                <Link
-                    to={post_url}
-                    dangerouslySetInnerHTML={{
-                        __html: highlightKeyword(
-                            summary,
-                            keyWord,
-                            highlightColor
-                        ),
-                    }}
-                />
+                <Link to={post_url}>
+                    {renderHighlight(summary, keyWord, highlightColor)}
+                </Link>
             </div>
         );
 
@@ -155,15 +164,13 @@ class PostSummary extends React.Component {
             <h2 className="articles__h2 entry-title">
                 <Link to={post_url}>
                     {isNsfw && <span className="nsfw-flag">nsfw</span>}
-                    <span
-                        dangerouslySetInnerHTML={{
-                            __html: highlightKeyword(
-                                post.get('title'),
-                                keyWord,
-                                highlightColor
-                            ),
-                        }}
-                    />
+                    <span>
+                        {renderHighlight(
+                            post.get('title'),
+                            keyWord,
+                            highlightColor
+                        )}
+                    </span>
                 </Link>
             </h2>
         );

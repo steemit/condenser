@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {
     extractBodySummary,
     extractImageLink,
-    highlightKeyword,
+    highlightSegments,
 } from 'app/utils/ExtractContent';
 import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import * as userActions from 'app/redux/UserReducer';
@@ -14,6 +14,22 @@ import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 import tt from 'counterpart';
 // TODO: document why ` ` => `%20` is needed, and/or move to base fucntion
 const proxify = (url, size) => proxifyImageUrl(url, size).replace(/ /g, '%20');
+
+// Render keyword-highlighted text as React nodes; drafts may contain raw
+// HTML in titles/bodies and must not pass through dangerouslySetInnerHTML.
+const renderHighlight = (text, keyword, color) =>
+    highlightSegments(text, keyword).map(
+        (seg, i) =>
+            typeof seg === 'string' ? (
+                seg
+            ) : (
+                // Segments have no stable identity; position is the key.
+                // eslint-disable-next-line react/no-array-index-key
+                <span key={i} style={{ background: color }}>
+                    {seg.match}
+                </span>
+            )
+    );
 
 class DraftSummary extends React.Component {
     static propTypes = {
@@ -58,31 +74,17 @@ class DraftSummary extends React.Component {
         const highlightColor = '#00FFC8';
         const content_body = (
             <div className="DraftSummary__body entry-content">
-                <span
-                    onClick={onClickContent}
-                    dangerouslySetInnerHTML={{
-                        __html: highlightKeyword(
-                            summary,
-                            keyWord,
-                            highlightColor
-                        ),
-                    }}
-                />
+                <span onClick={onClickContent}>
+                    {renderHighlight(summary, keyWord, highlightColor)}
+                </span>
             </div>
         );
 
         const content_title = (
             <h2 className="drafts__h2 entry-title">
-                <span
-                    onClick={onClickContent}
-                    dangerouslySetInnerHTML={{
-                        __html: highlightKeyword(
-                            post.title,
-                            keyWord,
-                            highlightColor
-                        ),
-                    }}
-                />
+                <span onClick={onClickContent}>
+                    {renderHighlight(post.title, keyWord, highlightColor)}
+                </span>
             </h2>
         );
 

@@ -1,4 +1,4 @@
-/* global describe, it, before, beforeEach, after, afterEach */
+/* global describe, it, expect, before, beforeEach, after, afterEach */
 import HtmlReady from './HtmlReady';
 
 beforeEach(() => {
@@ -6,9 +6,28 @@ beforeEach(() => {
 });
 
 describe('htmlready', () => {
-    it('should return an empty string if input cannot be parsed', () => {
-        const teststring = 'teststring lol'; // this string causes the xmldom parser to fail & error out
-        expect(HtmlReady(teststring).html).toEqual('');
+    it('should extract state from unwrapped multi-root input', () => {
+        // extractImageLink passes remarkable output with multiple
+        // top-level blocks and no <html> wrapper; the state collections
+        // must still be populated (@xmldom/xmldom needs a single root).
+        const res = HtmlReady(
+            '<p>text</p>\n<hr>\n<p><img src="https://example.com/pic.png"></p>',
+            { mutate: false }
+        );
+        expect(Array.from(res.images)).toContain('https://example.com/pic.png');
+        expect(res.html).toBeUndefined();
+    });
+
+    it('should keep state collections on the error path', () => {
+        const res = HtmlReady('teststring lol', { mutate: false });
+        expect(res.images instanceof Set).toBe(true);
+    });
+
+    it('should pass bare text through unchanged', () => {
+        // xmldom 0.1.x errored out on input without a root element;
+        // @xmldom/xmldom 0.8.x parses it and returns the text as-is.
+        const teststring = 'teststring lol';
+        expect(HtmlReady(teststring).html).toEqual('teststring lol');
     });
 
     it('should allow links where the text portion and href contains steemit.com', () => {

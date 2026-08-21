@@ -18,6 +18,28 @@ describe('htmlready', () => {
         expect(res.html).toBeUndefined();
     });
 
+    it('should not report a synthetic html wrapper in htmltags', () => {
+        // Markdown-mode ReplyEditor rejects leftover htmltags after
+        // subtracting allowedTags; a parse-only <html> root must not
+        // block plain posts as "Please remove ... <html>".
+        const res = HtmlReady('<p>hello world</p>', { mutate: false });
+        expect(Array.from(res.htmltags)).toContain('p');
+        expect(Array.from(res.htmltags)).not.toContain('html');
+    });
+
+    it('should still report a real html root in htmltags', () => {
+        const res = HtmlReady('<html><p>hello world</p></html>', {
+            mutate: false,
+        });
+        expect(Array.from(res.htmltags)).toContain('html');
+        expect(Array.from(res.htmltags)).toContain('p');
+    });
+
+    it('should still report nested html inside a fragment', () => {
+        const res = HtmlReady('<p>hello</p><html>x</html>', { mutate: false });
+        expect(Array.from(res.htmltags)).toContain('html');
+    });
+
     it('should keep state collections on the error path', () => {
         const res = HtmlReady('teststring lol', { mutate: false });
         expect(res.images instanceof Set).toBe(true);

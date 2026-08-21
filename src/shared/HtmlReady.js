@@ -12,8 +12,11 @@ export const getInternalImageMessage = () => tt('g.internal_image_message');
 
 const noop = () => {};
 // User-supplied markdown is expected to be malformed HTML; keep parsing.
-// (True fatal errors throw ParseError, caught by HtmlReady's try/catch.)
-const DOMParser = new xmldom.DOMParser({ onError: noop });
+// NOTE: @xmldom/xmldom 0.8 consumes the `errorHandler` object (the 0.9+
+// line replaced it with an `onError` callback).
+const DOMParser = new xmldom.DOMParser({
+    errorHandler: { warning: noop, error: noop, fatalError: noop },
+});
 const XMLSerializer = new xmldom.XMLSerializer();
 
 // Parse an HTML fragment and return its root element. xmldom returns a
@@ -96,10 +99,15 @@ export default function(
     state.images = new Set();
     state.links = new Set();
     try {
-        const doc = DOMParser.parseFromString(
-            preprocessHtml(html),
-            'text/html'
-        );
+        // Callers such as extractImageLink pass rendered markdown that is
+        // NOT wrapped in a root element (multiple top-level blocks).
+        // @xmldom/xmldom only accepts a single root element, so fragment
+        // input is parsed inside a synthetic <html> root and unwrapped
+        // again on serialization; already-wrapped input passes through.
+        const prepared = preprocessHtml(html);
+        const hadWrapper = /^\s*<html[\s>]/i.test(prepared);
+        const source = hadWrapper ? prepared : `<html>${prepared}</html>`;
+        const doc = DOMParser.parseFromString(source, 'text/html');
         traverse(doc, state);
         if (mutate) {
             if (hideImages) {
@@ -125,7 +133,7 @@ export default function(
         // console.log('state', state)
         if (!mutate) return state;
         return {
-            html: doc ? XMLSerializer.serializeToString(doc) : '',
+            html: doc ? serializeDoc(doc, hadWrapper) : '',
             ...state,
         };
     } catch (error) {
@@ -134,7 +142,9 @@ export default function(
             'rendering error',
             JSON.stringify({ error: error.message, html })
         );
-        return { html: '' };
+        // Keep the state collections in the failure path: callers using
+        // mutate:false (e.g. extractImageLink) read rtags.images directly.
+        return { html: '', ...state };
     }
 }
 
@@ -143,6 +153,20 @@ function preprocessHtml(html) {
     html = embedThreeSpeakNode(html);
 
     return html;
+}
+
+// Serialize a parsed document. Input that arrived without an <html> root
+// was parsed inside a synthetic one; unwrap it so the output shape matches
+// the input shape (HtmlReady used to pass fragments through unchanged).
+function serializeDoc(doc, hadWrapper) {
+    if (hadWrapper) return XMLSerializer.serializeToString(doc);
+    const root = doc.documentElement;
+    if (!root) return XMLSerializer.serializeToString(doc);
+    let out = '';
+    Array.prototype.slice.call(root.childNodes).forEach(node => {
+        out += XMLSerializer.serializeToString(node);
+    });
+    return out;
 }
 function detectImageLinksOrLinkify(textNode, state) {
     const imageRegex = /(https?:\/\/\S+\.(?:jpg|jpeg|png|gif)(?:\?[^\s]*)?)/gi;

@@ -1,5 +1,9 @@
 /* global describe, it, expect */
-import { highlightSegments, extractBodySummary } from './ExtractContent';
+import {
+    highlightSegments,
+    extractBodySummary,
+    extractImageLink,
+} from './ExtractContent';
 import { htmlDecode } from './Html';
 
 describe('highlightSegments', () => {
@@ -54,6 +58,23 @@ describe('highlightSegments', () => {
             { match: '<img src=x onerror=alert(1)>' },
             ' world',
         ]);
+    });
+});
+
+describe('extractImageLink', () => {
+    it('finds images in markdown bodies (unwrapped multi-root html)', () => {
+        expect(
+            extractImageLink({}, 'words ![alt](https://example.com/x.png) end')
+        ).toBe('https://example.com/x.png');
+    });
+
+    it('reads the first json_metadata image when present', () => {
+        expect(
+            extractImageLink(
+                { image: ['https://example.com/a.jpg', 'https://e.com/b.jpg'] },
+                'no images here'
+            )
+        ).toBe('https://example.com/a.jpg');
     });
 });
 

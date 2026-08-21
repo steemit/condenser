@@ -238,6 +238,13 @@ app.use(function*(next) {
         });
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
+        // Only redirect to same-origin relative paths. A url like
+        // `//evil.com?ch=1` strips down to the protocol-relative `//evil.com`,
+        // which would send the user to an external host (open redirect).
+        if (!/^\/(?!\/)/.test(redir)) {
+            yield next;
+            return;
+        }
         console.log(`server redirect ${this.url} -> ${redir}`);
         this.status = 302;
         this.redirect(redir);

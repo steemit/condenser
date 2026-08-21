@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
 import { imageProxy } from 'app/utils/ProxifyUrl';
-import { highlightKeyword } from 'app/utils/ExtractContent';
+import { highlightSegments } from 'app/utils/ExtractContent';
 import * as userActions from 'app/redux/UserReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import tt from 'counterpart';
@@ -13,6 +13,22 @@ import { Set, Map } from 'immutable';
 export const SIZE_SMALL = 'small';
 export const SIZE_MED = 'medium';
 export const SIZE_LARGE = 'large';
+
+// Render keyword-highlighted text as React nodes; the search keyword comes
+// from the url and must never pass through dangerouslySetInnerHTML.
+const renderHighlight = (text, keyword, color) =>
+    highlightSegments(text, keyword).map(
+        (seg, i) =>
+            typeof seg === 'string' ? (
+                seg
+            ) : (
+                // Segments have no stable identity; position is the key.
+                // eslint-disable-next-line react/no-array-index-key
+                <span key={i} style={{ background: color }}>
+                    {seg.match}
+                </span>
+            )
+    );
 
 class SearchUserList extends Component {
     imgErrorFun(event) {
@@ -96,16 +112,9 @@ class SearchUserList extends Component {
                                 onError={event => this.imgErrorFun(event)}
                             />
                         </a>
-                        <span
-                            className="user-name"
-                            dangerouslySetInnerHTML={{
-                                __html: highlightKeyword(
-                                    name,
-                                    keyWord,
-                                    highlightColor
-                                ),
-                            }}
-                        />
+                        <span className="user-name">
+                            {renderHighlight(name, keyWord, highlightColor)}
+                        </span>
                         <span className="user-repution">{`(${Math.floor(
                             reputation
                         )})`}</span>

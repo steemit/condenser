@@ -84,11 +84,22 @@ export function extractBodySummary(body, strip_quotes = false) {
     return desc;
 }
 
-export function highlightKeyword(text, keyword, color) {
-    if (!text) return '';
-    var content = text.split(keyword);
-    var newText = content.join(
-        `<span style="background: ${color};">${keyword}</span>`
-    );
-    return newText;
+/**
+ * Split `text` into plain-text segments around `keyword` matches. Match
+ * results are returned as { match } objects so callers can render the
+ * highlight themselves. Unlike the old highlightKeyword (which returned an
+ * HTML string for dangerouslySetInnerHTML), no raw markup ever passes
+ * through here, so user-controlled titles/summaries cannot inject HTML.
+ */
+export function highlightSegments(text, keyword) {
+    if (!text) return [];
+    const str = String(text);
+    if (!keyword) return [str];
+    const parts = str.split(keyword);
+    const segments = [];
+    parts.forEach((part, i) => {
+        if (part !== '') segments.push(part);
+        if (i < parts.length - 1) segments.push({ match: keyword });
+    });
+    return segments;
 }

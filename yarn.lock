@@ -8969,7 +8969,7 @@ nan@^2.12.1, nan@^2.13.2, nan@^2.3.3:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.19.0.tgz#bb58122ad55a6c5bc973303908d5b16cfdd5a8c0"
   integrity sha512-nO1xXxfh/RWNxfd/XPfbIfFk5vgLsAxUR9y5O0cHMJu/AW9U95JLXqthYHjEp+8gQ5p96K9jUp8nbVOxCdRbtw==
 
-nanoid@^3.3.17:
+nanoid@^3.3.7, nanoid@^3.3.17:
   version "3.3.18"
   resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.18.tgz"
   integrity sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==
@@ -10138,11 +10138,11 @@ postcss@^6.0.0, postcss@^6.0.1, postcss@^6.0.17:
     supports-color "^5.4.0"
 
 postcss@^8.3.11:
-  version "8.5.26"
-  resolved "https://registry.npmjs.org/postcss/-/postcss-8.5.26.tgz"
-  integrity sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ==
+  version "8.4.49"
+  resolved "https://registry.npmjs.org/postcss/-/postcss-8.4.49.tgz"
+  integrity sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==
   dependencies:
-    nanoid "^3.3.17"
+    nanoid "^3.3.7"
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 

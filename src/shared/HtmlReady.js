@@ -1,4 +1,4 @@
-import xmldom from 'xmldom';
+import xmldom from '@xmldom/xmldom';
 import tt from 'counterpart';
 import linksRe, { any as linksAny } from 'app/utils/Links';
 import { validate_account_name } from 'app/utils/ChainValidation';
@@ -11,10 +11,15 @@ export const getExternalLinkWarningMessage = () =>
 export const getInternalImageMessage = () => tt('g.internal_image_message');
 
 const noop = () => {};
-const DOMParser = new xmldom.DOMParser({
-    errorHandler: { warning: noop, error: noop },
-});
+// User-supplied markdown is expected to be malformed HTML; keep parsing.
+// (True fatal errors throw ParseError, caught by HtmlReady's try/catch.)
+const DOMParser = new xmldom.DOMParser({ onError: noop });
 const XMLSerializer = new xmldom.XMLSerializer();
+
+// Parse an HTML fragment and return its root element. xmldom returns a
+// Document, and a Document node cannot be inserted into another tree.
+const parseFragment = fragment =>
+    DOMParser.parseFromString(fragment, 'text/html').documentElement;
 
 /**
  * Functions performed by HTMLReady
@@ -263,7 +268,7 @@ function iframe(state, child) {
         return;
     const html = XMLSerializer.serializeToString(child);
     child.parentNode.replaceChild(
-        DOMParser.parseFromString(`<div class="videoWrapper">${html}</div>`),
+        parseFragment(`<div class="videoWrapper">${html}</div>`),
         child
     );
 }
@@ -285,7 +290,7 @@ function img(state, child) {
     }
     if (child.parentNode && child.parentNode.nodeName.toLowerCase() !== 'a') {
         child.parentNode.replaceChild(
-            DOMParser.parseFromString(
+            parseFragment(
                 `<a href="` +
                     proxifyImageUrl(url, '0x0/') +
                     `" target="_blank">${child}</a>`
@@ -342,9 +347,7 @@ function linkifyNode(child, state) {
             state.links
         );
         if (mutate && content !== data) {
-            const newChild = DOMParser.parseFromString(
-                `<span>${content}</span>`
-            );
+            const newChild = parseFragment(`<span>${content}</span>`);
             child.parentNode.replaceChild(newChild, child);
             return newChild;
         }

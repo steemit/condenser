@@ -1,4 +1,4 @@
-/* global describe, it, before, beforeEach, after, afterEach */
+/* global describe, it, expect, before, beforeEach, after, afterEach */
 import HtmlReady from './HtmlReady';
 
 beforeEach(() => {
@@ -6,9 +6,11 @@ beforeEach(() => {
 });
 
 describe('htmlready', () => {
-    it('should return an empty string if input cannot be parsed', () => {
-        const teststring = 'teststring lol'; // this string causes the xmldom parser to fail & error out
-        expect(HtmlReady(teststring).html).toEqual('');
+    it('should pass bare text through unchanged', () => {
+        // xmldom 0.1.x errored out on input without a root element;
+        // @xmldom/xmldom 0.8.x parses it and returns the text as-is.
+        const teststring = 'teststring lol';
+        expect(HtmlReady(teststring).html).toEqual('teststring lol');
     });
 
     it('should allow links where the text portion and href contains steemit.com', () => {

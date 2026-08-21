@@ -7,6 +7,7 @@ import koa_router from 'koa-router';
 import requestTime from './requesttimings';
 import StatsLoggerClient from './utils/StatsLoggerClient';
 import { SteemMarket } from './utils/SteemMarket';
+import isSafeRedirectTarget from './utils/RedirectTarget';
 import hardwareStats from './hardwarestats';
 import cluster from 'cluster';
 import os from 'os';
@@ -241,33 +242,11 @@ app.use(function*(next) {
         // Only redirect to same-origin relative paths. A url like
         // `//evil.com?ch=1` strips down to the protocol-relative `//evil.com`,
         // which would send the user to an external host (open redirect).
-        // Decode and normalize the target before testing to prevent encoded
-        // bypasses such as "%2F%2Fevil.com".
-        const isSafeRedirectTarget = raw => {
-            if (!raw || typeof raw !== 'string') return false;
-            // keep the raw token for redirects that include querystring/fragments
-            const token = raw;
-            // Try decode once; if decoding fails just fall back to raw token.
-            let decoded = token;
-            try {
-                // decodeURIComponent throws on malformed sequences
-                decoded = decodeURIComponent(token);
-            } catch (e) {
-                decoded = token;
-            }
-            // Disallow any absolute/scheme-prefixed targets like 'http:' or 'https:'
-            if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(decoded)) return false;
-            // Disallow protocol-relative '//' (decoded or raw)
-            if (/^\/\//.test(decoded) || /^\/\//.test(token)) return false;
-            // Only allow same-origin relative paths that start with a single '/'
-            return /^\/(?!\/)/.test(decoded);
-        };
-
+        // Decoding/scheme checks live in isSafeRedirectTarget.
         if (!isSafeRedirectTarget(redir)) {
             yield next;
             return;
         }
-
         console.log(`server redirect ${this.url} -> ${redir}`);
         this.status = 302;
         this.redirect(redir);
@@ -470,5 +449,4 @@ if (env !== 'test') {
 if (process.env.PERFORMANCE_TRACING)
     setInterval(hardwareStats, 1000 * process.env.PERFORMANCE_TRACING);
 
-// export helper for tests: isSafeRedirectTarget
 module.exports = app;

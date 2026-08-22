@@ -108,7 +108,13 @@ export default function(
         const hadWrapper = /^\s*<html[\s>]/i.test(prepared);
         const source = hadWrapper ? prepared : `<html>${prepared}</html>`;
         const doc = DOMParser.parseFromString(source, 'text/html');
-        traverse(doc, state);
+        // Synthetic <html> is parse scaffolding only. Walking from `doc`
+        // would record `html` in htmltags and fail Markdown-mode post
+        // validation ("Please remove ... <html>"). A real user-supplied
+        // <html> root still matches hadWrapper, so it is collected.
+        const traverseRoot =
+            hadWrapper || !doc.documentElement ? doc : doc.documentElement;
+        traverse(traverseRoot, state);
         if (mutate) {
             if (hideImages) {
                 for (const image of Array.from(

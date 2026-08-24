@@ -24,9 +24,10 @@ import UserSettings from '@/components/modules/UserSettings';
 /**
  * User profile page with section
  * Route: /@[username]/[section]
- * Sections: blog, posts, comments, replies, payout, followers, followed, settings, notifications, communities
+ * Sections: blog, posts, comments, replies, payout, feed, followers, followed, settings, notifications, communities
  * Note: proxy.ts ensures only @username format reaches here
- * Equivalent to old route: UserProfile with params [@username, section]
+ * Equivalent to old route: UserProfile with params [@username, section];
+ * `feed` is legacy PostsIndex ['home', user] (bridge get_account_posts, sort 'feed')
  */
 export default function UserProfileSectionPage() {
   const params = useParams();
@@ -55,6 +56,7 @@ export default function UserProfileSectionPage() {
     'comments',
     'replies',
     'payout',
+    'feed',
   ].includes(section)
     ? (section as AccountPostsOrder)
     : 'blog';
@@ -95,7 +97,7 @@ export default function UserProfileSectionPage() {
       }
     };
 
-    if (['blog', 'posts', 'comments', 'replies', 'payout'].includes(section)) {
+    if (['blog', 'posts', 'comments', 'replies', 'payout', 'feed'].includes(section)) {
       loadPosts();
     } else {
       setLoading(false);
@@ -284,6 +286,26 @@ function emptySectionText(
       return `@${accountname} hasn't made any comments yet.`;
     case 'posts':
       return `@${accountname} hasn't made any posts yet.`;
+    case 'feed':
+      // Legacy PostsIndex noFriendsText (empty home feed).
+      return (
+        <span className="flex flex-col items-center gap-2">
+          <span>You haven&apos;t followed anyone yet!</span>
+          <span className="flex flex-wrap justify-center gap-3">
+            <Link href="/trending" className="text-accent-foreground underline">
+              Explore Trending
+            </Link>
+            <a
+              href="https://steemit.com/welcome"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent-foreground underline"
+            >
+              New users guide
+            </a>
+          </span>
+        </span>
+      );
     default:
       break;
   }

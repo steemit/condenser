@@ -53,6 +53,26 @@ describe('GET /api/steem/posts', () => {
     expect(getRankedPostsMock).not.toHaveBeenCalled();
   });
 
+  it('forwards sort=feed to getAccountPosts (user home feed)', async () => {
+    getAccountPostsMock.mockResolvedValue([{ post_id: 3 }]);
+
+    const res = await GET(
+      makeGetRequest('/api/steem/posts', { account: 'alice', sort: 'feed' })
+    );
+    expect(res.status).toBe(200);
+    // Legacy PostsIndex ['home', user] calls bridge get_account_posts with
+    // sort 'feed'; the client forwards `sort` verbatim to that bridge call.
+    expect(getAccountPostsMock).toHaveBeenCalledWith({
+      sort: 'feed',
+      account: 'alice',
+      start_author: undefined,
+      start_permlink: undefined,
+      limit: 20,
+      observer: undefined,
+    });
+    expect(getRankedPostsMock).not.toHaveBeenCalled();
+  });
+
   it('forwards pagination params and observer (observer gates the server cache)', async () => {
     getRankedPostsMock.mockResolvedValue([]);
 

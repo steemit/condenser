@@ -19,6 +19,7 @@ import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleNightmode } from "@/store/slices/appSlice";
 import { showLogin } from "@/store/slices/userSlice";
+import { logoutThunk } from "@/store/thunks/authThunks";
 import { SteemitLogo } from "@/components/layout/SteemitLogo";
 import { SidePanel } from "@/components/layout/SidePanel";
 import Userpic from "@/components/elements/Userpic";
@@ -139,13 +140,12 @@ export function Header() {
     if (win) win.opener = null;
   };
 
-  const logout = async () => {
-    await fetch("/api/auth/logout", {
-      method: "POST",
-      credentials: "same-origin",
-    });
+  const handleLogout = async () => {
+    // Full logout: clears the stored key, Redux state and the server session.
+    // Legacy does not navigate away on logout (UserSaga.js logout), so we
+    // stay on the current page and just refresh server components.
+    await dispatch(logoutThunk());
     router.refresh();
-    router.push("/");
   };
 
   return (
@@ -276,7 +276,7 @@ export function Header() {
                   >
                     Wallet
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => void logout()}>
+                  <DropdownMenuItem onClick={() => void handleLogout()}>
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuGroup>

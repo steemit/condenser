@@ -28,6 +28,19 @@ export async function GET(request: NextRequest) {
         );
       }
       result = await getUserSubscriptions({ account });
+      // bridge.list_all_subscriptions returns tuples, not objects:
+      // [community, community_title, role, affiliation_title]
+      // (legacy cards/SubscriptionsList.jsx renderItem). Map to typed objects
+      // so the client contract stays object-shaped.
+      result = (result || []).map((item: unknown) => {
+        if (!Array.isArray(item)) return item;
+        const [community, communityTitle, role, affiliationTitle] = item;
+        return {
+          name: community,
+          title: communityTitle || community,
+          context: { role, title: affiliationTitle },
+        };
+      });
     } else {
       // List communities
       result = await listCommunities({

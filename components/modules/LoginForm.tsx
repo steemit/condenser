@@ -185,7 +185,16 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
       ).unwrap();
 
       dispatch(hideLogin());
-      router.refresh();
+
+      // Legacy (UserSaga.js:495-500) navigates to the user's feed after
+      // logging in from the login page or the home page; modal logins from
+      // other pages stay put and just refresh.
+      const path = window.location.pathname;
+      if (path === '/login' || path === '/') {
+        router.push('/trending/my');
+      } else {
+        router.refresh();
+      }
     } catch (err: unknown) {
       console.error('Login error:', err);
       const errorMessage = err instanceof Error ? err.message : 'Login failed. Please try again.';

@@ -1,6 +1,9 @@
 /**
  * Steem API Route: Get Followers/Following Lists
- * GET /api/steem/followers?account=username&type=followers&page=1&limit=20
+ * GET /api/steem/followers?account=username&type=followers&page=0&limit=20
+ *
+ * `page` is 0-based: condenser_api.get_followers_by_page expects a 0-based
+ * page and legacy passes its 0-based currentPage straight through.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -11,7 +14,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const account = searchParams.get('account');
     const type = searchParams.get('type') || 'followers'; // 'followers' or 'following'
-    const page = parseInt(searchParams.get('page') || '1');
+    const page = parseInt(searchParams.get('page') || '0');
     const limit = parseInt(searchParams.get('limit') || '20');
 
     if (!account) {

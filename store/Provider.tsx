@@ -2,8 +2,19 @@
 
 import { Provider } from 'react-redux';
 import { store } from './index';
+import { useSessionHydration } from '@/hooks/use-session-hydration';
 
-export function ReduxProvider({ children }: { children: React.ReactNode }) {
-  return <Provider store={store}>{children}</Provider>;
+// Hydrates Redux from the server session cookie on first mount. Must live
+// inside <Provider> to access the dispatch context.
+function SessionHydration({ children }: { children: React.ReactNode }) {
+  useSessionHydration();
+  return <>{children}</>;
 }
 
+export function ReduxProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <Provider store={store}>
+      <SessionHydration>{children}</SessionHydration>
+    </Provider>
+  );
+}

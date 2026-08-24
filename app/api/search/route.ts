@@ -14,14 +14,19 @@ interface SearchParams {
 
 interface ElasticsearchQuery {
   size: number;
-  query?: any;
-  sort?: any;
+  query?: Record<string, unknown>;
+  sort?: Record<string, unknown>;
 }
+
+// Legacy parity (src/server/api/general.js): abortable ES fetch with a short
+// timeout to avoid socket exhaustion when ES DNS breaks or ES is down.
+const ES_FETCH_TIMEOUT_MS = 1200;
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { q, s = 'created', depth = 0, scroll_id } = body as SearchParams;
+    // Legacy default sort field is `created_at` (the ES field name).
+    const { q, s = 'created_at', depth = 0, scroll_id } = body as SearchParams;
 
     if (!q || q.trim().length === 0) {
       return NextResponse.json(
@@ -30,11 +35,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get Elasticsearch endpoint from environment
-    const elasticSearchEndpoint = process.env.ELASTICSEARCH_ENDPOINT;
-    
+    // `ELASTICSEARCH_URL` is the documented name (.env.example,
+    // docs/CONFIGURATION.md); `ELASTICSEARCH_ENDPOINT` is kept as a legacy
+    // alias for existing deployments.
+    const elasticSearchEndpoint =
+      process.env.ELASTICSEARCH_URL || process.env.ELASTICSEARCH_ENDPOINT;
+
     if (!elasticSearchEndpoint) {
-      // Return mock data for development
+      // Return mock data for development (intentional dev convenience)
       return NextResponse.json({
         hits: {
           hits: [],
@@ -88,7 +96,9 @@ export async function POST(request: NextRequest) {
       };
     }
 
-    let requestBody: any = { searchQuery };
+    // ES expects the query object itself ({size, query, sort}), NOT a
+    // { searchQuery: {...} } wrapper — the wrapper made ES return 400.
+    let requestBody: unknown = searchQuery;
     let endpoint = searchEndpoint;
 
     // Handle scroll pagination
@@ -107,26 +117,49 @@ export async function POST(request: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestBody),
+      signal: AbortSignal.timeout(ES_FETCH_TIMEOUT_MS),
     });
 
     if (!response.ok) {
-      throw new Error(`Elasticsearch request failed: ${response.statusText}`);
+      // Pass through non-2xx from ES as 502 to make the failure explicit
+      // (legacy behavior).
+      return NextResponse.json(
+        {
+          error: 'Search backend error',
+          code: 'SEARCH_BACKEND_ERROR',
+          es_status: response.status,
+        },
+        { status: 502 }
+      );
     }
 
     const result = await response.json();
     return NextResponse.json(result);
 
-  } catch (error: any) {
+  } catch (error: unknown) {
+    // ES connectivity failure or timeout: search is unavailable (503),
+    // never a silent 200 with empty hits.
+    const errName = (error as { name?: string } | null)?.name;
+    const isConnectivityError =
+      error instanceof DOMException ||
+      error instanceof TypeError ||
+      errName === 'TimeoutError' ||
+      errName === 'AbortError';
+    if (isConnectivityError) {
+      console.error('Search unavailable (ES connectivity/timeout):', error);
+      return NextResponse.json(
+        {
+          error: 'Search temporarily unavailable',
+          code: 'SEARCH_UNAVAILABLE',
+        },
+        { status: 503 }
+      );
+    }
+
     console.error('Search error:', error);
-    
-    // Return empty results on error (for development)
-    return NextResponse.json({
-      hits: {
-        hits: [],
-        total: { value: 0 },
-      },
-      _scroll_id: null,
-      error: error.message,
-    });
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Search failed' },
+      { status: 500 }
+    );
   }
 }

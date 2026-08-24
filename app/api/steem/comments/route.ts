@@ -19,8 +19,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get discussion which includes the post and all comments
-    const discussion = (await getDiscussion({ author, permlink })) as { replies?: unknown[] } | null;
+    // Bridge `get_discussion` returns a content MAP keyed by "author/permlink"
+    // (legacy loadThread): the root post lives at the `${author}/${permlink}`
+    // key, every other entry is a comment. There is no top-level `replies`
+    // field — each node's `replies` is an array of child map keys.
+    const discussion = (await getDiscussion({ author, permlink })) as Record<
+      string,
+      unknown
+    > | null;
 
     if (!discussion) {
       return NextResponse.json(
@@ -29,9 +35,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Extract comments from discussion
-    // The discussion structure may vary, adjust based on actual API response
-    const comments = discussion.replies || [];
+    // Flatten the map, excluding the root post itself; CommentsList rebuilds
+    // the tree client-side from parent_author/parent_permlink.
+    const rootKey = `${author}/${permlink}`;
+    const comments = Object.entries(discussion)
+      .filter(([key]) => key !== rootKey)
+      .map(([, content]) => content);
 
     return NextResponse.json(comments);
   } catch (error: unknown) {

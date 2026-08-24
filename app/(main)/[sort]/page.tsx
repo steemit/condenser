@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setPathname } from "@/store/slices/globalSlice";
 import {
   fetchRankedPosts,
@@ -27,6 +27,7 @@ const VALID_SORTS = [
 export default function SortPage() {
   const dispatch = useAppDispatch();
   const { sort } = useParams();
+  const observer = useAppSelector((s) => s.user.current?.username);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
@@ -42,14 +43,20 @@ export default function SortPage() {
     dispatch(setPathname(`/${sortString}`));
   }, [dispatch, sortString, isValidSort]);
 
+  // Normalize the sort for API calls; proxy.ts lowercases only for validation
+  // and passes the raw-cased segment through, so `/Trending` must still query
+  // `trending`. Display values stay as-is.
+  const order = sortString.toLowerCase() as FetchPostsParams["order"];
+
   const loadInitial = useCallback(async () => {
     if (!isValidSort) return;
     setLoading(true);
     setHasMore(true);
     try {
       const newPosts = await fetchRankedPosts({
-        order: sortString as FetchPostsParams["order"],
+        order,
         limit: 20,
+        observer,
       });
       setPosts(newPosts);
       setHasMore(newPosts.length >= 20);
@@ -59,7 +66,7 @@ export default function SortPage() {
     } finally {
       setLoading(false);
     }
-  }, [sortString, isValidSort]);
+  }, [order, sortString, isValidSort, observer]);
 
   useEffect(() => {
     if (!isValidSort) {
@@ -77,10 +84,11 @@ export default function SortPage() {
     try {
       const last = posts[posts.length - 1];
       const morePosts = await fetchRankedPosts({
-        order: sortString as FetchPostsParams["order"],
+        order,
         start_author: last.author,
         start_permlink: last.permlink,
         limit: 20,
+        observer,
       });
       const slice =
         morePosts[0]?.author === last.author &&
@@ -100,7 +108,7 @@ export default function SortPage() {
       setLoading(false);
       loadingMoreRef.current = false;
     }
-  }, [isValidSort, loading, hasMore, posts, sortString]);
+  }, [isValidSort, loading, hasMore, posts, order, sortString, observer]);
 
   if (showNotFound) {
     return <NotFound />;

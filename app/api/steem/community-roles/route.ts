@@ -29,9 +29,23 @@ export async function GET(request: NextRequest) {
 
     let result;
     if (type === 'roles') {
-      result = await getCommunityRoles({ community });
+      // bridge.list_community_roles returns [name, role, title] tuples
+      // (legacy pages/CommunityRoles.jsx destructures tuple[0..2]).
+      const roles = await getCommunityRoles({ community });
+      result = (roles || []).map((item: unknown) => {
+        if (!Array.isArray(item)) return item;
+        const [name, role, title] = item;
+        return { name, role, title };
+      });
     } else {
-      result = await getCommunitySubscribers({ community });
+      // bridge.list_subscribers returns [name, role, title, created_at] tuples
+      // (legacy modules/CommunitySubscriberList.jsx uses s[0..2]).
+      const subscribers = await getCommunitySubscribers({ community });
+      result = (subscribers || []).map((item: unknown) => {
+        if (!Array.isArray(item)) return item;
+        const [name, role, title, created_at] = item;
+        return { name, role, title, created_at };
+      });
     }
 
     return NextResponse.json(result || []);

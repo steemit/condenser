@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setPathname } from "@/store/slices/globalSlice";
 import {
   fetchRankedPosts,
@@ -27,6 +27,7 @@ const VALID_SORTS = [
 export default function SortTagPage() {
   const dispatch = useAppDispatch();
   const { sort, tag } = useParams();
+  const observer = useAppSelector((s) => s.user.current?.username);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
@@ -42,15 +43,23 @@ export default function SortTagPage() {
     dispatch(setPathname(`/${sortString}/${tagString}`));
   }, [dispatch, sortString, tagString, isValidSort]);
 
+  // Normalize sort/tag for API calls: proxy.ts lowercases only for validation
+  // and passes the raw-cased segments through, so `/Trending/My` would query a
+  // bogus sort/tag. Legacy lowercases the tag before querying
+  // (PostsIndex.jsx mapStateToProps). Display values stay as-is.
+  const order = sortString.toLowerCase() as FetchPostsParams["order"];
+  const fetchCategory = tagString.toLowerCase();
+
   const loadInitial = useCallback(async () => {
     if (!isValidSort) return;
     setLoading(true);
     setHasMore(true);
     try {
       const newPosts = await fetchRankedPosts({
-        order: sortString as FetchPostsParams["order"],
-        category: tagString,
+        order,
+        category: fetchCategory,
         limit: 20,
+        observer,
       });
       setPosts(newPosts);
       setHasMore(newPosts.length >= 20);
@@ -63,7 +72,7 @@ export default function SortTagPage() {
     } finally {
       setLoading(false);
     }
-  }, [sortString, tagString, isValidSort]);
+  }, [order, fetchCategory, sortString, tagString, isValidSort, observer]);
 
   useEffect(() => {
     if (!isValidSort) {
@@ -81,11 +90,12 @@ export default function SortTagPage() {
     try {
       const last = posts[posts.length - 1];
       const morePosts = await fetchRankedPosts({
-        order: sortString as FetchPostsParams["order"],
-        category: tagString,
+        order,
+        category: fetchCategory,
         start_author: last.author,
         start_permlink: last.permlink,
         limit: 20,
+        observer,
       });
       const slice =
         morePosts[0]?.author === last.author &&
@@ -105,7 +115,7 @@ export default function SortTagPage() {
       setLoading(false);
       loadingMoreRef.current = false;
     }
-  }, [isValidSort, loading, hasMore, posts, sortString, tagString]);
+  }, [isValidSort, loading, hasMore, posts, order, fetchCategory, observer]);
 
   const isHiveCommunity = tagString.startsWith("hive-");
 

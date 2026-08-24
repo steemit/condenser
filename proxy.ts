@@ -9,6 +9,7 @@
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { isGdprUser } from './lib/gdpr-user-list';
 
 // Reserved routes that should not be treated as categories
 const RESERVED_ROUTES = [
@@ -52,6 +53,18 @@ export function proxy(request: NextRequest) {
     pathname.includes('.')
   ) {
     return NextResponse.next();
+  }
+
+  // GDPR-listed accounts 404 on every route family that exposes them
+  // (mirrors legacy ResolveRoute.js GDPRUserList checks): /@user,
+  // /@user/<section|permlink|feed> and /category/@user/permlink.
+  // A single guard covers all four families because the @-segment is always
+  // the first or second path segment in each of them. Note: usernames
+  // containing a dot (e.g. mateja.klaric) are skipped by the '.' guard above
+  // and 404 naturally via not-found — same net effect.
+  const gdprMatch = pathname.match(/^\/(?:[^\/]+\/)?@([^\/]+)/);
+  if (gdprMatch && isGdprUser(gdprMatch[1])) {
+    return NextResponse.rewrite(new URL('/404', request.url));
   }
 
   // Follow legacy route matching order (ResolveRoute.js):

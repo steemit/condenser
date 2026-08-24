@@ -73,7 +73,8 @@ export type AccountPostsOrder =
   | "posts"
   | "comments"
   | "replies"
-  | "payout";
+  | "payout"
+  | "feed";
 
 export interface FetchAccountPostsParams {
   account: string;

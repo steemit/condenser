@@ -63,6 +63,18 @@ const testCases = [
   // Community routes
   { path: '/roles/hive-123456', expected: 'next', description: 'Community roles page' },
   
+  // GDPR-listed accounts (legacy GDPRUserList → NotFound on all four route families)
+  { path: '/@thedarkoverlord', expected: '404', description: 'GDPR user: profile root' },
+  { path: '/@thedarkoverlord/blog', expected: '404', description: 'GDPR user: profile section' },
+  { path: '/@thedarkoverlord/feed', expected: '404', description: 'GDPR user: feed' },
+  { path: '/@thedarkoverlord/my-post', expected: '404', description: 'GDPR user: post without category' },
+  { path: '/steem/@thedarkoverlord/my-post', expected: '404', description: 'GDPR user: post with category' },
+  { path: '/@TheDarkOverlord', expected: '404', description: 'GDPR user: match is case-insensitive' },
+  { path: '/@xondra/settings', expected: '404', description: 'GDPR user: settings section' },
+  { path: '/@mateja.klaric', expected: 'next', description: 'GDPR user with dot: skipped by "." guard (404s via not-found)' },
+  { path: '/@alice', expected: 'rewrite:/user/alice', description: 'Non-GDPR user unaffected' },
+  { path: '/steem/@alice/my-post', expected: 'rewrite:/post/steem/alice/my-post', description: 'Non-GDPR user post unaffected' },
+  
   // Sort feeds (pass through to [sort] / [sort]/[tag] routes)
   { path: '/hot', expected: 'next', description: 'Hot posts page' },
   { path: '/created', expected: 'next', description: 'Created posts page' },

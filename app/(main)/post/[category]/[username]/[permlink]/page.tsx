@@ -7,6 +7,7 @@ import { setPathname } from '@/store/slices/globalSlice';
 import { normalizeUsername, formatUsername } from '@/lib/utils/username';
 import PostFull from '@/components/cards/PostFull';
 import CommentsList from '@/components/cards/CommentsList';
+import { PostEditorResult } from '@/components/elements/PostEditor';
 import { Post, fetchPostByPermlink, fetchCommentsByPermlink } from '@/lib/api/steem';
 import { FeedLayout } from '@/components/layout/FeedLayout';
 
@@ -59,26 +60,36 @@ export default function PostPage() {
     loadData();
   }, [category, username, permlink]);
 
-  const handleNewComment = async (newCommentBody: string) => {
+  // PostEditor already broadcast the reply; optimistically append a
+  // synthesized comment built from the known author/permlink/body instead of
+  // refetching (the chain API may not have indexed the comment yet).
+  const handleNewComment = (result: PostEditorResult) => {
     if (!post) return;
-    // TODO: Implement actual comment submission via API
-    // For now, just add to local state
     const newComment: Post = {
-      author: 'currentuser', // Replace with actual logged-in user
-      permlink: `comment-${Date.now()}`,
+      author: result.author,
+      permlink: result.permlink,
       category: post.category,
       title: '',
-      body: newCommentBody,
+      body: result.body,
       created: new Date().toISOString(),
       net_rshares: '0',
       children: 0,
-      parent_author: post.author,
-      parent_permlink: post.permlink,
+      parent_author: result.parentAuthor,
+      parent_permlink: result.parentPermlink,
       depth: 1,
       active_votes: [],
       pending_payout_value: '0.000 SBD',
     };
     setComments((prevComments) => [...prevComments, newComment]);
+  };
+
+  // PostEditor already broadcast the edit; update the comment body in place.
+  const handleEditComment = (author: string, commentPermlink: string, body: string) => {
+    setComments((prevComments) =>
+      prevComments.map((c) =>
+        c.author === author && c.permlink === commentPermlink ? { ...c, body } : c
+      )
+    );
   };
 
   if (loading) {
@@ -110,6 +121,7 @@ export default function PostPage() {
         postPermlink={post.permlink}
         postCategory={post.category}
         onReply={handleNewComment}
+        onEdit={handleEditComment}
       />
     </FeedLayout>
   );

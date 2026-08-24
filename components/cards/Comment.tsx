@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAppSelector } from '@/store/hooks';
 import MarkdownViewer from '@/components/elements/MarkdownViewer';
 import Voting from '@/components/elements/Voting';
-import PostEditor from '@/components/elements/PostEditor';
+import PostEditor, { PostEditorResult } from '@/components/elements/PostEditor';
 import Userpic from '@/components/elements/Userpic';
 import TimeAgo from '@/components/elements/TimeAgo';
 import Reputation from '@/components/elements/Reputation';
@@ -27,7 +27,8 @@ interface CommentProps {
   comment: Comment;
   depth?: number;
   sortOrder?: 'votes' | 'new' | 'trending';
-  onReply?: (parentAuthor: string, parentPermlink: string, body: string) => void;
+  /** Called after a reply to this comment was broadcast successfully. */
+  onReply?: (result: PostEditorResult) => void;
   onEdit?: (author: string, permlink: string, body: string) => void;
   onDelete?: (author: string, permlink: string) => void;
   replies?: Comment[];
@@ -64,20 +65,6 @@ export default function Comment({
   const edited = comment.last_update && comment.last_update !== comment.created;
 
   const commentUrl = `/${comment.category}/@${comment.author}/${comment.permlink}`;
-
-  const handleReplySubmit = (body: string) => {
-    if (onReply) {
-      onReply(comment.author, comment.permlink, body);
-      setShowReply(false);
-    }
-  };
-
-  const handleEditSubmit = (body: string) => {
-    if (onEdit) {
-      onEdit(comment.author, comment.permlink, body);
-      setShowEdit(false);
-    }
-  };
 
   const handleDelete = () => {
     if (onDelete && confirm('Are you sure you want to delete this comment?')) {
@@ -227,17 +214,27 @@ export default function Comment({
                 )}
               </div>
 
-              {/* reply/edit editor */}
+              {/* reply/edit editor — PostEditor broadcasts itself; here we
+                  only propagate the result up for the optimistic update */}
               {(showReply || showEdit) && (
                 <div className="comment__editor my-4">
                   <PostEditor
                     type={showReply ? 'submit_comment' : 'edit'}
+                    parentAuthor={
+                      showReply ? comment.author : comment.parent_author
+                    }
+                    parentPermlink={
+                      showReply ? comment.permlink : comment.parent_permlink
+                    }
+                    commentPermlink={showEdit ? comment.permlink : undefined}
                     body={showEdit ? comment.body : undefined}
-                    onSuccess={(category, body) => {
-                      if (showReply && body) {
-                        handleReplySubmit(body);
-                      } else if (showEdit && body) {
-                        handleEditSubmit(body);
+                    onSuccess={(result) => {
+                      if (showReply) {
+                        onReply?.(result);
+                        setShowReply(false);
+                      } else {
+                        onEdit?.(result.author, result.permlink, result.body);
+                        setShowEdit(false);
                       }
                     }}
                     onCancel={() => {

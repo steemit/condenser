@@ -4,20 +4,25 @@
  */
 
 // Import steem object directly as a named export
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 import { steem } from '@steemit/steem-js';
 
 // Import types directly from dist (these are TypeScript definition files)
 // @ts-expect-error - TypeScript can't resolve these paths, but they exist at runtime
 import type { Transaction } from '@steemit/steem-js/dist/types';
 
-// Get classes and functions from steem object at runtime
-const PrivateKeyClass = steem.auth.PrivateKey;
-const SignatureClass = steem.auth.Signature;
-const serializeTransaction = steem.serializer.serializeTransaction;
+// Get operation factories from steem object at runtime
 const createComment = steem.operations.createComment;
 const createVote = steem.operations.createVote;
 const createCustomJson = steem.operations.createCustomJson;
+
+/**
+ * The operation factories return `{0: name, 1: payload}` objects, but the
+ * transaction serializer requires real `[name, payload]` array tuples.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toOperationTuple(op: any): [string, Record<string, unknown>] {
+  return [op[0], op[1]];
+}
 
 /**
  * Signed transaction with signatures
@@ -36,32 +41,24 @@ export async function signTransaction(
   privateKeyWif: string
 ): Promise<SignedTransaction> {
   try {
-    const privateKey = PrivateKeyClass.fromWif(privateKeyWif);
+    // Delegate digest building and signing to steem-js: it signs
+    // sha256(chain_id || serialize(trx)) with the config chain_id
+    // (default: Steem mainnet) and returns a signed_transaction object with
+    // hex signatures. The previous hand-rolled path referenced
+    // steem.serializer (removed in @steemit/steem-js 1.x, crashed at module
+    // load) and also omitted the chain id from the digest.
+    const signed = steem.auth.signTransaction(
+      {
+        ref_block_num: transaction.ref_block_num,
+        ref_block_prefix: transaction.ref_block_prefix,
+        expiration: transaction.expiration,
+        operations: transaction.operations,
+        extensions: transaction.extensions || [],
+      },
+      [privateKeyWif]
+    );
 
-    // Create transaction object
-    // Note: serializer accepts operations in tuple format, but Transaction type expects Operation[]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tx: any = {
-      ref_block_num: transaction.ref_block_num,
-      ref_block_prefix: transaction.ref_block_prefix,
-      expiration: transaction.expiration,
-      operations: transaction.operations,
-      extensions: transaction.extensions || [],
-    };
-
-    // Serialize transaction
-    const serializedTx = serializeTransaction(tx as Transaction);
-
-    // Sign transaction using Signature.signBufferSha256
-    const signature = SignatureClass.signBufferSha256(serializedTx, privateKey);
-    const signatureString = signature.toHex();
-
-    return {
-      ...transaction,
-      operations: transaction.operations,
-      extensions: transaction.extensions || [],
-      signatures: [signatureString],
-    };
+    return signed as SignedTransaction;
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     throw new Error(`Failed to sign transaction: ${errorMessage}`);
@@ -102,7 +99,7 @@ export async function signCommentOperation(
     const expirationStr = expiration.toISOString().slice(0, -5);
 
     // Create comment operation
-    const operation = createComment(
+    const operation = toOperationTuple(createComment(
       params.parentAuthor || '',
       params.parentPermlink,
       params.author,
@@ -110,7 +107,7 @@ export async function signCommentOperation(
       params.title,
       params.body,
       params.jsonMetadata
-    );
+    ));
 
     // Create transaction
     const transaction: Omit<SignedTransaction, 'signatures'> = {
@@ -160,12 +157,12 @@ export async function signVoteOperation(
     const expirationStr = expiration.toISOString().slice(0, -5);
 
     // Create vote operation
-    const operation = createVote(
+    const operation = toOperationTuple(createVote(
       params.voter,
       params.author,
       params.permlink,
       params.weight
-    );
+    ));
 
     // Create transaction
     const transaction: Omit<SignedTransaction, 'signatures'> = {
@@ -215,12 +212,12 @@ export async function signCustomJsonOperation(
     const expirationStr = expiration.toISOString().slice(0, -5);
 
     // Create custom_json operation
-    const operation = createCustomJson(
+    const operation = toOperationTuple(createCustomJson(
       params.requiredAuths || [],
       params.requiredPostingAuths || [],
       params.id,
       params.json
-    );
+    ));
 
     // Create transaction
     const transaction: Omit<SignedTransaction, 'signatures'> = {

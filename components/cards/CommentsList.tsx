@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useAppSelector } from '@/store/hooks';
 import Comment, { Comment as CommentType } from './Comment';
-import PostEditor from '@/components/elements/PostEditor';
+import PostEditor, { PostEditorResult } from '@/components/elements/PostEditor';
 import { ChevronDown } from 'lucide-react';
 
 interface CommentsListProps {
@@ -12,7 +12,8 @@ interface CommentsListProps {
   postPermlink: string;
   postCategory: string;
   sortOrder?: 'votes' | 'new' | 'trending';
-  onReply?: (parentAuthor: string, parentPermlink: string, body: string) => void;
+  /** Called after a reply (at any depth) was broadcast successfully. */
+  onReply?: (result: PostEditorResult) => void;
   onEdit?: (author: string, permlink: string, body: string) => void;
   onDelete?: (author: string, permlink: string) => void;
 }
@@ -87,12 +88,6 @@ export default function CommentsList({
   const rootComments = sortComments(buildCommentTree(comments), currentSortOrder);
   const visibleRoots = rootComments.slice(0, visibleCount);
 
-  const handleNewComment = (category?: string, body?: string) => {
-    if (onReply && body) {
-      onReply(postAuthor, postPermlink, body);
-    }
-  };
-
   return (
     <div
       className="Post_comments__content mx-auto mb-14 mt-8 max-w-[54rem] text-[92%]"
@@ -121,7 +116,12 @@ export default function CommentsList({
       {/* top-level reply editor (legacy shows it when logged in) */}
       {username && (
         <div className="mb-6">
-          <PostEditor type="submit_comment" onSuccess={handleNewComment} />
+          <PostEditor
+            type="submit_comment"
+            parentAuthor={postAuthor}
+            parentPermlink={postPermlink}
+            onSuccess={onReply}
+          />
         </div>
       )}
 

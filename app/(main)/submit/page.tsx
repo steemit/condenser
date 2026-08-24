@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
 import { showLogin } from '@/store/slices/userSlice';
-import PostEditor from '@/components/elements/PostEditor';
+import PostEditor, { PostEditorResult } from '@/components/elements/PostEditor';
 import { FeedLayout } from '@/components/layout/FeedLayout';
 
 /**
@@ -38,14 +38,9 @@ export default function SubmitPostPage() {
     );
   }
 
-  const handleSuccess = (category?: string) => {
-    // Clear draft from localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('replyEditorData-submit');
-    }
-    
-    // Redirect to created posts page
-    const redirectUrl = category ? `/created/${category}` : '/created';
+  const handleSuccess = (result: PostEditorResult) => {
+    // PostEditor already cleared its draft; redirect to the new post's feed.
+    const redirectUrl = result.category ? `/created/${result.category}` : '/created';
     router.push(redirectUrl);
   };
 

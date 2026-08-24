@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setPathname } from "@/store/slices/globalSlice";
 import { fetchRankedPosts, Post } from "@/lib/api/steem";
 import PostsList from "@/components/cards/PostsList";
@@ -13,6 +13,7 @@ import { FeedListHeader } from "@/components/layout/FeedListHeader";
  */
 export default function TrendingPage() {
   const dispatch = useAppDispatch();
+  const observer = useAppSelector((s) => s.user.current?.username);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
@@ -29,6 +30,7 @@ export default function TrendingPage() {
         const fetchedPosts = await fetchRankedPosts({
           order: "trending",
           limit: 20,
+          observer,
         });
         setPosts(fetchedPosts);
         setHasMore(fetchedPosts.length >= 20);
@@ -39,7 +41,7 @@ export default function TrendingPage() {
       }
     };
     void loadPosts();
-  }, []);
+  }, [observer]);
 
   const handleLoadMore = useCallback(async () => {
     if (loading || !hasMore || posts.length === 0) return;
@@ -53,6 +55,7 @@ export default function TrendingPage() {
         start_author: lastPost.author,
         start_permlink: lastPost.permlink,
         limit: 20,
+        observer,
       });
       const newPosts =
         morePosts[0]?.author === lastPost.author &&
@@ -72,7 +75,7 @@ export default function TrendingPage() {
       setLoading(false);
       loadingMoreRef.current = false;
     }
-  }, [loading, hasMore, posts]);
+  }, [loading, hasMore, posts, observer]);
 
   return (
     <FeedLayout>

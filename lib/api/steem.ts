@@ -263,11 +263,11 @@ export interface FollowItem {
 }
 
 /**
- * Fetch followers list
+ * Fetch followers list. `page` is 0-based (see app/api/steem/followers/route.ts).
  */
 export async function fetchFollowers(
   account: string,
-  page: number = 1,
+  page: number = 0,
   limit: number = 20
 ): Promise<FollowItem[]> {
   const searchParams = new URLSearchParams({
@@ -288,11 +288,11 @@ export async function fetchFollowers(
 }
 
 /**
- * Fetch following list
+ * Fetch following list. `page` is 0-based (see app/api/steem/followers/route.ts).
  */
 export async function fetchFollowing(
   account: string,
-  page: number = 1,
+  page: number = 0,
   limit: number = 20
 ): Promise<FollowItem[]> {
   const searchParams = new URLSearchParams({
@@ -435,6 +435,7 @@ export interface CommunitySubscriber {
   name: string;
   role?: string;
   title?: string;
+  created_at?: string;
   [key: string]: any;
 }
 

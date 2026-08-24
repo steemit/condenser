@@ -25,7 +25,10 @@ export default function FollowList({ accountname, type, total }: FollowListProps
   const currentUser = useAppSelector((s) => s.user.current?.username);
   const [items, setItems] = useState<FollowItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  // 0-based page: condenser_api.get_followers_by_page expects a 0-based page
+  // and legacy passes its 0-based currentPage straight through
+  // (elements/UserList.jsx + FetchDataSaga.js getFollowers).
+  const [page, setPage] = useState(0);
 
   const loadPage = useCallback(
     async (p: number) => {
@@ -46,15 +49,15 @@ export default function FollowList({ accountname, type, total }: FollowListProps
   );
 
   useEffect(() => {
-    void loadPage(1);
+    void loadPage(0);
   }, [loadPage]);
 
   const totalPages =
     typeof total === 'number' && total > 0
       ? Math.ceil(total / PAGE_SIZE)
       : items.length >= PAGE_SIZE
-        ? page + 1 // unknown total; at least one more page
-        : page;
+        ? page + 2 // unknown total; at least one more page
+        : page + 1;
 
   if (loading && items.length === 0) {
     return (
@@ -75,9 +78,10 @@ export default function FollowList({ accountname, type, total }: FollowListProps
   }
 
   // Page number window (ReactPaginate-like: prev/next + numbered pages).
+  // Internal pages are 0-based; the UI displays 1-based labels.
   const pageNumbers: number[] = [];
-  const start = Math.max(1, Math.min(page - 2, totalPages - 4));
-  for (let p = start; p <= Math.min(totalPages, start + 4); p++) {
+  const start = Math.max(0, Math.min(page - 2, totalPages - 5));
+  for (let p = start; p <= Math.min(totalPages - 1, start + 4); p++) {
     pageNumbers.push(p);
   }
 
@@ -116,13 +120,13 @@ export default function FollowList({ accountname, type, total }: FollowListProps
         >
           <button
             type="button"
-            disabled={page <= 1 || loading}
+            disabled={page <= 0 || loading}
             onClick={() => void loadPage(page - 1)}
             className="rounded px-2 py-1 text-foreground hover:bg-accent disabled:opacity-40"
           >
             previous
           </button>
-          {start > 1 && <span className="px-1 text-muted-foreground">…</span>}
+          {start > 0 && <span className="px-1 text-muted-foreground">…</span>}
           {pageNumbers.map((p) => (
             <button
               key={p}
@@ -135,15 +139,15 @@ export default function FollowList({ accountname, type, total }: FollowListProps
                   : 'text-foreground hover:bg-accent'
               } disabled:opacity-40`}
             >
-              {p}
+              {p + 1}
             </button>
           ))}
-          {pageNumbers[pageNumbers.length - 1] < totalPages && (
+          {pageNumbers[pageNumbers.length - 1] < totalPages - 1 && (
             <span className="px-1 text-muted-foreground">…</span>
           )}
           <button
             type="button"
-            disabled={page >= totalPages || loading}
+            disabled={page >= totalPages - 1 || loading}
             onClick={() => void loadPage(page + 1)}
             className="rounded px-2 py-1 text-foreground hover:bg-accent disabled:opacity-40"
           >

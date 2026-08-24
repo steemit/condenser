@@ -31,6 +31,19 @@ const nextConfig: NextConfig = {
   
   // Transpile packages if needed
   transpilePackages: [],
+
+  // Legacy URL aliases (legacy ResolveRoute.js mapped /login.html to the
+  // login page). Declared here rather than in proxy.ts so the redirect is
+  // evaluated before the route-resolution proxy.
+  async redirects() {
+    return [
+      {
+        source: '/login.html',
+        destination: '/login',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

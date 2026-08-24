@@ -12,6 +12,44 @@ const getDiscussionMock = vi.mocked(getDiscussion);
 
 const PARAMS = { author: 'alice', permlink: 'my-post' };
 
+/**
+ * Realistic bridge `get_discussion` response: a content map keyed by
+ * "author/permlink". The root post sits at the queried key; each node's
+ * `replies` is an array of child KEYS into the same map (legacy loadThread).
+ */
+const DISCUSSION_MAP = {
+  'alice/my-post': {
+    author: 'alice',
+    permlink: 'my-post',
+    body: 'the root post',
+    replies: ['bob/nice-post', 'carol/first'],
+  },
+  'bob/nice-post': {
+    author: 'bob',
+    permlink: 'nice-post',
+    body: 'nice post',
+    parent_author: 'alice',
+    parent_permlink: 'my-post',
+    replies: ['dave/thanks-bob'],
+  },
+  'carol/first': {
+    author: 'carol',
+    permlink: 'first',
+    body: 'first!',
+    parent_author: 'alice',
+    parent_permlink: 'my-post',
+    replies: [],
+  },
+  'dave/thanks-bob': {
+    author: 'dave',
+    permlink: 'thanks-bob',
+    body: 'thanks bob',
+    parent_author: 'bob',
+    parent_permlink: 'nice-post',
+    replies: [],
+  },
+};
+
 describe('GET /api/steem/comments', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -36,18 +74,33 @@ describe('GET /api/steem/comments', () => {
     expect(res.status).toBe(404);
   });
 
-  it('returns the replies of the discussion', async () => {
-    const replies = [{ author: 'bob', body: 'nice post' }];
-    getDiscussionMock.mockResolvedValue({ replies });
+  it('flattens the discussion map and excludes the root post', async () => {
+    getDiscussionMock.mockResolvedValue(DISCUSSION_MAP);
 
     const res = await GET(makeGetRequest('/api/steem/comments', PARAMS));
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual(replies);
+
+    const comments = (await res.json()) as Array<{
+      author: string;
+      permlink: string;
+    }>;
+    expect(comments).toHaveLength(3);
+    // The root post is excluded; every other map entry is returned as-is.
+    expect(comments.map((c) => `${c.author}/${c.permlink}`).sort()).toEqual([
+      'bob/nice-post',
+      'carol/first',
+      'dave/thanks-bob',
+    ]);
+    expect(comments).toContainEqual(DISCUSSION_MAP['bob/nice-post']);
+    expect(comments).toContainEqual(DISCUSSION_MAP['carol/first']);
+    expect(comments).toContainEqual(DISCUSSION_MAP['dave/thanks-bob']);
     expect(getDiscussionMock).toHaveBeenCalledWith(PARAMS);
   });
 
-  it('returns an empty list when the discussion has no replies', async () => {
-    getDiscussionMock.mockResolvedValue({});
+  it('returns an empty list when the root post has no comments', async () => {
+    getDiscussionMock.mockResolvedValue({
+      'alice/my-post': DISCUSSION_MAP['alice/my-post'],
+    });
 
     const res = await GET(makeGetRequest('/api/steem/comments', PARAMS));
     expect(res.status).toBe(200);

@@ -29,8 +29,11 @@ describe('GET /api/steem/communities', () => {
     expect(getUserSubscriptionsMock).not.toHaveBeenCalled();
   });
 
-  it('returns subscriptions for an account', async () => {
-    getUserSubscriptionsMock.mockResolvedValue([['hive-1', 'Steem']]);
+  it('returns subscriptions for an account, mapping tuples to objects', async () => {
+    // bridge.list_all_subscriptions tuples: [community, title, role, affiliation]
+    getUserSubscriptionsMock.mockResolvedValue([
+      ['hive-1', 'Steem', 'mod', 'founder'],
+    ]);
 
     const res = await GET(
       makeGetRequest('/api/steem/communities', {
@@ -39,8 +42,29 @@ describe('GET /api/steem/communities', () => {
       })
     );
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual([['hive-1', 'Steem']]);
+    expect(await res.json()).toEqual([
+      {
+        name: 'hive-1',
+        title: 'Steem',
+        context: { role: 'mod', title: 'founder' },
+      },
+    ]);
     expect(getUserSubscriptionsMock).toHaveBeenCalledWith({ account: 'alice' });
+  });
+
+  it('falls back to the community id when the tuple title is empty', async () => {
+    getUserSubscriptionsMock.mockResolvedValue([['hive-2', '', 'guest', '']]);
+
+    const res = await GET(
+      makeGetRequest('/api/steem/communities', {
+        type: 'subscriptions',
+        account: 'alice',
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual([
+      { name: 'hive-2', title: 'hive-2', context: { role: 'guest', title: '' } },
+    ]);
   });
 
   it('lists communities with defaults and forwards the observer', async () => {

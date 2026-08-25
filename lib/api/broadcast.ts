@@ -10,6 +10,7 @@ import {
   SignedTransaction 
 } from '@/lib/crypto/transaction-signer';
 import { getCachedKey, decryptAndRetrieveKey } from '@/lib/crypto/key-storage';
+import type { CommentOptionsConfig } from '@/lib/utils/comment-options';
 
 /**
  * Get private key for signing
@@ -65,6 +66,9 @@ export async function broadcastComment(
     title: string;
     body: string;
     jsonMetadata: string;
+    /** Payout/beneficiary options (root posts only); appended as a
+     * comment_options op right after the comment op. */
+    commentOptions?: CommentOptionsConfig;
   }
 ): Promise<{ success: boolean; result: unknown; transactionId?: string; permlink?: string }> {
   const privateKey = await getPrivateKeyForSigning();
@@ -77,7 +81,7 @@ export async function broadcastComment(
     title: params.title,
     body: params.body,
     jsonMetadata: params.jsonMetadata,
-  });
+  }, params.commentOptions);
 
   return broadcastSignedTransaction(signedTransaction);
 }

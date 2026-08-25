@@ -6,6 +6,8 @@
 // Import steem object directly as a named export
 import { steem } from '@steemit/steem-js';
 
+import type { CommentOptionsConfig } from '@/lib/utils/comment-options';
+
 // Import types directly from dist (these are TypeScript definition files)
 // @ts-expect-error - TypeScript can't resolve these paths, but they exist at runtime
 import type { Transaction } from '@steemit/steem-js/dist/types';
@@ -78,7 +80,8 @@ export async function signCommentOperation(
     title: string;
     body: string;
     jsonMetadata: string;
-  }
+  },
+  commentOptions?: CommentOptionsConfig
 ): Promise<SignedTransaction> {
   try {
     // Get dynamic global properties for transaction header
@@ -109,12 +112,36 @@ export async function signCommentOperation(
       params.jsonMetadata
     ));
 
+    const operations: Array<[string, Record<string, unknown>]> = [operation];
+
+    // comment_options must come directly after comment (legacy
+    // TransactionSaga.js preBroadcast_comment stresses this ordering).
+    // @steemit/steem-js 1.x has no createCommentOptions factory, but its
+    // serializer supports the op, so the tuple is constructed manually with
+    // the same defaults legacy applies.
+    if (commentOptions) {
+      operations.push([
+        'comment_options',
+        {
+          author: params.author,
+          permlink: params.permlink,
+          max_accepted_payout:
+            commentOptions.maxAcceptedPayout ?? '1000000.000 SBD',
+          percent_steem_dollars:
+            commentOptions.percentSteemDollars ?? 10000, // 10000 === 100%
+          allow_votes: true,
+          allow_curation_rewards: true,
+          extensions: commentOptions.extensions ?? [],
+        },
+      ]);
+    }
+
     // Create transaction
     const transaction: Omit<SignedTransaction, 'signatures'> = {
       ref_block_num: refBlockNum,
       ref_block_prefix: refBlockPrefix,
       expiration: expirationStr,
-      operations: [operation],
+      operations,
       extensions: [],
     };
 

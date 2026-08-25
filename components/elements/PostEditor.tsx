@@ -10,6 +10,14 @@ import {
   generateCommentPermlink,
   generateStoryPermlink,
 } from '@/lib/utils/permlink';
+import {
+  buildCommentOptionsConfig,
+  validateBeneficiaries,
+  DEFAULT_PAYOUT_TYPE,
+  MAX_BENEFICIARIES,
+  type BeneficiaryEntry,
+  type PayoutType,
+} from '@/lib/utils/comment-options';
 
 /** Result passed to onSuccess after a successful broadcast. */
 export interface PostEditorResult {
@@ -137,6 +145,11 @@ export default function PostEditor({
   const [body, setBody] = useState(initialBody || '');
   const [tags, setTags] = useState<string[]>(initialTags || []);
   const [category, setCategory] = useState(initialCategory || '');
+  // Payout options + beneficiaries apply to root posts only (legacy
+  // ReplyEditor gates them behind PostAdvancedSettings, shown for stories,
+  // and skips them entirely on edits — #735).
+  const [payoutType, setPayoutType] = useState<PayoutType>(DEFAULT_PAYOUT_TYPE);
+  const [beneficiaries, setBeneficiaries] = useState<BeneficiaryEntry[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Per-editor draft key so story/comment/edit drafts never clobber each
@@ -163,6 +176,10 @@ export default function PostEditor({
         if (draft.body) setBody(draft.body);
         if (draft.tags) setTags(draft.tags);
         if (draft.category) setCategory(draft.category);
+        // Legacy persists payoutType/beneficiaries in the same draft
+        // (ReplyEditor.jsx:203-245).
+        if (draft.payoutType) setPayoutType(draft.payoutType);
+        if (draft.beneficiaries) setBeneficiaries(draft.beneficiaries);
       } catch (e) {
         console.error('Error loading draft:', e);
       }
@@ -174,9 +191,9 @@ export default function PostEditor({
     if (typeof window === 'undefined') return;
     if (!title && !body) return;
 
-    const draftData = JSON.stringify({ title, body, tags, category });
+    const draftData = JSON.stringify({ title, body, tags, category, payoutType, beneficiaries });
     localStorage.setItem(`replyEditorData-${formId}`, draftData);
-  }, [title, body, tags, category, formId]);
+  }, [title, body, tags, category, payoutType, beneficiaries, formId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -212,6 +229,15 @@ export default function PostEditor({
     if (isStory && !cat) {
       setError('At least one tag is required (the first tag is the category)');
       return;
+    }
+    // Beneficiaries are validated with legacy required=true semantics
+    // (PostAdvancedSettings.jsx submit handler).
+    if (isStory) {
+      const beneficiaryError = validateBeneficiaries(username, beneficiaries, true);
+      if (beneficiaryError) {
+        setError(beneficiaryError);
+        return;
+      }
     }
 
     setSubmitting(true);
@@ -250,6 +276,11 @@ export default function PostEditor({
         title: trimmedTitle,
         body: trimmedBody,
         jsonMetadata,
+        // Root posts only: legacy never attaches comment_options to comments
+        // or edits.
+        commentOptions: isStory
+          ? buildCommentOptionsConfig(payoutType, beneficiaries)
+          : undefined,
       });
 
       // Clear draft
@@ -300,6 +331,27 @@ export default function PostEditor({
 
   const removeTag = (tagToRemove: string) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
+
+  // Beneficiary row editing, mirroring legacy BeneficiarySelector handlers.
+  const addBeneficiary = () => {
+    if (beneficiaries.length < MAX_BENEFICIARIES) {
+      setBeneficiaries([...beneficiaries, { username: '', percent: '' }]);
+    }
+  };
+
+  const removeBeneficiary = (idx: number) => {
+    setBeneficiaries(beneficiaries.filter((_, bidx) => idx !== bidx));
+  };
+
+  const updateBeneficiary = (
+    idx: number,
+    field: keyof BeneficiaryEntry,
+    value: string
+  ) => {
+    setBeneficiaries(
+      beneficiaries.map((b, bidx) => (idx === bidx ? { ...b, [field]: value } : b))
+    );
   };
 
   return (
@@ -370,6 +422,74 @@ export default function PostEditor({
         </div>
       )}
 
+      {isStory && (
+        <div className="space-y-4 border-t border-gray-200 pt-4">
+          <div>
+            <label
+              htmlFor="payout-type"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Author rewards
+            </label>
+            {/* Labels from legacy locales/en.json reply_editor.* */}
+            <select
+              id="payout-type"
+              value={payoutType}
+              onChange={(e) => setPayoutType(e.target.value as PayoutType)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="50%">50% SBD / 50% SP</option>
+              <option value="100%">Power Up 100%</option>
+              <option value="0%">Decline Payout</option>
+            </select>
+          </div>
+
+          <div>
+            <span className="block text-sm font-medium text-gray-700 mb-1">
+              Who should receive any rewards?
+            </span>
+            {beneficiaries.map((beneficiary, idx) => (
+              <div key={idx} className="flex items-center gap-2 mb-2">
+                <input
+                  type="text"
+                  value={beneficiary.username}
+                  onChange={(e) => updateBeneficiary(idx, 'username', e.target.value)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Account"
+                  aria-label={`Beneficiary account ${idx + 1}`}
+                />
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={beneficiary.percent}
+                  onChange={(e) => updateBeneficiary(idx, 'percent', e.target.value)}
+                  className="w-24 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Percent"
+                  aria-label={`Beneficiary percent ${idx + 1}`}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeBeneficiary(idx)}
+                  className="px-2 text-gray-500 hover:text-red-600"
+                  aria-label={`Remove beneficiary ${idx + 1}`}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+            {beneficiaries.length < MAX_BENEFICIARIES && (
+              <button
+                type="button"
+                onClick={addBeneficiary}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                Add account
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center gap-4 pt-4 border-t border-gray-200">
         <button
           type="submit"
@@ -395,6 +515,8 @@ export default function PostEditor({
             setTitle('');
             setBody('');
             setTags([]);
+            setPayoutType(DEFAULT_PAYOUT_TYPE);
+            setBeneficiaries([]);
             if (typeof window !== 'undefined') {
               localStorage.removeItem(`replyEditorData-${formId}`);
             }

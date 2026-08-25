@@ -218,4 +218,154 @@ describe('PostEditor', () => {
     ).toBeInTheDocument();
     expect(broadcastCommentMock).not.toHaveBeenCalled();
   });
+
+  it('shows the payout selector and beneficiaries editor only for stories', () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+
+    const { unmount } = render(
+      <PostEditor
+        type="submit_comment"
+        parentAuthor="bob"
+        parentPermlink="bob-post"
+      />,
+      { wrapper: wrapper(store) }
+    );
+    expect(screen.queryByLabelText('Author rewards')).toBeNull();
+    expect(screen.queryByText('Add account')).toBeNull();
+    unmount();
+
+    render(<PostEditor type="submit_story" />, { wrapper: wrapper(store) });
+    expect(screen.getByLabelText('Author rewards')).toHaveValue('50%');
+    expect(screen.getByText('Add account')).toBeInTheDocument();
+  });
+
+  it('rejects an invalid beneficiary account and does not broadcast', async () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    const user = userEvent.setup();
+
+    render(<PostEditor type="submit_story" />, { wrapper: wrapper(store) });
+
+    await user.type(screen.getByPlaceholderText('Title'), 'My Post');
+    await user.type(screen.getByPlaceholderText('Write your story...'), 'body');
+    await user.type(screen.getByPlaceholderText(/Add up to 8 tags/), 'test{Enter}');
+    await user.click(screen.getByText('Add account'));
+    await user.type(screen.getByLabelText('Beneficiary account 1'), '1bad');
+    await user.type(screen.getByLabelText('Beneficiary percent 1'), '10');
+    await user.click(screen.getByRole('button', { name: 'Post' }));
+
+    expect(
+      await screen.findByText('Each account segment should start with a letter.')
+    ).toBeInTheDocument();
+    expect(broadcastCommentMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects beneficiary totals over 100 percent', async () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    const user = userEvent.setup();
+
+    render(<PostEditor type="submit_story" />, { wrapper: wrapper(store) });
+
+    await user.type(screen.getByPlaceholderText('Title'), 'My Post');
+    await user.type(screen.getByPlaceholderText('Write your story...'), 'body');
+    await user.type(screen.getByPlaceholderText(/Add up to 8 tags/), 'test{Enter}');
+    await user.click(screen.getByText('Add account'));
+    await user.click(screen.getByText('Add account'));
+    await user.type(screen.getByLabelText('Beneficiary account 1'), 'bob');
+    await user.type(screen.getByLabelText('Beneficiary percent 1'), '60');
+    await user.type(screen.getByLabelText('Beneficiary account 2'), 'carol');
+    await user.type(screen.getByLabelText('Beneficiary percent 2'), '50');
+    await user.click(screen.getByRole('button', { name: 'Post' }));
+
+    expect(
+      await screen.findByText('Beneficiary total percentage must be less than 100')
+    ).toBeInTheDocument();
+    expect(broadcastCommentMock).not.toHaveBeenCalled();
+  });
+
+  it('passes sorted beneficiaries and the payout override to broadcastComment', async () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    const user = userEvent.setup();
+    const onSuccess = vi.fn();
+    broadcastCommentMock.mockResolvedValue({ success: true, result: {} });
+
+    render(<PostEditor type="submit_story" onSuccess={onSuccess} />, {
+      wrapper: wrapper(store),
+    });
+
+    await user.type(screen.getByPlaceholderText('Title'), 'My Post');
+    await user.type(screen.getByPlaceholderText('Write your story...'), 'body');
+    await user.type(screen.getByPlaceholderText(/Add up to 8 tags/), 'test{Enter}');
+    await user.selectOptions(screen.getByLabelText('Author rewards'), '100%');
+    await user.click(screen.getByText('Add account'));
+    await user.click(screen.getByText('Add account'));
+    await user.type(screen.getByLabelText('Beneficiary account 1'), 'charlie');
+    await user.type(screen.getByLabelText('Beneficiary percent 1'), '10');
+    await user.type(screen.getByLabelText('Beneficiary account 2'), 'bob');
+    await user.type(screen.getByLabelText('Beneficiary percent 2'), '5');
+    await user.click(screen.getByRole('button', { name: 'Post' }));
+
+    await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+
+    const args = broadcastCommentMock.mock.calls[0][0];
+    expect(args.commentOptions).toEqual({
+      percentSteemDollars: 0,
+      extensions: [
+        [
+          0,
+          {
+            beneficiaries: [
+              { account: 'bob', weight: 500 },
+              { account: 'charlie', weight: 1000 },
+            ],
+          },
+        ],
+      ],
+    });
+  });
+
+  it('omits commentOptions for the default payout without beneficiaries', async () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    const user = userEvent.setup();
+    const onSuccess = vi.fn();
+    broadcastCommentMock.mockResolvedValue({ success: true, result: {} });
+
+    render(<PostEditor type="submit_story" onSuccess={onSuccess} />, {
+      wrapper: wrapper(store),
+    });
+
+    await user.type(screen.getByPlaceholderText('Title'), 'My Post');
+    await user.type(screen.getByPlaceholderText('Write your story...'), 'body');
+    await user.type(screen.getByPlaceholderText(/Add up to 8 tags/), 'test{Enter}');
+    await user.click(screen.getByRole('button', { name: 'Post' }));
+
+    await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+    expect(broadcastCommentMock.mock.calls[0][0].commentOptions).toBeUndefined();
+  });
+
+  it('persists payoutType and beneficiaries in the localStorage draft', async () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    const user = userEvent.setup();
+
+    render(<PostEditor type="submit_story" />, { wrapper: wrapper(store) });
+
+    await user.type(screen.getByPlaceholderText('Title'), 'Draft Post');
+    await user.selectOptions(screen.getByLabelText('Author rewards'), '0%');
+    await user.click(screen.getByText('Add account'));
+    await user.type(screen.getByLabelText('Beneficiary account 1'), 'bob');
+    await user.type(screen.getByLabelText('Beneficiary percent 1'), '10');
+
+    await waitFor(() => {
+      const raw = localStorage.getItem('replyEditorData-submit');
+      expect(raw).toBeTruthy();
+      const draft = JSON.parse(raw as string);
+      expect(draft.payoutType).toBe('0%');
+      expect(draft.beneficiaries).toEqual([{ username: 'bob', percent: '10' }]);
+    });
+  });
 });

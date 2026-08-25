@@ -138,8 +138,9 @@ export function isWifFormat(key: string): boolean {
  */
 export function isPublicKeyFormat(key: string): boolean {
   try {
-    PublicKey.fromString(key);
-    return true;
+    // steem-js 1.x returns null instead of throwing for non-public-key
+    // input (e.g. a WIF), so a bare try/catch misclassifies every key.
+    return PublicKey.fromString(key) != null;
   } catch {
     return false;
   }
@@ -156,7 +157,11 @@ export function verifySignature(
   try {
     const sig = Signature.fromHex(signature);
     const pubKey = PublicKey.fromString(publicKey);
-    
+    if (!pubKey) {
+      // steem-js 1.x returns null for invalid public key strings
+      return false;
+    }
+
     return sig.verifyHash(Buffer.from(data, 'utf8'), pubKey);
   } catch {
     return false;

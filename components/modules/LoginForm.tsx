@@ -74,14 +74,15 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
       return t('loginform_jsx.wif_required');
     }
 
+    // Check for a public key first so users pasting one get the specific
+    // message (legacy behavior); isPublicKeyFormat runs before the WIF check.
+    if (isPublicKeyFormat(password.trim())) {
+      return t('loginform_jsx.you_need_a_private_password_or_key');
+    }
+
     // Only accept WIF format private keys
     if (!isWifFormat(password.trim())) {
       return t('loginform_jsx.invalid_wif_format');
-    }
-
-    // Check if password is a public key (should not be)
-    if (isPublicKeyFormat(password.trim())) {
-      return t('loginform_jsx.you_need_a_private_password_or_key');
     }
 
     return null;

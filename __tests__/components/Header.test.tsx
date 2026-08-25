@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ReactNode } from 'react';
 
 import userReducer, { setUser } from '@/store/slices/userSlice';
+import { IntlWrapper } from '@/__tests__/helpers/i18n';
 
 const routerPush = vi.fn();
 const routerRefresh = vi.fn();
@@ -69,7 +70,9 @@ describe('Header logout', () => {
 
     render(
       <Provider store={store}>
-        <Header />
+        <IntlWrapper>
+          <Header />
+        </IntlWrapper>
       </Provider>
     );
 

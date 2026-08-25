@@ -8,6 +8,7 @@ import type { ReactNode } from 'react';
 import PostEditor, { PostEditorResult } from '@/components/elements/PostEditor';
 import { broadcastComment } from '@/lib/api/broadcast';
 import userReducer, { setUser } from '@/store/slices/userSlice';
+import { IntlWrapper } from '@/__tests__/helpers/i18n';
 
 vi.mock('@/lib/api/broadcast', () => ({
   broadcastComment: vi.fn(),
@@ -21,7 +22,11 @@ function makeStore() {
 
 function wrapper(store: ReturnType<typeof makeStore>) {
   return function Wrapper({ children }: { children: ReactNode }) {
-    return <Provider store={store}>{children}</Provider>;
+    return (
+      <Provider store={store}>
+        <IntlWrapper>{children}</IntlWrapper>
+      </Provider>
+    );
   };
 }
 
@@ -57,7 +62,7 @@ describe('PostEditor', () => {
     await user.type(screen.getByPlaceholderText('Write your story...'), 'hi');
     await user.click(screen.getByRole('button', { name: 'Submit' }));
 
-    expect(await screen.findByText('Please log in to post.')).toBeInTheDocument();
+    expect(await screen.findByText('Login to Post')).toBeInTheDocument();
     expect(store.getState().user.show_login_modal).toBe(true);
     expect(broadcastCommentMock).not.toHaveBeenCalled();
     expect(onSuccess).not.toHaveBeenCalled();
@@ -85,7 +90,7 @@ describe('PostEditor', () => {
       'Hello #steem world'
     );
     await user.type(
-      screen.getByPlaceholderText(/Add up to 8 tags/),
+      screen.getByPlaceholderText(/Tag \(up to 8 tags\)/),
       'test{Enter}'
     );
     await user.click(screen.getByRole('button', { name: 'Post' }));
@@ -249,7 +254,7 @@ describe('PostEditor', () => {
 
     await user.type(screen.getByPlaceholderText('Title'), 'My Post');
     await user.type(screen.getByPlaceholderText('Write your story...'), 'body');
-    await user.type(screen.getByPlaceholderText(/Add up to 8 tags/), 'test{Enter}');
+    await user.type(screen.getByPlaceholderText(/Tag \(up to 8 tags\)/), 'test{Enter}');
     await user.click(screen.getByText('Add account'));
     await user.type(screen.getByLabelText('Beneficiary account 1'), '1bad');
     await user.type(screen.getByLabelText('Beneficiary percent 1'), '10');
@@ -270,7 +275,7 @@ describe('PostEditor', () => {
 
     await user.type(screen.getByPlaceholderText('Title'), 'My Post');
     await user.type(screen.getByPlaceholderText('Write your story...'), 'body');
-    await user.type(screen.getByPlaceholderText(/Add up to 8 tags/), 'test{Enter}');
+    await user.type(screen.getByPlaceholderText(/Tag \(up to 8 tags\)/), 'test{Enter}');
     await user.click(screen.getByText('Add account'));
     await user.click(screen.getByText('Add account'));
     await user.type(screen.getByLabelText('Beneficiary account 1'), 'bob');
@@ -298,7 +303,7 @@ describe('PostEditor', () => {
 
     await user.type(screen.getByPlaceholderText('Title'), 'My Post');
     await user.type(screen.getByPlaceholderText('Write your story...'), 'body');
-    await user.type(screen.getByPlaceholderText(/Add up to 8 tags/), 'test{Enter}');
+    await user.type(screen.getByPlaceholderText(/Tag \(up to 8 tags\)/), 'test{Enter}');
     await user.selectOptions(screen.getByLabelText('Author rewards'), '100%');
     await user.click(screen.getByText('Add account'));
     await user.click(screen.getByText('Add account'));
@@ -340,7 +345,7 @@ describe('PostEditor', () => {
 
     await user.type(screen.getByPlaceholderText('Title'), 'My Post');
     await user.type(screen.getByPlaceholderText('Write your story...'), 'body');
-    await user.type(screen.getByPlaceholderText(/Add up to 8 tags/), 'test{Enter}');
+    await user.type(screen.getByPlaceholderText(/Tag \(up to 8 tags\)/), 'test{Enter}');
     await user.click(screen.getByRole('button', { name: 'Post' }));
 
     await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));

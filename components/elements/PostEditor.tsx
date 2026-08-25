@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import MarkdownIt from 'markdown-it';
+import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
 import { broadcastComment } from '@/lib/api/broadcast';
@@ -140,6 +141,7 @@ export default function PostEditor({
   onCancel,
 }: PostEditorProps) {
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const username = useAppSelector((state) => state.user.current?.username);
   const [title, setTitle] = useState(initialTitle || '');
   const [body, setBody] = useState(initialBody || '');
@@ -202,32 +204,32 @@ export default function PostEditor({
     // The author comes from the logged-in session; the signing key comes
     // from the client-side key cache (lib/crypto/key-storage.ts).
     if (!username) {
-      setError('Please log in to post.');
+      setError(t('loginform_jsx.login_to_post'));
       dispatch(showLogin({}));
       return;
     }
 
     // Validation
     if (isStory && !title.trim()) {
-      setError('Title is required');
+      setError(t('reply_editor.title_required'));
       return;
     }
     if (!body.trim()) {
-      setError('Body is required');
+      setError(t('reply_editor.body_required'));
       return;
     }
     // Legacy ReplyEditor.jsx:261-267 — byte length, not char length.
     const maxBodyBytes = isStory ? MAX_BODY_BYTES_STORY : MAX_BODY_BYTES_COMMENT;
     const bodyBytes = new TextEncoder().encode(body).length;
     if (bodyBytes >= maxBodyBytes) {
-      setError(`Post body exceeds ${maxBodyBytes} bytes.`);
+      setError(t('reply_editor.body_exceeds_max_bytes', { maxBytes: maxBodyBytes }));
       return;
     }
     // Category = first tag (legacy ReplyEditor), unless a community
     // category was forced by the caller.
     const cat = (initialCategory || tags[0] || '').trim();
     if (isStory && !cat) {
-      setError('At least one tag is required (the first tag is the category)');
+      setError(t('reply_editor.category_required'));
       return;
     }
     // Beneficiaries are validated with legacy required=true semantics
@@ -306,7 +308,7 @@ export default function PostEditor({
       if (message.includes('Private key not available')) {
         // Session hydration restores identity but not the signing key (e.g.
         // after a page reload) — ask the user to log in again.
-        setError('Your signing key has expired. Please log in again to post.');
+        setError(t('reply_editor.signing_key_expired'));
         dispatch(showLogin({}));
       } else {
         setError(message);
@@ -370,7 +372,7 @@ export default function PostEditor({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full rounded-none border-0 border-b border-gray-300 px-2 py-2 text-[1rem] font-bold focus:border-gray-500 focus:outline-none"
-            placeholder="Title"
+            placeholder={t('reply_editor.title')}
             maxLength={255}
             required
           />
@@ -384,11 +386,11 @@ export default function PostEditor({
           onChange={(e) => setBody(e.target.value)}
           rows={15}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
-          placeholder="Write your story..."
+          placeholder={t('g.write_your_story')}
           required
         />
         <p className="mt-1 border-l border-[#ccc] bg-[#fafafa] px-2 py-[3px] text-[85%] text-[#767676]">
-          Markdown is supported. Use **bold**, *italic*, [links](url), etc.
+          {t('reply_editor.markdown_hint')}
         </p>
       </div>
 
@@ -416,7 +418,7 @@ export default function PostEditor({
             type="text"
             onKeyDown={handleTagInput}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder={`Add up to ${MAX_TAGS} tags (the first tag is the category)`}
+            placeholder={t('category_selector_jsx.tag_your_story')}
             disabled={tags.length >= MAX_TAGS}
           />
         </div>
@@ -429,7 +431,7 @@ export default function PostEditor({
               htmlFor="payout-type"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Author rewards
+              {t('post_advanced_settings_jsx.payout_option_header')}
             </label>
             {/* Labels from legacy locales/en.json reply_editor.* */}
             <select
@@ -438,15 +440,15 @@ export default function PostEditor({
               onChange={(e) => setPayoutType(e.target.value as PayoutType)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="50%">50% SBD / 50% SP</option>
-              <option value="100%">Power Up 100%</option>
-              <option value="0%">Decline Payout</option>
+              <option value="50%">{t('reply_editor.default_50_50')}</option>
+              <option value="100%">{t('reply_editor.power_up_100')}</option>
+              <option value="0%">{t('reply_editor.decline_payout')}</option>
             </select>
           </div>
 
           <div>
             <span className="block text-sm font-medium text-gray-700 mb-1">
-              Who should receive any rewards?
+              {t('beneficiary_selector_jsx.header')}
             </span>
             {beneficiaries.map((beneficiary, idx) => (
               <div key={idx} className="flex items-center gap-2 mb-2">
@@ -455,7 +457,7 @@ export default function PostEditor({
                   value={beneficiary.username}
                   onChange={(e) => updateBeneficiary(idx, 'username', e.target.value)}
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Account"
+                  placeholder={t('g.account')}
                   aria-label={`Beneficiary account ${idx + 1}`}
                 />
                 <input
@@ -483,7 +485,7 @@ export default function PostEditor({
                 onClick={addBeneficiary}
                 className="text-sm text-blue-600 hover:text-blue-800"
               >
-                Add account
+                {t('beneficiary_selector_jsx.add')}
               </button>
             )}
           </div>
@@ -496,7 +498,11 @@ export default function PostEditor({
           disabled={submitting}
           className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {submitting ? 'Submitting...' : isStory ? 'Post' : 'Submit'}
+          {submitting
+            ? t('reply_editor.submitting')
+            : isStory
+              ? t('g.post')
+              : t('g.submit')}
         </button>
 
         {onCancel && (
@@ -505,7 +511,7 @@ export default function PostEditor({
             onClick={onCancel}
             className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
           >
-            Cancel
+            {t('g.cancel')}
           </button>
         )}
 
@@ -523,11 +529,11 @@ export default function PostEditor({
           }}
           className="px-6 py-2 text-gray-700 hover:text-black transition-colors"
         >
-          Clear
+          {t('g.clear')}
         </button>
 
         <span className="text-sm text-gray-500 ml-auto">
-          Draft saved automatically
+          {t('reply_editor.draft_saved')}
         </span>
       </div>
     </form>

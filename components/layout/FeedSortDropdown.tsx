@@ -3,21 +3,22 @@
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { ChevronDownIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
 
 /**
- * Feed sort keys and labels — aligned with legacy SortOrder (vertical):
+ * Feed sort keys — aligned with legacy SortOrder (vertical):
  * Trending / Hot / New / Payouts / Muted. The /promoted and
  * /payout_comments routes still exist but are not offered here (legacy
- * does not list them).
+ * does not list them). Labels come from legacy message keys.
  */
-const SORT_OPTIONS: { value: string; label: string }[] = [
-  { value: "trending", label: "Trending" },
-  { value: "hot", label: "Hot" },
-  { value: "created", label: "New" },
-  { value: "payout", label: "Payouts" },
-  { value: "muted", label: "Muted" },
+const SORT_OPTIONS: { value: string; labelKey: string }[] = [
+  { value: "trending", labelKey: "main_menu.trending" },
+  { value: "hot", labelKey: "main_menu.hot" },
+  { value: "created", labelKey: "g.new" },
+  { value: "payout", labelKey: "g.payouts" },
+  { value: "muted", labelKey: "g.muted" },
 ];
 
 function sortPath(sort: string, categoryTag?: string) {
@@ -36,6 +37,7 @@ export function FeedSortDropdown({
   className?: string;
 }) {
   const router = useRouter();
+  const t = useTranslations();
   const normalized = sort.toLowerCase();
   // Unknown sorts (promoted / payout_comments) fall back to "trending" in
   // the dropdown, exactly like legacy when the sort isn't in the list.
@@ -52,7 +54,7 @@ export function FeedSortDropdown({
   return (
     <div className={cn("relative min-w-[160px]", className)}>
       <label className="sr-only" htmlFor="feed-sort-select">
-        Sort posts
+        {t("post_jsx.sort_order")}
       </label>
       <div className="pointer-events-none absolute right-2 top-1/2 z-10 -translate-y-1/2 text-muted-foreground">
         <ChevronDownIcon className="size-4" aria-hidden />
@@ -68,7 +70,7 @@ export function FeedSortDropdown({
       >
         {SORT_OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>
-            {o.label}
+            {t(o.labelKey)}
           </option>
         ))}
       </select>

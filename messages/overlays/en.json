@@ -1,0 +1,31 @@
+{
+  "comments": {
+    "no_comments_yet": "No comments yet. Be the first to comment!",
+    "load_more_comments": "LOAD MORE COMMENTS"
+  },
+  "posts_index": {
+    "no_pending_posts": "No pending posts found. This view only shows posts within 12-36 hours of payout.",
+    "no_muted_posts": "No muted posts found.",
+    "no_followed_posts": "You haven't followed anyone yet! Explore Trending to find people to follow.",
+    "no_posts_in_tag": "No posts in #{tag} yet!",
+    "no_posts_found": "No posts found."
+  },
+  "reply_editor": {
+    "title_required": "Title is required",
+    "body_required": "Body is required",
+    "category_required": "At least one tag is required (the first tag is the category)",
+    "body_exceeds_max_bytes": "Post body exceeds {maxBytes} bytes.",
+    "submitting": "Submitting...",
+    "markdown_hint": "Markdown is supported. Use **bold**, *italic*, [links](url), etc.",
+    "signing_key_expired": "Your signing key has expired. Please log in again to post."
+  },
+  "loginform_jsx": {
+    "enter_your_posting_wif": "Enter your posting private key (WIF)",
+    "username_required": "Username is required",
+    "invalid_username_format": "Invalid username format",
+    "wif_required": "Posting private key (WIF) is required",
+    "invalid_wif_format": "Invalid format. Please enter your posting private key in WIF format (starts with 5...)",
+    "validating_key": "Validating posting private key...",
+    "logging_in": "Logging in..."
+  }
+}

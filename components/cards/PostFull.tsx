@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Clock, Link2, MessageSquare } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Post } from '@/lib/api/steem';
 import { reputation } from '@/lib/extract-content';
@@ -25,6 +26,7 @@ interface PostFullProps {
  * | share icons | link).
  */
 export default function PostFull({ post }: PostFullProps) {
+  const t = useTranslations();
   const tags = post.json_metadata?.tags || [];
   const postUrl = `/${post.category}/@${post.author}/${post.permlink}`;
   const rep = reputation(post.author_reputation);
@@ -56,7 +58,7 @@ export default function PostFull({ post }: PostFullProps) {
         >
           {post.title || 'Untitled'}
           {powerUp100 && (
-            <span title="100% Steem Power payout" className="ml-2 align-middle text-[50%]">
+            <span title={t('g.powered_up_100')} className="ml-2 align-middle text-[50%]">
               ⚡
             </span>
           )}
@@ -70,7 +72,7 @@ export default function PostFull({ post }: PostFullProps) {
           <span className="right-side ml-3 leading-[1.2]">
             <span className="block">
               <Clock className="mr-1 inline size-4 align-[-2px]" aria-hidden />
-              in{' '}
+              {t('g.in')}{' '}
               <Link
                 href={`/trending/${post.category}`}
                 className="text-muted-foreground hover:text-accent-foreground"
@@ -88,12 +90,12 @@ export default function PostFull({ post }: PostFullProps) {
                     (post.last_update || '') + 'Z'
                   ).toLocaleString()}`}
                 >
-                  (edited)
+                  ({t('g.edited')})
                 </span>
               )}
             </span>
             <span className="block">
-              by{' '}
+              {t('g.by')}{' '}
               <Link
                 href={`/@${post.author}`}
                 className="font-bold text-foreground hover:text-accent-foreground"
@@ -131,7 +133,7 @@ export default function PostFull({ post }: PostFullProps) {
               href="#comments"
               className="mx-[0.15rem] text-foreground hover:text-accent-foreground"
             >
-              Reply
+              {t('g.reply')}
             </a>
           </span>
           <span className="PostFull__responses pr-[0.4rem]">
@@ -148,7 +150,7 @@ export default function PostFull({ post }: PostFullProps) {
           <button
             type="button"
             className="explore-post p-[2px] text-muted-foreground hover:text-accent-foreground"
-            title="Share this post"
+            title={t('g.share_this_post')}
             aria-label="Copy post link"
             onClick={copyLink}
           >

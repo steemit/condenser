@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { PenLineIcon, SearchIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -45,6 +46,7 @@ function addHistory(q: string) {
 /** Desktop capsule search box with icon + localStorage history (legacy SearchInput). */
 function HeaderSearch() {
   const router = useRouter();
+  const t = useTranslations();
   const [query, setQuery] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [showHistory, setShowHistory] = useState(false);
@@ -75,8 +77,8 @@ function HeaderSearch() {
             setShowHistory(true);
           }}
           onBlur={() => setTimeout(() => setShowHistory(false), 150)}
-          placeholder="Search"
-          aria-label="Search"
+          placeholder={t("g.search")}
+          aria-label={t("g.search")}
           className="h-[42px] w-full rounded-full border border-[#cacaca99] bg-transparent py-[9px] pl-8 pr-10 text-[16px] text-foreground outline-none transition-colors placeholder:text-muted-foreground hover:bg-[#06D6A9] hover:text-white hover:placeholder:text-white"
         />
         <button
@@ -110,6 +112,7 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const username = useAppSelector((s) => s.user.current?.username);
   const loggedIn = Boolean(username);
 
@@ -169,7 +172,7 @@ export function Header() {
           <Link
             href="/search"
             className="text-foreground hover:text-accent-foreground min-[766px]:hidden"
-            aria-label="Search"
+            aria-label={t("g.search")}
           >
             <SearchIcon className="size-5" />
           </Link>
@@ -181,14 +184,14 @@ export function Header() {
                 onClick={openLoginModal}
                 className="pr-1 text-foreground transition-colors hover:text-[#1FBF8F] dark:hover:text-[#06D6A9]"
               >
-                Login
+                {t("g.login")}
               </button>
               <button
                 type="button"
                 onClick={handleSignup}
                 className="my-0 ml-2 mr-3 whitespace-nowrap rounded-none bg-[#171F24] p-[0.6rem] font-bold text-[#fcfcfc] shadow-[0_0_0_0_transparent,2px_2px_0_0_#06D6A9] transition-all hover:bg-[#06D6A9] hover:shadow-[2px_2px_2px_rgba(0,0,0,0.1),4px_4px_0_0_#171F24]"
               >
-                Sign up
+                {t("g.sign_up")}
               </button>
             </span>
           ) : null}
@@ -197,8 +200,8 @@ export function Header() {
           <button
             type="button"
             onClick={goSubmit}
-            aria-label="Create post"
-            title="Create post"
+            aria-label={t("g.new_post")}
+            title={t("g.new_post")}
             className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#171F24] hover:text-white min-[760px]:size-[42px] [&_svg]:size-5 min-[760px]:[&_svg]:size-6 [&_svg]:text-[#cacaca] hover:[&_svg]:text-white"
           >
             <PenLineIcon />
@@ -237,33 +240,33 @@ export function Header() {
                   <DropdownMenuItem
                     onClick={() => router.push(`/@${username}/posts`)}
                   >
-                    Profile
+                    {t("g.profile")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(`/@${username}/notifications`)
                     }
                   >
-                    Notifications
+                    {t("g.notifications")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(`/@${username}/comments`)
                     }
                   >
-                    Comments
+                    {t("g.comments")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(`/@${username}/replies`)
                     }
                   >
-                    Replies
+                    {t("g.replies")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => dispatch(toggleNightmode())}
                   >
-                    Toggle night mode
+                    {t("g.toggle_nightmode")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() =>
@@ -274,10 +277,10 @@ export function Header() {
                       )
                     }
                   >
-                    Wallet
+                    {t("g.wallet")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => void handleLogout()}>
-                    Logout
+                    {t("g.logout")}
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>

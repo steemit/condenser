@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 
 import { Post } from "@/lib/api/steem";
 import PostSummary from "@/components/cards/PostSummary";
@@ -14,23 +15,6 @@ interface PostsListProps {
   order?: string;
 }
 
-/** Legacy PostsIndex empty-state copy (Callout), keyed by order/category. */
-function emptyText(order?: string, category?: string): string {
-  switch (order) {
-    case "payout":
-    case "payout_comments":
-      return "No pending posts found. This view only shows posts within 12-36 hours of payout.";
-    case "muted":
-      return "No muted posts found.";
-    case "feed":
-      return "You haven't followed anyone yet! Explore Trending to find people to follow.";
-    default:
-      break;
-  }
-  if (category && category !== "my") return `No posts in #${category} yet!`;
-  return "No posts found.";
-}
-
 /**
  * Posts list — legacy PostsList: summaries as <li> cards with infinite scroll.
  */
@@ -41,6 +25,7 @@ export default function PostsList({
   category,
   order,
 }: PostsListProps) {
+  const t = useTranslations();
   const listRef = useRef<HTMLDivElement>(null);
   const scrollListenerRef = useRef<(() => void) | null>(null);
 
@@ -101,9 +86,24 @@ export default function PostsList({
   }
 
   if (posts.length === 0) {
+    // Legacy PostsIndex empty-state copy (Callout), keyed by order/category.
+    // Legacy hardcoded these in English; the keys are new (see
+    // messages/overlays/en.json).
+    let emptyText: string;
+    if (order === "payout" || order === "payout_comments") {
+      emptyText = t("posts_index.no_pending_posts");
+    } else if (order === "muted") {
+      emptyText = t("posts_index.no_muted_posts");
+    } else if (order === "feed") {
+      emptyText = t("posts_index.no_followed_posts");
+    } else if (category && category !== "my") {
+      emptyText = t("posts_index.no_posts_in_tag", { tag: category });
+    } else {
+      emptyText = t("posts_index.no_posts_found");
+    }
     return (
       <div className="my-8 rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
-        {emptyText(order, category)}
+        {emptyText}
       </div>
     );
   }

@@ -90,6 +90,9 @@ const appSlice = createSlice({
     setUserPreferences: (state, action: PayloadAction<UserPreferences>) => {
       state.user_preferences = action.payload;
     },
+    setLocale: (state, action: PayloadAction<string>) => {
+      state.user_preferences.locale = action.payload;
+    },
     toggleNightmode: (state) => {
       state.user_preferences.nightmode = !state.user_preferences.nightmode;
     },
@@ -125,6 +128,7 @@ export const {
   addNotification,
   removeNotification,
   setUserPreferences,
+  setLocale,
   toggleNightmode,
   toggleBlogmode,
   receiveFeatureFlags,

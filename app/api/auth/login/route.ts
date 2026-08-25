@@ -83,6 +83,13 @@ export async function POST(request: NextRequest) {
     try {
       const sig = Signature.fromHex(signature);
       const pubKey = PublicKey.fromString(publicKey);
+      if (!pubKey) {
+        // steem-js 1.x returns null for invalid public key strings
+        return NextResponse.json(
+          { error: 'Invalid public key' },
+          { status: 400 }
+        );
+      }
       const isValidSignature = sig.verifyHash(Buffer.from(data, 'utf8'), pubKey);
       
       if (!isValidSignature) {

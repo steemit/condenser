@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import Link from 'next/link';
 import { Clock, Link2, MessageSquare } from 'lucide-react';
 
@@ -26,29 +25,6 @@ interface PostFullProps {
  * | share icons | link).
  */
 export default function PostFull({ post }: PostFullProps) {
-  // Set document title
-  useEffect(() => {
-    if (typeof window !== 'undefined' && post.title) {
-      document.title = `${post.title} — Steemit`;
-    }
-  }, [post.title]);
-
-  // Set canonical URL
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    let canonicalLink = document.getElementById('canonicalUrlID') as HTMLLinkElement;
-    if (!canonicalLink) {
-      canonicalLink = document.createElement('link');
-      canonicalLink.rel = 'canonical';
-      canonicalLink.id = 'canonicalUrlID';
-      document.head.appendChild(canonicalLink);
-    }
-
-    const canonicalURL = `/${post.category}/@${post.author}/${post.permlink}`;
-    canonicalLink.href = `${window.location.origin}${canonicalURL}`;
-  }, [post]);
-
   const tags = post.json_metadata?.tags || [];
   const postUrl = `/${post.category}/@${post.author}/${post.permlink}`;
   const rep = reputation(post.author_reputation);

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAppSelector } from '@/store/hooks';
 import Comment, { Comment as CommentType } from './Comment';
 import PostEditor, { PostEditorResult } from '@/components/elements/PostEditor';
@@ -82,6 +83,7 @@ export default function CommentsList({
   onDelete,
 }: CommentsListProps) {
   const username = useAppSelector((s) => s.user.current?.username);
+  const t = useTranslations();
   const [currentSortOrder, setCurrentSortOrder] = useState(sortOrder);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -95,19 +97,20 @@ export default function CommentsList({
     >
       {/* sort control (legacy: top-right, "Sort by: <bold>") */}
       <div className="Post__comments_sort_order mb-2 flex items-center justify-end gap-1 text-[94%]">
-        <span className="text-muted-foreground">Sort by:</span>
+        <span className="text-muted-foreground">{t('post_jsx.sort_order')}:</span>
         <span className="relative inline-flex items-center">
           <select
             value={currentSortOrder}
             onChange={(e) =>
               setCurrentSortOrder(e.target.value as 'votes' | 'new' | 'trending')
             }
-            aria-label="Comment sort order"
+            aria-label={t('post_jsx.sort_order')}
             className="cursor-pointer appearance-none bg-transparent pr-4 font-bold text-foreground outline-none"
           >
-            <option value="trending">Trending</option>
-            <option value="votes">Votes</option>
-            <option value="new">New</option>
+            {/* legacy maps the 'new' sort to the 'age' label */}
+            <option value="trending">{t('post_jsx.comment_sort_order.trending')}</option>
+            <option value="votes">{t('post_jsx.comment_sort_order.votes')}</option>
+            <option value="new">{t('post_jsx.comment_sort_order.age')}</option>
           </select>
           <ChevronDown className="pointer-events-none absolute right-0 size-3.5" aria-hidden />
         </span>
@@ -127,7 +130,7 @@ export default function CommentsList({
 
       {visibleRoots.length === 0 ? (
         <div className="py-12 text-center text-muted-foreground">
-          <p>No comments yet. Be the first to comment!</p>
+          <p>{t('comments.no_comments_yet')}</p>
         </div>
       ) : (
         <>
@@ -151,7 +154,7 @@ export default function CommentsList({
                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
                 className="comment-button rounded-[10px] bg-[#06d6a9] px-8 py-[15px] font-bold text-white"
               >
-                LOAD MORE COMMENTS
+                {t('comments.load_more_comments')}
               </button>
             </div>
           )}

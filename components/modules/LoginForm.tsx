@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { hideLogin, loginError } from '@/store/slices/userSlice';
 import { loginThunk } from '@/store/thunks/authThunks';
@@ -24,6 +25,7 @@ import { encryptAndStoreKey, initializeKeyLifecycle } from '@/lib/crypto/key-sto
 export default function LoginForm({ embedded = false }: { embedded?: boolean }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const { login_error } = useAppSelector((state) => state.user);
 
   const [username, setUsername] = useState('');
@@ -59,27 +61,27 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
 
   const validateForm = (): string | null => {
     if (!username.trim()) {
-      return 'Username is required';
+      return t('loginform_jsx.username_required');
     }
 
     // Basic username validation (lowercase, alphanumeric, dots, hyphens)
     const usernameRegex = /^[a-z0-9.-]+$/;
     if (!usernameRegex.test(username.toLowerCase())) {
-      return 'Invalid username format';
+      return t('loginform_jsx.invalid_username_format');
     }
 
     if (!password.trim()) {
-      return 'Posting private key (WIF) is required';
+      return t('loginform_jsx.wif_required');
     }
 
     // Only accept WIF format private keys
     if (!isWifFormat(password.trim())) {
-      return 'Invalid format. Please enter your posting private key in WIF format (starts with 5...)';
+      return t('loginform_jsx.invalid_wif_format');
     }
 
     // Check if password is a public key (should not be)
     if (isPublicKeyFormat(password.trim())) {
-      return 'You need a posting private key (WIF), not a public key';
+      return t('loginform_jsx.you_need_a_private_password_or_key');
     }
 
     return null;
@@ -218,7 +220,7 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
   return (
     <div className="LoginForm mx-auto mb-2 mt-4 max-w-[28rem]">
       {!embedded ? (
-        <h3 className="mb-4 text-left text-xl font-bold">Login</h3>
+        <h3 className="mb-4 text-left text-xl font-bold">{t('g.login')}</h3>
       ) : null}
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -233,7 +235,7 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value.toLowerCase())}
-              placeholder="Enter your username"
+              placeholder={t('loginform_jsx.enter_your_username')}
               className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
               autoComplete="username"
               disabled={submitting}
@@ -249,7 +251,7 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your posting private key (WIF)"
+            placeholder={t('loginform_jsx.enter_your_posting_wif')}
             className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             autoComplete="off"
             disabled={submitting}
@@ -257,7 +259,7 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
           />
           {validatingKey && (
             <p className="mt-1 text-xs text-blue-600">
-              Validating posting private key...
+              {t('loginform_jsx.validating_key')}
             </p>
           )}
         </div>
@@ -285,7 +287,7 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               disabled={submitting}
             />
-            <span className="ml-2 text-sm text-gray-700">Keep me logged in</span>
+            <span className="ml-2 text-sm text-gray-700">{t('loginform_jsx.keep_me_logged_in')}</span>
           </label>
         </div>
 
@@ -296,17 +298,21 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
             disabled={submitting}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {submitting ? (validatingKey ? 'Validating key...' : 'Logging in...') : 'Login'}
+            {submitting
+              ? validatingKey
+                ? t('loginform_jsx.validating_key')
+                : t('loginform_jsx.logging_in')
+              : t('g.login')}
           </button>
           <span className="register ml-auto text-right text-sm text-gray-600">
-            Not a Steemit user?
+            {t('loginform_jsx.not_a_steemit_user')}
             <br />
             <button
               type="button"
               onClick={handleSignup}
               className="text-blue-600 hover:text-blue-800 underline"
             >
-              Sign up for free and get STEEM
+              {t('loginform_jsx.sign_up_get_steem')}
             </button>
           </span>
         </div>

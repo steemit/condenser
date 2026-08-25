@@ -1,7 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAppSelector } from '@/store/hooks';
+import { useTranslations } from 'next-intl';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { setLocale } from '@/store/slices/appSlice';
+import { LOCALES, LOCALE_LABELS, DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/config';
 
 interface UserProfile {
   name?: string;
@@ -30,6 +33,9 @@ export default function UserSettings({
   onProfileUpdate 
 }: UserSettingsProps) {
   const currentUser = useAppSelector((state) => state.user.current?.username);
+  const dispatch = useAppDispatch();
+  const t = useTranslations();
+  const localePref = useAppSelector((state) => state.app.user_preferences.locale);
   
   // Form state
   const [formData, setFormData] = useState<UserProfile>({
@@ -48,7 +54,11 @@ export default function UserSettings({
 
   // User preferences
   const [nsfwPref, setNsfwPref] = useState('warn');
-  const [language, setLanguage] = useState('en');
+  // Language is a real preference: it lives in Redux user_preferences.locale
+  // (like legacy) and switching it updates the UI immediately — the
+  // I18nProvider observes the Redux value, loads the locale's messages and
+  // persists the choice in a cookie.
+  const language: Locale = isLocale(localePref) ? localePref : DEFAULT_LOCALE;
 
   // Update form when profile changes
   useEffect(() => {
@@ -344,21 +354,18 @@ export default function UserSettings({
           {/* Language */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Language
+              {t('g.language')}
             </label>
             <select
               value={language}
-              onChange={(e) => setLanguage(e.target.value)}
+              onChange={(e) => dispatch(setLocale(e.target.value))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="en">English</option>
-              <option value="zh">中文</option>
-              <option value="es">Español</option>
-              <option value="fr">Français</option>
-              <option value="de">Deutsch</option>
-              <option value="ja">日本語</option>
-              <option value="ko">한국어</option>
-              <option value="ru">Русский</option>
+              {LOCALES.map((locale) => (
+                <option key={locale} value={locale}>
+                  {LOCALE_LABELS[locale]}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -369,7 +376,7 @@ export default function UserSettings({
             className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
             onClick={() => {
               // TODO: Save preferences
-              console.log('Saving preferences:', { nsfwPref, language });
+              console.log('Saving preferences:', { nsfwPref });
             }}
           >
             Save Preferences

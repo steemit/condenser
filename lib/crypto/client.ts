@@ -2,24 +2,14 @@
  * Client-side cryptographic utilities
  * Handles private key validation and signing operations
  * Only supports posting key authentication for security
+ *
+ * All operations go through the steem-js SDK high-level auth helpers
+ * (steem.auth.*). Do not drop down to the ecc classes (PrivateKey /
+ * PublicKey / Signature) — their API changed in steem-js 1.x and
+ * hand-rolled usage has broken login twice already.
  */
 
-// Import steem object directly as a named export
 import { steem } from '@steemit/steem-js';
-
-// Import types directly from dist (these are TypeScript definition files)
-// @ts-expect-error - TypeScript can't resolve these paths, but they exist at runtime
-import type { PrivateKey } from '@steemit/steem-js/dist/auth/ecc/src/key_private';
-// @ts-expect-error - TypeScript can't resolve these paths, but they exist at runtime
-import type { PublicKey } from '@steemit/steem-js/dist/auth/ecc/src/key_public';
-// @ts-expect-error - TypeScript can't resolve these paths, but they exist at runtime
-import type { Signature } from '@steemit/steem-js/dist/auth/ecc/src/signature';
-
-// Get classes from steem object at runtime
-// Use type aliases for cleaner code
-const PrivateKey = steem.auth.PrivateKey;
-const PublicKey = steem.auth.PublicKey;
-const Signature = steem.auth.Signature;
 
 export interface KeyValidationResult {
   isValid: boolean;
@@ -41,13 +31,15 @@ export function validatePostingKey(
   expectedPostingPublicKey: string
 ): KeyValidationResult {
   try {
-    // Parse the private key
-    const privateKey = PrivateKey.fromWif(privateKeyWif);
-    
-    // Generate public key from private key
-    const publicKey = privateKey.toPublicKey();
-    const publicKeyString = publicKey.toString();
-    
+    if (!steem.auth.isWif(privateKeyWif)) {
+      return {
+        isValid: false,
+        error: 'Invalid private key format',
+      };
+    }
+
+    const publicKeyString = steem.auth.wifToPublic(privateKeyWif);
+
     // Check if it matches the expected posting public key
     if (publicKeyString !== expectedPostingPublicKey) {
       return {
@@ -55,7 +47,7 @@ export function validatePostingKey(
         error: 'Private key does not match the posting public key for this account',
       };
     }
-    
+
     return {
       isValid: true,
       publicKey: publicKeyString,
@@ -80,9 +72,8 @@ export function signAuthData(
   timestamp: number = Date.now()
 ): SignatureResult {
   try {
-    const privateKey = PrivateKey.fromWif(privateKeyWif);
-    const publicKey = privateKey.toPublicKey().toString();
-    
+    const publicKey = steem.auth.wifToPublic(privateKeyWif);
+
     // Create authentication data that includes username
     const authData = {
       username,
@@ -90,17 +81,17 @@ export function signAuthData(
       timestamp,
       action: 'login',
     };
-    
+
     const dataString = JSON.stringify(authData);
-    
-    // Sign the data. steem-js 1.x removed PrivateKey.sign(); signing is a
-    // static Signature.sign(string, key) which SHA-256 hashes the utf-8
-    // string internally (server verifies with verifyBuffer over the same
-    // bytes).
-    const signature = Signature.sign(dataString, privateKey);
-    
+
+    // steem.auth.sign() SHA-256 hashes the utf-8 message and returns the
+    // hex signature; the server verifies with verifySignature() over the
+    // same string (both are steem.auth helpers, so the hashing convention
+    // cannot drift apart).
+    const signature = steem.auth.sign(dataString, privateKeyWif);
+
     return {
-      signature: signature.toHex(),
+      signature,
       publicKey,
       data: dataString,
     };
@@ -116,8 +107,7 @@ export function signAuthData(
  */
 export function derivePostingKey(username: string, password: string): string {
   try {
-    const privateKey = PrivateKey.fromSeed(username + 'posting' + password);
-    return privateKey.toString();
+    return steem.auth.toWif(username, password, 'posting');
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     throw new Error(`Failed to derive posting key: ${errorMessage}`);
@@ -128,25 +118,16 @@ export function derivePostingKey(username: string, password: string): string {
  * Check if a string looks like a WIF private key
  */
 export function isWifFormat(key: string): boolean {
-  try {
-    PrivateKey.fromWif(key);
-    return true;
-  } catch {
-    return false;
-  }
+  return steem.auth.isWif(key);
 }
 
 /**
  * Check if a string looks like a public key
  */
 export function isPublicKeyFormat(key: string): boolean {
-  try {
-    // steem-js 1.x returns null instead of throwing for non-public-key
-    // input (e.g. a WIF), so a bare try/catch misclassifies every key.
-    return PublicKey.fromString(key) != null;
-  } catch {
-    return false;
-  }
+  // steem.auth.isPubkey validates the STM-prefixed public key format and
+  // returns false (never throws) for WIFs and garbage input.
+  return steem.auth.isPubkey(key);
 }
 
 /**
@@ -158,16 +139,7 @@ export function verifySignature(
   publicKey: string
 ): boolean {
   try {
-    const sig = Signature.fromHex(signature);
-    const pubKey = PublicKey.fromString(publicKey);
-    if (!pubKey) {
-      // steem-js 1.x returns null for invalid public key strings
-      return false;
-    }
-
-    // verifyHash requires a 32-byte digest; verifyBuffer hashes the raw
-    // data with SHA-256 first, matching Signature.sign() on the signer side.
-    return sig.verifyBuffer(Buffer.from(data, 'utf8'), pubKey);
+    return steem.auth.verifySignature(data, signature, publicKey);
   } catch {
     return false;
   }

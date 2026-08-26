@@ -412,5 +412,4 @@ export async function getUnreadNotifications(params: {
  * Export steem API for direct access if needed
  */
 export { steem };
-export const PrivateKey = steem.auth.PrivateKey;
 

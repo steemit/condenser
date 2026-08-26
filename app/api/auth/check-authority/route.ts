@@ -4,8 +4,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { steem } from '@steemit/steem-js';
 import { getAccount } from '@/lib/steem/client';
-import { PrivateKey } from '@/lib/steem/client';
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,44 +28,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Derive private keys
-    const isRole = (r: string, fn: () => InstanceType<typeof PrivateKey>) => (!role || role === r ? fn() : undefined);
+    // Derive public keys via the steem-js SDK auth helpers.
+    const isRole = (r: string, fn: () => string) => (!role || role === r ? fn() : undefined);
 
-    let privateKeys: {
-      posting_private?: InstanceType<typeof PrivateKey>;
-      active_private?: InstanceType<typeof PrivateKey>;
-      owner_private?: InstanceType<typeof PrivateKey>;
-      memo_private: InstanceType<typeof PrivateKey>;
+    let publicKeys: {
+      posting_pub?: string;
+      active_pub?: string;
+      owner_pub?: string;
+      memo_pub: string;
     };
 
-    try {
-      // Try to parse as WIF (private key)
-      const privateKey = PrivateKey.fromWif(password);
-      privateKeys = {
-        owner_private: isRole('owner', () => privateKey),
-        posting_private: isRole('posting', () => privateKey),
-        active_private: isRole('active', () => privateKey),
-        memo_private: privateKey,
+    if (steem.auth.isWif(password)) {
+      // A WIF: check the same key against every role
+      const pub = steem.auth.wifToPublic(password);
+      publicKeys = {
+        owner_pub: isRole('owner', () => pub),
+        posting_pub: isRole('posting', () => pub),
+        active_pub: isRole('active', () => pub),
+        memo_pub: pub,
       };
-    } catch {
-      // Not a WIF, treat as password and derive keys
-      privateKeys = {
-        posting_private: isRole('posting', () =>
-          PrivateKey.fromSeed(username + 'posting' + password)
-        ),
-        active_private: isRole('active', () =>
-          PrivateKey.fromSeed(username + 'active' + password)
-        ),
-        memo_private: PrivateKey.fromSeed(username + 'memo' + password),
+    } else {
+      // A master password: derive per-role keys
+      const derivePub = (r: string) => steem.auth.wifToPublic(steem.auth.toWif(username, password, r));
+      publicKeys = {
+        posting_pub: isRole('posting', () => derivePub('posting')),
+        active_pub: isRole('active', () => derivePub('active')),
+        memo_pub: derivePub('memo'),
       };
     }
 
     // Check authority (simplified version)
-    const toPub = (k?: InstanceType<typeof PrivateKey>) => (k ? k.toPublicKey().toString() : '-');
-    const postingPub = toPub(privateKeys.posting_private);
-    const activePub = toPub(privateKeys.active_private);
-    const ownerPub = toPub(privateKeys.owner_private);
-    const memoPub = toPub(privateKeys.memo_private);
+    const postingPub = publicKeys.posting_pub ?? '-';
+    const activePub = publicKeys.active_pub ?? '-';
+    const ownerPub = publicKeys.owner_pub ?? '-';
+    const memoPub = publicKeys.memo_pub;
 
     // Simplified authority check
     /**
@@ -104,13 +100,13 @@ export async function POST(request: NextRequest) {
     };
 
     const auth = {
-      posting: privateKeys.posting_private
+      posting: publicKeys.posting_pub
         ? checkKeyAuth(postingPub, accountData.posting)
         : 'none',
-      active: privateKeys.active_private
+      active: publicKeys.active_pub
         ? checkKeyAuth(activePub, accountData.active)
         : 'none',
-      owner: privateKeys.owner_private
+      owner: publicKeys.owner_pub
         ? checkKeyAuth(ownerPub, accountData.owner)
         : 'none',
       memo: accountData.memo_key === memoPub ? 'full' : 'none',

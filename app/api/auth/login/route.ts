@@ -8,12 +8,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccount } from '@/lib/steem/client';
 import { getSession, loginUser, setSessionCookie } from '@/lib/auth/session';
-// NOTE: Signature/PublicKey are NOT exported at the package root at runtime
-// (only under steem.auth.*). The root-level verify() parses the public key
-// and hex signature, then runs verifyBuffer (SHA-256 of the raw data) —
-// matching Signature.sign(dataString, key) on the client. It returns false
-// for malformed input instead of throwing.
-import { verify } from '@steemit/steem-js';
+// steem.auth.verifySignature() parses the public key and hex signature,
+// then runs verifyBuffer (SHA-256 of the raw message) — matching
+// steem.auth.sign() on the client. It returns false for malformed input
+// instead of throwing.
+import { steem } from '@steemit/steem-js';
 
 export async function POST(request: NextRequest) {
   try {
@@ -85,7 +84,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 5: Verify the signature
-    if (!verify(data, signature, publicKey)) {
+    if (!steem.auth.verifySignature(data, signature, publicKey)) {
       return NextResponse.json(
         { error: 'Invalid signature' },
         { status: 401 }

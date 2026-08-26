@@ -11,10 +11,14 @@ vi.mock('@/lib/auth/session', () => ({
   setSessionCookie: vi.fn(),
 }));
 
-const { verifyMock } = vi.hoisted(() => ({ verifyMock: vi.fn() }));
+const { verifySignatureMock } = vi.hoisted(() => ({ verifySignatureMock: vi.fn() }));
 
 vi.mock('@steemit/steem-js', () => ({
-  verify: verifyMock,
+  steem: {
+    auth: {
+      verifySignature: verifySignatureMock,
+    },
+  },
 }));
 
 import { POST } from '@/app/api/auth/login/route';
@@ -51,7 +55,7 @@ describe('POST /api/auth/login', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    verifyMock.mockReturnValue(true);
+    verifySignatureMock.mockReturnValue(true);
   });
 
   it('rejects bodies missing required fields', async () => {
@@ -100,7 +104,7 @@ describe('POST /api/auth/login', () => {
 
   it('returns 401 when the signature does not verify', async () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey());
-    verifyMock.mockReturnValue(false);
+    verifySignatureMock.mockReturnValue(false);
 
     const res = await POST(makePostRequest('/api/auth/login', validBody()));
     expect(res.status).toBe(401);

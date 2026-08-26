@@ -20,15 +20,12 @@ declare module '@steemit/steem-js' {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export const steem: any;
 
-  export class PublicKey {
-    static fromString(publicKey: string): PublicKey;
-    toString(): string;
-  }
-
-  export class Signature {
-    static fromHex(hex: string): Signature;
-    verifyHash(hash: Buffer, pubKey: PublicKey): boolean;
-  }
+  // Root-level helpers from dist/crypto (steem-js 1.x).
+  // NOTE: Signature/PublicKey classes are NOT exported at the package root
+  // at runtime — only under steem.auth.*. Do not re-add declarations for
+  // them here; declaring non-existent exports masks runtime failures.
+  export const verify: (message: string | Buffer, signature: string, publicKey: string) => boolean;
+  export const sign: (message: string | Buffer, privateKey: string) => string;
 
   export const api: {
     setOptions(options: {

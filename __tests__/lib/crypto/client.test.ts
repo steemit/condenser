@@ -4,6 +4,7 @@ import { steem } from '@steemit/steem-js';
 import {
   isWifFormat,
   isPublicKeyFormat,
+  signAuthData,
   verifySignature,
 } from '@/lib/crypto/client';
 
@@ -46,5 +47,37 @@ describe('isPublicKeyFormat', () => {
 describe('verifySignature', () => {
   it('returns false for a null-yielding (invalid) public key string', () => {
     expect(verifySignature('00'.repeat(33), 'data', 'not-a-key')).toBe(false);
+  });
+});
+
+describe('signAuthData / verifySignature roundtrip', () => {
+  // Regression: steem-js 1.x removed PrivateKey.sign() (signing is now the
+  // static Signature.sign(string, key)) and verifyHash() requires a 32-byte
+  // digest (raw data must go through verifyBuffer). The old calls made every
+  // login fail with "s.sign is not a function" / a verifyHash length throw.
+  it('signs auth data and verifies it against the derived public key', () => {
+    const result = signAuthData(WIF, 'testuser', 'challenge-123', 1700000000000);
+
+    expect(result.publicKey).toBe(PUB);
+    const authData = JSON.parse(result.data);
+    expect(authData).toEqual({
+      username: 'testuser',
+      challenge: 'challenge-123',
+      timestamp: 1700000000000,
+      action: 'login',
+    });
+    expect(verifySignature(result.signature, result.data, result.publicKey)).toBe(true);
+  });
+
+  it('rejects a signature over tampered data', () => {
+    const result = signAuthData(WIF, 'testuser', 'challenge-123', 1700000000000);
+    const tampered = result.data.replace('challenge-123', 'challenge-456');
+    expect(verifySignature(result.signature, tampered, result.publicKey)).toBe(false);
+  });
+
+  it('rejects verification against a different public key', () => {
+    const other = steem.auth.PrivateKey.fromSeed('condenser-crypto-client-other');
+    const result = signAuthData(WIF, 'testuser', 'challenge-123', 1700000000000);
+    expect(verifySignature(result.signature, result.data, other.toPublicKey().toString())).toBe(false);
   });
 });

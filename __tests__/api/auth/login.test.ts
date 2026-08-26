@@ -11,15 +11,10 @@ vi.mock('@/lib/auth/session', () => ({
   setSessionCookie: vi.fn(),
 }));
 
-const { verifyHashMock } = vi.hoisted(() => ({ verifyHashMock: vi.fn() }));
+const { verifyMock } = vi.hoisted(() => ({ verifyMock: vi.fn() }));
 
 vi.mock('@steemit/steem-js', () => ({
-  Signature: {
-    fromHex: vi.fn(() => ({ verifyHash: verifyHashMock })),
-  },
-  PublicKey: {
-    fromString: vi.fn((value: string) => ({ toString: () => value })),
-  },
+  verify: verifyMock,
 }));
 
 import { POST } from '@/app/api/auth/login/route';
@@ -56,7 +51,7 @@ describe('POST /api/auth/login', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    verifyHashMock.mockReturnValue(true);
+    verifyMock.mockReturnValue(true);
   });
 
   it('rejects bodies missing required fields', async () => {
@@ -105,7 +100,7 @@ describe('POST /api/auth/login', () => {
 
   it('returns 401 when the signature does not verify', async () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey());
-    verifyHashMock.mockReturnValue(false);
+    verifyMock.mockReturnValue(false);
 
     const res = await POST(makePostRequest('/api/auth/login', validBody()));
     expect(res.status).toBe(401);

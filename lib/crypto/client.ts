@@ -93,8 +93,11 @@ export function signAuthData(
     
     const dataString = JSON.stringify(authData);
     
-    // Sign the data
-    const signature = privateKey.sign(Buffer.from(dataString, 'utf8'));
+    // Sign the data. steem-js 1.x removed PrivateKey.sign(); signing is a
+    // static Signature.sign(string, key) which SHA-256 hashes the utf-8
+    // string internally (server verifies with verifyBuffer over the same
+    // bytes).
+    const signature = Signature.sign(dataString, privateKey);
     
     return {
       signature: signature.toHex(),
@@ -162,7 +165,9 @@ export function verifySignature(
       return false;
     }
 
-    return sig.verifyHash(Buffer.from(data, 'utf8'), pubKey);
+    // verifyHash requires a 32-byte digest; verifyBuffer hashes the raw
+    // data with SHA-256 first, matching Signature.sign() on the signer side.
+    return sig.verifyBuffer(Buffer.from(data, 'utf8'), pubKey);
   } catch {
     return false;
   }

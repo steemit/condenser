@@ -8,7 +8,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccount } from '@/lib/steem/client';
 import { getSession, loginUser, setSessionCookie } from '@/lib/auth/session';
-import { Signature, PublicKey } from '@steemit/steem-js';
+// NOTE: Signature/PublicKey are NOT exported at the package root at runtime
+// (only under steem.auth.*). The root-level verify() parses the public key
+// and hex signature, then runs verifyBuffer (SHA-256 of the raw data) —
+// matching Signature.sign(dataString, key) on the client. It returns false
+// for malformed input instead of throwing.
+import { verify } from '@steemit/steem-js';
 
 export async function POST(request: NextRequest) {
   try {
@@ -80,28 +85,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 5: Verify the signature
-    try {
-      const sig = Signature.fromHex(signature);
-      const pubKey = PublicKey.fromString(publicKey);
-      if (!pubKey) {
-        // steem-js 1.x returns null for invalid public key strings
-        return NextResponse.json(
-          { error: 'Invalid public key' },
-          { status: 400 }
-        );
-      }
-      const isValidSignature = sig.verifyHash(Buffer.from(data, 'utf8'), pubKey);
-      
-      if (!isValidSignature) {
-        return NextResponse.json(
-          { error: 'Invalid signature' },
-          { status: 401 }
-        );
-      }
-    } catch (error: unknown) {
-      console.error('Signature verification error:', error);
+    if (!verify(data, signature, publicKey)) {
       return NextResponse.json(
-        { error: 'Signature verification failed' },
+        { error: 'Invalid signature' },
         { status: 401 }
       );
     }

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { Post } from "@/lib/api/steem";
 import PostSummary from "@/components/cards/PostSummary";
+import { PostSummarySkeleton } from "@/components/elements/skeletons";
 import LoadingIndicator from "@/components/elements/LoadingIndicator";
 
 interface PostsListProps {
@@ -78,10 +79,14 @@ export default function PostsList({
   }, [posts.length, onLoadMore]);
 
   if (loading && posts.length === 0) {
+    // Skeleton placeholders matching the card shape, replaced by real
+    // content once the feed arrives.
     return (
-      <div className="flex flex-col items-center justify-center gap-2 py-12">
-        <LoadingIndicator type="circle" />
-      </div>
+      <ul className="PostsList__summaries flex flex-col gap-[0.8em]">
+        {Array.from({ length: 10 }, (_, i) => (
+          <PostSummarySkeleton key={i} />
+        ))}
+      </ul>
     );
   }
 

@@ -36,6 +36,44 @@ export interface SignedTransaction extends Omit<Transaction, 'operations'> {
 }
 
 /**
+ * Build the transaction header from the chain's dynamic global properties.
+ *
+ * The expiration MUST be based on the chain head block time (props.time),
+ * not the client wall clock: steemd rejects transactions whose expiration
+ * exceeds head_time + STEEM_MAX_TIME_UNTIL_EXPIRATION (1h), and head_time
+ * lags wall clock by a few seconds — so "client now + 1h" is right at the
+ * boundary and intermittently fails with transaction_expiration_exception,
+ * quite apart from client clock skew. Head time + 10 minutes matches the
+ * wallet's transaction-header approach and leaves ample margin.
+ */
+async function getTransactionHeader(): Promise<{
+  ref_block_num: number;
+  ref_block_prefix: number;
+  expiration: string;
+}> {
+  const response = await fetch('/api/steem/dynamic-global-properties');
+  if (!response.ok) {
+    throw new Error('Failed to get dynamic global properties');
+  }
+  const props = await response.json();
+
+  const headBlockNumber = props.head_block_number;
+  const refBlockNum = headBlockNumber & 0xffff;
+  const headBlockId = props.head_block_id;
+  const refBlockPrefix = Buffer.from(headBlockId, 'hex').readUInt32LE(4);
+
+  // props.time is the head block time as "YYYY-MM-DDTHH:MM:SS" (UTC, no Z).
+  const headTimeStr: string = props.time;
+  const headTimeMs = new Date(headTimeStr.endsWith('Z') ? headTimeStr : headTimeStr + 'Z').getTime();
+  if (!Number.isFinite(headTimeMs)) {
+    throw new Error('Invalid head block time in dynamic global properties');
+  }
+  const expiration = new Date(headTimeMs + 600 * 1000).toISOString().slice(0, -5);
+
+  return { ref_block_num: refBlockNum, ref_block_prefix: refBlockPrefix, expiration };
+}
+
+/**
  * Sign a transaction with private key
  */
 export async function signTransaction(
@@ -84,22 +122,7 @@ export async function signCommentOperation(
   commentOptions?: CommentOptionsConfig
 ): Promise<SignedTransaction> {
   try {
-    // Get dynamic global properties for transaction header
-    const response = await fetch('/api/steem/dynamic-global-properties');
-    if (!response.ok) {
-      throw new Error('Failed to get dynamic global properties');
-    }
-    const props = await response.json();
-
-    // Calculate transaction header
-    const headBlockNumber = props.head_block_number;
-    const refBlockNum = headBlockNumber & 0xffff;
-    const headBlockId = props.head_block_id;
-    const refBlockPrefix = Buffer.from(headBlockId, 'hex').readUInt32LE(4);
-
-    // Calculate expiration (1 hour from now)
-    const expiration = new Date(Date.now() + 60 * 60 * 1000);
-    const expirationStr = expiration.toISOString().slice(0, -5);
+    const header = await getTransactionHeader();
 
     // Create comment operation
     const operation = toOperationTuple(createComment(
@@ -138,9 +161,9 @@ export async function signCommentOperation(
 
     // Create transaction
     const transaction: Omit<SignedTransaction, 'signatures'> = {
-      ref_block_num: refBlockNum,
-      ref_block_prefix: refBlockPrefix,
-      expiration: expirationStr,
+      ref_block_num: header.ref_block_num,
+      ref_block_prefix: header.ref_block_prefix,
+      expiration: header.expiration,
       operations,
       extensions: [],
     };
@@ -166,22 +189,7 @@ export async function signVoteOperation(
   }
 ): Promise<SignedTransaction> {
   try {
-    // Get dynamic global properties
-    const response = await fetch('/api/steem/dynamic-global-properties');
-    if (!response.ok) {
-      throw new Error('Failed to get dynamic global properties');
-    }
-    const props = await response.json();
-
-    // Calculate transaction header
-    const headBlockNumber = props.head_block_number;
-    const refBlockNum = headBlockNumber & 0xffff;
-    const headBlockId = props.head_block_id;
-    const refBlockPrefix = Buffer.from(headBlockId, 'hex').readUInt32LE(4);
-
-    // Calculate expiration
-    const expiration = new Date(Date.now() + 60 * 60 * 1000);
-    const expirationStr = expiration.toISOString().slice(0, -5);
+    const header = await getTransactionHeader();
 
     // Create vote operation
     const operation = toOperationTuple(createVote(
@@ -193,9 +201,9 @@ export async function signVoteOperation(
 
     // Create transaction
     const transaction: Omit<SignedTransaction, 'signatures'> = {
-      ref_block_num: refBlockNum,
-      ref_block_prefix: refBlockPrefix,
-      expiration: expirationStr,
+      ref_block_num: header.ref_block_num,
+      ref_block_prefix: header.ref_block_prefix,
+      expiration: header.expiration,
       operations: [operation],
       extensions: [],
     };
@@ -221,22 +229,7 @@ export async function signCustomJsonOperation(
   }
 ): Promise<SignedTransaction> {
   try {
-    // Get dynamic global properties
-    const response = await fetch('/api/steem/dynamic-global-properties');
-    if (!response.ok) {
-      throw new Error('Failed to get dynamic global properties');
-    }
-    const props = await response.json();
-
-    // Calculate transaction header
-    const headBlockNumber = props.head_block_number;
-    const refBlockNum = headBlockNumber & 0xffff;
-    const headBlockId = props.head_block_id;
-    const refBlockPrefix = Buffer.from(headBlockId, 'hex').readUInt32LE(4);
-
-    // Calculate expiration
-    const expiration = new Date(Date.now() + 60 * 60 * 1000);
-    const expirationStr = expiration.toISOString().slice(0, -5);
+    const header = await getTransactionHeader();
 
     // Create custom_json operation
     const operation = toOperationTuple(createCustomJson(
@@ -248,9 +241,9 @@ export async function signCustomJsonOperation(
 
     // Create transaction
     const transaction: Omit<SignedTransaction, 'signatures'> = {
-      ref_block_num: refBlockNum,
-      ref_block_prefix: refBlockPrefix,
-      expiration: expirationStr,
+      ref_block_num: header.ref_block_num,
+      ref_block_prefix: header.ref_block_prefix,
+      expiration: header.expiration,
       operations: [operation],
       extensions: [],
     };

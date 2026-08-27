@@ -68,6 +68,9 @@ describe('signCommentOperation comment_options', () => {
           head_block_number: 1000,
           head_block_id:
             '000003e800000000000000000000000000000000000000000000000000000000',
+          // Chain head block time (UTC, no Z) — the signer derives the
+          // expiration from it.
+          time: '2026-08-27T12:00:00',
         }),
       })
     );
@@ -80,6 +83,13 @@ describe('signCommentOperation comment_options', () => {
     expect(ops).toHaveLength(1);
     expect(ops[0][0]).toBe('comment');
     expect(ops[0][1]).toMatchObject({ author: 'alice', permlink: 'my-post' });
+  });
+
+  it('derives the expiration from the chain head block time (+10min), not the client clock', async () => {
+    await signCommentOperation('wif', PARAMS);
+    const trx = signTransactionMock.mock.calls[0][0];
+    expect(trx.expiration).toBe('2026-08-27T12:10:00');
+    expect(trx.ref_block_num).toBe(1000 & 0xffff);
   });
 
   it('appends comment_options immediately after comment with legacy defaults', async () => {

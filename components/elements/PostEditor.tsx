@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import MarkdownIt from 'markdown-it';
 import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -154,6 +154,10 @@ export default function PostEditor({
   const [beneficiaries, setBeneficiaries] = useState<BeneficiaryEntry[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // The tag input is uncontrolled; a tag the user typed but did not commit
+  // with Enter/comma is flushed from here on submit (legacy read the input
+  // value directly at submit time).
+  const tagInputRef = useRef<HTMLInputElement>(null);
   // Per-editor draft key so story/comment/edit drafts never clobber each
   // other (legacy used a unique formId per editor instance).
   const formId =
@@ -225,9 +229,18 @@ export default function PostEditor({
       setError(t('reply_editor.body_exceeds_max_bytes', { maxBytes: maxBodyBytes }));
       return;
     }
+    // Flush a tag the user typed but never committed with Enter/comma.
+    let effectiveTags = tags;
+    const pendingTag = tagInputRef.current?.value.trim().replace(/^#/, '').toLowerCase();
+    if (isStory && pendingTag && !tags.includes(pendingTag) && tags.length < MAX_TAGS) {
+      effectiveTags = [...tags, pendingTag];
+      setTags(effectiveTags);
+      if (tagInputRef.current) tagInputRef.current.value = '';
+    }
+
     // Category = first tag (legacy ReplyEditor), unless a community
     // category was forced by the caller.
-    const cat = (initialCategory || tags[0] || '').trim();
+    const cat = (initialCategory || effectiveTags[0] || '').trim();
     if (isStory && !cat) {
       setError(t('reply_editor.category_required'));
       return;
@@ -265,7 +278,7 @@ export default function PostEditor({
 
       const jsonMetadata = buildJsonMetadata({
         isStory,
-        tags,
+        tags: effectiveTags,
         category: cat,
         body: trimmedBody,
       });
@@ -318,17 +331,29 @@ export default function PostEditor({
     }
   };
 
-  const handleTagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === ',') {
-      e.preventDefault();
-      const input = e.currentTarget;
-      const tag = input.value.trim().replace(/^#/, '').toLowerCase();
-
-      if (tag && !tags.includes(tag) && tags.length < MAX_TAGS) {
-        setTags([...tags, tag]);
-        input.value = '';
-      }
+  const commitTag = (raw: string) => {
+    const tag = raw.trim().replace(/^#/, '').toLowerCase();
+    if (tag && !tags.includes(tag) && tags.length < MAX_TAGS) {
+      setTags([...tags, tag]);
     }
+  };
+
+  const handleTagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const input = e.currentTarget;
+    if (e.key === 'Enter' || e.key === ',' || e.key === ' ') {
+      e.preventDefault();
+      commitTag(input.value);
+      input.value = '';
+    } else if (e.key === 'Backspace' && input.value === '' && tags.length > 0) {
+      // Modern tag-input affordance: backspace on an empty field pops the
+      // last tag back out.
+      setTags(tags.slice(0, -1));
+    }
+  };
+
+  const handleTagBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    commitTag(e.currentTarget.value);
+    e.currentTarget.value = '';
   };
 
   const removeTag = (tagToRemove: string) => {
@@ -371,7 +396,7 @@ export default function PostEditor({
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-none border-0 border-b border-gray-300 px-2 py-2 text-[1rem] font-bold focus:border-gray-500 focus:outline-none"
+            className="w-full rounded-none border-0 border-b border-gray-300 px-2 py-2 text-[1rem] font-bold focus:border-[#06D6A9] focus:outline-none"
             placeholder={t('reply_editor.title')}
             maxLength={255}
             required
@@ -385,7 +410,7 @@ export default function PostEditor({
           value={body}
           onChange={(e) => setBody(e.target.value)}
           rows={15}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-[#06D6A9] focus:outline-none font-mono text-sm"
           placeholder={t('g.write_your_story')}
           required
         />
@@ -396,31 +421,40 @@ export default function PostEditor({
 
       {isStory && (
         <div>
-          <div className="flex flex-wrap gap-2 mb-2">
+          {/* Tag pills live inside the input container (modern tag input):
+              commit on Enter/comma/space/blur, × removes, Backspace on an
+              empty field pops the last tag. */}
+          <div
+            className="flex w-full cursor-text flex-wrap items-center gap-2 rounded-lg border border-gray-300 px-2 py-1.5 focus-within:border-[#06D6A9]"
+            onClick={() => tagInputRef.current?.focus()}
+          >
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700"
+                className="inline-flex items-center gap-1 rounded-full bg-[#06D6A9]/15 px-2.5 py-0.5 text-sm text-[#0b8f68] dark:text-[#06D6A9]"
               >
                 #{tag}
                 <button
                   type="button"
                   onClick={() => removeTag(tag)}
-                  className="ml-2 text-blue-500 hover:text-blue-700"
+                  className="leading-none hover:text-red-500"
+                  aria-label={`Remove tag ${tag}`}
                 >
                   ×
                 </button>
               </span>
             ))}
+            <input
+              id="tags"
+              type="text"
+              ref={tagInputRef}
+              onKeyDown={handleTagInput}
+              onBlur={handleTagBlur}
+              className="min-w-[120px] flex-1 border-none bg-transparent px-1 py-1 text-sm focus:outline-none"
+              placeholder={tags.length === 0 ? t('category_selector_jsx.tag_your_story') : ''}
+              disabled={tags.length >= MAX_TAGS}
+            />
           </div>
-          <input
-            id="tags"
-            type="text"
-            onKeyDown={handleTagInput}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder={t('category_selector_jsx.tag_your_story')}
-            disabled={tags.length >= MAX_TAGS}
-          />
         </div>
       )}
 
@@ -438,7 +472,7 @@ export default function PostEditor({
               id="payout-type"
               value={payoutType}
               onChange={(e) => setPayoutType(e.target.value as PayoutType)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-[#06D6A9] focus:outline-none"
             >
               <option value="50%">{t('reply_editor.default_50_50')}</option>
               <option value="100%">{t('reply_editor.power_up_100')}</option>
@@ -456,7 +490,7 @@ export default function PostEditor({
                   type="text"
                   value={beneficiary.username}
                   onChange={(e) => updateBeneficiary(idx, 'username', e.target.value)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:border-[#06D6A9] focus:outline-none"
                   placeholder={t('g.account')}
                   aria-label={`Beneficiary account ${idx + 1}`}
                 />
@@ -465,7 +499,7 @@ export default function PostEditor({
                   inputMode="numeric"
                   value={beneficiary.percent}
                   onChange={(e) => updateBeneficiary(idx, 'percent', e.target.value)}
-                  className="w-24 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-24 px-4 py-2 border border-gray-300 rounded-lg focus:border-[#06D6A9] focus:outline-none"
                   placeholder="Percent"
                   aria-label={`Beneficiary percent ${idx + 1}`}
                 />

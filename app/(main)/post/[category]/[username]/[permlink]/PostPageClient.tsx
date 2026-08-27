@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useAppDispatch } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
@@ -8,6 +9,8 @@ import { normalizeUsername, formatUsername } from '@/lib/utils/username';
 import PostFull from '@/components/cards/PostFull';
 import CommentsList from '@/components/cards/CommentsList';
 import { PostEditorResult } from '@/components/elements/PostEditor';
+import { PostDetailSkeleton } from '@/components/elements/skeletons';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Post, fetchPostByPermlink, fetchCommentsByPermlink } from '@/lib/api/steem';
 import { FeedLayout } from '@/components/layout/FeedLayout';
 
@@ -94,17 +97,22 @@ export default function PostPageClient() {
 
   if (loading) {
     return (
-      <FeedLayout centerClassName="md:max-w-4xl">
-        <div className="flex flex-col items-center justify-center gap-2 py-12">
-          <p className="text-muted-foreground">Loading post...</p>
-        </div>
+      <FeedLayout>
+        {/* Skeleton keeps the breadcrumb row + content column at their
+            final positions, so the page doesn't jump when data arrives. */}
+        <header className="mb-4 min-[760px]:mb-[10px] min-[760px]:pl-2">
+          <div className="flex h-10 items-center">
+            <Skeleton className="h-4 w-48" />
+          </div>
+        </header>
+        <PostDetailSkeleton />
       </FeedLayout>
     );
   }
 
   if (error || !post) {
     return (
-      <FeedLayout centerClassName="md:max-w-4xl">
+      <FeedLayout>
         <div className="flex flex-col items-center justify-center gap-2 py-12">
           <p className="text-destructive">{error || "Post not found"}</p>
         </div>
@@ -113,7 +121,27 @@ export default function PostPageClient() {
   }
 
   return (
-    <FeedLayout centerClassName="md:max-w-4xl">
+    <FeedLayout>
+      {/* Breadcrumb row — same spacing/height as the feed pages' sort
+          header (FeedListHeader: mb-4/10px + h-10 dropdown) so the article
+          and feed columns start at the same visual offset. */}
+      <header className="mb-4 min-[760px]:mb-[10px] min-[760px]:pl-2">
+        <nav
+          aria-label="Breadcrumb"
+          className="flex h-10 items-center gap-2 text-sm text-muted-foreground"
+        >
+          <Link
+            href={`/trending/${encodeURIComponent(post.category)}`}
+            className="shrink-0 font-semibold hover:text-accent-foreground"
+          >
+            #{post.category}
+          </Link>
+          <span aria-hidden>/</span>
+          <span className="min-w-0 truncate" aria-current="page">
+            {post.title || "Untitled"}
+          </span>
+        </nav>
+      </header>
       <PostFull post={post} />
       <CommentsList
         comments={comments}

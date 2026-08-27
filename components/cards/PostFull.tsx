@@ -51,7 +51,7 @@ export default function PostFull({ post }: PostFullProps) {
       itemScope
       itemType="http://schema.org/Article"
     >
-      <div className="PostFull__header mx-auto max-w-[40rem] border-b border-border">
+      <div className="PostFull__header mx-auto max-w-[54rem] border-b border-border">
         <h1
           className="font-sans font-extrabold leading-[1.1] [overflow-wrap:break-word] text-[240%]"
           itemProp="headline"
@@ -109,7 +109,7 @@ export default function PostFull({ post }: PostFullProps) {
         </div>
       </div>
 
-      <div className="PostFull__body mx-auto max-w-[40rem] py-4" itemProp="articleBody">
+      <div className="PostFull__body mx-auto max-w-[54rem] py-4" itemProp="articleBody">
         <MarkdownViewer
           text={post.body || ''}
           large
@@ -120,7 +120,7 @@ export default function PostFull({ post }: PostFullProps) {
 
       <TagList tags={tags} category={post.category} />
 
-      <div className="PostFull__footer mx-auto flex max-w-[40rem] flex-wrap items-center justify-between gap-2 text-[94%] leading-[2rem]">
+      <div className="PostFull__footer mx-auto flex max-w-[54rem] flex-wrap items-center justify-between gap-2 text-[94%] leading-[2rem]">
         <div>
           <Voting post={post} />
         </div>

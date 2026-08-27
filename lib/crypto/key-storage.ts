@@ -17,6 +17,24 @@ interface EncryptedKeyData {
   timestamp: number; // Encryption timestamp
 }
 
+/** Shape used when Web Crypto subtle is unavailable (plaintext fallback). */
+interface PlainKeyData {
+  plain: string;
+  username: string;
+  timestamp: number;
+}
+
+/**
+ * crypto.subtle exists only in secure contexts (HTTPS or localhost). Plain
+ * HTTP over a LAN IP (e.g. http://192.168.x.x during development) has no
+ * subtle API at all — degrade to plaintext sessionStorage there. That is
+ * acceptable: on a non-secure context the page itself is already plaintext,
+ * so encryption would buy nothing; production is always HTTPS.
+ */
+function isSubtleCryptoAvailable(): boolean {
+  return typeof crypto !== 'undefined' && !!crypto.subtle;
+}
+
 /**
  * Get application-level encryption key material
  * Uses a combination of application identifier and username for key derivation
@@ -71,6 +89,18 @@ export async function encryptAndStoreKey(
 ): Promise<void> {
   if (typeof window === 'undefined') {
     throw new Error('Key storage is only available in browser environment');
+  }
+
+  // Non-secure context (plain HTTP over LAN etc.): no crypto.subtle.
+  // Fall back to plaintext sessionStorage — see isSubtleCryptoAvailable().
+  if (!isSubtleCryptoAvailable()) {
+    console.warn(
+      'Web Crypto subtle API unavailable (non-secure context); storing the posting key unencrypted in sessionStorage. Use HTTPS in production.'
+    );
+    const plainData: PlainKeyData = { plain: privateKeyWif, username, timestamp: Date.now() };
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(plainData));
+    (window as unknown as { [key: string]: string })[MEMORY_CACHE_KEY] = privateKeyWif;
+    return;
   }
 
   try {
@@ -145,7 +175,16 @@ export async function decryptAndRetrieveKey(): Promise<{ privateKey: string; use
       return null;
     }
 
-    const encryptedKeyData: EncryptedKeyData = JSON.parse(stored);
+    const parsed = JSON.parse(stored);
+
+    // Plaintext fallback written on non-secure contexts (no crypto.subtle).
+    if ('plain' in parsed) {
+      const data = parsed as PlainKeyData;
+      (window as unknown as { [key: string]: string })[MEMORY_CACHE_KEY] = data.plain;
+      return { privateKey: data.plain, username: data.username };
+    }
+
+    const encryptedKeyData: EncryptedKeyData = parsed;
 
     // Decode salt and IV
     const salt = Uint8Array.from(atob(encryptedKeyData.salt), (c) => c.charCodeAt(0));

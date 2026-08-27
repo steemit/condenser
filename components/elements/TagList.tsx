@@ -19,7 +19,7 @@ export default function TagList({ tags, category }: TagListProps) {
   if (list.length === 0) return null;
 
   return (
-    <div className="TagList__horizontal mx-auto mb-2 max-w-[40rem]">
+    <div className="TagList__horizontal mx-auto mb-2 max-w-[54rem]">
       {list.map((tag) => (
         <Link
           key={tag}

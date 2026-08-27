@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
-import { broadcastOperation } from '@/store/slices/transactionSlice';
+import { broadcastCustomJson } from '@/lib/api/broadcast';
 import LoadingIndicator from '@/components/elements/LoadingIndicator';
 
 interface SubscribeButtonProps {
@@ -26,7 +26,7 @@ export default function SubscribeButton({
   const [isHovered, setIsHovered] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(subscribed);
 
-  const onClick = (e: React.MouseEvent) => {
+  const onClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (!username) {
       dispatch(showLogin({}));
@@ -40,26 +40,19 @@ export default function SubscribeButton({
       { community },
     ];
 
-    dispatch(
-      broadcastOperation({
-        type: 'custom_json',
-        confirm: isSubscribed
-          ? `Unsubscribe from ${community}?`
-          : `Subscribe to ${community}?`,
-        operation: {
-          id: 'community',
-          required_posting_auths: [username],
-          json: JSON.stringify(json),
-        },
-        successCallback: () => {
-          setIsSubscribed(!isSubscribed);
-          setLoading(false);
-        },
-        errorCallback: () => {
-          setLoading(false);
-        },
-      })
-    );
+    try {
+      await broadcastCustomJson({
+        id: 'community',
+        requiredAuths: [],
+        requiredPostingAuths: [username],
+        json: JSON.stringify(json),
+      });
+      setIsSubscribed(!isSubscribed);
+    } catch (err) {
+      console.error('Subscribe broadcast error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const buttonText = isHovered

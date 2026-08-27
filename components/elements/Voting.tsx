@@ -3,8 +3,8 @@
 import { useState, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
-import { broadcastOperation } from '@/store/slices/transactionSlice';
 import { voted, set } from '@/store/slices/globalSlice';
+import { broadcastVote } from '@/lib/api/broadcast';
 import { Post } from '@/lib/api/steem';
 import {
   DropdownMenu,
@@ -56,12 +56,16 @@ function VoteCircle({
   dir,
   active,
   voting,
+  disabled,
   onClick,
   title,
 }: {
   dir: 'up' | 'down';
   active: boolean;
+  /** This icon is the one currently broadcasting (shows the spinner). */
   voting: boolean;
+  /** A vote broadcast is in flight (either direction) — block new clicks. */
+  disabled: boolean;
   onClick: () => void;
   title: string;
 }) {
@@ -79,11 +83,11 @@ function VoteCircle({
     <button
       type="button"
       onClick={onClick}
-      disabled={voting}
+      disabled={disabled}
       title={title}
       className={`relative inline-flex rounded-full transition-colors ${color} ${hover} ${
         active ? activeFill : ''
-      } ${voting ? 'cursor-not-allowed opacity-50' : ''}`}
+      } ${disabled ? 'cursor-not-allowed opacity-50' : ''}`}
     >
       {voting ? (
         <span
@@ -126,6 +130,9 @@ export default function Voting({
     const key = `transaction_vote_active_${post.author}_${post.permlink}`;
     return state.global[key] || false;
   });
+  // Which direction is currently broadcasting; only that icon spins
+  // (legacy Voting.jsx tracks votingUp/votingDown separately).
+  const [votingDir, setVotingDir] = useState<'up' | 'down' | null>(null);
 
   const [showWeight, setShowWeight] = useState<'up' | 'down' | null>(null);
   const [sliderWeight, setSliderWeight] = useState({
@@ -156,12 +163,7 @@ export default function Voting({
   const myVote = post.active_votes?.find((v) => v.voter === username);
   const myVoteWeight = myVote ? myVote.weight : 0;
 
-  const calculateRshares = (weight: number): number => {
-    const netVests = 1000000; // Mock value, as before
-    return Math.floor(0.05 * netVests * 1e6 * (weight / 10000.0));
-  };
-
-  const handleVote = (up: boolean) => {
+  const handleVote = async (up: boolean) => {
     if (!username) {
       dispatch(showLogin());
       return;
@@ -177,70 +179,42 @@ export default function Voting({
       weight = up ? MAX_WEIGHT : -MAX_WEIGHT;
     }
 
-    const rshares = calculateRshares(Math.abs(weight));
-    const isFlag = up ? null : true;
+    const flagKey = `transaction_vote_active_${post.author}_${post.permlink}`;
+    const prevWeight = myVoteWeight;
 
-    const confirm = () => {
-      if (myVoteWeight == null) return null;
-      if (weight === 0) {
-        return isFlag
-          ? 'Removing your vote'
-          : 'Removing your vote will reset curation rewards for this post';
-      }
-      if (weight > 0) {
-        return isFlag
-          ? 'Changing to an upvote'
-          : 'Changing to an upvote will reset curation rewards for this post';
-      }
-      if (weight < 0) {
-        return isFlag
-          ? 'Changing to a downvote'
-          : 'Changing to a downvote will reset curation rewards for this post';
-      }
-      return null;
-    };
-
-    dispatch(
-      set({
-        key: `transaction_vote_active_${post.author}_${post.permlink}`,
-        value: true,
-      })
-    );
-
+    dispatch(set({ key: flagKey, value: true }));
+    setVotingDir(up ? 'up' : 'down');
+    // Optimistic vote update (reverted on broadcast failure).
     dispatch(
       voted({
-        voter: username!,
+        voter: username,
         author: post.author,
         permlink: post.permlink,
         weight,
       })
     );
 
-    dispatch(
-      broadcastOperation({
-        type: 'vote',
-        operation: {
+    try {
+      await broadcastVote({
+        voter: username,
+        author: post.author,
+        permlink: post.permlink,
+        weight,
+      });
+    } catch (err) {
+      console.error('Vote broadcast error:', err);
+      dispatch(
+        voted({
           voter: username,
           author: post.author,
           permlink: post.permlink,
-          weight,
-          __rshares: rshares,
-          __config: {
-            title: weight < 0 ? 'Confirm Downvote' : null,
-          },
-        },
-        confirm: confirm(),
-        errorCallback: (errorKey: string) => {
-          console.error('Transaction Error:', errorKey);
-          dispatch(
-            set({
-              key: `transaction_vote_active_${post.author}_${post.permlink}`,
-              value: false,
-            })
-          );
-        },
-      })
-    );
+          weight: prevWeight,
+        })
+      );
+    } finally {
+      dispatch(set({ key: flagKey, value: false }));
+      setVotingDir(null);
+    }
 
     if (showWeight) setShowWeight(null);
   };
@@ -292,7 +266,8 @@ export default function Voting({
           <VoteCircle
             dir="up"
             active={upvoteActive}
-            voting={Boolean(voting)}
+            voting={Boolean(voting) && votingDir === 'up'}
+            disabled={Boolean(voting)}
             onClick={() => handleChevronClick(true)}
             title={upvoteActive ? 'Remove Vote' : 'Upvote'}
           />
@@ -330,7 +305,8 @@ export default function Voting({
           <VoteCircle
             dir="down"
             active={downvoteActive}
-            voting={Boolean(voting)}
+            voting={Boolean(voting) && votingDir === 'down'}
+            disabled={Boolean(voting)}
             onClick={() => handleChevronClick(false)}
             title={downvoteActive ? 'Remove Vote' : 'Downvote'}
           />

@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
-import { broadcastOperation } from '@/store/slices/transactionSlice';
+import { broadcastCustomJson } from '@/lib/api/broadcast';
 import { updateFollowState } from '@/store/slices/globalSlice';
 
 interface FollowProps {
@@ -134,14 +134,14 @@ export default function Follow({
     });
   };
 
-  const updateFollow = (
+  const updateFollow = async (
     followerUser: string,
     followingUser: string,
     what: string[],
     done: () => void
   ) => {
     const json = ['follow', { follower: followerUser, following: followingUser, what }];
-    
+
     // Optimistic update
     dispatch(
       updateFollowState({
@@ -151,23 +151,26 @@ export default function Follow({
       })
     );
 
-    // Broadcast operation
-    dispatch(
-      broadcastOperation({
-        type: 'custom_json',
-        operation: {
-          id: 'follow',
-          required_posting_auths: [followerUser],
-          json: JSON.stringify(json),
-        },
-        successCallback: done,
-        errorCallback: () => {
-          // Revert optimistic update on error
-          // TODO: Revert the follow state
-          done();
-        },
-      })
-    );
+    try {
+      await broadcastCustomJson({
+        id: 'follow',
+        requiredAuths: [],
+        requiredPostingAuths: [followerUser],
+        json: JSON.stringify(json),
+      });
+    } catch (err) {
+      console.error('Follow broadcast error:', err);
+      // Revert the optimistic update
+      dispatch(
+        updateFollowState({
+          follower: followerUser,
+          following: followingUser,
+          what: [followingWhat, ignoreWhat],
+        })
+      );
+    } finally {
+      done();
+    }
   };
 
   const buttonClass = `${

@@ -92,7 +92,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
           <div className="flex items-center gap-1 py-1 text-[13px] text-muted-foreground min-[760px]:text-[14px]">
             <Reblog author={post.author} permlink={post.permlink} iconOnly />
             <span>
-              <Link
+              <Link prefetch={false}
                 href={`/@${rebloggedBy[0]}`}
                 className="font-semibold text-muted-foreground hover:text-accent-foreground"
               >
@@ -105,11 +105,11 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
 
         {/* summary-header: avatar + author + rep + "in #tag ·" + time */}
         <div className="flex items-center border-transparent py-0.5 text-[14px]">
-          <Link href={`/@${post.author}`} className="mr-2 shrink-0">
+          <Link prefetch={false} href={`/@${post.author}`} className="mr-2 shrink-0">
             <Userpic account={post.author} className="!h-6 !w-6" />
           </Link>
           <span className="min-w-0 truncate">
-            <Link
+            <Link prefetch={false}
               href={`/@${post.author}`}
               className="font-bold text-foreground hover:text-accent-foreground min-[760px]:text-[16px]"
             >
@@ -118,7 +118,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
             {rep !== null && <Reputation value={rep} />}{" "}
             <span className="text-muted-foreground">
               in{" "}
-              <Link
+              <Link prefetch={false}
                 href={tagUrl}
                 className="text-muted-foreground hover:text-accent-foreground"
               >
@@ -156,7 +156,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
         >
           {thumb && (
             <div className="articles__content-block articles__content-block--img min-[760px]:mr-[14px] min-[760px]:shrink-0">
-              <Link
+              <Link prefetch={false}
                 href={postUrl}
                 className="mb-2 block overflow-hidden min-[760px]:mb-0 min-[760px]:h-[77px] min-[760px]:w-[130px]"
               >
@@ -179,7 +179,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
                   nsfw
                 </span>
               )}
-              <Link
+              <Link prefetch={false}
                 href={postUrl}
                 className="text-foreground visited:text-muted-foreground"
               >
@@ -189,7 +189,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
             {/* legacy PostSummary__body: the excerpt itself is a link */}
             {summary && (
               <div className="PostSummary__body pb-[0.15rem] text-[0.9rem] leading-[1.4] text-foreground min-[760px]:truncate">
-                <Link
+                <Link prefetch={false}
                   href={postUrl}
                   className="block text-foreground min-[760px]:inline"
                 >
@@ -211,7 +211,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
                   <ChevronUp className="size-4" aria-hidden />
                   {totalVotes}
                 </span>
-                <Link
+                <Link prefetch={false}
                   href={`${postUrl}#comments`}
                   className="flex items-center gap-1 px-4 text-muted-foreground hover:text-accent-foreground"
                 >

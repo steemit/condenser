@@ -53,8 +53,12 @@ export async function POST(request: NextRequest) {
     initializeSteemApi();
 
     // Forward the signed transaction to Steem network
-    // The API only forwards, it does not sign or modify the transaction
-    const result = await callSteemApi<{ id?: string }>('broadcast_transaction', [signedTransaction]);
+    // The API only forwards, it does not sign or modify the transaction.
+    // The method MUST be namespaced: bare "broadcast_transaction" makes
+    // steemd's appbase JSON-RPC assert "method specification invalid.
+    // Should be api.method". (network_broadcast_api is avoided per the
+    // wallet project's findings — it bad_casts on some nodes.)
+    const result = await callSteemApi<{ id?: string }>('condenser_api.broadcast_transaction', [signedTransaction]);
 
     // Extract operation details for response + cache invalidation
     const firstOperation = signedTransaction.operations[0];

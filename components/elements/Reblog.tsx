@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
-import { broadcastOperation } from '@/store/slices/transactionSlice';
+import { broadcastCustomJson } from '@/lib/api/broadcast';
 
 interface ReblogProps {
   author: string;
@@ -32,7 +32,7 @@ export default function Reblog({ author, permlink, iconOnly = false }: ReblogPro
     }
   }, [username, author, permlink]);
 
-  const handleReblog = (e: React.MouseEvent) => {
+  const handleReblog = async (e: React.MouseEvent) => {
     e.preventDefault();
 
     if (!username) {
@@ -46,32 +46,20 @@ export default function Reblog({ author, permlink, iconOnly = false }: ReblogPro
 
     const json = ['reblog', { account: username, author, permlink }];
 
-    dispatch(
-      broadcastOperation({
-        type: 'custom_json',
-        confirm: 'This post will be added to your blog and shared with your followers.',
-        operation: {
-          id: 'follow',
-          required_posting_auths: [username],
-          json: JSON.stringify(json),
-          __config: {
-            title: 'Resteem this post',
-          },
-        },
-        successCallback: () => {
-          // Record user action (optional, for analytics)
-          // userActionRecord('reblog', { username, author, permlink });
-
-          setActive(true);
-          setLoading(false);
-          setReblogged(username, author, permlink);
-        },
-        errorCallback: () => {
-          setActive(false);
-          setLoading(false);
-        },
-      })
-    );
+    try {
+      await broadcastCustomJson({
+        id: 'follow',
+        requiredAuths: [],
+        requiredPostingAuths: [username],
+        json: JSON.stringify(json),
+      });
+      setActive(true);
+      setReblogged(username, author, permlink);
+    } catch (err) {
+      console.error('Reblog broadcast error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Legacy icon-only style: gray reblog icon, teal when active, spinner while

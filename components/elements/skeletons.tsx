@@ -26,33 +26,49 @@ export function PostSummarySkeleton() {
 }
 
 /**
- * Placeholder matching the post detail column (PostFull: header with
- * avatar/author, title, body paragraphs, footer bar) at the same 54rem
- * content width.
+ * Placeholder matching the post detail card shape exactly (PostFull:
+ * bordered card → 54rem centered header with h1 title + 48px avatar/author
+ * rows → body → tag pills → split footer), so nothing jumps on load.
  */
 export function PostDetailSkeleton() {
   return (
-    <div className="mx-auto max-w-[54rem]">
-      <div className="flex items-center gap-2 border-b border-border pb-2">
-        <Skeleton className="size-10 shrink-0 rounded-full" />
-        <div className="space-y-1.5">
-          <Skeleton className="h-3.5 w-32" />
-          <Skeleton className="h-3 w-48" />
+    <div className="rounded-[6px] border border-border bg-card px-4 pb-4 pt-8">
+      {/* PostFull__header: title first, then avatar + author/time rows */}
+      <div className="mx-auto max-w-[54rem] border-b border-border">
+        <Skeleton className="h-9 w-3/4" />
+        <div className="my-4 flex items-center">
+          <Skeleton className="size-12 shrink-0 rounded-full" />
+          <div className="ml-3 space-y-1.5">
+            <Skeleton className="h-3.5 w-48" />
+            <Skeleton className="h-3.5 w-32" />
+          </div>
         </div>
       </div>
-      <Skeleton className="mt-4 h-8 w-2/3" />
-      <div className="mt-4 space-y-2 py-4">
+
+      {/* PostFull__body */}
+      <div className="mx-auto max-w-[54rem] space-y-2 py-4">
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-11/12" />
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-3/5" />
       </div>
-      <div className="flex items-center gap-3">
-        <Skeleton className="size-[22px] rounded-full" />
-        <Skeleton className="size-[22px] rounded-full" />
-        <Skeleton className="h-3.5 w-16" />
-        <Skeleton className="h-3.5 w-24" />
+
+      {/* TagList pills */}
+      <div className="mx-auto mb-2 flex max-w-[54rem] gap-2">
+        <Skeleton className="h-6 w-16 rounded-full" />
+        <Skeleton className="h-6 w-20 rounded-full" />
+        <Skeleton className="h-6 w-14 rounded-full" />
+      </div>
+
+      {/* PostFull__footer: voting left, actions right */}
+      <div className="mx-auto flex max-w-[54rem] items-center justify-between">
+        <div className="flex items-center gap-1">
+          <Skeleton className="size-[22px] rounded-full" />
+          <Skeleton className="size-[22px] rounded-full" />
+          <Skeleton className="ml-1 h-3.5 w-12" />
+        </div>
+        <Skeleton className="h-3.5 w-32" />
       </div>
     </div>
   );

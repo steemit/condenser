@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { toggleNightmode } from "@/store/slices/appSlice";
 import { showLogin } from "@/store/slices/userSlice";
 import { logoutThunk } from "@/store/thunks/authThunks";
 import { SteemitLogo } from "@/components/layout/SteemitLogo";
@@ -231,10 +230,15 @@ export function Header() {
                   />
                 </span>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-48">
-                <DropdownMenuLabel className="font-normal">
-                  @{username}
-                </DropdownMenuLabel>
+              <DropdownMenuContent align="end" sideOffset={10} className="min-w-48">
+                {/* Base UI requires Menu.GroupLabel to live inside a
+                    Menu.Group — otherwise opening the menu throws
+                    "MenuGroupContext is missing" and crashes the page. */}
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel className="font-normal">
+                    @{username}
+                  </DropdownMenuLabel>
+                </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem
@@ -248,25 +252,6 @@ export function Header() {
                     }
                   >
                     {t("g.notifications")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() =>
-                      router.push(`/@${username}/comments`)
-                    }
-                  >
-                    {t("g.comments")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() =>
-                      router.push(`/@${username}/replies`)
-                    }
-                  >
-                    {t("g.replies")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => dispatch(toggleNightmode())}
-                  >
-                    {t("g.toggle_nightmode")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() =>

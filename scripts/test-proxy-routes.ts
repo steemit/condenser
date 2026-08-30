@@ -71,7 +71,10 @@ const testCases = [
   { path: '/steem/@thedarkoverlord/my-post', expected: '404', description: 'GDPR user: post with category' },
   { path: '/@TheDarkOverlord', expected: '404', description: 'GDPR user: match is case-insensitive' },
   { path: '/@xondra/settings', expected: '404', description: 'GDPR user: settings section' },
-  { path: '/@mateja.klaric', expected: 'next', description: 'GDPR user with dot: skipped by "." guard (404s via not-found)' },
+  { path: '/@mateja.klaric', expected: '404', description: 'GDPR user with dot: caught by the GDPR guard directly' },
+  { path: '/@ety001.test01', expected: 'rewrite:/user/ety001.test01', description: 'Dotted non-GDPR username routes to profile' },
+  { path: '/@alice/post-v1.2', expected: 'rewrite:/post-no-category/alice/post-v1.2', description: 'Dotted permlink routes to post page' },
+  { path: '/file.svg', expected: 'next', description: 'Static public file passes through' },
   { path: '/@alice', expected: 'rewrite:/user/alice', description: 'Non-GDPR user unaffected' },
   { path: '/steem/@alice/my-post', expected: 'rewrite:/post/steem/alice/my-post', description: 'Non-GDPR user post unaffected' },
   

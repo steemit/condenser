@@ -29,6 +29,11 @@ const SORT_TYPES = [
   'hot', 'trending', 'promoted', 'payout', 'payout_comments', 'muted', 'created'
 ];
 
+// Known static asset extensions served from public/ (or framework internals).
+// Anything else with a dot (usernames, permlinks) must continue routing.
+const STATIC_ASSET_RE =
+  /\.(ico|png|jpe?g|gif|svg|webp|avif|css|js|map|json|xml|txt|webmanifest|woff2?|ttf|eot|mp4|webm|pdf|html?)$/i;
+
 export function proxy(request: NextRequest) {
   // Get pathname and ensure it's decoded
   // Next.js should decode it automatically, but we handle %40 (@) encoding explicitly
@@ -44,13 +49,16 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // Skip API routes, static files, and the 404 page
+  // Skip API routes, static files, and the 404 page. Static files are
+  // detected by a known asset extension — NOT by any dot, because Steem
+  // usernames and permlinks may legitimately contain dots
+  // (e.g. /@ety001.test01, /@user/post-v1.2).
   if (
     pathname.startsWith('/api/') ||
     pathname.startsWith('/_next/') ||
     pathname.startsWith('/static/') ||
     pathname === '/404' ||
-    pathname.includes('.')
+    STATIC_ASSET_RE.test(pathname)
   ) {
     return NextResponse.next();
   }
@@ -59,9 +67,9 @@ export function proxy(request: NextRequest) {
   // (mirrors legacy ResolveRoute.js GDPRUserList checks): /@user,
   // /@user/<section|permlink|feed> and /category/@user/permlink.
   // A single guard covers all four families because the @-segment is always
-  // the first or second path segment in each of them. Note: usernames
-  // containing a dot (e.g. mateja.klaric) are skipped by the '.' guard above
-  // and 404 naturally via not-found — same net effect.
+  // the first or second path segment in each of them. Dotted usernames
+  // (e.g. mateja.klaric) reach this guard too — the static-asset check above
+  // only matches known file extensions.
   const gdprMatch = pathname.match(/^\/(?:[^\/]+\/)?@([^\/]+)/);
   if (gdprMatch && isGdprUser(gdprMatch[1])) {
     return NextResponse.rewrite(new URL('/404', request.url));

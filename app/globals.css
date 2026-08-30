@@ -135,6 +135,9 @@
   }
   html {
     @apply font-sans;
+    /* Reserve the scrollbar gutter permanently so navigating between pages
+       with and without a scrollbar does not shift the layout horizontally. */
+    scrollbar-gutter: stable;
   }
 }
 /* Post-body rendering styles (ported from legacy markdown.scss /

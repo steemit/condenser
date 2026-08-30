@@ -22,7 +22,7 @@ export default function UserRedirectClient() {
   }, [username, router]);
 
   return (
-    <FeedLayout>
+    <FeedLayout hideRightRail>
       <div className="flex flex-col items-center justify-center gap-2 py-12">
         <p className="text-muted-foreground">Loading...</p>
       </div>

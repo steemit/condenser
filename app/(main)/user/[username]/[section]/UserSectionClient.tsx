@@ -149,20 +149,32 @@ export default function UserSectionClient() {
     />
   );
 
-  // Show loading state if profile is still loading
+  // While the profile loads, the banner already renders (it falls back to
+  // the accountname) and post sections show the same skeleton cards as the
+  // feed pages instead of a bare loading label.
   if (profileLoading) {
+    const isPostsSection = ['blog', 'posts', 'comments', 'replies', 'payout', 'feed'].includes(section);
     return (
-      <FeedLayout>
-        <div className="flex flex-col items-center justify-center gap-2 py-12">
-          <p className="text-muted-foreground">Loading profile...</p>
-        </div>
+      <FeedLayout hideRightRail banner={profileHeader}>
+        {isPostsSection ? (
+          <PostsList
+            posts={[]}
+            loading
+            category={`@${accountname}`}
+            order={order}
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-2 py-12">
+            <p className="text-muted-foreground">Loading profile...</p>
+          </div>
+        )}
       </FeedLayout>
     );
   }
 
   if (!profile) {
     return (
-      <FeedLayout>
+      <FeedLayout hideRightRail>
         <div className="flex flex-col items-center justify-center gap-2 py-12">
           <p className="text-destructive">User not found</p>
         </div>
@@ -174,7 +186,7 @@ export default function UserSectionClient() {
   if (section === 'settings') {
     if (!isMyAccount) {
       return (
-        <FeedLayout centerClassName="md:max-w-4xl">
+        <FeedLayout centerClassName="md:max-w-4xl" hideRightRail>
           <div className="rounded-lg border border-border bg-muted/50 p-4">
             <p className="text-foreground">
               You can only view your own settings.
@@ -185,8 +197,11 @@ export default function UserSectionClient() {
     }
 
     return (
-      <FeedLayout centerClassName="md:max-w-4xl">
-        {profileHeader}
+      <FeedLayout
+        centerClassName="md:max-w-4xl"
+        hideRightRail
+        banner={profileHeader}
+      >
         <div className="mt-8">
           <UserSettings 
             accountname={accountname} 
@@ -212,8 +227,11 @@ export default function UserSectionClient() {
   if (section === 'followers' || section === 'followed') {
     const followType = section === 'followers' ? 'followers' : 'following';
     return (
-      <FeedLayout centerClassName="md:max-w-4xl">
-        {profileHeader}
+      <FeedLayout
+        centerClassName="md:max-w-4xl"
+        hideRightRail
+        banner={profileHeader}
+      >
         <h3 className="mt-6 mb-4 text-lg font-bold text-foreground">
           {section === 'followers' ? 'Followers' : 'Following'}
         </h3>
@@ -232,8 +250,11 @@ export default function UserSectionClient() {
 
   if (section === 'notifications') {
     return (
-      <FeedLayout centerClassName="md:max-w-4xl lg:max-w-6xl">
-        {profileHeader}
+      <FeedLayout
+        centerClassName="md:max-w-4xl lg:max-w-6xl"
+        hideRightRail
+        banner={profileHeader}
+      >
         <NotificationsList username={accountname} />
       </FeedLayout>
     );
@@ -241,21 +262,27 @@ export default function UserSectionClient() {
 
   if (section === 'communities') {
     return (
-      <FeedLayout centerClassName="md:max-w-4xl lg:max-w-6xl">
-        {profileHeader}
+      <FeedLayout
+        centerClassName="md:max-w-4xl lg:max-w-6xl"
+        hideRightRail
+        banner={profileHeader}
+      >
         <CommunitiesList accountname={accountname} />
       </FeedLayout>
     );
   }
 
   return (
-    <FeedLayout>
-      {profileHeader}
-
+    <FeedLayout hideRightRail banner={profileHeader}>
       {loading && posts.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-2 py-12">
-          <p className="text-muted-foreground">Loading posts...</p>
-        </div>
+        // Same skeleton placeholders as the feed pages (PostsList renders
+        // PostSummarySkeleton cards while the first page loads).
+        <PostsList
+          posts={[]}
+          loading
+          category={`@${accountname}`}
+          order={order}
+        />
       ) : posts.length === 0 ? (
         <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
           {emptySectionText(section, accountname, isMyAccount)}

@@ -5,8 +5,21 @@ describe('isSafeRedirectTarget', () => {
     it('rejects protocol-relative targets', () => {
         expect(isSafeRedirectTarget('//evil.com')).toBe(false);
         expect(isSafeRedirectTarget('%2F%2Fevil.com')).toBe(false);
-        expect(isSafeRedirectTarget('/%2F%2Fevil.com')).toBe(false);
         expect(isSafeRedirectTarget('///evil.com')).toBe(false);
+    });
+
+    it('rejects backslash forms the browser treats as authority', () => {
+        // `\` is normalized to `/` before URL parsing, so these are
+        // protocol-relative in every browser even though no literal
+        // `//` appears — the gap reported by the security team.
+        expect(isSafeRedirectTarget('/\\evil.com')).toBe(false);
+        expect(isSafeRedirectTarget('\\evil.com')).toBe(false);
+        expect(isSafeRedirectTarget('/\\/\\evil.com')).toBe(false);
+        expect(isSafeRedirectTarget('/\\//evil.com')).toBe(false);
+        // tabs/newlines are stripped by the URL parser just like by browsers
+        expect(isSafeRedirectTarget('/\t/evil.com')).toBe(false);
+        expect(isSafeRedirectTarget('/\\\nevil.com')).toBe(false);
+        expect(isSafeRedirectTarget('/\r/evil.com')).toBe(false);
     });
 
     it('rejects scheme-prefixed targets', () => {
@@ -14,16 +27,21 @@ describe('isSafeRedirectTarget', () => {
         expect(isSafeRedirectTarget('https:evil')).toBe(false);
         // eslint-disable-next-line no-script-url
         expect(isSafeRedirectTarget('javascript:alert(1)')).toBe(false);
-        // scheme check runs after decoding too
         expect(isSafeRedirectTarget('%68ttp%3a%2f%2fevil.com')).toBe(false);
+        expect(isSafeRedirectTarget('https://steemit.com.example.com')).toBe(
+            false
+        );
     });
 
     it('accepts same-origin relative paths', () => {
         expect(isSafeRedirectTarget('/foo/bar')).toBe(true);
         expect(isSafeRedirectTarget('/')).toBe(true);
         expect(isSafeRedirectTarget('/path?x=1#frag')).toBe(true);
-        // encoded characters that decode to harmless path content
         expect(isSafeRedirectTarget('/trending?next=%2Fhot')).toBe(true);
+        // encoded slashes stay path content on this host — the browser
+        // never decodes them into an authority, so this is same-origin
+        expect(isSafeRedirectTarget('/%2F%2Fevil.com')).toBe(true);
+        expect(isSafeRedirectTarget('/%5Cevil.com')).toBe(true);
     });
 
     it('rejects non-string or empty inputs', () => {
@@ -32,8 +50,9 @@ describe('isSafeRedirectTarget', () => {
         expect(isSafeRedirectTarget('')).toBe(false);
     });
 
-    it('falls back to the raw token when decoding fails', () => {
-        // '%' alone is malformed; the raw form still decides
+    it('tolerates malformed percent sequences as plain path content', () => {
+        // '%' alone is not decoded into anything by the URL parser;
+        // it stays in the path on this origin
         expect(isSafeRedirectTarget('/%')).toBe(true);
         expect(isSafeRedirectTarget('%2F%2F')).toBe(false);
     });

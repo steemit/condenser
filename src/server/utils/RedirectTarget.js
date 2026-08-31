@@ -1,3 +1,8 @@
+import { URL } from 'url';
+
+// Fixed parse base: any same-origin target must resolve to this origin.
+const BASE = 'https://steemit.com';
+
 /**
  * Validate redirect targets produced from user-controlled urls.
  *
@@ -6,26 +11,27 @@
  * is protocol-relative and would send the user to an external host
  * (open redirect), so only same-origin relative paths may pass.
  *
- * The target is decoded once before testing to also reject encoded
- * bypasses such as `%2F%2Fevil.com` or `/%2F%2Fevil.com`, and any
- * scheme-prefixed form (`http:`, `javascript:`, ...) is rejected.
- * Kept dependency-free on purpose: unit tests import this module
- * directly without booting the whole server (config/steem-js chain).
+ * Validation uses the WHATWG URL parser — the same algorithm
+ * browsers use to resolve the Location header — instead of literal
+ * string checks. Regexes on the raw token miss forms the browser
+ * still treats as an authority switch, e.g. `/\evil.com` or
+ * `//evil.com` with tab/newline sprinkled in: backslashes and
+ * control chars are normalized before parsing, so a raw `\` acts
+ * exactly like a second `/`. Parsing against a fixed base and
+ * comparing origins rejects every authority-override form while
+ * accepting any rooted same-origin path (encoded characters such
+ * as `/%2F%2Fevil.com` stay plain path content on this host).
  */
 export default function isSafeRedirectTarget(raw) {
     if (!raw || typeof raw !== 'string') return false;
-    const token = raw;
-    let decoded = token;
+    // Must be a rooted relative path — rejects absolute urls and
+    // bare schemes (`http:...`, `javascript:...`, `%2F%2F...`).
+    if (raw[0] !== '/') return false;
+    let url;
     try {
-        // decodeURIComponent throws on malformed sequences
-        decoded = decodeURIComponent(token);
+        url = new URL(raw, BASE);
     } catch (e) {
-        decoded = token;
+        return false;
     }
-    // Disallow absolute/scheme-prefixed targets like 'http:' or 'https:'
-    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(decoded)) return false;
-    // Disallow protocol-relative '//' (decoded or raw)
-    if (/^\/\//.test(decoded) || /^\/\//.test(token)) return false;
-    // Only allow same-origin relative paths starting with a single '/'
-    return /^\/(?!\/)/.test(decoded);
+    return url.origin === BASE;
 }

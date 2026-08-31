@@ -43,7 +43,7 @@ interface UserState {
   image_viewer_url: string;
 }
 
-const generateTrackingId = () =>
+export const generateTrackingId = () =>
   `x-${Math.random().toString().slice(2)}`;
 
 const initialState: UserState = {
@@ -167,6 +167,11 @@ const userSlice = createSlice({
     usernamePasswordLogin: (state) => {
       state.trackingId = generateTrackingId();
       // Saga handles the rest
+    },
+    // Legacy parity: the SSR session uid seeds trackingId for anonymous
+    // visitors; usernamePasswordLogin regenerates it on login.
+    setTrackingId: (state, action: PayloadAction<string>) => {
+      state.trackingId = action.payload;
     },
     setUser: (state, action: PayloadAction<User>) => {
       state.current = { ...state.current, ...action.payload };
@@ -302,6 +307,7 @@ export const {
   hidePromotePost,
   checkKeyType,
   usernamePasswordLogin,
+  setTrackingId,
   setUser,
   closeLogin,
   loginError,

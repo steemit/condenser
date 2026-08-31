@@ -97,12 +97,18 @@ export default function Comment({
       className={cn('Comment mb-5', depth === 1 ? 'root' : 'reply')}
       id={`@${comment.author}/${comment.permlink}`}
     >
-      <div className="Comment__block">
-        {/* avatar column (48px desktop / 16px mobile) */}
+      {/* flow-root contains the floated avatar even when the collapsed
+          header is shorter than the avatar (legacy shrinks the avatar to
+          24px when collapsed; without containment the float overflows and
+          pushes the next comment's avatar right, creating a staircase). */}
+      <div className="Comment__block flow-root">
+        {/* avatar column (48px desktop / 16px mobile; 24px when collapsed) */}
         <Link href={`/@${comment.author}`} className="float-left">
           <Userpic
             account={comment.author}
-            className="!size-4 min-[640px]:!size-12"
+            className={
+              collapsed ? '!size-6' : '!size-4 min-[640px]:!size-12'
+            }
           />
         </Link>
 
@@ -248,8 +254,9 @@ export default function Comment({
           )}
         </div>
 
-        {/* nested replies — dotted tree line, recursive */}
-        {sortedReplies.length > 0 && (
+        {/* nested replies — dotted tree line, recursive; hidden while the
+            comment is collapsed (legacy: replies = null when collapsed) */}
+        {!collapsed && sortedReplies.length > 0 && (
           <div className="Comment__replies ml-[10px] mt-[1.4rem] border-l border-dotted border-[#788187] pl-2 min-[640px]:ml-[62px]">
             {depth >= MAX_DEPTH ? (
               <Link

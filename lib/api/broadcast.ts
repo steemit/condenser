@@ -3,11 +3,12 @@
  * Signs transactions locally and forwards to API
  */
 
-import { 
-  signCommentOperation, 
-  signVoteOperation, 
+import {
+  signCommentOperation,
+  signVoteOperation,
   signCustomJsonOperation,
-  SignedTransaction 
+  signDeleteCommentOperation,
+  SignedTransaction
 } from '@/lib/crypto/transaction-signer';
 import { getCachedKey, decryptAndRetrieveKey } from '@/lib/crypto/key-storage';
 import type { CommentOptionsConfig } from '@/lib/utils/comment-options';
@@ -138,5 +139,25 @@ export async function broadcastCustomJson(
 export async function broadcastPreSignedTransaction(
   signedTransaction: SignedTransaction
 ): Promise<{ success: boolean; result: unknown; transactionId?: string; permlink?: string }> {
+  return broadcastSignedTransaction(signedTransaction);
+}
+
+/**
+ * Delete a comment/post (legacy Comment.jsx deletePost: broadcasts
+ * delete_comment after the user confirms).
+ */
+export async function broadcastDeleteComment(
+  params: {
+    author: string;
+    permlink: string;
+  }
+): Promise<{ success: boolean; result: unknown; transactionId?: string; permlink?: string }> {
+  const privateKey = await getPrivateKeyForSigning();
+
+  const signedTransaction = await signDeleteCommentOperation(privateKey, {
+    author: params.author,
+    permlink: params.permlink,
+  });
+
   return broadcastSignedTransaction(signedTransaction);
 }

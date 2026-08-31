@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Source_Sans_3 } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { ReduxProvider } from "@/store/Provider";
 
@@ -12,6 +13,10 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+// Google Analytics via gtag.js (legacy server-html.jsx). Disabled unless
+// SDC_GOOGLE_ANALYTICS_ID is set; legacy config defaulted it to false.
+const gaId = process.env.SDC_GOOGLE_ANALYTICS_ID;
 
 export const metadata: Metadata = {
   title: "Condenser - Steemit Frontend",
@@ -64,6 +69,20 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap"
         />
+        {gaId ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-gtag-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaId}');`}
+            </Script>
+          </>
+        ) : null}
         <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>

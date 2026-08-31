@@ -255,3 +255,38 @@ export async function signCustomJsonOperation(
     throw new Error(`Failed to create custom_json operation: ${errorMessage}`);
   }
 }
+
+/**
+ * Create and sign a delete_comment operation (legacy Comment.jsx
+ * deletePost). steem-js 1.x has no createDeleteComment factory, but its
+ * serializer supports the op, so the tuple is constructed manually.
+ */
+export async function signDeleteCommentOperation(
+  privateKeyWif: string,
+  params: {
+    author: string;
+    permlink: string;
+  }
+): Promise<SignedTransaction> {
+  try {
+    const header = await getTransactionHeader();
+
+    const transaction: Omit<SignedTransaction, 'signatures'> = {
+      ref_block_num: header.ref_block_num,
+      ref_block_prefix: header.ref_block_prefix,
+      expiration: header.expiration,
+      operations: [
+        [
+          'delete_comment',
+          { author: params.author, permlink: params.permlink },
+        ],
+      ],
+      extensions: [],
+    };
+
+    return await signTransaction(transaction, privateKeyWif);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(`Failed to create delete_comment operation: ${errorMessage}`);
+  }
+}

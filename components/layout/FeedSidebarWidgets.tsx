@@ -10,6 +10,10 @@ import {
   type CommunitySubscription,
 } from "@/lib/api/steem";
 import SubscribeButton from "@/components/elements/SubscribeButton";
+import AdSwipe from "@/components/elements/AdSwipe";
+import TronAd from "@/components/elements/TronAd";
+import Announcement from "@/components/layout/Announcement";
+import { INDEX_LEFT_SIDE_AD_LIST, POST_LEFT_SIDE_AD_LIST, tronAdsConfig } from "@/lib/ads";
 
 /** Legacy c-sidebar__module chrome. */
 function SidebarModule({
@@ -134,16 +138,43 @@ function CommunityPane({ community }: { community: string }) {
 export function FeedSidebarWidgets() {
   const pathname = usePathname();
   const username = useAppSelector((s) => s.user.current?.username);
+  const trackingId = useAppSelector((s) => s.user.trackingId);
 
   const communityMatch = pathname?.match(
     /^\/(?:trending|hot|created|promoted|payout|payout_comments|muted)\/(hive-[^/]+)/
   );
   const community = communityMatch?.[1];
+  // Post pages get the post-scoped creative tags (legacy Post.jsx right
+  // rail); feed pages get the index list.
+  const isPostPage = Boolean(
+    pathname?.match(/^\/[^/]+\/@[^/]+\/[^/]+/) ||
+      pathname?.match(/^\/@[^/]+\/[^/]+/)
+  );
+  const adList = isPostPage ? POST_LEFT_SIDE_AD_LIST : INDEX_LEFT_SIDE_AD_LIST;
 
   return (
     <div className="flex flex-col">
       {community && <CommunityPane community={community} />}
+      {/* Announcement: always on post pages, and on feed pages regardless
+          of login state; community pages stay without it (legacy). */}
+      {(isPostPage || !community) && <Announcement />}
       {username ? <SidebarLinks /> : <SidebarNewUsers />}
+      {/* Legacy PostsIndexLayout/Post right rail: ads are the LAST modules,
+          rendered bare (no card chrome) so creatives fill the column. */}
+      <div className="mb-4">
+        <AdSwipe adList={adList} trackingId={trackingId} />
+      </div>
+      {tronAdsConfig.enabled && tronAdsConfig.sidebarPid && (
+        <TronAd
+          trackingId={trackingId}
+          wrapperName="tron_ad_sideby"
+          pid={tronAdsConfig.sidebarPid}
+          adTag="tron_ad_sideby"
+          ratioClass="ratio-1-1"
+          env={tronAdsConfig.env}
+          isMock={tronAdsConfig.isMock}
+        />
+      )}
     </div>
   );
 }

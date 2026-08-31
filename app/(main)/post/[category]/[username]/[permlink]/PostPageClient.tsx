@@ -3,15 +3,20 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useAppDispatch } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
 import { normalizeUsername, formatUsername } from '@/lib/utils/username';
 import PostFull from '@/components/cards/PostFull';
 import CommentsList from '@/components/cards/CommentsList';
+import AdSwipe from '@/components/elements/AdSwipe';
+import TronAd from '@/components/elements/TronAd';
+import { BOTTOM_AD_LIST, tronAdsConfig } from '@/lib/ads';
 import { PostEditorResult } from '@/components/elements/PostEditor';
 import { PostDetailSkeleton } from '@/components/elements/skeletons';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Post, fetchPostByPermlink, fetchCommentsByPermlink } from '@/lib/api/steem';
+import { broadcastDeleteComment } from '@/lib/api/broadcast';
+import { userActionRecord } from '@/lib/analytics/overseer';
 import { FeedLayout } from '@/components/layout/FeedLayout';
 
 /**
@@ -23,6 +28,7 @@ import { FeedLayout } from '@/components/layout/FeedLayout';
 export default function PostPageClient() {
   const params = useParams();
   const dispatch = useAppDispatch();
+  const trackingId = useAppSelector((s) => s.user.trackingId);
   const category = params.category as string;
   const usernameRaw = params.username as string;
   const username = normalizeUsername(usernameRaw);
@@ -95,6 +101,28 @@ export default function PostPageClient() {
     );
   };
 
+  // Comment.tsx already confirmed with the user. Legacy Comment.jsx
+  // deletePost: record the action, broadcast delete_comment to the chain,
+  // then drop the comment from local state.
+  const handleDeleteComment = async (author: string, commentPermlink: string) => {
+    userActionRecord('delete_comment', {
+      username: author,
+      comment_type: 'reply',
+      permlink: commentPermlink,
+    });
+    try {
+      await broadcastDeleteComment({ author, permlink: commentPermlink });
+      setComments((prevComments) =>
+        prevComments.filter(
+          (c) => !(c.author === author && c.permlink === commentPermlink)
+        )
+      );
+    } catch (err) {
+      console.error('Delete comment broadcast error:', err);
+      alert('Failed to delete the comment. Please try again.');
+    }
+  };
+
   if (loading) {
     return (
       <FeedLayout>
@@ -143,6 +171,37 @@ export default function PostPageClient() {
         </nav>
       </header>
       <PostFull post={post} />
+      {/* Legacy Post.jsx bottom ads sit right below the article body, above
+          the comments; width follows the article card (full content column). */}
+      <div className="mt-2 w-full">
+        <AdSwipe
+          adList={BOTTOM_AD_LIST}
+          trackingId={trackingId}
+          direction="vertical"
+        />
+        {tronAdsConfig.enabled && tronAdsConfig.contentPcPid && (
+          <TronAd
+            trackingId={trackingId}
+            wrapperName="tron_ad_pc"
+            pid={tronAdsConfig.contentPcPid}
+            adTag="tron_ad_pc"
+            ratioClass="ratio-10-1"
+            env={tronAdsConfig.env}
+            isMock={tronAdsConfig.isMock}
+          />
+        )}
+        {tronAdsConfig.enabled && tronAdsConfig.contentMobilePid && (
+          <TronAd
+            trackingId={trackingId}
+            wrapperName="tron_ad_mobile"
+            pid={tronAdsConfig.contentMobilePid}
+            adTag="tron_ad_mobile"
+            ratioClass="ratio-375-80"
+            env={tronAdsConfig.env}
+            isMock={tronAdsConfig.isMock}
+          />
+        )}
+      </div>
       <CommentsList
         comments={comments}
         postAuthor={post.author}
@@ -150,6 +209,7 @@ export default function PostPageClient() {
         postCategory={post.category}
         onReply={handleNewComment}
         onEdit={handleEditComment}
+        onDelete={handleDeleteComment}
       />
     </FeedLayout>
   );

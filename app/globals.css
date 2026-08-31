@@ -83,9 +83,9 @@
   --sidebar-accent-foreground: #06d6a9;
   --sidebar-border: #eeeeee;
   --sidebar-ring: #06d6a9;
-  /* Legacy text links (_themes.scss light: textColorAccent/Hover) */
-  --link: #004eff;
-  --link-hover: #1a5099;
+  /* Global link color: teal, matching the UI accent links. */
+  --link: #06d6a9;
+  --link-hover: #06d6a9;
 }
 
 /* Dark theme — aligned with _themes.scss (dark) */
@@ -216,7 +216,7 @@
   margin: 0 0 1.5rem 0;
 }
 
-/* legacy .link--accent (light: blue #004EFF, dark: teal) */
+/* Post-body links use the global teal link color. */
 .Markdown a {
   color: var(--link);
   text-decoration: none;
@@ -226,6 +226,44 @@
 .Markdown a:visited,
 .Markdown a:active {
   color: var(--link);
+}
+
+/* Same divider look as the announcement module: thin theme-border line. */
+.Markdown hr {
+  margin: 1.5rem 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* Announcement module content: plain UI body text (sans, normal size,
+   foreground color) instead of the 120% serif post-body typography, with
+   links in the global UI link color (teal accent). */
+.Announcement__content {
+  font-family: var(--font-sans);
+  font-size: 95%;
+  line-height: 1.5;
+  color: var(--foreground);
+}
+.Announcement__content p {
+  font-size: 100%;
+  margin: 0 0 0.8rem 0;
+}
+.Announcement__content a,
+.Announcement__content a:visited,
+.Announcement__content a:active {
+  color: var(--accent-foreground);
+}
+.Announcement__content a:hover {
+  text-decoration: underline;
+}
+
+/* Notice items are separated by <hr> ("---" in the notice markdown); slim
+   divider with the theme border color (padding on hr would inflate the
+   element's box height). */
+.Announcement__content hr {
+  margin: 0.8rem 0;
+  border: none;
+  border-top: 1px solid var(--border);
 }
 
 .Markdown a:hover,

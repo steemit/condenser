@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
 import { broadcastCustomJson } from '@/lib/api/broadcast';
+import { userActionRecord } from '@/lib/analytics/overseer';
 
 interface ReblogProps {
   author: string;
@@ -45,6 +46,9 @@ export default function Reblog({ author, permlink, iconOnly = false }: ReblogPro
     setLoading(true);
 
     const json = ['reblog', { account: username, author, permlink }];
+
+    // Legacy Reblog.jsx:49 — record the reblog action at dispatch time.
+    userActionRecord('reblog', { username, permlink, author });
 
     try {
       await broadcastCustomJson({
@@ -102,14 +106,14 @@ export default function Reblog({ author, permlink, iconOnly = false }: ReblogPro
       disabled={loading || active}
       className={`flex items-center gap-1 px-3 py-1.5 rounded transition-colors ${
         active
-          ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+          ? 'bg-[#06D6A9]/15 text-[#0b8f68] dark:text-[#06D6A9]'
           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
       } ${loading ? 'opacity-50 cursor-not-allowed' : ''} ${active ? 'cursor-default' : ''}`}
       title={active ? 'Already reblogged' : 'Reblog this post'}
     >
       {loading ? (
         <svg
-          className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"
+          className="animate-spin h-4 w-4 border-2 border-[#06D6A9] border-t-transparent rounded-full"
           viewBox="0 0 24 24"
         >
           <circle

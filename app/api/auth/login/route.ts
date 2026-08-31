@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getAccount } from '@/lib/steem/client';
+import { callSteemApi, getAccount } from '@/lib/steem/client';
 import { getSession, loginUser, setSessionCookie } from '@/lib/auth/session';
 // steem.auth.verifySignature() parses the public key and hex signature,
 // then runs verifyBuffer (SHA-256 of the raw message) — matching
@@ -107,6 +107,17 @@ export async function POST(request: NextRequest) {
 
     // Set session cookie
     setSessionCookie(response, sessionToken);
+
+    // Login checkpoint (legacy src/server/api/general.js login_account):
+    // report the sign-in to overseer. Best-effort — never blocks login.
+    callSteemApi('overseer.collect', [
+      'custom',
+      {
+        measurement: 'user_login',
+        tags: { entry: 'condenser' },
+        fields: { username },
+      },
+    ]).catch((err) => console.warn('overseer user_login error:', err));
 
     return response;
   } catch (error: unknown) {

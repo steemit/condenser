@@ -179,7 +179,7 @@ export default function Follow({
     busy ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
   }`;
 
-  const activeButtonClass = `${buttonClass} bg-blue-600 text-white border-blue-600 hover:bg-blue-700`;
+  const activeButtonClass = `${buttonClass} bg-[#06D6A9] text-white border-[#06D6A9] hover:opacity-90`;
   const inactiveButtonClass = `${buttonClass} border-gray-300 text-gray-700 hover:bg-gray-50`;
 
   return (

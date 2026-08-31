@@ -46,7 +46,32 @@ REDIS_KEY_PREFIX=steem:session:
 ```bash
 NEXT_PUBLIC_SIGNUP_URL=https://signup.steemit.com
 ELASTICSEARCH_URL=http://localhost:9200
+
+# Analytics (all optional)
+# Google Analytics (gtag.js) property id — scripts are injected only when set.
+SDC_GOOGLE_ANALYTICS_ID=
+# Comma-separated activity-campaign URL hashes reported to overseer
+# activity_tracker (e.g. "promo-2026,launch").
+NEXT_PUBLIC_ACTIVITY_TAGS=
+# Tron ad network slots (legacy tronads_*); all disabled unless ENABLED is set.
+NEXT_PUBLIC_TRONADS_ENABLED=
+NEXT_PUBLIC_TRONADS_ENV=0
+NEXT_PUBLIC_TRONADS_MOCK=0
+NEXT_PUBLIC_TRONADS_SIDEBAR_AD_PID=
+NEXT_PUBLIC_TRONADS_CONTENT_PC_AD_PID=
+NEXT_PUBLIC_TRONADS_CONTENT_MOBILE_AD_PID=
 ```
+
+### Analytics (overseer)
+
+Overseer metrics (route views, user actions, activity campaigns) replicate the
+legacy `ServerApiClient.js` reporting. The client posts to
+`POST /api/steem/overseer`, which relays to the node's `overseer.collect`
+JSON-RPC method (steem-js is server-only in the rewrite, unlike legacy which
+called the node directly from the browser). No configuration is required — the
+relay uses `STEEM_API_URL`. GA page views and route tags are recorded on every
+client-side navigation; `user_login` is reported server-side by
+`/api/auth/login`.
 
 ## Session Management
 

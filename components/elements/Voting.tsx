@@ -5,6 +5,7 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
 import { voted, set } from '@/store/slices/globalSlice';
 import { broadcastVote } from '@/lib/api/broadcast';
+import { userActionRecord } from '@/lib/analytics/overseer';
 import { Post } from '@/lib/api/steem';
 import {
   DropdownMenu,
@@ -72,11 +73,11 @@ function VoteCircle({
   const color = dir === 'up' ? 'text-[#1FBF8F] dark:text-[#06D6A9]' : 'text-[#f99]';
   const hover =
     dir === 'up'
-      ? 'hover:text-white hover:[&_.v-circle]:fill-[#004EFF] hover:[&_.v-circle]:stroke-[#004EFF] dark:hover:[&_.v-circle]:fill-[#06D6A9] dark:hover:[&_.v-circle]:stroke-[#06D6A9]'
+      ? 'hover:text-white hover:[&_.v-circle]:fill-[#06D6A9] hover:[&_.v-circle]:stroke-[#06D6A9]'
       : 'hover:text-white hover:[&_.v-circle]:fill-[#f66] hover:[&_.v-circle]:stroke-[#f66]';
   const activeFill =
     dir === 'up'
-      ? '[&_.v-circle]:fill-[#004EFF] [&_.v-circle]:stroke-[#004EFF] dark:[&_.v-circle]:fill-[#06D6A9] dark:[&_.v-circle]:stroke-[#06D6A9] text-white'
+      ? '[&_.v-circle]:fill-[#06D6A9] [&_.v-circle]:stroke-[#06D6A9] text-white'
       : '[&_.v-circle]:fill-[#f66] [&_.v-circle]:stroke-[#f66] text-white';
 
   return (
@@ -181,6 +182,15 @@ export default function Voting({
 
     const flagKey = `transaction_vote_active_${post.author}_${post.permlink}`;
     const prevWeight = myVoteWeight;
+
+    // Legacy Voting.jsx: record the vote action at dispatch time.
+    userActionRecord('vote', {
+      vote_type: weight === 0 ? 'cancel' : weight > 0 ? 'up' : 'down',
+      voter: username,
+      author: post.author,
+      permlink: post.permlink,
+      weight,
+    });
 
     dispatch(set({ key: flagKey, value: true }));
     setVotingDir(up ? 'up' : 'down');
@@ -343,7 +353,6 @@ export default function Voting({
         {payoutValue !== undefined && (
           <DropdownMenu>
             <DropdownMenuTrigger
-              nativeButton={false}
               render={
                 <button
                   type="button"
@@ -378,7 +387,6 @@ export default function Voting({
       {showList && totalVotes > 0 && (
         <DropdownMenu>
           <DropdownMenuTrigger
-            nativeButton={false}
             render={
               <button
                 type="button"

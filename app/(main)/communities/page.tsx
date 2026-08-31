@@ -13,7 +13,7 @@ import {
 } from "@/lib/api/steem";
 import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
 import SubscribeButton from "@/components/elements/SubscribeButton";
-import LoadingIndicator from "@/components/elements/LoadingIndicator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const SORT_OPTIONS = [
   { value: "rank", label: "Rank" },
@@ -125,8 +125,22 @@ export default function CommunitiesPage() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-12">
-            <LoadingIndicator type="circle" />
+          // Skeleton rows matching the community table shape (title + about
+          // + stats + subscribe button), same approach as the feed skeletons.
+          <div className="mt-4 w-full" aria-busy="true">
+            {Array.from({ length: 8 }, (_, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between border-b border-border py-2"
+              >
+                <div className="w-[600px] max-w-full pr-[6%]">
+                  <Skeleton className="h-6 w-2/5" />
+                  <Skeleton className="mt-2 h-4 w-3/4" />
+                  <Skeleton className="mt-2 h-3 w-1/3" />
+                </div>
+                <Skeleton className="h-8 w-24 shrink-0" />
+              </div>
+            ))}
           </div>
         ) : communities.length === 0 ? (
           <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">

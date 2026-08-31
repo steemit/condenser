@@ -219,7 +219,9 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
   };
 
   return (
-    <div className="LoginForm mx-auto mb-2 mt-4 max-w-[28rem]">
+    // w-full matters: inside the grid-based dialog, auto margins disable the
+    // default stretch and the form would shrink to its (narrow) content width.
+    <div className="LoginForm mx-auto mb-2 mt-4 w-full max-w-[28rem]">
       {!embedded ? (
         <h3 className="mb-4 text-left text-xl font-bold">{t('g.login')}</h3>
       ) : null}
@@ -237,7 +239,7 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
               value={username}
               onChange={(e) => setUsername(e.target.value.toLowerCase())}
               placeholder={t('loginform_jsx.enter_your_username')}
-              className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-[#06D6A9] focus:border-[#06D6A9]"
               autoComplete="username"
               disabled={submitting}
               required
@@ -253,13 +255,13 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder={t('loginform_jsx.enter_your_posting_wif')}
-            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#06D6A9] focus:border-[#06D6A9]"
             autoComplete="off"
             disabled={submitting}
             required
           />
           {validatingKey && (
-            <p className="mt-1 text-xs text-blue-600">
+            <p className="mt-1 text-xs text-[#06D6A9]">
               {t('loginform_jsx.validating_key')}
             </p>
           )}
@@ -276,18 +278,36 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
         {/* Save login option */}
         <div>
           <label className="flex items-center">
-            <input
-              type="checkbox"
-              checked={saveLogin}
-              onChange={(e) => {
-                setSaveLogin(e.target.checked);
-                if (typeof window !== 'undefined') {
-                  localStorage.setItem('saveLogin', e.target.checked ? 'yes' : 'no');
-                }
-              }}
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              disabled={submitting}
-            />
+            {/* Custom checkbox: the browser picks the accent-color tick color
+                (dark on teal), so render an explicit white tick instead. */}
+            <span className="relative inline-flex">
+              <input
+                type="checkbox"
+                checked={saveLogin}
+                onChange={(e) => {
+                  setSaveLogin(e.target.checked);
+                  if (typeof window !== 'undefined') {
+                    localStorage.setItem('saveLogin', e.target.checked ? 'yes' : 'no');
+                  }
+                }}
+                className="peer h-4 w-4 appearance-none rounded border border-gray-300 bg-transparent checked:border-[#06D6A9] checked:bg-[#06D6A9] focus:ring-2 focus:ring-[#06D6A9]"
+                disabled={submitting}
+              />
+              <svg
+                className="pointer-events-none absolute inset-0 m-auto hidden h-3 w-3 text-white peer-checked:block"
+                viewBox="0 0 12 10"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M1 5.5 4.2 8.5 11 1.5"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
             <span className="ml-2 text-sm text-gray-700">{t('loginform_jsx.keep_me_logged_in')}</span>
           </label>
         </div>
@@ -297,7 +317,7 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
           <button
             type="submit"
             disabled={submitting}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-[#06D6A9] text-white rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#06D6A9] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting
               ? validatingKey
@@ -311,7 +331,7 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
             <button
               type="button"
               onClick={handleSignup}
-              className="text-blue-600 hover:text-blue-800 underline"
+              className="text-[#06D6A9] hover:underline"
             >
               {t('loginform_jsx.sign_up_get_steem')}
             </button>

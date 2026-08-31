@@ -196,7 +196,7 @@ export default function UserSettings({
               type="url"
               value={formData.profile_image}
               onChange={(e) => handleInputChange('profile_image', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.profile_image ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="https://example.com/image.jpg"
@@ -215,7 +215,7 @@ export default function UserSettings({
               type="url"
               value={formData.cover_image}
               onChange={(e) => handleInputChange('cover_image', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.cover_image ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="https://example.com/cover.jpg"
@@ -234,7 +234,7 @@ export default function UserSettings({
               type="text"
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.name ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="Your display name"
@@ -256,7 +256,7 @@ export default function UserSettings({
             <textarea
               value={formData.about}
               onChange={(e) => handleInputChange('about', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.about ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="Tell us about yourself..."
@@ -280,7 +280,7 @@ export default function UserSettings({
               type="text"
               value={formData.location}
               onChange={(e) => handleInputChange('location', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.location ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="Your location"
@@ -303,7 +303,7 @@ export default function UserSettings({
               type="url"
               value={formData.website}
               onChange={(e) => handleInputChange('website', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.website ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="https://yourwebsite.com"
@@ -322,7 +322,7 @@ export default function UserSettings({
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2 bg-[#06D6A9] text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {submitting ? 'Updating...' : 'Update Profile'}
             </button>
@@ -343,7 +343,7 @@ export default function UserSettings({
             <select
               value={nsfwPref}
               onChange={(e) => setNsfwPref(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9]"
             >
               <option value="hide">Hide NSFW content</option>
               <option value="warn">Warn before showing NSFW content</option>
@@ -359,7 +359,7 @@ export default function UserSettings({
             <select
               value={language}
               onChange={(e) => dispatch(setLocale(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9]"
             >
               {LOCALES.map((locale) => (
                 <option key={locale} value={locale}>

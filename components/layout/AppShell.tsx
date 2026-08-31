@@ -6,6 +6,7 @@ import { DegradationBanner } from "@/components/layout/DegradationBanner";
 import { GlobalModals } from "@/components/modules/GlobalModals";
 import { ThemeSync } from "@/components/layout/ThemeSync";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
+import { Analytics } from "@/components/providers/Analytics";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [scrollVisible, setScrollVisible] = useState(false);
@@ -20,6 +21,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <ThemeSync />
+      <Analytics />
       <Header />
       <DegradationBanner />
       <GlobalModals />

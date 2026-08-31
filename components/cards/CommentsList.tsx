@@ -92,7 +92,7 @@ export default function CommentsList({
 
   return (
     <div
-      className="Post_comments__content mx-auto mb-14 mt-8 max-w-[54rem] text-[92%]"
+      className="Post_comments__content mx-auto mb-14 mt-8 text-[92%]"
       id="comments"
     >
       {/* sort control (legacy: top-right, "Sort by: <bold>") */}

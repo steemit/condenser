@@ -2,6 +2,8 @@
 
 import { Facebook, Linkedin, Twitter } from 'lucide-react';
 
+import { userActionRecord } from '@/lib/analytics/overseer';
+
 /** Legacy reddit icon (assets/icons/reddit.svg). */
 function RedditIcon({ className }: { className?: string }) {
   return (
@@ -36,46 +38,56 @@ export default function ShareMenu({ url, title }: ShareMenuProps) {
     );
   };
 
+  // Legacy PostFull.jsx share tracking (FbShare/TwitterShare/RedditShare/
+  // LinkedInShare — default tags only, no extra fields).
   const items = [
     {
       name: 'Facebook',
       icon: Facebook,
-      onClick: () =>
+      onClick: () => {
+        userActionRecord('FbShare');
         open(
           `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`,
           600,
           400
-        ),
+        );
+      },
     },
     {
       name: 'Twitter',
       icon: Twitter,
-      onClick: () =>
+      onClick: () => {
+        userActionRecord('TwitterShare');
         open(
           `https://twitter.com/share?text=${encodeURIComponent(title)}&url=${encodeURIComponent(fullUrl)}`,
           640,
           320
-        ),
+        );
+      },
     },
     {
       name: 'LinkedIn',
       icon: Linkedin,
-      onClick: () =>
+      onClick: () => {
+        userActionRecord('LinkedInShare');
         open(
           `https://www.linkedin.com/shareArticle?title=${encodeURIComponent(title)}&url=${encodeURIComponent(fullUrl)}&source=Steemit&mini=true`,
           720,
           480
-        ),
+        );
+      },
     },
     {
       name: 'Reddit',
       icon: RedditIcon,
-      onClick: () =>
+      onClick: () => {
+        userActionRecord('RedditShare');
         open(
           `https://www.reddit.com/submit?title=${encodeURIComponent(title)}&url=${encodeURIComponent(fullUrl)}`,
           600,
           400
-        ),
+        );
+      },
     },
   ];
 

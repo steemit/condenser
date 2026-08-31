@@ -12,7 +12,7 @@
 
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/store/hooks';
-import { setUser } from '@/store/slices/userSlice';
+import { setTrackingId, setUser } from '@/store/slices/userSlice';
 
 // One hydration attempt per page load is enough: the session cookie lives
 // for 30 days, and on failure the UI simply stays logged out until the next
@@ -36,7 +36,12 @@ export function useSessionHydration() {
     fetch('/api/auth/session', { credentials: 'same-origin' })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (cancelled || !data?.authenticated) return;
+        if (cancelled || !data) return;
+        // Legacy parity: every visitor's trackingId is the session uid
+        // (the session route creates one when missing), regenerated at
+        // login time by usernamePasswordLogin.
+        if (data.session?.uid) dispatch(setTrackingId(data.session.uid));
+        if (!data.authenticated) return;
         const username = data.session?.username;
         if (!username) return;
         // Same action shape loginThunk dispatches on success so downstream

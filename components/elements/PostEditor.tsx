@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
 import { broadcastComment } from '@/lib/api/broadcast';
+import { userActionRecord } from '@/lib/analytics/overseer';
 import htmlReady from '@/lib/html-ready';
 import {
   generateCommentPermlink,
@@ -283,6 +284,15 @@ export default function PostEditor({
         body: trimmedBody,
       });
 
+      // Legacy ReplyEditor.jsx:1510 — record the comment action at
+      // broadcast time (is_edit / payout_type / comment_type tags).
+      userActionRecord('comment', {
+        username,
+        is_edit: isEdit,
+        payout_type: payoutType,
+        comment_type: isStory ? 'post' : 'reply',
+      });
+
       const result = await broadcastComment({
         parentAuthor,
         parentPermlink,
@@ -517,7 +527,7 @@ export default function PostEditor({
               <button
                 type="button"
                 onClick={addBeneficiary}
-                className="text-sm text-blue-600 hover:text-blue-800"
+                className="text-sm text-[#06D6A9] hover:underline"
               >
                 {t('beneficiary_selector_jsx.add')}
               </button>
@@ -530,7 +540,7 @@ export default function PostEditor({
         <button
           type="submit"
           disabled={submitting}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="px-6 py-2 bg-[#06D6A9] text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {submitting
             ? t('reply_editor.submitting')

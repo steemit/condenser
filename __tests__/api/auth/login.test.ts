@@ -3,6 +3,7 @@ import { makePostRequest } from '@/__tests__/helpers/request';
 
 vi.mock('@/lib/steem/client', () => ({
   getAccount: vi.fn(),
+  callSteemApi: vi.fn().mockResolvedValue({}),
 }));
 
 vi.mock('@/lib/auth/session', () => ({
@@ -22,10 +23,11 @@ vi.mock('@steemit/steem-js', () => ({
 }));
 
 import { POST } from '@/app/api/auth/login/route';
-import { getAccount } from '@/lib/steem/client';
+import { callSteemApi, getAccount } from '@/lib/steem/client';
 import { getSession, loginUser, setSessionCookie } from '@/lib/auth/session';
 
 const getAccountMock = vi.mocked(getAccount);
+const callSteemApiMock = vi.mocked(callSteemApi);
 const getSessionMock = vi.mocked(getSession);
 const loginUserMock = vi.mocked(loginUser);
 const setSessionCookieMock = vi.mocked(setSessionCookie);
@@ -124,5 +126,14 @@ describe('POST /api/auth/login', () => {
     expect(body.user.username).toBe('alice');
     expect(loginUserMock).toHaveBeenCalledWith(null, 'alice');
     expect(setSessionCookieMock).toHaveBeenCalledWith(res, 'new-session-token');
+    // Legacy login_account checkpoint: sign-in is reported to overseer.
+    expect(callSteemApiMock).toHaveBeenCalledWith('overseer.collect', [
+      'custom',
+      {
+        measurement: 'user_login',
+        tags: { entry: 'condenser', version: 'next' },
+        fields: { username: 'alice' },
+      },
+    ]);
   });
 });

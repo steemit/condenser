@@ -195,13 +195,14 @@ export function Header() {
             </span>
           ) : null}
 
-          {/* legacy circular pencil IconButton (36px, 42px ≥760px) */}
+          {/* legacy circular pencil IconButton (36px, 42px ≥760px);
+              hover uses the global brand teal for consistency */}
           <button
             type="button"
             onClick={goSubmit}
             aria-label={t("g.new_post")}
             title={t("g.new_post")}
-            className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#171F24] hover:text-white min-[760px]:size-[42px] [&_svg]:size-5 min-[760px]:[&_svg]:size-6 [&_svg]:text-[#cacaca] hover:[&_svg]:text-white"
+            className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#06D6A9] hover:text-white min-[760px]:size-[42px] [&_svg]:size-5 min-[760px]:[&_svg]:size-6 [&_svg]:text-[#cacaca] hover:[&_svg]:text-white"
           >
             <PenLineIcon />
           </button>
@@ -209,7 +210,6 @@ export function Header() {
           {loggedIn && username ? (
             <DropdownMenu>
               <DropdownMenuTrigger
-                nativeButton={false}
                 render={
                   <Button
                     variant="ghost"

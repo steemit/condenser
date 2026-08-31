@@ -39,6 +39,12 @@ FROM base AS builder
 # Copy source code
 COPY . .
 
+# GA id is baked into statically prerendered pages at build time (legacy
+# injects gtag into SSR HTML from runtime env; static pages can only see
+# build-time env). Dynamic pages additionally read the runtime env var.
+ARG SDC_GOOGLE_ANALYTICS_ID
+ENV SDC_GOOGLE_ANALYTICS_ID=${SDC_GOOGLE_ANALYTICS_ID}
+
 # Build the application
 RUN pnpm build
 

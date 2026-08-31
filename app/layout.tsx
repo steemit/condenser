@@ -1,6 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist_Mono, Source_Sans_3 } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { ReduxProvider } from "@/store/Provider";
 
@@ -14,9 +13,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Google Analytics via gtag.js (legacy server-html.jsx). Disabled unless
-// SDC_GOOGLE_ANALYTICS_ID is set; legacy config defaulted it to false.
+// Google Analytics, injected exactly like legacy server-html.jsx: the id
+// comes from env (baked at build time for statically prerendered pages,
+// read at request time for dynamic ones) and the gtag scripts go straight
+// into the SSR HTML so the browser loads them at parse time — no
+// client-side injection and no hydration dependency.
 const gaId = process.env.SDC_GOOGLE_ANALYTICS_ID;
+
+// viewport-fit=cover is required for env(safe-area-inset-*) to take effect
+// on notched phones (the mobile bottom tab bar pads against it).
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "Condenser - Steemit Frontend",
@@ -69,18 +79,22 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap"
         />
+        {/* GA, same as legacy server-html.jsx: plain script tags in the SSR
+            HTML (async gtag.js + inline dataLayer/config init). */}
         {gaId ? (
           <>
-            <Script
+            <script
+              async
               src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="afterInteractive"
             />
-            <Script id="ga-gtag-init" strategy="afterInteractive">
-              {`window.dataLayer = window.dataLayer || [];
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${gaId}');`}
-            </Script>
+gtag('config', '${gaId}');`,
+              }}
+            />
           </>
         ) : null}
         <ReduxProvider>{children}</ReduxProvider>

@@ -173,7 +173,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
           <div className="articles__content-block articles__content-block--text min-w-0 flex-1">
             {/* legacy h2: 16px / line-clamp 3 on small screens,
                 15px / clamp 1 at ≥760px */}
-            <h2 className="articles__h2 line-clamp-3 text-[16px] font-bold leading-snug min-[760px]:truncate min-[760px]:text-[15px]">
+            <h2 className="articles__h2 line-clamp-3 text-[16px] font-bold leading-snug break-words min-[760px]:truncate min-[760px]:text-[15px]">
               {isNsfw && (
                 <span className="mr-1 rounded-[3px] border border-[#ff0264] px-[5px] py-[2px] align-middle font-[Arial] text-[75%] text-[#ff0264]">
                   nsfw
@@ -188,7 +188,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
             </h2>
             {/* legacy PostSummary__body: the excerpt itself is a link */}
             {summary && (
-              <div className="PostSummary__body pb-[0.15rem] text-[0.9rem] leading-[1.4] text-foreground min-[760px]:truncate">
+              <div className="PostSummary__body pb-[0.15rem] text-[0.9rem] leading-[1.4] text-foreground break-words min-[760px]:truncate">
                 <Link prefetch={false}
                   href={postUrl}
                   className="block text-foreground min-[760px]:inline"

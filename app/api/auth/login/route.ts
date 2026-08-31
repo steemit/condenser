@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
       'custom',
       {
         measurement: 'user_login',
-        tags: { entry: 'condenser' },
+        tags: { entry: 'condenser', version: 'next' },
         fields: { username },
       },
     ]).catch((err) => console.warn('overseer user_login error:', err));

@@ -5,6 +5,9 @@
  * the browser via steem-js. In the rewrite steem-js is server-only, so these
  * helpers relay through the /api/steem/overseer route handler instead. All
  * calls are fire-and-forget: failures are logged, never thrown.
+ *
+ * Every payload carries `version: 'next'` so rewrite traffic can be told
+ * apart from legacy condenser traffic in overseer (legacy sends no version).
  */
 
 type Primitive = string | number | boolean | null | undefined;
@@ -46,7 +49,7 @@ export function recordRouteTag(
   params: Record<string, Primitive> = {},
   isLogin = false
 ): void {
-  let tags: Record<string, Primitive> = { app: 'condenser', tag };
+  let tags: Record<string, Primitive> = { app: 'condenser', version: 'next', tag };
   let fields: Record<string, Primitive> = { trackingId };
   switch (tag) {
     case 'post':
@@ -54,12 +57,13 @@ export function recordRouteTag(
       break;
     case 'community_index':
       fields = { trackingId, community_name: params.community_name };
-      tags = { app: 'condenser', tag, sort: params.order };
+      tags = { app: 'condenser', version: 'next', tag, sort: params.order };
       break;
     case 'category':
       fields = { trackingId, category: params.category };
       tags = {
         app: 'condenser',
+        version: 'next',
         tag,
         sort: params.order,
         is_user_feed: params.is_user_feed,
@@ -68,7 +72,7 @@ export function recordRouteTag(
       break;
     case 'index':
       fields = { trackingId };
-      tags = { app: 'condenser', tag, sort: params.order };
+      tags = { app: 'condenser', version: 'next', tag, sort: params.order };
       break;
   }
   tags['is_login'] = isLogin;
@@ -80,12 +84,13 @@ export function userActionRecord(
   action: string,
   params: Record<string, Primitive> = {}
 ): void {
-  let tags: Record<string, Primitive> = { app: 'condenser', action_type: action };
+  let tags: Record<string, Primitive> = { app: 'condenser', version: 'next', action_type: action };
   let fields: Record<string, Primitive> = {};
   switch (action) {
     case 'comment':
       tags = {
         app: 'condenser',
+        version: 'next',
         action_type: action,
         is_edit: params.is_edit,
         payout_type: params.payout_type,
@@ -94,7 +99,7 @@ export function userActionRecord(
       fields = { username: params.username };
       break;
     case 'vote':
-      tags = { app: 'condenser', action_type: action, vote_type: params.vote_type };
+      tags = { app: 'condenser', version: 'next', action_type: action, vote_type: params.vote_type };
       fields = {
         voter: params.voter,
         author: params.author,
@@ -113,7 +118,7 @@ export function userActionRecord(
       };
       break;
     case 'delete_comment':
-      tags = { app: 'condenser', action_type: action, comment_type: params.comment_type };
+      tags = { app: 'condenser', version: 'next', action_type: action, comment_type: params.comment_type };
       fields = { username: params.username, permlink: params.permlink };
       break;
   }
@@ -128,7 +133,7 @@ export function recordAdsView({
   trackingId: string;
   adTag: string;
 }): void {
-  void collect(['ad', { trackingId, adTag }]);
+  void collect(['ad', { trackingId, adTag, version: 'next' }]);
 }
 
 /** Legacy ServerApiClient.recordActivityTracker — URL-hash campaign visits. */
@@ -147,7 +152,7 @@ export function recordActivityTracker({
     'custom',
     {
       measurement: 'activity_tracker',
-      tags: { activityTag, appType: 'condenser' },
+      tags: { activityTag, appType: 'condenser', version: 'next' },
       fields: {
         views: 1,
         trackingId,

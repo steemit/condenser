@@ -131,7 +131,7 @@ describe('POST /api/auth/login', () => {
       'custom',
       {
         measurement: 'user_login',
-        tags: { entry: 'condenser' },
+        tags: { entry: 'condenser', version: 'next' },
         fields: { username: 'alice' },
       },
     ]);

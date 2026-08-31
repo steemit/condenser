@@ -26,7 +26,7 @@ describe('overseer payloads', () => {
     expect(data).toEqual({
       measurement: 'route',
       fields: { trackingId: 'x-123', permlink: 'hello-world' },
-      tags: { app: 'condenser', tag: 'post', is_login: true },
+      tags: { app: 'condenser', version: 'next', tag: 'post', is_login: true },
     });
   });
 
@@ -37,7 +37,7 @@ describe('overseer payloads', () => {
       is_user_feed: false,
     });
     const [, data] = lastCollectCall();
-    expect(data.tags).toMatchObject({ tag: 'category', sort: 'trending', is_my_community: true });
+    expect(data.tags).toMatchObject({ tag: 'category', sort: 'trending', is_my_community: true, version: 'next' });
   });
 
   it('userActionRecord vote', () => {
@@ -53,7 +53,7 @@ describe('overseer payloads', () => {
     expect(data).toEqual({
       measurement: 'user_action',
       fields: { voter: 'alice', author: 'bob', permlink: 'p1', weight: 10000 },
-      tags: { app: 'condenser', action_type: 'vote', vote_type: 'up' },
+      tags: { app: 'condenser', version: 'next', action_type: 'vote', vote_type: 'up' },
     });
   });
 
@@ -70,6 +70,7 @@ describe('overseer payloads', () => {
       fields: { username: 'alice' },
       tags: {
         app: 'condenser',
+        version: 'next',
         action_type: 'comment',
         is_edit: false,
         payout_type: '50%',
@@ -94,7 +95,7 @@ describe('overseer payloads', () => {
     const [collection, data] = lastCollectCall();
     expect(collection).toBe('custom');
     expect(data.measurement).toBe('activity_tracker');
-    expect(data.tags).toEqual({ activityTag: 'promo', appType: 'condenser' });
+    expect(data.tags).toEqual({ activityTag: 'promo', appType: 'condenser', version: 'next' });
     expect(data.fields).toMatchObject({ views: 1, trackingId: 'x-9', pathname: '/trending' });
   });
 

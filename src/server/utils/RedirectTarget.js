@@ -1,7 +1,26 @@
+// `url` core module import for Node 8.x compatibility: the global
+// URL binding only exists from Node 10 on, while package.json engines
+// declares `node >= 8.7.0`.
 import { URL } from 'url';
 
-// Fixed parse base: any same-origin target must resolve to this origin.
+// Parsing anchor for the same-origin check below. Fixed on purpose,
+// never derived from the request:
+// - The ch=/cn=/r= middleware only ever redirects to the remainder
+//   of the request path after stripping session params — always a
+//   rooted relative path. Such paths resolve to whatever base they
+//   are parsed against, so this constant never rejects legitimate
+//   traffic on staging/local; it is only a parsing anchor used to
+//   detect authority overrides (`//`, `/\`, embedded control chars).
+// - Deriving it from the request Host header would be wrong: Host is
+//   attacker-controllable, and "same-origin" measured against a
+//   spoofable value would re-open the bug this module closes.
 const BASE = 'https://steemit.com';
+
+// Compare origins, not raw strings: URL.origin is always normalized
+// (lowercase scheme/host, default port dropped), so a future BASE
+// edit — trailing slash, cased host — cannot silently break the
+// comparison.
+const BASE_ORIGIN = new URL(BASE).origin;
 
 /**
  * Validate redirect targets produced from user-controlled urls.
@@ -33,5 +52,5 @@ export default function isSafeRedirectTarget(raw) {
     } catch (e) {
         return false;
     }
-    return url.origin === BASE;
+    return url.origin === BASE_ORIGIN;
 }

@@ -22,6 +22,22 @@ describe('isSafeRedirectTarget', () => {
         expect(isSafeRedirectTarget('/\r/evil.com')).toBe(false);
     });
 
+    it('rejects unrooted inputs that normalize into protocol-relative', () => {
+        // Browsers strip leading tab/newline/space before resolving the
+        // Location header, so these all become `//evil.com` downstream;
+        // the rooted check (`raw[0] === '/'`) must reject them before
+        // any parsing happens.
+        expect(isSafeRedirectTarget('\t//evil.com')).toBe(false);
+        expect(isSafeRedirectTarget('\n/\\evil.com')).toBe(false);
+        expect(isSafeRedirectTarget(' //evil.com')).toBe(false);
+        // Fail-closed boundary: even a benign normalized target is
+        // rejected while the raw input is not rooted. Middleware
+        // output always starts with '/', so this never fires in
+        // practice — if it ever did, the request just skips the
+        // redirect and continues normal handling.
+        expect(isSafeRedirectTarget('\t/trending')).toBe(false);
+    });
+
     it('rejects scheme-prefixed targets', () => {
         expect(isSafeRedirectTarget('http://evil.com')).toBe(false);
         expect(isSafeRedirectTarget('https:evil')).toBe(false);

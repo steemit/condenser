@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
  * Mobile bottom tab bar (legacy PrimaryNavigation on small screens):
  * fixed 60px bar with Explore / My Profile / My Wallet, icon above label,
  * active tab gets a teal bottom border. Visible only <760px.
+ * Always pinned to the bottom (unlike the header, it does not auto-hide).
  */
 export function MobileTabBar() {
   const pathname = usePathname();
@@ -61,7 +62,9 @@ export function MobileTabBar() {
       className="PrimaryNavigation fixed inset-x-0 bottom-0 z-[100] block min-[760px]:hidden"
       aria-label="Primary navigation"
     >
-      <ul className="PrimaryNavTabs flex justify-around border-t border-border bg-card">
+      {/* pb-[env(safe-area-inset-bottom)] lifts the bar above the phone's
+          home-indicator / gesture area, which otherwise covers the labels. */}
+      <ul className="PrimaryNavTabs flex justify-around border-t border-border bg-card pb-[env(safe-area-inset-bottom)]">
         {tabs.map((tab) => (
           <li key={tab.key} className="flex-1 text-center">
             <button

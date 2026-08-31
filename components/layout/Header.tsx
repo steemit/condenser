@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PenLineIcon, SearchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
+import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { showLogin } from "@/store/slices/userSlice";
 import { logoutThunk } from "@/store/thunks/authThunks";
@@ -119,6 +120,24 @@ export function Header() {
   const signupUrl =
     process.env.NEXT_PUBLIC_SIGNUP_URL ?? "https://signup.steemit.com";
 
+  // Hide the header when scrolling down past its height, reveal it again
+  // when scrolling up (mobile pattern; the transform is a no-op ≥760px).
+  const [headerHidden, setHeaderHidden] = useState(false);
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - lastY;
+      // Ignore tiny jitter and the overscroll bounce at the top/bottom.
+      if (Math.abs(delta) > 5) {
+        setHeaderHidden(y > 64 && delta > 0);
+        lastY = y;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   // legacy signup links carry a source tracker: #source=condenser|{routeTag}
   const routeTag = pathname?.split("/")[1] || "trending";
 
@@ -151,7 +170,12 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-[100] w-full border-b border-border bg-card shadow-[0_2px_4px_0_rgba(0,0,0,0.05)]">
+    <header
+      className={cn(
+        "sticky top-0 z-[100] w-full border-b border-border bg-card shadow-[0_2px_4px_0_rgba(0,0,0,0.05)] transition-transform duration-300",
+        headerHidden ? "-translate-y-full min-[760px]:translate-y-0" : "translate-y-0"
+      )}
+    >
       <nav className="mx-auto flex h-16 max-w-[100vw] items-center gap-2 px-3 sm:px-4">
         <div className="flex min-w-0 flex-1 items-center md:max-w-[40%] lg:max-w-[33%]">
           <Link

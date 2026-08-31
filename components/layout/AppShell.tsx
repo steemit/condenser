@@ -19,13 +19,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-background text-foreground">
       <ThemeSync />
       <Analytics />
       <Header />
       <DegradationBanner />
       <GlobalModals />
-      <main className="flex flex-1 flex-col px-0 pb-[68px] pt-4 min-[760px]:pb-0">
+      <main className="flex flex-1 flex-col px-0 pb-[calc(68px+env(safe-area-inset-bottom))] pt-4 min-[760px]:pb-0">
         {children}
       </main>
       <MobileTabBar />

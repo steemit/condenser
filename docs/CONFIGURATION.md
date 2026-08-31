@@ -73,6 +73,13 @@ relay uses `STEEM_API_URL`. GA page views and route tags are recorded on every
 client-side navigation; `user_login` is reported server-side by
 `/api/auth/login`.
 
+GA (gtag.js) is inlined into the SSR HTML by the root layout, exactly like
+legacy `server-html.jsx` (async gtag.js + inline dataLayer/config init — the
+browser loads it at parse time, no hydration dependency). The id comes from
+`SDC_GOOGLE_ANALYTICS_ID`: statically prerendered pages bake it at Docker
+**build** time (the Dockerfile passes it as a build ARG into `pnpm build`),
+while dynamic pages read it from the runtime environment variable.
+
 ## Session Management
 
 The application supports two session storage modes:

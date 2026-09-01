@@ -12,6 +12,7 @@ import {
 import SubscribeButton from "@/components/elements/SubscribeButton";
 import AdSwipe from "@/components/elements/AdSwipe";
 import TronAd from "@/components/elements/TronAd";
+import SteemMarket from "@/components/elements/SteemMarket";
 import Announcement from "@/components/layout/Announcement";
 import { INDEX_LEFT_SIDE_AD_LIST, POST_LEFT_SIDE_AD_LIST, tronAdsConfig } from "@/lib/ads";
 
@@ -130,10 +131,10 @@ function CommunityPane({ community }: { community: string }) {
 }
 
 /**
- * Right rail modules (legacy PostsIndexLayout sidebar):
+ * Right rail modules (legacy PostsIndexLayout/Post.jsx sidebars):
  * community pane on community pages, then SidebarNewUsers (logged out) or
- * SidebarLinks (logged in). SteemMarket is not migrated — the new stack has
- * no market-data endpoint (legacy injects it server-side).
+ * SidebarLinks (logged in), then the Coin Marketplace (hidden unless
+ * STEEM_MARKET_ENDPOINT is configured), then ads last.
  */
 export function FeedSidebarWidgets() {
   const pathname = usePathname();
@@ -159,6 +160,17 @@ export function FeedSidebarWidgets() {
           of login state; community pages stay without it (legacy). */}
       {(isPostPage || !community) && <Announcement />}
       {username ? <SidebarLinks /> : <SidebarNewUsers />}
+      {/* Legacy ad tag: CoinMarketPlacePost on post pages, Index/Community
+          on feed pages depending on the community context. */}
+      <SteemMarket
+        page={
+          isPostPage
+            ? "CoinMarketPlacePost"
+            : community
+              ? "CoinMarketPlaceCommunity"
+              : "CoinMarketPlaceIndex"
+        }
+      />
       {/* Legacy PostsIndexLayout/Post right rail: ads are the LAST modules,
           rendered bare (no card chrome) so creatives fill the column. */}
       <div className="mb-4">

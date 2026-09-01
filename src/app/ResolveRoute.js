@@ -11,7 +11,13 @@ const reg = pattern => {
             '<sort>',
             '(hot|trending|promoted|payout|payout_comments|muted|created)'
         )
-        .replace('<tag>', '([\\w\\W\\d-]{1,32})')
+        // <tag> must not admit path separators: a class like [\w\W] matches
+        // every char, letting `//evil.com/@a/b` pose as tag=/evil.com and
+        // reach the lowercase-normalization 301 (open redirect). Letters,
+        // digits, underscore, dot and hyphen cover every chain-legal tag
+        // (incl. hive-NNNNNN communities); case is kept on purpose so the
+        // 301 still normalizes /trending/HIVE-148441.
+        .replace('<tag>', '([\\w.-]{1,32})')
         .replace('<permlink>', '([\\w\\d-]+)')
         .replace('/', '\\/');
     return new RegExp('^\\/' + pattern + '$');

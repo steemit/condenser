@@ -8,6 +8,7 @@ import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
 import { determineViewMode } from '../app/utils/Links';
 import { getSupportedLocales } from './utils/misc';
+import isSafeRedirectTarget from './utils/RedirectTarget';
 import {
     safeStartTimer,
     safeStopTimer,
@@ -147,7 +148,11 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             ctx.session.uid
         );
 
-        if (redirectUrl) {
+        // Router-driven redirects are internal paths, but guard the exit
+        // anyway: if a future onEnter hook ever derives the target from
+        // request data, an unsafe target falls through to normal render
+        // instead of leaving the site.
+        if (redirectUrl && isSafeRedirectTarget(redirectUrl)) {
             console.log('Redirecting to', redirectUrl);
             ctx.status = 302;
             ctx.redirect(redirectUrl);
@@ -185,14 +190,20 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         safeStopTimer(ctx.state.requestTimer, 'finalRender_ms');
     } catch (err) {
         // Render 500 error page from server
-        console.error('AppRender error', err, redirect);
+        // Destructure before logging: the old order referenced `redirect`
+        // inside console.error ahead of its const declaration (TDZ), so
+        // every caught error re-threw a ReferenceError and the router
+        // redirect/error handling below was unreachable.
         const { error, redirect } = err;
+        console.error('AppRender error', err, redirect);
         if (error) throw error;
 
         // Handle component `onEnter` transition
         if (redirect) {
             const { pathname, search } = redirect;
-            ctx.redirect(pathname + search);
+            if (isSafeRedirectTarget(pathname + search)) {
+                ctx.redirect(pathname + search);
+            }
         }
 
         throw err;

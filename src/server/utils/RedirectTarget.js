@@ -40,6 +40,16 @@ const BASE_ORIGIN = new URL(BASE).origin;
  * comparing origins rejects every authority-override form while
  * accepting any rooted same-origin path (encoded characters such
  * as `/%2F%2Fevil.com` stay plain path content on this host).
+ *
+ * Parser contract: Node's WHATWG URL (imported from the `url` core
+ * module — global only from Node 10, engines declares >= 8.7.0)
+ * implements the same URL Standard browsers apply when resolving
+ * the Location header, so "origin === BASE_ORIGIN" here means the
+ * browser provably stays on this host. The unit tests pin that
+ * equivalence (backslash, encoded, control-char and query/fragment
+ * forms) so a future parser divergence or a runtime without a
+ * compliant URL fails loudly instead of silently re-opening the
+ * redirect.
  */
 export default function isSafeRedirectTarget(raw) {
     if (!raw || typeof raw !== 'string') return false;

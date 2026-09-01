@@ -213,7 +213,11 @@ app.use(function*(next) {
             this.status = 451;
             return;
         }
-        if (p !== this.originalUrl) {
+        // Guard the redirect exit, not just the route: a URL like
+        // `//evil.com/@a/B` used to match Post (tag swallowing the `/`),
+        // reach this 301 and send the browser to evil.com. Either the
+        // tightened <tag> regex or this guard blocks it independently.
+        if (p !== this.originalUrl && isSafeRedirectTarget(p)) {
             this.status = 301;
             this.redirect(p);
             return;
@@ -223,7 +227,7 @@ app.use(function*(next) {
     // normalize top category filtering from cased params
     if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
         const p = this.originalUrl.toLowerCase();
-        if (p !== this.originalUrl) {
+        if (p !== this.originalUrl && isSafeRedirectTarget(p)) {
             this.status = 301;
             this.redirect(p);
             return;

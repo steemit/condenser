@@ -75,10 +75,11 @@ client-side navigation; `user_login` is reported server-side by
 
 GA (gtag.js) is inlined into the SSR HTML by the root layout, exactly like
 legacy `server-html.jsx` (async gtag.js + inline dataLayer/config init — the
-browser loads it at parse time, no hydration dependency). The id comes from
-`SDC_GOOGLE_ANALYTICS_ID`: statically prerendered pages bake it at Docker
-**build** time (the Dockerfile passes it as a build ARG into `pnpm build`),
-while dynamic pages read it from the runtime environment variable.
+browser loads it at parse time, no hydration dependency). All routes render
+per-request (`force-dynamic` in the root layout), so the id is always read
+from the runtime `SDC_GOOGLE_ANALYTICS_ID` — unset means no GA. This keeps
+published images environment-agnostic: the community runs the same images
+with their own env.
 
 ## Session Management
 

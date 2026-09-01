@@ -1,5 +1,6 @@
 /* global describe, it, expect */
 import isSafeRedirectTarget from '../utils/RedirectTarget';
+import { routeRegex } from '../../app/ResolveRoute';
 
 describe('isSafeRedirectTarget', () => {
     it('rejects protocol-relative targets', () => {
@@ -71,5 +72,36 @@ describe('isSafeRedirectTarget', () => {
         // it stays in the path on this origin
         expect(isSafeRedirectTarget('/%')).toBe(true);
         expect(isSafeRedirectTarget('%2F%2F')).toBe(false);
+    });
+
+    it('routeRegex does not swallow path separators into <tag>', () => {
+        // These previously matched Post with tag=/evil.com (the [\w\W]
+        // class matches every char), reached the lowercase-normalization
+        // 301 in server.js and redirected off-site once any uppercase
+        // char was present.
+        expect(routeRegex.Post.test('//evil.com/@a/b')).toBe(false);
+        expect(routeRegex.Post.test('/\\evil.com/@a/b')).toBe(false);
+        expect(routeRegex.Post.test('/\\/\\evil.com/@a/b')).toBe(false);
+        expect(routeRegex.PostJson.test('//evil.com/@a/b.json')).toBe(false);
+        expect(routeRegex.CategoryFilters.test('/trending//evil.com')).toBe(
+            false
+        );
+    });
+
+    it('routeRegex still matches legitimate tag routes', () => {
+        expect(routeRegex.Post.test('/hive-148441/@ety001/some-post')).toBe(
+            true
+        );
+        expect(routeRegex.Post.test('/photography/@ety001/some-post')).toBe(
+            true
+        );
+        // uppercase tags must keep matching so the 301 lowercase
+        // normalization in server.js still fires
+        expect(routeRegex.Post.test('/HIVE-148441/@a/B')).toBe(true);
+        expect(routeRegex.CategoryFilters.test('/trending/HIVE-148441')).toBe(
+            true
+        );
+        expect(routeRegex.CategoryFilters.test('/trending')).toBe(true);
+        expect(routeRegex.CommunityRoles.test('/roles/hive-123')).toBe(true);
     });
 });

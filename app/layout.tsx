@@ -13,11 +13,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// All routes render per-request (legacy parity): published images are
+// pulled by the community to run their own condenser, so environment
+// like SDC_GOOGLE_ANALYTICS_ID must never be baked into prerendered HTML.
+export const dynamic = "force-dynamic";
+
 // Google Analytics, injected exactly like legacy server-html.jsx: the id
-// comes from env (baked at build time for statically prerendered pages,
-// read at request time for dynamic ones) and the gtag scripts go straight
-// into the SSR HTML so the browser loads them at parse time — no
-// client-side injection and no hydration dependency.
+// comes from the runtime env and the gtag scripts go straight into the
+// SSR HTML so the browser loads them at parse time — no client-side
+// injection and no hydration dependency.
 const gaId = process.env.SDC_GOOGLE_ANALYTICS_ID;
 
 // viewport-fit=cover is required for env(safe-area-inset-*) to take effect

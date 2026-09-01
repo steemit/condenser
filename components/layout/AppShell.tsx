@@ -18,8 +18,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // overflow-x-clip (not hidden): hidden would turn this div into a scroll
+  // container and break position:sticky descendants (left nav, header);
+  // clip crops the same overflow without creating one.
   return (
-    <div className="flex min-h-screen flex-col overflow-x-hidden bg-background text-foreground">
+    <div className="flex min-h-screen flex-col overflow-x-clip bg-background text-foreground">
       <ThemeSync />
       <Analytics />
       <Header />

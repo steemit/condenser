@@ -60,6 +60,10 @@ NEXT_PUBLIC_TRONADS_MOCK=0
 NEXT_PUBLIC_TRONADS_SIDEBAR_AD_PID=
 NEXT_PUBLIC_TRONADS_CONTENT_PC_AD_PID=
 NEXT_PUBLIC_TRONADS_CONTENT_MOBILE_AD_PID=
+# Coin Marketplace right-rail module (legacy steem_market_*). No endpoint
+# configured means the module stays hidden.
+STEEM_MARKET_ENDPOINT=
+STEEM_MARKET_TOKEN=
 ```
 
 ### Analytics (overseer)

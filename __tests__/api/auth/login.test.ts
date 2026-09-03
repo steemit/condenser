@@ -43,6 +43,7 @@ function validBody() {
     data: JSON.stringify({
       username: 'alice',
       challenge: CHALLENGE,
+      timestamp: Date.now(),
       action: 'login',
     }),
     challenge: CHALLENGE,
@@ -58,6 +59,9 @@ describe('POST /api/auth/login', () => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
     verifySignatureMock.mockReturnValue(true);
+    // The challenge route stores the issued challenge in the session cookie;
+    // the login route verifies the signed challenge against it.
+    getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE } as never);
   });
 
   it('rejects bodies missing required fields', async () => {
@@ -96,12 +100,51 @@ describe('POST /api/auth/login', () => {
 
   it('returns 400 when the signed data does not match the request', async () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey());
+    getSessionMock.mockResolvedValue({ loginChallenge: 'different' } as never);
 
     const res = await POST(
       makePostRequest('/api/auth/login', { ...validBody(), challenge: 'different' })
     );
     expect(res.status).toBe(400);
     expect(await res.json()).toEqual({ error: 'Invalid authentication data' });
+  });
+
+  it('returns 400 when the challenge does not match the session', async () => {
+    getAccountMock.mockResolvedValue(accountWithPostingKey());
+    getSessionMock.mockResolvedValue({ loginChallenge: 'other-challenge' } as never);
+
+    const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'Invalid or expired login challenge' });
+    expect(loginUserMock).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 when the session has no stored challenge', async () => {
+    getAccountMock.mockResolvedValue(accountWithPostingKey());
+    getSessionMock.mockResolvedValue(null);
+
+    const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'Invalid or expired login challenge' });
+    expect(loginUserMock).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 when the signed timestamp is stale', async () => {
+    getAccountMock.mockResolvedValue(accountWithPostingKey());
+
+    const staleBody = {
+      ...validBody(),
+      data: JSON.stringify({
+        username: 'alice',
+        challenge: CHALLENGE,
+        timestamp: Date.now() - 10 * 60 * 1000, // 10 minutes old
+        action: 'login',
+      }),
+    };
+    const res = await POST(makePostRequest('/api/auth/login', staleBody));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'Invalid or expired login challenge' });
+    expect(loginUserMock).not.toHaveBeenCalled();
   });
 
   it('returns 401 when the signature does not verify', async () => {
@@ -115,7 +158,7 @@ describe('POST /api/auth/login', () => {
 
   it('creates a session and sets the cookie on success', async () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey());
-    getSessionMock.mockResolvedValue(null);
+    getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE } as never);
     loginUserMock.mockResolvedValue('new-session-token');
 
     const res = await POST(makePostRequest('/api/auth/login', validBody()));
@@ -124,7 +167,7 @@ describe('POST /api/auth/login', () => {
     const body = await res.json();
     expect(body.success).toBe(true);
     expect(body.user.username).toBe('alice');
-    expect(loginUserMock).toHaveBeenCalledWith(null, 'alice');
+    expect(loginUserMock).toHaveBeenCalledWith({ loginChallenge: CHALLENGE }, 'alice');
     expect(setSessionCookieMock).toHaveBeenCalledWith(res, 'new-session-token');
     // Legacy login_account checkpoint: sign-in is reported to overseer.
     expect(callSteemApiMock).toHaveBeenCalledWith('overseer.collect', [

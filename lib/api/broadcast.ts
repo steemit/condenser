@@ -8,6 +8,7 @@ import {
   signVoteOperation,
   signCustomJsonOperation,
   signDeleteCommentOperation,
+  signAccountUpdate2Operation,
   SignedTransaction
 } from '@/lib/crypto/transaction-signer';
 import { getCachedKey, decryptAndRetrieveKey } from '@/lib/crypto/key-storage';
@@ -157,6 +158,28 @@ export async function broadcastDeleteComment(
   const signedTransaction = await signDeleteCommentOperation(privateKey, {
     author: params.author,
     permlink: params.permlink,
+  });
+
+  return broadcastSignedTransaction(signedTransaction);
+}
+
+/**
+ * Update account profile metadata (legacy Settings.jsx updateAccount):
+ * broadcasts account_update2 with the profile in posting_json_metadata.
+ */
+export async function broadcastAccountUpdate(
+  params: {
+    account: string;
+    jsonMetadata: string;
+    postingJsonMetadata: string;
+  }
+): Promise<{ success: boolean; result: unknown; transactionId?: string; permlink?: string }> {
+  const privateKey = await getPrivateKeyForSigning();
+
+  const signedTransaction = await signAccountUpdate2Operation(privateKey, {
+    account: params.account,
+    jsonMetadata: params.jsonMetadata,
+    postingJsonMetadata: params.postingJsonMetadata,
   });
 
   return broadcastSignedTransaction(signedTransaction);

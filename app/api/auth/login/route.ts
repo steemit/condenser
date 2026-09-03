@@ -60,10 +60,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Step 3: Verify the challenge matches what we issued
-    // For now, we'll skip session-based challenge verification and just verify the signature
-    // In production, you'd want to verify the challenge came from our server
-    
+    // Step 3: Verify the challenge matches the one issued to this session
+    // (legacy general.js login_account verifies the signed challenge against
+    // session login_challenge — self-minted challenges are rejected).
+    const currentSession = await getSession(request);
+    if (
+      !currentSession?.loginChallenge ||
+      currentSession.loginChallenge !== challenge
+    ) {
+      return NextResponse.json(
+        { error: 'Invalid or expired login challenge' },
+        { status: 400 }
+      );
+    }
+
     // Step 4: Parse and verify the signed data
     let authData;
     try {
@@ -83,6 +93,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Reject stale signatures: the client signs a millisecond timestamp
+    // (signAuthData) — accept a 5-minute window plus clock skew.
+    const signedAt = Number(authData.timestamp);
+    if (
+      !Number.isFinite(signedAt) ||
+      Math.abs(Date.now() - signedAt) > 5 * 60 * 1000
+    ) {
+      return NextResponse.json(
+        { error: 'Invalid or expired login challenge' },
+        { status: 400 }
+      );
+    }
+
     // Step 5: Verify the signature
     if (!steem.auth.verifySignature(data, signature, publicKey)) {
       return NextResponse.json(
@@ -92,7 +115,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 6: Authentication successful, create session
-    const currentSession = await getSession(request);
     const sessionToken = await loginUser(currentSession, username);
     
     const response = NextResponse.json({

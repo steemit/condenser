@@ -266,6 +266,22 @@ export async function fetchUserProfile(
   }
 }
 
+/** Raw condenser account (posting_json_metadata/json_metadata included).
+ *  Never cached — used on settings save to merge into fresh metadata. */
+export async function fetchAccount(username: string): Promise<Record<string, unknown> | null> {
+  const searchParams = new URLSearchParams({ username });
+  try {
+    const { data } = await cachedFetch<Record<string, unknown>>(
+      `/api/steem/account?${searchParams.toString()}`,
+      { ...SWR.profile, noStore: true }
+    );
+    return data;
+  } catch (error) {
+    console.error('Error fetching account:', error);
+    return null;
+  }
+}
+
 /**
  * Follower/Following item interface
  */
@@ -331,6 +347,8 @@ export async function fetchFollowing(
 export interface UnreadNotificationsResponse {
   account: string;
   unread_count: number;
+  /** bridge lastread timestamp ('YYYY-MM-DD HH:MM:SS'), for row-level unread. */
+  lastread?: string | null;
   result?: unknown;
   error?: string;
 }

@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface OffchainState {
-  user: Record<string, any>;
-  account?: any;
+  user: Record<string, unknown>;
+  account?: unknown;
 }
 
 const initialState: OffchainState = {
@@ -14,7 +14,7 @@ const offchainSlice = createSlice({
   initialState,
   reducers: {
     // Handle user/SAVE_LOGIN_CONFIRM action from user slice
-    saveLoginConfirm: (state, action: PayloadAction<any>) => {
+    saveLoginConfirm: (state, action: PayloadAction<unknown>) => {
       if (!action.payload) {
         state.account = null;
       }

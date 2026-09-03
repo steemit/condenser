@@ -39,11 +39,11 @@ declare module '@steemit/steem-js' {
       };
       useAppbaseApi?: boolean;
     }): void;
-    call(method: string, params: any, callback: (err: any, data: any) => void): void;
-    getAccountsAsync(usernames: string[]): Promise<any[]>;
-    getDynamicGlobalPropertiesAsync(): Promise<any>;
-    getFollowingAsync(account: string, start: string, type: string, limit: number): Promise<any[]>;
-    getFollowersAsync(account: string, start: string, type: string, limit: number): Promise<any[]>;
+    call(method: string, params: unknown, callback: (err: unknown, data: unknown) => void): void;
+    getAccountsAsync(usernames: string[]): Promise<unknown[]>;
+    getDynamicGlobalPropertiesAsync(): Promise<unknown>;
+    getFollowingAsync(account: string, start: string, type: string, limit: number): Promise<unknown[]>;
+    getFollowersAsync(account: string, start: string, type: string, limit: number): Promise<unknown[]>;
   };
 
   export const config: {

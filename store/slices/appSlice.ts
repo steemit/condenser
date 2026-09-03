@@ -16,7 +16,7 @@ export interface Notification {
   key: string;
   action?: string;
   dismissAfter?: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface AppState {
@@ -27,9 +27,9 @@ interface AppState {
   };
   notifications: Record<string, Notification> | null;
   user_preferences: UserPreferences;
-  featureFlags: Record<string, any>;
+  featureFlags: Record<string, unknown>;
   modalLoading: boolean;
-  routeTag: any;
+  routeTag: unknown;
   frontend_has_rendered?: boolean;
 }
 
@@ -60,7 +60,7 @@ const appSlice = createSlice({
     setLocation: (state, action: PayloadAction<{ pathname: string }>) => {
       state.location = action.payload;
     },
-    steemApiError: (state, action: PayloadAction<any>) => {
+    steemApiError: (state, action: PayloadAction<unknown>) => {
       // Log error but don't update state as per original implementation
       console.error('SteemApiError', action.payload);
     },
@@ -99,7 +99,7 @@ const appSlice = createSlice({
     toggleBlogmode: (state) => {
       state.user_preferences.blogmode = !state.user_preferences.blogmode;
     },
-    receiveFeatureFlags: (state, action: PayloadAction<Record<string, any>>) => {
+    receiveFeatureFlags: (state, action: PayloadAction<Record<string, unknown>>) => {
       state.featureFlags = {
         ...state.featureFlags,
         ...action.payload,
@@ -114,7 +114,7 @@ const appSlice = createSlice({
     setFeRendered: (state) => {
       state.frontend_has_rendered = true;
     },
-    setRouteTag: (state, action: PayloadAction<any>) => {
+    setRouteTag: (state, action: PayloadAction<unknown>) => {
       state.routeTag = action.payload;
     },
   },

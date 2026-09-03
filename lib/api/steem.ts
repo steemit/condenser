@@ -43,11 +43,24 @@ export interface Post {
     weight: number;
   }>;
   pending_payout_value?: string;
+  // Legacy bridge fields read by cards / voting UI.
+  stats?: {
+    gray?: boolean;
+    is_pinned?: boolean;
+    total_votes?: number;
+    [key: string]: unknown;
+  };
+  author_reputation?: string | number;
+  last_update?: string;
+  community_title?: string;
+  payout_at?: string;
+  author_payout_value?: string;
+  curator_payout_value?: string;
   json_metadata?: {
     tags?: string[];
-    [key: string]: any;
+    [key: string]: unknown;
   };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface FetchPostsParams {
@@ -226,10 +239,10 @@ export interface UserProfile {
       profile_image?: string;
       cover_image?: string;
       version?: number;
-      [key: string]: any;
+      [key: string]: unknown;
     };
   };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
@@ -318,7 +331,7 @@ export async function fetchFollowing(
 export interface UnreadNotificationsResponse {
   account: string;
   unread_count: number;
-  result?: any;
+  result?: unknown;
   error?: string;
 }
 
@@ -362,14 +375,14 @@ export interface CommunitySubscription {
   avatar_url?: string;
   description?: string;
   flag_text?: string;
-  settings?: any;
-  team?: any[];
+  settings?: unknown;
+  team?: unknown[];
   context?: {
     role?: string;
     title?: string;
     subscribed?: boolean;
   };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
@@ -425,7 +438,7 @@ export interface CommunityRole {
   role: string;
   title: string;
   account?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
@@ -436,7 +449,7 @@ export interface CommunitySubscriber {
   role?: string;
   title?: string;
   created_at?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**

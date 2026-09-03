@@ -13,7 +13,9 @@
     "typecheck:phase1": "tsc --noEmit --project tsconfig.phase1.json",
     "test:api": "tsx scripts/test-api.ts",
     "test:proxy": "tsx scripts/test-proxy-routes.ts",
-    "test:render": "tsx scripts/compare-render-pipeline.ts"
+    "test:render": "tsx scripts/compare-render-pipeline.ts",
+    "typecheck": "tsc --noEmit",
+    "lint:ci": "node scripts/lint-budget.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
@@ -64,5 +66,6 @@
     "typescript": "^5",
     "vitest": "^4.1.11",
     "xmldom-legacy": "npm:xmldom@0.1.27"
-  }
+  },
+  "packageManager": "pnpm@10.17.0"
 }

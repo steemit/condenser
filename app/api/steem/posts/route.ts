@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20', 10);
     const observer = searchParams.get('observer') || undefined;
 
-    let posts: any[];
+    let posts: unknown[];
 
     if (account) {
       // Get account posts
@@ -42,10 +42,11 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(posts);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching posts:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch posts';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch posts' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

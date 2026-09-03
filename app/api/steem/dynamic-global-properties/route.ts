@@ -15,10 +15,12 @@ export async function GET() {
     const props = await callSteemApi('get_dynamic_global_properties', []);
 
     return NextResponse.json(props);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching dynamic global properties:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to fetch dynamic global properties';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch dynamic global properties' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

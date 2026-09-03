@@ -13,7 +13,7 @@ interface UserProfile {
   website?: string;
   profile_image?: string;
   cover_image?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface UserSettingsProps {

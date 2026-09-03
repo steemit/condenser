@@ -29,13 +29,15 @@ export async function GET(request: NextRequest) {
       unread_count: unreadCount,
       result: result || {},
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching unread notifications:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to fetch unread notifications';
     return NextResponse.json(
-      { 
+      {
         account: request.nextUrl.searchParams.get('account'),
         unread_count: 0,
-        error: error.message || 'Failed to fetch unread notifications',
+        error: errorMessage,
       },
       { status: 500 }
     );

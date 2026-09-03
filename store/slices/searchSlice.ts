@@ -6,10 +6,10 @@ interface SearchResult {
     created_at: string;
     author_rep: number;
     total_votes: number;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   _index?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface SearchHits {
@@ -23,7 +23,7 @@ interface SearchState {
   pending: boolean;
   error: boolean | string;
   scrollId: string | false;
-  result: any[];
+  result: unknown[];
   depth: number;
   total_result: number;
   sort: string;

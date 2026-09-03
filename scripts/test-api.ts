@@ -9,7 +9,7 @@ interface TestResult {
   name: string;
   success: boolean;
   error?: string;
-  data?: any;
+  data?: unknown;
   duration: number;
 }
 
@@ -50,12 +50,13 @@ async function testEndpoint(
       data,
       duration,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     const duration = Date.now() - startTime;
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return {
       name,
       success: false,
-      error: error.message || 'Unknown error',
+      error: errorMessage,
       duration,
     };
   }
@@ -102,8 +103,13 @@ async function runTests() {
   // Test 5: Get Post (if we have a known post)
   // First, let's get a post from trending to use for testing
   const trendingResult = results.find((r) => r.name.includes('Trending'));
-  if (trendingResult?.success && trendingResult.data?.length > 0) {
-    const firstPost = trendingResult.data[0];
+  // Ranked-posts endpoint returns an array of {author, permlink, ...} entries.
+  const trendingPosts = (trendingResult?.data ?? []) as Array<{
+    author?: string;
+    permlink?: string;
+  }>;
+  if (trendingResult?.success && trendingPosts.length > 0) {
+    const firstPost = trendingPosts[0];
     results.push(
       await testEndpoint(
         'Get Single Post',

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Types
 interface TransactionState {
-  operations: any[];
+  operations: unknown[];
   status: {
     key: string;
     error: boolean;
@@ -10,13 +10,13 @@ interface TransactionState {
   };
   errors: {
     bandwidthError: boolean;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   show_confirm_modal?: boolean;
-  confirmBroadcastOperation?: any;
+  confirmBroadcastOperation?: unknown;
   confirmErrorCallback?: (msg: string) => void;
-  confirm?: any;
-  warning?: any;
+  confirm?: unknown;
+  warning?: unknown;
 }
 
 const initialState: TransactionState = {
@@ -41,9 +41,9 @@ const transactionSlice = createSlice({
   initialState,
   reducers: {
     confirmOperation: (state, action: PayloadAction<{
-      operation: any;
-      confirm?: any;
-      warning?: any;
+      operation: unknown;
+      confirm?: unknown;
+      warning?: unknown;
       errorCallback?: (msg: string) => void;
     }>) => {
       const { operation, confirm, warning, errorCallback } = action.payload;
@@ -60,9 +60,9 @@ const transactionSlice = createSlice({
     },
     broadcastOperation: (state, action: PayloadAction<{
       type: string;
-      operation: any;
+      operation: unknown;
       confirm?: string | null;
-      warning?: any;
+      warning?: unknown;
       errorCallback?: (msg: string) => void;
       successCallback?: () => void;
       allowPostUnsafe?: boolean;
@@ -70,14 +70,14 @@ const transactionSlice = createSlice({
       // Saga/thunk handles this, no state change
     },
     error: (state, action: PayloadAction<{
-      operations?: any[];
+      operations?: unknown[];
       error: Error;
       errorCallback: (msg: string) => void;
     }>) => {
       const { error, errorCallback } = action.payload;
-      
+
       let msg: string;
-      let key = error.toString().replace(/rethrow$/, '');
+      const key = error.toString().replace(/rethrow$/, '');
 
       if (/You may only post once every/.test(key)) {
         msg = 'You may only post once every five minutes.';
@@ -138,31 +138,31 @@ const transactionSlice = createSlice({
         state.errors[action.payload.key] = false;
       }
     },
-    set: (state, action: PayloadAction<{ key: string | string[]; value: any }>) => {
+    set: (state, action: PayloadAction<{ key: string | string[]; value: unknown }>) => {
       const { key, value } = action.payload;
       const keys = Array.isArray(key) ? key : [key];
-      
-      let current: any = state;
+
+      let current: Record<string, unknown> = state as unknown as Record<string, unknown>;
       for (let i = 0; i < keys.length - 1; i++) {
         const k = keys[i];
         if (!(k in current) || typeof current[k] !== 'object') {
           current[k] = {};
         }
-        current = current[k];
+        current = current[k] as Record<string, unknown>;
       }
       current[keys[keys.length - 1]] = value;
     },
     remove: (state, action: PayloadAction<{ key: string | string[] }>) => {
       const { key } = action.payload;
       const keys = Array.isArray(key) ? key : [key];
-      
-      let current: any = state;
+
+      let current: Record<string, unknown> = state as unknown as Record<string, unknown>;
       for (let i = 0; i < keys.length - 1; i++) {
         const k = keys[i];
         if (!(k in current)) {
           return;
         }
-        current = current[k];
+        current = current[k] as Record<string, unknown>;
       }
       delete current[keys[keys.length - 1]];
     },

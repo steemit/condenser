@@ -17,7 +17,12 @@ describe('GET /api/steem/post', () => {
   });
 
   it('returns 400 when author or permlink is missing', async () => {
-    for (const query of [{}, { author: 'alice' }, { permlink: 'my-post' }]) {
+    const queries: Record<string, string>[] = [
+      {},
+      { author: 'alice' },
+      { permlink: 'my-post' },
+    ];
+    for (const query of queries) {
       const res = await GET(makeGetRequest('/api/steem/post', query));
       expect(res.status).toBe(400);
       expect(await res.json()).toEqual({

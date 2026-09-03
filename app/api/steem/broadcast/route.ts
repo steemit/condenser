@@ -152,6 +152,12 @@ async function invalidateAfterBroadcast(operations: Array<[string, Record<string
         await cacheDeleteByPrefix('steem:profile:');
         break;
       }
+      case 'account_update2': {
+        // Profile settings save — the account's cached profile is stale.
+        const account = String(opData.account || '');
+        if (account) await cacheDeleteByPrefix(`steem:profile:${account}`);
+        break;
+      }
       default:
         // Other ops (transfer, witness, etc.) don't touch feed/profile caches.
         break;

@@ -93,6 +93,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Reject stale signatures: the client signs a millisecond timestamp
+    // (signAuthData) — accept a 5-minute window plus clock skew.
+    const signedAt = Number(authData.timestamp);
+    if (
+      !Number.isFinite(signedAt) ||
+      Math.abs(Date.now() - signedAt) > 5 * 60 * 1000
+    ) {
+      return NextResponse.json(
+        { error: 'Invalid or expired login challenge' },
+        { status: 400 }
+      );
+    }
+
     // Step 5: Verify the signature
     if (!steem.auth.verifySignature(data, signature, publicKey)) {
       return NextResponse.json(

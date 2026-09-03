@@ -43,6 +43,7 @@ function validBody() {
     data: JSON.stringify({
       username: 'alice',
       challenge: CHALLENGE,
+      timestamp: Date.now(),
       action: 'login',
     }),
     challenge: CHALLENGE,
@@ -123,6 +124,24 @@ describe('POST /api/auth/login', () => {
     getSessionMock.mockResolvedValue(null);
 
     const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'Invalid or expired login challenge' });
+    expect(loginUserMock).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 when the signed timestamp is stale', async () => {
+    getAccountMock.mockResolvedValue(accountWithPostingKey());
+
+    const staleBody = {
+      ...validBody(),
+      data: JSON.stringify({
+        username: 'alice',
+        challenge: CHALLENGE,
+        timestamp: Date.now() - 10 * 60 * 1000, // 10 minutes old
+        action: 'login',
+      }),
+    };
+    const res = await POST(makePostRequest('/api/auth/login', staleBody));
     expect(res.status).toBe(400);
     expect(await res.json()).toEqual({ error: 'Invalid or expired login challenge' });
     expect(loginUserMock).not.toHaveBeenCalled();

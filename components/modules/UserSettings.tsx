@@ -6,7 +6,35 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setLocale } from '@/store/slices/appSlice';
 import { LOCALES, LOCALE_LABELS, DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/config';
 import { broadcastAccountUpdate } from '@/lib/api/broadcast';
+import { fetchAccount } from '@/lib/api/steem';
 import { userActionRecord } from '@/lib/analytics/overseer';
+
+/** Legacy o2j.ifStringParseJSON. */
+function ifStringParseJSON(value: unknown): unknown {
+  if (typeof value !== 'string') return value;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
+}
+
+/** Legacy Settings.jsx read_profile_v2: prefer posting_json_metadata when it
+ *  carries profile.version, else fall back to (possibly double-encoded,
+ *  issue #1237) json_metadata. */
+function readProfileV2(account: Record<string, unknown> | null): Record<string, unknown> {
+  if (!account) return {};
+  let md = ifStringParseJSON(account.posting_json_metadata);
+  if (md && typeof md === 'object') {
+    const profile = (md as Record<string, unknown>).profile;
+    if (profile && typeof profile === 'object' && (profile as Record<string, unknown>).version) {
+      return md as Record<string, unknown>;
+    }
+  }
+  md = ifStringParseJSON(account.json_metadata);
+  if (typeof md === 'string') md = ifStringParseJSON(md);
+  return md && typeof md === 'object' ? (md as Record<string, unknown>) : {};
+}
 
 interface UserProfile {
   name?: string;
@@ -21,9 +49,6 @@ interface UserProfile {
 interface UserSettingsProps {
   accountname: string;
   profile: UserProfile | null;
-  /** Full account metadata object (for merging on save, legacy
-   *  Settings.jsx merges into the account's existing metadata). */
-  metadata?: Record<string, unknown> | null;
   onProfileUpdate?: (profile: UserProfile) => void;
 }
 
@@ -35,7 +60,6 @@ interface UserSettingsProps {
 export default function UserSettings({ 
   accountname, 
   profile, 
-  metadata,
   onProfileUpdate 
 }: UserSettingsProps) {
   const currentUser = useAppSelector((state) => state.user.current?.username);
@@ -142,10 +166,13 @@ export default function UserSettings({
     setSuccessMessage('');
 
     try {
-      // Legacy Settings.jsx handleSubmit: merge into the account's existing
-      // metadata, drop legacy user_image and empty fields, mark profile
-      // version 2, then broadcast account_update2 (posting_json_metadata).
-      const metaData: Record<string, unknown> = { ...(metadata ?? {}) };
+      // Legacy Settings.jsx handleSubmit + read_profile_v2: merge into the
+      // RAW account metadata (bridge get_profile only returns the sanitized
+      // profile sub-object — merging into it would drop arbitrary top-level
+      // keys written by other apps), drop legacy user_image and empty
+      // fields, mark profile version 2, then broadcast account_update2.
+      const account = await fetchAccount(accountname);
+      const metaData: Record<string, unknown> = { ...readProfileV2(account) };
       delete metaData.user_image;
       const profileData: Record<string, unknown> = {
         ...((metaData.profile as Record<string, unknown>) ?? {}),
@@ -170,7 +197,7 @@ export default function UserSettings({
       setSuccessMessage('Profile updated successfully!');
 
       if (onProfileUpdate) {
-        onProfileUpdate(formData);
+        onProfileUpdate(profileData);
       }
     } catch (error) {
       console.error('Error updating profile:', error);

@@ -8,9 +8,29 @@ import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import * as RedisSession from './redis-session';
 
+const FALLBACK_JWT_SECRET = 'your-secret-key-change-in-production';
+
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'your-secret-key-change-in-production'
+  process.env.JWT_SECRET || FALLBACK_JWT_SECRET
 );
+
+/**
+ * Fail closed when a production deployment runs with the fallback JWT
+ * secret: anyone could mint session cookies (including a forged
+ * loginChallenge, defeating the login challenge check). Called by session
+ * creation/verification, not at module load, so static prerendering at
+ * build time (where env is absent) never trips it.
+ */
+function assertJwtSecretConfigured(): void {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    (!process.env.JWT_SECRET || process.env.JWT_SECRET === FALLBACK_JWT_SECRET)
+  ) {
+    throw new Error(
+      'JWT_SECRET is not configured. Set a strong random JWT_SECRET for production deployments.'
+    );
+  }
+}
 
 export const COOKIE_NAME = 'steem-session';
 const COOKIE_OPTIONS = {
@@ -61,6 +81,7 @@ function generateLoginChallenge(): string {
  * Uses Redis if available, otherwise falls back to JWT
  */
 export async function createSession(data: Partial<SessionData> = {}): Promise<string> {
+  assertJwtSecretConfigured();
   const now = Math.floor(Date.now() / 1000);
   
   const sessionData: SessionData = {
@@ -99,6 +120,7 @@ export async function createSession(data: Partial<SessionData> = {}): Promise<st
  * Handles both Redis session IDs and JWT tokens
  */
 export async function verifySession(token: string): Promise<SessionData | null> {
+  assertJwtSecretConfigured();
   // Try Redis first (session IDs are typically shorter and hex-only)
   if (RedisSession.isRedisAvailable() && token.length <= 32 && /^[a-f0-9]+$/.test(token)) {
     const sessionData = await RedisSession.getSession(token);
@@ -238,8 +260,13 @@ export async function loginUser(
     },
   };
 
+  // The login challenge is single-use: never carry it into the session
+  // produced by a successful login (replay resistance).
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { loginChallenge, ...sessionWithoutChallenge } = sessionData;
+
   return createSession({
-    ...sessionData,
+    ...sessionWithoutChallenge,
     username,
   });
 }

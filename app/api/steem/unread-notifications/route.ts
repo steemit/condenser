@@ -20,13 +20,14 @@ export async function GET(request: NextRequest) {
 
     const result = await getUnreadNotifications({ account });
 
-    // The bridge API returns unread notifications data
-    // Extract the count from the result
-    const unreadCount = result?.unread_count || 0;
+    // bridge.unread_notifications returns { lastread, unread } (legacy
+    // shape); map it onto the route's response fields.
+    const unreadCount = (result?.unread as number) ?? 0;
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       account,
       unread_count: unreadCount,
+      lastread: (result?.lastread as string) ?? null,
       result: result || {},
     });
   } catch (error: unknown) {

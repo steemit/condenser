@@ -22,6 +22,8 @@ ADDRESS_PREFIX=STM
 ### Authentication
 ```bash
 JWT_SECRET=your-secret-key-change-in-production
+# NOTE: production deployments fail closed without a real JWT_SECRET
+# (session creation/verification throws) — the fallback secret is dev-only.
 ```
 
 ### Session Management - Redis (Optional)

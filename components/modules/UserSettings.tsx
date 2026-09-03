@@ -5,6 +5,8 @@ import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setLocale } from '@/store/slices/appSlice';
 import { LOCALES, LOCALE_LABELS, DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/config';
+import { broadcastAccountUpdate } from '@/lib/api/broadcast';
+import { userActionRecord } from '@/lib/analytics/overseer';
 
 interface UserProfile {
   name?: string;
@@ -19,6 +21,9 @@ interface UserProfile {
 interface UserSettingsProps {
   accountname: string;
   profile: UserProfile | null;
+  /** Full account metadata object (for merging on save, legacy
+   *  Settings.jsx merges into the account's existing metadata). */
+  metadata?: Record<string, unknown> | null;
   onProfileUpdate?: (profile: UserProfile) => void;
 }
 
@@ -30,6 +35,7 @@ interface UserSettingsProps {
 export default function UserSettings({ 
   accountname, 
   profile, 
+  metadata,
   onProfileUpdate 
 }: UserSettingsProps) {
   const currentUser = useAppSelector((state) => state.user.current?.username);
@@ -136,15 +142,33 @@ export default function UserSettings({
     setSuccessMessage('');
 
     try {
-      // TODO: Implement actual profile update via blockchain
-      // This would involve creating a account_update operation
-      console.log('Updating profile:', formData);
+      // Legacy Settings.jsx handleSubmit: merge into the account's existing
+      // metadata, drop legacy user_image and empty fields, mark profile
+      // version 2, then broadcast account_update2 (posting_json_metadata).
+      const metaData: Record<string, unknown> = { ...(metadata ?? {}) };
+      delete metaData.user_image;
+      const profileData: Record<string, unknown> = {
+        ...((metaData.profile as Record<string, unknown>) ?? {}),
+      };
+      for (const field of ['profile_image', 'cover_image', 'name', 'about', 'location', 'website']) {
+        const value = formData[field];
+        if (value) profileData[field] = value;
+        else delete profileData[field];
+      }
+      profileData.version = 2;
+      metaData.profile = profileData;
 
-      // For now, simulate the update
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await broadcastAccountUpdate({
+        account: accountname,
+        jsonMetadata: '',
+        postingJsonMetadata: JSON.stringify(metaData),
+      });
+
+      // Legacy update_account tracking.
+      userActionRecord('update_account', { username: accountname });
 
       setSuccessMessage('Profile updated successfully!');
-      
+
       if (onProfileUpdate) {
         onProfileUpdate(formData);
       }

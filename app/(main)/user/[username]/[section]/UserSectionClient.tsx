@@ -206,6 +206,7 @@ export default function UserSectionClient() {
           <UserSettings 
             accountname={accountname} 
             profile={profile?.metadata?.profile || null}
+            metadata={(profile?.metadata as Record<string, unknown>) ?? null}
             onProfileUpdate={(updatedProfile) => {
               // Update local profile state
               if (profile) {

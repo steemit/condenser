@@ -53,9 +53,21 @@ export default function NotificationBadge({
 
     fetchCount();
 
+    // Zero immediately when the user marks notifications as read (the list
+    // page broadcasts custom_json setLastRead and emits this event).
+    const onMarkedRead = (e: Event) => {
+      if ((e as CustomEvent).detail?.username === username) {
+        setUnreadCount(0);
+      }
+    };
+    window.addEventListener('notifications:marked-read', onMarkedRead);
+
     // Optionally refresh count periodically
     const interval = setInterval(fetchCount, 60000); // Refresh every minute
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('notifications:marked-read', onMarkedRead);
+    };
   }, [username]);
 
   // Don't render if loading or no username

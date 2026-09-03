@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { receiveNotifications, receiveUnreadNotifications, notificationsLoading } from '@/store/slices/globalSlice';
+import { broadcastCustomJson } from '@/lib/api/broadcast';
 import { cachedFetch } from '@/lib/cache/client-fetch';
 import LoadingIndicator from '@/components/elements/LoadingIndicator';
 import Userpic from '@/components/elements/Userpic';
@@ -139,15 +140,30 @@ export default function NotificationsList({ username }: NotificationsListProps) 
   };
 
   const handleMarkAsRead = async () => {
+    // Legacy FetchDataSaga.markNotificationsAsReadSaga: the read marker is
+    // a custom_json (id: 'notify') broadcast carrying setLastRead; hivemind
+    // needs a few seconds to index it, so legacy clears the unread state
+    // after a 6s delay.
+    const timeNow = new Date().toISOString().slice(0, 19);
     try {
-      // TODO: Implement actual API call to mark notifications as read
-      // This requires broadcasting a custom_json operation
-      dispatch(
-        receiveUnreadNotifications({
-          name: username,
-          unreadNotifications: {},
-        })
-      );
+      await broadcastCustomJson({
+        requiredAuths: [],
+        requiredPostingAuths: [username],
+        id: 'notify',
+        json: JSON.stringify(['setLastRead', { date: timeNow }]),
+      });
+      setTimeout(() => {
+        dispatch(
+          receiveUnreadNotifications({
+            name: username,
+            unreadNotifications: {},
+          })
+        );
+        // The header badge polls on its own timer; tell it to zero now.
+        window.dispatchEvent(
+          new CustomEvent('notifications:marked-read', { detail: { username } })
+        );
+      }, 6000);
     } catch (error) {
       console.error('Error marking notifications as read:', error);
     }

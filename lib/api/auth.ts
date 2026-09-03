@@ -16,11 +16,11 @@ export interface LoginParams {
 
 export interface Account {
   name: string;
-  posting: any;
-  active: any;
-  owner: any;
+  posting: unknown;
+  active: unknown;
+  owner: unknown;
   memo_key: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**

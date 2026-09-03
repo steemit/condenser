@@ -32,10 +32,11 @@ export async function POST(request: NextRequest) {
     }
 
     return response;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Logout error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Logout failed';
     return NextResponse.json(
-      { error: error.message || 'Logout failed' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

@@ -49,10 +49,11 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(result || []);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching community roles/subscribers:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch community data';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch community data' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

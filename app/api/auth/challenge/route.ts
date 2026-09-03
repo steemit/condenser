@@ -31,7 +31,7 @@ export async function GET() {
       challenge,
       sessionToken, // Client needs this to maintain challenge context
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error generating challenge:', error);
     return NextResponse.json(
       { error: 'Failed to generate challenge' },

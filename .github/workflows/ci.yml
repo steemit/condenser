@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [next, master]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      # Fails only when the legacy lint-debt error count grows past the
+      # budget (see scripts/lint-budget.mjs); ratchet it down over time.
+      - name: Lint (budget)
+        run: pnpm lint:ci
+
+      - name: Unit / integration tests
+        run: pnpm test
+
+      - name: Route proxy tests
+        run: pnpm test:proxy
+
+      - name: Production build
+        run: pnpm build

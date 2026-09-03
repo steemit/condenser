@@ -163,14 +163,17 @@ describe('buildPostMetadata', () => {
       },
     });
     expect(meta.openGraph?.images).toEqual(['https://example.com/pic.jpg']);
-    expect(meta.twitter?.card).toBe('summary_large_image');
-    expect(meta.twitter?.images).toEqual(['https://example.com/pic.jpg']);
+    // Next's Twitter type is a union whose new variant drops `card`; we
+    // always emit the classic shape, so read it through that branch.
+    const twitter = meta.twitter as { card?: string; images?: string[] };
+    expect(twitter.card).toBe('summary_large_image');
+    expect(twitter.images).toEqual(['https://example.com/pic.jpg']);
   });
 
   it('falls back to the author avatar with a summary card when there is no image', () => {
     const meta = buildPostMetadata({ ...basePost, body: 'no images here' });
     expect(meta.openGraph?.images).toEqual([`${SITE_ORIGIN}/avatar/alice`]);
-    expect(meta.twitter?.card).toBe('summary');
+    expect((meta.twitter as { card?: string }).card).toBe('summary');
   });
 
   it('strips quotes in the description for replies (depth > 0)', () => {

@@ -170,8 +170,11 @@ export default function SearchContent() {
     }
   };
 
+  // Redux search results are stored as untyped legacy payloads.
+  const hits = searchState.result as SearchHitSource[];
+
   // Convert search results to Post format
-  const posts: Post[] = searchState.result.map((item: SearchHitSource) => ({
+  const posts: Post[] = hits.map((item) => ({
     author: item.author || "",
     permlink: item.permlink || "",
     category: item.category || "",
@@ -276,7 +279,7 @@ export default function SearchContent() {
               Nothing was found.
             </div>
           ) : depth === 2 ? (
-            <SearchUserList hits={searchState.result} />
+            <SearchUserList hits={hits} />
           ) : (
             <PostsList
               posts={posts}

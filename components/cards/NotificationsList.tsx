@@ -84,7 +84,9 @@ export default function NotificationsList({ username }: NotificationsListProps) 
 
   const [filter, setFilter] = useState<FilterKey>('all');
 
-  const notifications: Notification[] = notificationsState?.notifications || [];
+  // The slice stores untyped legacy items; this component owns the shape.
+  const notifications = (notificationsState?.notifications ??
+    []) as Notification[];
   const isLastPage = notificationsState?.isLastPage || false;
   const unreadMap: Record<string, unknown> =
     notificationsState?.unreadNotifications || {};

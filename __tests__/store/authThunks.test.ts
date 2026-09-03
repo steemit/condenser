@@ -3,9 +3,15 @@ import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import userReducer, { setUser } from '@/store/slices/userSlice';
 import { logoutThunk } from '@/store/thunks/authThunks';
+import type { AppDispatch, RootState } from '@/store';
 
-function makeStore() {
-  return configureStore({ reducer: { user: userReducer } });
+// The thunk's dispatch signature is typed against the full app store; the
+// partial reducer under test only touches user state, so widen the type.
+type TestStore = { dispatch: AppDispatch; getState: () => RootState };
+function makeStore(): TestStore {
+  return configureStore({
+    reducer: { user: userReducer },
+  }) as unknown as TestStore;
 }
 
 describe('logoutThunk', () => {

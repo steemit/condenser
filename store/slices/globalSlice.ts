@@ -1,36 +1,62 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Types
+export interface Vote {
+  voter: string;
+  weight: number;
+  rshares?: string;
+  percent?: number;
+  time?: string;
+  [key: string]: unknown;
+}
+
 export interface Post {
   author: string;
   permlink: string;
   collapsed?: boolean;
-  [key: string]: any;
+  replies?: string[];
+  active_votes?: Vote[];
+  [key: string]: unknown;
 }
 
 export interface Account {
   name: string;
   witness_votes?: Set<string>;
-  [key: string]: any;
+  [key: string]: unknown;
+}
+
+export interface NotificationItem {
+  [key: string]: unknown;
 }
 
 export interface Notification {
   name: string;
-  notifications: any[];
+  notifications: NotificationItem[];
   isLastPage?: boolean;
-  unreadNotifications?: Record<string, any>;
+  unreadNotifications?: Record<string, unknown>;
 }
 
 export interface Community {
   name: string;
-  [key: string]: any;
+  [key: string]: unknown;
+}
+
+interface FetchJsonEntry {
+  loading: boolean;
+  result?: unknown;
+  error?: unknown;
+}
+
+interface DialogEntry {
+  visible: boolean;
+  data?: unknown;
 }
 
 interface GlobalState {
-  status: Record<string, any>;
+  status: Record<string, unknown>;
   content: Record<string, Post>;
   accounts: Record<string, Account>;
-  headers: Record<string, any>;
+  headers: Record<string, unknown>;
   notifications: Record<string, Notification> & {
     loading?: boolean;
   };
@@ -38,20 +64,20 @@ interface GlobalState {
   community_idx: string[];
   subscriptions: {
     loading?: boolean;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   special_posts?: {
-    featured_posts?: any[];
-    promoted_posts?: any[];
+    featured_posts?: unknown[];
+    promoted_posts?: unknown[];
   };
-  fetchJson: Record<string, any>;
-  dialogs: Record<string, any>;
-  rewards?: any;
-  dgp?: any;
+  fetchJson: Record<string, FetchJsonEntry>;
+  dialogs: Record<string, DialogEntry>;
+  rewards?: unknown;
+  dgp?: unknown;
   vests_per_steem?: number;
-  notices?: any;
-  tagslist?: any[];
-  followerslist?: any[];
+  notices?: unknown;
+  tagslist?: unknown[];
+  followerslist?: unknown[];
   pathname?: string;
   follow?: {
     getFollowingAsync?: Record<string, {
@@ -62,9 +88,9 @@ interface GlobalState {
       blog_loading?: boolean;
       ignore_loading?: boolean;
     }>;
-    [key: string]: any;
+    [key: string]: unknown;
   };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const postKey = (author: string, permlink: string): string | null => {
@@ -103,12 +129,13 @@ const globalSlice = createSlice({
       }
       state.content[post].collapsed = collapsed;
     },
-    receiveState: (state, action: PayloadAction<any>) => {
+    receiveState: (state, action: PayloadAction<Record<string, unknown>>) => {
       // Deep merge payload into state
       const payload = action.payload;
       Object.keys(payload).forEach((key) => {
         if (typeof payload[key] === 'object' && payload[key] !== null && !Array.isArray(payload[key])) {
-          state[key] = { ...state[key], ...payload[key] };
+          const existing = (state[key] ?? {}) as Record<string, unknown>;
+          state[key] = { ...existing, ...(payload[key] as Record<string, unknown>) };
         } else {
           state[key] = payload[key];
         }
@@ -116,7 +143,7 @@ const globalSlice = createSlice({
     },
     receiveNotifications: (state, action: PayloadAction<{
       name: string;
-      notifications: any[];
+      notifications: NotificationItem[];
       isLastPage?: boolean;
     }>) => {
       const { name, notifications, isLastPage } = action.payload;
@@ -136,7 +163,7 @@ const globalSlice = createSlice({
     },
     receiveUnreadNotifications: (state, action: PayloadAction<{
       name: string;
-      unreadNotifications: Record<string, any>;
+      unreadNotifications: Record<string, unknown>;
     }>) => {
       const { name, unreadNotifications } = action.payload;
       if (!state.notifications[name]) {
@@ -176,7 +203,7 @@ const globalSlice = createSlice({
         }
       });
     },
-    receivePostHeader: (state, action: PayloadAction<Record<string, any>>) => {
+    receivePostHeader: (state, action: PayloadAction<Record<string, unknown>>) => {
       state.headers = {
         ...state.headers,
         ...action.payload,
@@ -186,12 +213,12 @@ const globalSlice = createSlice({
       const { communities } = action.payload;
       const communityMap: Record<string, Community> = {};
       const communityIdx: string[] = [];
-      
+
       communities.forEach((community) => {
         communityMap[community.name] = community;
         communityIdx.push(community.name);
       });
-      
+
       state.community = communityMap;
       state.community_idx = communityIdx;
     },
@@ -209,15 +236,15 @@ const globalSlice = createSlice({
     loadingSubscriptions: (state, action: PayloadAction<boolean>) => {
       state.subscriptions.loading = action.payload;
     },
-    receiveSubscriptions: (state, action: PayloadAction<any>) => {
+    receiveSubscriptions: (state, action: PayloadAction<Record<string, unknown>>) => {
       state.subscriptions = {
         ...state.subscriptions,
         ...action.payload,
       };
     },
     syncSpecialPosts: (state, action: PayloadAction<{
-      featured_posts?: any[];
-      promoted_posts?: any[];
+      featured_posts?: unknown[];
+      promoted_posts?: unknown[];
     }>) => {
       state.special_posts = action.payload;
     },
@@ -245,7 +272,7 @@ const globalSlice = createSlice({
       const { parent_author, parent_permlink, author, permlink } = action.payload;
       const parentKey = postKey(parent_author, parent_permlink);
       const replyKey = postKey(author, permlink);
-      
+
       if (parentKey && replyKey) {
         if (!state.content[parentKey]) {
           state.content[parentKey] = {
@@ -283,7 +310,7 @@ const globalSlice = createSlice({
         }
         // Update or add vote
         const voteIndex = state.content[key].active_votes!.findIndex(
-          (v: any) => v.voter === voter
+          (v: Vote) => v.voter === voter
         );
         if (voteIndex >= 0) {
           state.content[key].active_votes![voteIndex].weight = weight;
@@ -296,61 +323,62 @@ const globalSlice = createSlice({
       // Set fetching state
       state.status.fetching = action.payload;
     },
-    receiveData: (state, action: PayloadAction<any>) => {
+    receiveData: (state, action: PayloadAction<Record<string, unknown>>) => {
       // Merge received data
       state.status = {
         ...state.status,
         ...action.payload,
       };
     },
-    set: (state, action: PayloadAction<{ key: string | string[]; value: any }>) => {
+    set: (state, action: PayloadAction<{ key: string | string[]; value: unknown }>) => {
       const { key, value } = action.payload;
       const keys = Array.isArray(key) ? key : [key];
-      
-      let current: any = state;
+
+      let current: Record<string, unknown> = state as Record<string, unknown>;
       for (let i = 0; i < keys.length - 1; i++) {
         const k = keys[i];
-        if (!(k in current) || typeof current[k] !== 'object') {
+        if (typeof current[k] !== 'object' || current[k] === null) {
           current[k] = {};
         }
-        current = current[k];
+        current = current[k] as Record<string, unknown>;
       }
       current[keys[keys.length - 1]] = value;
     },
     remove: (state, action: PayloadAction<{ key: string | string[] }>) => {
       const { key } = action.payload;
       const keys = Array.isArray(key) ? key : [key];
-      
-      let current: any = state;
+
+      let current: Record<string, unknown> = state as Record<string, unknown>;
       for (let i = 0; i < keys.length - 1; i++) {
         const k = keys[i];
         if (!(k in current)) {
           return; // Path doesn't exist
         }
-        current = current[k];
+        current = current[k] as Record<string, unknown>;
       }
       delete current[keys[keys.length - 1]];
     },
-    update: (state, action: PayloadAction<{ key: string | string[]; value: any }>) => {
+    update: (state, action: PayloadAction<{ key: string | string[]; value: unknown }>) => {
       // Similar to set but for updates
       const { key, value } = action.payload;
       const keys = Array.isArray(key) ? key : [key];
-      
-      let current: any = state;
+
+      let current: Record<string, unknown> = state as Record<string, unknown>;
       for (let i = 0; i < keys.length - 1; i++) {
         const k = keys[i];
-        if (!(k in current) || typeof current[k] !== 'object') {
+        if (typeof current[k] !== 'object' || current[k] === null) {
           current[k] = {};
         }
-        current = current[k];
+        current = current[k] as Record<string, unknown>;
       }
-      if (typeof current[keys[keys.length - 1]] === 'object' && typeof value === 'object') {
-        current[keys[keys.length - 1]] = {
-          ...current[keys[keys.length - 1]],
-          ...value,
+      const last = keys[keys.length - 1];
+      if (typeof current[last] === 'object' && typeof value === 'object' && value !== null) {
+        current[last] = {
+          ...(current[last] as Record<string, unknown>),
+          ...(value as Record<string, unknown>),
         };
       } else {
-        current[keys[keys.length - 1]] = value;
+        current[last] = value;
       }
     },
     fetchJson: (state, action: PayloadAction<{ id: string }>) => {
@@ -361,7 +389,7 @@ const globalSlice = createSlice({
         state.fetchJson[action.payload.id].loading = true;
       }
     },
-    fetchJsonResult: (state, action: PayloadAction<{ id: string; result?: any; error?: any }>) => {
+    fetchJsonResult: (state, action: PayloadAction<{ id: string; result?: unknown; error?: unknown }>) => {
       const { id, result, error } = action.payload;
       state.fetchJson[id] = {
         loading: false,
@@ -369,7 +397,7 @@ const globalSlice = createSlice({
         error,
       };
     },
-    showDialog: (state, action: PayloadAction<{ name: string; data?: any }>) => {
+    showDialog: (state, action: PayloadAction<{ name: string; data?: unknown }>) => {
       const { name, data } = action.payload;
       state.dialogs[name] = {
         visible: true,
@@ -382,22 +410,22 @@ const globalSlice = createSlice({
         state.dialogs[name].visible = false;
       }
     },
-    receiveRewards: (state, action: PayloadAction<any>) => {
+    receiveRewards: (state, action: PayloadAction<unknown>) => {
       state.rewards = action.payload;
     },
-    setDgp: (state, action: PayloadAction<any>) => {
+    setDgp: (state, action: PayloadAction<unknown>) => {
       state.dgp = action.payload;
     },
     setVestsPerSteem: (state, action: PayloadAction<number>) => {
       state.vests_per_steem = action.payload;
     },
-    setNotices: (state, action: PayloadAction<any>) => {
+    setNotices: (state, action: PayloadAction<unknown>) => {
       state.notices = action.payload;
     },
-    setTagslist: (state, action: PayloadAction<any[]>) => {
+    setTagslist: (state, action: PayloadAction<unknown[]>) => {
       state.tagslist = action.payload;
     },
-    setFollowerslist: (state, action: PayloadAction<any[]>) => {
+    setFollowerslist: (state, action: PayloadAction<unknown[]>) => {
       state.followerslist = action.payload;
     },
     updateFollowState: (state, action: PayloadAction<{
@@ -406,7 +434,7 @@ const globalSlice = createSlice({
       what: string[];
     }>) => {
       const { follower, following, what } = action.payload;
-      
+
       // Initialize follow state structure if needed
       if (!state.follow) {
         state.follow = {};
@@ -424,11 +452,11 @@ const globalSlice = createSlice({
       }
 
       const followData = state.follow.getFollowingAsync[follower];
-      
+
       // Determine action based on what array
       const hasBlog = what[0] === 'blog';
       const hasIgnore = what[1] === 'ignore';
-      
+
       // Update blog_result
       if (!followData.blog_result) {
         followData.blog_result = [];
@@ -438,7 +466,7 @@ const globalSlice = createSlice({
       } else if (!hasBlog && followData.blog_result.includes(following)) {
         followData.blog_result = followData.blog_result.filter((u: string) => u !== following);
       }
-      
+
       // Update ignore_result
       if (!followData.ignore_result) {
         followData.ignore_result = [];
@@ -448,7 +476,7 @@ const globalSlice = createSlice({
       } else if (!hasIgnore && followData.ignore_result.includes(following)) {
         followData.ignore_result = followData.ignore_result.filter((u: string) => u !== following);
       }
-      
+
       // Update counts
       followData.blog_count = followData.blog_result.length;
       followData.ignore_count = followData.ignore_result.length;

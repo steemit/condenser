@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UserProfile {
   username: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface UserProfilesState {
@@ -22,7 +22,7 @@ const userProfilesSlice = createSlice({
     // truth for cached profile data. Kept only to avoid breaking imports.
     addProfile: (state, action: PayloadAction<{
       username: string;
-      account: any;
+      account: UserProfile;
     }>) => {
       const { username, account } = action.payload;
       if (username && account) {

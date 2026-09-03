@@ -88,9 +88,10 @@ export const loginThunk = createAsyncThunk<
           pub_keys_used: [],
         })
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
-      const errorMessage = error.message || 'Login failed. Please try again.';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Login failed. Please try again.';
       dispatch(loginError({ error: errorMessage }));
       return rejectWithValue(errorMessage);
     }

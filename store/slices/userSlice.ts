@@ -6,9 +6,15 @@ export interface User {
   private_keys?: {
     active_private?: string;
     posting_private?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
-  [key: string]: any;
+  [key: string]: unknown;
+}
+
+export interface UserAuthority {
+  active?: string;
+  owner?: string;
+  [key: string]: unknown;
 }
 
 interface UserState {
@@ -16,12 +22,12 @@ interface UserState {
   show_login_modal: boolean;
   show_login_warning: boolean;
   login_type?: string;
-  loginBroadcastOperation?: any;
-  loginDefault?: any;
+  loginBroadcastOperation?: unknown;
+  loginDefault?: unknown;
   login_error?: string;
   show_terms_modal?: boolean;
-  termsDefault?: any;
-  saveLoginConfirm?: any;
+  termsDefault?: unknown;
+  saveLoginConfirm?: unknown;
   pub_keys_used: string[] | null;
   locale: string;
   show_side_panel: boolean;
@@ -37,7 +43,7 @@ interface UserState {
   on_post_templates_close_modal: (() => void) | null;
   logged_out?: boolean;
   keys_error?: string;
-  authority: Record<string, any>;
+  authority: Record<string, UserAuthority>;
   hide_connection_error_modal: boolean;
   show_image_viewer: boolean;
   image_viewer_url: string;
@@ -75,8 +81,8 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     showLogin: (state, action: PayloadAction<{
-      operation?: any;
-      loginDefault?: any;
+      operation?: unknown;
+      loginDefault?: unknown;
       type?: string;
     } | undefined>) => {
       const payload = action.payload;
@@ -103,7 +109,7 @@ const userSlice = createSlice({
     hideLoginWarning: (state) => {
       state.show_login_warning = false;
     },
-    showTerms: (state, action: PayloadAction<{ termsDefault?: any } | undefined>) => {
+    showTerms: (state, action: PayloadAction<{ termsDefault?: unknown } | undefined>) => {
       const payload = action.payload;
       let termsDefault;
       if (payload) {
@@ -116,7 +122,7 @@ const userSlice = createSlice({
       state.show_terms_modal = false;
       state.termsDefault = undefined;
     },
-    saveLoginConfirm: (state, action: PayloadAction<any>) => {
+    saveLoginConfirm: (state, action: PayloadAction<unknown>) => {
       state.saveLoginConfirm = action.payload;
     },
     saveLogin: (state) => {
@@ -205,7 +211,7 @@ const userSlice = createSlice({
     },
     setAuthority: (state, action: PayloadAction<{
       accountName: string;
-      auth: any;
+      auth: UserAuthority;
       pub_keys_used?: string[];
     }>) => {
       const { accountName, auth, pub_keys_used } = action.payload;
@@ -217,18 +223,18 @@ const userSlice = createSlice({
     hideConnectionErrorModal: (state) => {
       state.hide_connection_error_modal = true;
     },
-    set: (state, action: PayloadAction<{ key: string | string[]; value: any }>) => {
+    set: (state, action: PayloadAction<{ key: string | string[]; value: unknown }>) => {
       const { key, value } = action.payload;
       const keys = Array.isArray(key) ? key : [key];
-      
+
       // Deep set using keys array
-      let current: any = state;
+      let current: Record<string, unknown> = state as unknown as Record<string, unknown>;
       for (let i = 0; i < keys.length - 1; i++) {
         const k = keys[i];
         if (!(k in current)) {
           current[k] = {};
         }
-        current = current[k];
+        current = current[k] as Record<string, unknown>;
       }
       current[keys[keys.length - 1]] = value;
     },

@@ -9,10 +9,10 @@ interface CommunityRole {
 interface CommunityState {
   [community: string]: {
     listSubscribersPending?: boolean;
-    listSubscribersError?: any;
-    subscribers?: any[];
+    listSubscribersError?: unknown;
+    subscribers?: unknown[];
     listRolesPending?: boolean;
-    listRolesError?: any;
+    listRolesError?: unknown;
     roles?: CommunityRole[];
     updatePending?: boolean;
   };
@@ -45,7 +45,7 @@ const communitySlice = createSlice({
     },
     getCommunitySubscribersError: (state, action: PayloadAction<{
       community: string;
-      error: any;
+      error: unknown;
     }>) => {
       const { community, error } = action.payload;
       if (!state[community]) {
@@ -55,7 +55,7 @@ const communitySlice = createSlice({
     },
     setCommunitySubscribers: (state, action: PayloadAction<{
       community: string;
-      subscribers: any[];
+      subscribers: unknown[];
     }>) => {
       const { community, subscribers } = action.payload;
       if (!state[community]) {
@@ -79,7 +79,7 @@ const communitySlice = createSlice({
     },
     getCommunityRolesError: (state, action: PayloadAction<{
       community: string;
-      error: any;
+      error: unknown;
     }>) => {
       const { community, error } = action.payload;
       if (!state[community]) {

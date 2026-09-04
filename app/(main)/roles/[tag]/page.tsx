@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useAppDispatch } from "@/store/hooks";
 import { setPathname } from "@/store/slices/globalSlice";
 import {
@@ -44,6 +45,7 @@ function CommunityMemberCard({
   title?: string | null;
   role?: string | null;
 }) {
+  const t = useTranslations();
   const initial = name?.charAt(0)?.toUpperCase() || "U";
 
   return (
@@ -83,7 +85,7 @@ function CommunityMemberCard({
           nativeButton={false}
           render={<Link href={`/@${name}`} />}
         >
-          View profile
+          {t("user_roles.view_profile")}
         </Button>
       </div>
     </Card>
@@ -92,6 +94,7 @@ function CommunityMemberCard({
 
 export default function CommunityRolesPage() {
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const params = useParams();
   const tag = (Array.isArray(params.tag) ? params.tag[0] : params.tag) ?? "";
   const [roles, setRoles] = useState<CommunityRole[]>([]);
@@ -129,7 +132,7 @@ export default function CommunityRolesPage() {
     return (
       <FeedLayout centerClassName="md:max-w-4xl lg:max-w-6xl">
         <div className="flex flex-col items-center justify-center gap-2 py-12">
-          <p className="text-muted-foreground">Loading community data...</p>
+          <p className="text-muted-foreground">{t("user_roles.loading_community_data")}</p>
         </div>
       </FeedLayout>
     );
@@ -139,7 +142,7 @@ export default function CommunityRolesPage() {
     <FeedLayout centerClassName="md:max-w-4xl lg:max-w-6xl">
       <div className="mb-6">
         <h1 className="mb-2 font-sans text-2xl font-bold text-foreground md:text-3xl">
-          Community Management
+          {t("user_roles.community_management")}
         </h1>
         <div className="flex flex-wrap items-center gap-2 text-muted-foreground">
           <Link
@@ -149,7 +152,7 @@ export default function CommunityRolesPage() {
             {tag}
           </Link>
           <span aria-hidden>/</span>
-          <span>Roles &amp; Members</span>
+          <span>{t("user_roles.roles_and_members")}</span>
         </div>
       </div>
 
@@ -164,7 +167,7 @@ export default function CommunityRolesPage() {
                 : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
             }`}
           >
-            Roles ({roles.length})
+            {t("g.roles")} ({roles.length})
           </button>
           <button
             type="button"
@@ -175,7 +178,7 @@ export default function CommunityRolesPage() {
                 : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
             }`}
           >
-            Subscribers ({subscribers.length})
+            {t("user_roles.subscribers")} ({subscribers.length})
           </button>
         </nav>
       </div>
@@ -185,7 +188,7 @@ export default function CommunityRolesPage() {
           {roles.length === 0 ? (
             <div className="rounded-lg border border-border bg-muted/40 p-8 text-center">
               <p className="text-muted-foreground">
-                No roles found for this community.
+                {t("user_roles.no_roles")}
               </p>
             </div>
           ) : (
@@ -207,7 +210,7 @@ export default function CommunityRolesPage() {
           {subscribers.length === 0 ? (
             <div className="rounded-lg border border-border bg-muted/40 p-8 text-center">
               <p className="text-muted-foreground">
-                No subscribers found for this community.
+                {t("user_roles.no_subscribers")}
               </p>
             </div>
           ) : (

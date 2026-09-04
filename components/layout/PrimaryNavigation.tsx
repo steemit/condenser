@@ -8,6 +8,7 @@ import {
   UserRoundIcon,
   WalletIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
 import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
@@ -28,15 +29,16 @@ const GLOBAL_FEED_SORTS = new Set([
  * Second-level items under "My Profile" (legacy ProfileNavigation).
  * Settings is intentionally not in the sidebar; Feed is omitted because it
  * duplicates Explore → My Friends (/@{me}/feed).
+ * labelKey is a next-intl message key resolved with useTranslations().
  */
-const MY_PROFILE_SECTIONS: { segment: string; label: string }[] = [
-  { segment: "blog", label: "Blog" },
-  { segment: "posts", label: "Posts" },
-  { segment: "comments", label: "Comments" },
-  { segment: "replies", label: "Replies" },
-  { segment: "notifications", label: "Notifications" },
-  { segment: "communities", label: "Subscriptions" },
-  { segment: "payout", label: "Payouts" },
+const MY_PROFILE_SECTIONS: { segment: string; labelKey: string }[] = [
+  { segment: "blog", labelKey: "g.blog" },
+  { segment: "posts", labelKey: "g.posts" },
+  { segment: "comments", labelKey: "g.comments" },
+  { segment: "replies", labelKey: "g.replies" },
+  { segment: "notifications", labelKey: "g.notifications" },
+  { segment: "communities", labelKey: "g.subscriptions" },
+  { segment: "payout", labelKey: "g.payouts" },
 ];
 
 function profileSectionHref(username: string, segment: string) {
@@ -246,6 +248,7 @@ function NavGroup({
 
 export function PrimaryNavigation({ pathname }: { pathname: string }) {
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const sessionUser = useAppSelector((s) => s.user.current?.username);
   const walletBase = getSteemitWalletBaseUrl();
 
@@ -288,14 +291,14 @@ export function PrimaryNavigation({ pathname }: { pathname: string }) {
     // menu); one's own feed lives under Explore > My Friends instead.
     const sections =
       viewedUser && !isOwnProfile
-        ? [...MY_PROFILE_SECTIONS, { segment: "feed", label: "Friends Feed" }]
+        ? [...MY_PROFILE_SECTIONS, { segment: "feed", labelKey: "g.friends_feed" }]
         : MY_PROFILE_SECTIONS;
-    return sections.map(({ segment, label }) => ({
-      label,
+    return sections.map(({ segment, labelKey }) => ({
+      label: t(labelKey),
       href: profileSectionHref(user, segment),
       active: isProfileSectionActive(effectiveUrl, user, segment),
     }));
-  }, [profileGroupUser, viewedUser, isOwnProfile, effectiveUrl]);
+  }, [profileGroupUser, viewedUser, isOwnProfile, effectiveUrl, t]);
 
   const profileGroupActive = profileSections.some((s) => s.active);
 
@@ -333,31 +336,31 @@ export function PrimaryNavigation({ pathname }: { pathname: string }) {
     <nav
       id="appNavigation"
       className="App__navigation flex flex-col gap-5 text-sm"
-      aria-label="Primary navigation"
+      aria-label={t("navigation.primary_navigation")}
     >
       <NavGroup
-        label="Explore"
+        label={t("g.explore")}
         icon={CompassIcon}
         active={exploreActive}
         expanded={expanded === "explore"}
         onToggle={() => toggleGroup("explore")}
       >
-        <NavSubItem href="/trending" label="All Posts" active={allPostsActive} />
+        <NavSubItem href="/trending" label={t("g.posts_all")} active={allPostsActive} />
         <NavSubItem
           href="/communities"
-          label="Communities"
+          label={t("g.communities")}
           active={communitiesActive}
         />
         {sessionUser ? (
           <>
             <NavSubItem
               href={`/@${sessionUser}/feed`}
-              label="My Friends"
+              label={t("g.my_friends")}
               active={myFriendsActive}
             />
             <NavSubItem
               href="/trending/my"
-              label="My Subscriptions"
+              label={t("g.my_subscriptions")}
               active={mySubsActive}
             />
           </>
@@ -365,14 +368,14 @@ export function PrimaryNavigation({ pathname }: { pathname: string }) {
           <>
             <NavSubItem
               href=""
-              label="My Friends"
+              label={t("g.my_friends")}
               active={false}
               useLoginPrompt
               onLoginPrompt={loginPrompt}
             />
             <NavSubItem
               href=""
-              label="My Subscriptions"
+              label={t("g.my_subscriptions")}
               active={false}
               useLoginPrompt
               onLoginPrompt={loginPrompt}
@@ -383,7 +386,7 @@ export function PrimaryNavigation({ pathname }: { pathname: string }) {
 
       {profileGroupUser ? (
         <NavGroup
-          label={viewedUser && !isOwnProfile ? `@${profileGroupUser}` : "My Profile"}
+          label={viewedUser && !isOwnProfile ? `@${profileGroupUser}` : t("g.my_profile")}
           icon={UserRoundIcon}
           active={profileGroupActive}
           expanded={expanded === "profile"}
@@ -400,7 +403,7 @@ export function PrimaryNavigation({ pathname }: { pathname: string }) {
           className={pillClass(false, "font-bold")}
         >
           <UserRoundIcon className="size-[1.15rem] shrink-0" aria-hidden />
-          <span className="flex-1 text-left">My Profile</span>
+          <span className="flex-1 text-left">{t("g.my_profile")}</span>
         </button>
       )}
 
@@ -412,12 +415,12 @@ export function PrimaryNavigation({ pathname }: { pathname: string }) {
           className={pillClass(false, "font-bold")}
         >
           <WalletIcon className="size-[1.15rem] shrink-0" aria-hidden />
-          <span className="flex-1 text-left">My Wallet</span>
+          <span className="flex-1 text-left">{t("g.my_wallet")}</span>
         </a>
       ) : (
         <button type="button" onClick={loginPrompt} className={pillClass(false, "font-bold")}>
           <WalletIcon className="size-[1.15rem] shrink-0" aria-hidden />
-          <span className="flex-1 text-left">My Wallet</span>
+          <span className="flex-1 text-left">{t("g.my_wallet")}</span>
         </button>
       )}
     </nav>

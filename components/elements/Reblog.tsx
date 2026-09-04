@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
 import { broadcastCustomJson } from '@/lib/api/broadcast';
@@ -20,6 +21,7 @@ interface ReblogProps {
  */
 export default function Reblog({ author, permlink, iconOnly = false }: ReblogProps) {
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const username = useAppSelector((state) => state.user.current?.username);
 
   const [active, setActive] = useState(false);
@@ -76,8 +78,8 @@ export default function Reblog({ author, permlink, iconOnly = false }: ReblogPro
         className={`inline-flex items-center p-0.5 transition-colors ${
           loading ? 'opacity-50 cursor-not-allowed' : ''
         }`}
-        title={active ? 'Already reblogged' : 'Reblog this post'}
-        aria-label={active ? 'Already reblogged' : 'Reblog this post'}
+        title={active ? t('reblog_jsx.already_reblogged') : t('reblog_jsx.reblog_this_post')}
+        aria-label={active ? t('reblog_jsx.already_reblogged') : t('reblog_jsx.reblog_this_post')}
       >
         {loading ? (
           <svg
@@ -109,7 +111,7 @@ export default function Reblog({ author, permlink, iconOnly = false }: ReblogPro
           ? 'bg-[#06D6A9]/15 text-[#0b8f68] dark:text-[#06D6A9]'
           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
       } ${loading ? 'opacity-50 cursor-not-allowed' : ''} ${active ? 'cursor-default' : ''}`}
-      title={active ? 'Already reblogged' : 'Reblog this post'}
+      title={active ? t('reblog_jsx.already_reblogged') : t('reblog_jsx.reblog_this_post')}
     >
       {loading ? (
         <svg
@@ -142,7 +144,7 @@ export default function Reblog({ author, permlink, iconOnly = false }: ReblogPro
           />
         </svg>
       )}
-      <span className="text-sm">{active ? 'Reblogged' : 'Reblog'}</span>
+      <span className="text-sm">{active ? t('reblog_jsx.reblogged') : t('reblog_jsx.reblog')}</span>
     </button>
   );
 }

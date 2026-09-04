@@ -439,10 +439,10 @@
   },
   "user_profile": {
     "unknown_account": "Невідомий обліковий запис",
-    "user_hasnt_made_any_posts_yet": "Схоже, %(name)s ще не опублікував жодного допису!",
+    "user_hasnt_made_any_posts_yet": "Схоже, {name} ще не опублікував жодного допису!",
     "user_hasnt_started_bloggin_yet": "Схоже, %(name)s ще не почав вести блог!",
     "user_hasnt_followed_anything_yet": "Схоже, %(name)s ще не стежить ні за ким! Якщо %(name)s нещодавно додав нових користувачів для підписки, їх персоналізована стрічка заповниться, щойно стане доступним новий вміст.",
-    "user_hasnt_had_any_replies_yet": "%(name)s ще не отримав жодної відповіді",
+    "user_hasnt_had_any_replies_yet": "{name} ще не отримав жодної відповіді",
     "user_hasnt_had_any_notifications_yet": "%(name)s ще не отримав сповіщень",
     "looks_like_you_havent_posted_anything_yet": "Схоже, ви ще нічого не опублікували.",
     "create_a_post": "Створити допис",
@@ -500,7 +500,7 @@
     "changing_to_a_downvote": "Перехід на голосування проти",
     "changing_to_a_downvote_will_reset_curation_rewards_for_this_post": "Перехід на голосування проти скасує ваші винагороди за кураторство для цієї публікації",
     "confirm_flag": "Підтвердити позначку",
-    "and_more": "і ще %(count)s",
+    "and_more": "і ще {count}",
     "votes_plural": {
       "one": "%(count)s голосів",
       "other": "%(count)s голосів"

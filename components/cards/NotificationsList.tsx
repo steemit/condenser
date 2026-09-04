@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { receiveNotifications, receiveUnreadNotifications, notificationsLoading } from '@/store/slices/globalSlice';
 import { broadcastCustomJson } from '@/lib/api/broadcast';
@@ -34,12 +35,12 @@ interface NotificationsListProps {
 }
 
 const FILTERS = [
-  { key: 'all', label: 'All' },
-  { key: 'replies', label: 'Replies' },
-  { key: 'mentions', label: 'Mentions' },
-  { key: 'follows', label: 'Follows' },
-  { key: 'upvotes', label: 'Upvotes' },
-  { key: 'resteems', label: 'Resteems' },
+  { key: 'all', labelKey: 'notificationslist_jsx.all' },
+  { key: 'replies', labelKey: 'notificationslist_jsx.replies' },
+  { key: 'mentions', labelKey: 'notificationslist_jsx.mentions' },
+  { key: 'follows', labelKey: 'notificationslist_jsx.follows' },
+  { key: 'upvotes', labelKey: 'notificationslist_jsx.upvotes' },
+  { key: 'resteems', labelKey: 'notificationslist_jsx.resteems' },
 ] as const;
 
 type FilterKey = (typeof FILTERS)[number]['key'];
@@ -79,6 +80,7 @@ function renderMsg(msg: string): React.ReactNode {
  */
 export default function NotificationsList({ username }: NotificationsListProps) {
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const notificationsState = useAppSelector((state) =>
     state.global.notifications?.[username]
   );
@@ -194,7 +196,7 @@ export default function NotificationsList({ username }: NotificationsListProps) 
       }, 6000);
     } catch (error) {
       console.error('Error marking notifications as read:', error);
-      setMarkReadError('Failed to mark notifications as read. Please try again.');
+      setMarkReadError(t('notificationslist_jsx.mark_as_read_error'));
     } finally {
       setMarkReadPending(false);
     }
@@ -230,7 +232,7 @@ export default function NotificationsList({ username }: NotificationsListProps) 
                 filter === f.key ? 'font-bold' : ''
               } ${i > 0 ? 'border-l border-[#ababab]' : ''}`}
             >
-              {f.label}
+              {t(f.labelKey)}
             </button>
           </span>
         ))}
@@ -244,7 +246,7 @@ export default function NotificationsList({ username }: NotificationsListProps) 
             disabled={markReadPending}
             className="font-bold text-foreground hover:text-accent-foreground disabled:opacity-50"
           >
-            {markReadPending ? 'Marking...' : 'Mark all as read'}
+            {markReadPending ? t('notificationslist_jsx.marking') : t('notificationslist_jsx.mark_all_as_read')}
           </button>
           {markReadError && (
             <p className="mt-1 text-sm text-destructive">{markReadError}</p>
@@ -258,7 +260,7 @@ export default function NotificationsList({ username }: NotificationsListProps) 
         </div>
       ) : filteredNotifications.length === 0 ? (
         <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
-          Welcome! You don&apos;t have any notifications yet.
+          {t('notificationslist_jsx.empty')}
         </div>
       ) : (
         <div>
@@ -284,7 +286,7 @@ export default function NotificationsList({ username }: NotificationsListProps) 
                 {isUnread && (
                   <span
                     className="absolute right-4 top-3 text-[2em] leading-none text-accent-foreground"
-                    title="Unread"
+                    title={t('notificationslist_jsx.unread')}
                   >
                     •
                   </span>
@@ -326,7 +328,7 @@ export default function NotificationsList({ username }: NotificationsListProps) 
                 disabled={loading}
                 className="font-bold text-foreground hover:text-accent-foreground disabled:opacity-50"
               >
-                {loading ? 'Loading...' : 'Load more'}
+                {loading ? t('g.loading') : t('notificationslist_jsx.load_more')}
               </button>
             </div>
           )}

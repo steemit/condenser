@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import LoginForm from "@/components/modules/LoginForm";
 import {
   Dialog,
@@ -16,6 +18,7 @@ import { hideLogin } from "@/store/slices/userSlice";
  */
 export function GlobalModals() {
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const open = useAppSelector((s) => s.user.show_login_modal);
 
   return (
@@ -27,7 +30,7 @@ export function GlobalModals() {
     >
       <DialogContent showCloseButton>
         <DialogHeader>
-          <DialogTitle>Login</DialogTitle>
+          <DialogTitle>{t("g.login")}</DialogTitle>
         </DialogHeader>
         <LoginForm embedded />
       </DialogContent>

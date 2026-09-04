@@ -1,0 +1,9 @@
+{
+  "voting_jsx": {
+    "and_more": "et {count} en plus"
+  },
+  "user_profile": {
+    "user_hasnt_made_any_posts_yet": "Il semblerait que {name} n'ait pas encore publié d'article.",
+    "user_hasnt_had_any_replies_yet": "{name} n'a pas encore reçu de réponse"
+  }
+}

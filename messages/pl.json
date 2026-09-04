@@ -391,10 +391,10 @@
   },
   "user_profile": {
     "unknown_account": "Konto nieznane",
-    "user_hasnt_made_any_posts_yet": "Wygląda na to, że %(name)s nie opublikował jeszcze żadnych wpisów!",
+    "user_hasnt_made_any_posts_yet": "Wygląda na to, że {name} nie opublikował jeszcze żadnych wpisów!",
     "user_hasnt_started_bloggin_yet": "Wygląda na to, że %(name)s nie zaczął jeszcze blogowania!",
     "user_hasnt_followed_anything_yet": "Wygląda na to, że użytkownik %(name)s jeszcze nikogo nie obserwuje. Jeśli %(name)s zaczął(ęła) obserwować nowych użytkowników jego(jej) osobisty strumień zacznie się zapełniać, gdy powstaną nowe treści.  ",
-    "user_hasnt_had_any_replies_yet": "%(name)s nie ma jeszcze żadnych odpowiedzi",
+    "user_hasnt_had_any_replies_yet": "{name} nie ma jeszcze żadnych odpowiedzi",
     "followers": "Obserwujący",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "To są punkty reputacji użytkownika %(name)s.\n\nSystem punktów reputacji bazuje na historii otrzymanych przez użytkownika głosów i jest używany do ukrywania wpisów o niskiej jakości.",
     "follower_count": {
@@ -438,7 +438,7 @@
     "changing_to_an_upvote": "Zmień na głos za",
     "changing_to_a_downvote": "Zmień na głos przeciw",
     "confirm_flag": "Potwierdź oznaczenie flagą",
-    "and_more": "i %(count)s więcej",
+    "and_more": "i {count} więcej",
     "votes_plural": {
       "one": "%(count)s głos",
       "other": "%(count)s głosów"

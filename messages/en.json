@@ -328,7 +328,12 @@
     "many_followers": "%(count)s Followers",
     "many_posts": "%(count)s Posts",
     "search_history": "History",
-    "announcement": "Announcements"
+    "announcement": "Announcements",
+    "untitled": "Untitled",
+    "scroll_to_top": "Scroll to top",
+    "pagination": "Pagination",
+    "submit_search": "Submit search",
+    "welcome_guide": "Welcome Guide"
   },
   "navigation": {
     "about": "About Steemit, Inc.",
@@ -359,7 +364,11 @@
     "intro_tagline": "Your voice is worth something",
     "intro_paragraph": "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool.",
     "jobs": "Jobs at Steemit",
-    "steem_proposals": "Steem Proposals"
+    "steem_proposals": "Steem Proposals",
+    "primary_navigation": "Primary navigation",
+    "menu": "Menu",
+    "close_menu": "Close menu",
+    "breadcrumb": "Breadcrumb"
   },
   "main_menu": {
     "hot": "Hot",
@@ -442,17 +451,19 @@
     "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN": "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
     "view_the_full_context": "View the full context",
     "view_the_direct_parent": "View the direct parent",
-    "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment's thread from"
+    "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment's thread from",
+    "post_not_found": "Post not found",
+    "failed_to_load": "Failed to load post or comments"
   },
   "recoveraccountstep1_jsx": {
     "recover_account_intro": "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service."
   },
   "user_profile": {
     "unknown_account": "Unknown Account",
-    "user_hasnt_made_any_posts_yet": "Looks like %(name)s hasn't made any posts yet!",
+    "user_hasnt_made_any_posts_yet": "{name} hasn't made any posts yet.",
     "user_hasnt_started_bloggin_yet": "Looks like %(name)s hasn't started blogging yet!",
     "user_hasnt_followed_anything_yet": "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
-    "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+    "user_hasnt_had_any_replies_yet": "{name} hasn't had any replies yet.",
     "user_hasnt_had_any_notifications_yet": "%(name)s hasn't had any notifications yet",
     "looks_like_you_havent_posted_anything_yet": "Looks like you haven't posted anything yet.",
     "create_a_post": "Create a Post",
@@ -477,7 +488,23 @@
       "other": "%(count)s posts"
     },
     "hide_resteems": "Hide Resteems",
-    "show_all": "Show All"
+    "show_all": "Show All",
+    "reputation_title": "This is {name}'s reputation score. It is based on the history of votes.",
+    "blacklisted_on": "Blacklisted on: {list}",
+    "followers_label": "{count, plural, one {follower} other {followers}}",
+    "posts_label": "{count, plural, one {post} other {posts}}",
+    "following_label": "following",
+    "joined_date": "Joined {date}",
+    "loading_profile": "Loading profile...",
+    "user_not_found": "User not found",
+    "only_view_own_settings": "You can only view your own settings.",
+    "following": "Following",
+    "no_friends_feed": "You haven't followed anyone yet!",
+    "explore_trending": "Explore Trending",
+    "new_users_guide": "New users guide",
+    "user_hasnt_made_any_comments_yet": "{name} hasn't made any comments yet.",
+    "no_pending_payouts": "No pending payouts.",
+    "user_hasnt_posted_anything_yet": "{name} hasn't posted anything yet."
   },
   "post_jsx": {
     "now_showing_comments_with_low_ratings": "Now showing comments with low ratings",
@@ -510,14 +537,25 @@
     "changing_to_a_downvote": "Changing to a Down-Vote",
     "changing_to_a_downvote_will_reset_curation_rewards_for_this_post": "Changing to a Down-Vote will reset your curation rewards for this post",
     "confirm_flag": "Confirm Flag",
-    "and_more": "and %(count)s more",
+    "and_more": "and {count} more",
     "votes_plural": {
       "one": "%(count)s vote",
       "other": "%(count)s votes"
     },
     "must_reached_minimum_payout": "(amount must reach $0.02 for payout)",
     "payout": "Payout",
-    "breakdown": "Breakdown"
+    "breakdown": "Breakdown",
+    "vote_weight": "Vote weight",
+    "downvote_weight": "Downvote weight",
+    "vote_percent": "Vote {percent}%",
+    "downvote_percent": "Downvote {percent}%",
+    "payout_details": "Payout details",
+    "pending_payout_amount": "Pending Payout {value}",
+    "payout_date": "Payout Date {date}",
+    "author_payout": "Author Payout {value}",
+    "curator_payout": "Curator Payout {value}",
+    "voters": "Voters",
+    "vote_count": "{count, plural, one {# vote} other {# votes}}"
   },
   "votesandcomments_jsx": {
     "no_responses_yet_click_to_respond": "No responses yet. Click to respond.",
@@ -576,7 +614,8 @@
     "resources": "Resources"
   },
   "markdownviewer_jsx": {
-    "images_were_hidden_due_to_low_ratings": "Images were hidden due to low ratings."
+    "images_were_hidden_due_to_low_ratings": "Images were hidden due to low ratings.",
+    "embedded_video_title": "{provider} video {id}"
   },
   "postsummary_jsx": {
     "resteemed": "resteemed",
@@ -585,7 +624,8 @@
     "adjust_your": "adjust your",
     "display_preferences": "display preferences",
     "create_an_account": "create an account",
-    "to_save_your_preferences": "to save your preferences"
+    "to_save_your_preferences": "to save your preferences",
+    "this_post_is_nsfw": "This post is"
   },
   "posts_index": {
     "empty_feed_1": "Looks like you haven't followed anything yet",
@@ -599,7 +639,8 @@
     "no_muted_posts": "No muted posts found.",
     "no_followed_posts": "You haven't followed anyone yet! Explore Trending to find people to follow.",
     "no_posts_in_tag": "No posts in #{tag} yet!",
-    "no_posts_found": "No posts found."
+    "no_posts_found": "No posts found.",
+    "unmoderated_tag": "Unmoderated tag"
   },
   "explorepost_jsx": {
     "copied": "Copied Successfully",
@@ -670,7 +711,12 @@
     "wif_required": "Posting private key (WIF) is required",
     "invalid_wif_format": "Invalid format. Please enter your posting private key in WIF format (starts with 5...)",
     "validating_key": "Validating posting private key...",
-    "logging_in": "Logging in..."
+    "logging_in": "Logging in...",
+    "invalid_account_or_no_posting_authority": "Invalid account or posting authority not found",
+    "invalid_posting_key": "Invalid posting key",
+    "failed_to_get_challenge": "Failed to get login challenge",
+    "login_failed": "Login failed",
+    "login_failed_try_again": "Login failed. Please try again."
   },
   "chainvalidation_js": {
     "account_name_should_not_be_empty": "Account name should not be empty.",
@@ -707,8 +753,8 @@
     "upload_error_image": "Please insert only image files.",
     "upload_image": "Upload an image",
     "uploading_image": "Uploading image",
-    "profile_image_url": "Profile picture url",
-    "cover_image_url": "Cover image url",
+    "profile_image_url": "Profile Image URL",
+    "cover_image_url": "Cover Image URL",
     "profile_name": "Display Name",
     "profile_about": "About",
     "profile_location": "Location",
@@ -716,7 +762,28 @@
     "saved": "Saved!",
     "rpc_title": "RPC Node List",
     "rpc_select": "Select RPC Node",
-    "selected_rpc": "Selected RPC Node : %(rpc)s"
+    "selected_rpc": "Selected RPC Node : %(rpc)s",
+    "account_settings": "Account Settings",
+    "only_own_profile": "You can only edit your own profile settings.",
+    "profile_updated": "Profile updated successfully!",
+    "update_failed": "Failed to update profile. Please try again.",
+    "profile_image_placeholder": "https://example.com/image.jpg",
+    "cover_image_placeholder": "https://example.com/cover.jpg",
+    "display_name_placeholder": "Your display name",
+    "about_placeholder": "Tell us about yourself...",
+    "location_placeholder": "Your location",
+    "website_placeholder": "https://yourwebsite.com",
+    "characters_used": "{count}/{max} characters",
+    "profile_image_invalid_url": "Profile image must be a valid URL",
+    "cover_image_invalid_url": "Cover image must be a valid URL",
+    "website_invalid_url": "Website must be a valid URL",
+    "name_too_long": "Name is too long (max {max} characters)",
+    "about_too_long": "About is too long (max {max} characters)",
+    "location_too_long": "Location is too long (max {max} characters)",
+    "website_too_long": "Website URL is too long (max {max} characters)",
+    "update_profile": "Update Profile",
+    "updating": "Updating...",
+    "save_preferences": "Save Preferences"
   },
   "transfer_jsx": {
     "amount_is_in_form": "Amount is in the form 99999.999",
@@ -804,7 +871,13 @@
     "follows": "Follows",
     "resteems": "Resteems",
     "upvotes": "Upvotes",
-    "mentions": "Mentions"
+    "mentions": "Mentions",
+    "marking": "Marking...",
+    "mark_as_read_error": "Failed to mark notifications as read. Please try again.",
+    "empty": "Welcome! You don't have any notifications yet.",
+    "unread": "Unread",
+    "unread_notifications": "{count, plural, one {# unread notification} other {# unread notifications}}",
+    "failed_to_load": "Failed to load notifications"
   },
   "user_roles": {
     "role_permissions": "Role Permissions",
@@ -822,10 +895,84 @@
     "muted_description": "new posts automatically muted",
     "invalid_username": "Please enter a valid username.",
     "invalid_character": "Please enter a username without \"@\".",
-    "invalid_role": "The user already has that role."
+    "invalid_role": "The user already has that role.",
+    "loading_community_data": "Loading community data...",
+    "community_management": "Community Management",
+    "roles_and_members": "Roles & Members",
+    "subscribers": "Subscribers",
+    "no_roles": "No roles found for this community.",
+    "no_subscribers": "No subscribers found for this community.",
+    "view_profile": "View profile"
   },
   "comments": {
     "no_comments_yet": "No comments yet. Be the first to comment!",
-    "load_more_comments": "LOAD MORE COMMENTS"
+    "load_more_comments": "LOAD MORE COMMENTS",
+    "confirm_delete": "Are you sure you want to delete this comment?",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "reply_count": "{count, plural, one {# reply} other {# replies}}",
+    "show_more_replies": "Show {count, plural, one {# more reply} other {# more replies}}",
+    "delete_failed": "Failed to delete the comment. Please try again."
+  },
+  "sidebar": {
+    "new_to_steemit": "New to Steemit?",
+    "community_stats": "{subscribers, plural, one {# subscriber} other {# subscribers}} • {posters, plural, one {# active poster} other {# active posters}}",
+    "coin_marketplace": "Coin Marketplace"
+  },
+  "time_ago": {
+    "just_now": "just now",
+    "minutes": "{count, plural, one {# minute ago} other {# minutes ago}}",
+    "hours": "{count, plural, one {# hour ago} other {# hours ago}}",
+    "days": "{count, plural, one {# day ago} other {# days ago}}",
+    "weeks": "{count, plural, one {# week ago} other {# weeks ago}}",
+    "months": "{count, plural, one {# month ago} other {# months ago}}",
+    "years": "{count, plural, one {# year ago} other {# years ago}}"
+  },
+  "reblog_jsx": {
+    "already_reblogged": "Already reblogged",
+    "reblog_this_post": "Reblog this post",
+    "reblogged": "Reblogged",
+    "reblog": "Reblog"
+  },
+  "degradation_banner": {
+    "outage": "Connection to the Steem network is unstable. Some actions may fail.",
+    "degraded": "Showing cached content — the Steem network is slow to respond."
+  },
+  "share_menu": {
+    "share_on": "Share on {name}"
+  },
+  "search_jsx": {
+    "accounts": "Accounts",
+    "sort_by": "Sort by:",
+    "newest": "Newest",
+    "highest_payout": "Highest Payout",
+    "searching": "Searching...",
+    "nothing_found": "Nothing was found.",
+    "enter_query_hint": "Enter a search query above to find posts, comments, and accounts."
+  },
+  "communities_jsx": {
+    "search_communities": "Search communities",
+    "sort_communities": "Sort communities",
+    "subscribers": "Subscribers",
+    "nothing_found": "Nothing was found.",
+    "stats": "{subscribers, plural, one {# subscriber} other {# subscribers}} • {posters, plural, one {# poster} other {# posters}} • {posts, plural, one {# post} other {# posts}}"
+  },
+  "submit_jsx": {
+    "please_log_in": "Please log in to create a post."
+  },
+  "notfound": {
+    "title": "Sorry! This page doesn't exist.",
+    "head_back": "Not to worry. You can head back to",
+    "our_homepage": "our homepage",
+    "or_check_posts": ", or check out some great posts below.",
+    "menu_new_posts": "new posts",
+    "menu_hot_posts": "hot posts",
+    "menu_trending_posts": "trending posts",
+    "menu_promoted_posts": "promoted posts",
+    "menu_active_posts": "active posts"
+  },
+  "follow_list": {
+    "no_followers": "@{username} has no followers yet.",
+    "not_following": "@{username} is not following anyone yet."
   }
 }

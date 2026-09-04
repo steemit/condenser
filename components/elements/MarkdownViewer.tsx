@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import MarkdownIt from 'markdown-it';
 import sanitizeHtml from 'sanitize-html';
 import htmlReady from '@/lib/html-ready';
@@ -56,6 +57,7 @@ export default function MarkdownViewer({
   hideImages = false,
   isProxifyImages = false,
 }: MarkdownViewerProps) {
+  const t = useTranslations();
   // Low-ratings posts hide images until the user clicks the banner.
   const [allowNoImage, setAllowNoImage] = useState(true);
 
@@ -140,19 +142,19 @@ export default function MarkdownViewer({
         );
       } else {
         let url: string | null = null;
-        let title = '';
+        let provider = '';
         if (type === 'threespeak') {
           url = `https://3speak.online/embed?v=${id}`;
-          title = `ThreeSpeak video ${id}`;
+          provider = 'ThreeSpeak';
         } else if (type === 'vimeo') {
           url = `https://player.vimeo.com/video/${id}#t=${startTime}s`;
-          title = `Vimeo video ${id}`;
+          provider = 'Vimeo';
         } else if (type === 'twitch') {
           url = `https://player.twitch.tv/${id}`;
-          title = `Twitch video ${id}`;
+          provider = 'Twitch';
         } else if (type === 'dtube') {
           url = `https://emb.d.tube/#!/${id}`;
-          title = `DTube video ${id}`;
+          provider = 'DTube';
         } else {
           console.error('MarkdownViewer unknown embed type', type);
         }
@@ -168,7 +170,7 @@ export default function MarkdownViewer({
                 webkitallowfullscreen="true"
                 mozallowfullscreen="true"
                 allowFullScreen
-                title={title}
+                title={t('markdownviewer_jsx.embedded_video_title', { provider, id })}
               />
             </div>
           );
@@ -200,12 +202,12 @@ export default function MarkdownViewer({
           onClick={() => setAllowNoImage(false)}
           className="MarkdownViewer__negative_group"
         >
-          Images were hidden due to low ratings
+          {t('markdownviewer_jsx.images_were_hidden_due_to_low_ratings')}
           <button
             style={{ marginBottom: 0 }}
             className="button hollow tiny float-right"
           >
-            Show
+            {t('g.show')}
           </button>
         </div>
       )}

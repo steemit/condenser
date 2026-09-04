@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 /** Legacy steem round icon (from SteemLogo), shown at 4x on the 404 page. */
 function SteemIcon() {
@@ -17,11 +18,11 @@ function SteemIcon() {
 }
 
 const MENU = [
-  { href: "/created", label: "new posts" },
-  { href: "/hot", label: "hot posts" },
-  { href: "/trending", label: "trending posts" },
-  { href: "/promoted", label: "promoted posts" },
-  { href: "/payout", label: "active posts" },
+  { href: "/created", labelKey: "notfound.menu_new_posts" },
+  { href: "/hot", labelKey: "notfound.menu_hot_posts" },
+  { href: "/trending", labelKey: "notfound.menu_trending_posts" },
+  { href: "/promoted", labelKey: "notfound.menu_promoted_posts" },
+  { href: "/payout", labelKey: "notfound.menu_active_posts" },
 ];
 
 /**
@@ -29,18 +30,19 @@ const MENU = [
  * pipe-separated feed links (pages/NotFound.jsx, app.scss .NotFound).
  */
 export function NotFoundView() {
+  const t = useTranslations();
   return (
     <div className="NotFound mx-auto mt-[2em] w-[340px] text-center min-[640px]:w-[640px]">
       <SteemIcon />
       <h4 className="mb-4 text-lg font-bold text-foreground">
-        Sorry! This page doesn&apos;t exist.
+        {t("notfound.title")}
       </h4>
       <p className="mb-4 text-foreground">
-        Not to worry. You can head back to{" "}
+        {t("notfound.head_back")}{" "}
         <Link href="/" className="font-bold text-accent-foreground">
-          our homepage
+          {t("notfound.our_homepage")}
         </Link>
-        , or check out some great posts below.
+        {t("notfound.or_check_posts")}
       </p>
       <ul className="NotFound__menu mt-[1em]">
         {MENU.map((item, i) => (
@@ -49,7 +51,7 @@ export function NotFoundView() {
               href={item.href}
               className="text-accent-foreground hover:underline"
             >
-              {item.label}
+              {t(item.labelKey)}
             </Link>
             {i < MENU.length - 1 && (
               <span className="text-muted-foreground">&nbsp;|</span>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 /**
  * TimeAgo — relative timestamp like legacy's TimeAgoWrapper
@@ -13,21 +14,33 @@ const HOUR = 3600;
 const DAY = 86400;
 const WEEK = 604800;
 
-export function timeAgo(date: Date, now: number = Date.now()): string {
+export type TimeAgoUnit =
+  | 'just_now'
+  | 'minutes'
+  | 'hours'
+  | 'days'
+  | 'weeks'
+  | 'months'
+  | 'years';
+
+/** Pick the time_ago.* message key and its count for a given age. */
+export function timeAgoUnit(
+  date: Date,
+  now: number = Date.now()
+): { unit: TimeAgoUnit; count: number } {
   const seconds = Math.max(0, Math.floor((now - date.getTime()) / 1000));
-  if (seconds < 45) return 'just now';
+  if (seconds < 45) return { unit: 'just_now', count: 0 };
   const minutes = Math.floor(seconds / MINUTE);
-  if (minutes < 45) return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+  if (minutes < 45) return { unit: 'minutes', count: minutes };
   const hours = Math.floor(seconds / HOUR);
-  if (hours < 22) return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+  if (hours < 22) return { unit: 'hours', count: hours };
   const days = Math.floor(seconds / DAY);
-  if (days < 7) return `${days} day${days === 1 ? '' : 's'} ago`;
+  if (days < 7) return { unit: 'days', count: days };
   const weeks = Math.floor(seconds / WEEK);
-  if (weeks < 4) return `${weeks} week${weeks === 1 ? '' : 's'} ago`;
+  if (weeks < 4) return { unit: 'weeks', count: weeks };
   const months = Math.floor(days / 30);
-  if (months < 12) return `${months} month${months === 1 ? '' : 's'} ago`;
-  const years = Math.floor(days / 365);
-  return `${years} year${years === 1 ? '' : 's'} ago`;
+  if (months < 12) return { unit: 'months', count: months };
+  return { unit: 'years', count: Math.floor(days / 365) };
 }
 
 interface TimeAgoProps {
@@ -39,6 +52,7 @@ interface TimeAgoProps {
 }
 
 export default function TimeAgo({ date, className, prefix }: TimeAgoProps) {
+  const t = useTranslations();
   // Chain timestamps have no timezone suffix; they are UTC.
   const d = new Date(date.endsWith('Z') || /[+-]\d{2}:?\d{2}$/.test(date) ? date : date + 'Z');
   const [, setTick] = useState(0);
@@ -47,10 +61,12 @@ export default function TimeAgo({ date, className, prefix }: TimeAgoProps) {
     return () => clearInterval(id);
   }, []);
 
+  const { unit, count } = timeAgoUnit(d);
+
   return (
     <span className={className} title={d.toLocaleString()}>
       {prefix}
-      {timeAgo(d)}
+      {t(`time_ago.${unit}`, { count })}
     </span>
   );
 }

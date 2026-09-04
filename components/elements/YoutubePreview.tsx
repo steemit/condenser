@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface YoutubePreviewProps {
   youTubeId: string;
@@ -25,6 +26,7 @@ export default function YoutubePreview({
   startTime = 0,
   dataParams = 'enablejsapi=0&rel=0&origin=https://steemit.com',
 }: YoutubePreviewProps) {
+  const t = useTranslations();
   const [play, setPlay] = useState(false);
 
   if (!play) {
@@ -54,7 +56,7 @@ export default function YoutubePreview({
         src={autoPlaySrc}
         frameBorder="0"
         allowFullScreen
-        title={`YouTube video ${youTubeId}`}
+        title={t('markdownviewer_jsx.embedded_video_title', { provider: 'YouTube', id: youTubeId })}
       />
     </div>
   );

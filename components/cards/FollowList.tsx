@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { fetchFollowers, fetchFollowing, FollowItem } from '@/lib/api/steem';
 import Follow from '@/components/elements/Follow';
@@ -22,6 +23,7 @@ const PAGE_SIZE = 20;
  * with page-number pagination (ReactPaginate style).
  */
 export default function FollowList({ accountname, type, total }: FollowListProps) {
+  const t = useTranslations();
   const currentUser = useAppSelector((s) => s.user.current?.username);
   const [items, setItems] = useState<FollowItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,8 +73,8 @@ export default function FollowList({ accountname, type, total }: FollowListProps
     return (
       <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
         {type === 'followers'
-          ? `@${accountname} has no followers yet.`
-          : `@${accountname} is not following anyone yet.`}
+          ? t('follow_list.no_followers', { username: accountname })
+          : t('follow_list.not_following', { username: accountname })}
       </div>
     );
   }
@@ -115,7 +117,7 @@ export default function FollowList({ accountname, type, total }: FollowListProps
 
       {totalPages > 1 && (
         <nav
-          aria-label="Pagination"
+          aria-label={t('g.pagination')}
           className="mt-6 flex items-center justify-center gap-1 text-sm"
         >
           <button
@@ -124,7 +126,7 @@ export default function FollowList({ accountname, type, total }: FollowListProps
             onClick={() => void loadPage(page - 1)}
             className="rounded px-2 py-1 text-foreground hover:bg-accent disabled:opacity-40"
           >
-            previous
+            {t('g.previous')}
           </button>
           {start > 0 && <span className="px-1 text-muted-foreground">…</span>}
           {pageNumbers.map((p) => (
@@ -151,7 +153,7 @@ export default function FollowList({ accountname, type, total }: FollowListProps
             onClick={() => void loadPage(page + 1)}
             className="rounded px-2 py-1 text-foreground hover:bg-accent disabled:opacity-40"
           >
-            next
+            {t('g.next')}
           </button>
         </nav>
       )}

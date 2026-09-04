@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setPathname } from "@/store/slices/globalSlice";
 import {
@@ -42,6 +43,7 @@ export default function SearchContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   
   const query = searchParams.get('q') || '';
   const sortParam = searchParams.get('s') || 'created_at';
@@ -205,13 +207,13 @@ export default function SearchContent() {
             type="search"
             value={localQuery}
             onChange={(e) => setLocalQuery(e.target.value)}
-            placeholder="Search"
-            aria-label="Search"
+            placeholder={t("g.search")}
+            aria-label={t("g.search")}
             className="h-[42px] w-full border-none bg-transparent pr-10 text-[16px] text-foreground outline-none placeholder:text-muted-foreground"
           />
           <button
             type="submit"
-            aria-label="Submit search"
+            aria-label={t("g.submit_search")}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-foreground"
           >
             <SearchIcon className="size-5" strokeWidth={1.2} />
@@ -225,9 +227,9 @@ export default function SearchContent() {
           <div className="mb-4 flex flex-wrap items-center gap-y-2 border-b border-border pb-2">
             <div className="flex items-center">
               {[
-                { value: 0, label: "Posts" },
-                { value: 1, label: "Comments" },
-                { value: 2, label: "Accounts" },
+                { value: 0, label: t("g.posts") },
+                { value: 1, label: t("g.comments") },
+                { value: 2, label: t("search_jsx.accounts") },
               ].map((tab) => (
                 <button
                   key={tab.value}
@@ -252,7 +254,7 @@ export default function SearchContent() {
                   htmlFor="search-sort"
                   className="text-sm text-muted-foreground"
                 >
-                  Sort by:
+                  {t("search_jsx.sort_by")}
                 </label>
                 <select
                   id="search-sort"
@@ -263,8 +265,8 @@ export default function SearchContent() {
                     "focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
                   )}
                 >
-                  <option value="created_at">Newest</option>
-                  <option value="payout">Highest Payout</option>
+                  <option value="created_at">{t("search_jsx.newest")}</option>
+                  <option value="payout">{t("search_jsx.highest_payout")}</option>
                 </select>
               </div>
             )}
@@ -272,11 +274,11 @@ export default function SearchContent() {
 
           {searchState.pending && posts.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-2 py-12">
-              <p className="text-muted-foreground">Searching...</p>
+              <p className="text-muted-foreground">{t("search_jsx.searching")}</p>
             </div>
           ) : posts.length === 0 ? (
             <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
-              Nothing was found.
+              {t("search_jsx.nothing_found")}
             </div>
           ) : depth === 2 ? (
             <SearchUserList hits={hits} />
@@ -292,7 +294,7 @@ export default function SearchContent() {
         </>
       ) : (
         <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
-          Enter a search query above to find posts, comments, and accounts.
+          {t("search_jsx.enter_query_hint")}
         </div>
       )}
     </FeedLayout>

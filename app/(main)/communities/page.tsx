@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { SearchIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { FeedLayout } from "@/components/layout/FeedLayout";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -16,9 +17,9 @@ import SubscribeButton from "@/components/elements/SubscribeButton";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const SORT_OPTIONS = [
-  { value: "rank", label: "Rank" },
-  { value: "subs", label: "Subscribers" },
-  { value: "new", label: "New" },
+  { value: "rank", labelKey: "g.rank" },
+  { value: "subs", labelKey: "communities_jsx.subscribers" },
+  { value: "new", labelKey: "g.new" },
 ];
 
 /**
@@ -27,6 +28,7 @@ const SORT_OPTIONS = [
  */
 export default function CommunitiesPage() {
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const username = useAppSelector((s) => s.user.current?.username);
   const walletBase = getSteemitWalletBaseUrl();
 
@@ -83,13 +85,13 @@ export default function CommunitiesPage() {
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search"
-              aria-label="Search communities"
+              placeholder={t("g.search")}
+              aria-label={t("communities_jsx.search_communities")}
               className="h-[42px] w-full rounded-full border border-[#06D6A9] bg-transparent pl-4 pr-10 text-[16px] text-foreground outline-none placeholder:text-muted-foreground"
             />
             <button
               type="submit"
-              aria-label="Submit search"
+              aria-label={t("g.submit_search")}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-foreground"
             >
               <SearchIcon className="size-5" strokeWidth={1.2} />
@@ -103,7 +105,7 @@ export default function CommunitiesPage() {
                 rel="noopener noreferrer"
                 className="whitespace-nowrap text-sm text-accent-foreground"
               >
-                Create a community
+                {t("g.create_community")}
               </a>
             )}
             <select
@@ -112,12 +114,12 @@ export default function CommunitiesPage() {
                 setSort(e.target.value);
                 void performSearch(query, e.target.value);
               }}
-              aria-label="Sort communities"
+              aria-label={t("communities_jsx.sort_communities")}
               className="h-10 w-[300px] max-w-[33vw] cursor-pointer border border-input bg-card px-2 text-sm text-foreground"
             >
               {SORT_OPTIONS.map((o) => (
                 <option key={o.value} value={o.value}>
-                  {o.label}
+                  {t(o.labelKey)}
                 </option>
               ))}
             </select>
@@ -144,7 +146,7 @@ export default function CommunitiesPage() {
           </div>
         ) : communities.length === 0 ? (
           <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
-            Nothing was found.
+            {t("communities_jsx.nothing_found")}
           </div>
         ) : (
           <table className="mt-4 w-full">
@@ -166,8 +168,11 @@ export default function CommunitiesPage() {
                     <br />
                     <span className="text-foreground">{comm.about}</span>
                     <small className="block text-[#999]">
-                      {comm.subscribers} subscribers &bull; {comm.num_authors}{" "}
-                      posters &bull; {comm.num_pending} posts
+                      {t("communities_jsx.stats", {
+                        subscribers: comm.subscribers ?? 0,
+                        posters: comm.num_authors ?? 0,
+                        posts: comm.num_pending ?? 0,
+                      })}
                     </small>
                   </th>
                   <td className="w-px whitespace-nowrap py-2 text-right align-middle">

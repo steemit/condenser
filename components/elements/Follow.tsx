@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
 import { broadcastCustomJson } from '@/lib/api/broadcast';
@@ -29,6 +30,7 @@ export default function Follow({
   children,
 }: FollowProps) {
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const currentUser = useAppSelector((state) => state.user.current?.username);
   const follower = propFollower || currentUser;
 
@@ -60,7 +62,7 @@ export default function Follow({
         }}
         className={`${fat ? '' : 'px-2 py-1 text-sm'} border border-gray-300 rounded text-gray-700 hover:bg-gray-50`}
       >
-        Follow
+        {t('g.follow')}
       </button>
     );
   }
@@ -69,7 +71,7 @@ export default function Follow({
   if (loading) {
     return (
       <span className="text-sm text-gray-500">
-        Loading...
+        {t('g.loading')}...
       </span>
     );
   }
@@ -190,7 +192,7 @@ export default function Follow({
           disabled={busy}
           className={inactiveButtonClass}
         >
-          Follow
+          {t('g.follow')}
         </button>
       )}
 
@@ -200,7 +202,7 @@ export default function Follow({
           disabled={busy}
           className={activeButtonClass}
         >
-          Unfollow
+          {t('g.unfollow')}
         </button>
       )}
 
@@ -210,7 +212,7 @@ export default function Follow({
           disabled={busy}
           className={inactiveButtonClass}
         >
-          Mute
+          {t('g.mute')}
         </button>
       )}
 
@@ -220,7 +222,7 @@ export default function Follow({
           disabled={busy}
           className={activeButtonClass}
         >
-          Unmute
+          {t('g.unmute')}
         </button>
       )}
 

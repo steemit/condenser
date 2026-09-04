@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { fetchUnreadNotificationsCount, UnreadNotificationsResponse } from '@/lib/api/steem';
 
 interface NotificationBadgeProps {
@@ -19,6 +20,7 @@ export default function NotificationBadge({
   className = '', 
   showZero = false 
 }: NotificationBadgeProps) {
+  const t = useTranslations();
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +46,7 @@ export default function NotificationBadge({
         }
       } catch (err) {
         console.error('Error fetching notification count:', err);
-        setError('Failed to load notifications');
+        setError(t('notificationslist_jsx.failed_to_load'));
         setUnreadCount(0);
       } finally {
         setLoading(false);
@@ -68,7 +70,7 @@ export default function NotificationBadge({
       clearInterval(interval);
       window.removeEventListener('notifications:marked-read', onMarkedRead);
     };
-  }, [username]);
+  }, [username, t]);
 
   // Don't render if loading or no username
   if (loading || !username) {
@@ -93,7 +95,7 @@ export default function NotificationBadge({
   return (
     <span 
       className={`inline-flex items-center justify-center min-w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full ${className}`}
-      title={`${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}`}
+      title={t('notificationslist_jsx.unread_notifications', { count: unreadCount })}
     >
       {unreadCount > 99 ? '99+' : unreadCount}
     </span>

@@ -1,6 +1,7 @@
 'use client';
 
 import { Facebook, Linkedin, Twitter } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { userActionRecord } from '@/lib/analytics/overseer';
 
@@ -25,6 +26,7 @@ interface ShareMenuProps {
  * icons side by side, each opening the share dialog in a popup window.
  */
 export default function ShareMenu({ url, title }: ShareMenuProps) {
+  const t = useTranslations();
   const fullUrl =
     typeof window !== 'undefined' ? `${window.location.origin}${url}` : url;
 
@@ -98,8 +100,8 @@ export default function ShareMenu({ url, title }: ShareMenuProps) {
           key={item.name}
           type="button"
           onClick={item.onClick}
-          title={`Share on ${item.name}`}
-          aria-label={`Share on ${item.name}`}
+          title={t('share_menu.share_on', { name: item.name })}
+          aria-label={t('share_menu.share_on', { name: item.name })}
           className="p-[2px] text-muted-foreground transition-colors hover:text-accent-foreground"
         >
           <item.icon className="size-5 fill-current" aria-hidden />

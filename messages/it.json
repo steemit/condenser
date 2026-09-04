@@ -395,10 +395,10 @@
   },
   "user_profile": {
     "unknown_account": "Account sconosciuto",
-    "user_hasnt_made_any_posts_yet": "Sembra che %(name)snon abbia ancora pubblicato nessun post! ",
+    "user_hasnt_made_any_posts_yet": "Sembra che {name}non abbia ancora pubblicato nessun post! ",
     "user_hasnt_started_bloggin_yet": "Sembra che %(name)s non abbia ancora iniziato a scrivere!",
     "user_hasnt_followed_anything_yet": "Sembra che %(name)snon stia seguendo ancora nessuno! Se %(name)sha aggiunto di recente nuovi utenti da seguire, il feed personalizzato si riempirà di contenuti non appena ce ne saranno di nuovi. ",
-    "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+    "user_hasnt_had_any_replies_yet": "{name} hasn't had any replies yet",
     "looks_like_you_havent_posted_anything_yet": "Looks like you haven't posted anything yet.",
     "create_a_post": "Create a Post",
     "explore_trending_articles": "Explore Trending Articles",
@@ -447,7 +447,7 @@
     "changing_to_an_upvote": "Cambia in un upvote",
     "changing_to_a_downvote": "Cambia in un downvote",
     "confirm_flag": "Conferma il flag",
-    "and_more": "e %(count)s in più",
+    "and_more": "e {count} in più",
     "votes_plural": {
       "one": "%(count)s voto",
       "other": "%(count)s voti"

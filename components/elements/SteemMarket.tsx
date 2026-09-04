@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { useAppSelector } from "@/store/hooks";
 import { recordAdsView } from "@/lib/analytics/overseer";
@@ -167,6 +168,7 @@ function CoinChart({
 }
 
 export default function SteemMarket({ page }: { page: string }) {
+  const t = useTranslations();
   const trackingId = useAppSelector((s) => s.user.trackingId);
   const [data, setData] = useState<MarketData | null>(null);
 
@@ -194,7 +196,7 @@ export default function SteemMarket({ page }: { page: string }) {
   return (
     <div className="c-sidebar__module mb-4 rounded-[6px] border border-border bg-card p-[1.5em]">
       <div className="c-sidebar__header mb-2">
-        <h3 className="c-sidebar__h3 font-bold text-foreground">Coin Marketplace</h3>
+        <h3 className="c-sidebar__h3 font-bold text-foreground">{t("sidebar.coin_marketplace")}</h3>
       </div>
       <div className="c-sidebar__content">
         {coins.map((coin) => (

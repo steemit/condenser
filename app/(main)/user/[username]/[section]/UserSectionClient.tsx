@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
 import {
@@ -34,6 +35,7 @@ import UserSettings from '@/components/modules/UserSettings';
 export default function UserSectionClient() {
   const params = useParams();
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const username = useAppSelector((state) => state.user.current?.username);
   
   const usernameRaw = params.username as string;
@@ -165,7 +167,7 @@ export default function UserSectionClient() {
           />
         ) : (
           <div className="flex flex-col items-center justify-center gap-2 py-12">
-            <p className="text-muted-foreground">Loading profile...</p>
+            <p className="text-muted-foreground">{t('user_profile.loading_profile')}</p>
           </div>
         )}
       </FeedLayout>
@@ -176,7 +178,7 @@ export default function UserSectionClient() {
     return (
       <FeedLayout hideRightRail>
         <div className="flex flex-col items-center justify-center gap-2 py-12">
-          <p className="text-destructive">User not found</p>
+          <p className="text-destructive">{t('user_profile.user_not_found')}</p>
         </div>
       </FeedLayout>
     );
@@ -189,7 +191,7 @@ export default function UserSectionClient() {
         <FeedLayout centerClassName="md:max-w-4xl" hideRightRail>
           <div className="rounded-lg border border-border bg-muted/50 p-4">
             <p className="text-foreground">
-              You can only view your own settings.
+              {t('user_profile.only_view_own_settings')}
             </p>
           </div>
         </FeedLayout>
@@ -233,7 +235,7 @@ export default function UserSectionClient() {
         banner={profileHeader}
       >
         <h3 className="mt-6 mb-4 text-lg font-bold text-foreground">
-          {section === 'followers' ? 'Followers' : 'Following'}
+          {section === 'followers' ? t('user_profile.followers') : t('user_profile.following')}
         </h3>
         <FollowList
           accountname={accountname}
@@ -285,7 +287,7 @@ export default function UserSectionClient() {
         />
       ) : posts.length === 0 ? (
         <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
-          {emptySectionText(section, accountname, isMyAccount)}
+          {emptySectionText(t, section, accountname, isMyAccount)}
         </div>
       ) : (
         <PostsList
@@ -302,27 +304,28 @@ export default function UserSectionClient() {
 
 /** Legacy UserProfile empty-state copy per section (UserProfile.jsx:23-69). */
 function emptySectionText(
+  t: ReturnType<typeof useTranslations>,
   section: string,
   accountname: string,
   isMyAccount: boolean
 ): React.ReactNode {
   switch (section) {
     case 'replies':
-      return `@${accountname} hasn't had any replies yet.`;
+      return t('user_profile.user_hasnt_had_any_replies_yet', { name: `@${accountname}` });
     case 'payout':
-      return 'No pending payouts.';
+      return t('user_profile.no_pending_payouts');
     case 'comments':
-      return `@${accountname} hasn't made any comments yet.`;
+      return t('user_profile.user_hasnt_made_any_comments_yet', { name: `@${accountname}` });
     case 'posts':
-      return `@${accountname} hasn't made any posts yet.`;
+      return t('user_profile.user_hasnt_made_any_posts_yet', { name: `@${accountname}` });
     case 'feed':
       // Legacy PostsIndex noFriendsText (empty home feed).
       return (
         <span className="flex flex-col items-center gap-2">
-          <span>You haven&apos;t followed anyone yet!</span>
+          <span>{t('user_profile.no_friends_feed')}</span>
           <span className="flex flex-wrap justify-center gap-3">
             <Link href="/trending" className="text-accent-foreground underline">
-              Explore Trending
+              {t('user_profile.explore_trending')}
             </Link>
             <a
               href="https://steemit.com/welcome"
@@ -330,7 +333,7 @@ function emptySectionText(
               rel="noopener noreferrer"
               className="text-accent-foreground underline"
             >
-              New users guide
+              {t('user_profile.new_users_guide')}
             </a>
           </span>
         </span>
@@ -341,16 +344,16 @@ function emptySectionText(
   if (isMyAccount) {
     return (
       <span className="flex flex-col items-center gap-2">
-        <span>You haven&apos;t posted anything yet.</span>
+        <span>{t('user_profile.looks_like_you_havent_posted_anything_yet')}</span>
         <span className="flex flex-wrap justify-center gap-3">
           <Link href="/communities" className="text-accent-foreground underline">
-            Explore Communities
+            {t('g.explore_communities')}
           </Link>
           <Link href="/submit" className="text-accent-foreground underline">
-            Create a post
+            {t('user_profile.create_a_post')}
           </Link>
           <Link href="/trending" className="text-accent-foreground underline">
-            Trending Articles
+            {t('user_profile.explore_trending_articles')}
           </Link>
           <a
             href="https://steemit.com/welcome"
@@ -358,12 +361,12 @@ function emptySectionText(
             rel="noopener noreferrer"
             className="text-accent-foreground underline"
           >
-            Welcome Guide
+            {t('g.welcome_guide')}
           </a>
         </span>
       </span>
     );
   }
-  return `@${accountname} hasn't posted anything yet.`;
+  return t('user_profile.user_hasnt_posted_anything_yet', { name: `@${accountname}` });
 }
 

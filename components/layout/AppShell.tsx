@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Header } from "@/components/layout/Header";
 import { DegradationBanner } from "@/components/layout/DegradationBanner";
 import { GlobalModals } from "@/components/modules/GlobalModals";
@@ -9,6 +10,7 @@ import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { Analytics } from "@/components/providers/Analytics";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const t = useTranslations();
   const [scrollVisible, setScrollVisible] = useState(false);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <button
           type="button"
           className="scroll-to-top fixed bottom-[76px] right-6 z-40 flex size-10 items-center justify-center rounded-md border border-border bg-card text-lg text-foreground shadow-md transition-opacity hover:bg-muted min-[760px]:bottom-6"
-          aria-label="Scroll to top"
+          aria-label={t("g.scroll_to_top")}
           onClick={() =>
             window.scrollTo({ top: 0, behavior: "smooth" })
           }

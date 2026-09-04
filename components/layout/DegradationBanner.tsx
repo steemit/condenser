@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import {
   useServiceHealth,
   type ServiceHealthStatus,
@@ -24,13 +26,14 @@ const bannerStyles: Record<ServiceHealthStatus, string> = {
 
 export function DegradationBanner() {
   const status = useServiceHealth();
+  const t = useTranslations();
 
   if (status === 'healthy' || status === 'unknown') return null;
 
   const message =
     status === 'outage'
-      ? 'Connection to the Steem network is unstable. Some actions may fail.'
-      : 'Showing cached content — the Steem network is slow to respond.';
+      ? t('degradation_banner.outage')
+      : t('degradation_banner.degraded');
 
   return (
     <div

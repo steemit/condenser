@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
 import { broadcastCustomJson } from '@/lib/api/broadcast';
@@ -21,6 +22,7 @@ export default function SubscribeButton({
   subscribed = false,
 }: SubscribeButtonProps) {
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const username = useAppSelector((s) => s.user.current?.username);
   const [loading, setLoading] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -57,11 +59,11 @@ export default function SubscribeButton({
 
   const buttonText = isHovered
     ? isSubscribed
-      ? 'Leave'
-      : 'Subscribe'
+      ? t('g.leave')
+      : t('g.subscribe')
     : isSubscribed
-      ? 'Joined'
-      : 'Subscribe';
+      ? t('g.joined')
+      : t('g.subscribe');
 
   return (
     <button

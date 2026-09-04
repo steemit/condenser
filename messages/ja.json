@@ -397,10 +397,10 @@
   },
   "user_profile": {
     "unknown_account": "不明なアカウント",
-    "user_hasnt_made_any_posts_yet": "%(name)sはまだ1つも投稿していないようです！",
+    "user_hasnt_made_any_posts_yet": "{name}はまだ1つも投稿していないようです！",
     "user_hasnt_started_bloggin_yet": "%(name)sはまだブログを開始していないようです！",
     "user_hasnt_followed_anything_yet": "%(name)sはまだ誰もフォローしていません！%(name)sが最近新しいユーザーをフォローした場合、新しいコンテンツが有効になると個々のフィードに追加されます。",
-    "user_hasnt_had_any_replies_yet": "%(name)sへの返信はまだありません。",
+    "user_hasnt_had_any_replies_yet": "{name}への返信はまだありません。",
     "looks_like_you_havent_posted_anything_yet": "あなたはまだ1つも投稿していないようです！",
     "create_a_post": "投稿を作成する",
     "explore_trending_articles": "トレンド記事を検索する",
@@ -449,7 +449,7 @@
     "changing_to_an_upvote": "Upvoteに変更する",
     "changing_to_a_downvote": "Downvoteに変更する",
     "confirm_flag": "フラグの確認",
-    "and_more": "他%(count)s人",
+    "and_more": "他{count}人",
     "votes_plural": {
       "one": "%(count)s件の投票",
       "other": "%(count)s件の投票"

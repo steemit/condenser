@@ -109,35 +109,35 @@ export default function UserSettings({
     const newErrors: Record<string, string> = {};
 
     if (formData.profile_image && !/^https?:\/\//.test(formData.profile_image)) {
-      newErrors.profile_image = 'Profile image must be a valid URL';
+      newErrors.profile_image = t('settings_jsx.profile_image_invalid_url');
     }
 
     if (formData.cover_image && !/^https?:\/\//.test(formData.cover_image)) {
-      newErrors.cover_image = 'Cover image must be a valid URL';
+      newErrors.cover_image = t('settings_jsx.cover_image_invalid_url');
     }
 
     if (formData.name && formData.name.length > 20) {
-      newErrors.name = 'Name is too long (max 20 characters)';
+      newErrors.name = t('settings_jsx.name_too_long', { max: 20 });
     }
 
     if (formData.name && /^\s*@/.test(formData.name)) {
-      newErrors.name = 'Name must not begin with @';
+      newErrors.name = t('settings_jsx.name_must_not_begin_with');
     }
 
     if (formData.about && formData.about.length > 160) {
-      newErrors.about = 'About is too long (max 160 characters)';
+      newErrors.about = t('settings_jsx.about_too_long', { max: 160 });
     }
 
     if (formData.location && formData.location.length > 30) {
-      newErrors.location = 'Location is too long (max 30 characters)';
+      newErrors.location = t('settings_jsx.location_too_long', { max: 30 });
     }
 
     if (formData.website && formData.website.length > 100) {
-      newErrors.website = 'Website URL is too long (max 100 characters)';
+      newErrors.website = t('settings_jsx.website_too_long', { max: 100 });
     }
 
     if (formData.website && formData.website && !/^https?:\/\//.test(formData.website)) {
-      newErrors.website = 'Website must be a valid URL';
+      newErrors.website = t('settings_jsx.website_invalid_url');
     }
 
     return newErrors;
@@ -194,14 +194,14 @@ export default function UserSettings({
       // Legacy update_account tracking.
       userActionRecord('update_account', { username: accountname });
 
-      setSuccessMessage('Profile updated successfully!');
+      setSuccessMessage(t('settings_jsx.profile_updated'));
 
       if (onProfileUpdate) {
         onProfileUpdate(profileData);
       }
     } catch (error) {
       console.error('Error updating profile:', error);
-      setErrors({ general: 'Failed to update profile. Please try again.' });
+      setErrors({ general: t('settings_jsx.update_failed') });
     } finally {
       setSubmitting(false);
     }
@@ -213,7 +213,7 @@ export default function UserSettings({
   if (!canEdit) {
     return (
       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-        <p className="text-yellow-800">You can only edit your own profile settings.</p>
+        <p className="text-yellow-800">{t('settings_jsx.only_own_profile')}</p>
       </div>
     );
   }
@@ -221,7 +221,7 @@ export default function UserSettings({
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold mb-6">Account Settings</h2>
+        <h2 className="text-2xl font-bold mb-6">{t('settings_jsx.account_settings')}</h2>
         
         {/* Success message */}
         {successMessage && (
@@ -241,7 +241,7 @@ export default function UserSettings({
           {/* Profile Image */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Profile Image URL
+              {t('settings_jsx.profile_image_url')}
             </label>
             <input
               type="url"
@@ -250,7 +250,7 @@ export default function UserSettings({
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.profile_image ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="https://example.com/image.jpg"
+              placeholder={t('settings_jsx.profile_image_placeholder')}
             />
             {errors.profile_image && (
               <p className="mt-1 text-sm text-red-600">{errors.profile_image}</p>
@@ -260,7 +260,7 @@ export default function UserSettings({
           {/* Cover Image */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Cover Image URL
+              {t('settings_jsx.cover_image_url')}
             </label>
             <input
               type="url"
@@ -269,7 +269,7 @@ export default function UserSettings({
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.cover_image ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="https://example.com/cover.jpg"
+              placeholder={t('settings_jsx.cover_image_placeholder')}
             />
             {errors.cover_image && (
               <p className="mt-1 text-sm text-red-600">{errors.cover_image}</p>
@@ -279,7 +279,7 @@ export default function UserSettings({
           {/* Display Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Display Name
+              {t('settings_jsx.profile_name')}
             </label>
             <input
               type="text"
@@ -288,21 +288,21 @@ export default function UserSettings({
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.name ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="Your display name"
+              placeholder={t('settings_jsx.display_name_placeholder')}
               maxLength={20}
             />
             {errors.name && (
               <p className="mt-1 text-sm text-red-600">{errors.name}</p>
             )}
             <p className="mt-1 text-sm text-gray-500">
-              {(formData.name ?? '').length}/20 characters
+              {t('settings_jsx.characters_used', { count: (formData.name ?? '').length, max: 20 })}
             </p>
           </div>
 
           {/* About */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              About
+              {t('settings_jsx.profile_about')}
             </label>
             <textarea
               value={formData.about}
@@ -310,7 +310,7 @@ export default function UserSettings({
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.about ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="Tell us about yourself..."
+              placeholder={t('settings_jsx.about_placeholder')}
               rows={3}
               maxLength={160}
             />
@@ -318,14 +318,14 @@ export default function UserSettings({
               <p className="mt-1 text-sm text-red-600">{errors.about}</p>
             )}
             <p className="mt-1 text-sm text-gray-500">
-              {(formData.about ?? '').length}/160 characters
+              {t('settings_jsx.characters_used', { count: (formData.about ?? '').length, max: 160 })}
             </p>
           </div>
 
           {/* Location */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Location
+              {t('settings_jsx.profile_location')}
             </label>
             <input
               type="text"
@@ -334,21 +334,21 @@ export default function UserSettings({
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.location ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="Your location"
+              placeholder={t('settings_jsx.location_placeholder')}
               maxLength={30}
             />
             {errors.location && (
               <p className="mt-1 text-sm text-red-600">{errors.location}</p>
             )}
             <p className="mt-1 text-sm text-gray-500">
-              {(formData.location ?? '').length}/30 characters
+              {t('settings_jsx.characters_used', { count: (formData.location ?? '').length, max: 30 })}
             </p>
           </div>
 
           {/* Website */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Website
+              {t('settings_jsx.profile_website')}
             </label>
             <input
               type="url"
@@ -357,14 +357,14 @@ export default function UserSettings({
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
                 errors.website ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="https://yourwebsite.com"
+              placeholder={t('settings_jsx.website_placeholder')}
               maxLength={100}
             />
             {errors.website && (
               <p className="mt-1 text-sm text-red-600">{errors.website}</p>
             )}
             <p className="mt-1 text-sm text-gray-500">
-              {(formData.website ?? '').length}/100 characters
+              {t('settings_jsx.characters_used', { count: (formData.website ?? '').length, max: 100 })}
             </p>
           </div>
 
@@ -375,7 +375,7 @@ export default function UserSettings({
               disabled={submitting}
               className="px-6 py-2 bg-[#06D6A9] text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {submitting ? 'Updating...' : 'Update Profile'}
+              {submitting ? t('settings_jsx.updating') : t('settings_jsx.update_profile')}
             </button>
           </div>
         </form>
@@ -383,22 +383,22 @@ export default function UserSettings({
 
       {/* Preferences Section */}
       <div className="border-t pt-8">
-        <h3 className="text-xl font-semibold mb-4">Preferences</h3>
+        <h3 className="text-xl font-semibold mb-4">{t('settings_jsx.preferences')}</h3>
         
         <div className="space-y-4">
           {/* NSFW Content */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              NSFW Content
+              {t('settings_jsx.not_safe_for_work_nsfw_content')}
             </label>
             <select
               value={nsfwPref}
               onChange={(e) => setNsfwPref(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9]"
             >
-              <option value="hide">Hide NSFW content</option>
-              <option value="warn">Warn before showing NSFW content</option>
-              <option value="show">Always show NSFW content</option>
+              <option value="hide">{t('settings_jsx.always_hide')}</option>
+              <option value="warn">{t('settings_jsx.always_warn')}</option>
+              <option value="show">{t('settings_jsx.always_show')}</option>
             </select>
           </div>
 
@@ -430,7 +430,7 @@ export default function UserSettings({
               console.log('Saving preferences:', { nsfwPref });
             }}
           >
-            Save Preferences
+            {t('settings_jsx.save_preferences')}
           </button>
         </div>
       </div>

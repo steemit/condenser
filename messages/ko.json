@@ -401,10 +401,10 @@
   },
   "user_profile": {
     "unknown_account": "Unknown Account",
-    "user_hasnt_made_any_posts_yet": "%(name)s님은 아직 남긴 글이 없습니다.",
+    "user_hasnt_made_any_posts_yet": "{name}님은 아직 남긴 글이 없습니다.",
     "user_hasnt_started_bloggin_yet": "%(name)s님은 아직 블로깅을 시작하지 않았습니다.",
     "user_hasnt_followed_anything_yet": "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
-    "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+    "user_hasnt_had_any_replies_yet": "{name} hasn't had any replies yet",
     "looks_like_you_havent_posted_anything_yet": "아직 포스팅을 하지 않았습니다.",
     "create_a_post": "글쓰기",
     "explore_trending_articles": "대세글 읽어보기",
@@ -453,7 +453,7 @@
     "changing_to_an_upvote": "Changing to an Up-Vote",
     "changing_to_a_downvote": "Changing to a Down-Vote",
     "confirm_flag": "Confirm Flag",
-    "and_more": "and %(count)s more",
+    "and_more": "and {count} more",
     "votes_plural": {
       "one": "%(count)s 보팅",
       "other": "%(count)s 보팅"

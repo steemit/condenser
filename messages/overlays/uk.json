@@ -1,0 +1,9 @@
+{
+  "voting_jsx": {
+    "and_more": "і ще {count}"
+  },
+  "user_profile": {
+    "user_hasnt_made_any_posts_yet": "Схоже, {name} ще не опублікував жодного допису!",
+    "user_hasnt_had_any_replies_yet": "{name} ще не отримав жодної відповіді"
+  }
+}

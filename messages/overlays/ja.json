@@ -1,0 +1,9 @@
+{
+  "voting_jsx": {
+    "and_more": "他{count}人"
+  },
+  "user_profile": {
+    "user_hasnt_made_any_posts_yet": "{name}はまだ1つも投稿していないようです！",
+    "user_hasnt_had_any_replies_yet": "{name}への返信はまだありません。"
+  }
+}

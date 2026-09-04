@@ -1,0 +1,9 @@
+{
+  "voting_jsx": {
+    "and_more": "and {count} more"
+  },
+  "user_profile": {
+    "user_hasnt_made_any_posts_yet": "{name}님은 아직 남긴 글이 없습니다.",
+    "user_hasnt_had_any_replies_yet": "{name} hasn't had any replies yet"
+  }
+}

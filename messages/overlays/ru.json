@@ -1,0 +1,9 @@
+{
+  "voting_jsx": {
+    "and_more": "и {count} больше"
+  },
+  "user_profile": {
+    "user_hasnt_made_any_posts_yet": "Похоже, что {name} еще не написал постов!",
+    "user_hasnt_had_any_replies_yet": "{name} еще не получил ответов"
+  }
+}

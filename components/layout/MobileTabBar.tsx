@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { BookMarkedIcon, UserRoundIcon, WalletIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -18,20 +19,21 @@ export function MobileTabBar() {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const username = useAppSelector((s) => s.user.current?.username);
   const walletBase = getSteemitWalletBaseUrl();
 
   const tabs = [
     {
       key: "explore",
-      label: "Explore",
+      label: t("g.explore"),
       icon: BookMarkedIcon,
       active: !pathname?.startsWith("/@"),
       onClick: () => router.push("/trending"),
     },
     {
       key: "profile",
-      label: "My Profile",
+      label: t("g.my_profile"),
       icon: UserRoundIcon,
       active: Boolean(username && pathname?.startsWith(`/@${username}`)),
       onClick: () => {
@@ -44,7 +46,7 @@ export function MobileTabBar() {
     },
     {
       key: "wallet",
-      label: "My Wallet",
+      label: t("g.my_wallet"),
       icon: WalletIcon,
       active: false,
       onClick: () => {
@@ -60,7 +62,7 @@ export function MobileTabBar() {
   return (
     <nav
       className="PrimaryNavigation fixed inset-x-0 bottom-0 z-[100] block min-[760px]:hidden"
-      aria-label="Primary navigation"
+      aria-label={t("navigation.primary_navigation")}
     >
       {/* pb-[env(safe-area-inset-bottom)] lifts the bar above the phone's
           home-indicator / gesture area, which otherwise covers the labels. */}

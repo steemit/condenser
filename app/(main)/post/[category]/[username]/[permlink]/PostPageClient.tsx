@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setPathname } from '@/store/slices/globalSlice';
 import { normalizeUsername, formatUsername } from '@/lib/utils/username';
@@ -28,6 +29,7 @@ import { FeedLayout } from '@/components/layout/FeedLayout';
 export default function PostPageClient() {
   const params = useParams();
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const trackingId = useAppSelector((s) => s.user.trackingId);
   const category = params.category as string;
   const usernameRaw = params.username as string;
@@ -56,18 +58,18 @@ export default function PostPageClient() {
           const fetchedComments = await fetchCommentsByPermlink(username, permlink);
           setComments(fetchedComments);
         } else {
-          setError('Post not found');
+          setError(t('postfull_jsx.post_not_found'));
         }
       } catch (err) {
         console.error('Error fetching post or comments:', err);
-        setError('Failed to load post or comments');
+        setError(t('postfull_jsx.failed_to_load'));
       } finally {
         setLoading(false);
       }
     };
 
     loadData();
-  }, [category, username, permlink]);
+  }, [category, username, permlink, t]);
 
   // PostEditor already broadcast the reply; optimistically append a
   // synthesized comment built from the known author/permlink/body instead of
@@ -119,7 +121,7 @@ export default function PostPageClient() {
       );
     } catch (err) {
       console.error('Delete comment broadcast error:', err);
-      alert('Failed to delete the comment. Please try again.');
+      alert(t('comments.delete_failed'));
     }
   };
 
@@ -142,7 +144,7 @@ export default function PostPageClient() {
     return (
       <FeedLayout>
         <div className="flex flex-col items-center justify-center gap-2 py-12">
-          <p className="text-destructive">{error || "Post not found"}</p>
+          <p className="text-destructive">{error || t('postfull_jsx.post_not_found')}</p>
         </div>
       </FeedLayout>
     );
@@ -155,7 +157,7 @@ export default function PostPageClient() {
           and feed columns start at the same visual offset. */}
       <header className="mb-4 min-[760px]:mb-[10px] min-[760px]:pl-2">
         <nav
-          aria-label="Breadcrumb"
+          aria-label={t('navigation.breadcrumb')}
           className="flex h-10 items-center gap-2 text-sm text-muted-foreground"
         >
           <Link
@@ -166,7 +168,7 @@ export default function PostPageClient() {
           </Link>
           <span aria-hidden>/</span>
           <span className="min-w-0 truncate" aria-current="page">
-            {post.title || "Untitled"}
+            {post.title || t('g.untitled')}
           </span>
         </nav>
       </header>

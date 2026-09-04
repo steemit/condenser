@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Calendar, Link2, MapPin } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { proxifyImageUrl } from '@/lib/media/proxify-url';
 import Userpic from '@/components/elements/Userpic';
@@ -53,6 +54,7 @@ export default function UserProfileHeader({
   active,
   blacklists = [],
 }: UserProfileHeaderProps) {
+  const t = useTranslations();
   const displayName = profile?.name || accountname;
 
   const coverImage = profile?.cover_image;
@@ -98,7 +100,7 @@ export default function UserProfileHeader({
           {rep !== null && (
             <span
               className="UserProfile__rep text-[80%] font-extralight"
-              title={`This is ${accountname}'s reputation score. It is based on the history of votes.`}
+              title={t('user_profile.reputation_title', { name: accountname })}
             >
               ({rep})
             </span>
@@ -106,7 +108,7 @@ export default function UserProfileHeader({
           {blacklists.length > 0 && (
             <span
               className="account_warn ml-1 font-bold text-[#ff4d4f]"
-              title={`Blacklisted on: ${blacklists.join(', ')}`}
+              title={t('user_profile.blacklisted_on', { list: blacklists.join(', ') })}
             >
               ({blacklists.length})
             </span>
@@ -123,17 +125,20 @@ export default function UserProfileHeader({
           <div className="UserProfile__stats mb-[5px] pb-[5px] text-[90%]">
             <span className="px-2.5">
               <Link href={`/@${accountname}/followers`}>
-                <strong>{stats?.followers ?? 0}</strong> followers
+                <strong>{stats?.followers ?? 0}</strong>{' '}
+                {t('user_profile.followers_label', { count: stats?.followers ?? 0 })}
               </Link>
             </span>
             <span className="border-l border-[#ccc] px-2.5">
               <Link href={`/@${accountname}`}>
-                <strong>{postCount ?? 0}</strong> posts
+                <strong>{postCount ?? 0}</strong>{' '}
+                {t('user_profile.posts_label', { count: postCount ?? 0 })}
               </Link>
             </span>
             <span className="border-l border-[#ccc] px-2.5">
               <Link href={`/@${accountname}/followed`}>
-                <strong>{stats?.following ?? 0}</strong> following
+                <strong>{stats?.following ?? 0}</strong>{' '}
+                {t('user_profile.following_label', { count: stats?.following ?? 0 })}
               </Link>
             </span>
             {typeof stats?.sp === 'number' && stats.sp > 0 && (
@@ -169,12 +174,13 @@ export default function UserProfileHeader({
             )}
             {joinDate && (
               <span className="inline-flex items-center gap-1">
-                <Calendar className="size-4" aria-hidden /> Joined {joinDate}
+                <Calendar className="size-4" aria-hidden />{' '}
+                {t('user_profile.joined_date', { date: joinDate })}
               </span>
             )}
             {active && (
               <span className="inline-flex items-center gap-1">
-                <Calendar className="size-4" aria-hidden /> Active{' '}
+                <Calendar className="size-4" aria-hidden /> {t('g.active')}{' '}
                 <TimeAgo date={active} />
               </span>
             )}

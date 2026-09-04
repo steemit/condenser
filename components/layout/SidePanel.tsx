@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Sheet,
@@ -35,6 +36,7 @@ const linkClass =
  */
 export function SidePanel({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const username = useAppSelector((s) => s.user.current?.username);
   const loggedIn = Boolean(username);
   const nightmode = useAppSelector((s) => s.app.user_preferences.nightmode);
@@ -56,8 +58,8 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
       key: "extras",
       hidden: loggedIn,
       items: [
-        { label: "Sign in", onClick: () => dispatch(showLogin({})) },
-        { label: "Sign up", link: signupUrl, external: true },
+        { label: t("g.sign_in"), onClick: () => dispatch(showLogin({})) },
+        { label: t("g.sign_up"), link: signupUrl, external: true },
       ],
     },
     {
@@ -66,11 +68,12 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
       items: [
         // The rewrite does not host /welcome; point at the legacy site for
         // now (same treatment as faq/privacy/tos below).
-        { label: "Welcome", link: "https://steemit.com/welcome", external: true },
-        // Legacy's language switcher is not ported (no i18n in the rewrite).
-        { label: "FAQ", link: "https://steemit.com/faq.html", external: true },
+        { label: t("navigation.welcome"), link: "https://steemit.com/welcome", external: true },
+        // Legacy's language switcher is superseded by the locale selector in
+        // UserSettings (next-intl bridge), so it is not in this drawer.
+        { label: t("navigation.faq"), link: "https://steemit.com/faq.html", external: true },
         {
-          label: nightmode ? "Toggle day mode" : "Toggle night mode",
+          label: nightmode ? t("g.toggle_daymode") : t("g.toggle_nightmode"),
           onClick: () => dispatch(toggleNightmode()),
         },
       ],
@@ -80,22 +83,22 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
       mt: "always",
       items: [
         {
-          label: "Stolen Account Recovery",
+          label: t("navigation.stolen_account_recovery"),
           link: `${walletBase}/recover_account_step_1`,
           external: true,
         },
         {
-          label: "Change Account Password",
+          label: t("navigation.change_account_password"),
           link: `${walletBase}/change_password`,
           external: true,
         },
         {
-          label: "Vote for Witnesses",
+          label: t("navigation.vote_for_witnesses"),
           link: `${walletBase}/~witnesses`,
           external: true,
         },
         {
-          label: "Steem Proposals",
+          label: t("navigation.steem_proposals"),
           link: `${walletBase}/proposals`,
           external: true,
         },
@@ -104,7 +107,7 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
     {
       key: "exchanges",
       mt: "always",
-      section: "Third Party Exchanges",
+      section: t("navigation.third_party_exchanges"),
       items: [
         {
           label: "Poloniex",
@@ -118,12 +121,12 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
       mt: "always",
       items: [
         {
-          label: "Advertise",
+          label: t("navigation.advertise"),
           link: "https://selfserve.steemit.com",
           external: true,
         },
         {
-          label: "Jobs",
+          label: t("navigation.jobs"),
           link: "https://recruiting.paylocity.com/recruiting/jobs/List/3288/Steemit-Inc",
           external: true,
         },
@@ -134,18 +137,18 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
       mt: "always",
       items: [
         {
-          label: "API Docs",
+          label: t("navigation.api_docs"),
           link: "https://developers.steem.io/",
           external: true,
         },
         {
-          label: "Bluepaper",
+          label: t("navigation.bluepaper"),
           link: "https://steem.io/steem-bluepaper.pdf",
           external: true,
         },
-        { label: "SMT Whitepaper", link: "https://smt.steem.io/", external: true },
+        { label: t("navigation.smt_whitepaper"), link: "https://smt.steem.io/", external: true },
         {
-          label: "Whitepaper",
+          label: t("navigation.whitepaper"),
           link: "https://steem.com/SteemWhitePaper.pdf",
           external: true,
         },
@@ -156,12 +159,12 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
       mt: "always",
       items: [
         {
-          label: "Privacy Policy",
+          label: t("navigation.privacy_policy"),
           link: "https://steemit.com/privacy.html",
           external: true,
         },
         {
-          label: "Terms of Service",
+          label: t("navigation.terms_of_service"),
           link: "https://steemit.com/tos.html",
           external: true,
         },
@@ -179,10 +182,10 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
         showCloseButton={false}
         className="w-[250px] gap-0 overflow-y-auto border-none bg-[#11161A] p-0 pt-12 text-white"
       >
-        <SheetTitle className="sr-only">Menu</SheetTitle>
+        <SheetTitle className="sr-only">{t("navigation.menu")}</SheetTitle>
         {/* legacy CloseButton: sits in the 3rem top padding, own row */}
         <SheetClose
-          aria-label="Close menu"
+          aria-label={t("navigation.close_menu")}
           className="absolute right-4 top-2 text-[2rem] leading-none text-white transition-colors hover:text-[#06D6A9]"
         >
           ×

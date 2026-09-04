@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronUp, MessageCircle, Pin } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { Post } from "@/lib/api/steem";
 import {
@@ -31,6 +32,7 @@ interface PostSummaryProps {
  */
 export default function PostSummary({ post, order }: PostSummaryProps) {
   const [revealNsfw, setRevealNsfw] = useState(false);
+  const t = useTranslations();
 
   const tags = post.json_metadata?.tags || [];
   const isNsfw = tags.includes("nsfw");
@@ -64,16 +66,17 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
     return (
       <li className="list-none rounded-[6px] border border-border bg-card px-2 py-3 min-[760px]:px-2 min-[760px]:py-1">
         <div className="py-2 text-[15px] text-muted-foreground">
-          This post is <span className="font-semibold text-[#ff0264]">nsfw</span>
-          .{" "}
+          {t("postsummary_jsx.this_post_is_nsfw")}{" "}
+          <span className="font-semibold text-[#ff0264]">nsfw</span>.{" "}
           <button
             type="button"
             className="text-accent-foreground underline"
             onClick={() => setRevealNsfw(true)}
           >
-            Reveal it
+            {t("postsummary_jsx.reveal_it")}
           </button>{" "}
-          or adjust your display preferences.
+          {t("g.or")} {t("postsummary_jsx.adjust_your")}{" "}
+          {t("postsummary_jsx.display_preferences")}.
         </div>
       </li>
     );
@@ -98,7 +101,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
               >
                 {rebloggedBy[0]}
               </Link>{" "}
-              resteemed
+              {t("postsummary_jsx.resteemed")}
             </span>
           </div>
         )}
@@ -117,7 +120,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
             </Link>{" "}
             {rep !== null && <Reputation value={rep} />}{" "}
             <span className="text-muted-foreground">
-              in{" "}
+              {t("g.in")}{" "}
               <Link prefetch={false}
                 href={tagUrl}
                 className="text-muted-foreground hover:text-accent-foreground"
@@ -132,14 +135,14 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
               )}
             </span>
             {powerUp100 && (
-              <span title="100% Steem Power payout" className="ml-1 align-middle">
+              <span title={t("g.powered_up_100")} className="ml-1 align-middle">
                 ⚡
               </span>
             )}
             {isPinned && (
               <span className="ml-1 inline-flex items-center gap-0.5 rounded border border-accent-foreground px-1 py-px text-[11px] text-accent-foreground">
                 <Pin className="size-3" />
-                Pinned
+                {t("g.pinned")}
               </span>
             )}
           </span>
@@ -183,7 +186,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
                 href={postUrl}
                 className="text-foreground visited:text-muted-foreground"
               >
-                {post.title || "Untitled"}
+                {post.title || t("g.untitled")}
               </Link>
             </h2>
             {/* legacy PostSummary__body: the excerpt itself is a link */}
@@ -206,7 +209,7 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
                 <Voting post={post} showList={false} />
                 <span
                   className="flex items-center gap-1 border-r border-border pr-4 text-muted-foreground"
-                  title={`${totalVotes} votes`}
+                  title={t("voting_jsx.vote_count", { count: totalVotes })}
                 >
                   <ChevronUp className="size-4" aria-hidden />
                   {totalVotes}

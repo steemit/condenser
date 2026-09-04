@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
 import { voted, set } from '@/store/slices/globalSlice';
@@ -126,6 +127,7 @@ export default function Voting({
   isComment = false,
 }: VotingProps) {
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const username = useAppSelector((state) => state.user.current?.username);
   const voting = useAppSelector((state) => {
     const key = `transaction_vote_active_${post.author}_${post.permlink}`;
@@ -279,7 +281,7 @@ export default function Voting({
             voting={Boolean(voting) && votingDir === 'up'}
             disabled={Boolean(voting)}
             onClick={() => handleChevronClick(true)}
-            title={upvoteActive ? 'Remove Vote' : 'Upvote'}
+            title={upvoteActive ? t('g.remove_vote') : t('g.upvote')}
           />
           {enableSlider && showWeight === 'up' && (
             <div className="absolute left-1/2 top-full z-[100] mt-1 w-[180px] -translate-x-1/2 rounded-[6px] border border-border bg-card p-3 shadow-lg">
@@ -298,14 +300,14 @@ export default function Voting({
                   saveSliderWeight(true, w);
                 }}
                 className="w-full"
-                aria-label="Vote weight"
+                aria-label={t('voting_jsx.vote_weight')}
               />
               <button
                 type="button"
                 onClick={() => handleVote(true)}
                 className="mt-2 w-full rounded bg-[#06D6A9] px-2 py-1 text-sm font-bold text-white"
               >
-                Vote {sliderWeight.up / 100}%
+                {t('voting_jsx.vote_percent', { percent: sliderWeight.up / 100 })}
               </button>
             </div>
           )}
@@ -318,7 +320,7 @@ export default function Voting({
             voting={Boolean(voting) && votingDir === 'down'}
             disabled={Boolean(voting)}
             onClick={() => handleChevronClick(false)}
-            title={downvoteActive ? 'Remove Vote' : 'Downvote'}
+            title={downvoteActive ? t('g.remove_vote') : t('g.downvote')}
           />
           {enableSlider && showWeight === 'down' && (
             <div className="absolute left-1/2 top-full z-[100] mt-1 w-[180px] -translate-x-1/2 rounded-[6px] border border-border bg-card p-3 shadow-lg">
@@ -337,14 +339,14 @@ export default function Voting({
                   saveSliderWeight(false, w);
                 }}
                 className="w-full"
-                aria-label="Downvote weight"
+                aria-label={t('voting_jsx.downvote_weight')}
               />
               <button
                 type="button"
                 onClick={() => handleVote(false)}
                 className="mt-2 w-full rounded bg-[#f66] px-2 py-1 text-sm font-bold text-white"
               >
-                Downvote {sliderWeight.down / 100}%
+                {t('voting_jsx.downvote_percent', { percent: sliderWeight.down / 100 })}
               </button>
             </div>
           )}
@@ -357,7 +359,7 @@ export default function Voting({
                 <button
                   type="button"
                   className="flex items-center gap-0.5 px-1 text-foreground hover:text-accent-foreground"
-                  title="Payout details"
+                  title={t('voting_jsx.payout_details')}
                 />
               }
             >
@@ -368,16 +370,16 @@ export default function Voting({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="min-w-56">
               <DropdownMenuItem disabled>
-                Pending Payout {fmtPayout(post.pending_payout_value)}
+                {t('voting_jsx.pending_payout_amount', { value: fmtPayout(post.pending_payout_value) })}
               </DropdownMenuItem>
               {post.payout_at && (
-                <DropdownItemText text={`Payout Date ${new Date(post.payout_at + 'Z').toLocaleString()}`} />
+                <DropdownItemText text={t('voting_jsx.payout_date', { date: new Date(post.payout_at + 'Z').toLocaleString() })} />
               )}
               {post.author_payout_value && (
-                <DropdownItemText text={`Author Payout ${fmtPayout(post.author_payout_value)}`} />
+                <DropdownItemText text={t('voting_jsx.author_payout', { value: fmtPayout(post.author_payout_value) })} />
               )}
               {post.curator_payout_value && (
-                <DropdownItemText text={`Curator Payout ${fmtPayout(post.curator_payout_value)}`} />
+                <DropdownItemText text={t('voting_jsx.curator_payout', { value: fmtPayout(post.curator_payout_value) })} />
               )}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -391,11 +393,11 @@ export default function Voting({
               <button
                 type="button"
                 className="px-1 text-foreground hover:text-accent-foreground"
-                title="Voters"
+                title={t('voting_jsx.voters')}
               />
             }
           >
-            {totalVotes} vote{totalVotes === 1 ? '' : 's'}
+            {t('voting_jsx.vote_count', { count: totalVotes })}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="min-w-[140px]">
             {votes.map((v) => (
@@ -405,7 +407,7 @@ export default function Voting({
               />
             ))}
             {extraVoters > 0 && (
-              <DropdownItemText text={`and ${extraVoters} more`} />
+              <DropdownItemText text={t('voting_jsx.and_more', { count: extraVoters })} />
             )}
           </DropdownMenuContent>
         </DropdownMenu>

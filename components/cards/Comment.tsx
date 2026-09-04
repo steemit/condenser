@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useAppSelector } from '@/store/hooks';
 import MarkdownViewer from '@/components/elements/MarkdownViewer';
 import Voting from '@/components/elements/Voting';
@@ -56,6 +57,7 @@ export default function Comment({
   // legacy: gray comments render with the body hidden behind a reveal link
   const [revealGray, setRevealGray] = useState(false);
   const username = useAppSelector((state) => state.user.current?.username);
+  const t = useTranslations();
 
   const isMyComment = username === comment.author;
   const gray = Boolean(comment.stats?.gray) && !isMyComment;
@@ -67,7 +69,7 @@ export default function Comment({
   const commentUrl = `/${comment.category}/@${comment.author}/${comment.permlink}`;
 
   const handleDelete = () => {
-    if (onDelete && confirm('Are you sure you want to delete this comment?')) {
+    if (onDelete && confirm(t('comments.confirm_delete'))) {
       onDelete(comment.author, comment.permlink);
     }
   };
@@ -119,7 +121,7 @@ export default function Comment({
               type="button"
               onClick={() => setCollapsed(!collapsed)}
               className="float-right tracking-[0.1rem] text-muted-foreground hover:text-foreground"
-              title={collapsed ? 'Expand' : 'Collapse'}
+              title={collapsed ? t('comments.expand') : t('comments.collapse')}
             >
               {collapsed ? '[+]' : '[-]'}
             </button>
@@ -143,7 +145,7 @@ export default function Comment({
                   (comment.last_update || '') + 'Z'
                 ).toLocaleString()}`}
               >
-                (edited)
+                ({t('g.edited')})
               </span>
             )}
             {gray && hideBody && (
@@ -152,16 +154,14 @@ export default function Comment({
                 onClick={() => setRevealGray(true)}
                 className="ml-2 text-accent-foreground hover:underline"
               >
-                reveal comment
+                {t('g.reveal_comment')}
               </button>
             )}
             {collapsed && (comment.children ?? sortedReplies.length) > 0 && (
               <span className="ml-2 text-muted-foreground">
-                ({comment.children ?? sortedReplies.length}{' '}
-                {(comment.children ?? sortedReplies.length) === 1
-                  ? 'reply'
-                  : 'replies'}
-                )
+                ({t('comments.reply_count', {
+                  count: comment.children ?? sortedReplies.length,
+                })})
               </span>
             )}
           </div>
@@ -179,7 +179,7 @@ export default function Comment({
                 )}
                 {gray && (
                   <p className="text-[85%] text-muted-foreground">
-                    This comment will be hidden due to low ratings.
+                    {t('g.will_be_hidden_due_to_low_rating')}
                   </p>
                 )}
               </div>
@@ -195,7 +195,7 @@ export default function Comment({
                   }}
                   className="text-foreground hover:text-accent-foreground"
                 >
-                  Reply
+                  {t('g.reply')}
                 </button>
                 {isMyComment && (
                   <>
@@ -207,14 +207,14 @@ export default function Comment({
                       }}
                       className="text-foreground hover:text-accent-foreground"
                     >
-                      Edit
+                      {t('g.edit')}
                     </button>
                     <button
                       type="button"
                       onClick={handleDelete}
                       className="text-foreground hover:text-accent-foreground"
                     >
-                      Delete
+                      {t('g.delete')}
                     </button>
                   </>
                 )}
@@ -263,10 +263,9 @@ export default function Comment({
                 href={commentUrl}
                 className="text-accent-foreground hover:underline"
               >
-                Show {comment.children || sortedReplies.length} more{' '}
-                {(comment.children || sortedReplies.length) === 1
-                  ? 'reply'
-                  : 'replies'}
+                {t('comments.show_more_replies', {
+                  count: comment.children || sortedReplies.length,
+                })}
               </Link>
             ) : (
               sortedReplies.map((reply) => (

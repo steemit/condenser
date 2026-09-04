@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { FeedSortDropdown } from "@/components/layout/FeedSortDropdown";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +21,7 @@ export function FeedListHeader({
   unmoderatedTagHint?: boolean;
   className?: string;
 }) {
+  const t = useTranslations();
   return (
     // Legacy spacing: header padding-bottom 10px; articles__hr is
     // display:none in layout-list (a later SCSS rule overrides the MQ(M)
@@ -30,7 +33,7 @@ export function FeedListHeader({
           {/* legacy h1.articles__h1 removed: redundant with the sort dropdown */}
           {unmoderatedTagHint ? (
             <p className="mt-1 hidden text-[80%] text-muted-foreground min-[1200px]:block">
-              Unmoderated tag
+              {t("posts_index.unmoderated_tag")}
             </p>
           ) : null}
         </div>

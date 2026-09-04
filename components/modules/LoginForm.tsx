@@ -108,12 +108,12 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
       // Step 1: Get account info to retrieve posting public key
       const accountResponse = await fetch(`/api/steem/account?username=${encodeURIComponent(normalizedUsername)}`);
       if (!accountResponse.ok) {
-        throw new Error('Account not found');
+        throw new Error(t('g.account_not_found'));
       }
       const account = await accountResponse.json();
-      
+
       if (!account || !account.posting || !account.posting.key_auths || account.posting.key_auths.length === 0) {
-        throw new Error('Invalid account or posting authority not found');
+        throw new Error(t('loginform_jsx.invalid_account_or_no_posting_authority'));
       }
 
       // Get the posting public key (first key in posting authority)
@@ -122,20 +122,20 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
       // Step 2: Validate that input is a WIF format private key
       const privateKeyWif = password.trim();
       if (!isWifFormat(privateKeyWif)) {
-        throw new Error('Invalid format. Only posting private keys in WIF format are allowed.');
+        throw new Error(t('loginform_jsx.invalid_wif_format'));
       }
 
       // Step 3: Validate private key matches posting public key
       setValidatingKey(true);
       const validation = validatePostingKey(privateKeyWif, postingPublicKey);
       if (!validation.isValid) {
-        throw new Error(validation.error || 'Invalid posting key');
+        throw new Error(validation.error || t('loginform_jsx.invalid_posting_key'));
       }
 
       // Step 4: Get login challenge from server
       const challengeResponse = await fetch('/api/auth/challenge');
       if (!challengeResponse.ok) {
-        throw new Error('Failed to get login challenge');
+        throw new Error(t('loginform_jsx.failed_to_get_challenge'));
       }
       const { challenge } = await challengeResponse.json();
 
@@ -159,7 +159,7 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
 
       if (!loginResponse.ok) {
         const errorData = await loginResponse.json();
-        throw new Error(errorData.error || 'Login failed');
+        throw new Error(errorData.error || t('loginform_jsx.login_failed'));
       }
 
       await loginResponse.json();
@@ -200,7 +200,7 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
       }
     } catch (err: unknown) {
       console.error('Login error:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Login failed. Please try again.';
+      const errorMessage = err instanceof Error ? err.message : t('loginform_jsx.login_failed_try_again');
       setError(errorMessage);
       dispatch(loginError({ error: errorMessage }));
     } finally {

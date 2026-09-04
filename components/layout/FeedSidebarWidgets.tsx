@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { useAppSelector } from "@/store/hooks";
 import {
@@ -38,8 +39,9 @@ function SidebarModule({
 
 /** Logged-out rail: "New to Steemit?" (legacy SidebarNewUsers). */
 function SidebarNewUsers() {
+  const t = useTranslations();
   return (
-    <SidebarModule title="New to Steemit?">
+    <SidebarModule title={t("sidebar.new_to_steemit")}>
       <ul>
         <li className="py-1">
           <a
@@ -48,7 +50,7 @@ function SidebarNewUsers() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Welcome Guide
+            {t("g.welcome_guide")}
           </a>
         </li>
       </ul>
@@ -58,6 +60,7 @@ function SidebarNewUsers() {
 
 /** Logged-in rail: trending communities (legacy SidebarLinks). */
 function SidebarLinks() {
+  const t = useTranslations();
   const [topics, setTopics] = useState<CommunitySubscription[]>([]);
 
   useEffect(() => {
@@ -77,7 +80,7 @@ function SidebarLinks() {
   return (
     <SidebarModule>
       <ul>
-        <li className="py-1 text-[#aaa]">Trending communities</li>
+        <li className="py-1 text-[#aaa]">{t("g.trending_communities")}</li>
         {topics.map((c) => (
           <li key={c.name} className="py-1">
             <Link
@@ -95,6 +98,7 @@ function SidebarLinks() {
 
 /** Community info panel for /(sort)/hive-* pages (legacy CommunityPane). */
 function CommunityPane({ community }: { community: string }) {
+  const t = useTranslations();
   const username = useAppSelector((s) => s.user.current?.username);
   const [info, setInfo] = useState<CommunitySubscription | null>(null);
 
@@ -120,7 +124,10 @@ function CommunityPane({ community }: { community: string }) {
         <p className="mb-2 text-sm text-muted-foreground">{info.about}</p>
       )}
       <p className="mb-3 text-sm text-muted-foreground">
-        {info.subscribers} subscribers &bull; {info.num_authors} active posters
+        {t("sidebar.community_stats", {
+          subscribers: info.subscribers ?? 0,
+          posters: info.num_authors ?? 0,
+        })}
       </p>
       <SubscribeButton
         community={info.name}

@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import userReducer, { setUser } from '@/store/slices/userSlice';
+import { IntlWrapper } from '@/__tests__/helpers/i18n';
 import { PrimaryNavigation } from '@/components/layout/PrimaryNavigation';
 
 afterEach(cleanup);
@@ -19,7 +20,9 @@ function makeStore(loggedIn = true) {
 function renderNav(pathname: string, loggedIn = true) {
   return render(
     <Provider store={makeStore(loggedIn)}>
-      <PrimaryNavigation pathname={pathname} />
+      <IntlWrapper>
+        <PrimaryNavigation pathname={pathname} />
+      </IntlWrapper>
     </Provider>
   );
 }

@@ -783,7 +783,10 @@
     "website_too_long": "Website URL is too long (max {max} characters)",
     "update_profile": "Update Profile",
     "updating": "Updating...",
-    "save_preferences": "Save Preferences"
+    "save_preferences": "Save Preferences",
+    "saving": "Saving...",
+    "preferences_saved": "Preferences saved.",
+    "save_preferences_failed": "Failed to save preferences"
   },
   "transfer_jsx": {
     "amount_is_in_form": "Amount is in the form 99999.999",

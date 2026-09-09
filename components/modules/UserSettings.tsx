@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setLocale } from '@/store/slices/appSlice';
+import { setLocale, setUserPreferences } from '@/store/slices/appSlice';
 import { LOCALES, LOCALE_LABELS, DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/config';
 import { broadcastAccountUpdate } from '@/lib/api/broadcast';
 import { fetchAccount } from '@/lib/api/steem';
@@ -66,6 +66,7 @@ export default function UserSettings({
   const dispatch = useAppDispatch();
   const t = useTranslations();
   const localePref = useAppSelector((state) => state.app.user_preferences.locale);
+  const userPreferences = useAppSelector((state) => state.app.user_preferences);
   
   // Form state
   const [formData, setFormData] = useState<UserProfile>({
@@ -83,7 +84,12 @@ export default function UserSettings({
   const [successMessage, setSuccessMessage] = useState('');
 
   // User preferences
-  const [nsfwPref, setNsfwPref] = useState('warn');
+  const nsfwPref = useAppSelector(
+    (state) => state.app.user_preferences.nsfwPref
+  );
+  const [savingPrefs, setSavingPrefs] = useState(false);
+  const [prefsMessage, setPrefsMessage] = useState('');
+  const [prefsError, setPrefsError] = useState('');
   // Language is a real preference: it lives in Redux user_preferences.locale
   // (like legacy) and switching it updates the UI immediately — the
   // I18nProvider observes the Redux value, loads the locale's messages and
@@ -393,7 +399,14 @@ export default function UserSettings({
             </label>
             <select
               value={nsfwPref}
-              onChange={(e) => setNsfwPref(e.target.value)}
+              onChange={(e) =>
+                dispatch(
+                  setUserPreferences({
+                    ...userPreferences,
+                    nsfwPref: e.target.value,
+                  })
+                )
+              }
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9]"
             >
               <option value="hide">{t('settings_jsx.always_hide')}</option>
@@ -422,15 +435,49 @@ export default function UserSettings({
         </div>
 
         <div className="mt-6">
+          {prefsMessage && (
+            <p className="mb-2 text-sm text-[#06D6A9]">{prefsMessage}</p>
+          )}
+          {prefsError && (
+            <p className="mb-2 text-sm text-red-600">{prefsError}</p>
+          )}
           <button
             type="button"
-            className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            onClick={() => {
-              // TODO: Save preferences
-              console.log('Saving preferences:', { nsfwPref });
+            disabled={savingPrefs}
+            className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+            onClick={async () => {
+              // Legacy Settings.jsx + /api/v1/setUserPreferences: persist
+              // preferences into the server session (login required).
+              setSavingPrefs(true);
+              setPrefsMessage('');
+              setPrefsError('');
+              try {
+                const res = await fetch('/api/auth/preferences', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ payload: userPreferences }),
+                });
+                if (!res.ok) {
+                  // Surface the translated failure message; log the server
+                  // detail (English) for debugging instead of showing it raw.
+                  const data = await res.json().catch(() => null);
+                  console.error('Save preferences failed:', data?.error || res.status);
+                  throw new Error(t('settings_jsx.save_preferences_failed'));
+                }
+                setPrefsMessage(t('settings_jsx.preferences_saved'));
+              } catch (error) {
+                console.error('Error saving preferences:', error);
+                setPrefsError(
+                  error instanceof Error
+                    ? error.message
+                    : t('settings_jsx.save_preferences_failed')
+                );
+              } finally {
+                setSavingPrefs(false);
+              }
             }}
           >
-            {t('settings_jsx.save_preferences')}
+            {savingPrefs ? t('settings_jsx.saving') : t('settings_jsx.save_preferences')}
           </button>
         </div>
       </div>

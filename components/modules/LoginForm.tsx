@@ -19,8 +19,6 @@ import { encryptAndStoreKey, initializeKeyLifecycle } from '@/lib/crypto/key-sto
  * Handles user authentication and login
  * Migrated from legacy/src/app/components/modules/LoginForm.jsx
  * Note: Steem Keychain support has been removed as per project requirements
- * TODO: Implement password validation and checksum checking
- * TODO: Implement account name validation
  */
 export default function LoginForm({ embedded = false }: { embedded?: boolean }) {
   const router = useRouter();
@@ -210,7 +208,6 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
   };
 
   const handleSignup = () => {
-    // TODO: Open signup URL in new window
     // Safe access to process.env for UMD compatibility
     const signupUrl = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_SIGNUP_URL) 
       ? process.env.NEXT_PUBLIC_SIGNUP_URL 

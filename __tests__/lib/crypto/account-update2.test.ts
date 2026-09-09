@@ -1,45 +1,59 @@
-import { describe, expect, it } from 'vitest';
+// @vitest-environment node
+//
+// Uses the real steem-js (noble crypto requires same-realm Uint8Array, which
+// jsdom's Buffer breaks); the signing path needs Node's realm.
 
-import { serializeAccountUpdate2Transaction } from '@/lib/crypto/transaction-signer';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { signAccountUpdate2Operation } from '@/lib/crypto/transaction-signer';
+import { steem } from '@steemit/steem-js';
 
 /**
- * Golden byte-level compatibility test: the hand-rolled account_update2
- * serializer must produce exactly the bytes the legacy steem-js 0.7
- * serializer emits (the format production condenser has always used).
- * Golden hex generated from condenser-legacy's operations.js.
+ * account_update2 metadata-only signing (condenser profile settings save).
+ * The byte-level wire-format guarantee lives in steem-js's own golden tests
+ * (steemit/steem-js#552); here we verify our signing path end to end with
+ * the real steem-js: no throw on absent authorities, well-formed signature.
  */
-describe('serializeAccountUpdate2Transaction', () => {
-  it('matches the legacy steem-js 0.7 wire format byte-for-byte', () => {
-    const buf = serializeAccountUpdate2Transaction(
-      {
-        ref_block_num: 12345,
-        ref_block_prefix: 67890,
-        expiration: '2026-09-04T00:00:00',
-      },
-      {
-        account: 'alice',
-        json_metadata: '',
-        posting_json_metadata: JSON.stringify({
-          profile: { name: 'Alice', version: 2 },
-        }),
-      }
-    );
 
-    expect(buf.toString('hex')).toBe(
-      '393032090100000a9a6a012b05616c696365000000000028' +
-        '7b2270726f66696c65223a7b226e616d65223a22416c696365222c2276657273696f6e223a327d7d' +
-        '0000'
+const DGP = {
+  head_block_number: 100000000,
+  head_block_id:
+    '05f5e100a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c',
+  time: '2026-09-09T12:00:00',
+};
+
+describe('signAccountUpdate2Operation', () => {
+  beforeEach(() => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({ ok: true, json: async () => DGP })
     );
   });
 
-  it('marks owner/active/posting/memo_key absent (0x00 flags)', () => {
-    const buf = serializeAccountUpdate2Transaction(
-      { ref_block_num: 1, ref_block_prefix: 2, expiration: '2026-09-04T00:00:00' },
-      { account: 'bob', json_metadata: '', posting_json_metadata: '{}' }
-    );
-    const hex = buf.toString('hex');
-    // 2B num + 4B prefix + 4B time + 01 op count + 2b op index +
-    // 03 'bob' + 0000 0000 (owner/active/posting/memo_key absent) + ...
-    expect(hex).toContain('2b03626f6200000000');
+  it('signs a metadata-only account_update2 with the real steem-js', async () => {
+    const wif = steem.auth.toWif('alice', 'testpass', 'posting');
+    const signed = await signAccountUpdate2Operation(wif, {
+      account: 'alice',
+      jsonMetadata: '',
+      postingJsonMetadata: JSON.stringify({
+        profile: { name: 'Alice', version: 2 },
+      }),
+    });
+
+    const [opName, payload] = signed.operations[0] as [
+      string,
+      Record<string, unknown>,
+    ];
+    expect(opName).toBe('account_update2');
+    expect(payload).toEqual({
+      account: 'alice',
+      json_metadata: '',
+      posting_json_metadata: JSON.stringify({
+        profile: { name: 'Alice', version: 2 },
+      }),
+      extensions: [],
+    });
+    expect(signed.signatures).toHaveLength(1);
+    expect(signed.signatures[0]).toMatch(/^[0-9a-f]{130}$/);
   });
 });

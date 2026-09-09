@@ -58,6 +58,31 @@ describe('POST /api/auth/preferences', () => {
     expect(updateSessionMock).not.toHaveBeenCalled();
   });
 
+  it('rejects when the merged result exceeds the cap', async () => {
+    getSessionMock.mockResolvedValue({
+      ...loggedInSession,
+      userPreferences: { blob: 'x'.repeat(900) },
+    });
+
+    const res = await POST(
+      makePostRequest('/api/auth/preferences', { payload: { extra: 'y'.repeat(900) } })
+    );
+    expect(res.status).toBe(400);
+    expect(updateSessionMock).not.toHaveBeenCalled();
+  });
+
+  it('treats __proto__ keys as inert own properties (no pollution)', async () => {
+    getSessionMock.mockResolvedValue(loggedInSession);
+
+    const res = await POST(
+      makePostRequest('/api/auth/preferences', { payload: JSON.parse('{"__proto__":{"x":1}}') })
+    );
+    expect(res.status).toBe(200);
+    const merged = updateSessionMock.mock.calls[0][1].userPreferences;
+    expect(({} as Record<string, unknown>).x).toBeUndefined();
+    expect(Object.prototype.hasOwnProperty.call(merged, '__proto__')).toBe(true);
+  });
+
   it('merges the payload into session userPreferences and re-issues the cookie', async () => {
     getSessionMock.mockResolvedValue(loggedInSession);
 

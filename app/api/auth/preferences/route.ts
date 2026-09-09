@@ -32,8 +32,13 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    // Legacy cap: the serialized payload must stay small.
-    if (JSON.stringify(payload).length > 1024) {
+    // Legacy cap: the serialized payload must stay small. Validate the
+    // *merged* result too — legacy replaced the stored prefs each save, so
+    // the cap bounded the stored state; with a merge, repeated sub-cap
+    // payloads would otherwise grow the session unbounded (and past the
+    // ~4KB cookie cap on the JWT fallback, silently dropping the session).
+    const merged = { ...session.userPreferences, ...payload };
+    if (JSON.stringify(merged).length > 1024) {
       return NextResponse.json(
         { error: 'the data is too long' },
         { status: 400 }
@@ -42,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     const updatedToken = await updateSession(
       session,
-      { userPreferences: { ...session.userPreferences, ...payload } },
+      { userPreferences: merged },
       request.cookies.get(COOKIE_NAME)?.value
     );
 

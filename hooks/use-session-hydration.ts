@@ -45,6 +45,9 @@ export function useSessionHydration() {
         // Legacy auto-login also restores saved user preferences (nsfwPref,
         // …) from the session — except locale, which is cookie-managed in
         // the rewrite (i18n PR) and must not be stomped here.
+        // Known race (accepted): if the user saves prefs in Settings before
+        // this in-flight snapshot resolves, the dispatch reverts the Redux
+        // state until next reload; the server-side state stays correct.
         if (data.session?.userPreferences) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { locale: _locale, ...rest } = data.session.userPreferences;

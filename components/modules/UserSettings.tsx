@@ -458,8 +458,11 @@ export default function UserSettings({
                   body: JSON.stringify({ payload: userPreferences }),
                 });
                 if (!res.ok) {
-                  const data = await res.json();
-                  throw new Error(data.error || 'Failed to save preferences');
+                  // Surface the translated failure message; log the server
+                  // detail (English) for debugging instead of showing it raw.
+                  const data = await res.json().catch(() => null);
+                  console.error('Save preferences failed:', data?.error || res.status);
+                  throw new Error(t('settings_jsx.save_preferences_failed'));
                 }
                 setPrefsMessage(t('settings_jsx.preferences_saved'));
               } catch (error) {
@@ -467,7 +470,7 @@ export default function UserSettings({
                 setPrefsError(
                   error instanceof Error
                     ? error.message
-                    : 'Failed to save preferences'
+                    : t('settings_jsx.save_preferences_failed')
                 );
               } finally {
                 setSavingPrefs(false);

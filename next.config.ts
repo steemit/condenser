@@ -23,6 +23,12 @@ const nextConfig: NextConfig = {
   
   // Server external packages (moved from experimental)
   serverExternalPackages: ['@steemit/steem-js'],
+
+  // Dev-only: extra origins allowed to reach the dev server (HMR websocket
+  // included). Next.js blocks non-localhost dev origins by default; set
+  // NEXT_DEV_ALLOWED_ORIGINS="192.168.1.10,host.local" when accessing the
+  // dev server from another machine on the LAN.
+  allowedDevOrigins: process.env.NEXT_DEV_ALLOWED_ORIGINS?.split(',').map((s) => s.trim()).filter(Boolean),
   
   // Turbopack configuration (Next.js 16 default)
   turbopack: {

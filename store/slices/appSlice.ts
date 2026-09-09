@@ -87,8 +87,10 @@ const appSlice = createSlice({
         delete state.notifications[action.payload.key];
       }
     },
-    setUserPreferences: (state, action: PayloadAction<UserPreferences>) => {
-      state.user_preferences = action.payload;
+    setUserPreferences: (state, action: PayloadAction<Partial<UserPreferences>>) => {
+      // Merge (not replace): session hydration restores saved prefs without
+      // the cookie-managed locale, and must not stomp it.
+      state.user_preferences = { ...state.user_preferences, ...action.payload };
     },
     setLocale: (state, action: PayloadAction<string>) => {
       state.user_preferences.locale = action.payload;

@@ -13,6 +13,7 @@
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/store/hooks';
 import { setTrackingId, setUser } from '@/store/slices/userSlice';
+import { setUserPreferences } from '@/store/slices/appSlice';
 
 // One hydration attempt per page load is enough: the session cookie lives
 // for 30 days, and on failure the UI simply stays logged out until the next
@@ -41,6 +42,14 @@ export function useSessionHydration() {
         // (the session route creates one when missing), regenerated at
         // login time by usernamePasswordLogin.
         if (data.session?.uid) dispatch(setTrackingId(data.session.uid));
+        // Legacy auto-login also restores saved user preferences (nsfwPref,
+        // …) from the session — except locale, which is cookie-managed in
+        // the rewrite (i18n PR) and must not be stomped here.
+        if (data.session?.userPreferences) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { locale: _locale, ...rest } = data.session.userPreferences;
+          dispatch(setUserPreferences(rest));
+        }
         if (!data.authenticated) return;
         const username = data.session?.username;
         if (!username) return;

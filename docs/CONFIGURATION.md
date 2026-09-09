@@ -66,6 +66,12 @@ NEXT_PUBLIC_TRONADS_CONTENT_MOBILE_AD_PID=
 # configured means the module stays hidden.
 STEEM_MARKET_ENDPOINT=
 STEEM_MARKET_TOKEN=
+
+# Dev-only (`pnpm dev`): comma-separated extra origins allowed to reach the
+# dev server, HMR websocket included. Next.js blocks non-localhost dev
+# origins by default, so set this when accessing the dev server from another
+# machine on the LAN (e.g. "192.168.1.10"). Loaded from .env/.env.local.
+NEXT_DEV_ALLOWED_ORIGINS=
 ```
 
 ### Analytics (overseer)

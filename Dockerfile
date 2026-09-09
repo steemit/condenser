@@ -10,7 +10,7 @@ RUN apk update && apk add --no-cache \
     g++ \
     git \
     && npm config set registry https://registry.npmjs.org/ \
-    && npm install -g pnpm
+    && npm install -g pnpm@10.17.0
 
 # Set working directory
 WORKDIR /app

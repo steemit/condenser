@@ -288,6 +288,11 @@ export function Header() {
                   >
                     {t("g.wallet")}
                   </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/@${username}/settings`)}
+                  >
+                    {t("g.settings")}
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => void handleLogout()}>
                     {t("g.logout")}
                   </DropdownMenuItem>

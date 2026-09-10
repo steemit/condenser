@@ -289,10 +289,12 @@ export function PrimaryNavigation({ pathname }: { pathname: string }) {
     const user = profileGroupUser.toLowerCase();
     // Other users' groups additionally expose Friends Feed (legacy "More"
     // menu); one's own feed lives under Explore > My Friends instead.
+    // Settings is only linked on one's own profile (legacy parity — the
+    // /@user/settings route itself stays reachable for direct visits).
     const sections =
       viewedUser && !isOwnProfile
         ? [...MY_PROFILE_SECTIONS, { segment: "feed", labelKey: "g.friends_feed" }]
-        : MY_PROFILE_SECTIONS;
+        : [...MY_PROFILE_SECTIONS, { segment: "settings", labelKey: "g.settings" }];
     return sections.map(({ segment, labelKey }) => ({
       label: t(labelKey),
       href: profileSectionHref(user, segment),

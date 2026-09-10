@@ -113,4 +113,16 @@ describe('PrimaryNavigation profile group identity', () => {
     expect(isActive(itemByLabel('My Friends'))).toBe(true);
     expect(screen.getByText('My Profile')).toBeTruthy();
   });
+
+  it('links Settings on the own profile group only', () => {
+    renderNav('/@alice/settings');
+    const settings = itemByLabel('Settings');
+    expect(settings.getAttribute('href')).toBe('/@alice/settings');
+    expect(isActive(settings)).toBe(true);
+  });
+
+  it('hides Settings on other users\' profile groups', () => {
+    renderNav('/@bob/posts');
+    expect(screen.queryByText('Settings')).toBeNull();
+  });
 });

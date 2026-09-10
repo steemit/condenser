@@ -154,7 +154,8 @@
     "save_preferences": "Save Preferences",
     "saving": "Saving...",
     "preferences_saved": "Preferences saved.",
-    "save_preferences_failed": "Failed to save preferences"
+    "save_preferences_failed": "Failed to save preferences",
+    "image_hosting_note": "Note: the official site only displays images hosted on steemitimages.com — third-party image hosts are not shown. Use Upload to host your image."
   },
   "search_jsx": {
     "accounts": "Accounts",

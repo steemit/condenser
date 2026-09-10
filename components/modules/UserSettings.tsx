@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setLocale, setUserPreferences } from '@/store/slices/appSlice';
 import { LOCALES, LOCALE_LABELS, DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/config';
 import { broadcastAccountUpdate } from '@/lib/api/broadcast';
 import { fetchAccount } from '@/lib/api/steem';
+import { uploadImage } from '@/lib/media/upload-image';
 import { userActionRecord } from '@/lib/analytics/overseer';
 
 /** Legacy o2j.ifStringParseJSON. */
@@ -83,6 +84,15 @@ export default function UserSettings({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successMessage, setSuccessMessage] = useState('');
 
+  // Image upload state (profile_image / cover_image)
+  const [uploadingImage, setUploadingImage] = useState<
+    'profile_image' | 'cover_image' | null
+  >(null);
+  const fileInputRefs = {
+    profile_image: useRef<HTMLInputElement>(null),
+    cover_image: useRef<HTMLInputElement>(null),
+  };
+
   // User preferences
   const nsfwPref = useAppSelector(
     (state) => state.app.user_preferences.nsfwPref
@@ -155,6 +165,35 @@ export default function UserSettings({
     // Clear error for this field
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  // Legacy Settings.jsx upload: send the image to the first-party hoster
+  // (steemitimages.com) and fill the field with the returned URL.
+  const handleImageUpload = async (
+    field: 'profile_image' | 'cover_image',
+    file: File | undefined
+  ) => {
+    if (!file || !currentUser) return;
+    setUploadingImage(field);
+    setErrors(prev => ({ ...prev, [field]: '' }));
+    try {
+      const url = await uploadImage(file, currentUser);
+      handleInputChange(field, url);
+    } catch (error) {
+      console.error('Image upload failed:', error);
+      setErrors(prev => ({
+        ...prev,
+        [field]:
+          error instanceof Error
+            ? error.message
+            : t('settings_jsx.update_failed'),
+      }));
+    } finally {
+      setUploadingImage(null);
+      // Allow re-selecting the same file.
+      const input = fileInputRefs[field].current;
+      if (input) input.value = '';
     }
   };
 
@@ -249,15 +288,36 @@ export default function UserSettings({
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings_jsx.profile_image_url')}
             </label>
-            <input
-              type="url"
-              value={formData.profile_image}
-              onChange={(e) => handleInputChange('profile_image', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
-                errors.profile_image ? 'border-red-500' : 'border-gray-300'
-              }`}
-              placeholder={t('settings_jsx.profile_image_placeholder')}
-            />
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={formData.profile_image}
+                onChange={(e) => handleInputChange('profile_image', e.target.value)}
+                className={`flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
+                  errors.profile_image ? 'border-red-500' : 'border-gray-300'
+                }`}
+                placeholder={t('settings_jsx.profile_image_placeholder')}
+              />
+              <input
+                ref={fileInputRefs.profile_image}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) =>
+                  void handleImageUpload('profile_image', e.target.files?.[0])
+                }
+              />
+              <button
+                type="button"
+                disabled={uploadingImage !== null}
+                onClick={() => fileInputRefs.profile_image.current?.click()}
+                className="px-4 py-2 whitespace-nowrap bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+              >
+                {uploadingImage === 'profile_image'
+                  ? t('settings_jsx.uploading_image')
+                  : t('settings_jsx.upload_image')}
+              </button>
+            </div>
             {errors.profile_image && (
               <p className="mt-1 text-sm text-red-600">{errors.profile_image}</p>
             )}
@@ -268,18 +328,42 @@ export default function UserSettings({
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings_jsx.cover_image_url')}
             </label>
-            <input
-              type="url"
-              value={formData.cover_image}
-              onChange={(e) => handleInputChange('cover_image', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
-                errors.cover_image ? 'border-red-500' : 'border-gray-300'
-              }`}
-              placeholder={t('settings_jsx.cover_image_placeholder')}
-            />
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={formData.cover_image}
+                onChange={(e) => handleInputChange('cover_image', e.target.value)}
+                className={`flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#06D6A9] ${
+                  errors.cover_image ? 'border-red-500' : 'border-gray-300'
+                }`}
+                placeholder={t('settings_jsx.cover_image_placeholder')}
+              />
+              <input
+                ref={fileInputRefs.cover_image}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) =>
+                  void handleImageUpload('cover_image', e.target.files?.[0])
+                }
+              />
+              <button
+                type="button"
+                disabled={uploadingImage !== null}
+                onClick={() => fileInputRefs.cover_image.current?.click()}
+                className="px-4 py-2 whitespace-nowrap bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+              >
+                {uploadingImage === 'cover_image'
+                  ? t('settings_jsx.uploading_image')
+                  : t('settings_jsx.upload_image')}
+              </button>
+            </div>
             {errors.cover_image && (
               <p className="mt-1 text-sm text-red-600">{errors.cover_image}</p>
             )}
+            <p className="mt-1 text-xs text-gray-500">
+              {t('settings_jsx.image_hosting_note')}
+            </p>
           </div>
 
           {/* Display Name */}

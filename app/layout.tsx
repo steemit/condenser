@@ -24,6 +24,11 @@ export const dynamic = "force-dynamic";
 // injection and no hydration dependency.
 const gaId = process.env.SDC_GOOGLE_ANALYTICS_ID;
 
+// Image upload endpoint (legacy $STM_Config.upload_image): read from the
+// runtime env and inlined into the SSR HTML for the settings-page upload
+// helper (lib/media/upload-image.ts) to pick up client-side.
+const uploadImageUrl = process.env.SDC_UPLOAD_IMAGE_URL;
+
 // viewport-fit=cover is required for env(safe-area-inset-*) to take effect
 // on notched phones (the mobile bottom tab bar pads against it).
 export const viewport: Viewport = {
@@ -100,6 +105,14 @@ gtag('config', '${gaId}');`,
               }}
             />
           </>
+        ) : null}
+        {/* Runtime upload endpoint for lib/media/upload-image.ts. */}
+        {uploadImageUrl ? (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.__SDC_UPLOAD_IMAGE_URL__ = ${JSON.stringify(uploadImageUrl)};`,
+            }}
+          />
         ) : null}
         <ReduxProvider>{children}</ReduxProvider>
       </body>

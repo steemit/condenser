@@ -67,14 +67,15 @@ describe('uploadImage', () => {
     expect((init.body as FormData).get('file')).toBeTruthy();
   });
 
-  it('honors NEXT_PUBLIC_UPLOAD_IMAGE_URL when set', async () => {
-    vi.stubEnv('NEXT_PUBLIC_UPLOAD_IMAGE_URL', 'https://img.example.com/');
+  it('honors the runtime-injected SDC_UPLOAD_IMAGE_URL when set', async () => {
+    (globalThis as { __SDC_UPLOAD_IMAGE_URL__?: string }).__SDC_UPLOAD_IMAGE_URL__ =
+      'https://img.example.com/';
     fetchMock.mockResolvedValue(okResponse({ url: 'https://img.example.com/x.png' }));
 
     await uploadImage(makeImageFile(), 'alice');
     const [endpoint] = fetchMock.mock.calls[0];
     expect(endpoint).toMatch(/^https:\/\/img\.example\.com\/alice\//);
-    vi.unstubAllEnvs();
+    delete (globalThis as { __SDC_UPLOAD_IMAGE_URL__?: string }).__SDC_UPLOAD_IMAGE_URL__;
   });
 
   it('surfaces hoster error responses', async () => {

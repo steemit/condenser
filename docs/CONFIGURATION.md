@@ -51,8 +51,10 @@ ELASTICSEARCH_URL=http://localhost:9200
 
 # Image upload endpoint for the settings page profile/cover upload (legacy
 # $STM_Config.upload_image). The client signs the file with the posting key
-# and POSTs it here. Default: https://steemitimages.com
-NEXT_PUBLIC_UPLOAD_IMAGE_URL=https://steemitimages.com
+# and POSTs it here. Read at request time and inlined into the SSR HTML (like
+# SDC_GOOGLE_ANALYTICS_ID) — never baked into the bundle.
+# Default: https://steemitimages.com
+SDC_UPLOAD_IMAGE_URL=https://steemitimages.com
 
 # Analytics (all optional)
 # Google Analytics (gtag.js) property id — scripts are injected only when set.

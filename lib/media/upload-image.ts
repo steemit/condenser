@@ -12,8 +12,14 @@ import { getCachedKey, decryptAndRetrieveKey } from '@/lib/crypto/key-storage';
 
 const DEFAULT_UPLOAD_URL = 'https://steemitimages.com';
 
+// Runtime config, inlined into the SSR HTML by the root layout from
+// SDC_UPLOAD_IMAGE_URL (legacy $STM_Config.upload_image parity). Read at
+// call time, never baked into the bundle — published images stay
+// environment-agnostic (same rationale as the GA id injection).
 function uploadBaseUrl(): string {
-  const url = process.env.NEXT_PUBLIC_UPLOAD_IMAGE_URL || DEFAULT_UPLOAD_URL;
+  const url =
+    (globalThis as { __SDC_UPLOAD_IMAGE_URL__?: string })
+      .__SDC_UPLOAD_IMAGE_URL__ || DEFAULT_UPLOAD_URL;
   return url.replace(/\/+$/, '');
 }
 

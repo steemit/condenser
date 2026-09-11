@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Next.js version implements a secure client-side private key management system that addresses the challenge of maintaining private keys across page refreshes while maintaining security. Unlike the legacy single-page application that could keep keys in memory, this system uses encrypted storage with automatic lifecycle management.
+The Next.js version implements client-side private key management that mirrors the legacy condenser lifecycle: the posting key is kept available for signing for the whole session, and — when the user opts in with "keep me logged in" — persisted across reloads and new tabs until explicit logout. Unlike the legacy app, which stored the posting key as plain hex in `localStorage['autopost2']`, the rewrite stores it AES-GCM encrypted in `localStorage['steem_encrypted_key']`.
 
 ## Architecture
 
@@ -11,42 +11,49 @@ The Next.js version implements a secure client-side private key management syste
 1. **Client-Side Signing**: All transactions are signed on the client before being sent to the API
 2. **API as Forwarder**: The API layer only forwards pre-signed transactions to the Steem network
 3. **No Server Storage**: Private keys are never stored on the server
-4. **Encrypted Storage**: Private keys are encrypted before storage using Web Crypto API
-5. **Automatic Cleanup**: Keys are cleared when pages become hidden or tabs are closed
+4. **Posting Key Only**: Only the lowest-privilege key (posting/memo) is ever stored; active/owner keys are rejected at login
+5. **Legacy Lifecycle**: "Keep me logged in" persists the key until logout; without it the key lives in memory only for the tab session
 
 ## Key Storage System
+
+### Threat Model
+
+- The stored key is the **posting key only** — the lowest-privilege key (posting/memo), never active/owner.
+- Persisting it in localStorage **matches legacy condenser behavior** (legacy stored it as plain hex in `autopost2`).
+- The AES-GCM encryption is **obfuscation only**: the key material (origin + username) is derivable by any same-origin script, so this does **NOT** protect against XSS. Key leakage under XSS is an accepted trade-off, since a posting key cannot move funds.
+- The key **persists until explicit logout**.
 
 ### Storage Mechanism
 
 The system uses a two-tier storage approach:
 
-1. **Encrypted Storage (sessionStorage)**: 
-   - Private keys are encrypted with user's password using AES-GCM
-   - Stored in `sessionStorage` (automatically cleared when tab closes)
-   - Uses PBKDF2 for key derivation (100,000 iterations)
+1. **Persistent Storage (localStorage, opt-in)**:
+   - Written only when "keep me logged in" is checked at login
+   - The posting key is encrypted with AES-GCM before storage (PBKDF2 key derivation, 100,000 iterations)
+   - The encryption key material is derived from `origin:username:key-storage` — publicly derivable, so this is obfuscation, not password protection (see Threat Model)
+   - Survives page reloads, new tabs, and browser restarts; cleared only by explicit logout
 
-2. **Memory Cache**:
-   - Decrypted keys are cached in memory for performance
-   - Automatically cleared when page becomes hidden
-   - Re-encrypted key remains in sessionStorage for later use
+2. **Memory Cache (always)**:
+   - The decrypted key is cached on `window` for fast signing
+   - This is the *only* copy when "keep me logged in" is unchecked — the key is lost when the tab closes or reloads (legacy behavior: unchecked = in-memory only)
+   - Disappears naturally when the tab closes
 
-### Security Features
+On non-secure contexts (plain HTTP, e.g. development over a LAN IP) `crypto.subtle` is unavailable; the system degrades to storing the key unencrypted in localStorage. Production is always HTTPS.
 
-- **Web Crypto API**: Industry-standard encryption
-- **AES-GCM**: Authenticated encryption with associated data
-- **PBKDF2**: Password-based key derivation (100,000 iterations)
-- **Random IV/Salt**: Unique encryption parameters for each storage
-- **Session-Based**: Keys cleared on tab close
-- **Visibility-Based Cleanup**: Memory cache cleared when page hidden
+### Migration from Older Versions
+
+Versions before this change wrote the encrypted key to `sessionStorage`. On first read, `decryptAndRetrieveKey` moves any such entry into localStorage and removes the sessionStorage copy, so existing sessions keep working. `clearStoredKey` clears both storages.
 
 ## Transaction Signing Flow
 
 ### 1. User Login
 
 ```typescript
-// User logs in with password or WIF private key
+// User logs in with their posting WIF private key.
 // After successful authentication:
-await encryptAndStoreKey(privateKeyWif, username, password);
+await encryptAndStoreKey(privateKeyWif, username, saveLogin);
+// saveLogin (the "keep me logged in" checkbox) controls whether the
+// encrypted key is persisted to localStorage or kept in memory only.
 ```
 
 ### 2. Transaction Creation
@@ -111,31 +118,12 @@ const result = await broadcastSignedTransaction(signedTransaction);
 - Does NOT sign or modify transactions
 - Only forwards to Steem network
 
-## Key Lifecycle Management
+## Key Lifecycle
 
-### Initialization
-
-```typescript
-// Initialize on app load
-useEffect(() => {
-  const cleanup = initializeKeyLifecycle();
-  return cleanup;
-}, []);
-```
-
-### Lifecycle Events
-
-1. **Page Visible**: Key loaded from sessionStorage and cached in memory
-2. **Page Hidden**: Memory cache cleared (encrypted key remains)
-3. **Tab Closed**: sessionStorage cleared (all keys removed)
-4. **User Logout**: Explicitly clears all storage
-
-### Memory Cache Strategy
-
-- **Fast Access**: Decrypted keys cached in memory for quick signing
-- **Security**: Cleared when page becomes hidden
-- **Persistence**: Encrypted key remains in sessionStorage
-- **Re-authentication**: User can decrypt again with password if needed
+1. **Login**: Key validated, then cached in memory; encrypted copy persisted to localStorage if "keep me logged in" is checked
+2. **Signing**: Key read from memory cache, falling back to decrypting the localStorage copy
+3. **Page Reload / New Tab**: Memory cache is gone; with "keep me logged in" the key is restored from localStorage, without it the user must log in again
+4. **Logout**: `clearStoredKey()` removes the localStorage entry (plus any legacy sessionStorage entry) and the memory cache
 
 ## Usage Examples
 
@@ -144,7 +132,7 @@ useEffect(() => {
 ```typescript
 import { broadcastComment } from '@/lib/api/broadcast';
 
-// Key is automatically retrieved from memory cache or sessionStorage
+// Key is automatically retrieved from memory cache or localStorage
 const result = await broadcastComment({
   parentAuthor: '',
   parentPermlink: 'hive-123456',
@@ -153,7 +141,6 @@ const result = await broadcastComment({
   title: '',
   body: 'This is my comment',
   jsonMetadata: '{}',
-  // password: 'optional' // Only needed if key not in memory
 });
 ```
 
@@ -193,23 +180,20 @@ const result = await broadcastCustomJson({
 ### Advantages Over Legacy System
 
 1. **No Server-Side Key Storage**: Keys never leave the client
-2. **Encrypted Storage**: Even if sessionStorage is compromised, keys are encrypted
-3. **Automatic Cleanup**: Keys cleared on tab close or page hide
-4. **API Security**: API cannot sign transactions, only forwards them
-5. **Password Protection**: Encrypted keys require password to decrypt
+2. **Encrypted at Rest**: The persisted key is AES-GCM encrypted instead of legacy's plain hex (obfuscation only — see Threat Model)
+3. **API Security**: API cannot sign transactions, only forwards them
+4. **Posting Key Only**: Active/owner keys are rejected, so a leaked key cannot move funds
 
 ### Limitations
 
-1. **Page Refresh**: Requires re-authentication if memory cache cleared
-2. **Password Required**: User must remember password for re-decryption
-3. **Session-Based**: Keys lost on tab close (by design for security)
+1. **XSS**: Any same-origin script can derive the encryption key material and decrypt the stored key. This is an accepted trade-off (posting keys cannot move funds) and is no worse than legacy's plaintext storage.
+2. **Shared Devices**: With "keep me logged in", the key stays on the device until explicit logout — users on shared devices should uncheck it or log out.
 
 ### Best Practices
 
-1. **Use "Keep me logged in"**: Stores encrypted key for session
-2. **Don't share passwords**: Each user should have unique password
-3. **Logout when done**: Explicitly clear keys when finished
-4. **Use secure passwords**: Strong passwords protect encrypted keys
+1. **Uncheck "Keep me logged in" on shared devices**: The key then lives in memory only for the tab session
+2. **Logout when done**: Explicitly clears the persisted key
+3. **Never enter active/owner keys**: The login form rejects them; only the posting key is ever stored
 
 ## Migration from Legacy
 
@@ -217,18 +201,17 @@ const result = await broadcastCustomJson({
 
 | Legacy | Next.js |
 |--------|---------|
-| Memory-only storage | Encrypted sessionStorage + memory cache |
-| Survives page refresh | Requires re-authentication after refresh |
-| No encryption | AES-GCM encryption with password |
-| Server-side signing | Client-side signing only |
+| Plain hex WIF in `localStorage['autopost2']` (opt-in) | AES-GCM encrypted key in `localStorage['steem_encrypted_key']` (opt-in) |
+| Unchecked: key in Redux memory for the tab session | Unchecked: key in memory cache for the tab session |
+| Server-side signing possible | Client-side signing only |
 | API signs transactions | API only forwards |
 
 ### Benefits
 
-1. **Better Security**: Encrypted storage with automatic cleanup
+1. **Better Security at Rest**: Encrypted storage instead of plaintext hex
 2. **API Simplification**: API doesn't need to handle keys
 3. **User Control**: Users control their own keys
-4. **Compliance**: Better alignment with security best practices
+4. **Same UX as Legacy**: Identical "keep me logged in" semantics
 
 ## Implementation Details
 
@@ -244,7 +227,7 @@ const result = await broadcastCustomJson({
 
 - Web Crypto API (browser built-in)
 - `@steemit/steem-js`: Transaction serialization and signing
-- sessionStorage: Encrypted key storage
+- localStorage: Encrypted key storage (opt-in persistence)
 
 ## Future Enhancements
 

@@ -1,11 +1,21 @@
 /**
- * Secure client-side private key storage
- * Uses Web Crypto API for encryption and sessionStorage for persistence
- * Memory cache for performance, cleared on page visibility change
+ * Client-side posting key storage.
+ *
+ * Threat model:
+ * - The stored key is the posting key only — the lowest-privilege key
+ *   (posting/memo), never active/owner.
+ * - Persisting it in localStorage matches legacy condenser behavior (legacy
+ *   stored it as plain hex in `autopost2`).
+ * - The AES-GCM encryption is obfuscation only: the key material
+ *   (origin + username) is derivable by any same-origin script, so this does
+ *   NOT protect against XSS. Key leakage under XSS is an accepted trade-off,
+ *   since a posting key cannot move funds.
+ * - The key persists until explicit logout.
  */
 
 const STORAGE_KEY = 'steem_encrypted_key';
 const MEMORY_CACHE_KEY = 'steem_decrypted_key';
+const MEMORY_CACHE_USERNAME_KEY = 'steem_decrypted_key_username';
 const ENCRYPTION_ALGORITHM = 'AES-GCM';
 const KEY_DERIVATION_ALGORITHM = 'PBKDF2';
 
@@ -27,7 +37,7 @@ interface PlainKeyData {
 /**
  * crypto.subtle exists only in secure contexts (HTTPS or localhost). Plain
  * HTTP over a LAN IP (e.g. http://192.168.x.x during development) has no
- * subtle API at all — degrade to plaintext sessionStorage there. That is
+ * subtle API at all — degrade to plaintext localStorage there. That is
  * acceptable: on a non-secure context the page itself is already plaintext,
  * so encryption would buy nothing; production is always HTTPS.
  */
@@ -42,7 +52,7 @@ function isSubtleCryptoAvailable(): boolean {
 function getEncryptionKeyMaterial(username: string): string {
   // Use application identifier + username for key derivation
   // This ensures each user has a unique encryption key
-  const appId = typeof window !== 'undefined' 
+  const appId = typeof window !== 'undefined'
     ? (window.location.origin || 'steem-condenser')
     : 'steem-condenser';
   return `${appId}:${username}:key-storage`;
@@ -79,27 +89,41 @@ async function deriveKey(
   );
 }
 
+function setMemoryCache(privateKeyWif: string, username: string): void {
+  const w = window as unknown as { [key: string]: string };
+  w[MEMORY_CACHE_KEY] = privateKeyWif;
+  w[MEMORY_CACHE_USERNAME_KEY] = username;
+}
+
 /**
- * Encrypt and store private key
- * Uses application-level key material derived from username
+ * Encrypt and store the private key.
+ * Uses application-level key material derived from username.
+ *
+ * The decrypted key is always cached in memory (lost when the tab closes).
+ * With `persist` (the legacy "keep me logged in" checkbox) the encrypted key
+ * is additionally written to localStorage, where it survives reloads and new
+ * tabs until explicit logout — matching legacy condenser's `autopost2`.
  */
 export async function encryptAndStoreKey(
   privateKeyWif: string,
-  username: string
+  username: string,
+  persist = true
 ): Promise<void> {
   if (typeof window === 'undefined') {
     throw new Error('Key storage is only available in browser environment');
   }
 
   // Non-secure context (plain HTTP over LAN etc.): no crypto.subtle.
-  // Fall back to plaintext sessionStorage — see isSubtleCryptoAvailable().
+  // Fall back to plaintext localStorage — see isSubtleCryptoAvailable().
   if (!isSubtleCryptoAvailable()) {
-    console.warn(
-      'Web Crypto subtle API unavailable (non-secure context); storing the posting key unencrypted in sessionStorage. Use HTTPS in production.'
-    );
-    const plainData: PlainKeyData = { plain: privateKeyWif, username, timestamp: Date.now() };
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(plainData));
-    (window as unknown as { [key: string]: string })[MEMORY_CACHE_KEY] = privateKeyWif;
+    if (persist) {
+      console.warn(
+        'Web Crypto subtle API unavailable (non-secure context); storing the posting key unencrypted in localStorage. Use HTTPS in production.'
+      );
+      const plainData: PlainKeyData = { plain: privateKeyWif, username, timestamp: Date.now() };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(plainData));
+    }
+    setMemoryCache(privateKeyWif, username);
     return;
   }
 
@@ -123,23 +147,19 @@ export async function encryptAndStoreKey(
       encoder.encode(privateKeyWif)
     );
 
-    // Store encrypted data
-    const encryptedKeyData: EncryptedKeyData = {
-      encrypted: btoa(String.fromCharCode(...new Uint8Array(encryptedData))),
-      iv: btoa(String.fromCharCode(...iv)),
-      salt: btoa(String.fromCharCode(...salt)),
-      username,
-      timestamp: Date.now(),
-    };
-
-    // Store in sessionStorage (cleared when tab closes)
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(encryptedKeyData));
-
-    // Also cache decrypted key in memory for performance
-    // This will be cleared on page visibility change
-    if (typeof window !== 'undefined') {
-      (window as unknown as { [key: string]: string })[MEMORY_CACHE_KEY] = privateKeyWif;
+    if (persist) {
+      const encryptedKeyData: EncryptedKeyData = {
+        encrypted: btoa(String.fromCharCode(...new Uint8Array(encryptedData))),
+        iv: btoa(String.fromCharCode(...iv)),
+        salt: btoa(String.fromCharCode(...salt)),
+        username,
+        timestamp: Date.now(),
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(encryptedKeyData));
     }
+
+    // Also cache the decrypted key in memory for performance
+    setMemoryCache(privateKeyWif, username);
   } catch (error) {
     console.error('Failed to encrypt and store key:', error);
     throw new Error('Failed to securely store private key');
@@ -156,21 +176,31 @@ export async function decryptAndRetrieveKey(): Promise<{ privateKey: string; use
   }
 
   try {
-    // Check memory cache first
-    const cachedKey = (window as unknown as { [key: string]: string })[MEMORY_CACHE_KEY];
-    if (cachedKey) {
-      const stored = sessionStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const data: EncryptedKeyData = JSON.parse(stored);
-        return {
-          privateKey: cachedKey,
-          username: data.username,
-        };
+    // Migrate a legacy sessionStorage entry (written by versions before the
+    // key became persistent) into localStorage so it survives like the
+    // legacy autopost2 entry did.
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      const legacy = sessionStorage.getItem(STORAGE_KEY);
+      if (legacy) {
+        localStorage.setItem(STORAGE_KEY, legacy);
+        sessionStorage.removeItem(STORAGE_KEY);
       }
     }
 
-    // Retrieve from sessionStorage
-    const stored = sessionStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(STORAGE_KEY);
+
+    // Check memory cache first
+    const w = window as unknown as { [key: string]: string };
+    const cachedKey = w[MEMORY_CACHE_KEY];
+    if (cachedKey) {
+      const username = stored
+        ? (JSON.parse(stored) as EncryptedKeyData | PlainKeyData).username
+        : w[MEMORY_CACHE_USERNAME_KEY];
+      if (username) {
+        return { privateKey: cachedKey, username };
+      }
+    }
+
     if (!stored) {
       return null;
     }
@@ -180,7 +210,7 @@ export async function decryptAndRetrieveKey(): Promise<{ privateKey: string; use
     // Plaintext fallback written on non-secure contexts (no crypto.subtle).
     if ('plain' in parsed) {
       const data = parsed as PlainKeyData;
-      (window as unknown as { [key: string]: string })[MEMORY_CACHE_KEY] = data.plain;
+      setMemoryCache(data.plain, data.username);
       return { privateKey: data.plain, username: data.username };
     }
 
@@ -209,7 +239,7 @@ export async function decryptAndRetrieveKey(): Promise<{ privateKey: string; use
     const privateKey = decoder.decode(decryptedData);
 
     // Cache in memory
-    (window as unknown as { [key: string]: string })[MEMORY_CACHE_KEY] = privateKey;
+    setMemoryCache(privateKey, encryptedKeyData.username);
 
     return {
       privateKey,
@@ -232,13 +262,16 @@ export function getCachedKey(): string | null {
 }
 
 /**
- * Check if encrypted key exists in storage
+ * Check if a persisted key exists in storage
  */
 export function hasStoredKey(): boolean {
   if (typeof window === 'undefined') {
     return false;
   }
-  return sessionStorage.getItem(STORAGE_KEY) !== null;
+  return (
+    localStorage.getItem(STORAGE_KEY) !== null ||
+    sessionStorage.getItem(STORAGE_KEY) !== null
+  );
 }
 
 /**
@@ -248,7 +281,7 @@ export function getStoredUsername(): string | null {
   if (typeof window === 'undefined') {
     return null;
   }
-  const stored = sessionStorage.getItem(STORAGE_KEY);
+  const stored = localStorage.getItem(STORAGE_KEY) ?? sessionStorage.getItem(STORAGE_KEY);
   if (!stored) {
     return null;
   }
@@ -267,38 +300,10 @@ export function clearStoredKey(): void {
   if (typeof window === 'undefined') {
     return;
   }
+  localStorage.removeItem(STORAGE_KEY);
+  // Also clear any legacy sessionStorage entry left by older versions.
   sessionStorage.removeItem(STORAGE_KEY);
-  delete (window as unknown as { [key: string]: string })[MEMORY_CACHE_KEY];
-}
-
-/**
- * Initialize key lifecycle management
- * Clears memory cache when page becomes hidden
- */
-export function initializeKeyLifecycle(): () => void {
-  if (typeof window === 'undefined') {
-    return () => {}; // No-op for SSR
-  }
-
-  const handleVisibilityChange = () => {
-    if (document.hidden) {
-      // Page is hidden, clear memory cache for security
-      // Encrypted key remains in sessionStorage
-      delete (window as unknown as { [key: string]: string })[MEMORY_CACHE_KEY];
-    }
-  };
-
-  const handleBeforeUnload = () => {
-    // Clear everything on page unload
-    clearStoredKey();
-  };
-
-  document.addEventListener('visibilitychange', handleVisibilityChange);
-  window.addEventListener('beforeunload', handleBeforeUnload);
-
-  // Return cleanup function
-  return () => {
-    document.removeEventListener('visibilitychange', handleVisibilityChange);
-    window.removeEventListener('beforeunload', handleBeforeUnload);
-  };
+  const w = window as unknown as { [key: string]: string };
+  delete w[MEMORY_CACHE_KEY];
+  delete w[MEMORY_CACHE_USERNAME_KEY];
 }

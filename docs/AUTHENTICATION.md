@@ -127,8 +127,9 @@ REDIS_KEY_PREFIX=steem:session:
 
 ### Key Management Security
 - **No Server Storage**: Private keys never stored on server
-- **Memory Safety**: Keys cleared from memory after use
-- **Role Restriction**: Only posting authority allowed
+- **Posting Key Only**: Only the lowest-privilege key (posting/memo) is stored; active/owner keys are rejected at login
+- **"Keep me logged in" Persistence**: When checked, the posting key is AES-GCM encrypted and persisted in localStorage until explicit logout (legacy `autopost2` behavior); when unchecked it lives in memory only for the tab session
+- **Obfuscation, Not Password Protection**: The encryption key material (origin + username) is derivable by any same-origin script, so this does not protect against XSS — an accepted trade-off since a posting key cannot move funds (see `docs/KEY_MANAGEMENT.md`)
 - **Public Key Verification**: Server validates against blockchain data
 
 ## Migration from Legacy System

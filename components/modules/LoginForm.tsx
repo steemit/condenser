@@ -12,7 +12,7 @@ import {
   isWifFormat,
   isPublicKeyFormat 
 } from '@/lib/crypto/client';
-import { encryptAndStoreKey, initializeKeyLifecycle } from '@/lib/crypto/key-storage';
+import { encryptAndStoreKey } from '@/lib/crypto/key-storage';
 
 /**
  * LoginForm component
@@ -38,10 +38,6 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('saveLogin');
       setSaveLogin(saved !== 'no');
-      
-      // Initialize key lifecycle management
-      const cleanup = initializeKeyLifecycle();
-      return cleanup;
     }
   }, []);
 
@@ -162,18 +158,15 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
 
       await loginResponse.json();
       
-      // Step 7: Store encrypted private key for subsequent operations
-      // The key is encrypted using application-level key material and stored in sessionStorage
-      // It will be cleared when the tab is closed
-      if (saveLogin) {
-        try {
-          // Encrypt and store the private key
-          // Encryption uses application identifier + username for key derivation
-          await encryptAndStoreKey(privateKeyWif, normalizedUsername);
-        } catch (storageError) {
-          console.error('Failed to store encrypted key:', storageError);
-          // Don't fail login if storage fails, but log the error
-        }
+      // Step 7: Store the private key for subsequent operations.
+      // With "keep me logged in" the encrypted key is persisted to
+      // localStorage until explicit logout (legacy autopost2 behavior);
+      // otherwise it lives only in the in-memory cache for this tab session.
+      try {
+        await encryptAndStoreKey(privateKeyWif, normalizedUsername, saveLogin);
+      } catch (storageError) {
+        console.error('Failed to store encrypted key:', storageError);
+        // Don't fail login if storage fails, but log the error
       }
       
       // Step 8: Update Redux state

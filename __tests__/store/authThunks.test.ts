@@ -25,7 +25,8 @@ describe('logoutThunk', () => {
     const store = makeStore();
     store.dispatch(setUser({ username: 'alice', posting_authority: true }));
     window.localStorage.setItem('autopost2', JSON.stringify({ username: 'alice' }));
-    window.sessionStorage.setItem('steem_encrypted_key', '{"encrypted":"x"}');
+    window.localStorage.setItem('steem_encrypted_key', '{"encrypted":"x"}');
+    window.sessionStorage.setItem('steem_encrypted_key', '{"encrypted":"legacy"}');
 
     await store.dispatch(logoutThunk());
 
@@ -33,6 +34,7 @@ describe('logoutThunk', () => {
     expect(state.current).toEqual({});
     expect(state.logged_out).toBe(true);
     expect(window.localStorage.getItem('autopost2')).toBeNull();
+    expect(window.localStorage.getItem('steem_encrypted_key')).toBeNull();
     expect(window.sessionStorage.getItem('steem_encrypted_key')).toBeNull();
     expect(fetch).toHaveBeenCalledWith('/api/auth/logout', { method: 'POST' });
   });

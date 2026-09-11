@@ -5,9 +5,11 @@
  * Restores user identity into Redux on app mount when a valid server-side
  * session cookie exists (legacy App.jsx auto-login equivalent).
  *
- * Note: this only restores identity/UI state. The encrypted private key in
- * sessionStorage does not survive a page reload by design, so posting
- * actions will prompt for the key again — that is intentional.
+ * Note: this only restores identity/UI state. The posting key is restored
+ * separately by lib/crypto/key-storage: if the user checked "keep me logged
+ * in" the encrypted key in localStorage survives the reload and signing
+ * keeps working; otherwise the key was memory-only and the user must log in
+ * again to sign.
  */
 
 import { useEffect } from 'react';

@@ -32,7 +32,6 @@ export const loginThunk = createAsyncThunk<
     const {
       username,
       password,
-      saveLogin = false,
       operationType,
     } = payload;
 
@@ -49,18 +48,6 @@ export const loginThunk = createAsyncThunk<
 
       // The actual authentication is now handled in the LoginForm component
       // This thunk is mainly for updating Redux state after successful login
-      
-      // Save login preference if requested
-      if (saveLogin) {
-        if (typeof window !== 'undefined') {
-          const loginData = {
-            username: finalUsername,
-            timestamp: Date.now(),
-            // Never store actual keys in localStorage
-          };
-          localStorage.setItem('autopost2', JSON.stringify(loginData));
-        }
-      }
 
       // Set user in Redux store (minimal info, session is managed server-side)
       dispatch(
@@ -104,10 +91,10 @@ export const loginThunk = createAsyncThunk<
 export const logoutThunk = createAsyncThunk<void, void, { dispatch: AppDispatch }>(
   'auth/logout',
   async (_, { dispatch }) => {
-    // Clear encrypted private key from sessionStorage and memory
+    // Clear the persisted posting key (localStorage + memory cache)
     clearStoredKey();
 
-    // Clear localStorage
+    // Clean up the legacy key written by older versions of condenser
     if (typeof window !== 'undefined') {
       localStorage.removeItem('autopost2');
     }

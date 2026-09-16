@@ -162,9 +162,16 @@ export default function Voting({
     }));
   };
 
-  // Find user's vote
+  // Find user's vote. Bridge active_votes carry only {voter, rshares};
+  // rshares' sign is the vote direction (legacy Voting.jsx). The local
+  // override makes the optimistic update visible: posts live in
+  // component-local state, so the Redux `voted` write never re-renders here.
+  const [localVote, setLocalVote] = useState<number | null>(null);
   const myVote = post.active_votes?.find((v) => v.voter === username);
-  const myVoteWeight = myVote ? myVote.weight : 0;
+  const chainWeight = myVote
+    ? Number(myVote.rshares ?? myVote.weight ?? myVote.percent ?? 0)
+    : 0;
+  const myVoteWeight = localVote ?? chainWeight;
 
   const handleVote = async (up: boolean) => {
     if (!username) {
@@ -196,6 +203,7 @@ export default function Voting({
 
     dispatch(set({ key: flagKey, value: true }));
     setVotingDir(up ? 'up' : 'down');
+    setLocalVote(weight);
     // Optimistic vote update (reverted on broadcast failure).
     dispatch(
       voted({
@@ -215,6 +223,14 @@ export default function Voting({
       });
     } catch (err) {
       console.error('Vote broadcast error:', err);
+      // The chain rejects re-broadcasting an unchanged vote
+      // ("current vote ... is identical to this vote"). That means the
+      // desired state is already on-chain — keep the optimistic state
+      // instead of reverting (cleanup happens in `finally`).
+      const identical =
+        err instanceof Error && err.message.includes('identical to this vote');
+      if (identical) return;
+      setLocalVote(prevWeight);
       dispatch(
         voted({
           voter: username,
@@ -258,12 +274,11 @@ export default function Voting({
   const downvoteActive = myVoteWeight < 0;
 
   const totalVotes = post.stats?.total_votes ?? post.active_votes?.length ?? 0;
-  type Vote = { voter: string; weight: number; rshares?: number | string; percent?: number };
-  const votes = [...((post.active_votes ?? []) as Vote[])]
+  const votes = [...(post.active_votes ?? [])]
     .sort(
       (a, b) =>
-        Math.abs(Number(b.rshares ?? b.weight)) -
-        Math.abs(Number(a.rshares ?? a.weight))
+        Math.abs(Number(b.rshares ?? b.weight ?? 0)) -
+        Math.abs(Number(a.rshares ?? a.weight ?? 0))
     )
     .slice(0, MAX_VOTES_DISPLAY);
   const extraVoters = Math.max(0, totalVotes - votes.length);
@@ -403,7 +418,7 @@ export default function Voting({
             {votes.map((v) => (
               <DropdownItemText
                 key={v.voter}
-                text={`${Number(v.weight) < 0 ? '-' : '+'} ${v.voter}`}
+                text={`${Number(v.rshares ?? v.weight ?? 0) < 0 ? '-' : '+'} ${v.voter}`}
               />
             ))}
             {extraVoters > 0 && (

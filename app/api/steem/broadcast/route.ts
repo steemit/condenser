@@ -21,6 +21,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { initializeSteemApi, callSteemApi } from '@/lib/steem/client';
 import { cacheDeleteByPrefix } from '@/lib/cache/redis';
+import {
+  recordPendingVote,
+  recordPendingRootPost,
+  recordPendingChild,
+  recordPendingDeletion,
+  synthesizePostFromCommentOp,
+} from '@/lib/steem/pending-overlay';
 
 export async function POST(request: NextRequest) {
   try {
@@ -88,6 +95,10 @@ export async function POST(request: NextRequest) {
     // wallet project's per-route invalidation. Failures here are non-critical.
     await invalidateAfterBroadcast(signedTransaction.operations);
 
+    // Record the write in the pending overlay so reads within the hivemind
+    // indexing window still reflect it (lib/steem/pending-overlay.ts).
+    await recordPendingOverlays(signedTransaction.operations);
+
     const response = NextResponse.json({
       success: true,
       result,
@@ -95,10 +106,18 @@ export async function POST(request: NextRequest) {
       permlink,
     });
 
-    // Signal the browser (L1) cache to drop this user's entries. The value is
-    // consumed by client-fetch.ts in PR2; harmless until then.
-    if (actor) {
-      response.headers.set('X-Cache-Invalidate', actor);
+    // Signal the browser (L1) cache to drop affected entries. Tokens are
+    // comma-separated and matched by substring against cached URLs: the
+    // actor covers per-user entries, and for votes `permlink=...` covers
+    // the post + comments entries (their URLs are author/permlink-shaped
+    // and would otherwise survive, serving pre-vote active_votes).
+    const invalidateTokens: string[] = [];
+    if (actor) invalidateTokens.push(actor);
+    if (firstOperation?.[0] === 'vote' && permlink) {
+      invalidateTokens.push(`permlink=${permlink}`);
+    }
+    if (invalidateTokens.length > 0) {
+      response.headers.set('X-Cache-Invalidate', invalidateTokens.join(','));
     }
     return response;
   } catch (error: unknown) {
@@ -126,10 +145,12 @@ async function invalidateAfterBroadcast(operations: Array<[string, Record<string
     switch (opName) {
       case 'vote': {
         // A vote changes the post's ranking and the voter's profile.
-        const author = String(opData.author || '');
-        const permlink = String(opData.permlink || '');
+        // NOTE: do NOT delete `steem:post:{author}:{permlink}` here — the
+        // indexer needs a few seconds to see the vote, so the next read
+        // would re-cache PRE-vote data as fresh for a full TTL. Keeping the
+        // old entry bounds staleness to its remaining TTL instead.
         const voter = String(opData.voter || '');
-        if (author && permlink) await cacheDeleteByPrefix(`steem:post:${author}:${permlink}`);
+        const author = String(opData.author || '');
         await cacheDeleteByPrefix('steem:posts:ranked:');
         if (voter) await cacheDeleteByPrefix(`steem:profile:${voter}`);
         if (author) await cacheDeleteByPrefix(`steem:profile:${author}`);
@@ -160,6 +181,56 @@ async function invalidateAfterBroadcast(operations: Array<[string, Record<string
       }
       default:
         // Other ops (transfer, witness, etc.) don't touch feed/profile caches.
+        break;
+    }
+  }
+}
+
+/**
+ * Record freshly broadcast writes into the pending overlay (short-TTL Redis
+ * keys merged into read results until hivemind indexes the change).
+ */
+async function recordPendingOverlays(operations: Array<[string, Record<string, unknown>]>): Promise<void> {
+  for (const [opName, opData] of operations) {
+    switch (opName) {
+      case 'vote': {
+        const author = String(opData.author || '');
+        const permlink = String(opData.permlink || '');
+        const voter = String(opData.voter || '');
+        const weight = Number(opData.weight ?? 0);
+        if (author && permlink && voter) {
+          await recordPendingVote(author, permlink, voter, weight);
+        }
+        break;
+      }
+      case 'comment': {
+        const author = String(opData.author || '');
+        const permlink = String(opData.permlink || '');
+        if (!author || !permlink) break;
+        const post = synthesizePostFromCommentOp({
+          parent_author: opData.parent_author as string | undefined,
+          parent_permlink: opData.parent_permlink as string | undefined,
+          author,
+          permlink,
+          title: opData.title as string | undefined,
+          body: opData.body as string | undefined,
+          json_metadata: opData.json_metadata as string | undefined,
+        });
+        const parentAuthor = String(opData.parent_author || '');
+        if (parentAuthor) {
+          await recordPendingChild(parentAuthor, String(opData.parent_permlink || ''), post);
+        } else {
+          await recordPendingRootPost(post);
+        }
+        break;
+      }
+      case 'delete_comment': {
+        const author = String(opData.author || '');
+        const permlink = String(opData.permlink || '');
+        if (author && permlink) await recordPendingDeletion(author, permlink);
+        break;
+      }
+      default:
         break;
     }
   }

@@ -91,6 +91,7 @@ export default function UserSectionClient() {
           account: accountname,
           order,
           limit: 20,
+          observer: username,
         });
         setPosts(fetchedPosts);
         setHasMore(fetchedPosts.length >= 20);
@@ -106,7 +107,7 @@ export default function UserSectionClient() {
     } else {
       setLoading(false);
     }
-  }, [accountname, order, section]);
+  }, [accountname, order, section, username]);
 
   const handleLoadMore = async () => {
     if (loading || !hasMore || posts.length === 0) return;
@@ -120,6 +121,7 @@ export default function UserSectionClient() {
         start_author: lastPost.author,
         start_permlink: lastPost.permlink,
         limit: 20,
+        observer: username,
       });
 
       if (fetchedPosts.length > 0) {

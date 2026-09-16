@@ -1,0 +1,296 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+/**
+ * In-memory Redis fake covering the subset used by pending-overlay:
+ * get/set/expire/hset/hgetall + pipeline. hgetall matches ioredis semantics
+ * (empty object for missing keys).
+ */
+class FakeRedis {
+  strings = new Map<string, string>();
+  hashes = new Map<string, Map<string, string>>();
+
+  async set(key: string, value: string) {
+    this.strings.set(key, value);
+    return 'OK';
+  }
+  async get(key: string) {
+    return this.strings.get(key) ?? null;
+  }
+  async expire() {
+    return 1;
+  }
+  async hset(key: string, field: string, value: string) {
+    if (!this.hashes.has(key)) this.hashes.set(key, new Map());
+    this.hashes.get(key)!.set(field, value);
+    return 1;
+  }
+  async hgetall(key: string) {
+    return Object.fromEntries(this.hashes.get(key) ?? []);
+  }
+  pipeline() {
+    const cmds: Array<() => Promise<unknown>> = [];
+    const self = this; // eslint-disable-line @typescript-eslint/no-this-alias
+    return {
+      hgetall(key: string) {
+        cmds.push(() => self.hgetall(key));
+        return this;
+      },
+      get(key: string) {
+        cmds.push(() => self.get(key));
+        return this;
+      },
+      async exec() {
+        const out: Array<[null, unknown]> = [];
+        for (const cmd of cmds) out.push([null, await cmd()]);
+        return out;
+      },
+    };
+  }
+}
+
+let fake: FakeRedis | null;
+
+vi.mock('@/lib/cache/redis', () => ({
+  getRedis: () => fake,
+  redisKey: (key: string) => `condenser:${key}`,
+}));
+
+import {
+  applyDiscussionOverlays,
+  applyVoteOverlayToPosts,
+  mergePendingVotes,
+  recordPendingChild,
+  recordPendingDeletion,
+  recordPendingRootPost,
+  recordPendingVote,
+  synthesizePostFromCommentOp,
+} from '@/lib/steem/pending-overlay';
+
+describe('mergePendingVotes', () => {
+  it('adds a new upvote with a synthesized positive rshares', () => {
+    const post = { author: 'bob', permlink: 'p', active_votes: [] };
+    const merged = mergePendingVotes(post, { alice: { weight: 10000, ts: 1 } });
+    expect(merged.active_votes).toEqual([{ voter: 'alice', rshares: '1' }]);
+  });
+
+  it('adds a new downvote with a synthesized negative rshares', () => {
+    const post = { author: 'bob', permlink: 'p', active_votes: [] };
+    const merged = mergePendingVotes(post, { alice: { weight: -10000, ts: 1 } });
+    expect(merged.active_votes).toEqual([{ voter: 'alice', rshares: '-1' }]);
+  });
+
+  it('removes the voter on cancellation (weight 0)', () => {
+    const post = {
+      author: 'bob',
+      permlink: 'p',
+      active_votes: [{ voter: 'alice', rshares: '999' }],
+    };
+    const merged = mergePendingVotes(post, { alice: { weight: 0, ts: 1 } });
+    expect(merged.active_votes).toEqual([]);
+  });
+
+  it('lets chain data win once it shows the intended direction', () => {
+    const post = {
+      author: 'bob',
+      permlink: 'p',
+      active_votes: [{ voter: 'alice', rshares: '123456' }],
+    };
+    const merged = mergePendingVotes(post, { alice: { weight: 10000, ts: 1 } });
+    expect(merged.active_votes).toEqual([{ voter: 'alice', rshares: '123456' }]);
+  });
+
+  it('overrides the direction when the chain still shows the old vote', () => {
+    const post = {
+      author: 'bob',
+      permlink: 'p',
+      active_votes: [{ voter: 'alice', rshares: '-500' }],
+    };
+    const merged = mergePendingVotes(post, { alice: { weight: 10000, ts: 1 } });
+    expect(merged.active_votes).toEqual([{ voter: 'alice', rshares: '1' }]);
+  });
+});
+
+describe('synthesizePostFromCommentOp', () => {
+  it('builds a root post: category from parent_permlink, depth 0', () => {
+    const post = synthesizePostFromCommentOp({
+      parent_author: '',
+      parent_permlink: 'life',
+      author: 'erin',
+      permlink: 'hello',
+      title: 'Hi',
+      body: 'Body',
+      json_metadata: '{"tags":["life"]}',
+    });
+    expect(post).toMatchObject({
+      author: 'erin',
+      permlink: 'hello',
+      category: 'life',
+      title: 'Hi',
+      body: 'Body',
+      depth: 0,
+      active_votes: [],
+      json_metadata: { tags: ['life'] },
+      url: '/life/@erin/hello',
+    });
+  });
+
+  it('builds a reply: depth 1, empty category, keeps parent refs', () => {
+    const post = synthesizePostFromCommentOp({
+      parent_author: 'bob',
+      parent_permlink: 'p',
+      author: 'erin',
+      permlink: 're-p',
+      body: 'Nice',
+    });
+    expect(post).toMatchObject({
+      depth: 1,
+      category: '',
+      parent_author: 'bob',
+      parent_permlink: 'p',
+      json_metadata: {},
+    });
+  });
+
+  it('tolerates malformed json_metadata', () => {
+    const post = synthesizePostFromCommentOp({
+      author: 'erin',
+      permlink: 'x',
+      json_metadata: '{bad json',
+    });
+    expect(post.json_metadata).toEqual({});
+  });
+});
+
+describe('applyVoteOverlayToPosts', () => {
+  beforeEach(() => {
+    fake = new FakeRedis();
+  });
+
+  it('merges pending votes into the matching post only', async () => {
+    await recordPendingVote('bob', 'p1', 'alice', 10000);
+    const posts = [
+      { author: 'bob', permlink: 'p1', active_votes: [] },
+      { author: 'bob', permlink: 'p2', active_votes: [] },
+    ];
+    const out = await applyVoteOverlayToPosts(posts);
+    expect(out[0].active_votes).toEqual([{ voter: 'alice', rshares: '1' }]);
+    expect(out[1].active_votes).toEqual([]);
+  });
+
+  it('returns posts unchanged when Redis is off', async () => {
+    fake = null;
+    const posts = [{ author: 'bob', permlink: 'p1', active_votes: [] }];
+    const out = await applyVoteOverlayToPosts(posts);
+    expect(out).toBe(posts);
+  });
+});
+
+describe('applyDiscussionOverlays', () => {
+  beforeEach(() => {
+    fake = new FakeRedis();
+  });
+
+  it('returns null when there is no chain data and no pending root', async () => {
+    expect(await applyDiscussionOverlays('bob', 'gone', null)).toBeNull();
+  });
+
+  it('serves a pending root post when hivemind has not indexed it (no 404)', async () => {
+    const post = synthesizePostFromCommentOp({
+      parent_author: '',
+      parent_permlink: 'life',
+      author: 'erin',
+      permlink: 'hello',
+      title: 'Hi',
+      body: 'Body',
+    });
+    await recordPendingRootPost(post);
+    const out = await applyDiscussionOverlays('erin', 'hello', null);
+    expect(out?.['erin/hello']).toMatchObject({ author: 'erin', title: 'Hi' });
+  });
+
+  it('merges a pending reply into an indexed discussion', async () => {
+    const discussion = {
+      'bob/p': { author: 'bob', permlink: 'p', active_votes: [] },
+    };
+    const reply = synthesizePostFromCommentOp({
+      parent_author: 'bob',
+      parent_permlink: 'p',
+      author: 'erin',
+      permlink: 're-p',
+      body: 'Nice',
+    });
+    await recordPendingChild('bob', 'p', reply);
+    const out = await applyDiscussionOverlays('bob', 'p', discussion);
+    expect(out?.['erin/re-p']).toMatchObject({ author: 'erin', body: 'Nice' });
+  });
+
+  it('merges a nested reply whose parent is itself still pending', async () => {
+    const discussion = {
+      'bob/p': { author: 'bob', permlink: 'p', active_votes: [] },
+    };
+    const reply1 = synthesizePostFromCommentOp({
+      parent_author: 'bob',
+      parent_permlink: 'p',
+      author: 'erin',
+      permlink: 're-p',
+      body: 'level 1',
+    });
+    const reply2 = synthesizePostFromCommentOp({
+      parent_author: 'erin',
+      parent_permlink: 're-p',
+      author: 'fred',
+      permlink: 're-re-p',
+      body: 'level 2',
+    });
+    await recordPendingChild('bob', 'p', reply1);
+    await recordPendingChild('erin', 're-p', reply2);
+    const out = await applyDiscussionOverlays('bob', 'p', discussion);
+    expect(out?.['erin/re-p']).toBeDefined();
+    expect(out?.['fred/re-re-p']).toMatchObject({ body: 'level 2' });
+  });
+
+  it('overlays an edit when the pending version is newer than chain data', async () => {
+    const discussion = {
+      'erin/hello': {
+        author: 'erin',
+        permlink: 'hello',
+        title: 'Old',
+        body: 'Old body',
+        last_update: '2020-01-01T00:00:00',
+        active_votes: [],
+      },
+    };
+    await recordPendingRootPost({ author: 'erin', permlink: 'hello', title: 'New', body: 'New body' });
+    const out = await applyDiscussionOverlays('erin', 'hello', discussion);
+    expect(out?.['erin/hello']).toMatchObject({ title: 'New', body: 'New body' });
+  });
+
+  it('drops tombstoned nodes after delete_comment', async () => {
+    const discussion = {
+      'bob/p': { author: 'bob', permlink: 'p', active_votes: [] },
+      'erin/re-p': { author: 'erin', permlink: 're-p', active_votes: [] },
+    };
+    await recordPendingDeletion('erin', 're-p');
+    const out = await applyDiscussionOverlays('bob', 'p', discussion);
+    expect(out?.['erin/re-p']).toBeUndefined();
+    expect(out?.['bob/p']).toBeDefined();
+  });
+
+  it('applies pending votes to discussion nodes', async () => {
+    const discussion = {
+      'bob/p': { author: 'bob', permlink: 'p', active_votes: [] },
+    };
+    await recordPendingVote('bob', 'p', 'alice', -10000);
+    const out = await applyDiscussionOverlays('bob', 'p', discussion);
+    expect(out?.['bob/p'].active_votes).toEqual([{ voter: 'alice', rshares: '-1' }]);
+  });
+
+  it('passes chain data through unchanged when Redis is off', async () => {
+    fake = null;
+    const discussion = {
+      'bob/p': { author: 'bob', permlink: 'p', active_votes: [] },
+    };
+    const out = await applyDiscussionOverlays('bob', 'p', discussion);
+    expect(out).toBe(discussion);
+  });
+});

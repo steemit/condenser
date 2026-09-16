@@ -1,0 +1,382 @@
+/**
+ * Pending-broadcast overlay.
+ *
+ * Writes (votes, posts, edits, deletes) hit steemd immediately, but every
+ * read path here goes through the bridge API backed by hivemind, which
+ * indexes with a few seconds of lag. Within that window a page refresh
+ * shows pre-write state — or a 404 for a brand-new post.
+ *
+ * This module records freshly broadcast changes in short-lived Redis keys
+ * and merges them into read results AFTER the cache layer (merged data is
+ * never written back to the content cache). Once hivemind catches up, the
+ * chain data agrees with the overlay and the keys expire on their own.
+ *
+ * All functions degrade to no-ops when Redis is not configured.
+ */
+
+import { getRedis, redisKey } from '@/lib/cache/redis';
+
+/** Covers the P99 hivemind indexing delay by a wide margin. */
+export const PENDING_TTL_SEC = 120;
+
+/** Max tree levels walked when merging pending replies into a discussion. */
+const MAX_OVERLAY_DEPTH = 8;
+
+export interface PendingVote {
+  weight: number;
+  ts: number;
+}
+
+export interface PendingContent {
+  ts: number;
+  deleted?: boolean;
+  post?: Record<string, unknown>;
+}
+
+export interface PostLike {
+  author?: string;
+  permlink?: string;
+  active_votes?: Array<{
+    voter: string;
+    rshares?: string | number;
+    weight?: number;
+    percent?: number;
+  }>;
+  last_update?: string;
+  created?: string;
+  [key: string]: unknown;
+}
+
+function voteKey(author: string, permlink: string): string {
+  return redisKey(`steem:pendingvote:${author}:${permlink}`);
+}
+
+function rootPostKey(author: string, permlink: string): string {
+  return redisKey(`steem:pendingroot:${author}:${permlink}`);
+}
+
+function childrenKey(parentAuthor: string, parentPermlink: string): string {
+  return redisKey(`steem:pendingchildren:${parentAuthor}:${parentPermlink}`);
+}
+
+function tombstoneKey(author: string, permlink: string): string {
+  return redisKey(`steem:pendingtomb:${author}:${permlink}`);
+}
+
+function parseJson<T>(raw: string): T | null {
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return null;
+  }
+}
+
+/** Bridge timestamps are UTC without a trailing 'Z'. */
+function chainTime(s?: string): number {
+  if (!s) return 0;
+  return Date.parse(s.endsWith('Z') ? s : `${s}Z`) || 0;
+}
+
+// ---------------------------------------------------------------------------
+// Write side (called from the broadcast route after a successful broadcast)
+// ---------------------------------------------------------------------------
+
+export async function recordPendingVote(
+  author: string,
+  permlink: string,
+  voter: string,
+  weight: number
+): Promise<void> {
+  const r = getRedis();
+  if (!r) return;
+  try {
+    const key = voteKey(author, permlink);
+    const entry: PendingVote = { weight, ts: Date.now() };
+    await r.hset(key, voter, JSON.stringify(entry));
+    await r.expire(key, PENDING_TTL_SEC);
+  } catch {
+    // Overlay write failure is non-critical — reads fall back to chain data.
+  }
+}
+
+/** Record a new or edited root post (parent_author === ''). */
+export async function recordPendingRootPost(post: Record<string, unknown>): Promise<void> {
+  const r = getRedis();
+  if (!r) return;
+  const author = String(post.author || '');
+  const permlink = String(post.permlink || '');
+  if (!author || !permlink) return;
+  try {
+    const entry: PendingContent = { ts: Date.now(), post };
+    await r.set(rootPostKey(author, permlink), JSON.stringify(entry), 'EX', PENDING_TTL_SEC);
+  } catch {
+    // non-critical
+  }
+}
+
+/** Record a new or edited reply, keyed under its immediate parent. */
+export async function recordPendingChild(
+  parentAuthor: string,
+  parentPermlink: string,
+  post: Record<string, unknown>
+): Promise<void> {
+  const r = getRedis();
+  if (!r) return;
+  const author = String(post.author || '');
+  const permlink = String(post.permlink || '');
+  if (!author || !permlink) return;
+  try {
+    const key = childrenKey(parentAuthor, parentPermlink);
+    const entry: PendingContent = { ts: Date.now(), post };
+    await r.hset(key, `${author}/${permlink}`, JSON.stringify(entry));
+    await r.expire(key, PENDING_TTL_SEC);
+  } catch {
+    // non-critical
+  }
+}
+
+/** Record a delete_comment; merge drops the node until the indexer catches up. */
+export async function recordPendingDeletion(author: string, permlink: string): Promise<void> {
+  const r = getRedis();
+  if (!r) return;
+  try {
+    await r.set(tombstoneKey(author, permlink), String(Date.now()), 'EX', PENDING_TTL_SEC);
+  } catch {
+    // non-critical
+  }
+}
+
+/**
+ * Build a bridge-shaped post object from a broadcast `comment` op, for
+ * serving the post page/discussion before hivemind has indexed it.
+ */
+export function synthesizePostFromCommentOp(op: {
+  parent_author?: string;
+  parent_permlink?: string;
+  author?: string;
+  permlink?: string;
+  title?: string;
+  body?: string;
+  json_metadata?: string;
+}): Record<string, unknown> {
+  const isRoot = !op.parent_author;
+  let jsonMetadata: Record<string, unknown> = {};
+  try {
+    jsonMetadata = op.json_metadata ? JSON.parse(op.json_metadata) : {};
+  } catch {
+    // malformed metadata — keep empty
+  }
+  const now = new Date().toISOString();
+  const category = isRoot ? op.parent_permlink || '' : '';
+  return {
+    author: op.author || '',
+    permlink: op.permlink || '',
+    category,
+    title: op.title || '',
+    body: op.body || '',
+    created: now,
+    last_update: now,
+    depth: isRoot ? 0 : 1,
+    parent_author: op.parent_author || '',
+    parent_permlink: op.parent_permlink || '',
+    children: 0,
+    net_rshares: '0',
+    active_votes: [],
+    replies: [],
+    pending_payout_value: '0.000 SBD',
+    payout: 0,
+    stats: { total_votes: 0, gray: false, hide: false, is_pinned: false },
+    json_metadata: jsonMetadata,
+    url: isRoot ? `/${category}/@${op.author}/${op.permlink}` : '',
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Read side (called from lib/steem/client.ts after the cache layer)
+// ---------------------------------------------------------------------------
+
+/** Merge pending votes into a single post's active_votes. */
+export function mergePendingVotes<T extends PostLike>(
+  post: T,
+  pending: Record<string, PendingVote>
+): T {
+  const votes = [...(post.active_votes ?? [])];
+  let changed = false;
+  for (const [voter, { weight }] of Object.entries(pending)) {
+    const idx = votes.findIndex((v) => v.voter === voter);
+    if (weight === 0) {
+      // Cancellation: drop the voter's entry until the chain confirms.
+      if (idx >= 0) {
+        votes.splice(idx, 1);
+        changed = true;
+      }
+      continue;
+    }
+    // The exact rshares value is unknowable pre-index; the UI only needs
+    // presence and sign.
+    const synthesized = weight > 0 ? '1' : '-1';
+    if (idx >= 0) {
+      const current = Number(votes[idx].rshares ?? 0);
+      // Chain data wins once it shows the intended direction (indexed).
+      if (Math.sign(current) === Math.sign(weight)) continue;
+      votes[idx] = { ...votes[idx], rshares: synthesized };
+      changed = true;
+    } else {
+      votes.push({ voter, rshares: synthesized });
+      changed = true;
+    }
+  }
+  return changed ? { ...post, active_votes: votes } : post;
+}
+
+/** Apply pending votes to a list of posts (one Redis pipeline round-trip). */
+export async function applyVoteOverlayToPosts<T extends PostLike>(posts: T[]): Promise<T[]> {
+  const r = getRedis();
+  if (!r || posts.length === 0) return posts;
+
+  const eligible: Array<{ index: number; author: string; permlink: string }> = [];
+  posts.forEach((p, index) => {
+    if (p && p.author && p.permlink) {
+      eligible.push({ index, author: p.author, permlink: p.permlink });
+    }
+  });
+  if (eligible.length === 0) return posts;
+
+  try {
+    const pipe = r.pipeline();
+    for (const { author, permlink } of eligible) {
+      pipe.hgetall(voteKey(author, permlink));
+    }
+    const results = await pipe.exec();
+    if (!results) return posts;
+
+    const out = [...posts];
+    results.forEach(([err, hash], i) => {
+      if (err || !hash || Object.keys(hash).length === 0) return;
+      const pending: Record<string, PendingVote> = {};
+      for (const [voter, raw] of Object.entries(hash)) {
+        const entry = parseJson<PendingVote>(raw);
+        if (entry) pending[voter] = entry;
+      }
+      if (Object.keys(pending).length > 0) {
+        out[eligible[i].index] = mergePendingVotes(out[eligible[i].index], pending);
+      }
+    });
+    return out;
+  } catch {
+    return posts;
+  }
+}
+
+/** Overlay the mutable fields of an edited post onto chain data. */
+function overlayEdit(existing: PostLike, entry: PendingContent): PostLike {
+  const post = entry.post as PostLike;
+  return {
+    ...existing,
+    title: post.title ?? existing.title,
+    body: post.body ?? existing.body,
+    json_metadata: post.json_metadata ?? existing.json_metadata,
+  };
+}
+
+function isPendingNewer(entry: PendingContent, existing: PostLike): boolean {
+  return entry.ts > chainTime(existing.last_update || existing.created);
+}
+
+/**
+ * Merge pending content (new posts, replies, edits, deletes) and pending
+ * votes into a bridge discussion map. Returns null when there is neither
+ * chain data nor a pending root post (preserving the 404 contract).
+ */
+export async function applyDiscussionOverlays(
+  author: string,
+  permlink: string,
+  discussion: Record<string, PostLike> | null
+): Promise<Record<string, PostLike> | null> {
+  const r = getRedis();
+  if (!r) return discussion;
+
+  const merged: Record<string, PostLike> = { ...(discussion ?? {}) };
+  const rootKey = `${author}/${permlink}`;
+
+  try {
+    // Pending root post (covers the "shared URL 404s right after posting").
+    const rootRaw = await r.get(rootPostKey(author, permlink));
+    if (rootRaw) {
+      const entry = parseJson<PendingContent>(rootRaw);
+      if (entry?.post) {
+        const existing = merged[rootKey];
+        if (!existing) {
+          merged[rootKey] = entry.post as PostLike;
+        } else if (isPendingNewer(entry, existing)) {
+          merged[rootKey] = overlayEdit(existing, entry);
+        }
+      }
+    }
+
+    // Pending replies/edits keyed by immediate parent, merged breadth-first
+    // so nested replies land even when their parent is itself still pending.
+    let frontier = Object.keys(merged);
+    const seen = new Set(frontier);
+    for (let depth = 0; depth < MAX_OVERLAY_DEPTH && frontier.length > 0; depth++) {
+      const pipe = r.pipeline();
+      for (const key of frontier) {
+        const sep = key.indexOf('/');
+        pipe.hgetall(childrenKey(key.slice(0, sep), key.slice(sep + 1)));
+      }
+      const results = await pipe.exec();
+      const next: string[] = [];
+      results?.forEach(([err, hash]) => {
+        if (err || !hash) return;
+        for (const [childKey, raw] of Object.entries(hash)) {
+          const entry = parseJson<PendingContent>(raw);
+          if (!entry) continue;
+          if (entry.deleted) {
+            delete merged[childKey];
+            continue;
+          }
+          if (!entry.post) continue;
+          const existing = merged[childKey];
+          if (!existing) {
+            merged[childKey] = entry.post as PostLike;
+            if (!seen.has(childKey)) {
+              seen.add(childKey);
+              next.push(childKey);
+            }
+          } else if (isPendingNewer(entry, existing)) {
+            merged[childKey] = overlayEdit(existing, entry);
+          }
+        }
+      });
+      frontier = next;
+    }
+
+    // Pending deletions (tombstones) for every node currently in the map.
+    const nodeKeys = Object.keys(merged);
+    if (nodeKeys.length > 0) {
+      const pipe = r.pipeline();
+      for (const key of nodeKeys) {
+        const sep = key.indexOf('/');
+        pipe.get(tombstoneKey(key.slice(0, sep), key.slice(sep + 1)));
+      }
+      const results = await pipe.exec();
+      results?.forEach(([err, val], i) => {
+        if (!err && val) delete merged[nodeKeys[i]];
+      });
+    }
+  } catch {
+    // Overlay read failure — fall back to chain data only.
+  }
+
+  // Pending votes on every node (root + comments).
+  const keys = Object.keys(merged);
+  if (keys.length > 0) {
+    const withVotes = await applyVoteOverlayToPosts(keys.map((k) => merged[k]));
+    keys.forEach((k, i) => {
+      merged[k] = withVotes[i];
+    });
+  }
+
+  if (Object.keys(merged).length === 0) return null;
+  return merged;
+}

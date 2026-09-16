@@ -7,6 +7,11 @@
 // Import steem object directly as a named export
 import { steem } from '@steemit/steem-js';
 import { withCache, type WithCacheResult } from '@/lib/cache/server-cache';
+import {
+  applyDiscussionOverlays,
+  applyVoteOverlayToPosts,
+  type PostLike,
+} from '@/lib/steem/pending-overlay';
 
 // Initialize Steem API configuration
 let isInitialized = false;
@@ -157,7 +162,8 @@ export async function getRankedPosts(params: {
 }): Promise<unknown[]> {
   const useCache = !params.observer && !params.start_author;
   if (!useCache) {
-    return callBridge<unknown[]>('get_ranked_posts', params);
+    const posts = await callBridge<unknown[]>('get_ranked_posts', params);
+    return applyVoteOverlayToPosts(posts as PostLike[]);
   }
 
   // Default 20 mirrors the posts route's fallback (app/api/steem/posts/route.ts:17).
@@ -165,7 +171,9 @@ export async function getRankedPosts(params: {
   const result = await withCache(key, CACHE_TTL.posts.ttl, CACHE_TTL.posts.staleTtl, () =>
     callBridge<unknown[]>('get_ranked_posts', params)
   );
-  return unwrap(result);
+  // Overlay merges happen AFTER the cache read and are never written back,
+  // so cached entries always hold pure chain data.
+  return applyVoteOverlayToPosts(unwrap(result) as PostLike[]);
 }
 
 /**
@@ -181,7 +189,8 @@ export async function getAccountPosts(params: {
 }): Promise<unknown[]> {
   const useCache = !params.observer && !params.start_author;
   if (!useCache) {
-    return callBridge<unknown[]>('get_account_posts', params);
+    const posts = await callBridge<unknown[]>('get_account_posts', params);
+    return applyVoteOverlayToPosts(posts as PostLike[]);
   }
 
   // Default 20 mirrors the posts route's fallback (app/api/steem/posts/route.ts:17).
@@ -189,7 +198,7 @@ export async function getAccountPosts(params: {
   const result = await withCache(key, CACHE_TTL.posts.ttl, CACHE_TTL.posts.staleTtl, () =>
     callBridge<unknown[]>('get_account_posts', params)
   );
-  return unwrap(result);
+  return applyVoteOverlayToPosts(unwrap(result) as PostLike[]);
 }
 
 /**
@@ -210,7 +219,14 @@ export async function getDiscussion(params: {
   const result = await withCache(key, CACHE_TTL.post.ttl, CACHE_TTL.post.staleTtl, () =>
     callBridge<unknown>('get_discussion', params)
   );
-  return unwrap(result);
+  // Pending-broadcast overlay: merges freshly broadcast votes/posts/edits/
+  // deletes that hivemind has not indexed yet. Applied after the cache read
+  // and never written back.
+  return applyDiscussionOverlays(
+    params.author,
+    params.permlink,
+    unwrap(result) as Record<string, PostLike> | null
+  );
 }
 
 /**

@@ -104,6 +104,10 @@ function backgroundRefresh(url: string, opts: CachedFetchOptions): void {
 
 /** Honour the server's per-write invalidation directive (X-Cache-Invalidate). */
 function handleCacheInvalidation(res: Response): void {
-  const prefix = res.headers.get('X-Cache-Invalidate');
-  if (prefix) clientCache.invalidate(prefix);
+  const header = res.headers.get('X-Cache-Invalidate');
+  if (!header) return;
+  for (const token of header.split(',')) {
+    const prefix = token.trim();
+    if (prefix) clientCache.invalidate(prefix);
+  }
 }

@@ -174,15 +174,14 @@ export default function Voting({
   const myVoteWeight = localVote ?? chainWeight;
 
   // Drop the local override once chain data catches up (same direction,
-  // or the vote is gone after a cancel), so vote changes made from other
+  // or the vote reads as zero after a cancel — bridge retains canceled
+  // votes as rshares "0" entries), so vote changes made from other
   // sessions/devices are reflected afterwards.
   const chainSign = Math.sign(chainWeight);
-  const hasMyVote = Boolean(myVote);
   useEffect(() => {
     if (localVote === null) return;
-    const confirmed = localVote === 0 ? !hasMyVote : chainSign === Math.sign(localVote);
-    if (confirmed) setLocalVote(null);
-  }, [localVote, chainSign, hasMyVote]);
+    if (chainSign === Math.sign(localVote)) setLocalVote(null);
+  }, [localVote, chainSign]);
 
   const handleVote = async (up: boolean) => {
     if (!username) {

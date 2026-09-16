@@ -211,8 +211,11 @@ export function mergePendingVotes<T extends PostLike>(
     if (weight === 0) {
       // Cancellation: drop the voter's entry until the chain confirms.
       if (idx >= 0) {
+        // A zero-rshares entry is already excluded from stats.total_votes,
+        // so removing it must not decrement the count again.
+        const hadWeight = Number(votes[idx].rshares ?? votes[idx].weight ?? 0) !== 0;
         votes.splice(idx, 1);
-        totalVotesDelta -= 1;
+        if (hadWeight) totalVotesDelta -= 1;
         changed = true;
       }
       continue;
@@ -224,6 +227,8 @@ export function mergePendingVotes<T extends PostLike>(
       const current = Number(votes[idx].rshares ?? 0);
       // Chain data wins once it shows the intended direction (indexed).
       if (Math.sign(current) === Math.sign(weight)) continue;
+      // Replacing a zero-rshares (cleared) entry makes the vote count again.
+      if (current === 0) totalVotesDelta += 1;
       votes[idx] = { ...votes[idx], rshares: synthesized };
       changed = true;
     } else {
@@ -236,7 +241,10 @@ export function mergePendingVotes<T extends PostLike>(
   const out: T = { ...post, active_votes: votes };
   // Keep the displayed vote count consistent with the overlaid entries.
   if (totalVotesDelta !== 0 && typeof post.stats?.total_votes === 'number') {
-    out.stats = { ...post.stats, total_votes: post.stats.total_votes + totalVotesDelta };
+    out.stats = {
+      ...post.stats,
+      total_votes: Math.max(0, post.stats.total_votes + totalVotesDelta),
+    };
   }
   return out;
 }

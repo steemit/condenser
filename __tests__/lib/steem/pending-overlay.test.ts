@@ -125,6 +125,25 @@ describe('mergePendingVotes', () => {
     expect(removed.active_votes).toEqual([]);
     expect(removed.stats?.total_votes).toBe(0);
   });
+
+  it('treats zero-rshares (cleared) entries as not counted', () => {
+    // Chain already shows the cancel as rshares "0"; a pending cancel must
+    // not decrement again (would go negative).
+    const cleared = {
+      author: 'bob',
+      permlink: 'p',
+      active_votes: [{ voter: 'alice', rshares: '0' }],
+      stats: { total_votes: 0 },
+    };
+    const out = mergePendingVotes(cleared, { alice: { weight: 0, ts: 1 } });
+    expect(out.active_votes).toEqual([]);
+    expect(out.stats?.total_votes).toBe(0);
+
+    // A re-vote replacing a cleared entry counts again.
+    const revote = mergePendingVotes(cleared, { alice: { weight: 10000, ts: 2 } });
+    expect(revote.active_votes).toEqual([{ voter: 'alice', rshares: '1' }]);
+    expect(revote.stats?.total_votes).toBe(1);
+  });
 });
 
 describe('synthesizePostFromCommentOp', () => {

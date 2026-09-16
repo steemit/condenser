@@ -71,21 +71,23 @@ export async function POST(request: NextRequest) {
     const firstOperation = signedTransaction.operations[0];
     let permlink: string | undefined;
     let actor: string | undefined;
+    let opType: string | undefined;
+    let opData: Record<string, unknown> | undefined;
 
     if (firstOperation && Array.isArray(firstOperation) && firstOperation.length >= 2) {
-      const opType = firstOperation[0];
-      const opData = firstOperation[1];
-      if (opData && typeof opData === 'object') {
-        permlink = opData.permlink || opData.parent_permlink;
+      opType = firstOperation[0];
+      const rawOpData = firstOperation[1];
+      if (rawOpData && typeof rawOpData === 'object') {
+        opData = rawOpData as Record<string, unknown>;
+        permlink = (opData.permlink as string) || (opData.parent_permlink as string);
         // The actor varies by op type: vote/comment use `voter`/`author`,
         // custom_json (reblog/follow/mute) carries the signer in
         // `required_posting_auths[0]` and a nested payload — but not voter/author.
         if (opType === 'custom_json') {
-          const postingAuths = (opData as Record<string, unknown>).required_posting_auths;
+          const postingAuths = opData.required_posting_auths;
           actor = Array.isArray(postingAuths) ? String(postingAuths[0] || '') : undefined;
         } else {
-          actor = (opData as Record<string, unknown>).voter as string
-            || (opData as Record<string, unknown>).author as string;
+          actor = (opData.voter as string) || (opData.author as string);
         }
       }
     }
@@ -115,18 +117,25 @@ export async function POST(request: NextRequest) {
     // account/permlink charset — anything else is dropped, never trusted.
     const SAFE_TOKEN = /^[a-z0-9.=-]+$/;
     const invalidateTokens: string[] = [];
-    const opType = firstOperation?.[0];
     if (actor && SAFE_TOKEN.test(actor)) invalidateTokens.push(actor);
     if (opType === 'vote' && permlink && SAFE_TOKEN.test(`permlink=${permlink}`)) {
       invalidateTokens.push(`permlink=${permlink}`);
     }
-    // A reply must also drop the parent discussion's L1 entries so the
-    // pending overlay gets a chance to merge it on the next read.
-    if (opType === 'comment') {
-      const parentPermlink = firstOperation?.[1]?.parent_permlink;
-      const parentAuthor = firstOperation?.[1]?.parent_author;
-      if (parentAuthor && parentPermlink && SAFE_TOKEN.test(`permlink=${parentPermlink}`)) {
-        invalidateTokens.push(`permlink=${parentPermlink}`);
+    if (opType === 'comment' && opData) {
+      const parentPermlink = opData.parent_permlink as string | undefined;
+      if (opData.parent_author) {
+        // A reply must also drop the parent discussion's L1 entries so the
+        // pending overlay gets a chance to merge it on the next read.
+        if (parentPermlink && SAFE_TOKEN.test(`permlink=${parentPermlink}`)) {
+          invalidateTokens.push(`permlink=${parentPermlink}`);
+        }
+      } else {
+        // A root-post EDIT keeps the post's own L1 entry otherwise; the
+        // token is harmless for new posts (their URL was never cached).
+        const ownPermlink = opData.permlink as string | undefined;
+        if (ownPermlink && SAFE_TOKEN.test(`permlink=${ownPermlink}`)) {
+          invalidateTokens.push(`permlink=${ownPermlink}`);
+        }
       }
     }
     if (invalidateTokens.length > 0) {

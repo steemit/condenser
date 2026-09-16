@@ -245,10 +245,25 @@ describe('POST /api/steem/broadcast', () => {
     const res = await POST(
       makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
     );
-    expect(res.headers.get('X-Cache-Invalidate')).toBe('erin');
+    // Root post/edit ops also emit their own permlink token so a post edit
+    // drops the post's L1 entry (harmless for brand-new posts).
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('erin,permlink=new-post');
     const prefixes = cacheDeleteMock.mock.calls.map((c) => c[0]);
     expect(prefixes).toContain('steem:posts:account:erin:');
     expect(prefixes).toContain('steem:profile:erin');
+  });
+
+  it('drops invalidation tokens whose op-derived values leave the safe charset', async () => {
+    const tx = signedTx([
+      ['vote', { voter: 'alice', author: 'bob', permlink: 'bad\r\npermlink', weight: 10000 }],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    // Broadcast still succeeds; only the hostile token is dropped.
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('alice');
   });
 
   it('omits X-Cache-Invalidate when no actor can be extracted', async () => {

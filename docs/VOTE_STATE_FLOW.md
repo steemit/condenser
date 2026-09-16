@@ -29,8 +29,8 @@ sequenceDiagram
     participant R as Redis (overlay keys)
     participant H as hivemind (bridge API)
 
+    UI->>UI: optimistic localVote (immediate feedback,<br/>before any network I/O)
     UI->>C: sign vote/comment/delete op (posting key, client-side)
-    UI->>UI: optimistic localVote (immediate feedback,<br/>before the request resolves)
     C->>B: signed transaction
     B->>D: broadcast_transaction
     D-->>B: accepted

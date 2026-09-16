@@ -183,6 +183,12 @@ export default function Voting({
     if (chainSign === Math.sign(localVote)) setLocalVote(null);
   }, [localVote, chainSign]);
 
+  // The override belongs to the account that cast it — drop it on
+  // logout/account switch so it can't mask the new viewer's state.
+  useEffect(() => {
+    setLocalVote(null);
+  }, [username]);
+
   const handleVote = async (up: boolean) => {
     if (!username) {
       dispatch(showLogin());

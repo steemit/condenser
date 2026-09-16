@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { cachedFetch } from '@/lib/cache/client-fetch';
+import { cachedFetch, invalidateFromResponse } from '@/lib/cache/client-fetch';
 import { clientCache } from '@/lib/cache/client-cache';
 
 const OPTS = { staleMs: 15_000, maxAgeMs: 120_000 };
@@ -24,6 +24,13 @@ describe('cachedFetch', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(second).toEqual({ data: { ok: 1 }, stale: false });
   });
+});
+
+describe('invalidateFromResponse', () => {
+  beforeEach(() => {
+    clientCache.clear();
+    vi.restoreAllMocks();
+  });
 
   it('applies comma-separated X-Cache-Invalidate tokens to matching entries only', async () => {
     const fetchMock = vi.fn();
@@ -35,11 +42,12 @@ describe('cachedFetch', () => {
     fetchMock.mockResolvedValueOnce(jsonResponse(['feed']));
     await cachedFetch('/api/steem/posts?sort=trending&limit=20', OPTS);
 
-    // A write response carrying voter + permlink tokens.
-    fetchMock.mockResolvedValueOnce(
-      jsonResponse({ success: true }, { 'X-Cache-Invalidate': 'alice,permlink=p' })
+    // The broadcast client applies the write response's invalidation tokens
+    // (voter + permlink) directly — the broadcast POST is a raw fetch, not a
+    // cachedFetch.
+    invalidateFromResponse(
+      new Response(null, { headers: { 'X-Cache-Invalidate': 'alice,permlink=p' } })
     );
-    await cachedFetch('/api/steem/broadcast', OPTS);
 
     // The post entry was evicted by the permlink token → network hit.
     fetchMock.mockResolvedValueOnce(jsonResponse({ title: 'fresh' }));
@@ -49,23 +57,23 @@ describe('cachedFetch', () => {
     // The feed entry matches no token → still served from cache.
     const feed = await cachedFetch('/api/steem/posts?sort=trending&limit=20', OPTS);
     expect(feed.data).toEqual(['feed']);
-    expect(fetchMock).toHaveBeenCalledTimes(4);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
   });
 
-  it('ignores blank tokens and missing header', async () => {
+  it('ignores blank tokens and a missing header', async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
 
     fetchMock.mockResolvedValueOnce(jsonResponse(['feed']));
     await cachedFetch('/api/steem/posts?sort=trending&limit=20', OPTS);
 
-    fetchMock.mockResolvedValueOnce(
-      jsonResponse({ success: true }, { 'X-Cache-Invalidate': ' , ' })
+    invalidateFromResponse(
+      new Response(null, { headers: { 'X-Cache-Invalidate': ' , ' } })
     );
-    await cachedFetch('/api/steem/broadcast', OPTS);
+    invalidateFromResponse(new Response(null));
 
     const feed = await cachedFetch('/api/steem/posts?sort=trending&limit=20', OPTS);
     expect(feed.data).toEqual(['feed']);
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });

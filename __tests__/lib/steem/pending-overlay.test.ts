@@ -108,6 +108,23 @@ describe('mergePendingVotes', () => {
     const merged = mergePendingVotes(post, { alice: { weight: 10000, ts: 1 } });
     expect(merged.active_votes).toEqual([{ voter: 'alice', rshares: '1' }]);
   });
+
+  it('keeps stats.total_votes consistent with overlaid adds/removals', () => {
+    const post = {
+      author: 'bob',
+      permlink: 'p',
+      active_votes: [{ voter: 'carol', rshares: '10' }],
+      stats: { total_votes: 1 },
+    };
+    const added = mergePendingVotes(post, { alice: { weight: 10000, ts: 1 } });
+    expect(added.stats?.total_votes).toBe(2);
+    const removed = mergePendingVotes(added, {
+      alice: { weight: 0, ts: 2 },
+      carol: { weight: 0, ts: 2 },
+    });
+    expect(removed.active_votes).toEqual([]);
+    expect(removed.stats?.total_votes).toBe(0);
+  });
 });
 
 describe('synthesizePostFromCommentOp', () => {
@@ -270,6 +287,38 @@ describe('applyDiscussionOverlays', () => {
       'bob/p': { author: 'bob', permlink: 'p', active_votes: [] },
       'erin/re-p': { author: 'erin', permlink: 're-p', active_votes: [] },
     };
+    await recordPendingDeletion('erin', 're-p');
+    const out = await applyDiscussionOverlays('bob', 'p', discussion);
+    expect(out?.['erin/re-p']).toBeUndefined();
+    expect(out?.['bob/p']).toBeDefined();
+  });
+
+  it('returns null when a pending root post is deleted before indexing', async () => {
+    const post = synthesizePostFromCommentOp({
+      parent_author: '',
+      parent_permlink: 'life',
+      author: 'erin',
+      permlink: 'gone',
+      title: 'Hi',
+      body: 'Body',
+    });
+    await recordPendingRootPost(post);
+    await recordPendingDeletion('erin', 'gone');
+    expect(await applyDiscussionOverlays('erin', 'gone', null)).toBeNull();
+  });
+
+  it('drops a pending reply that is deleted before indexing', async () => {
+    const discussion = {
+      'bob/p': { author: 'bob', permlink: 'p', active_votes: [] },
+    };
+    const reply = synthesizePostFromCommentOp({
+      parent_author: 'bob',
+      parent_permlink: 'p',
+      author: 'erin',
+      permlink: 're-p',
+      body: 'Nice',
+    });
+    await recordPendingChild('bob', 'p', reply);
     await recordPendingDeletion('erin', 're-p');
     const out = await applyDiscussionOverlays('bob', 'p', discussion);
     expect(out?.['erin/re-p']).toBeUndefined();

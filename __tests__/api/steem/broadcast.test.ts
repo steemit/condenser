@@ -174,6 +174,8 @@ describe('POST /api/steem/broadcast', () => {
       makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
     );
     expect(res.status).toBe(200);
+    // Replies also drop the parent discussion's L1 entries (post + comments).
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('erin,permlink=my-post');
     expect(recordChildMock).toHaveBeenCalledWith('bob', 'my-post', {
       author: 'erin',
       permlink: 're-my-post',

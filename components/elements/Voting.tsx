@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { showLogin } from '@/store/slices/userSlice';
@@ -173,6 +173,17 @@ export default function Voting({
     : 0;
   const myVoteWeight = localVote ?? chainWeight;
 
+  // Drop the local override once chain data catches up (same direction,
+  // or the vote is gone after a cancel), so vote changes made from other
+  // sessions/devices are reflected afterwards.
+  const chainSign = Math.sign(chainWeight);
+  const hasMyVote = Boolean(myVote);
+  useEffect(() => {
+    if (localVote === null) return;
+    const confirmed = localVote === 0 ? !hasMyVote : chainSign === Math.sign(localVote);
+    if (confirmed) setLocalVote(null);
+  }, [localVote, chainSign, hasMyVote]);
+
   const handleVote = async (up: boolean) => {
     if (!username) {
       dispatch(showLogin());
@@ -190,7 +201,10 @@ export default function Voting({
     }
 
     const flagKey = `transaction_vote_active_${post.author}_${post.permlink}`;
-    const prevWeight = myVoteWeight;
+    const prevLocal = localVote;
+    // Redux `voted` expects a weight-domain value (±10000), not raw rshares.
+    const prevReduxWeight =
+      prevLocal ?? (chainWeight === 0 ? 0 : Math.sign(chainWeight) * MAX_WEIGHT);
 
     // Legacy Voting.jsx: record the vote action at dispatch time.
     userActionRecord('vote', {
@@ -226,19 +240,20 @@ export default function Voting({
       // The chain rejects re-broadcasting an unchanged vote
       // ("current vote ... is identical to this vote"). That means the
       // desired state is already on-chain — keep the optimistic state
-      // instead of reverting (cleanup happens in `finally`).
+      // instead of reverting.
       const identical =
         err instanceof Error && err.message.includes('identical to this vote');
-      if (identical) return;
-      setLocalVote(prevWeight);
-      dispatch(
-        voted({
-          voter: username,
-          author: post.author,
-          permlink: post.permlink,
-          weight: prevWeight,
-        })
-      );
+      if (!identical) {
+        setLocalVote(prevLocal);
+        dispatch(
+          voted({
+            voter: username,
+            author: post.author,
+            permlink: post.permlink,
+            weight: prevReduxWeight,
+          })
+        );
+      }
     } finally {
       dispatch(set({ key: flagKey, value: false }));
       setVotingDir(null);
@@ -274,7 +289,9 @@ export default function Voting({
   const downvoteActive = myVoteWeight < 0;
 
   const totalVotes = post.stats?.total_votes ?? post.active_votes?.length ?? 0;
+  // Legacy Voting.jsx skips cleared votes (rshares == "0") in the voter list.
   const votes = [...(post.active_votes ?? [])]
+    .filter((v) => Number(v.rshares ?? v.weight ?? 0) !== 0)
     .sort(
       (a, b) =>
         Math.abs(Number(b.rshares ?? b.weight ?? 0)) -

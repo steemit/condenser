@@ -108,13 +108,26 @@ export async function POST(request: NextRequest) {
 
     // Signal the browser (L1) cache to drop affected entries. Tokens are
     // comma-separated and matched by substring against cached URLs: the
-    // actor covers per-user entries, and for votes `permlink=...` covers
-    // the post + comments entries (their URLs are author/permlink-shaped
-    // and would otherwise survive, serving pre-vote active_votes).
+    // actor covers per-user entries, and `permlink=...` covers the
+    // post + comments entries (their URLs are author/permlink-shaped and
+    // would otherwise survive a vote/reply, serving pre-write data).
+    // Tokens are op-derived (client-controlled), so restrict them to the
+    // account/permlink charset — anything else is dropped, never trusted.
+    const SAFE_TOKEN = /^[a-z0-9.=-]+$/;
     const invalidateTokens: string[] = [];
-    if (actor) invalidateTokens.push(actor);
-    if (firstOperation?.[0] === 'vote' && permlink) {
+    const opType = firstOperation?.[0];
+    if (actor && SAFE_TOKEN.test(actor)) invalidateTokens.push(actor);
+    if (opType === 'vote' && permlink && SAFE_TOKEN.test(`permlink=${permlink}`)) {
       invalidateTokens.push(`permlink=${permlink}`);
+    }
+    // A reply must also drop the parent discussion's L1 entries so the
+    // pending overlay gets a chance to merge it on the next read.
+    if (opType === 'comment') {
+      const parentPermlink = firstOperation?.[1]?.parent_permlink;
+      const parentAuthor = firstOperation?.[1]?.parent_author;
+      if (parentAuthor && parentPermlink && SAFE_TOKEN.test(`permlink=${parentPermlink}`)) {
+        invalidateTokens.push(`permlink=${parentPermlink}`);
+      }
     }
     if (invalidateTokens.length > 0) {
       response.headers.set('X-Cache-Invalidate', invalidateTokens.join(','));

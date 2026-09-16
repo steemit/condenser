@@ -29,7 +29,6 @@ export interface PendingVote {
 
 export interface PendingContent {
   ts: number;
-  deleted?: boolean;
   post?: Record<string, unknown>;
 }
 
@@ -42,6 +41,10 @@ export interface PostLike {
     weight?: number;
     percent?: number;
   }>;
+  stats?: {
+    total_votes?: number;
+    [key: string]: unknown;
+  };
   last_update?: string;
   created?: string;
   [key: string]: unknown;
@@ -202,12 +205,14 @@ export function mergePendingVotes<T extends PostLike>(
 ): T {
   const votes = [...(post.active_votes ?? [])];
   let changed = false;
+  let totalVotesDelta = 0;
   for (const [voter, { weight }] of Object.entries(pending)) {
     const idx = votes.findIndex((v) => v.voter === voter);
     if (weight === 0) {
       // Cancellation: drop the voter's entry until the chain confirms.
       if (idx >= 0) {
         votes.splice(idx, 1);
+        totalVotesDelta -= 1;
         changed = true;
       }
       continue;
@@ -223,10 +228,17 @@ export function mergePendingVotes<T extends PostLike>(
       changed = true;
     } else {
       votes.push({ voter, rshares: synthesized });
+      totalVotesDelta += 1;
       changed = true;
     }
   }
-  return changed ? { ...post, active_votes: votes } : post;
+  if (!changed) return post;
+  const out: T = { ...post, active_votes: votes };
+  // Keep the displayed vote count consistent with the overlaid entries.
+  if (totalVotesDelta !== 0 && typeof post.stats?.total_votes === 'number') {
+    out.stats = { ...post.stats, total_votes: post.stats.total_votes + totalVotesDelta };
+  }
+  return out;
 }
 
 /** Apply pending votes to a list of posts (one Redis pipeline round-trip). */
@@ -330,12 +342,7 @@ export async function applyDiscussionOverlays(
         if (err || !hash) return;
         for (const [childKey, raw] of Object.entries(hash)) {
           const entry = parseJson<PendingContent>(raw);
-          if (!entry) continue;
-          if (entry.deleted) {
-            delete merged[childKey];
-            continue;
-          }
-          if (!entry.post) continue;
+          if (!entry?.post) continue;
           const existing = merged[childKey];
           if (!existing) {
             merged[childKey] = entry.post as PostLike;

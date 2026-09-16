@@ -27,8 +27,8 @@ function sortComments(list: CommentType[], order: 'votes' | 'new' | 'trending') 
     if (order === 'new') {
       return new Date(b.created).getTime() - new Date(a.created).getTime();
     } else if (order === 'votes') {
-      const aVotes = a.active_votes?.filter((v) => v.weight > 0).length || 0;
-      const bVotes = b.active_votes?.filter((v) => v.weight > 0).length || 0;
+      const aVotes = a.active_votes?.filter((v) => Number(v.rshares ?? v.weight ?? 0) > 0).length || 0;
+      const bVotes = b.active_votes?.filter((v) => Number(v.rshares ?? v.weight ?? 0) > 0).length || 0;
       return bVotes - aVotes;
     }
     const aPayout = parseFloat(a.pending_payout_value || '0');

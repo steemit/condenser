@@ -67,7 +67,7 @@ export async function cachedFetch<T>(
   const res = await fetch(url);
   if (!res.ok) throw new HttpError(res.status, res.statusText);
   const data = (await res.json()) as T;
-  handleCacheInvalidation(res);
+  invalidateFromResponse(res);
   clientCache.set(url, data, opts.staleMs, opts.maxAgeMs);
   return { data, stale: false };
 }
@@ -94,7 +94,7 @@ function backgroundRefresh(url: string, opts: CachedFetchOptions): void {
       // entry with an error body — leave the stale (but valid) data in place.
       if (!res.ok) return;
       const data = await res.json();
-      handleCacheInvalidation(res);
+      invalidateFromResponse(res);
       clientCache.set(url, data, opts.staleMs, opts.maxAgeMs);
     })
     .catch(() => {
@@ -102,8 +102,16 @@ function backgroundRefresh(url: string, opts: CachedFetchOptions): void {
     });
 }
 
-/** Honour the server's per-write invalidation directive (X-Cache-Invalidate). */
-function handleCacheInvalidation(res: Response): void {
-  const prefix = res.headers.get('X-Cache-Invalidate');
-  if (prefix) clientCache.invalidate(prefix);
+/**
+ * Honour the server's per-write invalidation directive (X-Cache-Invalidate).
+ * Exported so the broadcast client (raw POST fetch, not cachedFetch) can
+ * apply it too — GET routes never set this header.
+ */
+export function invalidateFromResponse(res: Response): void {
+  const header = res.headers.get('X-Cache-Invalidate');
+  if (!header) return;
+  for (const token of header.split(',')) {
+    const prefix = token.trim();
+    if (prefix) clientCache.invalidate(prefix);
+  }
 }

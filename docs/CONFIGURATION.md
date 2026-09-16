@@ -30,6 +30,8 @@ JWT_SECRET=your-secret-key-change-in-production
 
 For distributed deployments, Redis-based session management is recommended. If Redis is not configured, the system will fall back to JWT-based sessions.
 
+The same Redis instance also backs the content cache and the pending-broadcast overlay (`lib/steem/pending-overlay.ts`): freshly broadcast votes/posts/edits/deletes are recorded in short-lived keys (120s TTL) and merged into read results until hivemind indexes them — this prevents vote-state loss and new-post 404s during the indexing window. Without Redis the overlay degrades to a no-op.
+
 #### Option 1: Redis URL
 ```bash
 REDIS_URL=redis://localhost:6379

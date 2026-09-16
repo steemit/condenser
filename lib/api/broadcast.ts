@@ -12,6 +12,7 @@ import {
   SignedTransaction
 } from '@/lib/crypto/transaction-signer';
 import { getCachedKey, decryptAndRetrieveKey } from '@/lib/crypto/key-storage';
+import { invalidateFromResponse } from '@/lib/cache/client-fetch';
 import type { CommentOptionsConfig } from '@/lib/utils/comment-options';
 
 /**
@@ -52,6 +53,10 @@ async function broadcastSignedTransaction(signedTransaction: SignedTransaction):
     const errorData = await response.json();
     throw new Error(errorData.error || 'Failed to broadcast transaction');
   }
+
+  // The server flags which L1 entries this write made stale
+  // (X-Cache-Invalidate tokens) — apply before the next read.
+  invalidateFromResponse(response);
 
   return response.json();
 }

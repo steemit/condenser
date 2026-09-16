@@ -38,9 +38,14 @@ export interface Post {
   created: string;
   net_rshares?: string;
   children?: number;
+  // Bridge API returns only {voter, rshares}; rshares' sign is the vote
+  // direction ("0" = cleared vote). weight/percent exist only on the
+  // optimistic Redux entries written by globalSlice.voted.
   active_votes?: Array<{
     voter: string;
-    weight: number;
+    rshares?: string | number;
+    weight?: number;
+    percent?: number;
   }>;
   pending_payout_value?: string;
   // Legacy bridge fields read by cards / voting UI.

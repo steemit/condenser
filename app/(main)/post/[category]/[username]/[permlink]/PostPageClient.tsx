@@ -31,6 +31,9 @@ export default function PostPageClient() {
   const dispatch = useAppDispatch();
   const t = useTranslations();
   const trackingId = useAppSelector((s) => s.user.trackingId);
+  // Refetch when the logged-in user changes so freshly indexed votes and
+  // any personalized fields show up without a manual reload.
+  const currentUsername = useAppSelector((s) => s.user.current?.username);
   const category = params.category as string;
   const usernameRaw = params.username as string;
   const username = normalizeUsername(usernameRaw);
@@ -69,7 +72,7 @@ export default function PostPageClient() {
     };
 
     loadData();
-  }, [category, username, permlink, t]);
+  }, [category, username, permlink, currentUsername, t]);
 
   // PostEditor already broadcast the reply; optimistically append a
   // synthesized comment built from the known author/permlink/body instead of

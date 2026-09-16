@@ -30,12 +30,12 @@ sequenceDiagram
     participant H as hivemind (bridge API)
 
     UI->>C: sign vote/comment/delete op (posting key, client-side)
+    UI->>UI: optimistic localVote (immediate feedback,<br/>before the request resolves)
     C->>B: signed transaction
     B->>D: broadcast_transaction
     D-->>B: accepted
     B->>R: record overlay (120s TTL)<br/>pendingvote / pendingroot / pendingchildren / pendingtomb
     B-->>UI: 200 + X-Cache-Invalidate tokens
-    UI->>UI: optimistic localVote (immediate feedback)
     UI->>UI: invalidateFromResponse() evicts L1 entries
 
     Note over UI,H: Next read (navigation / refresh)
@@ -112,7 +112,13 @@ flowchart LR
 | `vote` | `steem:pendingvote:{author}:{permlink}` field voter → `{weight, ts}` (weight 0 = cancel) | `steem:posts:ranked:`, `steem:profile:{voter}`, `steem:profile:{author}` — **`steem:post:` deliberately untouched** (a delete would re-cache pre-vote data for a full TTL while hivemind lags) | `{voter}`, `permlink={permlink}` |
 | `comment` (root post / edit) | `steem:pendingroot:{author}:{permlink}` → synthesized bridge-shaped post | `steem:posts:account:{author}:`, `steem:profile:{author}`, `steem:posts:ranked:` | `{author}`, `permlink={permlink}` (drops the post's own L1 entry on edits) |
 | `comment` (reply) | `steem:pendingchildren:{parentAuthor}:{parentPermlink}` field `{author}/{permlink}` → post | same as above | `{author}`, `permlink={parent_permlink}` (drops the parent discussion's post+comments entries) |
-| `delete_comment` | `steem:pendingtomb:{author}:{permlink}` | `steem:posts:ranked:`, `steem:profile:` | `{author}` only — the op carries no parent reference, so the parent's L1 entry expires naturally (≤ 15s fresh window) |
+| `delete_comment` | `steem:pendingtomb:{author}:{permlink}` | `steem:posts:ranked:`, `steem:profile:` | `{author}` only — the op carries no parent reference, so the parent's L1 entry goes stale within 15s and self-revalidates on the next read |
+
+All Redis keys are namespaced by `redisKey()` — the actual keys carry the
+`condenser:` prefix (configurable via `REDIS_KEY_PREFIX`), e.g.
+`condenser:steem:pendingvote:...`. Content entries (`pendingroot`,
+`pendingchildren`) store a `{ts, post}` envelope; `ts` is the broadcaster's
+wall clock at broadcast time and powers the newer-than edit check below.
 
 Tokens are sanitized to the account/permlink charset (`/^[a-z0-9.=-]+$/`)
 before entering the header — op data is client-controlled and never trusted.
@@ -128,9 +134,9 @@ is a raw fetch, so the client applies the header explicitly.
   of 404 during the indexing window.
 - **Replies**: keyed by immediate parent and merged breadth-first (max 8
   levels), so nested replies appear even when their parent is itself pending.
-- **Edits**: when the pending entry is newer than the chain's `last_update`,
-  only the mutable fields (`title`, `body`, `json_metadata`) are overlaid;
-  chain data wins otherwise.
+- **Edits**: when the pending entry is newer than the chain's `last_update`
+  (falling back to `created`), only the mutable fields (`title`, `body`,
+  `json_metadata`) are overlaid; chain data wins otherwise.
 - **Deletes**: tombstones drop the node from the discussion map; deleting a
   pending-but-unindexed root preserves the 404 contract.
 
@@ -143,7 +149,7 @@ is a raw fetch, so the client applies the header explicitly.
 | Broadcast fails | `localVote` reverts to the pre-attempt override; Redux reverts within the ±10000 weight domain |
 | Chain: "identical to this vote" | Treated as idempotent success — the desired state is already on-chain |
 | Overlay TTL expires before indexing | One refresh may show pre-write state; next read converges |
-| Discussion reads with many nodes | ~3 pipelined Redis rounds proportional to node count (mostly empty hits) — one RTT each |
+| Discussion reads with many nodes | A handful of pipelined Redis rounds: 1 root lookup + 1 per reply depth level (max 8) + 1 tombstone sweep + 1 vote merge; each round is a single RTT regardless of node count |
 
 ## Known limitations
 
@@ -152,7 +158,8 @@ is a raw fetch, so the client applies the header explicitly.
 - A pending reply whose parent is tombstoned in the same window briefly renders
   as a top-level comment; self-heals on TTL expiry.
 - `delete_comment` cannot invalidate the parent discussion's L1 entry (the op
-  carries no parent reference); bounded by the 15s fresh window.
+  carries no parent reference); the parent goes stale within 15s and
+  self-revalidates on the next read.
 
 ## Key files
 

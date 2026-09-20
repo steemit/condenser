@@ -290,6 +290,10 @@
       "checkbox": "Entiendo"
     }
   },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
+  },
   "navigation": {
     "about": "Sobre",
     "explore": "Explorar",

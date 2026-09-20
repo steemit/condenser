@@ -71,7 +71,9 @@ treated as categories or usernames. Whether a page actually exists for them:
 | `/api/*`, `/_next/*`, `/static/*`, any path containing `.` | Skipped by proxy (proxy.ts:48-56); also excluded by the `matcher` (proxy.ts:208-219) | `app/api/**`, `app/.well-known/**`, `public/**` | Implemented |
 | `/tags` | Pass-through (reserved) | — | **Not migrated** (legacy `TagsIndex`); falls through to `not-found.tsx` |
 | `/rewards` | Pass-through (reserved) | — | **Not migrated** (legacy `Rewards`); falls through to `not-found.tsx` |
-| `/welcome`, `/about`, `/faq`, `/privacy`, `/support`, `/tos` | Pass-through (reserved) | — | **Not migrated** (marketing/static pages; legacy served them at `/about.html` etc. plus `/welcome`) |
+| `/welcome` | Pass-through (reserved) | `app/(main)/welcome/page.tsx` | Implemented (legacy parity; MAIN-25) |
+| `/faq`, `/privacy`, `/tos` (legacy `/faq.html` etc., redirected) | Pass-through (reserved) | `app/(main)/faq|privacy|tos/page.tsx` | Implemented (legacy parity; MAIN-25) |
+| `/about`, `/support` | Pass-through (reserved) | — | **Not migrated** (marketing pages; legacy `/about.html`, `/support.html`) |
 
 ## Intentionally absent legacy routes
 
@@ -80,8 +82,9 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
 
 | Legacy route | Legacy page | Status in new app |
 |---|---|---|
-| `/welcome` | `Welcome` | Not migrated — 404 |
-| `/faq.html`, `/about.html`, `/support.html`, `/privacy.html`, `/tos.html` | `Faq` / `About` / `Support` / `Privacy` / `Tos` | Not migrated — paths contain `.`, so the proxy skips them and they 404 |
+| `/welcome` | `Welcome` | Implemented at `/welcome` (`app/(main)/welcome/page.tsx`) |
+| `/faq.html`, `/privacy.html`, `/tos.html` | `Faq` / `Privacy` / `Tos` | Implemented at `/faq` / `/privacy` / `/tos`; `.html` URLs 301-redirect (next.config.ts) |
+| `/about.html`, `/support.html` | `About` / `Support` | Not migrated — paths contain `.`, so the proxy skips them and they 404 |
 | `/login.html`, `/submit.html` | `Login` / `SubmitPost` | Replaced by `/login` and `/submit`; the `.html` URLs 404 |
 | `/tags` | `TagsIndex` | Not migrated — 404 |
 | `/rewards` | `Rewards` | Not migrated — 404 |

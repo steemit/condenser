@@ -294,6 +294,10 @@
       "checkbox": "I understand"
     }
   },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
+  },
   "navigation": {
     "about": "A propos",
     "explore": "Explorer",

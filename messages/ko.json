@@ -295,6 +295,10 @@
       "checkbox": "네 이해합니다."
     }
   },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
+  },
   "navigation": {
     "about": "스팀이란?",
     "explore": "태그별 현황",

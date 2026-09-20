@@ -335,6 +335,10 @@
     "submit_search": "Submit search",
     "welcome_guide": "Welcome Guide"
   },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
+  },
   "navigation": {
     "about": "About Steemit, Inc.",
     "explore": "Explore",

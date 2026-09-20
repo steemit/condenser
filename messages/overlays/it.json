@@ -5,5 +5,9 @@
   "user_profile": {
     "user_hasnt_made_any_posts_yet": "Sembra che {name}non abbia ancora pubblicato nessun post! ",
     "user_hasnt_had_any_replies_yet": "{name} hasn't had any replies yet"
+  },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
   }
 }

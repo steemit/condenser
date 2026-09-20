@@ -26,6 +26,7 @@ import {
   recordPendingRootPost,
   recordPendingChild,
   recordPendingDeletion,
+  recordPendingProfile,
   synthesizePostFromCommentOp,
 } from '@/lib/steem/pending-overlay';
 
@@ -86,6 +87,9 @@ export async function POST(request: NextRequest) {
         if (opType === 'custom_json') {
           const postingAuths = opData.required_posting_auths;
           actor = Array.isArray(postingAuths) ? String(postingAuths[0] || '') : undefined;
+        } else if (opType === 'account_update2') {
+          // Profile settings save — the signer is the `account` field.
+          actor = (opData.account as string) || undefined;
         } else {
           actor = (opData.voter as string) || (opData.author as string);
         }
@@ -250,6 +254,26 @@ async function recordPendingOverlays(operations: Array<[string, Record<string, u
         const author = String(opData.author || '');
         const permlink = String(opData.permlink || '');
         if (author && permlink) await recordPendingDeletion(author, permlink);
+        break;
+      }
+      case 'account_update2': {
+        // Profile settings save — remember the new profile sub-object so
+        // get_profile reads show it before hivemind indexes the account row.
+        const account = String(opData.account || '');
+        if (!account) break;
+        let profile: Record<string, unknown> = {};
+        try {
+          const md = opData.posting_json_metadata
+            ? (JSON.parse(String(opData.posting_json_metadata)) as Record<string, unknown>)
+            : {};
+          if (md.profile && typeof md.profile === 'object') {
+            profile = md.profile as Record<string, unknown>;
+          }
+        } catch {
+          // Malformed metadata — skip the overlay, chain data will surface.
+          break;
+        }
+        await recordPendingProfile(account, profile);
         break;
       }
       default:

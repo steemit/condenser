@@ -58,9 +58,11 @@ vi.mock('@/lib/cache/redis', () => ({
 import {
   applyDiscussionOverlays,
   applyVoteOverlayToPosts,
+  applyProfileOverlay,
   mergePendingVotes,
   recordPendingChild,
   recordPendingDeletion,
+  recordPendingProfile,
   recordPendingRootPost,
   recordPendingVote,
   synthesizePostFromCommentOp,
@@ -218,6 +220,92 @@ describe('applyVoteOverlayToPosts', () => {
     const posts = [{ author: 'bob', permlink: 'p1', active_votes: [] }];
     const out = await applyVoteOverlayToPosts(posts);
     expect(out).toBe(posts);
+  });
+});
+
+describe('applyProfileOverlay', () => {
+  beforeEach(() => {
+    fake = new FakeRedis();
+  });
+
+  const savedProfile = {
+    name: 'Alice',
+    about: 'New about',
+    location: 'Springfield',
+    version: 2,
+  };
+
+  it('replaces metadata.profile with the saved profile during the window', async () => {
+    await recordPendingProfile('alice', savedProfile);
+    const chain = {
+      id: 42,
+      name: 'alice',
+      metadata: { profile: { name: 'Old Name', about: 'Old', version: 2 } },
+    };
+    const out = await applyProfileOverlay('alice', chain);
+    expect(out?.metadata?.profile).toEqual(savedProfile);
+    // Everything outside metadata.profile is chain-owned and preserved.
+    expect(out?.id).toBe(42);
+    expect(out?.name).toBe('alice');
+  });
+
+  it('drops fields the user cleared (replace, not merge)', async () => {
+    // The save cleared location + website (absent from the new sub-object).
+    await recordPendingProfile('alice', {
+      name: 'Alice',
+      about: 'New about',
+      version: 2,
+    });
+    const chain = {
+      id: 42,
+      name: 'alice',
+      metadata: {
+        profile: {
+          name: 'Alice',
+          about: 'New about',
+          location: 'Nowhere',
+          website: 'https://x',
+          version: 2,
+        },
+      },
+    };
+    const out = await applyProfileOverlay('alice', chain);
+    expect(out?.metadata?.profile).toEqual({ name: 'Alice', about: 'New about', version: 2 });
+    expect((out?.metadata?.profile as Record<string, unknown>).location).toBeUndefined();
+    expect((out?.metadata?.profile as Record<string, unknown>).website).toBeUndefined();
+  });
+
+  it('is a no-op once the chain profile equals the saved one (indexed)', async () => {
+    await recordPendingProfile('alice', savedProfile);
+    const chain = { id: 42, name: 'alice', metadata: { profile: savedProfile } };
+    const out = await applyProfileOverlay('alice', chain);
+    expect(out).toBe(chain);
+  });
+
+  it('anchors on a minimal object when chain data is missing', async () => {
+    await recordPendingProfile('alice', savedProfile);
+    const out = await applyProfileOverlay('alice', null);
+    expect(out).toMatchObject({ name: 'alice', metadata: { profile: savedProfile } });
+  });
+
+  it('keys by the lowercased account (URLs may carry uppercase)', async () => {
+    await recordPendingProfile('Alice', savedProfile);
+    const chain = { id: 42, metadata: { profile: { name: 'Old' } } };
+    const out = await applyProfileOverlay('ALICE', chain);
+    expect(out?.metadata?.profile).toEqual(savedProfile);
+  });
+
+  it('passes data through when no overlay was recorded', async () => {
+    const chain = { id: 42, metadata: { profile: { name: 'Old' } } };
+    const out = await applyProfileOverlay('alice', chain);
+    expect(out).toBe(chain);
+  });
+
+  it('passes data through when Redis is off', async () => {
+    fake = null;
+    const chain = { id: 42, metadata: { profile: { name: 'Old' } } };
+    const out = await applyProfileOverlay('alice', chain);
+    expect(out).toBe(chain);
   });
 });
 

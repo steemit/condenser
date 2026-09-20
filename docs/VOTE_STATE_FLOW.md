@@ -1,8 +1,9 @@
 # Vote State & Write Convergence
 
-How a user's write (vote, post, reply, edit, delete) becomes visible again on read,
-despite the hivemind indexing lag. This documents the closed loop implemented in
-PR #4026 (`fix/vote-state-feedback`).
+How a user's write (vote, post, reply, edit, delete, profile save) becomes
+visible again on read, despite the hivemind indexing lag. This documents the
+closed loop implemented in PR #4026 (`fix/vote-state-feedback`) and its
+profile-save extension.
 
 ## The problem
 
@@ -34,7 +35,7 @@ sequenceDiagram
     C->>B: signed transaction
     B->>D: broadcast_transaction
     D-->>B: accepted
-    B->>R: record overlay (120s TTL)<br/>pendingvote / pendingroot / pendingchildren / pendingtomb
+    B->>R: record overlay (120s TTL)<br/>pendingvote / pendingroot / pendingchildren /<br/>pendingtomb / pendingprofile
     B-->>UI: 200 + X-Cache-Invalidate tokens
     UI->>UI: invalidateFromResponse() evicts L1 entries
 
@@ -113,6 +114,7 @@ flowchart LR
 | `comment` (root post / edit) | `steem:pendingroot:{author}:{permlink}` → synthesized bridge-shaped post | `steem:posts:account:{author}:`, `steem:profile:{author}`, `steem:posts:ranked:` | `{author}`, `permlink={permlink}` (drops the post's own L1 entry on edits) |
 | `comment` (reply) | `steem:pendingchildren:{parentAuthor}:{parentPermlink}` field `{author}/{permlink}` → post | same as above | `{author}`, `permlink={parent_permlink}` (drops the parent discussion's post+comments entries) |
 | `delete_comment` | `steem:pendingtomb:{author}:{permlink}` | `steem:posts:ranked:`, `steem:profile:` | `{author}` only — the op carries no parent reference, so the parent's L1 entry goes stale within 15s and self-revalidates on the next read |
+| `account_update2` | `steem:pendingprofile:{account}` → the complete new `profile` sub-object (parsed from `posting_json_metadata`) | `steem:profile:{account}` | `{account}` (drops the user's profile + account-post L1 entries) |
 
 All Redis keys are namespaced by `redisKey()` — the actual keys carry the
 `condenser:` prefix (configurable via `REDIS_KEY_PREFIX`), e.g.
@@ -151,6 +153,30 @@ is a raw fetch, so the client applies the header explicitly.
 | Overlay TTL expires before indexing | One refresh may show pre-write state; next read converges |
 | Discussion reads with many nodes | A handful of pipelined Redis rounds: 1 root lookup + 1 per reply depth level (max 8) + 1 tombstone sweep + 1 vote merge; each round is a single RTT regardless of node count |
 
+## Profile save overlay semantics (`getProfile`)
+
+`account_update2` (the settings page save) changes the account row in
+steemd immediately, but hivemind re-reads that row on its own schedule —
+and both cache layers hold the pre-save profile. The profile overlay
+(`steem:pendingprofile:{account}`, written by the broadcast route) closes
+the window:
+
+- **Merge, not synthesize**: bridge `get_profile` returns a full account
+  summary (id, stats, reputation, …). The overlay anchors on chain data
+  when it exists and only replaces `metadata.profile` with the saved
+  sub-object. A missing chain response still renders (anchored on
+  `{id: 0, name}`) rather than 404ing.
+- **Replace, not patch**: the save op carries the complete new
+  `metadata.profile` (the settings form merges it from fresh account
+  metadata before broadcasting), so the overlay swaps the sub-object
+  wholesale — fields the user cleared disappear during the window too.
+- **Convergence**: once the chain-side profile equals the saved one (same
+  keys, same values), the overlay is a no-op. A second save simply
+  rewrites the Redis key.
+- **Failure modes**: malformed `posting_json_metadata` on the op → no
+  overlay recorded (chain data surfaces); Redis off → no-op; overlay read
+  error → chain data as-is.
+
 ## Known limitations
 
 - New posts appear in feed lists (`/created/...`) only after hivemind indexes;
@@ -169,7 +195,7 @@ is a raw fetch, so the client applies the header explicitly.
 | Broadcast route (overlay write, L2 invalidation, L1 tokens) | `app/api/steem/broadcast/route.ts` |
 | Broadcast client (signing, L1 invalidation) | `lib/api/broadcast.ts` |
 | Pending overlay | `lib/steem/pending-overlay.ts` |
-| Read-side merge points | `lib/steem/client.ts` (`getDiscussion`, `getRankedPosts`, `getAccountPosts`) |
+| Read-side merge points | `lib/steem/client.ts` (`getDiscussion`, `getRankedPosts`, `getAccountPosts`, `getProfile`) |
 | Browser L1 cache | `lib/cache/client-cache.ts`, `lib/cache/client-fetch.ts` |
 | Redis L2 cache | `lib/cache/server-cache.ts`, `lib/cache/redis.ts` |
 | Tests | `__tests__/lib/steem/pending-overlay.test.ts`, `__tests__/lib/cache/client-fetch.test.ts`, `__tests__/api/steem/broadcast.test.ts` |

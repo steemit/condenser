@@ -32,6 +32,20 @@ export interface PendingContent {
   post?: Record<string, unknown>;
 }
 
+export interface PendingProfile {
+  ts: number;
+  profile: Record<string, unknown>;
+}
+
+/** Shape of the bridge get_profile response relevant to the overlay. */
+export interface ProfileLike {
+  metadata?: {
+    profile?: Record<string, unknown>;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
 export interface PostLike {
   author?: string;
   permlink?: string;
@@ -64,6 +78,10 @@ function childrenKey(parentAuthor: string, parentPermlink: string): string {
 
 function tombstoneKey(author: string, permlink: string): string {
   return redisKey(`steem:pendingtomb:${author}:${permlink}`);
+}
+
+function profileKey(account: string): string {
+  return redisKey(`steem:pendingprofile:${account}`);
 }
 
 function parseJson<T>(raw: string): T | null {
@@ -150,6 +168,26 @@ export async function recordPendingDeletion(author: string, permlink: string): P
 }
 
 /**
+ * Record an account_update2 profile save. `profile` is the new sanitized
+ * profile sub-object the client just wrote (including version: 2).
+ */
+export async function recordPendingProfile(
+  account: string,
+  profile: Record<string, unknown>
+): Promise<void> {
+  const r = getRedis();
+  if (!r) return;
+  const normalized = account.toLowerCase();
+  if (!normalized) return;
+  try {
+    const entry: PendingProfile = { ts: Date.now(), profile };
+    await r.set(profileKey(normalized), JSON.stringify(entry), 'EX', PENDING_TTL_SEC);
+  } catch {
+    // non-critical
+  }
+}
+
+/**
  * Build a bridge-shaped post object from a broadcast `comment` op, for
  * serving the post page/discussion before hivemind has indexed it.
  */
@@ -197,6 +235,58 @@ export function synthesizePostFromCommentOp(op: {
 // ---------------------------------------------------------------------------
 // Read side (called from lib/steem/client.ts after the cache layer)
 // ---------------------------------------------------------------------------
+
+/**
+ * Merge a pending profile save into a bridge get_profile result.
+ *
+ * Convergence, mirroring the vote overlay's sign check: once the chain-side
+ * profile already equals the saved one (hivemind indexed the save), the
+ * overlay is a no-op. Within the window the saved profile replaces
+ * metadata.profile wholesale — the broadcast carries the complete sub-object,
+ * so fields the user cleared disappear too — while everything else on the
+ * profile (stats, reputation, …) comes from chain data. A second save
+ * rewrites the Redis key, so the overlay always reflects the newest intent.
+ */
+export async function applyProfileOverlay<T extends ProfileLike>(
+  account: string,
+  profile: T | null
+): Promise<T | null> {
+  const r = getRedis();
+  if (!r) return profile;
+  const normalized = account.toLowerCase();
+  if (!normalized) return profile;
+
+  try {
+    const raw = await r.get(profileKey(normalized));
+    if (!raw) return profile;
+    const entry = parseJson<PendingProfile>(raw);
+    if (!entry || typeof entry.profile !== 'object' || entry.profile === null) return profile;
+
+    // The account exists on-chain (the profile route would 404 otherwise) —
+    // anchor the merge so a partially-indexed response stays complete.
+    const base: ProfileLike = profile ?? { id: 0, name: normalized };
+    const existing = (base.metadata?.profile ?? {}) as Record<string, unknown>;
+    const pending = entry.profile;
+    const pendingKeys = Object.keys(pending);
+
+    // Chain data wins once it already matches the saved profile (indexed):
+    // same keys, same values. The broadcast carries the COMPLETE new profile
+    // sub-object, so key-count equality also catches cleared fields.
+    const converged =
+      Object.keys(existing).length === pendingKeys.length &&
+      pendingKeys.every((k) => existing[k] === pending[k]);
+    if (converged) return profile;
+
+    // Replace (not merge) the profile sub-object: the op carries the complete
+    // new profile, so replacing also clears fields the user emptied. Fields
+    // outside metadata.profile are chain-owned and preserved.
+    const metadata = { ...(base.metadata ?? {}), profile: pending };
+    return { ...base, metadata } as T;
+  } catch {
+    // Overlay read failure — fall back to chain data only.
+    return profile;
+  }
+}
 
 /** Merge pending votes into a single post's active_votes. */
 export function mergePendingVotes<T extends PostLike>(

@@ -203,5 +203,9 @@
   "follow_list": {
     "no_followers": "@{username} has no followers yet.",
     "not_following": "@{username} is not following anyone yet."
+  },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
   }
 }

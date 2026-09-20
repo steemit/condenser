@@ -32,7 +32,7 @@ const SORT_TYPES = [
 // Known static asset extensions served from public/ (or framework internals).
 // Anything else with a dot (usernames, permlinks) must continue routing.
 const STATIC_ASSET_RE =
-  /\.(ico|png|jpe?g|gif|svg|webp|avif|css|js|map|json|xml|txt|webmanifest|woff2?|ttf|eot|mp4|webm|pdf|html?)$/i;
+  /\.(ico|png|jpe?g|gif|svg|webp|avif|css|js|map|json|xml|txt|md|webmanifest|woff2?|ttf|eot|mp4|webm|pdf|html?)$/i;
 
 export function proxy(request: NextRequest) {
   // Get pathname and ensure it's decoded

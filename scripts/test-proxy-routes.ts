@@ -27,6 +27,10 @@ const testCases = [
   { path: '/static/logo.png', expected: 'next', description: 'Path under /static/' },
   { path: '/404', expected: 'next', description: 'Explicit 404 page is skipped by proxy' },
   { path: '/about.html', expected: 'next', description: 'Path containing "." is skipped by proxy (renders 404 via not-found)' },
+  { path: '/welcome', expected: 'next', description: 'Welcome page (reserved, pass-through to app/(main)/welcome)' },
+  { path: '/faq', expected: 'next', description: 'FAQ page (reserved, pass-through to app/(main)/faq)' },
+  { path: '/privacy', expected: 'next', description: 'Privacy page (reserved, pass-through to app/(main)/privacy)' },
+  { path: '/tos', expected: 'next', description: 'Terms of Service page (reserved, pass-through to app/(main)/tos)' },
   
   // Category + user + permlink patterns
   { path: '/bitcoin/@alice/my-post', expected: 'rewrite:/post/bitcoin/alice/my-post', description: 'Category post' },
@@ -75,6 +79,7 @@ const testCases = [
   { path: '/@ety001.test01', expected: 'rewrite:/user/ety001.test01', description: 'Dotted non-GDPR username routes to profile' },
   { path: '/@alice/post-v1.2', expected: 'rewrite:/post-no-category/alice/post-v1.2', description: 'Dotted permlink routes to post page' },
   { path: '/file.svg', expected: 'next', description: 'Static public file passes through' },
+  { path: '/help/welcome.md', expected: 'next', description: 'Help markdown in public/ passes through (.md asset extension)' },
   { path: '/@alice', expected: 'rewrite:/user/alice', description: 'Non-GDPR user unaffected' },
   { path: '/steem/@alice/my-post', expected: 'rewrite:/post/steem/alice/my-post', description: 'Non-GDPR user post unaffected' },
   

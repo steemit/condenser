@@ -5,5 +5,9 @@
   "user_profile": {
     "user_hasnt_made_any_posts_yet": "Похоже, что {name} еще не написал постов!",
     "user_hasnt_had_any_replies_yet": "{name} еще не получил ответов"
+  },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
   }
 }

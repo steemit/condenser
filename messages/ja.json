@@ -292,6 +292,10 @@
       "checkbox": "理解しました。"
     }
   },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
+  },
   "navigation": {
     "about": "Steemについて",
     "explore": "投稿を探す",

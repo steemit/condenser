@@ -66,12 +66,12 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
       key: "internal",
       mt: "small",
       items: [
-        // The rewrite does not host /welcome; point at the legacy site for
-        // now (same treatment as faq/privacy/tos below).
-        { label: t("navigation.welcome"), link: "https://steemit.com/welcome", external: true },
+        // Hosted in-app since the drawer links must work offline of
+        // steemit.com (legacy served /welcome in-app too).
+        { label: t("navigation.welcome"), link: "/welcome" },
         // Legacy's language switcher is superseded by the locale selector in
         // UserSettings (next-intl bridge), so it is not in this drawer.
-        { label: t("navigation.faq"), link: "https://steemit.com/faq.html", external: true },
+        { label: t("navigation.faq"), link: "/faq" },
         {
           label: nightmode ? t("g.toggle_daymode") : t("g.toggle_nightmode"),
           onClick: () => dispatch(toggleNightmode()),
@@ -117,22 +117,6 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
       ],
     },
     {
-      key: "external",
-      mt: "always",
-      items: [
-        {
-          label: t("navigation.advertise"),
-          link: "https://selfserve.steemit.com",
-          external: true,
-        },
-        {
-          label: t("navigation.jobs"),
-          link: "https://recruiting.paylocity.com/recruiting/jobs/List/3288/Steemit-Inc",
-          external: true,
-        },
-      ],
-    },
-    {
       key: "organizational",
       mt: "always",
       items: [
@@ -146,7 +130,7 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
           link: "https://steem.io/steem-bluepaper.pdf",
           external: true,
         },
-        { label: t("navigation.smt_whitepaper"), link: "https://smt.steem.io/", external: true },
+        // SMT Whitepaper removed (dead external link; MAIN-25).
         {
           label: t("navigation.whitepaper"),
           link: "https://steem.com/SteemWhitePaper.pdf",
@@ -160,13 +144,11 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
       items: [
         {
           label: t("navigation.privacy_policy"),
-          link: "https://steemit.com/privacy.html",
-          external: true,
+          link: "/privacy",
         },
         {
           label: t("navigation.terms_of_service"),
-          link: "https://steemit.com/tos.html",
-          external: true,
+          link: "/tos",
         },
       ],
     },

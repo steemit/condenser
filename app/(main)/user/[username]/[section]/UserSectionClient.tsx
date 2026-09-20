@@ -329,14 +329,9 @@ function emptySectionText(
             <Link href="/trending" className="text-accent-foreground underline">
               {t('user_profile.explore_trending')}
             </Link>
-            <a
-              href="https://steemit.com/welcome"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent-foreground underline"
-            >
+            <Link href="/welcome" className="text-accent-foreground underline">
               {t('user_profile.new_users_guide')}
-            </a>
+            </Link>
           </span>
         </span>
       );
@@ -357,14 +352,9 @@ function emptySectionText(
           <Link href="/trending" className="text-accent-foreground underline">
             {t('user_profile.explore_trending_articles')}
           </Link>
-          <a
-            href="https://steemit.com/welcome"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-accent-foreground underline"
-          >
+          <Link href="/welcome" className="text-accent-foreground underline">
             {t('g.welcome_guide')}
-          </a>
+          </Link>
         </span>
       </span>
     );

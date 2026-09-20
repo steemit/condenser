@@ -192,11 +192,18 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
             {group.items.map((item) => (
               <li key={item.label}>
                 {item.link ? (
-                  <Link
-                    href={item.link}
-                    target={item.external ? "_blank" : undefined}
-                    rel={item.external ? "noopener noreferrer" : undefined}
-                    className={linkClass}
+                  // Internal links also close the drawer on click: SheetClose
+                  // renders the Link, so one click navigates AND dismisses
+                  // (external links open in a new tab and stay open instead).
+                  <SheetClose
+                    render={
+                      <Link
+                        href={item.link}
+                        target={item.external ? "_blank" : undefined}
+                        rel={item.external ? "noopener noreferrer" : undefined}
+                        className={linkClass}
+                      />
+                    }
                   >
                     {item.label}
                     {item.external && (
@@ -205,7 +212,7 @@ export function SidePanel({ children }: { children: React.ReactNode }) {
                         <ExternalLink className="size-3.5" aria-hidden />
                       </>
                     )}
-                  </Link>
+                  </SheetClose>
                 ) : (
                   <button
                     type="button"

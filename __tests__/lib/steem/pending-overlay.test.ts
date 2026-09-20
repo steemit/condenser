@@ -307,6 +307,31 @@ describe('applyProfileOverlay', () => {
     const out = await applyProfileOverlay('alice', chain);
     expect(out).toBe(chain);
   });
+
+  it('a second save rewrites the overlay — newest intent wins', async () => {
+    await recordPendingProfile('alice', { name: 'First', version: 2 });
+    await recordPendingProfile('alice', { name: 'Second', version: 2 });
+    const chain = { id: 42, name: 'alice', metadata: { profile: { name: 'Old' } } };
+    const out = await applyProfileOverlay('alice', chain);
+    expect(out?.metadata?.profile).toEqual({ name: 'Second', version: 2 });
+  });
+
+  it('passes data through when the stored overlay JSON is corrupted', async () => {
+    await fake?.set('condenser:steem:pendingprofile:alice', '{not json');
+    const chain = { id: 42, metadata: { profile: { name: 'Old' } } };
+    const out = await applyProfileOverlay('alice', chain);
+    expect(out).toBe(chain);
+  });
+
+  it('passes data through when the stored profile is an array', async () => {
+    await fake?.set(
+      'condenser:steem:pendingprofile:alice',
+      JSON.stringify({ ts: 1, profile: ['not', 'an', 'object'] })
+    );
+    const chain = { id: 42, metadata: { profile: { name: 'Old' } } };
+    const out = await applyProfileOverlay('alice', chain);
+    expect(out).toBe(chain);
+  });
 });
 
 describe('applyDiscussionOverlays', () => {

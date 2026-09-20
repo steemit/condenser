@@ -238,6 +238,60 @@ describe('POST /api/steem/broadcast', () => {
     expect(recordProfileMock).not.toHaveBeenCalled();
   });
 
+  it('records no profile overlay when posting_json_metadata is empty (key-only update)', async () => {
+    // Empty metadata means "leave posting metadata unchanged" — a {} overlay
+    // would blank the profile for the whole TTL window.
+    const tx = signedTx([
+      [
+        'account_update2',
+        { account: 'alice', json_metadata: '', posting_json_metadata: '', extensions: [] },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(recordProfileMock).not.toHaveBeenCalled();
+    // The L1/L2 invalidation still applies — key changes affect other reads.
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('alice');
+  });
+
+  it('records no profile overlay when metadata carries no profile key', async () => {
+    const tx = signedTx([
+      [
+        'account_update2',
+        { account: 'alice', json_metadata: '', posting_json_metadata: '{"other":1}', extensions: [] },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(recordProfileMock).not.toHaveBeenCalled();
+  });
+
+  it('records no profile overlay when the profile field is an array', async () => {
+    const tx = signedTx([
+      [
+        'account_update2',
+        {
+          account: 'alice',
+          json_metadata: '',
+          posting_json_metadata: JSON.stringify({ profile: ['not', 'an', 'object'] }),
+          extensions: [],
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(recordProfileMock).not.toHaveBeenCalled();
+  });
+
   it('records no profile overlay without an account', async () => {
     const tx = signedTx([
       ['account_update2', { json_metadata: '', posting_json_metadata: '{}', extensions: [] }],

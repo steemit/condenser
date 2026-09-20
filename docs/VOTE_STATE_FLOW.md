@@ -174,8 +174,12 @@ the window:
   keys, same values), the overlay is a no-op. A second save simply
   rewrites the Redis key.
 - **Failure modes**: malformed `posting_json_metadata` on the op → no
-  overlay recorded (chain data surfaces); Redis off → no-op; overlay read
-  error → chain data as-is.
+  overlay recorded (chain data surfaces); empty/absent
+  `posting_json_metadata` (a key-only `account_update2` — optional-field
+  semantics mean "leave unchanged") → no overlay recorded, while the
+  account token still invalidates L1/L2; metadata without a `profile`
+  key → no overlay; Redis off → no-op; overlay read error → chain data
+  as-is.
 
 ## Known limitations
 

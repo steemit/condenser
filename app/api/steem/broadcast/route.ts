@@ -259,21 +259,26 @@ async function recordPendingOverlays(operations: Array<[string, Record<string, u
       case 'account_update2': {
         // Profile settings save — remember the new profile sub-object so
         // get_profile reads show it before hivemind indexes the account row.
+        // An absent/empty posting_json_metadata means "leave unchanged"
+        // (optional-field semantics, e.g. key-only updates) — record nothing.
         const account = String(opData.account || '');
-        if (!account) break;
-        let profile: Record<string, unknown> = {};
+        const raw = opData.posting_json_metadata ? String(opData.posting_json_metadata) : '';
+        if (!account || !raw) break;
         try {
-          const md = opData.posting_json_metadata
-            ? (JSON.parse(String(opData.posting_json_metadata)) as Record<string, unknown>)
-            : {};
-          if (md.profile && typeof md.profile === 'object') {
-            profile = md.profile as Record<string, unknown>;
+          const md = JSON.parse(raw) as Record<string, unknown> | null;
+          if (
+            md &&
+            typeof md.profile === 'object' &&
+            md.profile !== null &&
+            !Array.isArray(md.profile)
+          ) {
+            await recordPendingProfile(account, md.profile as Record<string, unknown>);
           }
+          // Metadata without a profile key: skip the overlay too — a {}
+          // overlay would blank the profile for the whole TTL window.
         } catch {
           // Malformed metadata — skip the overlay, chain data will surface.
-          break;
         }
-        await recordPendingProfile(account, profile);
         break;
       }
       default:

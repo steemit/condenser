@@ -168,8 +168,10 @@ export async function recordPendingDeletion(author: string, permlink: string): P
 }
 
 /**
- * Record an account_update2 profile save. `profile` is the new sanitized
- * profile sub-object the client just wrote (including version: 2).
+ * Record an account_update2 profile save. `profile` is the profile sub-object
+ * as broadcast (the op carries the complete new sub-object, including
+ * version: 2) — recording happens only after the broadcast was accepted, so
+ * the signer's posting authority authorizes it (same trust as chain data).
  */
 export async function recordPendingProfile(
   account: string,
@@ -260,7 +262,14 @@ export async function applyProfileOverlay<T extends ProfileLike>(
     const raw = await r.get(profileKey(normalized));
     if (!raw) return profile;
     const entry = parseJson<PendingProfile>(raw);
-    if (!entry || typeof entry.profile !== 'object' || entry.profile === null) return profile;
+    if (
+      !entry ||
+      typeof entry.profile !== 'object' ||
+      entry.profile === null ||
+      Array.isArray(entry.profile)
+    ) {
+      return profile;
+    }
 
     // The account exists on-chain (the profile route would 404 otherwise) —
     // anchor the merge so a partially-indexed response stays complete.

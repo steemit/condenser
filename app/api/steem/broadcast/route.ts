@@ -26,6 +26,7 @@ import {
   recordPendingRootPost,
   recordPendingChild,
   recordPendingDeletion,
+  recordPendingProfile,
   synthesizePostFromCommentOp,
 } from '@/lib/steem/pending-overlay';
 
@@ -86,6 +87,9 @@ export async function POST(request: NextRequest) {
         if (opType === 'custom_json') {
           const postingAuths = opData.required_posting_auths;
           actor = Array.isArray(postingAuths) ? String(postingAuths[0] || '') : undefined;
+        } else if (opType === 'account_update2') {
+          // Profile settings save — the signer is the `account` field.
+          actor = (opData.account as string) || undefined;
         } else {
           actor = (opData.voter as string) || (opData.author as string);
         }
@@ -250,6 +254,31 @@ async function recordPendingOverlays(operations: Array<[string, Record<string, u
         const author = String(opData.author || '');
         const permlink = String(opData.permlink || '');
         if (author && permlink) await recordPendingDeletion(author, permlink);
+        break;
+      }
+      case 'account_update2': {
+        // Profile settings save — remember the new profile sub-object so
+        // get_profile reads show it before hivemind indexes the account row.
+        // An absent/empty posting_json_metadata means "leave unchanged"
+        // (optional-field semantics, e.g. key-only updates) — record nothing.
+        const account = String(opData.account || '');
+        const raw = opData.posting_json_metadata ? String(opData.posting_json_metadata) : '';
+        if (!account || !raw) break;
+        try {
+          const md = JSON.parse(raw) as Record<string, unknown> | null;
+          if (
+            md &&
+            typeof md.profile === 'object' &&
+            md.profile !== null &&
+            !Array.isArray(md.profile)
+          ) {
+            await recordPendingProfile(account, md.profile as Record<string, unknown>);
+          }
+          // Metadata without a profile key: skip the overlay too — a {}
+          // overlay would blank the profile for the whole TTL window.
+        } catch {
+          // Malformed metadata — skip the overlay, chain data will surface.
+        }
         break;
       }
       default:

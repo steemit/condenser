@@ -10,7 +10,9 @@ import { withCache, type WithCacheResult } from '@/lib/cache/server-cache';
 import {
   applyDiscussionOverlays,
   applyVoteOverlayToPosts,
+  applyProfileOverlay,
   type PostLike,
+  type ProfileLike,
 } from '@/lib/steem/pending-overlay';
 
 // Initialize Steem API configuration
@@ -306,14 +308,20 @@ export async function getProfile(params: {
 }): Promise<unknown> {
   // observer personalises the result (e.g. follows-you) — bypass cache when set.
   if (params.observer) {
-    return callBridge<unknown>('get_profile', params);
+    return applyProfileOverlay(
+      params.account,
+      (await callBridge<unknown>('get_profile', params)) as ProfileLike | null
+    );
   }
 
   const key = `steem:profile:${params.account}`;
   const result = await withCache(key, CACHE_TTL.profile.ttl, CACHE_TTL.profile.staleTtl, () =>
     callBridge<unknown>('get_profile', params)
   );
-  return unwrap(result);
+  // The profile overlay merges AFTER the cache layer (like votes/content) so
+  // cached entries keep holding pure chain data — covers the hivemind indexing
+  // window right after an account_update2 profile save.
+  return applyProfileOverlay(params.account, unwrap(result) as ProfileLike | null);
 }
 
 /**

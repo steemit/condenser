@@ -7,7 +7,13 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { callSteemApi, getAccount } from '@/lib/steem/client';
-import { getSession, loginUser, setSessionCookie } from '@/lib/auth/session';
+import {
+  COOKIE_NAME,
+  getSession,
+  loginUser,
+  revokeSession,
+  setSessionCookie,
+} from '@/lib/auth/session';
 // steem.auth.verifySignature() parses the public key and hex signature,
 // then runs verifyBuffer (SHA-256 of the raw message) — matching
 // steem.auth.sign() on the client. It returns false for malformed input
@@ -116,7 +122,12 @@ export async function POST(request: NextRequest) {
 
     // Step 6: Authentication successful, create session
     const sessionToken = await loginUser(currentSession, username);
-    
+
+    // Revoke the pre-login session (which still carries the now-consumed
+    // loginChallenge) so it cannot be replayed within its TTL (audit N-12).
+    // Best-effort no-op for stateless JWT tokens.
+    await revokeSession(request.cookies.get(COOKIE_NAME)?.value);
+
     const response = NextResponse.json({
       success: true,
       status: 'ok',

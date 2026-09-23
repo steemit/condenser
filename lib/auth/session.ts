@@ -10,26 +10,56 @@ import * as RedisSession from './redis-session';
 
 const FALLBACK_JWT_SECRET = 'your-secret-key-change-in-production';
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || FALLBACK_JWT_SECRET
-);
+const MIN_JWT_SECRET_BYTES = 32;
 
 /**
- * Fail closed when a production deployment runs with the fallback JWT
- * secret: anyone could mint session cookies (including a forged
- * loginChallenge, defeating the login challenge check). Called by session
- * creation/verification, not at module load, so static prerendering at
- * build time (where env is absent) never trips it.
+ * Fail closed when JWT_SECRET is missing, still the shipped placeholder, or
+ * shorter than 32 bytes — in ANY environment, not just production (audit
+ * N-04). A deployment without a strong secret lets anyone mint session
+ * cookies, including a forged loginChallenge that defeats the login
+ * challenge check. Redis-backed deployments are not exempt: verifySession
+ * falls through to JWT verification, so a JWT forged with a known secret is
+ * accepted even when Redis sessions are in use.
+ *
+ * Called by session creation/verification, not at module load, so static
+ * prerendering at build time (where env is absent) never trips it.
  */
 function assertJwtSecretConfigured(): void {
-  if (
-    process.env.NODE_ENV === 'production' &&
-    (!process.env.JWT_SECRET || process.env.JWT_SECRET === FALLBACK_JWT_SECRET)
-  ) {
+  const raw = process.env.JWT_SECRET;
+  if (!raw) {
     throw new Error(
-      'JWT_SECRET is not configured. Set a strong random JWT_SECRET for production deployments.'
+      'JWT_SECRET is not configured. Generate a strong random secret (openssl rand -hex 32) and set it as JWT_SECRET; session endpoints fail closed without it.'
     );
   }
+  if (raw === FALLBACK_JWT_SECRET) {
+    throw new Error(
+      'JWT_SECRET is set to the insecure placeholder value. Generate a strong random secret (openssl rand -hex 32) and set it as JWT_SECRET.'
+    );
+  }
+  const byteLength = new TextEncoder().encode(raw).byteLength;
+  if (byteLength < MIN_JWT_SECRET_BYTES) {
+    throw new Error(
+      `JWT_SECRET must be at least ${MIN_JWT_SECRET_BYTES} bytes (got ${byteLength}). Generate a strong random secret (openssl rand -hex 32) and set it as JWT_SECRET.`
+    );
+  }
+}
+
+/**
+ * Resolve the JWT signing secret at call time (env may be absent at module
+ * load, e.g. during static prerender). Asserts the configuration first so an
+ * unusable secret can never sign or verify a token.
+ */
+function getJwtSecret(): Uint8Array {
+  assertJwtSecretConfigured();
+  return new TextEncoder().encode(process.env.JWT_SECRET as string);
+}
+
+/**
+ * Whether a session token is a Redis session id (short lowercase hex)
+ * rather than a signed JWT. Mirrors the dispatch in verifySession.
+ */
+function isRedisSessionId(token: string): boolean {
+  return token.length <= 32 && /^[a-f0-9]+$/.test(token);
 }
 
 export const COOKIE_NAME = 'steem-session';
@@ -110,7 +140,7 @@ export async function createSession(data: Partial<SessionData> = {}): Promise<st
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('30d')
-    .sign(JWT_SECRET);
+    .sign(getJwtSecret());
 
   return token;
 }
@@ -122,7 +152,7 @@ export async function createSession(data: Partial<SessionData> = {}): Promise<st
 export async function verifySession(token: string): Promise<SessionData | null> {
   assertJwtSecretConfigured();
   // Try Redis first (session IDs are typically shorter and hex-only)
-  if (RedisSession.isRedisAvailable() && token.length <= 32 && /^[a-f0-9]+$/.test(token)) {
+  if (RedisSession.isRedisAvailable() && isRedisSessionId(token)) {
     const sessionData = await RedisSession.getSession(token);
     if (sessionData) {
       return sessionData;
@@ -131,7 +161,7 @@ export async function verifySession(token: string): Promise<SessionData | null> 
 
   // Fallback to JWT verification
   try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
+    const { payload } = await jwtVerify(token, getJwtSecret());
     return payload as unknown as SessionData;
   } catch (error) {
     console.error('Session verification failed:', error);
@@ -186,7 +216,7 @@ export async function updateSession(
   };
 
   // Try to update existing Redis session if we have a session ID
-  if (currentToken && RedisSession.isRedisAvailable() && currentToken.length <= 32 && /^[a-f0-9]+$/.test(currentToken)) {
+  if (currentToken && RedisSession.isRedisAvailable() && isRedisSessionId(currentToken)) {
     const updated = await RedisSession.updateSession(currentToken, updatedSession);
     if (updated) {
       return currentToken; // Keep the same session ID
@@ -281,4 +311,33 @@ export async function logoutUser(currentSession: SessionData): Promise<string> {
     ...sessionWithoutUser,
     loginChallenge: generateLoginChallenge(), // Generate new challenge
   });
+}
+
+/**
+ * Best-effort server-side revocation of a session token (audit N-05/N-12).
+ *
+ * Callers hand over the superseded token when a session is rotated or
+ * destroyed — on logout and on successful login — so the old token cannot
+ * be replayed after the cookie has been replaced.
+ *
+ * Only Redis session ids can be revoked: `RedisSession.deleteSession`
+ * removes the backing key, so the token becomes useless immediately (and
+ * does not linger for its 30-day TTL). Stateless JWT fallback tokens cannot
+ * be revoked — they remain valid until their `exp` — which is the documented
+ * limitation of the JWT-only mode; production deployments should configure
+ * Redis (`REDIS_URL`) to get real revocation.
+ *
+ * Never throws: revocation must not break the logout/login flow when Redis
+ * is unconfigured (deleteSession is a safe no-op) or temporarily failing.
+ */
+export async function revokeSession(token: string | null | undefined): Promise<void> {
+  if (!token || !isRedisSessionId(token)) {
+    // Absent, or a stateless JWT token: nothing to delete server-side.
+    return;
+  }
+  try {
+    await RedisSession.deleteSession(token);
+  } catch (error) {
+    console.error('Failed to revoke session:', error);
+  }
 }

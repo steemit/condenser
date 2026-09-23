@@ -13,6 +13,9 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      # Session signing secret is required in every environment (fail closed).
+      # Compose refuses to start without it — generate via openssl rand -hex 32
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET is required (generate with openssl rand -hex 32)}
     command: pnpm dev
 
   condenser-prod:
@@ -24,6 +27,9 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      # Session signing secret is required in every environment (fail closed).
+      # Compose refuses to start without it — generate via openssl rand -hex 32
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET is required (generate with openssl rand -hex 32)}
       # Add your environment variables here
       - STEEM_API_URL=https://api.steemit.com
       - STEEMD_USE_APPBASE=true

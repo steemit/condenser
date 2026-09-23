@@ -98,4 +98,16 @@ describe('POST /api/auth/preferences', () => {
     );
     expect(setSessionCookieMock).toHaveBeenCalledWith(res, 'updated-token');
   });
+
+  it('returns 413 when the body exceeds the 64KB request cap (audit N-08)', async () => {
+    getSessionMock.mockResolvedValue(loggedInSession);
+
+    const res = await POST(
+      makePostRequest('/api/auth/preferences', { payload: { blob: 'x'.repeat(70 * 1024) } })
+    );
+    expect(res.status).toBe(413);
+    expect(await res.json()).toEqual({ error: 'Request body too large' });
+    // The 1024-char stored-state cap is separate; the request never got that far.
+    expect(updateSessionMock).not.toHaveBeenCalled();
+  });
 });

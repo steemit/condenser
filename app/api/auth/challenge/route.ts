@@ -15,6 +15,11 @@ import {
   setSessionCookie,
   updateSession,
 } from '@/lib/auth/session';
+import {
+  RATE_LIMITS,
+  checkRateLimit,
+  rateLimitResponse,
+} from '@/lib/cache/rate-limit';
 
 /**
  * Generate a secure random challenge
@@ -22,11 +27,18 @@ import {
 function generateChallenge(): string {
   const array = new Uint8Array(32);
   crypto.getRandomValues(array);
-  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+  return Array.from(array, (byte) => byte.toString(16).padStart(2, '0')).join('');
 }
 
 export async function GET(request: NextRequest) {
   try {
+    // Rate limit first (audit N-08): every cookie-less hit mints a Redis
+    // session, so an unbounded flood would write sessions linearly.
+    const rateLimit = await checkRateLimit(request, RATE_LIMITS.authChallenge);
+    if (!rateLimit.allowed) {
+      return rateLimitResponse(rateLimit.retryAfterSeconds);
+    }
+
     const challenge = generateChallenge();
 
     const existing = await getSession(request);

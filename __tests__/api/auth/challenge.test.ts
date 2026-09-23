@@ -8,6 +8,16 @@ vi.mock('@/lib/auth/session', () => ({
   updateSession: vi.fn(),
 }));
 
+// Partial mock: keep the real RATE_LIMITS / rateLimitResponse, stub only the
+// Redis-backed check (audit N-08).
+vi.mock('@/lib/cache/rate-limit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/cache/rate-limit')>();
+  return {
+    ...actual,
+    checkRateLimit: vi.fn(async () => ({ allowed: true })),
+  };
+});
+
 import { GET } from '@/app/api/auth/challenge/route';
 import { makeGetRequest } from '@/__tests__/helpers/request';
 import {
@@ -16,11 +26,13 @@ import {
   setSessionCookie,
   updateSession,
 } from '@/lib/auth/session';
+import { checkRateLimit } from '@/lib/cache/rate-limit';
 
 const createSessionMock = vi.mocked(createSession);
 const getSessionMock = vi.mocked(getSession);
 const updateSessionMock = vi.mocked(updateSession);
 const setSessionCookieMock = vi.mocked(setSessionCookie);
+const checkRateLimitMock = vi.mocked(checkRateLimit);
 
 describe('GET /api/auth/challenge', () => {
   beforeEach(() => {
@@ -29,6 +41,7 @@ describe('GET /api/auth/challenge', () => {
     getSessionMock.mockResolvedValue(null);
     createSessionMock.mockResolvedValue('session-token');
     updateSessionMock.mockResolvedValue('updated-session-token');
+    checkRateLimitMock.mockResolvedValue({ allowed: true });
   });
 
   it('returns a 64-hex challenge, stores it in the session, and sets the cookie', async () => {
@@ -65,5 +78,28 @@ describe('GET /api/auth/challenge', () => {
     const res = await GET(makeGetRequest('/api/auth/challenge'));
     expect(res.status).toBe(500);
     expect(await res.json()).toEqual({ error: 'Failed to generate challenge' });
+  });
+
+  it('checks the auth:challenge limit (30/min/IP) before doing any work', async () => {
+    await GET(makeGetRequest('/api/auth/challenge'));
+    expect(checkRateLimitMock).toHaveBeenCalledTimes(1);
+    expect(checkRateLimitMock).toHaveBeenCalledWith(
+      expect.anything(),
+      { key: 'auth:challenge', limit: 30, windowSeconds: 60 }
+    );
+  });
+
+  it('returns 429 with Retry-After and no session write when the limit is hit', async () => {
+    checkRateLimitMock.mockResolvedValue({ allowed: false, retryAfterSeconds: 42 });
+
+    const res = await GET(makeGetRequest('/api/auth/challenge'));
+    expect(res.status).toBe(429);
+    expect(res.headers.get('Retry-After')).toBe('42');
+    expect(await res.json()).toEqual({
+      error: 'Too many requests. Please try again later.',
+    });
+    expect(createSessionMock).not.toHaveBeenCalled();
+    expect(updateSessionMock).not.toHaveBeenCalled();
+    expect(setSessionCookieMock).not.toHaveBeenCalled();
   });
 });

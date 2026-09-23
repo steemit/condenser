@@ -32,7 +32,7 @@ JWT_SECRET=<output of openssl rand -hex 32>
 
 For distributed deployments, Redis-based session management is recommended. If Redis is not configured, the system will fall back to JWT-based sessions.
 
-The same Redis instance also backs the content cache and the pending-broadcast overlay (`lib/steem/pending-overlay.ts`): freshly broadcast votes/posts/edits/deletes are recorded in short-lived keys (120s TTL) and merged into read results until hivemind indexes them — this prevents vote-state loss and new-post 404s during the indexing window. Without Redis the overlay degrades to a no-op.
+The same Redis instance also backs the content cache, the API rate limiter (`lib/cache/rate-limit.ts`), and the pending-broadcast overlay (`lib/steem/pending-overlay.ts`): freshly broadcast votes/posts/edits/deletes are recorded in short-lived keys (120s TTL) and merged into read results until hivemind indexes them — this prevents vote-state loss and new-post 404s during the indexing window. Without Redis the overlay and the rate limiter degrade to no-ops.
 
 #### Option 1: Redis URL
 ```bash
@@ -126,6 +126,44 @@ The application supports two session storage modes:
 3. If no Redis configuration is found, JWT-based sessions will be used
 
 ## Security Features
+
+### Rate Limiting & Request Body Caps (audit N-08)
+
+Write and abuse-prone endpoints are rate limited per client IP with a Redis
+fixed-window counter (`lib/cache/rate-limit.ts`). The client IP is taken from
+`x-forwarded-for` (first entry), then `x-real-ip`, else the shared `unknown`
+bucket — this assumes production runs behind a trusted reverse proxy that
+overwrites those headers (see the trust assumptions in the module's comments).
+Blocked requests receive `429` with a `Retry-After` header.
+
+| Endpoint | Limit | Dimension |
+|----------|-------|-----------|
+| `GET /api/auth/challenge` | 30/min | IP |
+| `POST /api/auth/login` | 10/min | IP **and** account (body username) |
+| `POST /api/steem/broadcast` | 30/min | IP |
+| `POST /api/search` | 30/min | IP |
+| `POST /api/steem/overseer` | 60/min | IP |
+
+Limits are code constants (the `RATE_LIMITS` registry), deliberately not
+env-configurable: they are abuse backstops, not tuning knobs, and env-driven
+security thresholds invite misconfiguration. They require `REDIS_URL`; without
+Redis the limiter is a no-op and all requests are allowed (fail open — losing
+an abuse backstop must not take the site down).
+
+All POST routes cap the request body at 64KB (`lib/api/body-limit.ts`):
+oversized bodies are rejected with `413` based on `Content-Length` when
+present, and by reading the stream for chunked requests where the header is
+absent or lying. `POST /api/auth/check-authority` is exempt from both wrappers
+(the endpoint is scheduled for removal).
+
+### Session TTLs
+
+Anonymous ("challenge-only") sessions — created by `GET /api/auth/challenge`
+and cookie-less hits on `GET /api/auth/session` — expire after **10 minutes**
+(Redis TTL and JWT `exp` alike), matching the 5-minute login challenge window
+with 2x headroom. Logged-in sessions keep the 30-day TTL, and any rewrite of
+a session preserves its original TTL class. Without Redis, the same 10-minute
+expiration applies to the JWT fallback tokens.
 
 ### Authentication
 - Only posting keys are allowed for login (active/owner keys are blocked for security)

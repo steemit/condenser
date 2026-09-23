@@ -21,6 +21,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { initializeSteemApi, callSteemApi } from '@/lib/steem/client';
 import { cacheDeleteByPrefix } from '@/lib/cache/redis';
+import { readJsonWithLimit } from '@/lib/api/body-limit';
+import {
+  RATE_LIMITS,
+  checkRateLimit,
+  rateLimitResponse,
+} from '@/lib/cache/rate-limit';
 import {
   recordPendingVote,
   recordPendingRootPost,
@@ -32,7 +38,24 @@ import {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    // Abuse wrappers (audit N-08): rate limit before reading the body, then
+    // enforce the body size cap while reading it. The chain node enforces
+    // its own limits; this caps the relay's surface.
+    const rateLimit = await checkRateLimit(request, RATE_LIMITS.steemBroadcast);
+    if (!rateLimit.allowed) {
+      return rateLimitResponse(rateLimit.retryAfterSeconds);
+    }
+
+    const limited = await readJsonWithLimit(request);
+    if (!limited.ok) {
+      return limited.response;
+    }
+    const body = limited.data as {
+      signedTransaction?: {
+        operations?: unknown;
+        signatures?: unknown[];
+      };
+    };
     const { signedTransaction } = body;
 
     if (!signedTransaction) {

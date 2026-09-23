@@ -15,7 +15,10 @@ vi.mock('@/lib/auth/redis-session', () => redisSessionMocks);
 
 import {
   createSession,
+  loginUser,
+  logoutUser,
   revokeSession,
+  updateSession,
   verifySession,
 } from '@/lib/auth/session';
 
@@ -117,10 +120,146 @@ describe('lib/auth/session', () => {
       expect(sid).toMatch(/^[a-f0-9]{1,32}$/);
       expect(redisSessionMocks.storeSession).toHaveBeenCalledWith(
         sid,
-        expect.objectContaining({ username: 'alice' })
+        expect.objectContaining({ username: 'alice' }),
+        2592000 // logged-in sessions keep the 30-day TTL (audit N-08)
       );
 
       expect(await verifySession(sid)).toMatchObject({ username: 'alice' });
+    });
+  });
+
+  describe('session TTL classes (audit N-08)', () => {
+    beforeEach(() => {
+      redisSessionMocks.isRedisAvailable.mockReturnValue(true);
+      redisSessionMocks.storeSession.mockResolvedValue(true);
+      redisSessionMocks.updateSession.mockResolvedValue(true);
+    });
+
+    it('stores a challenge-only session with the short 600s TTL', async () => {
+      const sid = await createSession({ loginChallenge: 'abc' });
+      expect(sid).toMatch(/^[a-f0-9]{1,32}$/);
+      expect(redisSessionMocks.storeSession).toHaveBeenCalledWith(
+        sid,
+        expect.objectContaining({ ttlClass: 'challenge', loginChallenge: 'abc' }),
+        600
+      );
+    });
+
+    it('stores an anonymous createSession() call with the short TTL (withSession path)', async () => {
+      await createSession(); // GET /api/auth/session with no cookie
+      expect(redisSessionMocks.storeSession).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({ ttlClass: 'challenge' }),
+        600
+      );
+    });
+
+    it('stores a logged-in session with the 30-day TTL', async () => {
+      await createSession({ username: 'alice' });
+      expect(redisSessionMocks.storeSession).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({ ttlClass: 'persistent', username: 'alice' }),
+        2592000
+      );
+    });
+
+    it('updateSession does NOT reset a challenge-only session back to 30 days', async () => {
+      const sid = await updateSession(
+        { uid: 'u1', loginChallenge: 'abc', ttlClass: 'challenge', lastVisit: 1, newVisit: true },
+        { loginChallenge: 'refreshed' },
+        REDIS_SID
+      );
+      expect(sid).toBe(REDIS_SID); // same sid, rewritten in place
+      expect(redisSessionMocks.updateSession).toHaveBeenCalledWith(
+        REDIS_SID,
+        expect.objectContaining({ ttlClass: 'challenge', loginChallenge: 'refreshed' }),
+        600
+      );
+    });
+
+    it('updateSession keeps the 30-day TTL for logged-in sessions', async () => {
+      await updateSession(
+        { uid: 'u1', username: 'alice', ttlClass: 'persistent', lastVisit: 1, newVisit: false },
+        { userPreferences: { locale: 'zh' } },
+        REDIS_SID
+      );
+      expect(redisSessionMocks.updateSession).toHaveBeenCalledWith(
+        REDIS_SID,
+        expect.objectContaining({ username: 'alice', ttlClass: 'persistent' }),
+        2592000
+      );
+    });
+
+    it('derives the class from username for marker-less legacy sessions', async () => {
+      // Sessions written before this change carry no ttlClass marker.
+      await updateSession(
+        { uid: 'u1', username: 'alice', lastVisit: 1, newVisit: false },
+        {},
+        REDIS_SID
+      );
+      expect(redisSessionMocks.updateSession).toHaveBeenCalledWith(
+        REDIS_SID,
+        expect.objectContaining({ ttlClass: 'persistent' }),
+        2592000
+      );
+
+      await updateSession(
+        { uid: 'u2', loginChallenge: 'abc', lastVisit: 1, newVisit: false },
+        {},
+        REDIS_SID
+      );
+      expect(redisSessionMocks.updateSession).toHaveBeenLastCalledWith(
+        REDIS_SID,
+        expect.objectContaining({ ttlClass: 'challenge' }),
+        600
+      );
+    });
+
+    it('loginUser never leaks the pre-login challenge class into the 30-day session', async () => {
+      await loginUser(
+        { uid: 'u1', loginChallenge: 'abc', ttlClass: 'challenge', lastVisit: 1, newVisit: true },
+        'alice'
+      );
+      expect(redisSessionMocks.storeSession).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({ username: 'alice', ttlClass: 'persistent' }),
+        2592000
+      );
+    });
+
+    it('logoutUser lands back in the short challenge class', async () => {
+      await logoutUser({
+        uid: 'u1',
+        username: 'alice',
+        ttlClass: 'persistent',
+        lastVisit: 1,
+        newVisit: false,
+      });
+      expect(redisSessionMocks.storeSession).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({ ttlClass: 'challenge' }),
+        600
+      );
+    });
+  });
+
+  describe('session TTL in JWT fallback mode (audit N-08)', () => {
+    beforeEach(() => {
+      redisSessionMocks.isRedisAvailable.mockReturnValue(false);
+    });
+
+    it('signs challenge-only JWTs with a ~10-minute expiration', async () => {
+      const token = await createSession({ loginChallenge: 'abc' });
+      const session = await verifySession(token);
+      expect(session?.ttlClass).toBe('challenge');
+      expect((session?.exp ?? 0) - (session?.iat ?? 0)).toBe(600);
+    });
+
+    it('signs logged-in JWTs with a ~30-day expiration', async () => {
+      const token = await createSession({ username: 'alice' });
+      const session = await verifySession(token);
+      expect(session?.ttlClass).toBe('persistent');
+      expect((session?.exp ?? 0) - (session?.iat ?? 0)).toBe(2592000);
     });
   });
 

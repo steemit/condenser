@@ -13,6 +13,7 @@ import {
   setSessionCookie,
   updateSession,
 } from '@/lib/auth/session';
+import { readJsonWithLimit } from '@/lib/api/body-limit';
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,7 +25,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
+    // Body size cap (audit N-08) before parsing — the 1024-char payload cap
+    // below bounds the stored state, this bounds the request itself.
+    const limited = await readJsonWithLimit(request);
+    if (!limited.ok) {
+      return limited.response;
+    }
+    const body = limited.data as { payload?: unknown } | null;
     const payload = body?.payload;
     if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
       return NextResponse.json(

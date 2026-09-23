@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { NextRequest } from 'next/server';
 import {
   makePostRequest,
   sessionCookieHeader,
@@ -27,6 +28,16 @@ vi.mock('@steemit/steem-js', () => ({
   },
 }));
 
+// Partial mock: keep the real RATE_LIMITS / rateLimitResponse, stub only the
+// Redis-backed check (audit N-08).
+vi.mock('@/lib/cache/rate-limit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/cache/rate-limit')>();
+  return {
+    ...actual,
+    checkRateLimit: vi.fn(async () => ({ allowed: true })),
+  };
+});
+
 import { POST } from '@/app/api/auth/login/route';
 import { callSteemApi, getAccount } from '@/lib/steem/client';
 import {
@@ -35,6 +46,7 @@ import {
   revokeSession,
   setSessionCookie,
 } from '@/lib/auth/session';
+import { checkRateLimit } from '@/lib/cache/rate-limit';
 
 const getAccountMock = vi.mocked(getAccount);
 const callSteemApiMock = vi.mocked(callSteemApi);
@@ -42,6 +54,7 @@ const getSessionMock = vi.mocked(getSession);
 const loginUserMock = vi.mocked(loginUser);
 const revokeSessionMock = vi.mocked(revokeSession);
 const setSessionCookieMock = vi.mocked(setSessionCookie);
+const checkRateLimitMock = vi.mocked(checkRateLimit);
 
 const POSTING_KEY = 'STM6 posting key';
 const CHALLENGE = 'abc123';
@@ -75,6 +88,7 @@ describe('POST /api/auth/login', () => {
     // the login route verifies the signed challenge against it.
     getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE } as never);
     revokeSessionMock.mockResolvedValue();
+    checkRateLimitMock.mockResolvedValue({ allowed: true });
   });
 
   it('rejects bodies missing required fields', async () => {
@@ -202,5 +216,100 @@ describe('POST /api/auth/login', () => {
         fields: { username: 'alice' },
       },
     ]);
+  });
+});
+
+describe('POST /api/auth/login abuse wrappers (audit N-08)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    verifySignatureMock.mockReturnValue(true);
+    getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE } as never);
+    getAccountMock.mockResolvedValue(accountWithPostingKey());
+    loginUserMock.mockResolvedValue('new-session-token');
+    revokeSessionMock.mockResolvedValue();
+    checkRateLimitMock.mockResolvedValue({ allowed: true });
+  });
+
+  it('returns 429 with Retry-After when the IP limit denies the request', async () => {
+    checkRateLimitMock.mockResolvedValueOnce({ allowed: false, retryAfterSeconds: 30 });
+
+    const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    expect(res.status).toBe(429);
+    expect(res.headers.get('Retry-After')).toBe('30');
+    expect(await res.json()).toEqual({
+      error: 'Too many requests. Please try again later.',
+    });
+    expect(getAccountMock).not.toHaveBeenCalled();
+    expect(loginUserMock).not.toHaveBeenCalled();
+  });
+
+  it('checks the IP bucket (10/min) first and the account bucket second', async () => {
+    await POST(makePostRequest('/api/auth/login', validBody()));
+
+    expect(checkRateLimitMock).toHaveBeenCalledTimes(2);
+    expect(checkRateLimitMock.mock.calls[0][1]).toEqual({
+      key: 'auth:login:ip',
+      limit: 10,
+      windowSeconds: 60,
+    });
+    expect(checkRateLimitMock.mock.calls[1][1]).toEqual({
+      key: 'auth:login:acct',
+      limit: 10,
+      windowSeconds: 60,
+      identifier: 'alice',
+    });
+  });
+
+  it('skips the account bucket for bodies missing required fields', async () => {
+    const res = await POST(makePostRequest('/api/auth/login', { username: 'alice' }));
+    expect(res.status).toBe(400);
+    expect(checkRateLimitMock).toHaveBeenCalledTimes(1); // IP check only
+  });
+
+  it('returns 429 when the per-account bucket denies the request', async () => {
+    checkRateLimitMock
+      .mockResolvedValueOnce({ allowed: true }) // IP
+      .mockResolvedValueOnce({ allowed: false, retryAfterSeconds: 17 }); // account
+
+    const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    expect(res.status).toBe(429);
+    expect(res.headers.get('Retry-After')).toBe('17');
+    expect(getAccountMock).not.toHaveBeenCalled();
+  });
+
+  it('returns 413 when the body exceeds the 64KB cap', async () => {
+    const res = await POST(
+      makePostRequest('/api/auth/login', {
+        ...validBody(),
+        username: 'a'.repeat(70 * 1024),
+      })
+    );
+    expect(res.status).toBe(413);
+    expect(await res.json()).toEqual({ error: 'Request body too large' });
+    expect(checkRateLimitMock).toHaveBeenCalledTimes(1); // IP check ran, account never reached
+    expect(getAccountMock).not.toHaveBeenCalled();
+  });
+
+  it('returns 413 for an over-cap chunked body without Content-Length', async () => {
+    // Chunked transfer encoding: no Content-Length header is derived from a
+    // stream body, so the cap must be enforced by reading the stream.
+    const body = 'x'.repeat(64 * 1024 + 1);
+    const request = new NextRequest(new URL('/api/auth/login', 'http://localhost'), {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(new Uint8Array([...body].map((c) => c.charCodeAt(0))));
+          controller.close();
+        },
+      }),
+      // Required by undici when the body is a stream.
+      duplex: 'half',
+    });
+
+    const res = await POST(request);
+    expect(res.status).toBe(413);
+    expect(await res.json()).toEqual({ error: 'Request body too large' });
   });
 });

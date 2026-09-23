@@ -45,13 +45,13 @@ describe('GET /api/steem/account', () => {
     expect(getAccountMock).toHaveBeenCalledWith('alice');
   });
 
-  it('propagates RPC failures as 500', async () => {
+  it('returns 500 with a generic message on RPC failure (audit N-20)', async () => {
     getAccountMock.mockRejectedValue(new Error('timeout'));
 
     const res = await GET(
       makeGetRequest('/api/steem/account', { username: 'alice' })
     );
     expect(res.status).toBe(500);
-    expect(await res.json()).toEqual({ error: 'timeout' });
+    expect(await res.json()).toEqual({ error: 'Failed to fetch account' });
   });
 });

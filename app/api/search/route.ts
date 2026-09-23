@@ -228,8 +228,10 @@ export async function POST(request: NextRequest) {
     }
 
     console.error('Search error:', error);
+    // Raw error only in server logs (above); clients get a generic message
+    // (audit N-20: unexpected internals must not reach the response).
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Search failed' },
+      { error: 'Search failed' },
       { status: 500 }
     );
   }

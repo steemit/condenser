@@ -97,11 +97,11 @@ describe('GET /api/steem/posts', () => {
     });
   });
 
-  it('propagates RPC failures as 500', async () => {
+  it('returns 500 with a generic message on RPC failure (audit N-20)', async () => {
     getRankedPostsMock.mockRejectedValue(new Error('node down'));
 
     const res = await GET(makeGetRequest('/api/steem/posts'));
     expect(res.status).toBe(500);
-    expect(await res.json()).toEqual({ error: 'node down' });
+    expect(await res.json()).toEqual({ error: 'Failed to fetch posts' });
   });
 });

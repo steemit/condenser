@@ -94,13 +94,13 @@ describe('GET /api/steem/community-roles', () => {
     ]);
   });
 
-  it('propagates RPC failures as 500', async () => {
+  it('returns 500 with a generic message on RPC failure (audit N-20)', async () => {
     getCommunityRolesMock.mockRejectedValue(new Error('boom'));
 
     const res = await GET(
       makeGetRequest('/api/steem/community-roles', { community: 'hive-1' })
     );
     expect(res.status).toBe(500);
-    expect(await res.json()).toEqual({ error: 'boom' });
+    expect(await res.json()).toEqual({ error: 'Failed to fetch community data' });
   });
 });

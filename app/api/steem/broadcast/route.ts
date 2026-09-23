@@ -273,14 +273,18 @@ export async function POST(request: NextRequest) {
     }
     return response;
   } catch (error: unknown) {
+    // The full error (message + stack) goes to the server log only. The
+    // client still receives the chain's rejection message via `error` —
+    // Voting.tsx matches it ("identical to this vote") to keep optimistic
+    // state on redundant votes — but the extra `details:
+    // error.toString()` echo is gone (audit N-20: it duplicated internal
+    // stack/type details into the response body).
     console.error('Broadcast error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to broadcast transaction';
-    const errorDetails = error instanceof Error ? error.toString() : String(error);
 
     return NextResponse.json(
       {
         error: errorMessage,
-        details: errorDetails,
       },
       { status: 500 }
     );

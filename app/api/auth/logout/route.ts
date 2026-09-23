@@ -54,9 +54,10 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error: unknown) {
     console.error('Logout error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Logout failed';
+    // Raw error only in server logs (above); clients get a generic message
+    // (audit N-20: unexpected internals must not reach the response).
     return NextResponse.json(
-      { error: errorMessage },
+      { error: 'Logout failed. Please try again.' },
       { status: 500 }
     );
   }

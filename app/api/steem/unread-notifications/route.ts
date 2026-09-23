@@ -44,13 +44,13 @@ export async function GET(request: NextRequest) {
     });
   } catch (error: unknown) {
     console.error('Error fetching unread notifications:', error);
-    const errorMessage =
-      error instanceof Error ? error.message : 'Failed to fetch unread notifications';
+    // Raw error only in server logs (above); clients get a generic message
+    // (audit N-20: unexpected RPC internals must not reach the response).
     return NextResponse.json(
       {
         account: request.nextUrl.searchParams.get('account'),
         unread_count: 0,
-        error: errorMessage,
+        error: 'Failed to fetch unread notifications',
       },
       { status: 500 }
     );

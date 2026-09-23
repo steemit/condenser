@@ -15,15 +15,29 @@
  *
  * Bodies within the cap are returned buffered, so routes parse the buffer
  * instead of calling request.json() again (the stream can only be read once).
- * 64KB is far above every legitimate payload these routes accept (login
- * signatures, signed transactions, search queries, small preference blobs)
- * and far below anything that could pressure memory.
+ *
+ * Caps are per endpoint. The default 64KB (MAX_BODY_BYTES) is far above every
+ * legitimate payload the auth/search/overseer routes accept (login
+ * signatures, search queries, small preference blobs) and far below anything
+ * that could pressure memory. The one exception is steem/broadcast
+ * (MAX_BROADCAST_BODY_BYTES, 256KB): the chain accepts post bodies up to
+ * 65536 bytes and the client editor caps them at 65280, but the JSON
+ * envelope, string escaping and the transaction signature inflate the HTTP
+ * body of a maximal legitimate post to roughly 67KB — a 64KB cap would 413
+ * it. 256KB keeps ~4x headroom over that worst case while still bounding the
+ * buffered memory per request.
  */
 
 import { NextResponse } from 'next/server';
 
-/** Maximum accepted POST body size (64KB). */
+/** Default maximum accepted POST body size (64KB). */
 export const MAX_BODY_BYTES = 64 * 1024;
+
+/**
+ * Broadcast-specific cap (256KB): legitimate long posts reach ~67KB of HTTP
+ * body after the JSON envelope, escaping and signature (see module comment).
+ */
+export const MAX_BROADCAST_BODY_BYTES = 256 * 1024;
 
 const BODY_TOO_LARGE_ERROR = 'Request body too large';
 
@@ -58,8 +72,8 @@ export async function enforceBodyLimit(
     return tooLarge();
   }
 
-  // Slow path: read the actual bytes, stopping as soon as the cap is exceeded
-  // (one extra byte is read to detect "strictly greater" without ambiguity).
+  // Slow path: read the actual bytes, rejecting as soon as the cumulative
+  // total crosses the cap (the over-read is bounded by a single chunk).
   const reader = request.body?.getReader();
   if (!reader) {
     return { ok: true, bytes: new Uint8Array(0) };

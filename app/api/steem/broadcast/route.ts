@@ -21,7 +21,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { initializeSteemApi, callSteemApi } from '@/lib/steem/client';
 import { cacheDeleteByPrefix } from '@/lib/cache/redis';
-import { readJsonWithLimit } from '@/lib/api/body-limit';
+import { MAX_BROADCAST_BODY_BYTES, readJsonWithLimit } from '@/lib/api/body-limit';
 import {
   RATE_LIMITS,
   checkRateLimit,
@@ -40,13 +40,16 @@ export async function POST(request: NextRequest) {
   try {
     // Abuse wrappers (audit N-08): rate limit before reading the body, then
     // enforce the body size cap while reading it. The chain node enforces
-    // its own limits; this caps the relay's surface.
+    // its own limits; this caps the relay's surface. The cap here is the
+    // broadcast-specific 256KB: a maximal legitimate post (65280-byte body
+    // client-side, 65536 on-chain) inflates to ~67KB of HTTP body after the
+    // JSON envelope, escaping and signature — the default 64KB would 413 it.
     const rateLimit = await checkRateLimit(request, RATE_LIMITS.steemBroadcast);
     if (!rateLimit.allowed) {
       return rateLimitResponse(rateLimit.retryAfterSeconds);
     }
 
-    const limited = await readJsonWithLimit(request);
+    const limited = await readJsonWithLimit(request, MAX_BROADCAST_BODY_BYTES);
     if (!limited.ok) {
       return limited.response;
     }

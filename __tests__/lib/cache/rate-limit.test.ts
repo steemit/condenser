@@ -45,7 +45,8 @@ describe('lib/cache/rate-limit', () => {
       expect(redisMocks.eval).not.toHaveBeenCalled();
     });
 
-    it('fails open when Redis errors mid-call', async () => {
+    it('fails open when Redis errors mid-call and warns that the limiter is disabled', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
       redisMocks.eval.mockRejectedValue(new Error('connection lost'));
 
       const result = await checkRateLimit(requestWithHeaders({}), {
@@ -54,6 +55,40 @@ describe('lib/cache/rate-limit', () => {
         windowSeconds: 60,
       });
       expect(result).toEqual({ allowed: true });
+      // The silent fail-open is observable: one warning names the mode and
+      // the underlying error.
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn.mock.calls[0].join(' ')).toContain('failing OPEN');
+      expect(warn.mock.calls[0].join(' ')).toContain('connection lost');
+    });
+
+    it('throttles the fail-open warning so an outage under a flood cannot flood the logs', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      // Control the clock the throttle reads; start at the real now so the
+      // module's warn-timestamp from prior tests is either fresh (throttled)
+      // or stale (warns) — the assertions below hold in both cases.
+      let now = Date.now();
+      const nowSpy = vi.spyOn(Date, 'now').mockImplementation(() => now);
+      redisMocks.eval.mockRejectedValue(new Error('connection lost'));
+      const rule = { key: 'auth:challenge', limit: 30, windowSeconds: 60 };
+
+      // Prime the throttle state (may warn or not depending on prior tests).
+      await checkRateLimit(requestWithHeaders({}), rule);
+      const baseline = warn.mock.calls.length;
+
+      // A burst of erroring calls within the window: at most the priming
+      // warning — never one per request.
+      for (let i = 0; i < 10; i++) {
+        await checkRateLimit(requestWithHeaders({}), rule);
+      }
+      expect(warn.mock.calls.length).toBe(baseline);
+
+      // Outside the throttle window exactly one more warning fires.
+      now += 61_000;
+      await checkRateLimit(requestWithHeaders({}), rule);
+      expect(warn.mock.calls.length).toBe(baseline + 1);
+
+      nowSpy.mockRestore();
     });
 
     it('allows while the counter is within the limit and reports remaining', async () => {
@@ -122,6 +157,52 @@ describe('lib/cache/rate-limit', () => {
         '60'
       );
     });
+
+    it('keeps hyphens in account identifiers so some-user and someuser do not share a bucket', async () => {
+      redisMocks.eval.mockResolvedValue([1, 60]);
+
+      await checkRateLimit(requestWithHeaders({}), {
+        key: 'auth:login:acct',
+        limit: 10,
+        windowSeconds: 60,
+        identifier: 'Some-User',
+      });
+      await checkRateLimit(requestWithHeaders({}), {
+        key: 'auth:login:acct',
+        limit: 10,
+        windowSeconds: 60,
+        identifier: 'someuser',
+      });
+
+      const identities = redisMocks.eval.mock.calls.map((c) => c[2]);
+      // '-' is a legal Steem username character: distinct names must land in
+      // distinct buckets (no cross-account lockout / no shared quota).
+      expect(identities).toEqual([
+        'condenser:ratelimit:auth:login:acct:some-user',
+        'condenser:ratelimit:auth:login:acct:someuser',
+      ]);
+    });
+
+    it('runs the atomic fixed-window Lua script with the EXPIRE-on-first-hit guard intact', async () => {
+      redisMocks.eval.mockResolvedValue([1, 60]);
+
+      await checkRateLimit(requestWithHeaders({}), {
+        key: 'auth:challenge',
+        limit: 30,
+        windowSeconds: 60,
+      });
+
+      // Assert on the script CONTENT, not just that eval ran: the INCR must
+      // be there, and EXPIRE must only fire on the first hit of a window —
+      // dropping the `current == 1` guard would re-EXPIRE on every request
+      // (window never ends) while all behavioural tests stay green, and
+      // losing EXPIRE entirely would leak persistent counter keys.
+      const script = redisMocks.eval.mock.calls[0][0] as string;
+      expect(script).toContain("redis.call('INCR', KEYS[1])");
+      expect(script).toContain('if current == 1 then');
+      expect(script).toContain("redis.call('EXPIRE', KEYS[1], ARGV[1])");
+      expect(script).toContain("redis.call('TTL', KEYS[1])");
+    });
   });
 
   describe('getClientIp', () => {
@@ -145,12 +226,12 @@ describe('lib/cache/rate-limit', () => {
     });
 
     it('collapses a forged non-IP XFF value to the safe charset (key shaping blocked)', () => {
-      // Everything outside [a-z0-9.:] is stripped before the value can shape
+      // Everything outside [a-z0-9.:-] is stripped before the value can shape
       // the Redis key; separators/punctuation cannot smuggle structure in.
       // (Raw CR/LF never even reach this code — the Headers API rejects them.)
       const ip = getClientIp(requestWithHeaders({ 'x-forwarded-for': 'a*b c?d=e&f' }));
       expect(ip).toBe('abcdef');
-      expect(ip).toMatch(/^[a-z0-9.:]+$/);
+      expect(ip).toMatch(/^[a-z0-9.:-]+$/);
     });
 
     it('falls back to x-real-ip when x-forwarded-for is absent', () => {
@@ -202,6 +283,7 @@ describe('lib/cache/rate-limit', () => {
   describe('RATE_LIMITS registry', () => {
     it('covers the audited endpoints with the agreed thresholds', () => {
       expect(RATE_LIMITS.authChallenge).toEqual({ key: 'auth:challenge', limit: 30, windowSeconds: 60 });
+      expect(RATE_LIMITS.authSession).toEqual({ key: 'auth:session', limit: 120, windowSeconds: 60 });
       expect(RATE_LIMITS.authLoginIp).toEqual({ key: 'auth:login:ip', limit: 10, windowSeconds: 60 });
       expect(RATE_LIMITS.authLoginAccount).toEqual({ key: 'auth:login:acct', limit: 10, windowSeconds: 60 });
       expect(RATE_LIMITS.steemBroadcast).toEqual({ key: 'steem:broadcast', limit: 30, windowSeconds: 60 });

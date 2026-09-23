@@ -5,10 +5,22 @@ vi.mock('@/lib/auth/session', () => ({
   withSession: vi.fn(),
 }));
 
+// Partial mock: keep the real RATE_LIMITS / rateLimitResponse, stub only the
+// Redis-backed check (audit N-08).
+vi.mock('@/lib/cache/rate-limit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/cache/rate-limit')>();
+  return {
+    ...actual,
+    checkRateLimit: vi.fn(async () => ({ allowed: true })),
+  };
+});
+
 import { GET } from '@/app/api/auth/session/route';
 import { withSession } from '@/lib/auth/session';
+import { checkRateLimit } from '@/lib/cache/rate-limit';
 
 const withSessionMock = withSession as unknown as Mock;
+const checkRateLimitMock = vi.mocked(checkRateLimit);
 
 /** Drive the mocked withSession so it invokes the handler with a fixed session. */
 function givenSession(session: unknown) {
@@ -20,6 +32,7 @@ function givenSession(session: unknown) {
 describe('GET /api/auth/session', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    checkRateLimitMock.mockResolvedValue({ allowed: true });
   });
 
   it('reports unauthenticated when there is no session', async () => {
@@ -67,5 +80,29 @@ describe('GET /api/auth/session', () => {
       newVisit: true,
       userPreferences: {},
     });
+  });
+
+  it('checks the auth:session limit (120/min/IP) before doing any work', async () => {
+    givenSession(null);
+
+    await GET(makeGetRequest('/api/auth/session'));
+    expect(checkRateLimitMock).toHaveBeenCalledTimes(1);
+    expect(checkRateLimitMock).toHaveBeenCalledWith(
+      expect.anything(),
+      { key: 'auth:session', limit: 120, windowSeconds: 60 }
+    );
+  });
+
+  it('returns 429 with Retry-After and mints no session when the limit is hit', async () => {
+    checkRateLimitMock.mockResolvedValue({ allowed: false, retryAfterSeconds: 17 });
+
+    const res = await GET(makeGetRequest('/api/auth/session'));
+    expect(res.status).toBe(429);
+    expect(res.headers.get('Retry-After')).toBe('17');
+    expect(await res.json()).toEqual({
+      error: 'Too many requests. Please try again later.',
+    });
+    // Rejected before withSession could mint a session for the cookie-less hit.
+    expect(withSessionMock).not.toHaveBeenCalled();
   });
 });

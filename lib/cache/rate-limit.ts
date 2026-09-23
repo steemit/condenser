@@ -23,7 +23,8 @@
  * talking to the app directly (unproxied dev server) can forge them, which
  * only lets that client rotate its own bucket — the header is never used for
  * anything beyond bucketing. Values are additionally restricted to the
- * IP charset ([A-Za-z0-9.:]) so a hostile header cannot shape the Redis key.
+ * identity charset ([a-z0-9.:-]) so a hostile header cannot shape the Redis
+ * key.
  */
 
 import { NextResponse } from 'next/server';
@@ -64,6 +65,11 @@ export interface RateLimitResult {
  * - auth/challenge  30/min/IP — challenge generation is cheap but every
  *   cookie-less hit mints a Redis session (now short-TTL); still a write per
  *   request, so keep the ceiling low.
+ * - auth/session    120/min/IP — the session probe fires once per page load
+ *   for real clients, so the ceiling is far above any legitimate traffic,
+ *   but like challenge a cookie-less hit mints a session (withSession
+ *   creates one), so creation must stay bounded (audit follow-up: challenge
+ *   was limited but session was not).
  * - auth/login      10/min/IP and 10/min/account — each attempt costs an
  *   RPC getAccount + signature verification; the account dimension stops
  *   one credential being hammered from many IPs (and slows one attacker
@@ -77,6 +83,7 @@ export interface RateLimitResult {
  */
 export const RATE_LIMITS = {
   authChallenge: { key: 'auth:challenge', limit: 30, windowSeconds: 60 },
+  authSession: { key: 'auth:session', limit: 120, windowSeconds: 60 },
   authLoginIp: { key: 'auth:login:ip', limit: 10, windowSeconds: 60 },
   authLoginAccount: { key: 'auth:login:acct', limit: 10, windowSeconds: 60 },
   steemBroadcast: { key: 'steem:broadcast', limit: 30, windowSeconds: 60 },
@@ -88,12 +95,19 @@ const UNKNOWN_IP = 'unknown';
 const MAX_IDENTITY_LENGTH = 45; // longest valid IPv6 textual form
 
 /**
- * Restrict an identity to the IP charset before it becomes part of a Redis
- * key. Anything unexpected (injected separators/spaces/unicode) collapses to
- * the 'unknown' bucket rather than erroring.
+ * Restrict an identity to the identity charset before it becomes part of a
+ * Redis key. Anything unexpected (injected separators/spaces/unicode)
+ * collapses to the 'unknown' bucket rather than erroring.
+ *
+ * '-' is included because Steem usernames legally contain it: without it,
+ * 'some-user' and 'someuser' would share one bucket, and spraying variants
+ * of a hyphenated victim's name could lock out unrelated accounts. IPs never
+ * contain '-' (v4/v6 textual forms use digits, dots, colons at most), so the
+ * extra character is inert for the IP dimension.
  */
 function sanitizeIdentity(raw: string): string {
-  const cleaned = raw.trim().toLowerCase().replace(/[^a-z0-9.:]/g, '');
+  // The '-' sits last inside the class so it is a literal, not a range.
+  const cleaned = raw.trim().toLowerCase().replace(/[^a-z0-9.:-]/g, '');
   if (!cleaned || cleaned.length > MAX_IDENTITY_LENGTH) return UNKNOWN_IP;
   return cleaned;
 }
@@ -125,6 +139,25 @@ if current == 1 then
 end
 return { current, redis.call('TTL', KEYS[1]) }
 `;
+
+/**
+ * Fail-open observability: a Redis outage silently disables the limiter, so
+ * the first error in a while is logged — but never per request, or the
+ * outage itself (under attack traffic) would flood the logs. Throttled to
+ * one warning per FAIL_OPEN_WARN_INTERVAL_MS of wall clock.
+ */
+let lastFailOpenWarnAt = 0;
+const FAIL_OPEN_WARN_INTERVAL_MS = 60_000;
+
+function warnFailOpenThrottled(error: unknown): void {
+  const now = Date.now();
+  if (now - lastFailOpenWarnAt < FAIL_OPEN_WARN_INTERVAL_MS) return;
+  lastFailOpenWarnAt = now;
+  console.warn(
+    'rate limiter failing OPEN (allowing all requests) due to a Redis error:',
+    error instanceof Error ? error.message : String(error)
+  );
+}
 
 /**
  * Check a request against a fixed-window rate limit.
@@ -163,8 +196,10 @@ export async function checkRateLimit(
     // race) — the next request starts a fresh window, so advise a short retry.
     const retryAfter = ttl > 0 ? ttl : 1;
     return { allowed: false, retryAfterSeconds: retryAfter };
-  } catch {
-    // Redis error mid-call: fail open rather than 500-ing real traffic.
+  } catch (error) {
+    // Redis error mid-call: fail open rather than 500-ing real traffic, but
+    // leave a throttled breadcrumb (see warnFailOpenThrottled).
+    warnFailOpenThrottled(error);
     return { allowed: true };
   }
 }

@@ -440,9 +440,34 @@ describe('POST /api/steem/broadcast', () => {
     expect(callSteemApiMock).not.toHaveBeenCalled();
   });
 
-  it('returns 413 when the body exceeds the 64KB cap', async () => {
+  it('accepts a maximal legitimate long-post body (~67KB) under the 256KB cap', async () => {
+    // The client editor allows 65280-byte bodies; the JSON envelope,
+    // escaping and signature inflate the HTTP body to ~67KB — the previous
+    // 64KB cap rejected these with a 413 (audit follow-up).
     const tx = signedTx([
-      ['vote', { voter: 'alice', author: 'bob', permlink: 'p'.repeat(70 * 1024), weight: 1 }],
+      ['comment', { author: 'alice', permlink: 'p'.repeat(67 * 1024), body: 'x'.repeat(65280) }],
+    ]);
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(callSteemApiMock).toHaveBeenCalled();
+  });
+
+  it('accepts a 200KB body under the 256KB broadcast cap', async () => {
+    const tx = signedTx([
+      ['vote', { voter: 'alice', author: 'bob', permlink: 'p'.repeat(200 * 1024), weight: 1 }],
+    ]);
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(callSteemApiMock).toHaveBeenCalled();
+  });
+
+  it('returns 413 when the body exceeds the 256KB broadcast cap', async () => {
+    const tx = signedTx([
+      ['vote', { voter: 'alice', author: 'bob', permlink: 'p'.repeat(300 * 1024), weight: 1 }],
     ]);
     const res = await POST(
       makePostRequest('/api/steem/broadcast', { signedTransaction: tx })

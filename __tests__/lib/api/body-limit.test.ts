@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   MAX_BODY_BYTES,
+  MAX_BROADCAST_BODY_BYTES,
   enforceBodyLimit,
   readJsonWithLimit,
 } from '@/lib/api/body-limit';
@@ -106,6 +107,14 @@ describe('lib/api/body-limit', () => {
       const request = chunkedRequest(['x'.repeat(11)]);
       const result = await enforceBodyLimit(request, 10);
       expect(result.ok).toBe(false);
+    });
+
+    it('locks the per-endpoint caps: 64KB default, 256KB for broadcast', () => {
+      // The broadcast cap is the audit follow-up: a maximal legitimate post
+      // (~67KB HTTP body after envelope/escaping/signature) must pass while
+      // every other endpoint keeps the tighter default.
+      expect(MAX_BODY_BYTES).toBe(64 * 1024);
+      expect(MAX_BROADCAST_BODY_BYTES).toBe(256 * 1024);
     });
   });
 

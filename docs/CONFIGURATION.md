@@ -139,10 +139,16 @@ Blocked requests receive `429` with a `Retry-After` header.
 | Endpoint | Limit | Dimension |
 |----------|-------|-----------|
 | `GET /api/auth/challenge` | 30/min | IP |
+| `GET /api/auth/session` | 120/min | IP |
 | `POST /api/auth/login` | 10/min | IP **and** account (body username) |
 | `POST /api/steem/broadcast` | 30/min | IP |
 | `POST /api/search` | 30/min | IP |
 | `POST /api/steem/overseer` | 60/min | IP |
+
+`GET /api/auth/session` is limited at 120/min/IP because a cookie-less hit
+mints a session (same as challenge) — the ceiling is far above the
+once-per-page-load pattern of real clients while still bounding session
+creation.
 
 Limits are code constants (the `RATE_LIMITS` registry), deliberately not
 env-configurable: they are abuse backstops, not tuning knobs, and env-driven
@@ -153,8 +159,12 @@ an abuse backstop must not take the site down).
 All POST routes cap the request body at 64KB (`lib/api/body-limit.ts`):
 oversized bodies are rejected with `413` based on `Content-Length` when
 present, and by reading the stream for chunked requests where the header is
-absent or lying. `POST /api/auth/check-authority` is exempt from both wrappers
-(the endpoint is scheduled for removal).
+absent or lying. The one exception is `POST /api/steem/broadcast`, capped at
+256KB — a maximal legitimate post (65280-byte body client-side, 65536
+on-chain) inflates to ~67KB of HTTP body after the JSON envelope, escaping
+and signature, which a 64KB cap would reject. `POST /api/auth/check-authority`
+is exempt from rate limiting only (the endpoint is scheduled for removal);
+its body is still capped.
 
 ### Session TTLs
 
@@ -174,7 +184,7 @@ expiration applies to the JWT fallback tokens.
 ### Session Security
 - HTTP-only cookies prevent XSS attacks
 - Secure flag enabled in production
-- 30-day session expiration with automatic renewal
+- 10-minute expiration for anonymous (challenge-only) sessions, 30-day for logged-in sessions, with automatic renewal (see "Session TTLs" above)
 - Session invalidation on logout
 
 ### Key Management

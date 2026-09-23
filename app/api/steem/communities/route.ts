@@ -7,15 +7,43 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserSubscriptions, listCommunities } from '@/lib/steem/client';
 
+// Param bounds (audit N-21): (query, sort, limit) feed the server cache key
+// in lib/steem/client.ts listCommunities(), so each component must be
+// length/value bounded here — otherwise an unbounded query inflates the key
+// space and limit=100000 caches a huge serialized list (value amplification).
+const MAX_QUERY_LENGTH = 64;
+const MAX_LIMIT = 100;
+const DEFAULT_LIMIT = 20;
+// Sort options actually exposed by the communities explore page.
+const COMMUNITY_SORTS = new Set(['rank', 'subs', 'new']);
+
+/** Parse and clamp an integer query param; non-numeric values fall back. */
+function clampIntParam(
+  raw: string | null,
+  fallback: number,
+  min: number,
+  max: number
+): number {
+  const parsed = parseInt(raw ?? '', 10);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.min(Math.max(parsed, min), max);
+}
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const account = searchParams.get('account');
     const type = searchParams.get('type') || 'list'; // 'subscriptions' or 'list'
     const observer = searchParams.get('observer') || undefined;
-    const query = searchParams.get('query') || '';
-    const sort = searchParams.get('sort') || 'rank';
-    const limit = parseInt(searchParams.get('limit') || '20');
+    const query = (searchParams.get('query') || '').trim().slice(0, MAX_QUERY_LENGTH);
+    const sortRaw = searchParams.get('sort') || 'rank';
+    const sort = COMMUNITY_SORTS.has(sortRaw) ? sortRaw : 'rank';
+    const limit = clampIntParam(
+      searchParams.get('limit'),
+      DEFAULT_LIMIT,
+      1,
+      MAX_LIMIT
+    );
 
     let result;
 

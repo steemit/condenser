@@ -188,13 +188,15 @@ describe('buildPostMetadata', () => {
         image: ['https://steemitimages.com/DQmXabc/pic.jpg'],
       },
     });
-    expect(String(meta.openGraph?.images?.[0])).toMatch(
-      /^https:\/\/steemitimages\.com\/p\//
+    const ogImage = String(
+      (meta.openGraph?.images as { url?: string }[] | undefined)?.[0]?.url ??
+        meta.openGraph?.images
     );
-    const twitter = meta.twitter as { images?: string[] };
-    expect(String(twitter.images?.[0])).toMatch(
-      /^https:\/\/steemitimages\.com\/p\//
+    expect(ogImage).toMatch(/^https:\/\/steemitimages\.com\/p\//);
+    const twitterImage = String(
+      (meta.twitter as { images?: string[] }).images?.[0]
     );
+    expect(twitterImage).toMatch(/^https:\/\/steemitimages\.com\/p\//);
   });
 
   it('degrades non-http(s) og:image to the author avatar (audit N-17)', () => {

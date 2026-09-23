@@ -31,13 +31,18 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         // User preferences processing time
         safeStartTimer(ctx.state.requestTimer, 'userPreferences_ms');
         let userPreferences = {};
-        if (ctx.session.user_prefs) {
+        // ctx.session is never written on cacheable responses (see the
+        // anonymous-cacheable middleware in server.js), so it holds a fresh
+        // empty session there. Reading it is safe; the local alias just keeps
+        // the guards below obvious.
+        const session = ctx.state.cacheable ? null : ctx.session;
+        if (session && session.user_prefs) {
             try {
-                userPreferences = JSON.parse(ctx.session.user_prefs);
+                userPreferences = JSON.parse(session.user_prefs);
             } catch (err) {
                 console.error(
                     'cannot parse user preferences:',
-                    ctx.session.uid,
+                    session.uid,
                     err
                 );
             }
@@ -54,18 +59,25 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             if (!localeIsSupported) locale = 'en';
             userPreferences.locale = locale;
         }
-        let login_challenge = ctx.session.login_challenge;
-        if (!login_challenge) {
-            login_challenge = secureRandom.randomBuffer(16).toString('hex');
-            ctx.session.login_challenge = login_challenge;
+        // Per-visitor secrets are omitted on cacheable (cookieless) responses:
+        // a cached copy must not share one visitor's csrf secret or login
+        // challenge with everyone. The client fetches a fresh challenge when
+        // the login dialog opens, so anonymous viewing is unaffected.
+        let login_challenge = null;
+        if (!ctx.state.cacheable) {
+            login_challenge = ctx.session.login_challenge;
+            if (!login_challenge) {
+                login_challenge = secureRandom.randomBuffer(16).toString('hex');
+                ctx.session.login_challenge = login_challenge;
+            }
         }
         safeStopTimer(ctx.state.requestTimer, 'userPreferences_ms');
 
         // Special posts loading time
         safeStartTimer(ctx.state.requestTimer, 'specialPosts_ms');
         const offchain = {
-            csrf: ctx.csrf,
-            new_visit: ctx.session.new_visit,
+            csrf: ctx.state.cacheable ? null : ctx.csrf,
+            new_visit: ctx.state.cacheable ? null : ctx.session.new_visit,
             config: $STM_Config,
             special_posts: await ctx.specialPostsPromise,
             login_challenge,
@@ -114,7 +126,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 env: process.env.NODE_ENV,
                 walletUrl: config.wallet_url,
                 steemMarket: ctx.steemMarketData,
-                trackingId: ctx.session.uid,
+                trackingId: session ? session.uid : null,
                 vests_per_trx: null,
                 frontend_has_rendered: false,
                 activityTag:
@@ -145,7 +157,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             userPreferences,
             offchain,
             ctx.state.requestTimer,
-            ctx.session.uid
+            session ? session.uid : null
         );
 
         // Router-driven redirects are internal paths, but guard the exit
@@ -182,9 +194,30 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             title,
             meta,
             google_analytics_id: config.google_analytics_id,
-            csp_nonce: ctx.session.cspNonce,
+            // On cacheable responses the session is opted out; use a stable
+            // placeholder nonce. It only satisfies the nonce attribute
+            // format - no GA scripts render without a session uid anyway
+            // (trackingId null), and a per-visitor nonce in a cached page
+            // would be shared across visitors anyway.
+            csp_nonce: ctx.state.cacheable
+                ? 'anonymous-cache'
+                : ctx.session.cspNonce,
         };
         ctx.status = statusCode;
+        // Eligibility declaration for shared caches (openresty proxy_cache,
+        // potentially Cloudflare edge later): anonymous post pages may be
+        // reused by any cache for 5 minutes. Everything session-bearing goes
+        // out as explicitly uncacheable. Error pages (404/500 renders) stay
+        // private too - caching a "post not found" for 5 minutes would pin
+        // a transient state.
+        if (ctx.state.cacheable && statusCode === 200) {
+            ctx.set(
+                'Cache-Control',
+                'public, max-age=300, stale-while-revalidate=60'
+            );
+        } else {
+            ctx.set('Cache-Control', 'private, no-store');
+        }
         ctx.body =
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);
         safeStopTimer(ctx.state.requestTimer, 'finalRender_ms');

@@ -142,6 +142,52 @@ csrf(app);
 
 koaLocale(app);
 
+// ---------------------------------------------------------------------------
+// Anonymous cacheable pages.
+//
+// A cookieless GET of a post page renders identically for every visitor
+// (observer=null; logged-in users always carry a session cookie), so the
+// openresty proxy (see steemit/openresty#21) may serve such responses from
+// its cache. Two things must hold for that to work:
+//   1. the response must carry no Set-Cookie - nginx refuses to cache
+//      responses that set cookies, and a session cookie must never be
+//      replayed to a different visitor;
+//   2. the response must not embed per-visitor secrets (csrf secret,
+//      login_challenge, csp nonce) - a cached copy would share one
+//      visitor's secrets with everyone.
+//
+// So for eligible requests we simply NEVER TOUCH the session: every write
+// site below (csp nonce, uid/visit tracking, login_challenge, csrf secret)
+// is guarded on `this.state.cacheable`. koa-session's commit is a no-op for
+// a fresh, never-written session with no incoming cookie (no prevjson, zero
+// length -> no Set-Cookie). NOTE: `this.session = null` must NOT be used:
+// koa-session treats that as "session removed" and emits a deletion
+// Set-Cookie, which would re-defeat the cache. `this.state.cacheable` also
+// tells app_render to omit the per-visitor secrets. None of them are needed
+// to *view* a post page: the client fetches a fresh login challenge when
+// the user opens the login dialog, and csrf tokens are only consumed by
+// authenticated POSTs (which always come from cookie-carrying,
+// never-cached sessions).
+//
+// Eligibility is deliberately narrower than "no cookie": also requires GET +
+// post-page shape (with or without category prefix) + no session-bearing
+// query params. The openresty gate re-checks independently; this middleware
+// only decides what the app itself may render session-free.
+// ---------------------------------------------------------------------------
+app.use(function*(next) {
+    if (
+        this.method === 'GET' &&
+        (this.headers.cookie === undefined ||
+            this.headers.cookie === '') &&
+        !/[?&](ch|cn|r)=/.test(this.url) &&
+        (routeRegex.Post.test(this.url) ||
+            routeRegex.PostNoCategory.test(this.url))
+    ) {
+        this.state.cacheable = true;
+    }
+    yield next;
+});
+
 function convertEntriesToArrays(obj) {
     const conf = Object.keys(obj).reduce((result, key) => {
         result[key] = obj[key].split(/\s+/);
@@ -274,11 +320,20 @@ if (env === 'production') {
 }
 
 // Sets the `script-src` directive to
-// "'self' 'nonce-e33ccde670f149c1789b1e1e113b0916'"
+// " 'self' 'nonce-e33ccde670f149c1789b1e1e113b0916'"
 // (or similar)
 app.use(function*(next) {
-    this.session.cspNonce = secureRandom.randomBuffer(16).toString('hex');
-    this.req.cspNonce = this.session.cspNonce;
+    // Cacheable responses never write the session (see the anonymous
+    // cacheable pages middleware above): no per-visitor nonce is written
+    // (that would both resurrect the session cookie and embed a per-visitor
+    // value in a shared cached page). req.cspNonce keeps a stable placeholder
+    // so helmet's nonce callback still emits a well-formed directive.
+    if (this.state.cacheable) {
+        this.req.cspNonce = 'anonymous-cache';
+    } else {
+        this.session.cspNonce = secureRandom.randomBuffer(16).toString('hex');
+        this.req.cspNonce = this.session.cspNonce;
+    }
     yield next;
 });
 
@@ -313,6 +368,13 @@ app.use(
 // set user's uid - used to identify users in logs and some other places
 // FIXME SECURITY PRIVACY cycle this uid after a period of time
 app.use(function*(next) {
+    // Cacheable responses opted out of the session entirely (see the
+    // anonymous cacheable pages middleware) - skip all uid/visit tracking,
+    // which would otherwise write the session and emit Set-Cookie.
+    if (this.state.cacheable) {
+        yield next;
+        return;
+    }
     const last_visit = this.session.last_visit;
     this.session.last_visit = (new Date().getTime() / 1000) | 0;
     const from_link = this.request.headers.referer;

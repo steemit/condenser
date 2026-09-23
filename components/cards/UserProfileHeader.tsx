@@ -5,6 +5,7 @@ import { Calendar, Link2, MapPin } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { proxifyImageUrl } from '@/lib/media/proxify-url';
+import { safeCoverImageUrl, safeProfileWebsite } from '@/lib/profile-metadata';
 import Userpic from '@/components/elements/Userpic';
 import Follow from '@/components/elements/Follow';
 import TimeAgo from '@/components/elements/TimeAgo';
@@ -57,14 +58,18 @@ export default function UserProfileHeader({
   const t = useTranslations();
   const displayName = profile?.name || accountname;
 
-  const coverImage = profile?.cover_image;
+  // On-chain metadata is attacker-controlled (account_update2 bypasses our
+  // write-side checks): validate before it reaches the style/href sinks.
+  // safeCoverImageUrl returns null for non-http(s) values or values carrying
+  // CSS metacharacters, degrading to no cover background (audit N-06).
+  const coverImage = safeCoverImageUrl(profile?.cover_image);
   const coverStyle: React.CSSProperties = coverImage
     ? { backgroundImage: `url(${proxifyImageUrl(coverImage, '2048x512')})` }
     : {};
 
-  const websiteLabel = profile?.website
-    ? profile.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
-    : null;
+  // safeProfileWebsite only links http(s) URLs whose hostname is not on the
+  // phishing blacklist; everything else degrades to plain text (audit N-16).
+  const website = safeProfileWebsite(profile?.website);
 
   const joinDate = created
     ? new Date(created).toLocaleDateString('en-US', {
@@ -159,17 +164,22 @@ export default function UserProfileHeader({
                 <MapPin className="size-4" aria-hidden /> {profile.location}
               </span>
             )}
-            {profile?.website && websiteLabel && (
+            {website && (
               <span className="inline-flex items-center gap-1">
                 <Link2 className="size-4" aria-hidden />{' '}
-                <a
-                  href={profile.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline"
-                >
-                  {websiteLabel}
-                </a>
+                {website.href ? (
+                  <a
+                    href={website.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline"
+                  >
+                    {website.label}
+                  </a>
+                ) : (
+                  // Non-http(s) or blacklisted hostname: plain text, no anchor.
+                  <span>{website.label}</span>
+                )}
               </span>
             )}
             {joinDate && (

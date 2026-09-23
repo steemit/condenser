@@ -154,11 +154,14 @@ export function Header() {
   };
 
   const handleSignup = () => {
-    const win = window.open(
+    // 'noopener,noreferrer' in the features argument severs the opener link
+    // at open time; the previous win.opener = null cleanup left a race where
+    // the popup could reach window.opener first (audit N-23).
+    window.open(
       `${signupUrl}/#source=condenser|${routeTag}`,
-      "_blank"
+      "_blank",
+      "noopener,noreferrer"
     );
-    if (win) win.opener = null;
   };
 
   const handleLogout = async () => {

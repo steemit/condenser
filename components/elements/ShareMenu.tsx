@@ -36,7 +36,7 @@ export default function ShareMenu({ url, title }: ShareMenuProps) {
     window.open(
       shareUrl,
       'Share',
-      `width=${width},height=${height},left=${left},top=${top},toolbar=0,status=0`
+      `width=${width},height=${height},left=${left},top=${top},toolbar=0,status=0,noopener,noreferrer`
     );
   };
 

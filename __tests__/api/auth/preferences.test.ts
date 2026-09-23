@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import { makePostRequest } from '@/__tests__/helpers/request';
+import {
+  csrfHeader,
+  makePostRequest,
+  TEST_CSRF_TOKEN,
+} from '@/__tests__/helpers/request';
 
 vi.mock('@/lib/auth/session', () => ({
   COOKIE_NAME: 'session',
@@ -18,6 +22,7 @@ const setSessionCookieMock = setSessionCookie as unknown as Mock;
 const loggedInSession = {
   username: 'alice',
   uid: 'uid-1',
+  csrfToken: TEST_CSRF_TOKEN,
   lastVisit: 1700000000,
   newVisit: false,
   userPreferences: { nsfwPref: 'warn' },
@@ -32,7 +37,7 @@ describe('POST /api/auth/preferences', () => {
   it('rejects anonymous sessions with 401', async () => {
     getSessionMock.mockResolvedValue({ uid: 'uid-2', userPreferences: {} });
 
-    const res = await POST(makePostRequest('/api/auth/preferences', { payload: { nsfwPref: 'hide' } }));
+    const res = await POST(makePostRequest('/api/auth/preferences', { payload: { nsfwPref: 'hide' } }, csrfHeader()));
     expect(res.status).toBe(401);
     expect(updateSessionMock).not.toHaveBeenCalled();
   });
@@ -41,7 +46,7 @@ describe('POST /api/auth/preferences', () => {
     getSessionMock.mockResolvedValue(loggedInSession);
 
     for (const payload of [null, 'str', 42, [1, 2]]) {
-      const res = await POST(makePostRequest('/api/auth/preferences', { payload }));
+      const res = await POST(makePostRequest('/api/auth/preferences', { payload }, csrfHeader()));
       expect(res.status).toBe(400);
     }
     expect(updateSessionMock).not.toHaveBeenCalled();
@@ -51,7 +56,7 @@ describe('POST /api/auth/preferences', () => {
     getSessionMock.mockResolvedValue(loggedInSession);
 
     const res = await POST(
-      makePostRequest('/api/auth/preferences', { payload: { blob: 'x'.repeat(2000) } })
+      makePostRequest('/api/auth/preferences', { payload: { blob: 'x'.repeat(2000) } }, csrfHeader())
     );
     expect(res.status).toBe(400);
     expect(await res.json()).toEqual({ error: 'the data is too long' });
@@ -65,7 +70,7 @@ describe('POST /api/auth/preferences', () => {
     });
 
     const res = await POST(
-      makePostRequest('/api/auth/preferences', { payload: { extra: 'y'.repeat(900) } })
+      makePostRequest('/api/auth/preferences', { payload: { extra: 'y'.repeat(900) } }, csrfHeader())
     );
     expect(res.status).toBe(400);
     expect(updateSessionMock).not.toHaveBeenCalled();
@@ -75,7 +80,7 @@ describe('POST /api/auth/preferences', () => {
     getSessionMock.mockResolvedValue(loggedInSession);
 
     const res = await POST(
-      makePostRequest('/api/auth/preferences', { payload: JSON.parse('{"__proto__":{"x":1}}') })
+      makePostRequest('/api/auth/preferences', { payload: JSON.parse('{"__proto__":{"x":1}}') }, csrfHeader())
     );
     expect(res.status).toBe(200);
     const merged = updateSessionMock.mock.calls[0][1].userPreferences;
@@ -87,7 +92,7 @@ describe('POST /api/auth/preferences', () => {
     getSessionMock.mockResolvedValue(loggedInSession);
 
     const res = await POST(
-      makePostRequest('/api/auth/preferences', { payload: { nsfwPref: 'hide', theme: 'dark' } })
+      makePostRequest('/api/auth/preferences', { payload: { nsfwPref: 'hide', theme: 'dark' } }, csrfHeader())
     );
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ status: 'ok' });
@@ -99,11 +104,40 @@ describe('POST /api/auth/preferences', () => {
     expect(setSessionCookieMock).toHaveBeenCalledWith(res, 'updated-token');
   });
 
+  it('rejects a missing X-CSRF-Token header with 403 (audit N-22)', async () => {
+    getSessionMock.mockResolvedValue(loggedInSession);
+
+    const res = await POST(
+      makePostRequest('/api/auth/preferences', { payload: { nsfwPref: 'hide' } })
+    );
+    expect(res.status).toBe(403);
+    expect(await res.json()).toEqual({ error: 'Invalid or missing CSRF token' });
+    expect(updateSessionMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a mismatched token with 403 and a non-JSON Content-Type with 415 (audit N-22)', async () => {
+    getSessionMock.mockResolvedValue(loggedInSession);
+
+    const mismatched = await POST(
+      makePostRequest('/api/auth/preferences', { payload: {} }, csrfHeader('b'.repeat(64)))
+    );
+    expect(mismatched.status).toBe(403);
+
+    const badType = await POST(
+      makePostRequest('/api/auth/preferences', { payload: {} }, {
+        ...csrfHeader(),
+        'content-type': 'text/plain',
+      })
+    );
+    expect(badType.status).toBe(415);
+    expect(updateSessionMock).not.toHaveBeenCalled();
+  });
+
   it('returns 413 when the body exceeds the 64KB request cap (audit N-08)', async () => {
     getSessionMock.mockResolvedValue(loggedInSession);
 
     const res = await POST(
-      makePostRequest('/api/auth/preferences', { payload: { blob: 'x'.repeat(70 * 1024) } })
+      makePostRequest('/api/auth/preferences', { payload: { blob: 'x'.repeat(70 * 1024) } }, csrfHeader())
     );
     expect(res.status).toBe(413);
     expect(await res.json()).toEqual({ error: 'Request body too large' });

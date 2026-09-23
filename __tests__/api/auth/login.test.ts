@@ -1,8 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
 import {
+  csrfHeader,
   makePostRequest,
   sessionCookieHeader,
+  TEST_CSRF_TOKEN,
 } from '@/__tests__/helpers/request';
 
 vi.mock('@/lib/steem/client', () => ({
@@ -86,7 +88,7 @@ describe('POST /api/auth/login', () => {
     verifySignatureMock.mockReturnValue(true);
     // The challenge route stores the issued challenge in the session cookie;
     // the login route verifies the signed challenge against it.
-    getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE } as never);
+    getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE, csrfToken: TEST_CSRF_TOKEN } as never);
     revokeSessionMock.mockResolvedValue();
     checkRateLimitMock.mockResolvedValue({ allowed: true });
   });
@@ -101,7 +103,9 @@ describe('POST /api/auth/login', () => {
   it('returns 404 for an unknown account', async () => {
     getAccountMock.mockResolvedValue(null);
 
-    const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), csrfHeader())
+    );
     expect(res.status).toBe(404);
     expect(await res.json()).toEqual({ error: 'Account not found' });
   });
@@ -109,7 +113,9 @@ describe('POST /api/auth/login', () => {
   it('returns 401 when the public key is not a posting authority', async () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey('STMother key'));
 
-    const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), csrfHeader())
+    );
     expect(res.status).toBe(401);
     const body = await res.json();
     expect(body.error).toContain('not authorized for posting');
@@ -119,7 +125,7 @@ describe('POST /api/auth/login', () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey());
 
     const res = await POST(
-      makePostRequest('/api/auth/login', { ...validBody(), data: 'not-json' })
+      makePostRequest('/api/auth/login', { ...validBody(), data: 'not-json' }, csrfHeader())
     );
     expect(res.status).toBe(400);
     expect(await res.json()).toEqual({ error: 'Invalid data format' });
@@ -127,10 +133,10 @@ describe('POST /api/auth/login', () => {
 
   it('returns 400 when the signed data does not match the request', async () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey());
-    getSessionMock.mockResolvedValue({ loginChallenge: 'different' } as never);
+    getSessionMock.mockResolvedValue({ loginChallenge: 'different', csrfToken: TEST_CSRF_TOKEN } as never);
 
     const res = await POST(
-      makePostRequest('/api/auth/login', { ...validBody(), challenge: 'different' })
+      makePostRequest('/api/auth/login', { ...validBody(), challenge: 'different' }, csrfHeader())
     );
     expect(res.status).toBe(400);
     expect(await res.json()).toEqual({ error: 'Invalid authentication data' });
@@ -138,9 +144,11 @@ describe('POST /api/auth/login', () => {
 
   it('returns 400 when the challenge does not match the session', async () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey());
-    getSessionMock.mockResolvedValue({ loginChallenge: 'other-challenge' } as never);
+    getSessionMock.mockResolvedValue({ loginChallenge: 'other-challenge', csrfToken: TEST_CSRF_TOKEN } as never);
 
-    const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), csrfHeader())
+    );
     expect(res.status).toBe(400);
     expect(await res.json()).toEqual({ error: 'Invalid or expired login challenge' });
     expect(loginUserMock).not.toHaveBeenCalled();
@@ -149,13 +157,18 @@ describe('POST /api/auth/login', () => {
     expect(revokeSessionMock).not.toHaveBeenCalled();
   });
 
-  it('returns 400 when the session has no stored challenge', async () => {
+  it('returns 403 when there is no session at all (CSRF fails closed, audit N-22)', async () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey());
     getSessionMock.mockResolvedValue(null);
 
-    const res = await POST(makePostRequest('/api/auth/login', validBody()));
-    expect(res.status).toBe(400);
-    expect(await res.json()).toEqual({ error: 'Invalid or expired login challenge' });
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), csrfHeader())
+    );
+    // No session -> no stored token to match -> the CSRF gate rejects
+    // before the challenge check (a client without the challenge session
+    // could never satisfy the login challenge either).
+    expect(res.status).toBe(403);
+    expect(await res.json()).toEqual({ error: 'Invalid or missing CSRF token' });
     expect(loginUserMock).not.toHaveBeenCalled();
   });
 
@@ -171,7 +184,7 @@ describe('POST /api/auth/login', () => {
         action: 'login',
       }),
     };
-    const res = await POST(makePostRequest('/api/auth/login', staleBody));
+    const res = await POST(makePostRequest('/api/auth/login', staleBody, csrfHeader()));
     expect(res.status).toBe(400);
     expect(await res.json()).toEqual({ error: 'Invalid or expired login challenge' });
     expect(loginUserMock).not.toHaveBeenCalled();
@@ -181,25 +194,67 @@ describe('POST /api/auth/login', () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey());
     verifySignatureMock.mockReturnValue(false);
 
-    const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), csrfHeader())
+    );
     expect(res.status).toBe(401);
     expect(await res.json()).toEqual({ error: 'Invalid signature' });
   });
 
+  it('rejects a valid body without the X-CSRF-Token header with 403 (audit N-22)', async () => {
+    getAccountMock.mockResolvedValue(accountWithPostingKey());
+
+    const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    expect(res.status).toBe(403);
+    expect(await res.json()).toEqual({ error: 'Invalid or missing CSRF token' });
+    expect(loginUserMock).not.toHaveBeenCalled();
+    // The gate sits before the account bucket, so only the IP check ran.
+    expect(checkRateLimitMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('rejects a mismatched X-CSRF-Token header with 403 (audit N-22)', async () => {
+    getAccountMock.mockResolvedValue(accountWithPostingKey());
+
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), csrfHeader('f'.repeat(64)))
+    );
+    expect(res.status).toBe(403);
+    expect(getAccountMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a correct token with a non-JSON Content-Type with 415 (audit N-22)', async () => {
+    getAccountMock.mockResolvedValue(accountWithPostingKey());
+
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), {
+        ...csrfHeader(),
+        'content-type': 'text/plain',
+      })
+    );
+    expect(res.status).toBe(415);
+    expect(getAccountMock).not.toHaveBeenCalled();
+  });
+
   it('creates a session, revokes the old token, and sets the cookie on success', async () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey());
-    getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE } as never);
+    getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE, csrfToken: TEST_CSRF_TOKEN } as never);
     loginUserMock.mockResolvedValue('new-session-token');
 
     const res = await POST(
-      makePostRequest('/api/auth/login', validBody(), sessionCookieHeader(OLD_SID))
+      makePostRequest('/api/auth/login', validBody(), {
+        ...sessionCookieHeader(OLD_SID),
+        ...csrfHeader(),
+      })
     );
     expect(res.status).toBe(200);
 
     const body = await res.json();
     expect(body.success).toBe(true);
     expect(body.user.username).toBe('alice');
-    expect(loginUserMock).toHaveBeenCalledWith({ loginChallenge: CHALLENGE }, 'alice');
+    expect(loginUserMock).toHaveBeenCalledWith(
+      { loginChallenge: CHALLENGE, csrfToken: TEST_CSRF_TOKEN },
+      'alice'
+    );
     expect(setSessionCookieMock).toHaveBeenCalledWith(res, 'new-session-token');
     // The pre-login session (which still holds the consumed loginChallenge)
     // is revoked after the new session is minted (audit N-12).
@@ -224,7 +279,7 @@ describe('POST /api/auth/login abuse wrappers (audit N-08)', () => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
     verifySignatureMock.mockReturnValue(true);
-    getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE } as never);
+    getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE, csrfToken: TEST_CSRF_TOKEN } as never);
     getAccountMock.mockResolvedValue(accountWithPostingKey());
     loginUserMock.mockResolvedValue('new-session-token');
     revokeSessionMock.mockResolvedValue();
@@ -245,7 +300,7 @@ describe('POST /api/auth/login abuse wrappers (audit N-08)', () => {
   });
 
   it('checks the IP bucket (10/min) first and the account bucket second', async () => {
-    await POST(makePostRequest('/api/auth/login', validBody()));
+    await POST(makePostRequest('/api/auth/login', validBody(), csrfHeader()));
 
     expect(checkRateLimitMock).toHaveBeenCalledTimes(2);
     expect(checkRateLimitMock.mock.calls[0][1]).toEqual({
@@ -272,7 +327,9 @@ describe('POST /api/auth/login abuse wrappers (audit N-08)', () => {
       .mockResolvedValueOnce({ allowed: true }) // IP
       .mockResolvedValueOnce({ allowed: false, retryAfterSeconds: 17 }); // account
 
-    const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), csrfHeader())
+    );
     expect(res.status).toBe(429);
     expect(res.headers.get('Retry-After')).toBe('17');
     expect(getAccountMock).not.toHaveBeenCalled();

@@ -6,6 +6,7 @@ vi.mock('@/lib/auth/session', () => ({
   getSession: vi.fn(),
   setSessionCookie: vi.fn(),
   updateSession: vi.fn(),
+  verifySession: vi.fn(),
 }));
 
 // Partial mock: keep the real RATE_LIMITS / rateLimitResponse, stub only the
@@ -25,6 +26,7 @@ import {
   getSession,
   setSessionCookie,
   updateSession,
+  verifySession,
 } from '@/lib/auth/session';
 import { checkRateLimit } from '@/lib/cache/rate-limit';
 
@@ -32,6 +34,7 @@ const createSessionMock = vi.mocked(createSession);
 const getSessionMock = vi.mocked(getSession);
 const updateSessionMock = vi.mocked(updateSession);
 const setSessionCookieMock = vi.mocked(setSessionCookie);
+const verifySessionMock = vi.mocked(verifySession);
 const checkRateLimitMock = vi.mocked(checkRateLimit);
 
 describe('GET /api/auth/challenge', () => {
@@ -40,6 +43,12 @@ describe('GET /api/auth/challenge', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     getSessionMock.mockResolvedValue(null);
     createSessionMock.mockResolvedValue('session-token');
+    // Mint path decodes the fresh session to mirror its CSRF token (N-22).
+    verifySessionMock.mockResolvedValue({
+      uid: 'uid-1',
+      csrfToken:
+        '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+    } as never);
     updateSessionMock.mockResolvedValue('updated-session-token');
     checkRateLimitMock.mockResolvedValue({ allowed: true });
   });
@@ -55,6 +64,11 @@ describe('GET /api/auth/challenge', () => {
     });
     // The cookie persists the challenge for the login route to verify.
     expect(setSessionCookieMock).toHaveBeenCalledWith(res, 'session-token');
+    // The CSRF token is mirrored into the non-HttpOnly cookie (audit N-22).
+    expect(res.cookies.get('steem-csrf')?.value).toBe(
+      '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
+    );
+    expect(res.cookies.get('steem-csrf')?.httpOnly).toBe(false);
   });
 
   it('updates the existing session instead of minting a new one', async () => {

@@ -1,5 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { makePostRequest, sessionCookieHeader } from '@/__tests__/helpers/request';
+import {
+  csrfHeader,
+  makePostRequest,
+  sessionCookieHeader,
+  TEST_CSRF_TOKEN,
+} from '@/__tests__/helpers/request';
 
 vi.mock('@/lib/auth/session', () => ({
   COOKIE_NAME: 'steem-session',
@@ -47,6 +52,7 @@ describe('POST /api/auth/logout', () => {
     getSessionMock.mockResolvedValue({
       username: 'alice',
       uid: 'uid-1',
+      csrfToken: TEST_CSRF_TOKEN,
       lastVisit: 1700000000,
       newVisit: false,
     } as never);
@@ -65,6 +71,7 @@ describe('POST /api/auth/logout', () => {
     const session = {
       username: 'alice',
       uid: 'uid-1',
+      csrfToken: TEST_CSRF_TOKEN,
       lastVisit: 1700000000,
       newVisit: false,
     };
@@ -72,7 +79,10 @@ describe('POST /api/auth/logout', () => {
     logoutUserMock.mockResolvedValue('fresh-token');
 
     const res = await POST(
-      makePostRequest('/api/auth/logout', undefined, sessionCookieHeader(OLD_SID))
+      makePostRequest('/api/auth/logout', undefined, {
+        ...sessionCookieHeader(OLD_SID),
+        ...csrfHeader(),
+      })
     );
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({
@@ -93,12 +103,16 @@ describe('POST /api/auth/logout', () => {
   it('revokes the old token and clears the cookie for an anonymous session', async () => {
     getSessionMock.mockResolvedValue({
       uid: 'uid-2',
+      csrfToken: TEST_CSRF_TOKEN,
       lastVisit: 1700000000,
       newVisit: true,
     });
 
     const res = await POST(
-      makePostRequest('/api/auth/logout', undefined, sessionCookieHeader(OLD_SID))
+      makePostRequest('/api/auth/logout', undefined, {
+        ...sessionCookieHeader(OLD_SID),
+        ...csrfHeader(),
+      })
     );
     expect(res.status).toBe(200);
     expect(revokeSessionMock).toHaveBeenCalledWith(OLD_SID);
@@ -106,16 +120,51 @@ describe('POST /api/auth/logout', () => {
     expect(clearSessionCookieMock).toHaveBeenCalledWith(res);
   });
 
+  it('rejects logout without the X-CSRF-Token header with 403 (audit N-22)', async () => {
+    getSessionMock.mockResolvedValue({
+      username: 'alice',
+      uid: 'uid-1',
+      csrfToken: TEST_CSRF_TOKEN,
+      lastVisit: 1700000000,
+      newVisit: false,
+    } as never);
+
+    const res = await POST(makePostRequest('/api/auth/logout'));
+    expect(res.status).toBe(403);
+    expect(await res.json()).toEqual({ error: 'Invalid or missing CSRF token' });
+    expect(revokeSessionMock).not.toHaveBeenCalled();
+    expect(logoutUserMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects logout with a mismatched token with 403 (audit N-22)', async () => {
+    getSessionMock.mockResolvedValue({
+      username: 'alice',
+      uid: 'uid-1',
+      csrfToken: TEST_CSRF_TOKEN,
+      lastVisit: 1700000000,
+      newVisit: false,
+    } as never);
+
+    const res = await POST(
+      makePostRequest('/api/auth/logout', undefined, csrfHeader('a'.repeat(64)))
+    );
+    expect(res.status).toBe(403);
+    expect(logoutUserMock).not.toHaveBeenCalled();
+  });
+
   it('tolerates a missing cookie when revoking', async () => {
     getSessionMock.mockResolvedValue({
       username: 'alice',
       uid: 'uid-3',
+      csrfToken: TEST_CSRF_TOKEN,
       lastVisit: 1700000000,
       newVisit: false,
     });
     logoutUserMock.mockResolvedValue('fresh-token');
 
-    const res = await POST(makePostRequest('/api/auth/logout'));
+    const res = await POST(
+      makePostRequest('/api/auth/logout', undefined, csrfHeader())
+    );
     expect(res.status).toBe(200);
     expect(revokeSessionMock).toHaveBeenCalledWith(undefined);
   });

@@ -74,6 +74,20 @@ const isValidSignature = sig.verifyHash(Buffer.from(data, 'utf8'), pubKey);
 - Session creation and cookie management
 - Security validation and error handling
 
+#### `lib/auth/csrf.ts`
+- CSRF double-submit token (audit N-22). Every session carries a random
+  `csrfToken`, mirrored into the non-HttpOnly `steem-csrf` cookie by
+  `GET /api/auth/challenge`, `GET /api/auth/session` and every
+  session-writing route. The session-writing routes (`POST
+  /api/auth/login`, `POST /api/auth/logout`, `POST /api/auth/preferences`)
+  require the `X-CSRF-Token` request header to match the session value
+  (403 otherwise) and require `Content-Type: application/json` (415
+  otherwise). Clients use `postJsonWithCsrf()` (lib/api/csrf.ts), which
+  reads the cookie, attaches the header and retries once via
+  `GET /api/auth/session` when a pre-rollout session answers 403.
+  The broadcast relay is intentionally not covered: it carries no session
+  (authenticity comes from the client-side signature the chain verifies).
+
 #### `lib/auth/session.ts`
 - Hybrid session management (Redis + JWT fallback)
 - Secure cookie handling

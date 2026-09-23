@@ -36,7 +36,13 @@ describe('logoutThunk', () => {
     expect(window.localStorage.getItem('autopost2')).toBeNull();
     expect(window.localStorage.getItem('steem_encrypted_key')).toBeNull();
     expect(window.sessionStorage.getItem('steem_encrypted_key')).toBeNull();
-    expect(fetch).toHaveBeenCalledWith('/api/auth/logout', { method: 'POST' });
+    // The POST goes through postJsonWithCsrf: JSON content type + the
+    // double-submit header when a token cookie exists (audit N-22).
+    expect(fetch).toHaveBeenCalledWith('/api/auth/logout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: undefined,
+    });
   });
 
   it('still clears local state when the server logout call fails', async () => {

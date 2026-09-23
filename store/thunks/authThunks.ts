@@ -7,6 +7,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setUser, loginError, setAuthority, logout, setTrackingId, generateTrackingId } from '../slices/userSlice';
 import { clearStoredKey } from '@/lib/crypto/key-storage';
+import { postJsonWithCsrf } from '@/lib/api/csrf';
 import type { AppDispatch, RootState } from '../index';
 
 export interface LoginPayload {
@@ -101,11 +102,11 @@ export const logoutThunk = createAsyncThunk<void, void, { dispatch: AppDispatch 
     // Dispatch logout action
     dispatch(logout());
 
-    // Call server API logout to clear server-side session
+    // Call server API logout to clear server-side session. The POST echoes
+    // the CSRF token (audit N-22); postJsonWithCsrf refreshes the session
+    // and retries once if the token was missing/stale (pre-rollout session).
     try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-      });
+      await postJsonWithCsrf('/api/auth/logout');
     } catch (error) {
       // Don't fail logout if server call fails
       console.error('Server logout error:', error);

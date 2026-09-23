@@ -14,7 +14,9 @@ import {
   getSession,
   setSessionCookie,
   updateSession,
+  verifySession,
 } from '@/lib/auth/session';
+import { setCsrfCookie } from '@/lib/auth/csrf';
 import {
   RATE_LIMITS,
   checkRateLimit,
@@ -49,9 +51,16 @@ export async function GET(request: NextRequest) {
           request.cookies.get(COOKIE_NAME)?.value
         )
       : await createSession({ loginChallenge: challenge });
+    // For the mint path, decode the fresh session so its CSRF token can be
+    // mirrored into the cookie (audit N-22).
+    const session = existing ?? (await verifySession(sessionToken));
 
     const response = NextResponse.json({ challenge });
     setSessionCookie(response, sessionToken);
+    // Mirror the CSRF token alongside the challenge session so the login
+    // POST can echo it (audit N-22). updateSession preserves the token for
+    // existing sessions and backfills pre-rollout ones.
+    setCsrfCookie(response, session);
     return response;
   } catch (error: unknown) {
     console.error('Error generating challenge:', error);

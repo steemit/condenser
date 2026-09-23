@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import * as RedisSession from './redis-session';
+import { generateCsrfToken, setCsrfCookie } from './csrf';
 
 const FALLBACK_JWT_SECRET = 'your-secret-key-change-in-production';
 
@@ -126,6 +127,13 @@ export interface SessionData {
   username?: string;
   uid: string;
   loginChallenge?: string;
+  /**
+   * CSRF double-submit token (audit N-22): mirrored into the non-HttpOnly
+   * `steem-csrf` cookie and required (via the X-CSRF-Token header) by the
+   * session-writing routes. Generated at session creation and preserved
+   * across rotations; see lib/auth/csrf.ts.
+   */
+  csrfToken?: string;
   /** Internal TTL class marker (audit N-08); see SessionTtlClass. */
   ttlClass?: SessionTtlClass;
   lastVisit: number;
@@ -181,6 +189,10 @@ export async function createSession(data: Partial<SessionData> = {}): Promise<st
     // Authoritative and placed after the spread: the derived class always
     // wins, and an explicit `ttlClass: undefined` input cannot unset it.
     ttlClass,
+    // Same for the CSRF token: an explicit `csrfToken: undefined` (e.g.
+    // spreading a pre-rollout session through loginUser) must re-generate
+    // one rather than ship a token-less session (audit N-22).
+    csrfToken: (data.csrfToken as string | undefined) || generateCsrfToken(),
   };
 
   // Try Redis first. Challenge-only sessions get the short TTL so anonymous
@@ -285,6 +297,9 @@ export async function updateSession(
     ...currentSession,
     ...updates,
     ttlClass,
+    // Backfill for sessions minted before the CSRF rollout: every rewrite
+    // of the session carries a token (audit N-22).
+    csrfToken: currentSession.csrfToken || updates.csrfToken || generateCsrfToken(),
     lastVisit: now,
     newVisit: now - lastVisit > 1800, // 30 minutes
   };
@@ -330,15 +345,18 @@ export async function withSession(
   handler: (session: SessionData | null) => Promise<NextResponse>
 ): Promise<NextResponse> {
   let session = await getSession(request);
-  
+
   // Create new session if none exists
   if (!session) {
     const token = await createSession();
     session = await verifySession(token);
-    
+
     const response = await handler(session);
     if (session) {
       setSessionCookie(response, token);
+      // Mirror the CSRF token so the client can echo it on session writes
+      // (audit N-22).
+      setCsrfCookie(response, session);
     }
     return response;
   }
@@ -346,10 +364,11 @@ export async function withSession(
   // Update existing session
   const updatedToken = await updateSession(session, {});
   const updatedSession = await verifySession(updatedToken);
-  
+
   const response = await handler(updatedSession);
   setSessionCookie(response, updatedToken);
-  
+  setCsrfCookie(response, updatedSession);
+
   return response;
 }
 

@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getUnreadNotifications } from '@/lib/steem/client';
+import { getSession } from '@/lib/auth/session';
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,6 +16,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         { error: 'Account is required' },
         { status: 400 }
+      );
+    }
+
+    // Same session binding as /api/steem/notifications (audit N-14): the
+    // queried account must match the signed-in session. Steem usernames are
+    // case-insensitive, hence the lowercased comparison.
+    const session = await getSession(request);
+    if (!session?.username || session.username.toLowerCase() !== account.toLowerCase()) {
+      return NextResponse.json(
+        { error: 'Notifications are only readable for the signed-in account' },
+        { status: 403 }
       );
     }
 

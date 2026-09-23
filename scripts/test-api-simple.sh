@@ -58,16 +58,9 @@ test_endpoint "Get Ranked Posts (Hot)" \
 test_endpoint "Get Account Posts (steemit)" \
     "$BASE_URL/api/steem/posts?sort=blog&account=steemit&limit=5"
 
-test_endpoint "Get Notifications (steemit)" \
-    "$BASE_URL/api/steem/notifications?account=steemit&limit=10"
-
-test_endpoint "Get Unread Notifications (steemit)" \
-    "$BASE_URL/api/steem/unread-notifications?account=steemit"
-
-test_endpoint "Check Authority (Invalid - should fail)" \
-    "$BASE_URL/api/auth/check-authority" \
-    "POST" \
-    '{"username":"nonexistent","password":"test"}'
+# NOTE: /api/steem/notifications and /api/steem/unread-notifications are bound
+# to the signed-in session account (audit N-14), so they cannot be smoke-tested
+# anonymously. /api/auth/check-authority was removed (audit N-13).
 
 echo "✅ Testing complete!"
 

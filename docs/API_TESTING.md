@@ -70,20 +70,18 @@ curl "http://localhost:3000/api/steem/comments?author=steemit&permlink=firstpost
 
 #### 7. Get Notifications
 ```bash
-curl "http://localhost:3000/api/steem/notifications?account=steemit&limit=10"
+curl "http://localhost:3000/api/steem/notifications?account=steemit&limit=10" \
+  -H "Cookie: steem-session=<session-token-of-steemit>"
 ```
+Requires a logged-in session whose username matches `account` (audit N-14);
+otherwise the route responds `403`.
 
 #### 8. Get Unread Notifications
 ```bash
-curl "http://localhost:3000/api/steem/unread-notifications?account=steemit"
+curl "http://localhost:3000/api/steem/unread-notifications?account=steemit" \
+  -H "Cookie: steem-session=<session-token-of-steemit>"
 ```
-
-#### 9. Check Authority (POST)
-```bash
-curl -X POST "http://localhost:3000/api/auth/check-authority" \
-  -H "Content-Type: application/json" \
-  -d '{"username":"steemit","password":"test"}'
-```
+Same session binding as above.
 
 ### Method 3: Using Browser
 
@@ -101,14 +99,13 @@ Visit in browser:
 | `/api/steem/posts` | GET | Get ranked posts or account posts | `sort`, `tag`, `account`, `start_author`, `start_permlink`, `limit`, `observer` |
 | `/api/steem/post` | GET | Get single post | `author` (required), `permlink` (required) |
 | `/api/steem/comments` | GET | Get post comments | `author` (required), `permlink` (required) |
-| `/api/steem/notifications` | GET | Get account notifications | `account` (required), `last_id`, `limit` |
-| `/api/steem/unread-notifications` | GET | Get unread notification count | `account` (required) |
+| `/api/steem/notifications` | GET | Get account notifications (session-bound, audit N-14) | `account` (required, must match the signed-in session), `last_id`, `limit` |
+| `/api/steem/unread-notifications` | GET | Get unread notification count (session-bound, audit N-14) | `account` (required, must match the signed-in session) |
 
 ### Authentication API Endpoints
 
 | Endpoint | Method | Description | Parameters |
 |----------|--------|-------------|------------|
-| `/api/auth/check-authority` | POST | Check account authority | `username` (required), `password` (required), `role` (optional) |
 | `/api/auth/login` | POST | Server-side login | `username` (required), `signatures` (required) |
 
 ## Expected Response Format

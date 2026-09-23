@@ -5,7 +5,6 @@
  */
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAccount, checkAuthority, serverApiLogin } from '@/lib/api/auth';
 import { setUser, loginError, setAuthority, logout, setTrackingId, generateTrackingId } from '../slices/userSlice';
 import { clearStoredKey } from '@/lib/crypto/key-storage';
 import type { AppDispatch, RootState } from '../index';

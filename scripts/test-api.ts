@@ -126,36 +126,10 @@ async function runTests() {
     );
   }
 
-  // Test 7: Get Notifications (requires valid account)
-  results.push(
-    await testEndpoint(
-      'Get Notifications (steemit)',
-      `${API_BASE}/api/steem/notifications?account=steemit&limit=10`
-    )
-  );
-
-  // Test 8: Get Unread Notifications
-  results.push(
-    await testEndpoint(
-      'Get Unread Notifications (steemit)',
-      `${API_BASE}/api/steem/unread-notifications?account=steemit`
-    )
-  );
-
-  // Test 9: Check Authority (with invalid credentials - should fail gracefully)
-  results.push(
-    await testEndpoint(
-      'Check Authority (Invalid)',
-      `${API_BASE}/api/auth/check-authority`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          username: 'nonexistent',
-          password: 'test',
-        }),
-      }
-    )
-  );
+  // NOTE: /api/steem/notifications and /api/steem/unread-notifications are
+  // bound to the signed-in session account (audit N-14), so they cannot be
+  // smoke-tested anonymously. /api/auth/check-authority was removed (audit
+  // N-13).
 
   // Print Results
   console.log('\n\n' + '='.repeat(60));

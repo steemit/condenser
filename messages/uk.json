@@ -327,10 +327,6 @@
     "search_history": "Історія",
     "announcement": "Оголошення"
   },
-  "help_article": {
-    "loading": "Loading…",
-    "load_failed": "Failed to load this page. Please try again later."
-  },
   "navigation": {
     "about": "Про Steemit, Inc.",
     "explore": "Дослідити",
@@ -836,5 +832,9 @@
     "invalid_username": "Будь ласка, введіть дійсне ім'я користувача.",
     "invalid_character": "Будь ласка, введіть ім'я користувача без \"@\".",
     "invalid_role": "Користувач вже має цю роль."
+  },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
   }
 }

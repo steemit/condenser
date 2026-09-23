@@ -100,7 +100,13 @@ export default function htmlReady(
       preprocessHtml(`<html>${html}</html>`),
       'text/html'
     );
-    traverse(doc, state);
+    // The synthetic <html> wrapper is parse scaffolding, not user content:
+    // walking from the documentElement keeps it out of htmltags (legacy
+    // parity — ReplyEditor's submit-time tag validation would otherwise
+    // reject every markdown post with "remove <html>"). A real user-supplied
+    // <html> element inside the body is still nested below the wrapper and
+    // still collected.
+    traverse(doc.documentElement || doc, state);
     if (mutate) {
       if (hideImages) {
         for (const image of Array.from(doc.getElementsByTagName('img')) as AnyNode[]) {

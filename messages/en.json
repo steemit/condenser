@@ -335,10 +335,6 @@
     "submit_search": "Submit search",
     "welcome_guide": "Welcome Guide"
   },
-  "help_article": {
-    "loading": "Loading…",
-    "load_failed": "Failed to load this page. Please try again later."
-  },
   "navigation": {
     "about": "About Steemit, Inc.",
     "explore": "Explore",
@@ -415,7 +411,8 @@
     "body_exceeds_max_bytes": "Post body exceeds {maxBytes} bytes.",
     "submitting": "Submitting...",
     "markdown_hint": "Markdown is supported. Use **bold**, *italic*, [links](url), etc.",
-    "signing_key_expired": "Your signing key has expired. Please log in again to post."
+    "signing_key_expired": "Your signing key has expired. Please log in again to post.",
+    "remove_html_elements": "Please remove the following HTML elements from your post: {tags}"
   },
   "beneficiary_selector_jsx": {
     "header": "Who should receive any rewards?",
@@ -982,5 +979,9 @@
   "follow_list": {
     "no_followers": "@{username} has no followers yet.",
     "not_following": "@{username} is not following anyone yet."
+  },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
   }
 }

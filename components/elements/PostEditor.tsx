@@ -8,6 +8,7 @@ import { showLogin } from '@/store/slices/userSlice';
 import { broadcastComment } from '@/lib/api/broadcast';
 import { userActionRecord } from '@/lib/analytics/overseer';
 import htmlReady from '@/lib/html-ready';
+import { allowedTags } from '@/lib/sanitize-config';
 import {
   generateCommentPermlink,
   generateStoryPermlink,
@@ -72,15 +73,16 @@ const md = new MarkdownIt({
 /**
  * Build json_metadata like legacy ReplyEditor.jsx:1390-1432:
  * render the body, run HtmlReady without mutating, and record extracted
- * hashtags/users/images/links plus app + format.
+ * hashtags/users/images/links plus app + format. Takes the pre-rendered
+ * HTML so the submit-time tag validation below can reuse the same render.
  */
 function buildJsonMetadata(opts: {
   isStory: boolean;
   tags: string[];
   category: string;
-  body: string;
+  html: string;
 }): string {
-  const rtags = htmlReady(md.render(opts.body), { mutate: false });
+  const rtags = htmlReady(opts.html, { mutate: false });
 
   // legacy allTags(): user-entered tags first, then body hashtags until the
   // MAX_TAGS limit is reached.
@@ -256,6 +258,26 @@ export default function PostEditor({
       }
     }
 
+    // Render once — the tag validation here and buildJsonMetadata below
+    // consume the same output (single render, single rtags pass).
+    const trimmedBody = body.trim();
+    const renderedHtml = md.render(trimmedBody);
+
+    // Legacy ReplyEditor.jsx:1392-1406 (audit N-18): any HTML tag the
+    // sanitizer would strip must be removed BEFORE broadcasting, so the
+    // stored body and the rendered view never diverge. Applies to comments,
+    // stories and edits alike — they share this submit path.
+    const disallowedTags = [...htmlReady(renderedHtml, { mutate: false }).htmltags]
+      .filter((tag) => !allowedTags.includes(tag));
+    if (disallowedTags.length > 0) {
+      setError(
+        t('reply_editor.remove_html_elements', {
+          tags: disallowedTags.map((tag) => `<${tag}>`).join(', '),
+        })
+      );
+      return;
+    }
+
     setSubmitting(true);
     try {
       // Wire up author/permlink/parents like legacy ReplyEditor linkProps
@@ -263,7 +285,6 @@ export default function PostEditor({
       const parentAuthor = isStory ? '' : parentAuthorProp || '';
       const parentPermlink = isStory ? cat : parentPermlinkProp || '';
       const trimmedTitle = isStory ? title.trim() : '';
-      const trimmedBody = body.trim();
 
       let permlink: string;
       if (isEdit) {
@@ -281,7 +302,7 @@ export default function PostEditor({
         isStory,
         tags: effectiveTags,
         category: cat,
-        body: trimmedBody,
+        html: renderedHtml,
       });
 
       // Legacy ReplyEditor.jsx:1510 — record the comment action at

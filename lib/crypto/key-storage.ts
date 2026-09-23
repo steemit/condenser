@@ -10,14 +10,34 @@
  *   (origin + username) is derivable by any same-origin script, so this does
  *   NOT protect against XSS. Key leakage under XSS is an accepted trade-off,
  *   since a posting key cannot move funds.
+ * - After decryption the WIF lives in the module-scoped variables below, NOT
+ *   in window properties: an own enumerable window global is visible to any
+ *   same-origin script via `Object.keys(window)` (and enumerable by
+ *   low-privilege extension sandboxes), widening the theft surface for zero
+ *   benefit. A module closure is behaviorally equivalent for our purposes —
+ *   per-tab lifetime, never shared across reloads or tabs — while being
+ *   reachable only through this module's exported API. This is hardening, not
+ *   XSS protection (see the AES-GCM note above).
  * - The key persists until explicit logout.
+ *
+ * Module state and SSR: this module is client-only by construction — every
+ * setter (encryptAndStoreKey) throws on the server and every reader
+ * (decryptAndRetrieveKey / getCachedKey) returns null there, so the module
+ * variables below can only ever be populated in a browser tab and cannot leak
+ * across server requests or users.
  */
 
 const STORAGE_KEY = 'steem_encrypted_key';
-const MEMORY_CACHE_KEY = 'steem_decrypted_key';
-const MEMORY_CACHE_USERNAME_KEY = 'steem_decrypted_key_username';
 const ENCRYPTION_ALGORITHM = 'AES-GCM';
 const KEY_DERIVATION_ALGORITHM = 'PBKDF2';
+
+// In-memory cache of the decrypted WIF. Module scope instead of window
+// globals (audit N-07): see the threat-model note above. Lifecycle is
+// identical to the old window properties — populated on login/decrypt,
+// cleared on logout, dropped with the tab (a reload re-imports the module
+// with both variables back to null).
+let cachedWif: string | null = null;
+let cachedWifUsername: string | null = null;
 
 interface EncryptedKeyData {
   encrypted: string; // Base64 encoded encrypted key
@@ -90,9 +110,8 @@ async function deriveKey(
 }
 
 function setMemoryCache(privateKeyWif: string, username: string): void {
-  const w = window as unknown as { [key: string]: string };
-  w[MEMORY_CACHE_KEY] = privateKeyWif;
-  w[MEMORY_CACHE_USERNAME_KEY] = username;
+  cachedWif = privateKeyWif;
+  cachedWifUsername = username;
 }
 
 /**
@@ -190,14 +209,12 @@ export async function decryptAndRetrieveKey(): Promise<{ privateKey: string; use
     const stored = localStorage.getItem(STORAGE_KEY);
 
     // Check memory cache first
-    const w = window as unknown as { [key: string]: string };
-    const cachedKey = w[MEMORY_CACHE_KEY];
-    if (cachedKey) {
+    if (cachedWif) {
       const username = stored
         ? (JSON.parse(stored) as EncryptedKeyData | PlainKeyData).username
-        : w[MEMORY_CACHE_USERNAME_KEY];
+        : cachedWifUsername;
       if (username) {
-        return { privateKey: cachedKey, username };
+        return { privateKey: cachedWif, username };
       }
     }
 
@@ -258,7 +275,7 @@ export function getCachedKey(): string | null {
   if (typeof window === 'undefined') {
     return null;
   }
-  return (window as unknown as { [key: string]: string })[MEMORY_CACHE_KEY] || null;
+  return cachedWif || null;
 }
 
 /**
@@ -297,13 +314,14 @@ export function getStoredUsername(): string | null {
  * Clear stored key (logout)
  */
 export function clearStoredKey(): void {
+  // Clear the in-memory cache unconditionally (module state; on the server
+  // both variables are always null, so this is a no-op there).
+  cachedWif = null;
+  cachedWifUsername = null;
   if (typeof window === 'undefined') {
     return;
   }
   localStorage.removeItem(STORAGE_KEY);
   // Also clear any legacy sessionStorage entry left by older versions.
   sessionStorage.removeItem(STORAGE_KEY);
-  const w = window as unknown as { [key: string]: string };
-  delete w[MEMORY_CACHE_KEY];
-  delete w[MEMORY_CACHE_USERNAME_KEY];
 }

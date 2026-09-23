@@ -71,6 +71,18 @@ function parseFragment(html: string): AnyNode {
   return domParser.parseFromString(html, 'text/html').documentElement;
 }
 
+/**
+ * Escape a value interpolated into a double-quoted attribute of markup that
+ * is re-parsed below (linkify). The linksAny charset excludes quotes and
+ * angle brackets, so this is a no-op for everything currently matchable —
+ * it is defense in depth against charset drift, not a behavior change
+ * (audit N-15). Entity-encoded '&' from the serialized text round-trips
+ * correctly and must NOT be re-escaped.
+ */
+function escapeLinkifyAttr(value: string): string {
+  return value.replace(/"/g, '&quot;');
+}
+
 export default function htmlReady(
   html: string,
   { mutate = true, hideImages = false, isProxifyImages = false }: HtmlReadyOptions = {}
@@ -213,13 +225,19 @@ function img(state: HtmlReadyState, child: AnyNode): void {
     }
   }
   // Wrap standalone images in a clickable link to the full-size proxied image.
-  if (child.parentNode && child.parentNode.nodeName.toLowerCase() !== 'a') {
-    const wrapped = parseFragment(
-      `<a href="${proxifyImageUrl(url, '0x0/')}" target="_blank">${xmlSerializer.serializeToString(
-        child
-      )}</a>`
-    );
-    child.parentNode.replaceChild(wrapped, child);
+  // The anchor is built with the DOM API (setAttribute) instead of string
+  // interpolation: an attribute value from getAttribute can contain quotes,
+  // and splicing it into `<a href="${...}">` would allow attribute injection
+  // (audit N-15). setAttribute escapes it, semantically equivalent to the
+  // legacy parse-fragment flow for every well-formed URL.
+  const parent = child.parentNode;
+  if (parent && parent.nodeName.toLowerCase() !== 'a') {
+    const ownerDoc = child.ownerDocument || parent.ownerDocument;
+    const wrapped = ownerDoc.createElement('a');
+    wrapped.setAttribute('href', proxifyImageUrl(url, '0x0/'));
+    wrapped.setAttribute('target', '_blank');
+    parent.replaceChild(wrapped, child);
+    wrapped.appendChild(child);
   }
 }
 
@@ -342,7 +360,7 @@ function linkify(
   content = content.replace(linksAny('gi'), (ln) => {
     if (linksRe.image.test(ln)) {
       if (images) images.add(ln);
-      return `<img src="${ipfsPrefix(ln)}" />`;
+      return `<img src="${escapeLinkifyAttr(ipfsPrefix(ln))}" />`;
     }
 
     // do not linkify .exe or .zip urls
@@ -354,7 +372,7 @@ function linkify(
     }
 
     if (links) links.add(ln);
-    return `<a href="${ipfsPrefix(ln)}">${ln}</a>`;
+    return `<a href="${escapeLinkifyAttr(ipfsPrefix(ln))}">${ln}</a>`;
   });
   return content;
 }

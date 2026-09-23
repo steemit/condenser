@@ -7,6 +7,7 @@ vi.mock('@/lib/steem/client', () => ({
 }));
 
 vi.mock('@/lib/cache/redis', () => ({
+  cacheDelete: vi.fn().mockResolvedValue(undefined),
   cacheDeleteByPrefix: vi.fn().mockResolvedValue(undefined),
 }));
 
@@ -34,7 +35,7 @@ vi.mock('@/lib/cache/rate-limit', async (importOriginal) => {
 
 import { POST } from '@/app/api/steem/broadcast/route';
 import { callSteemApi } from '@/lib/steem/client';
-import { cacheDeleteByPrefix } from '@/lib/cache/redis';
+import { cacheDelete, cacheDeleteByPrefix } from '@/lib/cache/redis';
 import { checkRateLimit } from '@/lib/cache/rate-limit';
 import {
   recordPendingVote,
@@ -45,7 +46,8 @@ import {
 } from '@/lib/steem/pending-overlay';
 
 const callSteemApiMock = vi.mocked(callSteemApi);
-const cacheDeleteMock = vi.mocked(cacheDeleteByPrefix);
+const cacheDeleteMock = vi.mocked(cacheDelete);
+const cacheDeleteByPrefixMock = vi.mocked(cacheDeleteByPrefix);
 const checkRateLimitMock = vi.mocked(checkRateLimit);
 const recordVoteMock = vi.mocked(recordPendingVote);
 const recordRootMock = vi.mocked(recordPendingRootPost);
@@ -134,14 +136,17 @@ describe('POST /api/steem/broadcast', () => {
     );
     // Voter token (per-user entries) + permlink token (post/comments URLs).
     expect(res.headers.get('X-Cache-Invalidate')).toBe('alice,permlink=my-post');
-    const prefixes = cacheDeleteMock.mock.calls.map((c) => c[0]);
+    const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
     // steem:post: is deliberately NOT deleted: the indexer needs a few
     // seconds to see the vote, so an immediate delete would re-cache
     // pre-vote data as fresh for a full TTL.
-    expect(prefixes).not.toContain('steem:post:bob:my-post');
-    expect(prefixes).toContain('steem:posts:ranked:');
-    expect(prefixes).toContain('steem:profile:alice');
-    expect(prefixes).toContain('steem:profile:bob');
+    expect(deletedKeys).not.toContain('steem:post:bob:my-post');
+    // Exact profile keys only — ranked feeds are 3s-TTL caches left to
+    // natural expiry + the pending vote overlay (audit N-10).
+    expect(deletedKeys).toContain('steem:profile:alice');
+    expect(deletedKeys).toContain('steem:profile:bob');
+    // No prefix SCAN sweeps anywhere on the broadcast path (audit N-10).
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
     // The vote lands in the pending overlay for the indexing window.
     expect(recordVoteMock).toHaveBeenCalledWith('bob', 'my-post', 'alice', 10000);
   });
@@ -231,9 +236,10 @@ describe('POST /api/steem/broadcast', () => {
     // are keyed by account), which the op previously never emitted.
     expect(res.headers.get('X-Cache-Invalidate')).toBe('alice');
     expect(recordProfileMock).toHaveBeenCalledWith('alice', profile);
-    // The account's cached profile is dropped (pre-existing behaviour).
-    const prefixes = cacheDeleteMock.mock.calls.map((c) => c[0]);
-    expect(prefixes).toContain('steem:profile:alice');
+    // The account's cached profile is dropped exactly (audit N-10).
+    const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
+    expect(deletedKeys).toContain('steem:profile:alice');
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
   });
 
   it('records no profile overlay when posting_json_metadata is malformed', async () => {
@@ -346,9 +352,14 @@ describe('POST /api/steem/broadcast', () => {
       makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
     );
     expect(res.headers.get('X-Cache-Invalidate')).toBe('carol');
-    const prefixes = cacheDeleteMock.mock.calls.map((c) => c[0]);
-    expect(prefixes).toContain('steem:posts:ranked:');
-    expect(prefixes).toContain('steem:profile:');
+    const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
+    // The actor's and the follow target's profiles, exactly — the old code
+    // swept the whole `steem:profile:` prefix (audit N-10).
+    expect(deletedKeys).toContain('steem:profile:carol');
+    expect(deletedKeys).toContain('steem:profile:dave');
+    expect(deletedKeys).not.toContain('steem:profile:erin');
+    // No prefix SCAN sweeps: no `steem:posts:ranked:` flush either.
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
   });
 
   it('uses the author for comment ops and invalidates account posts', async () => {
@@ -373,9 +384,11 @@ describe('POST /api/steem/broadcast', () => {
     // Root post/edit ops also emit their own permlink token so a post edit
     // drops the post's L1 entry (harmless for brand-new posts).
     expect(res.headers.get('X-Cache-Invalidate')).toBe('erin,permlink=new-post');
-    const prefixes = cacheDeleteMock.mock.calls.map((c) => c[0]);
-    expect(prefixes).toContain('steem:posts:account:erin:');
-    expect(prefixes).toContain('steem:profile:erin');
+    const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
+    // The author's profile exactly; their account-post lists are 3s-TTL
+    // caches left to natural expiry (audit N-10 — no prefix sweeps).
+    expect(deletedKeys).toContain('steem:profile:erin');
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
   });
 
   it('drops invalidation tokens whose op-derived values leave the safe charset', async () => {
@@ -391,15 +404,239 @@ describe('POST /api/steem/broadcast', () => {
     expect(res.headers.get('X-Cache-Invalidate')).toBe('alice');
   });
 
-  it('omits X-Cache-Invalidate when no actor can be extracted', async () => {
+  it('rejects non-client operations (transfer) with 400 and never relays them', async () => {
+    // audit N-10: the relay only accepts the operation set the client itself
+    // constructs; transfer is not one of them.
     const tx = signedTx([['transfer', { from: 'a', to: 'b', amount: '1.000 STEEM', memo: '' }]]);
 
     const res = await POST(
       makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
     );
-    expect(res.headers.get('X-Cache-Invalidate')).toBeNull();
-    // Transfer does not touch feed/profile caches.
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'Operation not allowed: transfer' });
+    expect(callSteemApiMock).not.toHaveBeenCalled();
     expect(cacheDeleteMock).not.toHaveBeenCalled();
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects account_update (only account_update2 is a client operation)', async () => {
+    const tx = signedTx([
+      ['account_update', { account: 'alice', memo_key: 'STM5xyz', json_metadata: '' }],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'Operation not allowed: account_update' });
+    expect(callSteemApiMock).not.toHaveBeenCalled();
+  });
+
+  it('accepts every client-constructed operation type', async () => {
+    const tx = signedTx([
+      [
+        'comment',
+        { parent_author: '', parent_permlink: 'life', author: 'erin', permlink: 'p1', title: 'T', body: 'B', json_metadata: '{}' },
+      ],
+      [
+        'comment_options',
+        {
+          author: 'erin',
+          permlink: 'p1',
+          max_accepted_payout: '1000000.000 SBD',
+          percent_steem_dollars: 10000,
+          allow_votes: true,
+          allow_curation_rewards: true,
+          extensions: [],
+        },
+      ],
+      ['delete_comment', { author: 'erin', permlink: 'p2' }],
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['erin'],
+          id: 'notify',
+          json: JSON.stringify(['setLastRead', { date: '2026-01-01T00:00:00' }]),
+        },
+      ],
+      ['account_update2', { account: 'erin', json_metadata: '', posting_json_metadata: '', extensions: [] }],
+      ['vote', { voter: 'erin', author: 'bob', permlink: 'p3', weight: 100 }],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(callSteemApiMock).toHaveBeenCalledWith(
+      'condenser_api.broadcast_transaction',
+      [tx]
+    );
+  });
+
+  it('rejects custom_json with a non-client id', async () => {
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'sm_market_operation',
+          json: JSON.stringify([{ action: 'arbitrary' }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({
+      error: 'Operation not allowed: custom_json id=sm_market_operation',
+    });
+    expect(callSteemApiMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects custom_json with a missing id', async () => {
+    const tx = signedTx([
+      ['custom_json', { required_auths: [], required_posting_auths: ['carol'], json: '[]' }],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({
+      error: 'Operation not allowed: custom_json id=(missing)',
+    });
+    expect(callSteemApiMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects active-auth custom_json (client ops are posting-auth only)', async () => {
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: ['carol'],
+          required_posting_auths: [],
+          id: 'follow',
+          json: JSON.stringify(['follow', { follower: 'carol', following: 'dave', what: [] }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({
+      error: 'Operation not allowed: custom_json with required_auths',
+    });
+    expect(callSteemApiMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects malformed operations', async () => {
+    const tx = signedTx([['vote']]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({
+      error: 'Operation not allowed: malformed operation',
+    });
+    expect(callSteemApiMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects the whole transaction when any single operation is not allowed', async () => {
+    const tx = signedTx([
+      ['vote', { voter: 'alice', author: 'bob', permlink: 'p', weight: 1 }],
+      ['transfer', { from: 'a', to: 'b', amount: '1.000 STEEM', memo: '' }],
+      ['witness_update', { owner: 'a', url: '', block_signing_key: 'STM5x', props: {} }],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    // Both rejected names are listed (order of appearance, deduplicated).
+    expect(body.error).toBe('Operation not allowed: transfer, witness_update');
+    expect(callSteemApiMock).not.toHaveBeenCalled();
+  });
+
+  it('deletes the community subscribers cache exactly on community subscribe', async () => {
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['erin'],
+          id: 'community',
+          json: JSON.stringify(['subscribe', { community: 'hive-106292' }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
+    expect(deletedKeys).toContain('steem:profile:erin');
+    expect(deletedKeys).toContain('steem:community-subscribers:hive-106292');
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
+  });
+
+  it('only deletes the actor profile for reblog custom_json payloads', async () => {
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify(['reblog', { account: 'carol', author: 'dave', permlink: 'x' }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
+    // A reblog lands in the reblogger's own (3s-TTL) blog list; the target
+    // author's cached entries are unchanged.
+    expect(deletedKeys).toContain('steem:profile:carol');
+    expect(deletedKeys).not.toContain('steem:profile:dave');
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
+  });
+
+  it('deletes both case variants of a mixed-case account profile key', async () => {
+    const tx = signedTx([['vote', { voter: 'Alice', author: 'bob', permlink: 'p', weight: 1 }]]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
+    // Steem account names are case-insensitive; the profile route caches
+    // under whichever casing the reader used, so both variants must go.
+    expect(deletedKeys).toContain('steem:profile:alice');
+    expect(deletedKeys).toContain('steem:profile:Alice');
+  });
+
+  it('omits X-Cache-Invalidate when no actor can be extracted', async () => {
+    const tx = signedTx([['vote', { weight: 1 }]]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.headers.get('X-Cache-Invalidate')).toBeNull();
+    // No actor fields to scope any invalidation to.
+    expect(cacheDeleteMock).not.toHaveBeenCalled();
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
   });
 
   it('propagates RPC failures as 500 with the error message', async () => {

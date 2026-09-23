@@ -110,11 +110,18 @@ flowchart LR
 
 | Op | Overlay write (Redis, 120s TTL) | L2 (Redis) invalidation | L1 `X-Cache-Invalidate` tokens |
 |---|---|---|---|
-| `vote` | `steem:pendingvote:{author}:{permlink}` field voter → `{weight, ts}` (weight 0 = cancel) | `steem:posts:ranked:`, `steem:profile:{voter}`, `steem:profile:{author}` — **`steem:post:` deliberately untouched** (a delete would re-cache pre-vote data for a full TTL while hivemind lags) | `{voter}`, `permlink={permlink}` |
-| `comment` (root post / edit) | `steem:pendingroot:{author}:{permlink}` → synthesized bridge-shaped post | `steem:posts:account:{author}:`, `steem:profile:{author}`, `steem:posts:ranked:` | `{author}`, `permlink={permlink}` (drops the post's own L1 entry on edits) |
+| `vote` | `steem:pendingvote:{author}:{permlink}` field voter → `{weight, ts}` (weight 0 = cancel) | exact-key DEL `steem:profile:{voter}`, `steem:profile:{author}` — **`steem:post:` deliberately untouched** (a delete would re-cache pre-vote data for a full TTL while hivemind lags) and **list caches (`steem:posts:ranked:*`, `steem:posts:account:*`) left to their 3s fresh TTL + the vote overlay** | `{voter}`, `permlink={permlink}` |
+| `comment` (root post / edit) | `steem:pendingroot:{author}:{permlink}` → synthesized bridge-shaped post | exact-key DEL `steem:profile:{author}` (account-post lists are 3s-TTL caches, natural expiry) | `{author}`, `permlink={permlink}` (drops the post's own L1 entry on edits) |
 | `comment` (reply) | `steem:pendingchildren:{parentAuthor}:{parentPermlink}` field `{author}/{permlink}` → post | same as above | `{author}`, `permlink={parent_permlink}` (drops the parent discussion's post+comments entries) |
-| `delete_comment` | `steem:pendingtomb:{author}:{permlink}` | `steem:posts:ranked:`, `steem:profile:` | `{author}` only — the op carries no parent reference, so the parent's L1 entry goes stale within 15s and self-revalidates on the next read |
-| `account_update2` | `steem:pendingprofile:{account}` → the complete new `profile` sub-object (parsed from `posting_json_metadata`) | `steem:profile:{account}` | `{account}` (drops the user's profile + account-post L1 entries) |
+| `delete_comment` | `steem:pendingtomb:{author}:{permlink}` | exact-key DEL `steem:profile:{author}` | `{author}` only — the op carries no parent reference, so the parent's L1 entry goes stale within 15s and self-revalidates on the next read |
+| `custom_json` | none | exact-key DEL `steem:profile:{actor}`; `follow` also DELs the target's `steem:profile:{following}`; `community` also DELs `steem:community-subscribers:{community}` | `{actor}` |
+| `account_update2` | `steem:pendingprofile:{account}` → the complete new `profile` sub-object (parsed from `posting_json_metadata`) | exact-key DEL `steem:profile:{account}` | `{account}` (drops the user's profile + account-post L1 entries) |
+
+Since audit N-10 every L2 invalidation on the broadcast path is a fully-known
+exact-key DEL — no prefix sweeps (`cacheDeleteByPrefix` SCANs the whole
+keyspace regardless of match count, which let any registered account punch
+the shared cache through at ~zero cost). List caches are covered by their
+3-second fresh TTL plus the overlay instead of being swept.
 
 All Redis keys are namespaced by `redisKey()` — the actual keys carry the
 `condenser:` prefix (configurable via `REDIS_KEY_PREFIX`), e.g.

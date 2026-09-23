@@ -639,7 +639,7 @@ describe('POST /api/steem/broadcast', () => {
     expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
   });
 
-  it('propagates RPC failures as 500 with the error message', async () => {
+  it('propagates RPC failures as 500 with the error message but no details echo (audit N-20)', async () => {
     callSteemApiMock.mockRejectedValue(new Error('missing_active_authority'));
 
     const tx = signedTx([['vote', { voter: 'alice', author: 'bob', permlink: 'p', weight: 1 }]]);
@@ -648,7 +648,10 @@ describe('POST /api/steem/broadcast', () => {
     );
     expect(res.status).toBe(500);
     const body = await res.json();
+    // The chain rejection message stays (Voting.tsx matches it); the former
+    // `details: error.toString()` echo is gone.
     expect(body.error).toBe('missing_active_authority');
+    expect(body.details).toBeUndefined();
   });
 
   it('checks the steem:broadcast limit (30/min/IP) before reading the body', async () => {

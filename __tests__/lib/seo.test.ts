@@ -25,12 +25,17 @@ describe('makeCanonicalLink', () => {
     );
   });
 
-  it('accepts an absolute http(s) canonical_url from json_metadata', () => {
+  it('accepts a canonical_url on this site (steemit.com / www.steemit.com)', () => {
     expect(
       makeCanonicalLink(basePost, {
-        canonical_url: 'https://example.com/my-post',
+        canonical_url: 'https://steemit.com/photography/@alice/hello-world',
       })
-    ).toBe('https://example.com/my-post');
+    ).toBe('https://steemit.com/photography/@alice/hello-world');
+    expect(
+      makeCanonicalLink(basePost, {
+        canonical_url: 'https://www.steemit.com/photography/@alice/hello-world',
+      })
+    ).toBe('https://www.steemit.com/photography/@alice/hello-world');
   });
 
   it.each([
@@ -38,7 +43,11 @@ describe('makeCanonicalLink', () => {
     'ftp://example.com/post',
     '//example.com/post',
     'example.com/post',
-  ])('rejects non-http canonical_url %j', (url) => {
+    // Cross-domain canonical_url is no longer honored (audit N-17).
+    'https://example.com/my-post',
+    'https://evil.example/@alice/hello-world',
+    'https://notsteemit.com/',
+  ])('rejects canonical_url %j', (url) => {
     expect(makeCanonicalLink(basePost, { canonical_url: url })).toBe(
       'https://steemit.com/photography/@alice/hello-world'
     );
@@ -154,7 +163,7 @@ describe('buildPostMetadata', () => {
     expect(String(meta.description)).toContain('Hello');
   });
 
-  it('uses json_metadata.image[0] with a summary_large_image card', () => {
+  it('uses json_metadata.image[0] (validated + proxied) with a summary_large_image card', () => {
     const meta = buildPostMetadata({
       ...basePost,
       json_metadata: {
@@ -162,12 +171,41 @@ describe('buildPostMetadata', () => {
         image: ['https://example.com/pic.jpg'],
       },
     });
+    // Third-party hosts pass through the proxy verbatim.
     expect(meta.openGraph?.images).toEqual(['https://example.com/pic.jpg']);
     // Next's Twitter type is a union whose new variant drops `card`; we
     // always emit the classic shape, so read it through that branch.
     const twitter = meta.twitter as { card?: string; images?: string[] };
     expect(twitter.card).toBe('summary_large_image');
     expect(twitter.images).toEqual(['https://example.com/pic.jpg']);
+  });
+
+  it('proxies first-party og:image through the image proxy (audit N-17)', () => {
+    const meta = buildPostMetadata({
+      ...basePost,
+      json_metadata: {
+        tags: ['photography'],
+        image: ['https://steemitimages.com/DQmXabc/pic.jpg'],
+      },
+    });
+    const ogImage = String(
+      (meta.openGraph?.images as { url?: string }[] | undefined)?.[0]?.url ??
+        meta.openGraph?.images
+    );
+    expect(ogImage).toMatch(/^https:\/\/steemitimages\.com\/p\//);
+    const twitterImage = String(
+      (meta.twitter as { images?: string[] }).images?.[0]
+    );
+    expect(twitterImage).toMatch(/^https:\/\/steemitimages\.com\/p\//);
+  });
+
+  it('degrades non-http(s) og:image to the author avatar (audit N-17)', () => {
+    const meta = buildPostMetadata({
+      ...basePost,
+      json_metadata: { tags: ['photography'], image: ['javascript:alert(1)'] },
+    });
+    expect(meta.openGraph?.images).toEqual([`${SITE_ORIGIN}/avatar/alice`]);
+    expect((meta.twitter as { card?: string }).card).toBe('summary');
   });
 
   it('falls back to the author avatar with a summary card when there is no image', () => {
@@ -185,7 +223,23 @@ describe('buildPostMetadata', () => {
     expect(meta.description).toBe('my reply by alice');
   });
 
-  it('honours json_metadata.canonical_url as alternates.canonical but keeps og:url local', () => {
+  it('honours an on-site json_metadata.canonical_url as alternates.canonical but keeps og:url local', () => {
+    const meta = buildPostMetadata({
+      ...basePost,
+      json_metadata: {
+        tags: ['photography'],
+        canonical_url: 'https://steemit.com/photography/@alice/hello-world',
+      },
+    });
+    expect(meta.alternates?.canonical).toBe(
+      'https://steemit.com/photography/@alice/hello-world'
+    );
+    expect(meta.openGraph?.url).toBe(
+      'https://steemit.com/photography/@alice/hello-world'
+    );
+  });
+
+  it('ignores cross-domain canonical_url in metadata too (audit N-17)', () => {
     const meta = buildPostMetadata({
       ...basePost,
       json_metadata: {
@@ -193,8 +247,7 @@ describe('buildPostMetadata', () => {
         canonical_url: 'https://example.com/original',
       },
     });
-    expect(meta.alternates?.canonical).toBe('https://example.com/original');
-    expect(meta.openGraph?.url).toBe(
+    expect(meta.alternates?.canonical).toBe(
       'https://steemit.com/photography/@alice/hello-world'
     );
   });
@@ -215,8 +268,18 @@ describe('buildAccountMetadata', () => {
       card: 'summary',
       site: '@steemit',
       title: '@alice',
+      // Third-party host: passes the proxy verbatim.
       images: ['https://example.com/avatar.png'],
     });
+  });
+
+  it('degrades a non-http(s) profile image to the default share image (audit N-17)', () => {
+    const meta = buildAccountMetadata('alice', {
+      profile_image: 'javascript:alert(1)',
+    });
+    expect(meta.twitter?.images).toEqual([
+      `${SITE_ORIGIN}/images/steemit-twshare-2.png`,
+    ]);
   });
 
   it('falls back to account name and default about/image', () => {

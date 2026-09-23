@@ -14,6 +14,7 @@ import {
   revokeSession,
   setSessionCookie,
 } from '@/lib/auth/session';
+import { enforceCsrf, setCsrfCookie } from '@/lib/auth/csrf';
 import { readJsonWithLimit } from '@/lib/api/body-limit';
 import {
   RATE_LIMITS,
@@ -39,6 +40,7 @@ export async function POST(request: NextRequest) {
     if (!limited.ok) {
       return limited.response;
     }
+
     const body = limited.data as {
       username?: string;
       signature?: string;
@@ -54,6 +56,18 @@ export async function POST(request: NextRequest) {
         { error: 'Missing required fields: username, signature, publicKey, data, challenge' },
         { status: 400 }
       );
+    }
+
+    // CSRF double-submit gate (audit N-22): login rotates the session, so
+    // the request must echo the challenge session's csrfToken via the
+    // X-CSRF-Token header (LoginForm fetches /api/auth/challenge first,
+    // which mints both). Runs after the body cap and field validation so
+    // those 413/400 contracts are unchanged, before the account bucket and
+    // any RPC work.
+    const csrfSession = await getSession(request);
+    const csrfRejection = enforceCsrf(request, csrfSession);
+    if (csrfRejection) {
+      return csrfRejection;
     }
 
     // Second rate-limit dimension on the target account: each attempt costs
@@ -104,7 +118,8 @@ export async function POST(request: NextRequest) {
     // Step 3: Verify the challenge matches the one issued to this session
     // (legacy general.js login_account verifies the signed challenge against
     // session login_challenge — self-minted challenges are rejected).
-    const currentSession = await getSession(request);
+    // Reuses the session loaded at the CSRF gate.
+    const currentSession = csrfSession;
     if (
       !currentSession?.loginChallenge ||
       currentSession.loginChallenge !== challenge
@@ -173,8 +188,11 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Set session cookie
+    // Set session cookie + mirror the CSRF token (audit N-22). loginUser
+    // rotates the session but createSession preserves csrfToken, so the
+    // pre-login value is still the live one.
     setSessionCookie(response, sessionToken);
+    setCsrfCookie(response, csrfSession);
 
     // Login checkpoint (legacy src/server/api/general.js login_account):
     // report the sign-in to overseer. Best-effort — never blocks login.
@@ -190,9 +208,10 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error: unknown) {
     console.error('Login error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Login failed';
+    // Raw error only in server logs (above); clients get a generic message
+    // (audit N-20: unexpected internals must not reach the response).
     return NextResponse.json(
-      { error: errorMessage },
+      { error: 'Login failed. Please try again.' },
       { status: 500 }
     );
   }

@@ -83,7 +83,12 @@ describe('Header logout', () => {
     });
     expect(store.getState().user.logged_out).toBe(true);
     expect(window.localStorage.getItem('autopost2')).toBeNull();
-    expect(fetch).toHaveBeenCalledWith('/api/auth/logout', { method: 'POST' });
+    // postJsonWithCsrf shape (audit N-22): JSON content type + CSRF header.
+    expect(fetch).toHaveBeenCalledWith('/api/auth/logout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: undefined,
+    });
     expect(routerRefresh).toHaveBeenCalled();
     // Legacy does not navigate on logout
     expect(routerPush).not.toHaveBeenCalled();

@@ -30,9 +30,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(account);
   } catch (error: unknown) {
     console.error('Error fetching account:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch account';
+    // Raw error only in server logs (above); clients get a generic message
+    // (audit N-20: unexpected RPC internals must not reach the response).
     return NextResponse.json(
-      { error: errorMessage },
+      { error: 'Failed to fetch account' },
       { status: 500 }
     );
   }

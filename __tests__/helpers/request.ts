@@ -34,3 +34,12 @@ export function sessionCookieHeader(
 ): Record<string, string> {
   return { cookie: `${name}=${token}` };
 }
+
+/** Standard CSRF token used in route tests (mirrors the session value). */
+export const TEST_CSRF_TOKEN =
+  '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
+
+/** X-CSRF-Token header carrying the double-submit token (audit N-22). */
+export function csrfHeader(token: string = TEST_CSRF_TOKEN): Record<string, string> {
+  return { 'x-csrf-token': token };
+}

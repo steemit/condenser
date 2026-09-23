@@ -12,6 +12,7 @@ import {
   revokeSession,
   setSessionCookie,
 } from '@/lib/auth/session';
+import { enforceCsrf, setCsrfCookie } from '@/lib/auth/csrf';
 import { enforceBodyLimit } from '@/lib/api/body-limit';
 
 export async function POST(request: NextRequest) {
@@ -32,6 +33,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // CSRF double-submit gate (audit N-22): logout destroys/rotates the
+    // session, so it is a session write and must echo the token.
+    const csrfRejection = enforceCsrf(request, currentSession);
+    if (csrfRejection) {
+      return csrfRejection;
+    }
+
     const response = NextResponse.json({
       success: true,
       message: 'Logged out successfully',
@@ -46,6 +54,8 @@ export async function POST(request: NextRequest) {
       // User was logged in, create session without username
       const sessionToken = await logoutUser(currentSession);
       setSessionCookie(response, sessionToken);
+      // logoutUser keeps csrfToken through the rotation (audit N-22).
+      setCsrfCookie(response, currentSession);
     } else {
       // No user was logged in, just clear the session
       clearSessionCookie(response);
@@ -54,9 +64,10 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error: unknown) {
     console.error('Logout error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Logout failed';
+    // Raw error only in server logs (above); clients get a generic message
+    // (audit N-20: unexpected internals must not reach the response).
     return NextResponse.json(
-      { error: errorMessage },
+      { error: 'Logout failed. Please try again.' },
       { status: 500 }
     );
   }

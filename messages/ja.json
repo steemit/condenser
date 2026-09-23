@@ -292,10 +292,6 @@
       "checkbox": "理解しました。"
     }
   },
-  "help_article": {
-    "loading": "Loading…",
-    "load_failed": "Failed to load this page. Please try again later."
-  },
   "navigation": {
     "about": "Steemについて",
     "explore": "投稿を探す",
@@ -692,5 +688,9 @@
     "invalid_username": "有効なユーザー名を入力してください。",
     "invalid_character": "\"@\"を含まないユーザー名を入力してください。",
     "invalid_role": "ユーザーはすでにその役割を持っています。"
+  },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
   }
 }

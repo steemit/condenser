@@ -45,9 +45,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(comments);
   } catch (error: unknown) {
     console.error('Error fetching comments:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch comments';
+    // Raw error only in server logs (above); clients get a generic message
+    // (audit N-20: unexpected RPC internals must not reach the response).
     return NextResponse.json(
-      { error: errorMessage },
+      { error: 'Failed to fetch comments' },
       { status: 500 }
     );
   }

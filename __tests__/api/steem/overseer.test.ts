@@ -24,6 +24,15 @@ const callSteemApiMock = vi.mocked(callSteemApi);
 const checkRateLimitMock = vi.mocked(checkRateLimit);
 
 const PAYLOAD = ['custom', { measurement: 'page_view', tags: {}, fields: {} }];
+const AD_PAYLOAD = ['ad', { trackingId: 'x-123456', adTag: 'tron_ad_pc', version: 'next' }];
+const ROUTE_PAYLOAD = [
+  'custom',
+  {
+    measurement: 'route',
+    tags: { app: 'condenser', version: 'next', tag: 'post' },
+    fields: { trackingId: 'x-123', permlink: 'hello-world' },
+  },
+];
 
 describe('POST /api/steem/overseer', () => {
   beforeEach(() => {
@@ -37,6 +46,42 @@ describe('POST /api/steem/overseer', () => {
     const res = await POST(makePostRequest('/api/steem/overseer', PAYLOAD));
     expect(res.status).toBe(204);
     expect(callSteemApiMock).toHaveBeenCalledWith('overseer.collect', PAYLOAD);
+  });
+
+  it('relays the ad-view payload shape (recordAdsView)', async () => {
+    const res = await POST(makePostRequest('/api/steem/overseer', AD_PAYLOAD));
+    expect(res.status).toBe(204);
+    expect(callSteemApiMock).toHaveBeenCalledWith('overseer.collect', AD_PAYLOAD);
+  });
+
+  it('relays the route-tag payload shape with populated maps', async () => {
+    const res = await POST(makePostRequest('/api/steem/overseer', ROUTE_PAYLOAD));
+    expect(res.status).toBe(204);
+    expect(callSteemApiMock).toHaveBeenCalledWith('overseer.collect', ROUTE_PAYLOAD);
+  });
+
+  it.each([
+    'not an array',
+    ['custom'],
+    ['custom', { measurement: 'route' }, 'extra'],
+    ['unknown-kind', { measurement: 'route' }],
+    ['custom', 'not-an-object'],
+    // wrong field shapes
+    ['custom', {}],
+    ['custom', { measurement: 'Route Tags!' }],
+    ['custom', { measurement: 'route', tags: 'nope' }],
+    ['custom', { measurement: 'route', fields: { nested: { deep: true } } }],
+    ['custom', { measurement: 'route', surprise: 1 }],
+    ['custom', { measurement: 'route', fields: { bad$key: 1 } }],
+    ['ad', { trackingId: 'x-1', adTag: 'ok', version: 'next', extra: 1 }],
+    ['ad', { trackingId: 'x 1', adTag: 'ok', version: 'next' }],
+    ['ad', { trackingId: 'x-1', adTag: 'has space', version: 'next' }],
+    ['ad', { trackingId: 'x-1', adTag: 'ok' }],
+  ])('rejects malformed payload %j with 400 (audit N-25)', async (payload) => {
+    const res = await POST(makePostRequest('/api/steem/overseer', payload));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'Malformed analytics payload' });
+    expect(callSteemApiMock).not.toHaveBeenCalled();
   });
 
   it('still answers 204 when the relay fails', async () => {

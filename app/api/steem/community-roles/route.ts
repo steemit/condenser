@@ -51,9 +51,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(result || []);
   } catch (error: unknown) {
     console.error('Error fetching community roles/subscribers:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch community data';
+    // Raw error only in server logs (above); clients get a generic message
+    // (audit N-20: unexpected RPC internals must not reach the response).
     return NextResponse.json(
-      { error: errorMessage },
+      { error: 'Failed to fetch community data' },
       { status: 500 }
     );
   }

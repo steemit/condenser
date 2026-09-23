@@ -99,7 +99,7 @@ describe('GET /api/steem/unread-notifications', () => {
     expect(getUnreadMock).toHaveBeenCalledWith({ account: 'Alice' });
   });
 
-  it('propagates RPC failures as 500', async () => {
+  it('returns 500 with a generic message on RPC failure (audit N-20)', async () => {
     getUnreadMock.mockRejectedValue(new Error('boom'));
 
     const res = await GET(
@@ -107,7 +107,7 @@ describe('GET /api/steem/unread-notifications', () => {
     );
     expect(res.status).toBe(500);
     const body = await res.json();
-    expect(body.error).toBe('boom');
+    expect(body.error).toBe('Failed to fetch unread notifications');
     expect(body.unread_count).toBe(0);
   });
 });

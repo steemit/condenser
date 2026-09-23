@@ -13,6 +13,7 @@ import {
   isPublicKeyFormat 
 } from '@/lib/crypto/client';
 import { encryptAndStoreKey } from '@/lib/crypto/key-storage';
+import { postJsonWithCsrf } from '@/lib/api/csrf';
 
 /**
  * LoginForm component
@@ -136,19 +137,15 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
       // Step 5: Sign authentication data
       const signatureResult = signAuthData(privateKeyWif, normalizedUsername, challenge);
 
-      // Step 6: Submit signature for verification and login
-      const loginResponse = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: normalizedUsername,
-          signature: signatureResult.signature,
-          publicKey: signatureResult.publicKey,
-          data: signatureResult.data,
-          challenge,
-        }),
+      // Step 6: Submit signature for verification and login. The POST
+      // echoes the challenge session's CSRF token (audit N-22; the cookie
+      // was set by the /api/auth/challenge fetch in Step 4).
+      const loginResponse = await postJsonWithCsrf('/api/auth/login', {
+        username: normalizedUsername,
+        signature: signatureResult.signature,
+        publicKey: signatureResult.publicKey,
+        data: signatureResult.data,
+        challenge,
       });
 
       if (!loginResponse.ok) {

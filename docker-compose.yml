@@ -6,8 +6,16 @@ services:
       context: .
       dockerfile: Dockerfile
       target: development
+    # Run as non-root, matching the production stage's uid/gid (Dockerfile
+    # creates nextjs:nodejs as 1001:1001). Override with your host uid/gid
+    # when the bind-mounted ./ is not writable by 1001:
+    #   CONDENSER_DEV_UID=$UID CONDENSER_DEV_GID=$(id -g) docker compose up
+    user: "${CONDENSER_DEV_UID:-1001}:${CONDENSER_DEV_GID:-1001}"
     ports:
-      - "3000:3000"
+      # Loopback-only by default so the dev server is not exposed to the
+      # network; open it up (0.0.0.0:3000:3000) when external access is
+      # needed (e.g. testing from another device).
+      - "127.0.0.1:3000:3000"
     volumes:
       - .:/app
       - /app/node_modules
@@ -24,7 +32,9 @@ services:
       dockerfile: Dockerfile
       target: production
     ports:
-      - "3000:3000"
+      # Loopback-only by default; put a reverse proxy in front for public
+      # exposure (change to 0.0.0.0:3000:3000 only when you really mean it).
+      - "127.0.0.1:3000:3000"
     environment:
       - NODE_ENV=production
       # Session signing secret is required in every environment (fail closed).

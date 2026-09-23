@@ -13,6 +13,7 @@ import {
   setSessionCookie,
   updateSession,
 } from '@/lib/auth/session';
+import { enforceCsrf, setCsrfCookie } from '@/lib/auth/csrf';
 import { readJsonWithLimit } from '@/lib/api/body-limit';
 
 export async function POST(request: NextRequest) {
@@ -23,6 +24,12 @@ export async function POST(request: NextRequest) {
         { error: 'missing logged in account' },
         { status: 401 }
       );
+    }
+
+    // CSRF double-submit gate (audit N-22): preferences rewrite the session.
+    const csrfRejection = enforceCsrf(request, session);
+    if (csrfRejection) {
+      return csrfRejection;
     }
 
     // Body size cap (audit N-08) before parsing — the 1024-char payload cap
@@ -60,6 +67,8 @@ export async function POST(request: NextRequest) {
 
     const response = NextResponse.json({ status: 'ok' });
     setSessionCookie(response, updatedToken);
+    // updateSession preserves csrfToken across the rotation (audit N-22).
+    setCsrfCookie(response, session);
     return response;
   } catch (error: unknown) {
     console.error('Error saving user preferences:', error);

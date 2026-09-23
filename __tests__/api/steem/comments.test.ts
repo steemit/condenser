@@ -107,11 +107,11 @@ describe('GET /api/steem/comments', () => {
     expect(await res.json()).toEqual([]);
   });
 
-  it('propagates RPC failures as 500', async () => {
+  it('returns 500 with a generic message on RPC failure (audit N-20)', async () => {
     getDiscussionMock.mockRejectedValue(new Error('boom'));
 
     const res = await GET(makeGetRequest('/api/steem/comments', PARAMS));
     expect(res.status).toBe(500);
-    expect(await res.json()).toEqual({ error: 'boom' });
+    expect(await res.json()).toEqual({ error: 'Failed to fetch comments' });
   });
 });

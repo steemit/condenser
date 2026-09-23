@@ -294,10 +294,6 @@
       "checkbox": "I understand"
     }
   },
-  "help_article": {
-    "loading": "Loading…",
-    "load_failed": "Failed to load this page. Please try again later."
-  },
   "navigation": {
     "about": "A propos",
     "explore": "Explorer",
@@ -694,5 +690,9 @@
     "invalid_username": "Veuillez entrer un nom d'utilisateur valide.",
     "invalid_character": "Veuillez entrer un nom d'utilisateur sans \"@\".",
     "invalid_role": "L'utilisateur a déjà ce rôle."
+  },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
   }
 }

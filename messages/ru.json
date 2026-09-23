@@ -296,10 +296,6 @@
       "checkbox": "Я понял"
     }
   },
-  "help_article": {
-    "loading": "Loading…",
-    "load_failed": "Failed to load this page. Please try again later."
-  },
   "navigation": {
     "about": "О проекте",
     "explore": "Исследовать",
@@ -707,5 +703,9 @@
     "invalid_username": "Пожалуйста, введите действительное имя пользователя.",
     "invalid_character": "Пожалуйста, введите имя пользователя без \"@\".",
     "invalid_role": "У пользователя уже есть эта роль."
+  },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
   }
 }

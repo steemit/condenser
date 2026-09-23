@@ -40,5 +40,20 @@ nslookup registry.npmjs.org
 
 # Build and test
 docker build -t condenser:test .
-docker run -p 3000:3000 condenser:test
+# Bind to loopback only; use -p 0.0.0.0:3000:3000 when the container must
+# be reachable from outside the host.
+docker run -p 127.0.0.1:3000:3000 condenser:test
 ```
+
+## Security notes
+
+- Both compose services publish `127.0.0.1:3000:3000` (loopback only) by
+  default. Change the mapping to `0.0.0.0:3000:3000` only when external
+  access is intended, and prefer a reverse proxy for public exposure.
+- The dev service runs as a non-root user (`user:` in docker-compose.yml,
+  defaulting to the production stage's 1001:1001). When the bind-mounted
+  working copy is not writable by that uid, start compose with
+  `CONDENSER_DEV_UID=$UID CONDENSER_DEV_GID=$(id -g)`. The production image
+  already drops to the `nextjs` user via its Dockerfile `USER` directive.
+- `JWT_SECRET` is required in every environment; compose refuses to start
+  without it.

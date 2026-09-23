@@ -72,7 +72,12 @@ const iframeWhitelist: IframeRule[] = [
   },
 ];
 
-const allowedTags = [
+/**
+ * Tags the rendering pipeline lets through. Exported for the editor's
+ * submit-time validation (legacy ReplyEditor imports the same list from
+ * SanitizeConfig to reject posts containing tags sanitize would strip).
+ */
+export const allowedTags = [
   'div',
   'iframe',
   'del',

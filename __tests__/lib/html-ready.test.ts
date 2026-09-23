@@ -29,4 +29,21 @@ describe('htmlReady', () => {
     const { html } = htmlReady('<img src="https://steemitimages.com/QmX/p.png"/>');
     expect(html).toContain('steemitimages.com/p/');
   });
+
+  it('wraps an img anchor via the DOM API without attribute injection (audit N-15)', () => {
+    // A src containing quotes used to splice an extra attribute into the
+    // generated <a href="..."> wrapper; setAttribute must neutralize it.
+    const { html } = htmlReady(
+      `<img src='https://example.com/a.jpg" onmouseover="alert(1)'/>`
+    );
+    expect(html).not.toContain('onmouseover="alert(1)"');
+    // The (attacker-controlled) URL is entity-escaped inside the href.
+    expect(html).toContain('href="https://example.com/a.jpg&quot; onmouseover=&quot;alert(1)"');
+  });
+
+  it('linkify never emits unescaped quotes in generated attributes (audit N-15)', () => {
+    const { html } = htmlReady('<p>see https://example.com/a.jpg here</p>');
+    const hrefs = [...html.matchAll(/href="([^"]*)"/g)].map((m) => m[1]);
+    expect(hrefs.length).toBeGreaterThan(0);
+  });
 });

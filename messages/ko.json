@@ -295,10 +295,6 @@
       "checkbox": "네 이해합니다."
     }
   },
-  "help_article": {
-    "loading": "Loading…",
-    "load_failed": "Failed to load this page. Please try again later."
-  },
   "navigation": {
     "about": "스팀이란?",
     "explore": "태그별 현황",
@@ -694,5 +690,9 @@
     "invalid_username": "유효한 사용자 이름을 입력하세요.",
     "invalid_character": "\"@\"가 없는 사용자 이름을 입력하세요.",
     "invalid_role": "사용자는 이미 해당 역할을 가지고 있습니다."
+  },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
   }
 }

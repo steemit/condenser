@@ -26,18 +26,51 @@ describe('key-storage on non-secure contexts (no crypto.subtle)', () => {
     sessionStorage.clear();
   });
 
-  it('falls back to plaintext localStorage and roundtrips the key', async () => {
-    // Plain HTTP over a LAN IP has no Web Crypto subtle API at all.
+  it('does not persist the key on a non-secure context (audit N-24)', async () => {
+    // Plain HTTP over a LAN IP has no Web Crypto subtle API at all (and
+    // jsdom's isSecureContext is undefined — same class). Persistence is
+    // disabled: nothing may be written to localStorage, but the memory
+    // cache keeps the current tab working.
     vi.stubGlobal('crypto', { getRandomValues: (a: Uint8Array) => a });
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     await keyStorage.encryptAndStoreKey('5K-test-wif', 'alice');
-    expect(keyStorage.hasStoredKey()).toBe(true);
-    expect(localStorage.getItem('steem_encrypted_key')).not.toBeNull();
+    expect(localStorage.getItem('steem_encrypted_key')).toBeNull();
+    expect(sessionStorage.getItem('steem_encrypted_key')).toBeNull();
+    expect(keyStorage.hasStoredKey()).toBe(false);
+    expect(keyStorage.getCachedKey()).toBe('5K-test-wif');
+    expect(keyStorage.decryptAndRetrieveKey()).resolves.toEqual({
+      privateKey: '5K-test-wif',
+      username: 'alice',
+    });
+    expect(warn).toHaveBeenCalled();
 
-    // Simulate a fresh page load: only localStorage survives.
+    // A page reload drops the key entirely (memory cache only).
     const reloaded = await loadFreshModule();
-    const result = await reloaded.decryptAndRetrieveKey();
-    expect(result).toEqual({ privateKey: '5K-test-wif', username: 'alice' });
+    expect(reloaded.getCachedKey()).toBeNull();
+    expect(await reloaded.decryptAndRetrieveKey()).toBeNull();
+    warn.mockRestore();
+  });
+
+  it('forces persist off even on a secure context when subtle is unavailable (audit N-24)', async () => {
+    Object.defineProperty(window, 'isSecureContext', {
+      value: true,
+      configurable: true,
+    });
+    vi.stubGlobal('crypto', { getRandomValues: (a: Uint8Array) => a });
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    try {
+      await keyStorage.encryptAndStoreKey('5K-test-wif', 'alice');
+      expect(localStorage.getItem('steem_encrypted_key')).toBeNull();
+      expect(keyStorage.getCachedKey()).toBe('5K-test-wif');
+    } finally {
+      Object.defineProperty(window, 'isSecureContext', {
+        value: undefined,
+        configurable: true,
+      });
+      warn.mockRestore();
+    }
   });
 
   it('with persist=false keeps the key in memory only', async () => {
@@ -59,10 +92,35 @@ describe('key-storage on non-secure contexts (no crypto.subtle)', () => {
     expect(await reloaded.decryptAndRetrieveKey()).toBeNull();
   });
 
-  it('migrates a legacy sessionStorage entry into localStorage', async () => {
+  it('migrates a legacy sessionStorage entry into localStorage on a secure context', async () => {
+    vi.stubGlobal('crypto', { getRandomValues: (a: Uint8Array) => a });
+    Object.defineProperty(window, 'isSecureContext', {
+      value: true,
+      configurable: true,
+    });
+
+    try {
+      // Older versions wrote the (plaintext fallback) entry to sessionStorage.
+      sessionStorage.setItem(
+        'steem_encrypted_key',
+        JSON.stringify({ plain: '5K-test-wif', username: 'alice', timestamp: 1 })
+      );
+
+      const result = await keyStorage.decryptAndRetrieveKey();
+      expect(result).toEqual({ privateKey: '5K-test-wif', username: 'alice' });
+      expect(sessionStorage.getItem('steem_encrypted_key')).toBeNull();
+      expect(localStorage.getItem('steem_encrypted_key')).not.toBeNull();
+    } finally {
+      Object.defineProperty(window, 'isSecureContext', {
+        value: undefined,
+        configurable: true,
+      });
+    }
+  });
+
+  it('reads a legacy sessionStorage entry in place on a non-secure context (audit N-24)', async () => {
     vi.stubGlobal('crypto', { getRandomValues: (a: Uint8Array) => a });
 
-    // Older versions wrote the (plaintext fallback) entry to sessionStorage.
     sessionStorage.setItem(
       'steem_encrypted_key',
       JSON.stringify({ plain: '5K-test-wif', username: 'alice', timestamp: 1 })
@@ -70,8 +128,10 @@ describe('key-storage on non-secure contexts (no crypto.subtle)', () => {
 
     const result = await keyStorage.decryptAndRetrieveKey();
     expect(result).toEqual({ privateKey: '5K-test-wif', username: 'alice' });
-    expect(sessionStorage.getItem('steem_encrypted_key')).toBeNull();
-    expect(localStorage.getItem('steem_encrypted_key')).not.toBeNull();
+    // Nothing copied into localStorage, and the in-place entry is kept
+    // (removing it would lose the only copy).
+    expect(localStorage.getItem('steem_encrypted_key')).toBeNull();
+    expect(sessionStorage.getItem('steem_encrypted_key')).not.toBeNull();
   });
 
   it('clearStoredKey clears localStorage, sessionStorage and the memory cache', async () => {
@@ -149,9 +209,16 @@ describe('key-storage on secure contexts (AES-GCM)', () => {
       // Environments without Web Crypto are covered by the fallback suite.
       return;
     }
+    // The AES-GCM path only persists on a secure context (audit N-24);
+    // jsdom's isSecureContext is undefined, so simulate HTTPS.
+    Object.defineProperty(window, 'isSecureContext', {
+      value: true,
+      configurable: true,
+    });
 
-    await keyStorage.encryptAndStoreKey('5J-encrypted-wif', 'bob');
-    expect(keyStorage.hasStoredKey()).toBe(true);
+    try {
+      await keyStorage.encryptAndStoreKey('5J-encrypted-wif', 'bob');
+      expect(keyStorage.hasStoredKey()).toBe(true);
 
     // The persisted entry must not contain the plaintext WIF.
     const stored = JSON.parse(localStorage.getItem('steem_encrypted_key')!);
@@ -166,11 +233,17 @@ describe('key-storage on secure contexts (AES-GCM)', () => {
     const result = await reloaded.decryptAndRetrieveKey();
     expect(result).toEqual({ privateKey: '5J-encrypted-wif', username: 'bob' });
 
-    // The decrypted key is cached in module memory for subsequent calls…
-    expect(reloaded.getCachedKey()).toBe('5J-encrypted-wif');
-    // …and never leaks onto window.
-    const w = window as unknown as Record<string, unknown>;
-    expect(w['steem_decrypted_key']).toBeUndefined();
-    expect(Object.keys(window)).not.toContain('steem_decrypted_key');
+      // The decrypted key is cached in module memory for subsequent calls…
+      expect(reloaded.getCachedKey()).toBe('5J-encrypted-wif');
+      // …and never leaks onto window.
+      const w = window as unknown as Record<string, unknown>;
+      expect(w['steem_decrypted_key']).toBeUndefined();
+      expect(Object.keys(window)).not.toContain('steem_decrypted_key');
+    } finally {
+      Object.defineProperty(window, 'isSecureContext', {
+        value: undefined,
+        configurable: true,
+      });
+    }
   });
 });

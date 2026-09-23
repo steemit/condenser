@@ -224,6 +224,58 @@ describe('PostEditor', () => {
     expect(broadcastCommentMock).not.toHaveBeenCalled();
   });
 
+  it('rejects HTML tags the sanitizer would strip (audit N-18)', async () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    const user = userEvent.setup();
+    broadcastCommentMock.mockResolvedValue({ success: true, result: {} });
+
+    render(
+      <PostEditor
+        type="submit_comment"
+        parentAuthor="bob"
+        parentPermlink="bob-post"
+        body={'check this <script>alert(1)</script> <marquee>hi</marquee>'}
+      />,
+      { wrapper: wrapper(store) }
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    const error = await screen.findByText(/Please remove the following HTML elements/);
+    // The offending tags are listed for the author.
+    expect(error.textContent).toContain('<script>');
+    expect(error.textContent).toContain('<marquee>');
+    expect(broadcastCommentMock).not.toHaveBeenCalled();
+  });
+
+  it('accepts whitelisted tags like img and iframe embeds', async () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    const user = userEvent.setup();
+    const onSuccess = vi.fn();
+    broadcastCommentMock.mockResolvedValue({ success: true, result: {} });
+
+    render(
+      <PostEditor
+        type="submit_comment"
+        parentAuthor="bob"
+        parentPermlink="bob-post"
+        onSuccess={onSuccess}
+        body={
+          '<img src="https://example.com/pic.jpg"/>' +
+          '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe>'
+        }
+      />,
+      { wrapper: wrapper(store) }
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+    expect(broadcastCommentMock).toHaveBeenCalledTimes(1);
+  });
+
   it('shows the payout selector and beneficiaries editor only for stories', () => {
     const store = makeStore();
     store.dispatch(setUser({ username: 'alice' }));

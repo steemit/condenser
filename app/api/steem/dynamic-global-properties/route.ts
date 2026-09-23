@@ -17,10 +17,10 @@ export async function GET() {
     return NextResponse.json(props);
   } catch (error: unknown) {
     console.error('Error fetching dynamic global properties:', error);
-    const errorMessage =
-      error instanceof Error ? error.message : 'Failed to fetch dynamic global properties';
+    // Raw error only in server logs (above); clients get a generic message
+    // (audit N-20: unexpected RPC internals must not reach the response).
     return NextResponse.json(
-      { error: errorMessage },
+      { error: 'Failed to fetch dynamic global properties' },
       { status: 500 }
     );
   }

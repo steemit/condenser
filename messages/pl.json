@@ -287,10 +287,6 @@
       "other": "%(count)sodpowiedzi"
     }
   },
-  "help_article": {
-    "loading": "Loading…",
-    "load_failed": "Failed to load this page. Please try again later."
-  },
   "navigation": {
     "about": "O Steem",
     "explore": "Przeglądaj",
@@ -679,5 +675,9 @@
     "invalid_username": "Proszę wprowadzić prawidłową nazwę użytkownika.",
     "invalid_character": "Proszę wprowadzić nazwę użytkownika bez \"@\".",
     "invalid_role": "Użytkownik ma już tę rolę."
+  },
+  "help_article": {
+    "loading": "Loading…",
+    "load_failed": "Failed to load this page. Please try again later."
   }
 }

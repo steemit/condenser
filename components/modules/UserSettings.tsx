@@ -7,6 +7,7 @@ import { setLocale, setUserPreferences } from '@/store/slices/appSlice';
 import { LOCALES, LOCALE_LABELS, DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/config';
 import { broadcastAccountUpdate } from '@/lib/api/broadcast';
 import { fetchAccount } from '@/lib/api/steem';
+import { postJsonWithCsrf } from '@/lib/api/csrf';
 import { uploadImage } from '@/lib/media/upload-image';
 import { userActionRecord } from '@/lib/analytics/overseer';
 
@@ -536,10 +537,9 @@ export default function UserSettings({
               setPrefsMessage('');
               setPrefsError('');
               try {
-                const res = await fetch('/api/auth/preferences', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ payload: userPreferences }),
+                // Echoes the session's CSRF token (audit N-22).
+                const res = await postJsonWithCsrf('/api/auth/preferences', {
+                  payload: userPreferences,
                 });
                 if (!res.ok) {
                   // Surface the translated failure message; log the server

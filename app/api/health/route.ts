@@ -77,6 +77,8 @@ function buildResponse(
   stale = false
 ) {
   if (!healthy) {
+    // Raw probe error only in server logs; the response carries a generic
+    // message plus the boolean states (audit N-20).
     console.warn(
       '[api/health] Steem degraded',
       stale ? '(stale cache)' : '(live probe)',
@@ -96,7 +98,9 @@ function buildResponse(
           healthy,
           ...(blockNumber !== undefined && { blockNumber }),
           ...(latency !== undefined && { latency }),
-          ...(error !== undefined && { error }),
+          ...(error !== undefined && {
+            error: 'Steem node check failed',
+          }),
         },
       },
     },

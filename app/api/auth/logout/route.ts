@@ -12,9 +12,17 @@ import {
   revokeSession,
   setSessionCookie,
 } from '@/lib/auth/session';
+import { enforceBodyLimit } from '@/lib/api/body-limit';
 
 export async function POST(request: NextRequest) {
   try {
+    // The logout body is ignored, but still enforce the size cap so the
+    // endpoint cannot be used as an unbounded-buffer sink (audit N-08).
+    const limited = await enforceBodyLimit(request);
+    if (!limited.ok) {
+      return limited.response;
+    }
+
     const currentSession = await getSession(request);
 
     if (!currentSession) {

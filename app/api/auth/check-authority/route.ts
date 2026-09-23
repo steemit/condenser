@@ -6,11 +6,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { steem } from '@steemit/steem-js';
 import { getAccount } from '@/lib/steem/client';
+import { readJsonWithLimit } from '@/lib/api/body-limit';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { username, password, role } = body;
+    // Exempt from rate limiting (endpoint scheduled for removal, audit TODO
+    // 11), but the body is still capped so it cannot buffer unbounded
+    // memory (audit N-08).
+    const limited = await readJsonWithLimit(request);
+    if (!limited.ok) {
+      return limited.response;
+    }
+    const { username, password, role } = limited.data as {
+      username?: string;
+      password?: string;
+      role?: string;
+    };
 
     if (!username || !password) {
       return NextResponse.json(

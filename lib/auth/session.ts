@@ -71,10 +71,63 @@ const COOKIE_OPTIONS = {
   path: '/',
 };
 
+/**
+ * Session TTL class (audit N-08).
+ *
+ * 'challenge' sessions are anonymous (no username, at most a loginChallenge
+ * awaiting a signature). The challenge is only valid for ~5 minutes, yet
+ * cookie-less hits on /api/auth/challenge and /api/auth/session used to mint
+ * 30-day Redis sessions that anyone could pile up linearly. They now expire
+ * after 10 minutes (login window x2 headroom), so an unauthenticated visitor
+ * can hold at most a sliding 10-minute session instead of a 30-day one.
+ *
+ * 'persistent' sessions (any logged-in session) keep the 30-day TTL.
+ *
+ * DESIGN: the class is an explicit field stored in the session data, but it
+ * is always DERIVED (username present => 'persistent', otherwise
+ * 'challenge' — see resolveTtlClass). Deriving on every write is what keeps
+ * rewrites honest: RedisSession.storeSession/updateSession both default to
+ * the 30-day TTL, so updateSession passes the resolved class's TTL
+ * explicitly instead of letting the default reset a challenge session's
+ * clock. Trade-off worth noting: the anonymous-visit counters
+ * (lastVisit/newVisit) only track within that 10-minute window; nothing else
+ * consumes anonymous sessions.
+ *
+ * The cookie maxAge stays 30 days for both classes — a stale cookie pointing
+ * at an expired challenge session simply triggers a fresh anonymous session.
+ */
+export type SessionTtlClass = 'challenge' | 'persistent';
+
+/** TTL for challenge-only (anonymous) sessions: 10 minutes. */
+export const CHALLENGE_SESSION_TTL_SEC = 600;
+/** TTL for logged-in sessions: 30 days (matches redis-session default). */
+export const PERSISTENT_SESSION_TTL_SEC = 2592000;
+
+function ttlSecondsForClass(ttlClass: SessionTtlClass): number {
+  return ttlClass === 'challenge'
+    ? CHALLENGE_SESSION_TTL_SEC
+    : PERSISTENT_SESSION_TTL_SEC;
+}
+
+/**
+ * Resolve a session's TTL class from its data. Username presence is the
+ * single, total discriminator: a logged-in session is persistent, everything
+ * else (challenge holders, anonymous visitor sessions, post-logout sessions)
+ * is challenge-class. The stored ttlClass marker is therefore informational
+ * (observability + carried through rewrites) — nothing can promote an
+ * anonymous session to persistent, which in particular keeps a logged-in
+ * session's marker from leaking past logoutUser.
+ */
+function resolveTtlClass(data: Partial<SessionData>): SessionTtlClass {
+  return data.username ? 'persistent' : 'challenge';
+}
+
 export interface SessionData {
   username?: string;
   uid: string;
   loginChallenge?: string;
+  /** Internal TTL class marker (audit N-08); see SessionTtlClass. */
+  ttlClass?: SessionTtlClass;
   lastVisit: number;
   newVisit: boolean;
   userPreferences?: {
@@ -113,7 +166,8 @@ function generateLoginChallenge(): string {
 export async function createSession(data: Partial<SessionData> = {}): Promise<string> {
   assertJwtSecretConfigured();
   const now = Math.floor(Date.now() / 1000);
-  
+  const ttlClass = resolveTtlClass(data);
+
   const sessionData: SessionData = {
     uid: generateUID(),
     loginChallenge: generateLoginChallenge(),
@@ -124,22 +178,32 @@ export async function createSession(data: Partial<SessionData> = {}): Promise<st
       nsfwPref: 'warn',
     },
     ...data,
+    // Authoritative and placed after the spread: the derived class always
+    // wins, and an explicit `ttlClass: undefined` input cannot unset it.
+    ttlClass,
   };
 
-  // Try Redis first
+  // Try Redis first. Challenge-only sessions get the short TTL so anonymous
+  // hits cannot pile up 30-day keys (audit N-08).
   if (RedisSession.isRedisAvailable()) {
     const sessionId = generateUID();
-    const stored = await RedisSession.storeSession(sessionId, sessionData);
+    const stored = await RedisSession.storeSession(
+      sessionId,
+      sessionData,
+      ttlSecondsForClass(ttlClass)
+    );
     if (stored) {
       return sessionId; // Return session ID for Redis-based sessions
     }
   }
 
-  // Fallback to JWT
+  // Fallback to JWT. The per-class expiration keeps the same property for
+  // stateless tokens: an unauthenticated visitor's token is worthless after
+  // 10 minutes, while login sessions still last 30 days.
   const token = await new SignJWT(sessionData)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('30d')
+    .setExpirationTime(`${ttlSecondsForClass(ttlClass)}s`)
     .sign(getJwtSecret());
 
   return token;
@@ -207,23 +271,40 @@ export async function updateSession(
 ): Promise<string> {
   const now = Math.floor(Date.now() / 1000);
   const lastVisit = currentSession.lastVisit;
-  
+
+  // Preserve the session's TTL class across rewrites (audit N-08): a
+  // challenge-only session must not have its TTL reset to the 30-day default
+  // on every touch, and a logged-in session must not be shortened. Resolving
+  // from the merged data keeps username presence authoritative.
+  const ttlClass: SessionTtlClass = resolveTtlClass({
+    ...currentSession,
+    ...updates,
+  });
+
   const updatedSession: SessionData = {
     ...currentSession,
     ...updates,
+    ttlClass,
     lastVisit: now,
     newVisit: now - lastVisit > 1800, // 30 minutes
   };
 
-  // Try to update existing Redis session if we have a session ID
+  // Try to update existing Redis session if we have a session ID. The TTL is
+  // passed explicitly — RedisSession.updateSession would otherwise rewrite
+  // the key with the 30-day default.
   if (currentToken && RedisSession.isRedisAvailable() && isRedisSessionId(currentToken)) {
-    const updated = await RedisSession.updateSession(currentToken, updatedSession);
+    const updated = await RedisSession.updateSession(
+      currentToken,
+      updatedSession,
+      ttlSecondsForClass(ttlClass)
+    );
     if (updated) {
       return currentToken; // Keep the same session ID
     }
   }
 
-  // Create new session (Redis or JWT)
+  // Create new session (Redis or JWT) — updatedSession carries ttlClass, so
+  // createSession re-derives the same class and TTL.
   return createSession(updatedSession);
 }
 
@@ -291,7 +372,8 @@ export async function loginUser(
   };
 
   // The login challenge is single-use: never carry it into the session
-  // produced by a successful login (replay resistance).
+  // produced by a successful login (replay resistance). The new session's
+  // TTL class is re-derived as 'persistent' from the now-present username.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { loginChallenge, ...sessionWithoutChallenge } = sessionData;
 
@@ -307,6 +389,9 @@ export async function loginUser(
 export async function logoutUser(currentSession: SessionData): Promise<string> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { username, ...sessionWithoutUser } = currentSession;
+  // The post-logout session is anonymous, so resolveTtlClass lands it back in
+  // the short 'challenge' class (audit N-08) — the logged-in session's
+  // 'persistent' marker does not survive the username removal.
   return createSession({
     ...sessionWithoutUser,
     loginChallenge: generateLoginChallenge(), // Generate new challenge

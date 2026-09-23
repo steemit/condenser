@@ -4,6 +4,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { readJsonWithLimit } from '@/lib/api/body-limit';
+import {
+  RATE_LIMITS,
+  checkRateLimit,
+  rateLimitResponse,
+} from '@/lib/cache/rate-limit';
 
 interface SearchParams {
   q: string; // search query
@@ -24,9 +30,20 @@ const ES_FETCH_TIMEOUT_MS = 1200;
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    // Abuse wrappers (audit N-08): rate limit before reading the body, then
+    // the body size cap. Each search opens an ES scroll context (1m
+    // keepalive), so an unbounded flood ages out contexts linearly.
+    const rateLimit = await checkRateLimit(request, RATE_LIMITS.search);
+    if (!rateLimit.allowed) {
+      return rateLimitResponse(rateLimit.retryAfterSeconds);
+    }
+
+    const limited = await readJsonWithLimit(request);
+    if (!limited.ok) {
+      return limited.response;
+    }
     // Legacy default sort field is `created_at` (the ES field name).
-    const { q, s = 'created_at', depth = 0, scroll_id } = body as SearchParams;
+    const { q, s = 'created_at', depth = 0, scroll_id } = limited.data as SearchParams;
 
     if (!q || q.trim().length === 0) {
       return NextResponse.json(

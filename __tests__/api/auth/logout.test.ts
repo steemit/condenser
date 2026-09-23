@@ -43,6 +43,24 @@ describe('POST /api/auth/logout', () => {
     expect(revokeSessionMock).not.toHaveBeenCalled();
   });
 
+  it('returns 413 when the (ignored) body exceeds the 64KB cap (audit N-08)', async () => {
+    getSessionMock.mockResolvedValue({
+      username: 'alice',
+      uid: 'uid-1',
+      lastVisit: 1700000000,
+      newVisit: false,
+    } as never);
+
+    const res = await POST(
+      makePostRequest('/api/auth/logout', { blob: 'x'.repeat(70 * 1024) })
+    );
+    expect(res.status).toBe(413);
+    expect(await res.json()).toEqual({ error: 'Request body too large' });
+    // Rejected before any session work happens.
+    expect(getSessionMock).not.toHaveBeenCalled();
+    expect(revokeSessionMock).not.toHaveBeenCalled();
+  });
+
   it('revokes the old token, then rotates the session cookie when a user was logged in', async () => {
     const session = {
       username: 'alice',

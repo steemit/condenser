@@ -22,9 +22,20 @@ vi.mock('@/lib/steem/pending-overlay', () => ({
   })),
 }));
 
+// Partial mock: keep the real RATE_LIMITS / rateLimitResponse, stub only the
+// Redis-backed check (audit N-08).
+vi.mock('@/lib/cache/rate-limit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/cache/rate-limit')>();
+  return {
+    ...actual,
+    checkRateLimit: vi.fn(async () => ({ allowed: true })),
+  };
+});
+
 import { POST } from '@/app/api/steem/broadcast/route';
 import { callSteemApi } from '@/lib/steem/client';
 import { cacheDeleteByPrefix } from '@/lib/cache/redis';
+import { checkRateLimit } from '@/lib/cache/rate-limit';
 import {
   recordPendingVote,
   recordPendingRootPost,
@@ -35,6 +46,7 @@ import {
 
 const callSteemApiMock = vi.mocked(callSteemApi);
 const cacheDeleteMock = vi.mocked(cacheDeleteByPrefix);
+const checkRateLimitMock = vi.mocked(checkRateLimit);
 const recordVoteMock = vi.mocked(recordPendingVote);
 const recordRootMock = vi.mocked(recordPendingRootPost);
 const recordChildMock = vi.mocked(recordPendingChild);
@@ -59,6 +71,7 @@ describe('POST /api/steem/broadcast', () => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
     callSteemApiMock.mockResolvedValue({ id: 'tx-1' });
+    checkRateLimitMock.mockResolvedValue({ allowed: true });
   });
 
   it('returns 400 when signedTransaction is missing', async () => {
@@ -399,5 +412,68 @@ describe('POST /api/steem/broadcast', () => {
     expect(res.status).toBe(500);
     const body = await res.json();
     expect(body.error).toBe('missing_active_authority');
+  });
+
+  it('checks the steem:broadcast limit (30/min/IP) before reading the body', async () => {
+    const tx = signedTx([['vote', { voter: 'alice', author: 'bob', permlink: 'p', weight: 1 }]]);
+    await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
+
+    expect(checkRateLimitMock).toHaveBeenCalledWith(expect.anything(), {
+      key: 'steem:broadcast',
+      limit: 30,
+      windowSeconds: 60,
+    });
+  });
+
+  it('returns 429 with Retry-After and never forwards the transaction when limited', async () => {
+    checkRateLimitMock.mockResolvedValue({ allowed: false, retryAfterSeconds: 21 });
+
+    const tx = signedTx([['vote', { voter: 'alice', author: 'bob', permlink: 'p', weight: 1 }]]);
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(429);
+    expect(res.headers.get('Retry-After')).toBe('21');
+    expect(await res.json()).toEqual({
+      error: 'Too many requests. Please try again later.',
+    });
+    expect(callSteemApiMock).not.toHaveBeenCalled();
+  });
+
+  it('accepts a maximal legitimate long-post body (~67KB) under the 256KB cap', async () => {
+    // The client editor allows 65280-byte bodies; the JSON envelope,
+    // escaping and signature inflate the HTTP body to ~67KB — the previous
+    // 64KB cap rejected these with a 413 (audit follow-up).
+    const tx = signedTx([
+      ['comment', { author: 'alice', permlink: 'p'.repeat(67 * 1024), body: 'x'.repeat(65280) }],
+    ]);
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(callSteemApiMock).toHaveBeenCalled();
+  });
+
+  it('accepts a 200KB body under the 256KB broadcast cap', async () => {
+    const tx = signedTx([
+      ['vote', { voter: 'alice', author: 'bob', permlink: 'p'.repeat(200 * 1024), weight: 1 }],
+    ]);
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(callSteemApiMock).toHaveBeenCalled();
+  });
+
+  it('returns 413 when the body exceeds the 256KB broadcast cap', async () => {
+    const tx = signedTx([
+      ['vote', { voter: 'alice', author: 'bob', permlink: 'p'.repeat(300 * 1024), weight: 1 }],
+    ]);
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(413);
+    expect(await res.json()).toEqual({ error: 'Request body too large' });
+    expect(callSteemApiMock).not.toHaveBeenCalled();
   });
 });

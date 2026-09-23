@@ -14,6 +14,12 @@ import {
   revokeSession,
   setSessionCookie,
 } from '@/lib/auth/session';
+import { readJsonWithLimit } from '@/lib/api/body-limit';
+import {
+  RATE_LIMITS,
+  checkRateLimit,
+  rateLimitResponse,
+} from '@/lib/cache/rate-limit';
 // steem.auth.verifySignature() parses the public key and hex signature,
 // then runs verifyBuffer (SHA-256 of the raw message) — matching
 // steem.auth.sign() on the client. It returns false for malformed input
@@ -22,7 +28,24 @@ import { steem } from '@steemit/steem-js';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    // Abuse wrappers (audit N-08), ordered cheapest-first: IP rate limit
+    // before reading the body, body size cap while reading it.
+    const ipLimit = await checkRateLimit(request, RATE_LIMITS.authLoginIp);
+    if (!ipLimit.allowed) {
+      return rateLimitResponse(ipLimit.retryAfterSeconds);
+    }
+
+    const limited = await readJsonWithLimit(request);
+    if (!limited.ok) {
+      return limited.response;
+    }
+    const body = limited.data as {
+      username?: string;
+      signature?: string;
+      publicKey?: string;
+      data?: string;
+      challenge?: string;
+    };
     const { username, signature, publicKey, data, challenge } = body;
 
     // Validate required fields
@@ -31,6 +54,18 @@ export async function POST(request: NextRequest) {
         { error: 'Missing required fields: username, signature, publicKey, data, challenge' },
         { status: 400 }
       );
+    }
+
+    // Second rate-limit dimension on the target account: each attempt costs
+    // an RPC getAccount + signature verification, and this stops one
+    // credential being hammered from rotating IPs (audit N-08). Runs after
+    // field validation so only well-formed attempts consume the bucket.
+    const accountLimit = await checkRateLimit(request, {
+      ...RATE_LIMITS.authLoginAccount,
+      identifier: String(username),
+    });
+    if (!accountLimit.allowed) {
+      return rateLimitResponse(accountLimit.retryAfterSeconds);
     }
 
     // Step 1: Get account information

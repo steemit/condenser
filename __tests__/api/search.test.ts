@@ -2,6 +2,20 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { makePostRequest } from '@/__tests__/helpers/request';
 import { POST } from '@/app/api/search/route';
 
+// Partial mock: keep the real RATE_LIMITS / rateLimitResponse, stub only the
+// Redis-backed check (audit N-08).
+vi.mock('@/lib/cache/rate-limit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/cache/rate-limit')>();
+  return {
+    ...actual,
+    checkRateLimit: vi.fn(async () => ({ allowed: true })),
+  };
+});
+
+import { checkRateLimit } from '@/lib/cache/rate-limit';
+
+const checkRateLimitMock = vi.mocked(checkRateLimit);
+
 const ES_URL = 'http://es.example:9200';
 
 const ES_RESULT = {
@@ -22,6 +36,7 @@ describe('POST /api/search', () => {
   beforeEach(() => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.stubEnv('ELASTICSEARCH_URL', ES_URL);
+    checkRateLimitMock.mockResolvedValue({ allowed: true });
   });
 
   afterEach(() => {
@@ -153,5 +168,41 @@ describe('POST /api/search', () => {
 
     const res = await POST(makePostRequest('/api/search', { q: 'steem' }));
     expect(res.status).toBe(503);
+  });
+
+  it('checks the search limit (30/min/IP) before querying ES', async () => {
+    const fetchMock = mockEsOk();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await POST(makePostRequest('/api/search', { q: 'steem' }));
+    expect(checkRateLimitMock).toHaveBeenCalledWith(expect.anything(), {
+      key: 'search',
+      limit: 30,
+      windowSeconds: 60,
+    });
+  });
+
+  it('returns 429 with Retry-After and never reaches ES when limited', async () => {
+    checkRateLimitMock.mockResolvedValue({ allowed: false, retryAfterSeconds: 33 });
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const res = await POST(makePostRequest('/api/search', { q: 'steem' }));
+    expect(res.status).toBe(429);
+    expect(res.headers.get('Retry-After')).toBe('33');
+    expect(await res.json()).toEqual({
+      error: 'Too many requests. Please try again later.',
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('returns 413 when the body exceeds the 64KB cap', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const res = await POST(makePostRequest('/api/search', { q: 'x'.repeat(70 * 1024) }));
+    expect(res.status).toBe(413);
+    expect(await res.json()).toEqual({ error: 'Request body too large' });
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });

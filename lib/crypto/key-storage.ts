@@ -47,7 +47,12 @@ interface EncryptedKeyData {
   timestamp: number; // Encryption timestamp
 }
 
-/** Shape used when Web Crypto subtle is unavailable (plaintext fallback). */
+/**
+ * Shape written by pre-N-24 versions on non-secure contexts (plaintext
+ * fallback). No longer written (persistence is disabled there — audit
+ * N-24); kept only so decryptAndRetrieveKey can still read entries written
+ * by older versions until the user logs out.
+ */
 interface PlainKeyData {
   plain: string;
   username: string;
@@ -57,9 +62,7 @@ interface PlainKeyData {
 /**
  * crypto.subtle exists only in secure contexts (HTTPS or localhost). Plain
  * HTTP over a LAN IP (e.g. http://192.168.x.x during development) has no
- * subtle API at all — degrade to plaintext localStorage there. That is
- * acceptable: on a non-secure context the page itself is already plaintext,
- * so encryption would buy nothing; production is always HTTPS.
+ * subtle API at all.
  */
 function isSubtleCryptoAvailable(): boolean {
   return typeof crypto !== 'undefined' && !!crypto.subtle;
@@ -122,6 +125,11 @@ function setMemoryCache(privateKeyWif: string, username: string): void {
  * With `persist` (the legacy "keep me logged in" checkbox) the encrypted key
  * is additionally written to localStorage, where it survives reloads and new
  * tabs until explicit logout — matching legacy condenser's `autopost2`.
+ *
+ * Non-secure contexts (plain HTTP to a LAN IP — NOT dev http://localhost,
+ * which is a secure context) force persist off (audit N-24): localStorage
+ * there is readable by any network attacker, so nothing is written and the
+ * key lives in the memory cache for the current tab only.
  */
 export async function encryptAndStoreKey(
   privateKeyWif: string,
@@ -132,16 +140,29 @@ export async function encryptAndStoreKey(
     throw new Error('Key storage is only available in browser environment');
   }
 
-  // Non-secure context (plain HTTP over LAN etc.): no crypto.subtle.
-  // Fall back to plaintext localStorage — see isSubtleCryptoAvailable().
+  // Audit N-24: never persist the key on a non-secure context. The page
+  // itself is plaintext there, so the "keep me logged in" convenience would
+  // hand the WIF to anyone on the path. Keep the memory cache so the
+  // current tab keeps working.
+  if (!window.isSecureContext && persist) {
+    persist = false;
+    console.warn(
+      'Non-secure context (plain HTTP): the posting key is kept in memory for this tab only and will not be persisted. Serve the app over HTTPS to stay logged in across reloads.'
+    );
+  }
+
+  // No WebCrypto at all (also implies a non-secure context in practice):
+  // same policy — memory cache only, nothing written.
   if (!isSubtleCryptoAvailable()) {
     if (persist) {
+      persist = false;
       console.warn(
-        'Web Crypto subtle API unavailable (non-secure context); storing the posting key unencrypted in localStorage. Use HTTPS in production.'
+        'Web Crypto subtle API unavailable; the posting key is kept in memory for this tab only and will not be persisted.'
       );
-      const plainData: PlainKeyData = { plain: privateKeyWif, username, timestamp: Date.now() };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(plainData));
     }
+  }
+
+  if (!persist) {
     setMemoryCache(privateKeyWif, username);
     return;
   }
@@ -166,16 +187,14 @@ export async function encryptAndStoreKey(
       encoder.encode(privateKeyWif)
     );
 
-    if (persist) {
-      const encryptedKeyData: EncryptedKeyData = {
-        encrypted: btoa(String.fromCharCode(...new Uint8Array(encryptedData))),
-        iv: btoa(String.fromCharCode(...iv)),
-        salt: btoa(String.fromCharCode(...salt)),
-        username,
-        timestamp: Date.now(),
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(encryptedKeyData));
-    }
+    const encryptedKeyData: EncryptedKeyData = {
+      encrypted: btoa(String.fromCharCode(...new Uint8Array(encryptedData))),
+      iv: btoa(String.fromCharCode(...iv)),
+      salt: btoa(String.fromCharCode(...salt)),
+      username,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(encryptedKeyData));
 
     // Also cache the decrypted key in memory for performance
     setMemoryCache(privateKeyWif, username);
@@ -197,16 +216,19 @@ export async function decryptAndRetrieveKey(): Promise<{ privateKey: string; use
   try {
     // Migrate a legacy sessionStorage entry (written by versions before the
     // key became persistent) into localStorage so it survives like the
-    // legacy autopost2 entry did.
-    if (!localStorage.getItem(STORAGE_KEY)) {
+    // legacy autopost2 entry did. On a non-secure context nothing may be
+    // persisted (audit N-24), so the entry is read in place instead.
+    let stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) {
       const legacy = sessionStorage.getItem(STORAGE_KEY);
       if (legacy) {
-        localStorage.setItem(STORAGE_KEY, legacy);
-        sessionStorage.removeItem(STORAGE_KEY);
+        if (window.isSecureContext) {
+          localStorage.setItem(STORAGE_KEY, legacy);
+          sessionStorage.removeItem(STORAGE_KEY);
+        }
+        stored = legacy;
       }
     }
-
-    const stored = localStorage.getItem(STORAGE_KEY);
 
     // Check memory cache first
     if (cachedWif) {
@@ -224,7 +246,9 @@ export async function decryptAndRetrieveKey(): Promise<{ privateKey: string; use
 
     const parsed = JSON.parse(stored);
 
-    // Plaintext fallback written on non-secure contexts (no crypto.subtle).
+    // Plaintext entry written by a pre-N-24 version on a non-secure
+    // context: still readable so those sessions survive until logout, but
+    // nothing new is ever written in this shape.
     if ('plain' in parsed) {
       const data = parsed as PlainKeyData;
       setMemoryCache(data.plain, data.username);

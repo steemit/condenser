@@ -162,9 +162,9 @@ present, and by reading the stream for chunked requests where the header is
 absent or lying. The one exception is `POST /api/steem/broadcast`, capped at
 256KB — a maximal legitimate post (65280-byte body client-side, 65536
 on-chain) inflates to ~67KB of HTTP body after the JSON envelope, escaping
-and signature, which a 64KB cap would reject. `POST /api/auth/check-authority`
-is exempt from rate limiting only (the endpoint is scheduled for removal);
-its body is still capped.
+and signature, which a 64KB cap would reject. (The former
+`POST /api/auth/check-authority` rate-limit exemption is gone — the endpoint
+was removed entirely in audit N-13.)
 
 ### Session TTLs
 

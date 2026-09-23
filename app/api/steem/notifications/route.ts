@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccountNotifications } from '@/lib/steem/client';
+import { getSession } from '@/lib/auth/session';
 
 export async function GET(request: NextRequest) {
   try {
@@ -17,6 +18,19 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         { error: 'Account is required' },
         { status: 400 }
+      );
+    }
+
+    // Notifications are a signed-in feature: the queried account must match
+    // the session account (audit N-14). The underlying bridge RPC is public,
+    // so this adds no information hiding — it just stops our route from
+    // acting as an unauthenticated per-account oracle. Steem usernames are
+    // case-insensitive, hence the lowercased comparison.
+    const session = await getSession(request);
+    if (!session?.username || session.username.toLowerCase() !== account.toLowerCase()) {
+      return NextResponse.json(
+        { error: 'Notifications are only readable for the signed-in account' },
+        { status: 403 }
       );
     }
 
@@ -36,4 +50,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

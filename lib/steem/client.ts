@@ -382,7 +382,9 @@ export async function listCommunities(params: {
   }
 
   // Default 20 mirrors the communities route's own fallback (app/api/steem/
-  // communities/route.ts:18), so the key matches what actually reaches the RPC.
+  // communities/route.ts), so the key matches what actually reaches the RPC.
+  // The route clamps query (64 chars, trimmed), sort (whitelist) and limit
+  // ([1, 100]) before calling in, which keeps this key bounded (audit N-21).
   const key = `steem:communities:${params.sort || ''}:${params.query || ''}:${params.limit || 20}`;
   const result = await withCache(key, CACHE_TTL.communities.ttl, CACHE_TTL.communities.staleTtl, () =>
     callBridge<unknown[]>('list_communities', params)

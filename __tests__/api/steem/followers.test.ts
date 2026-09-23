@@ -92,6 +92,43 @@ describe('GET /api/steem/followers', () => {
     expect(await res.json()).toEqual([]);
   });
 
+  it('clamps limit to [1, 100] and floors page at 0 (audit N-21)', async () => {
+    followersMock.mockResolvedValue([]);
+
+    await GET(
+      makeGetRequest('/api/steem/followers', {
+        account: 'alice',
+        limit: '100000',
+      })
+    );
+    await GET(
+      makeGetRequest('/api/steem/followers', {
+        account: 'alice',
+        limit: '-3',
+      })
+    );
+    await GET(
+      makeGetRequest('/api/steem/followers', {
+        account: 'alice',
+        page: '-5',
+        limit: 'abc',
+      })
+    );
+
+    expect(followersMock).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ limit: 100 })
+    );
+    expect(followersMock).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ limit: 1 })
+    );
+    expect(followersMock).toHaveBeenNthCalledWith(
+      3,
+      expect.objectContaining({ page: 0, limit: 20 })
+    );
+  });
+
   it('propagates RPC failures as 500', async () => {
     followersMock.mockRejectedValue(new Error('boom'));
 

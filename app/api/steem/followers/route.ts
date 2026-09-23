@@ -9,13 +9,40 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getFollowersByPage, getFollowingByPage } from '@/lib/steem/client';
 
+// Param bounds (audit N-21): page/limit feed the server cache keys in
+// lib/steem/client.ts get{Followers,Following}ByPage(), so clamp them here.
+const MAX_LIMIT = 100;
+const DEFAULT_LIMIT = 20;
+
+/** Parse and clamp an integer query param; non-numeric values fall back. */
+function clampIntParam(
+  raw: string | null,
+  fallback: number,
+  min: number,
+  max: number
+): number {
+  const parsed = parseInt(raw ?? '', 10);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.min(Math.max(parsed, min), max);
+}
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const account = searchParams.get('account');
     const type = searchParams.get('type') || 'followers'; // 'followers' or 'following'
-    const page = parseInt(searchParams.get('page') || '0');
-    const limit = parseInt(searchParams.get('limit') || '20');
+    const page = clampIntParam(
+      searchParams.get('page'),
+      0,
+      0,
+      Number.MAX_SAFE_INTEGER
+    );
+    const limit = clampIntParam(
+      searchParams.get('limit'),
+      DEFAULT_LIMIT,
+      1,
+      MAX_LIMIT
+    );
 
     if (!account) {
       return NextResponse.json(

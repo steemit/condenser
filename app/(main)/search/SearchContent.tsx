@@ -133,12 +133,21 @@ export default function SearchContent() {
     }
   };
 
+  // Redux search results are stored as untyped legacy payloads.
+  const hits = searchState.result as SearchHitSource[];
+
+  // Offset pagination (audit N-09): the first query no longer opens an ES
+  // scroll context, so responses carry no _scroll_id. "Load more" requests
+  // the next page with a `from` offset instead; there are more pages as
+  // long as loaded hits < the reported total.
+  const hasMore = hits.length < searchState.total_result;
+
   const handleLoadMore = async () => {
-    if (!query.trim() || searchState.pending || !searchState.scrollId) return;
+    if (!query.trim() || searchState.pending || !hasMore) return;
 
     try {
       dispatch(searchPending({ pending: true }));
-      
+
       const response = await fetch('/api/search', {
         method: 'POST',
         headers: {
@@ -148,7 +157,7 @@ export default function SearchContent() {
           q: query,
           s: sort,
           depth: depth,
-          scroll_id: searchState.scrollId,
+          from: hits.length,
         }),
       });
 
@@ -171,9 +180,6 @@ export default function SearchContent() {
       dispatch(searchPending({ pending: false }));
     }
   };
-
-  // Redux search results are stored as untyped legacy payloads.
-  const hits = searchState.result as SearchHitSource[];
 
   // Convert search results to Post format
   const posts: Post[] = hits.map((item) => ({
@@ -286,9 +292,7 @@ export default function SearchContent() {
             <PostsList
               posts={posts}
               loading={searchState.pending}
-              onLoadMore={
-                searchState.scrollId ? handleLoadMore : undefined
-              }
+              onLoadMore={hasMore ? handleLoadMore : undefined}
             />
           )}
         </>

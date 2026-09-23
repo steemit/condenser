@@ -86,6 +86,65 @@ describe('GET /api/steem/communities', () => {
     });
   });
 
+  it('truncates and trims the query to bound the cache key (audit N-21)', async () => {
+    listCommunitiesMock.mockResolvedValue([]);
+
+    await GET(
+      makeGetRequest('/api/steem/communities', {
+        query: `  ${'x'.repeat(80)}  `,
+      })
+    );
+    expect(listCommunitiesMock).toHaveBeenCalledWith(
+      expect.objectContaining({ query: 'x'.repeat(64) })
+    );
+  });
+
+  it('clamps limit to [1, 100] with fallback for garbage (audit N-21)', async () => {
+    listCommunitiesMock.mockResolvedValue([]);
+
+    await GET(makeGetRequest('/api/steem/communities', { limit: '100000' }));
+    await GET(makeGetRequest('/api/steem/communities', { limit: '0' }));
+    await GET(makeGetRequest('/api/steem/communities', { limit: 'abc' }));
+
+    expect(listCommunitiesMock).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ limit: 100 })
+    );
+    expect(listCommunitiesMock).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ limit: 1 })
+    );
+    expect(listCommunitiesMock).toHaveBeenNthCalledWith(
+      3,
+      expect.objectContaining({ limit: 20 })
+    );
+  });
+
+  it('accepts UI sorts and falls back to rank for unknown sort values (audit N-21)', async () => {
+    listCommunitiesMock.mockResolvedValue([]);
+
+    await GET(makeGetRequest('/api/steem/communities', { sort: 'subs' }));
+    await GET(makeGetRequest('/api/steem/communities', { sort: 'new' }));
+    await GET(
+      makeGetRequest('/api/steem/communities', {
+        sort: 'arbitrary-field-name',
+      })
+    );
+
+    expect(listCommunitiesMock).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ sort: 'subs' })
+    );
+    expect(listCommunitiesMock).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ sort: 'new' })
+    );
+    expect(listCommunitiesMock).toHaveBeenNthCalledWith(
+      3,
+      expect.objectContaining({ sort: 'rank' })
+    );
+  });
+
   it('propagates RPC failures as 500', async () => {
     listCommunitiesMock.mockRejectedValue(new Error('boom'));
 

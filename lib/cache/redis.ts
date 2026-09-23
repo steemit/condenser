@@ -131,6 +131,24 @@ export async function cacheSet<T>(
 }
 
 /**
+ * Delete a single exact cache key (one DEL, no SCAN). Preferred over
+ * cacheDeleteByPrefix whenever the key is fully known — prefix deletes
+ * traverse the whole keyspace with SCAN regardless of how many keys match,
+ * so a write path that can name its keys exactly must use this instead
+ * (audit N-10).
+ */
+export async function cacheDelete(key: string): Promise<void> {
+  const r = getRedis();
+  if (!r) return;
+
+  try {
+    await r.del(redisKey(key));
+  } catch {
+    // Cache delete failure is non-critical
+  }
+}
+
+/**
  * Delete all keys matching a prefix (SCAN + DEL, non-blocking for large sets).
  * Used for write-after-invalidation on broadcast routes.
  */

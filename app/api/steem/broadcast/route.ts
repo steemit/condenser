@@ -1,10 +1,11 @@
 /**
  * Steem API Route: Broadcast Signed Transactions
  * POST /api/steem/broadcast
- * 
+ *
  * This API only forwards pre-signed transactions to the Steem network.
- * All signing is done client-side for security.
- * 
+ * All signing is done client-side for security. Operations are gated by an
+ * allowlist (audit N-10) — see ALLOWED_OPERATION_TYPES below.
+ *
  * Expected payload:
  * {
  *   signedTransaction: {
@@ -20,7 +21,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { initializeSteemApi, callSteemApi } from '@/lib/steem/client';
-import { cacheDeleteByPrefix } from '@/lib/cache/redis';
+import { cacheDelete } from '@/lib/cache/redis';
 import { MAX_BROADCAST_BODY_BYTES, readJsonWithLimit } from '@/lib/api/body-limit';
 import {
   RATE_LIMITS,
@@ -35,6 +36,94 @@ import {
   recordPendingProfile,
   synthesizePostFromCommentOp,
 } from '@/lib/steem/pending-overlay';
+
+/**
+ * Operation allowlist (audit N-10).
+ *
+ * This endpoint is an open relay for pre-signed transactions: the chain
+ * verifies signatures, so ops cannot be forged — but anything forwarded here
+ * is relayed from our infrastructure. The allowlist is exactly the operation
+ * set this client constructs (lib/crypto/transaction-signer.ts and its
+ * callers in lib/api/broadcast.ts):
+ *
+ *   vote            — Voting.tsx (broadcastVote)
+ *   comment         — PostEditor.tsx (broadcastComment)
+ *   comment_options — PostEditor.tsx, appended right after comment when the
+ *                     editor applies payout/beneficiary options
+ *   delete_comment  — PostPageClient.tsx (broadcastDeleteComment)
+ *   custom_json     — Follow/Reblog (id "follow"), SubscribeButton
+ *                     (id "community"), NotificationsList (id "notify")
+ *   account_update2 — UserSettings.tsx (broadcastAccountUpdate)
+ *
+ * Anything else (transfer, account_update, witness ops, …) is not a client
+ * flow and is rejected with a 400 before the relay attempt.
+ */
+const ALLOWED_OPERATION_TYPES: ReadonlySet<string> = new Set([
+  'vote',
+  'comment',
+  'comment_options',
+  'delete_comment',
+  'custom_json',
+  'account_update2',
+]);
+
+/**
+ * Allowed custom_json ids, from the actual call sites (audit N-10). The id
+ * namespaces the payload protocol; whitelisting op types alone would still
+ * relay arbitrary third-party protocols through custom_json.
+ */
+const ALLOWED_CUSTOM_JSON_IDS: ReadonlySet<string> = new Set([
+  'follow', // follow/unfollow/ignore (mute) + reblog payloads
+  'community', // community subscribe/unsubscribe
+  'notify', // mark notifications read (setLastRead)
+]);
+
+/** Cap for echoing a rejected custom_json id back in the error body. */
+const REJECTED_OP_LABEL_LIMIT = 32;
+
+/**
+ * Validate every operation against the allowlist. Returns the labels of the
+ * rejected operations (empty array = all allowed). Labels name only what the
+ * client itself sent — the allowlist contents are never disclosed.
+ */
+function findRejectedOperations(operations: unknown[]): string[] {
+  const rejected = new Set<string>();
+  for (const op of operations) {
+    if (!Array.isArray(op) || op.length < 2 || typeof op[0] !== 'string') {
+      rejected.add('malformed operation');
+      continue;
+    }
+    const name = op[0];
+    if (!ALLOWED_OPERATION_TYPES.has(name)) {
+      rejected.add(name.slice(0, REJECTED_OP_LABEL_LIMIT));
+      continue;
+    }
+    if (name === 'custom_json') {
+      const data = op[1];
+      if (!data || typeof data !== 'object' || Array.isArray(data)) {
+        rejected.add('malformed operation');
+        continue;
+      }
+      const record = data as Record<string, unknown>;
+      const id = typeof record.id === 'string' ? record.id : '';
+      if (!ALLOWED_CUSTOM_JSON_IDS.has(id)) {
+        rejected.add(
+          `custom_json id=${id.slice(0, REJECTED_OP_LABEL_LIMIT) || '(missing)'}`
+        );
+        continue;
+      }
+      // Every client custom_json is posting-auth only (login is posting-key
+      // only); an active-auth custom_json is not a client flow.
+      const requiredAuths = Array.isArray(record.required_auths)
+        ? record.required_auths
+        : [];
+      if (requiredAuths.length > 0) {
+        rejected.add('custom_json with required_auths');
+      }
+    }
+  }
+  return [...rejected];
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -79,6 +168,17 @@ export async function POST(request: NextRequest) {
     if (!signedTransaction.signatures || !Array.isArray(signedTransaction.signatures) || signedTransaction.signatures.length === 0) {
       return NextResponse.json(
         { error: 'Invalid transaction: must have at least one signature' },
+        { status: 400 }
+      );
+    }
+
+    // Allowlist gate (audit N-10): reject non-client operations before the
+    // relay attempt. The error names only the rejected operations (client
+    // input), never the allowlist contents.
+    const rejectedOperations = findRejectedOperations(signedTransaction.operations);
+    if (rejectedOperations.length > 0) {
+      return NextResponse.json(
+        { error: `Operation not allowed: ${rejectedOperations.join(', ')}` },
         { status: 400 }
       );
     }
@@ -189,52 +289,151 @@ export async function POST(request: NextRequest) {
 
 /**
  * Drop read-cache entries that this transaction's operations may have made
- * stale. Each invalidation targets a specific prefix set rather than flushing
- * everything, so unrelated cached feeds stay warm.
+ * stale (audit N-10: exact-key O(1) deletes only — no prefix sweeps).
+ *
+ * The previous implementation swept whole prefixes (`steem:profile:` covered
+ * EVERY user's profile; `steem:posts:ranked:` all ranked feeds), and each
+ * sweep is a SCAN over the entire keyspace regardless of how many keys
+ * match — so any registered account could punch the shared Redis cache
+ * through at ~zero cost, 30 times a minute per IP.
+ *
+ * List caches (`steem:posts:ranked:*`, `steem:posts:account:*`,
+ * `steem:post:*`) are deliberately NOT invalidated here anymore:
+ *   - their fresh TTL is 3s (CACHE_TTL.posts), so natural expiry bounds
+ *     staleness to seconds;
+ *   - the pending overlay (lib/steem/pending-overlay.ts) already merges
+ *     freshly broadcast votes into ranked/account-post reads for 120s after
+ *     the write, so vote visibility does not depend on the sweep;
+ *   - new posts/replies are surfaced by the overlay on the discussion path,
+ *     and list placement follows within the 3s fresh window;
+ *   - deleting `steem:post:*` outright would re-cache PRE-write data as
+ *     fresh for a full TTL while hivemind lags (the pre-existing reason the
+ *     vote branch never deleted it).
+ *
+ * Profile caches ARE deleted exactly: `steem:profile:{account}` is a single
+ * fully-known key (observer reads bypass the cache; see getProfile) with a
+ * 30s fresh TTL, and the exact delete guarantees the next read refetches
+ * instead of serving the pre-write value for the remaining TTL.
  */
 async function invalidateAfterBroadcast(operations: Array<[string, Record<string, unknown>]>): Promise<void> {
   for (const [opName, opData] of operations) {
     switch (opName) {
       case 'vote': {
-        // A vote changes the post's ranking and the voter's profile.
-        // NOTE: do NOT delete `steem:post:{author}:{permlink}` here — the
-        // indexer needs a few seconds to see the vote, so the next read
-        // would re-cache PRE-vote data as fresh for a full TTL. Keeping the
-        // old entry bounds staleness to its remaining TTL instead.
+        // A vote can shift hivemind-side profile fields of both parties;
+        // two exact deletes, actor-scoped.
         const voter = String(opData.voter || '');
         const author = String(opData.author || '');
-        await cacheDeleteByPrefix('steem:posts:ranked:');
-        if (voter) await cacheDeleteByPrefix(`steem:profile:${voter}`);
-        if (author) await cacheDeleteByPrefix(`steem:profile:${author}`);
+        if (voter) await deleteAccountScopedKey('steem:profile:', voter);
+        if (author) await deleteAccountScopedKey('steem:profile:', author);
         break;
       }
-      case 'comment': {
-        // New post/reply invalidates feeds + the author's account posts + profile.
+      case 'comment':
+      case 'delete_comment': {
+        // New/edited/deleted post changes the author's profile post count;
+        // their account-post lists are 3s-TTL caches left to natural expiry
+        // (see the function comment).
         const author = String(opData.author || '');
-        if (author) {
-          await cacheDeleteByPrefix(`steem:posts:account:${author}:`);
-          await cacheDeleteByPrefix(`steem:profile:${author}`);
-        }
-        await cacheDeleteByPrefix('steem:posts:ranked:');
+        if (author) await deleteAccountScopedKey('steem:profile:', author);
         break;
       }
-      case 'delete_comment':
       case 'custom_json': {
-        // custom_json covers reblog/follow/mute — feeds & profiles may shift.
-        await cacheDeleteByPrefix('steem:posts:ranked:');
-        await cacheDeleteByPrefix('steem:profile:');
+        await invalidateCustomJson(opData);
         break;
       }
       case 'account_update2': {
         // Profile settings save — the account's cached profile is stale.
         const account = String(opData.account || '');
-        if (account) await cacheDeleteByPrefix(`steem:profile:${account}`);
+        if (account) await deleteAccountScopedKey('steem:profile:', account);
         break;
       }
       default:
-        // Other ops (transfer, witness, etc.) don't touch feed/profile caches.
+        // comment_options piggybacks on comment; other whitelisted ops
+        // don't touch the caches tracked here.
         break;
     }
+  }
+}
+
+/**
+ * Delete `{prefix}{account}` exactly. Account names are case-insensitive
+ * on-chain but the read routes cache under whatever casing the reader used,
+ * so delete both the lowercase and raw variants to cover mixed-case keys.
+ */
+async function deleteAccountScopedKey(prefix: string, account: string): Promise<void> {
+  const normalized = account.toLowerCase();
+  await cacheDelete(`${prefix}${normalized}`);
+  if (normalized !== account) {
+    await cacheDelete(`${prefix}${account}`);
+  }
+}
+
+/** Parse a `["kind", {…}]`-shaped custom_json payload; null when unshaped. */
+function parseCustomJsonPayload(raw: unknown): [string, Record<string, unknown>] | null {
+  if (typeof raw !== 'string') return null;
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (
+      Array.isArray(parsed) &&
+      parsed.length >= 2 &&
+      typeof parsed[0] === 'string' &&
+      parsed[1] !== null &&
+      typeof parsed[1] === 'object' &&
+      !Array.isArray(parsed[1])
+    ) {
+      return [parsed[0], parsed[1] as Record<string, unknown>];
+    }
+  } catch {
+    // Unparsable payload — invalidate nothing beyond the actor's own keys.
+  }
+  return null;
+}
+
+/**
+ * custom_json invalidation scoped to what each payload id actually touches
+ * (audit N-10; the old branch swept every profile + every ranked feed).
+ */
+async function invalidateCustomJson(opData: Record<string, unknown>): Promise<void> {
+  const postingAuths = Array.isArray(opData.required_posting_auths)
+    ? opData.required_posting_auths
+    : [];
+  const actor = String(postingAuths[0] || '');
+  // The actor's own profile: covers follow-count shifts for `follow` and any
+  // hivemind-side profile field uniformly; harmless when nothing
+  // profile-visible changed.
+  if (actor) await deleteAccountScopedKey('steem:profile:', actor);
+
+  const payload = parseCustomJsonPayload(opData.json);
+  if (!payload) return;
+  const [kind, args] = payload;
+
+  switch (opData.id) {
+    case 'follow': {
+      if (kind === 'follow') {
+        // follow/unfollow/ignore also shifts the TARGET's cached
+        // follower-count profile — one exact key, not every user's profile.
+        const following = String(args.following || '');
+        if (following) await deleteAccountScopedKey('steem:profile:', following);
+      }
+      // kind === 'reblog': the post lands in the REBLOGGER's blog list (a
+      // 3s-TTL list cache, left to natural expiry); the target author's
+      // blog/profile are unchanged by a reblog.
+      break;
+    }
+    case 'community': {
+      // subscribe/unsubscribe changes the community's subscriber list —
+      // an exact key with a 10-minute fresh TTL (CACHE_TTL.communityRoles),
+      // previously not invalidated at all. The `steem:communities:*` list
+      // cache also embeds subscriber counts, but its key space is unbounded
+      // (sort x query x limit) so no exact delete is possible; its 10-minute
+      // TTL bounds the drift.
+      const community = String(args.community || '');
+      if (community) await deleteAccountScopedKey('steem:community-subscribers:', community);
+      break;
+    }
+    default:
+      // 'notify' (setLastRead): notifications are not cached (getAccountNotifications/
+      // getUnreadNotifications bypass withCache), nothing to drop.
+      break;
   }
 }
 

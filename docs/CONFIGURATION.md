@@ -21,9 +21,11 @@ ADDRESS_PREFIX=STM
 
 ### Authentication
 ```bash
-JWT_SECRET=your-secret-key-change-in-production
-# NOTE: production deployments fail closed without a real JWT_SECRET
-# (session creation/verification throws) — the fallback secret is dev-only.
+# REQUIRED in every environment (not just production). Session endpoints
+# fail closed unless JWT_SECRET is set, at least 32 bytes long, and not the
+# old placeholder value. Generate one with:
+#   openssl rand -hex 32
+JWT_SECRET=<output of openssl rand -hex 32>
 ```
 
 ### Session Management - Redis (Optional)

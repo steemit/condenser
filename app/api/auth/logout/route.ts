@@ -4,12 +4,19 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession, logoutUser, setSessionCookie, clearSessionCookie } from '@/lib/auth/session';
+import {
+  clearSessionCookie,
+  COOKIE_NAME,
+  getSession,
+  logoutUser,
+  revokeSession,
+  setSessionCookie,
+} from '@/lib/auth/session';
 
 export async function POST(request: NextRequest) {
   try {
     const currentSession = await getSession(request);
-    
+
     if (!currentSession) {
       return NextResponse.json(
         { error: 'No active session' },
@@ -21,6 +28,11 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'Logged out successfully',
     });
+
+    // Revoke the old server-side session (Redis mode) so the pre-logout
+    // token cannot be replayed after the cookie is replaced (audit N-05).
+    // Best-effort no-op for stateless JWT tokens.
+    await revokeSession(request.cookies.get(COOKIE_NAME)?.value);
 
     if (currentSession.username) {
       // User was logged in, create session without username

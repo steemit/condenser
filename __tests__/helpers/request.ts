@@ -15,10 +15,22 @@ export function makeGetRequest(
 }
 
 /** Build a NextRequest for a POST handler with a JSON body. */
-export function makePostRequest(path: string, body?: unknown): NextRequest {
+export function makePostRequest(
+  path: string,
+  body?: unknown,
+  headers: Record<string, string> = {}
+): NextRequest {
   return new NextRequest(new URL(path, BASE), {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', ...headers },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
+}
+
+/** Cookie header carrying a session token (see makePostRequest). */
+export function sessionCookieHeader(
+  token: string,
+  name = 'steem-session'
+): Record<string, string> {
+  return { cookie: `${name}=${token}` };
 }

@@ -27,6 +27,7 @@ business logic.
 ```bash
 pnpm install
 cp .env.example .env
+printf 'JWT_SECRET=%s\n' "$(openssl rand -hex 32)" >> .env
 pnpm dev
 ```
 
@@ -36,7 +37,8 @@ Environment variables at a glance (full reference:
 [docs/CONFIGURATION.md](docs/CONFIGURATION.md)):
 
 - `STEEM_API_URL` — Steem RPC endpoint (default `https://api.steemit.com`)
-- `JWT_SECRET` — **required in production**; use a strong random value
+- `JWT_SECRET` — **required** (every environment, fail closed); generate with
+  `openssl rand -hex 32`
 - `REDIS_URL` — **optional**; enables Redis-backed sessions and server-side
   content caching. Without it the app degrades gracefully to JWT-only sessions
   and direct RPC calls.

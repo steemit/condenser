@@ -1,5 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { makePostRequest } from '@/__tests__/helpers/request';
+import {
+  makePostRequest,
+  sessionCookieHeader,
+} from '@/__tests__/helpers/request';
 
 vi.mock('@/lib/steem/client', () => ({
   getAccount: vi.fn(),
@@ -7,8 +10,10 @@ vi.mock('@/lib/steem/client', () => ({
 }));
 
 vi.mock('@/lib/auth/session', () => ({
+  COOKIE_NAME: 'steem-session',
   getSession: vi.fn(),
   loginUser: vi.fn(),
+  revokeSession: vi.fn(),
   setSessionCookie: vi.fn(),
 }));
 
@@ -24,16 +29,23 @@ vi.mock('@steemit/steem-js', () => ({
 
 import { POST } from '@/app/api/auth/login/route';
 import { callSteemApi, getAccount } from '@/lib/steem/client';
-import { getSession, loginUser, setSessionCookie } from '@/lib/auth/session';
+import {
+  getSession,
+  loginUser,
+  revokeSession,
+  setSessionCookie,
+} from '@/lib/auth/session';
 
 const getAccountMock = vi.mocked(getAccount);
 const callSteemApiMock = vi.mocked(callSteemApi);
 const getSessionMock = vi.mocked(getSession);
 const loginUserMock = vi.mocked(loginUser);
+const revokeSessionMock = vi.mocked(revokeSession);
 const setSessionCookieMock = vi.mocked(setSessionCookie);
 
 const POSTING_KEY = 'STM6 posting key';
 const CHALLENGE = 'abc123';
+const OLD_SID = 'b'.repeat(26); // Redis session id shape
 
 function validBody() {
   return {
@@ -62,6 +74,7 @@ describe('POST /api/auth/login', () => {
     // The challenge route stores the issued challenge in the session cookie;
     // the login route verifies the signed challenge against it.
     getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE } as never);
+    revokeSessionMock.mockResolvedValue();
   });
 
   it('rejects bodies missing required fields', async () => {
@@ -117,6 +130,9 @@ describe('POST /api/auth/login', () => {
     expect(res.status).toBe(400);
     expect(await res.json()).toEqual({ error: 'Invalid or expired login challenge' });
     expect(loginUserMock).not.toHaveBeenCalled();
+    // A failed login keeps the old session alive (challenge retry), so
+    // nothing is revoked.
+    expect(revokeSessionMock).not.toHaveBeenCalled();
   });
 
   it('returns 400 when the session has no stored challenge', async () => {
@@ -156,12 +172,14 @@ describe('POST /api/auth/login', () => {
     expect(await res.json()).toEqual({ error: 'Invalid signature' });
   });
 
-  it('creates a session and sets the cookie on success', async () => {
+  it('creates a session, revokes the old token, and sets the cookie on success', async () => {
     getAccountMock.mockResolvedValue(accountWithPostingKey());
     getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE } as never);
     loginUserMock.mockResolvedValue('new-session-token');
 
-    const res = await POST(makePostRequest('/api/auth/login', validBody()));
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), sessionCookieHeader(OLD_SID))
+    );
     expect(res.status).toBe(200);
 
     const body = await res.json();
@@ -169,6 +187,12 @@ describe('POST /api/auth/login', () => {
     expect(body.user.username).toBe('alice');
     expect(loginUserMock).toHaveBeenCalledWith({ loginChallenge: CHALLENGE }, 'alice');
     expect(setSessionCookieMock).toHaveBeenCalledWith(res, 'new-session-token');
+    // The pre-login session (which still holds the consumed loginChallenge)
+    // is revoked after the new session is minted (audit N-12).
+    expect(revokeSessionMock).toHaveBeenCalledWith(OLD_SID);
+    expect(revokeSessionMock.mock.invocationCallOrder[0]).toBeGreaterThan(
+      loginUserMock.mock.invocationCallOrder[0]
+    );
     // Legacy login_account checkpoint: sign-in is reported to overseer.
     expect(callSteemApiMock).toHaveBeenCalledWith('overseer.collect', [
       'custom',

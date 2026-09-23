@@ -90,7 +90,10 @@ const isValidSignature = sig.verifyHash(Buffer.from(data, 'utf8'), pubKey);
 
 #### Required
 ```bash
-JWT_SECRET=your-secret-key-change-in-production
+# Strong random secret (>= 32 bytes), required in every environment;
+# session endpoints fail closed without it. Generate with:
+#   openssl rand -hex 32
+JWT_SECRET=<output of openssl rand -hex 32>
 ```
 
 #### Optional (Redis)
@@ -124,6 +127,8 @@ REDIS_KEY_PREFIX=steem:session:
 - **Secure Flag**: HTTPS-only in production
 - **SameSite Protection**: CSRF protection
 - **Automatic Expiration**: 30-day TTL with renewal
+- **JWT_SECRET Fail Closed**: session creation/verification throws in any environment when `JWT_SECRET` is missing, shorter than 32 bytes, or the shipped placeholder — a weak secret lets anyone mint session cookies (including forged login challenges)
+- **Session Revocation (Redis mode)**: logout and successful login revoke the superseded Redis session id server-side (`revokeSession()` → `RedisSession.deleteSession()`), so the old token cannot be replayed after the cookie is rotated. Stateless JWT fallback tokens cannot be revoked — they stay valid until their `exp`; use Redis sessions (`REDIS_URL`) in production for real revocation
 
 ### Key Management Security
 - **No Server Storage**: Private keys never stored on server

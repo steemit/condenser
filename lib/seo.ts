@@ -13,6 +13,7 @@
 
 import type { Metadata } from 'next';
 import { extractBodySummary, extractImageLink } from '@/lib/extract-content';
+import { proxifyImageUrl } from '@/lib/media/proxify-url';
 
 /**
  * Origin of this site, used for absolute URLs in metadata (avatar fallback
@@ -21,6 +22,20 @@ import { extractBodySummary, extractImageLink } from '@/lib/extract-content';
  * production origin.
  */
 export const SITE_ORIGIN = 'https://steemit.com';
+
+/**
+ * Hosts whose canonical_url json_metadata values are honored (audit N-17).
+ *
+ * Legacy (CanonicalLinker.read_md_canonical) accepted ANY absolute http(s)
+ * canonical_url, letting a post author point rel=canonical at an arbitrary
+ * site — an SEO-hijack surface on our own pages. Legacy has no domain
+ * whitelist for this, so the rule is restricted to this site's own host
+ * family; anything else falls through to the app-scheme/local URL logic.
+ */
+const CANONICAL_URL_ALLOWED_HOSTS = new Set(['steemit.com', 'www.steemit.com']);
+
+/** Only absolute http(s) URLs may become metadata images (audit N-17). */
+const ABSOLUTE_HTTP_URL = /^https?:\/\//i;
 
 /**
  * URL schemes from steemscript apps.json, restricted to the apps legacy
@@ -63,11 +78,45 @@ function readMdApp(metadata: JsonMetadata | null): string | null {
   return parts.length === 2 ? parts[0] : null;
 }
 
-/** Legacy read_md_canonical: accept only absolute http(s) canonical_url. */
+/**
+ * Legacy read_md_canonical, tightened (audit N-17): accept only absolute
+ * http(s) canonical_url whose host is this site's own (steemit.com /
+ * www.steemit.com). Cross-domain canonical_url values fall through to the
+ * app-scheme / local URL instead of being emitted as rel=canonical.
+ */
 function readMdCanonical(metadata: JsonMetadata | null): string | null {
   const url = metadata?.canonical_url;
-  if (typeof url !== 'string') return null;
-  return /^https?:\/\//.test(url) ? url : null;
+  if (typeof url !== 'string' || !/^https?:\/\//.test(url)) return null;
+  try {
+    if (!CANONICAL_URL_ALLOWED_HOSTS.has(new URL(url).hostname.toLowerCase())) {
+      return null;
+    }
+  } catch {
+    return null;
+  }
+  return url;
+}
+
+/**
+ * Validate an untrusted image URL (post json_metadata.image[0], on-chain
+ * profile_image) before it lands in og:image / twitter images, then force it
+ * through the image proxy (audit N-17 — mirrors the safe* style of
+ * lib/profile-metadata.ts):
+ *  - only absolute http(s) URLs with a parseable hostname pass (javascript:,
+ *    data:, protocol-relative and malformed values degrade to null);
+ *  - proxifyImageUrl then proxies first-party hosts (base58 /p/ form) and
+ *    passes third-party hosts through verbatim, matching the read pipeline.
+ */
+function safeMetadataImage(raw: unknown): string | null {
+  if (typeof raw !== 'string') return null;
+  const url = raw.trim();
+  if (!ABSOLUTE_HTTP_URL.test(url)) return null;
+  try {
+    if (!new URL(url).hostname) return null;
+  } catch {
+    return null;
+  }
+  return proxifyImageUrl(url, '640x0/');
 }
 
 /**
@@ -147,7 +196,11 @@ export function buildPostMetadata(post: SeoPost): Metadata {
 
   const title = `${post.title} — Steemit`;
   const description = `${extractBodySummary(post.body ?? '', isReply)} by ${post.author}`;
-  const imageLink = extractImageLink(jsonMetadata ?? undefined, post.body ?? null);
+  // Attacker-controlled (json_metadata.image[0] / first body image): must
+  // pass safeMetadataImage before it reaches og:image or twitter (N-17).
+  const imageLink = safeMetadataImage(
+    extractImageLink(jsonMetadata ?? undefined, post.body ?? null)
+  );
   const profileImage = `${SITE_ORIGIN}/avatar/${post.author}`;
 
   const canonical = makeCanonicalLink(post, jsonMetadata);
@@ -193,8 +246,11 @@ export function buildAccountMetadata(
 ): Metadata {
   const name = profile?.name || accountname;
   const about = profile?.about || 'Steemit: Communities Without Borders.';
+  // On-chain profile_image is attacker-controlled (account_update2): validate
+  // + proxy it like post images instead of emitting it raw (audit N-17).
   const profileImage =
-    profile?.profile_image || `${SITE_ORIGIN}/images/steemit-twshare-2.png`;
+    safeMetadataImage(profile?.profile_image) ||
+    `${SITE_ORIGIN}/images/steemit-twshare-2.png`;
 
   const title = `@${accountname}`;
   const description = `The latest posts from ${name}. Follow me at @${accountname}. ${about}`;

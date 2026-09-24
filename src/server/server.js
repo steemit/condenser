@@ -361,7 +361,43 @@ app.use(
     mount('/robots.txt', function*() {
         this.set('Cache-Control', 'public, max-age=86400000');
         this.type = 'text/plain';
-        this.body = 'User-agent: *\nAllow: /';
+        // Crawl policy (2026-09-20): SEO scrapers with no search value were
+        // pure SSR cost during the saturation incident. Post pages stay
+        // fully crawlable for search engines; Yandex/Applebot/Baidu honor
+        // Crawl-delay, so they get one. Google ignores Crawl-delay and is
+        // left on the default group (its share of bot traffic is tiny).
+        this.body = [
+            'User-agent: *',
+            'Allow: /',
+            '',
+            'User-agent: AhrefsBot',
+            'Disallow: /',
+            '',
+            'User-agent: SemrushBot',
+            'Disallow: /',
+            '',
+            'User-agent: MJ12bot',
+            'Disallow: /',
+            '',
+            'User-agent: DotBot',
+            'Disallow: /',
+            '',
+            'User-agent: PetalBot',
+            'Disallow: /',
+            '',
+            'User-agent: Yandex',
+            'Crawl-delay: 10',
+            '',
+            'User-agent: YandexBot',
+            'Crawl-delay: 10',
+            '',
+            'User-agent: Applebot',
+            'Crawl-delay: 10',
+            '',
+            'User-agent: Baiduspider',
+            'Crawl-delay: 10',
+            '',
+        ].join('\n');
     })
 );
 

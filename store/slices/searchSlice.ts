@@ -21,7 +21,6 @@ interface SearchHits {
 
 interface SearchState {
   pending: boolean;
-  scrollId: string | false;
   result: unknown[];
   depth: number;
   total_result: number;
@@ -31,7 +30,6 @@ const searchTypes = ['hive_posts', 'hive_replies', 'hive_accounts'];
 
 const initialState: SearchState = {
   pending: false,
-  scrollId: false,
   result: [],
   depth: 0,
   total_result: 0,
@@ -55,12 +53,10 @@ const searchSlice = createSlice({
     },
     searchResult: (state, action: PayloadAction<{
       hits: SearchHits;
-      _scroll_id?: string;
       append?: boolean;
     }>) => {
-      const { hits, _scroll_id, append } = action.payload;
+      const { hits, append } = action.payload;
       const results = hits.hits;
-      const scroll_id = _scroll_id || false;
       const depth = state.depth;
       
       if (results.length > 0) {
@@ -81,11 +77,9 @@ const searchSlice = createSlice({
 
       if (!append) {
         state.result = posts;
-        state.scrollId = scroll_id;
         state.total_result = hits.total.value;
       } else {
         state.result = [...state.result, ...posts];
-        state.scrollId = scroll_id;
         state.total_result = hits.total.value;
       }
     },

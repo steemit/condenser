@@ -14,7 +14,6 @@ import type { AppDispatch, RootState } from '../index';
 
 export interface LoginPayload {
   username: string;
-  saveLogin?: boolean;
 }
 
 /**

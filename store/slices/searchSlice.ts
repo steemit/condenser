@@ -21,24 +21,20 @@ interface SearchHits {
 
 interface SearchState {
   pending: boolean;
-  error: boolean | string;
   scrollId: string | false;
   result: unknown[];
   depth: number;
   total_result: number;
-  sort: string;
 }
 
 const searchTypes = ['hive_posts', 'hive_replies', 'hive_accounts'];
 
 const initialState: SearchState = {
   pending: false,
-  error: false,
   scrollId: false,
   result: [],
   depth: 0,
   total_result: 0,
-  sort: 'created_at',
 };
 
 const searchSlice = createSlice({
@@ -51,20 +47,11 @@ const searchSlice = createSlice({
     searchPending: (state, action: PayloadAction<{ pending: boolean }>) => {
       state.pending = action.payload.pending;
     },
-    searchError: (state, action: PayloadAction<{ error: boolean | string }>) => {
-      state.error = action.payload.error;
-    },
     searchReset: (state) => {
       state.result = [];
     },
     searchDepth: (state, action: PayloadAction<number>) => {
       state.depth = action.payload;
-    },
-    searchSort: (state, action: PayloadAction<string>) => {
-      state.sort = action.payload;
-    },
-    searchTotal: (state, action: PayloadAction<number>) => {
-      state.total_result = action.payload;
     },
     searchResult: (state, action: PayloadAction<{
       hits: SearchHits;
@@ -108,11 +95,8 @@ const searchSlice = createSlice({
 export const {
   searchDispatch,
   searchPending,
-  searchError,
   searchReset,
   searchDepth,
-  searchSort,
-  searchTotal,
   searchResult,
 } = searchSlice.actions;
 

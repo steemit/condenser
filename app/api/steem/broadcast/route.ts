@@ -559,22 +559,23 @@ async function invalidateCustomJson(opData: Record<string, unknown>): Promise<vo
         // unknowable, hence the scoped prefix deletes (see the N-10 note on
         // invalidateAfterBroadcast).
         //
-        // The ignore-seed family (`steem:following:`) is always swept — the
-        // login seeds embed the mute state, so every follow-kind write must
-        // drop it. The PAGE families are gated on the write touching the
-        // BLOG dimension: a pure mute/unmute (what carries 'ignore' but not
-        // 'blog') moves nobody between the blog list pages. A follow
-        // ('blog' present) and an unfollow (no 'blog' left and no 'ignore'
-        // kept) both change page membership and still sweep.
-        const what = Array.isArray(args.what) ? args.what.map(String) : [];
-        const touchesBlog = what.includes('blog') || !what.includes('ignore');
+        // All three follow-list families are swept UNCONDITIONALLY. The
+        // ignore-seed family (`steem:following:`) must drop for every
+        // follow-kind write (login seeds embed the mute state). The PAGE
+        // families cannot be payload-gated: Follow.tsx's handleUnfollow
+        // sends what=['','ignore'] when unfollowing a muted user (it keeps
+        // ignoreWhat), which is byte-identical to a pure mute payload —
+        // the server cannot distinguish them, yet the unfollow variant
+        // DOES change blog page membership. Gating on `what` would miss it
+        // and reopen the C1 "unfollow didn't save" window (30s fresh /
+        // 330s stale). A pure mute merely pays two SCANs it didn't need;
+        // mutes are rare, so unconditional sweeping is the only provably
+        // correct option (review consensus, PR #4047).
         if (follower) {
           await deleteAccountScopedPrefix('steem:following:', follower);
-          if (touchesBlog) {
-            await deleteAccountScopedPrefix('steem:following-page:', follower);
-          }
+          await deleteAccountScopedPrefix('steem:following-page:', follower);
         }
-        if (following && touchesBlog) {
+        if (following) {
           await deleteAccountScopedPrefix('steem:followers-page:', following);
         }
       }

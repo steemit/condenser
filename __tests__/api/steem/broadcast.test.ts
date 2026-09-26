@@ -809,16 +809,18 @@ describe('POST /api/steem/broadcast', () => {
     expect(res.status).toBe(200);
     expect(res.headers.get('X-Cache-Invalidate')).toBe('carol,dave');
     const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
-    // No 'blog' but also no kept 'ignore': unfollow removes blog membership,
-    // so the page families still change and are swept.
+    // Unfollow removes blog membership — the page families change and are
+    // swept (unconditionally, like every follow-kind write).
     expect(sweptPrefixes).toContain('steem:following-page:carol:');
     expect(sweptPrefixes).toContain('steem:following:carol:');
     expect(sweptPrefixes).toContain('steem:followers-page:dave:');
   });
 
-  it('sweeps only the ignore-state seeds for a pure mute (what lacks blog)', async () => {
-    // A mute (what: ['ignore']) moves nobody between the blog list pages —
-    // only the login follow-state seeds (which embed the mute state) change.
+  it('sweeps all follow-list families even for a pure mute (unconditional)', async () => {
+    // A mute (what: ['ignore']) doesn't move anybody between the blog list
+    // pages, but the sweep is unconditional anyway: the ['','ignore']
+    // payload is indistinguishable from an unfollow-that-changed-membership
+    // (see the next test), and a pure mute only pays two extra SCANs.
     const tx = signedTx([
       [
         'custom_json',
@@ -837,8 +839,36 @@ describe('POST /api/steem/broadcast', () => {
     expect(res.status).toBe(200);
     const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
     expect(sweptPrefixes).toContain('steem:following:carol:');
-    expect(sweptPrefixes).not.toContain('steem:following-page:carol:');
-    expect(sweptPrefixes).not.toContain('steem:followers-page:dave:');
+    expect(sweptPrefixes).toContain('steem:following-page:carol:');
+    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+  });
+
+  it('sweeps the page families for the ["", "ignore"] unfollow-keep-muted payload (C1)', async () => {
+    // Follow.tsx handleUnfollow keeps ignoreWhat, so unfollowing a muted
+    // user sends what=['','ignore'] — byte-identical to a pure mute. This
+    // write DOES remove blog page membership; a payload-level gate would
+    // miss it and reopen the "unfollow didn't save" window. The page
+    // families must be swept unconditionally.
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify(['follow', { follower: 'carol', following: 'dave', what: ['', 'ignore'] }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    expect(sweptPrefixes).toContain('steem:following:carol:');
+    expect(sweptPrefixes).toContain('steem:following-page:carol:');
+    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
   });
 
   it('sweeps both case variants of a mixed-case follow payload account (C1)', async () => {

@@ -27,6 +27,23 @@ export interface CacheRead<T> {
 class ClientCache {
   private store = new Map<string, CacheEntry<unknown>>();
   private insertionOrder: string[] = [];
+  /**
+   * Bumped by every invalidate()/clear() call. Lets in-flight fetches detect
+   * that an invalidation happened while they were away (C3): a fetch that
+   * started before a write's invalidation holds a pre-write snapshot, and
+   * caching it would resurrect the (evicted or not-yet-present) entry with a
+   * fresh window — see backgroundRefresh() in client-fetch.ts. Bumped even
+   * when invalidate() matches nothing: the fetch's key is not in the store
+   * yet, so the store cannot tell whether the token targeted it — erring
+   * toward "don't cache" costs one refetch, erring the other way silently
+   * undoes the invalidation.
+   */
+  private invalidationEpoch = 0;
+
+  /** Current invalidation epoch; compare before/after a fetch to detect eviction. */
+  getInvalidationEpoch(): number {
+    return this.invalidationEpoch;
+  }
 
   get<T>(key: string): CacheRead<T> | null {
     const entry = this.store.get(key);
@@ -85,11 +102,15 @@ class ClientCache {
       this.store.delete(key);
       this.removeFromOrder(key);
     }
+    // Always bump — see the field comment for why a match-less invalidate
+    // still invalidates in-flight fetches.
+    this.invalidationEpoch++;
   }
 
   clear(): void {
     this.store.clear();
     this.insertionOrder = [];
+    this.invalidationEpoch++;
   }
 
   private removeFromOrder(key: string): void {

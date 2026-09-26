@@ -63,12 +63,18 @@ export async function cachedFetch<T>(
     return { data: cached.data, stale: true };
   }
 
-  // No cache at all → must wait for fetch.
+  // No cache at all → must wait for fetch. Capture the invalidation epoch so
+  // a write's invalidation landing mid-flight (evicting this URL) prevents the
+  // pre-write snapshot from being cached with a fresh window (C3 — same
+  // resurrection risk as the background path, see backgroundRefresh).
+  const epochBefore = clientCache.getInvalidationEpoch();
   const res = await fetch(url);
   if (!res.ok) throw new HttpError(res.status, res.statusText);
   const data = (await res.json()) as T;
   invalidateFromResponse(res);
-  clientCache.set(url, data, opts.staleMs, opts.maxAgeMs);
+  if (clientCache.getInvalidationEpoch() === epochBefore) {
+    clientCache.set(url, data, opts.staleMs, opts.maxAgeMs);
+  }
   return { data, stale: false };
 }
 
@@ -88,6 +94,13 @@ export class HttpError extends Error {
 }
 
 function backgroundRefresh(url: string, opts: CachedFetchOptions): void {
+  // Snapshot the invalidation epoch when the refresh starts (C3): if a write's
+  // invalidation evicts this URL while the refresh is in flight, this
+  // response predates the write and caching it would resurrect the evicted
+  // entry with a fresh window — silently undoing the invalidation. Drop it
+  // instead; the next read refetches (GET responses carry no invalidation
+  // header, so only a concurrent write can move the epoch).
+  const epochBefore = clientCache.getInvalidationEpoch();
   fetch(url)
     .then(async (res) => {
       // A background refresh hitting an error must NOT overwrite the cached
@@ -95,6 +108,7 @@ function backgroundRefresh(url: string, opts: CachedFetchOptions): void {
       if (!res.ok) return;
       const data = await res.json();
       invalidateFromResponse(res);
+      if (clientCache.getInvalidationEpoch() !== epochBefore) return;
       clientCache.set(url, data, opts.staleMs, opts.maxAgeMs);
     })
     .catch(() => {

@@ -14,6 +14,7 @@ vi.mock('@/lib/cache/redis', () => ({
 import { getRedis } from '@/lib/cache/redis';
 import {
   RATE_LIMITS,
+  aggregateIpIdentity,
   checkRateLimit,
   getClientIp,
   rateLimitResponse,
@@ -125,7 +126,7 @@ describe('lib/cache/rate-limit', () => {
     });
 
     it('buckets per endpoint key + client IP under the condenser: namespace', async () => {
-      redisMocks.eval.mockResolvedValue([1, 60]);
+      redisMocks.eval.mockResolvedValue([1, 60, 0]);
 
       await checkRateLimit(
         requestWithHeaders({ 'x-forwarded-for': '203.0.113.9, 10.0.0.1' }),
@@ -136,12 +137,13 @@ describe('lib/cache/rate-limit', () => {
         expect.any(String), // the Lua script
         1, // number of keys
         'condenser:ratelimit:auth:login:ip:203.0.113.9',
-        '60'
+        '60',
+        '10'
       );
     });
 
     it('buckets on the explicit identifier when provided (login account dimension)', async () => {
-      redisMocks.eval.mockResolvedValue([1, 60]);
+      redisMocks.eval.mockResolvedValue([1, 60, 0]);
 
       await checkRateLimit(requestWithHeaders({}), {
         key: 'auth:login:acct',
@@ -154,12 +156,13 @@ describe('lib/cache/rate-limit', () => {
         expect.any(String),
         1,
         'condenser:ratelimit:auth:login:acct:alice', // sanitized to lowercase
-        '60'
+        '60',
+        '10'
       );
     });
 
     it('keeps hyphens in account identifiers so some-user and someuser do not share a bucket', async () => {
-      redisMocks.eval.mockResolvedValue([1, 60]);
+      redisMocks.eval.mockResolvedValue([1, 60, 0]);
 
       await checkRateLimit(requestWithHeaders({}), {
         key: 'auth:login:acct',
@@ -184,7 +187,7 @@ describe('lib/cache/rate-limit', () => {
     });
 
     it('runs the atomic fixed-window Lua script with the EXPIRE-on-first-hit guard intact', async () => {
-      redisMocks.eval.mockResolvedValue([1, 60]);
+      redisMocks.eval.mockResolvedValue([1, 60, 0]);
 
       await checkRateLimit(requestWithHeaders({}), {
         key: 'auth:challenge',
@@ -196,12 +199,60 @@ describe('lib/cache/rate-limit', () => {
       // be there, and EXPIRE must only fire on the first hit of a window —
       // dropping the `current == 1` guard would re-EXPIRE on every request
       // (window never ends) while all behavioural tests stay green, and
-      // losing EXPIRE entirely would leak persistent counter keys.
+      // losing EXPIRE entirely would leak persistent counter keys. The
+      // first-blocked flag must compare against the LIMIT argument so the
+      // 429 log fires exactly once per bucket-window.
       const script = redisMocks.eval.mock.calls[0][0] as string;
       expect(script).toContain("redis.call('INCR', KEYS[1])");
       expect(script).toContain('if current == 1 then');
       expect(script).toContain("redis.call('EXPIRE', KEYS[1], ARGV[1])");
       expect(script).toContain("redis.call('TTL', KEYS[1])");
+      expect(script).toContain('current == tonumber(ARGV[2]) + 1');
+    });
+
+    it('logs exactly the first blocked hit of a bucket-window (IP dimension)', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const rule = { key: 'auth:challenge', limit: 30, windowSeconds: 60 };
+
+      // count 31 == limit + 1 → first blocked hit: one log line naming the
+      // bucket and the aggregated IP.
+      redisMocks.eval.mockResolvedValue([31, 37, 1]);
+      const first = await checkRateLimit(
+        requestWithHeaders({ 'x-forwarded-for': '198.51.100.7' }),
+        rule
+      );
+      expect(first).toEqual({ allowed: false, retryAfterSeconds: 37 });
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn.mock.calls[0].join(' ')).toContain('bucket=auth:challenge');
+      expect(warn.mock.calls[0].join(' ')).toContain('ip=198.51.100.7');
+      expect(warn.mock.calls[0].join(' ')).toContain('retry_after=37s');
+
+      // Subsequent blocked hits in the same window stay silent.
+      redisMocks.eval.mockResolvedValue([32, 36, 0]);
+      await checkRateLimit(
+        requestWithHeaders({ 'x-forwarded-for': '198.51.100.7' }),
+        rule
+      );
+      expect(warn).toHaveBeenCalledTimes(1);
+
+      warn.mockRestore();
+    });
+
+    it('redacts the identity in the 429 log for account-dimension buckets (N-20 discipline)', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      redisMocks.eval.mockResolvedValue([11, 42, 1]);
+
+      await checkRateLimit(requestWithHeaders({}), {
+        key: 'auth:login:acct',
+        limit: 10,
+        windowSeconds: 60,
+        identifier: 'some-victim',
+      });
+
+      const line = warn.mock.calls[0].join(' ');
+      expect(line).toContain('identity=<redacted>');
+      expect(line).not.toContain('some-victim');
+      warn.mockRestore();
     });
   });
 
@@ -218,11 +269,11 @@ describe('lib/cache/rate-limit', () => {
       expect(ip).toBe('198.51.100.7');
     });
 
-    it('keeps IPv6 addresses intact', () => {
+    it('aggregates IPv6 addresses to their /64 prefix', () => {
       const ip = getClientIp(
         requestWithHeaders({ 'x-forwarded-for': '2001:db8::1, 10.0.0.1' })
       );
-      expect(ip).toBe('2001:db8::1');
+      expect(ip).toBe('2001:0db8:0000:0000::/64');
     });
 
     it('collapses a forged non-IP XFF value to the safe charset (key shaping blocked)', () => {
@@ -255,6 +306,73 @@ describe('lib/cache/rate-limit', () => {
 
     it('returns the unknown bucket for an empty XFF value', () => {
       expect(getClientIp(requestWithHeaders({ 'x-forwarded-for': ' , ' }))).toBe('unknown');
+    });
+  });
+
+  describe('aggregateIpIdentity (IPv6 /64 prefix, audit N-08 follow-up)', () => {
+    it('collapses every address of one /64 into a single bucket', () => {
+      const prefix = '2001:0db8:1234:5678::/64';
+      expect(aggregateIpIdentity('2001:db8:1234:5678::1')).toBe(prefix);
+      expect(aggregateIpIdentity('2001:db8:1234:5678::dead:beef')).toBe(prefix);
+      expect(
+        aggregateIpIdentity('2001:db8:1234:5678:ffff:ffff:ffff:ffff')
+      ).toBe(prefix);
+      // Full textual form normalizes to the same prefix (uppercase hex too).
+      expect(
+        aggregateIpIdentity('2001:0DB8:1234:5678:0000:0000:0000:0001')
+      ).toBe(prefix);
+    });
+
+    it('separates different /64s', () => {
+      expect(aggregateIpIdentity('2001:db8:1234:5679::1')).not.toBe(
+        aggregateIpIdentity('2001:db8:1234:5678::1')
+      );
+    });
+
+    it('normalizes IPv4-mapped IPv6 to the plain IPv4 form', () => {
+      expect(aggregateIpIdentity('::ffff:192.0.2.128')).toBe('192.0.2.128');
+      expect(aggregateIpIdentity('::FFFF:192.0.2.128')).toBe('192.0.2.128');
+      // Plain IPv4 passes through: mapped and plain share one bucket.
+      expect(aggregateIpIdentity('192.0.2.128')).toBe('192.0.2.128');
+    });
+
+    it('handles embedded dotted-quad tails and zone ids', () => {
+      // Embedded v4 tail in a global address: still the first-4-hextet /64.
+      expect(aggregateIpIdentity('2001:db8::192.0.2.1')).toBe(
+        '2001:0db8:0000:0000::/64'
+      );
+      expect(aggregateIpIdentity('fe80::1%eth0')).toBe(
+        'fe80:0000:0000:0000::/64'
+      );
+      expect(aggregateIpIdentity('[2001:db8::1]')).toBe(
+        '2001:0db8:0000:0000::/64'
+      );
+    });
+
+    it('keeps loopback and all-zero addresses in predictable buckets', () => {
+      expect(aggregateIpIdentity('::1')).toBe('0000:0000:0000:0000::/64');
+      expect(aggregateIpIdentity('::')).toBe('0000:0000:0000:0000::/64');
+    });
+
+    it('falls back to the charset sanitizer for malformed colon junk', () => {
+      // Not a valid IPv6 literal: same treatment as before aggregation
+      // existed — charset-strip (colons/dots are legal identity characters),
+      // unknown when nothing remains.
+      expect(aggregateIpIdentity('zz:::nonsense!!')).toBe('zz:::nonsense');
+      expect(aggregateIpIdentity('!!@@##')).toBe('unknown');
+    });
+
+    it('rejects impossible IPv6 group counts', () => {
+      // 9 groups without elision, and an elision that fills nothing: both
+      // fail IPv6 parsing and fall back to the charset sanitizer, which
+      // keeps these colon-legal strings verbatim (pre-aggregation behavior
+      // for hostile XFF values — they cannot shape the Redis key).
+      expect(aggregateIpIdentity('1:2:3:4:5:6:7:8:9')).toBe(
+        '1:2:3:4:5:6:7:8:9'
+      );
+      expect(aggregateIpIdentity('1:2:3:4:5:6:7:8::')).toBe('1:2:3:4:5:6:7:8::');
+      // Invalid hex group.
+      expect(aggregateIpIdentity('2001:xb8::1')).toBe('2001:xb8::1');
     });
   });
 

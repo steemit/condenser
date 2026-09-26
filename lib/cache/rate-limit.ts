@@ -24,7 +24,9 @@
  * only lets that client rotate its own bucket — the header is never used for
  * anything beyond bucketing. Values are additionally restricted to the
  * identity charset ([a-z0-9.:-]) so a hostile header cannot shape the Redis
- * key.
+ * key. IPv6 identities are aggregated to their /64 prefix (see
+ * aggregateIpIdentity) so address rotation inside one allocation cannot
+ * mint fresh buckets.
  */
 
 import { NextResponse } from 'next/server';
@@ -153,31 +155,134 @@ function sanitizeIdentity(raw: string): string {
 }
 
 /**
+ * Parse a textual IPv6 address into its 8 hextets, or null when malformed.
+ * Handles '::' elision, an embedded dotted-quad tail (e.g. 2001:db8::1.2.3.4)
+ * and a zone id (fe80::1%eth0); brackets from [::1] forms are tolerated.
+ */
+function parseIpv6(raw: string): number[] | null {
+  const addr = raw
+    .trim()
+    .toLowerCase()
+    .replace(/^\[/, '')
+    .replace(/\]$/, '')
+    .split('%')[0];
+  if (!addr || !addr.includes(':')) return null;
+
+  const parseGroups = (part: string): number[] | null => {
+    if (part === '') return [];
+    const pieces = part.split(':');
+    const groups: number[] = [];
+    for (let i = 0; i < pieces.length; i++) {
+      const piece = pieces[i];
+      if (piece.includes('.')) {
+        // Dotted-quad tail: counts as two hextets, only valid last.
+        if (i !== pieces.length - 1) return null;
+        const octets = piece.split('.').map(Number);
+        if (
+          octets.length !== 4 ||
+          octets.some((o) => !Number.isInteger(o) || o < 0 || o > 255)
+        ) {
+          return null;
+        }
+        groups.push((octets[0] << 8) | octets[1]);
+        groups.push((octets[2] << 8) | octets[3]);
+      } else {
+        if (!/^[0-9a-f]{1,4}$/.test(piece)) return null;
+        groups.push(parseInt(piece, 16));
+      }
+    }
+    return groups;
+  };
+
+  const halves = addr.split('::');
+  if (halves.length > 2) return null;
+  const left = parseGroups(halves[0]);
+  if (left === null) return null;
+  let groups: number[];
+  if (halves.length === 2) {
+    const right = parseGroups(halves[1]);
+    if (right === null) return null;
+    if (left.length + right.length >= 8) return null; // nothing elided
+    const fill = new Array(8 - left.length - right.length).fill(0);
+    groups = [...left, ...fill, ...right];
+  } else {
+    if (left.length !== 8) return null;
+    groups = left;
+  }
+  return groups;
+}
+
+/**
+ * Aggregate an IP identity for bucketing (audit N-08 follow-up, #4039
+ * leftover):
+ *  - IPv4-mapped IPv6 (::ffff:a.b.c.d) normalizes to the plain IPv4, so
+ *    mapped and plain forms share one bucket;
+ *  - every other IPv6 address collapses to its /64 prefix — the standard
+ *    SLAAC allocation size — so a single attacker rotating addresses inside
+ *    one /64 cannot mint a fresh bucket per request;
+ *  - plain IPv4 passes through unchanged;
+ *  - anything unparseable falls back to the charset sanitizer (previous
+ *    behavior for hostile XFF values).
+ */
+export function aggregateIpIdentity(raw: string): string {
+  const trimmed = raw.trim();
+  if (trimmed.includes(':')) {
+    const groups = parseIpv6(trimmed);
+    if (groups) {
+      // IPv4-mapped: ::ffff:a.b.c.d = [0,0,0,0,0,ffff,a,b].
+      if (
+        groups.slice(0, 5).every((g) => g === 0) &&
+        groups[5] === 0xffff
+      ) {
+        const a = groups[6];
+        const b = groups[7];
+        return `${a >> 8}.${a & 0xff}.${b >> 8}.${b & 0xff}`;
+      }
+      const hextet = (g: number) => g.toString(16).padStart(4, '0');
+      return groups
+        .slice(0, 4)
+        .map(hextet)
+        .join(':')
+        .concat('::/64');
+    }
+  }
+  return sanitizeIdentity(trimmed);
+}
+
+/**
  * Resolve the client IP for bucketing: first x-forwarded-for entry, then
- * x-real-ip, else 'unknown'. See the trust assumption in the module comment.
+ * x-real-ip, else 'unknown'. IPv6 values are aggregated to their /64 prefix
+ * (aggregateIpIdentity). See the trust assumption in the module comment.
  */
 export function getClientIp(request: Request): string {
   const xff = request.headers.get('x-forwarded-for');
   if (xff) {
     // "client, proxy1, proxy2" — the first entry is the originating client.
     const first = xff.split(',')[0];
-    if (first) return sanitizeIdentity(first);
+    if (first) return aggregateIpIdentity(first);
   }
   const real = request.headers.get('x-real-ip');
-  if (real) return sanitizeIdentity(real);
+  if (real) return aggregateIpIdentity(real);
   return UNKNOWN_IP;
 }
 
 /**
  * Fixed-window counter: INCR the bucket, set EXPIRE only on the first hit of
- * a window, and return the count plus the TTL left in the window.
+ * a window, and return the count, the TTL left in the window, and whether
+ * this hit is the FIRST one the bucket blocks (count == limit + 1) so the
+ * caller can log one 429 per bucket-window without log flooding.
  */
 const FIXED_WINDOW_LUA = `
 local current = redis.call('INCR', KEYS[1])
 if current == 1 then
   redis.call('EXPIRE', KEYS[1], ARGV[1])
 end
-return { current, redis.call('TTL', KEYS[1]) }
+local ttl = redis.call('TTL', KEYS[1])
+local first_blocked = 0
+if current == tonumber(ARGV[2]) + 1 then
+  first_blocked = 1
+end
+return { current, ttl, first_blocked }
 `;
 
 /**
@@ -209,9 +314,15 @@ export async function checkRateLimit(
   request: Request,
   opts: RateLimitOptions
 ): Promise<RateLimitResult> {
+  // The IP identity is computed even for identifier-bucketed rules so the
+  // first-429 log line below can always name the aggregated IP. Identifier
+  // dimensions (login account names) are deliberately NOT logged — only the
+  // bucket key (audit N-20 log discipline: no usernames or other sensitive
+  // fields in logs).
+  const ipIdentity = getClientIp(request);
   const identity = opts.identifier
     ? sanitizeIdentity(opts.identifier)
-    : getClientIp(request);
+    : ipIdentity;
   const redisKeyFull = redisKey(`ratelimit:${opts.key}:${identity}`);
 
   const redis = getRedis();
@@ -224,10 +335,11 @@ export async function checkRateLimit(
       FIXED_WINDOW_LUA,
       1,
       redisKeyFull,
-      String(opts.windowSeconds)
-    )) as [number, number];
+      String(opts.windowSeconds),
+      String(opts.limit)
+    )) as [number, number, number];
 
-    const [count, ttl] = result;
+    const [count, ttl, firstBlocked] = result;
     if (count <= opts.limit) {
       return { allowed: true, remaining: Math.max(0, opts.limit - count) };
     }
@@ -235,6 +347,16 @@ export async function checkRateLimit(
     // TTL is negative only if the key vanished between INCR and TTL (expiry
     // race) — the next request starts a fresh window, so advise a short retry.
     const retryAfter = ttl > 0 ? ttl : 1;
+    if (firstBlocked === 1) {
+      // One line per bucket-window (the Lua flags count == limit + 1) so an
+      // attack shows up in logs without flooding them (#4039 leftover). The
+      // identity is only logged for IP dimensions, never for account names.
+      console.warn(
+        `rate limit exceeded: bucket=${opts.key}` +
+          (opts.identifier ? ' identity=<redacted>' : ` ip=${ipIdentity}`) +
+          ` retry_after=${retryAfter}s`
+      );
+    }
     return { allowed: false, retryAfterSeconds: retryAfter };
   } catch (error) {
     // Redis error mid-call: fail open rather than 500-ing real traffic, but

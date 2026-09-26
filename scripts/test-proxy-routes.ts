@@ -46,7 +46,7 @@ const testCases = [
   { path: '/faq/@alice/my-post', expected: 'rewrite:/post/faq/alice/my-post', description: 'Reserved category "faq" renders Post (legacy parity)' },
   { path: '/tags/@alice/my-post', expected: 'rewrite:/post/tags/alice/my-post', description: '"tags" as category renders Post (legacy /tags is exact-path only)' },
   { path: '/promoted/@alice/my-post', expected: 'rewrite:/post/promoted/alice/my-post', description: 'Sort word "promoted" (not in RESERVED_ROUTES) as category renders Post' },
-  { path: '/about/@alice/my-post/', expected: 'next', description: 'Post URL with trailing slash: branch-2 regex ([^/]+) does not match, passes through — Next implicit 308 normalization drops the slash and re-enters the proxy → Post' },
+  { path: '/about/@alice/my-post/', expected: 'redirect:308:/about/@alice/my-post', description: 'Post URL with trailing slash: branch-2 regex ([^/]+) does not match; the proxy issues the 308 itself (with security headers) and the slash-less form re-enters the proxy → Post' },
 
   // User profile patterns
   { path: '/@alice', expected: 'rewrite:/user/alice', description: 'User profile root' },
@@ -54,7 +54,6 @@ const testCases = [
   { path: '/@alice/settings', expected: 'rewrite:/user/alice/settings', description: 'User settings section' },
   { path: '/@alice/communities', expected: 'rewrite:/user/alice/communities', description: 'User communities section' },
   { path: '/@alice/feed', expected: 'rewrite:/user/alice/feed', description: 'User feed' },
-  { path: '/@alice/feed/', expected: 'rewrite:/user/alice/feed/', description: 'User feed with trailing slash (nextUrl.clone() preserves trailing slash)' },
   { path: '/@alice/followers', expected: 'rewrite:/user/alice/followers', description: 'User followers' },
   
   // Post without category patterns
@@ -83,10 +82,10 @@ const testCases = [
   { path: '/post-no-category/a/b', expected: '404', description: 'Direct access to /post-no-category internal target 404s' },
   { path: '/post', expected: '404', description: 'Bare /post prefix 404s' },
   { path: '/post/@alice/my-post', expected: 'rewrite:/post/post/alice/my-post', description: '"post" as category still renders Post (branch 2 consumes it before the internal-target guard)' },
-  { path: '/post/@alice/my-post/', expected: 'next', description: 'Trailing-slash post URL under /post passes the guard (exact @-exemption) → Next 308 normalization re-enters branch 2' },
+  { path: '/post/@alice/my-post/', expected: 'redirect:308:/post/@alice/my-post', description: 'Trailing-slash post URL under /post passes the guard (exact @-exemption) → proxy-issued 308 normalization re-enters branch 2' },
   { path: '/user/@alice/blog', expected: 'rewrite:/post/user/alice/blog', description: '"user" as category renders Post — branch 2 consumes /user/@alice/blog before the guard (legacy Post regex parity: any [\\w.-]{1,32} tag is a category, so legacy also served this as Post, not UserProfile)' },
   { path: '/user/@alice/feed', expected: 'rewrite:/post/user/alice/feed', description: '"user" as category renders Post — branch 2 consumes /user/@alice/feed before the guard (legacy parity)' },
-  { path: '/user/@alice/my-post/', expected: 'next', description: 'Trailing-slash post URL under /user passes the guard (exact @-exemption) → Next 308 normalization re-enters branch 2' },
+  { path: '/user/@alice/my-post/', expected: 'redirect:308:/user/@alice/my-post', description: 'Trailing-slash post URL under /user passes the guard (exact @-exemption) → proxy-issued 308 normalization re-enters branch 2' },
   { path: '/post/a/@bob/my-post', expected: '404', description: 'Four-segment @-form under /post 404s — legacy has no 4-segment route; the old broad /@ exemption let it render /post/[category]/[username]/[permlink] with a 200' },
   { path: '/user/@alice/blog/extra', expected: '404', description: 'Four-segment @-form under /user 404s (legacy has no 4-segment route)' },
   { path: '/user/@alice', expected: '404', description: 'Two-segment @-form under /user 404s — legacy UserProfile/UserFeed require a first-segment @account; the old broad /@ exemption let it render /user/[username] with a 200' },
@@ -126,6 +125,20 @@ const testCases = [
   { path: '/trending/hive-123456', expected: 'next', description: 'Community trending posts' },
   { path: '/hot/bitcoin', expected: 'next', description: 'Hot posts in bitcoin tag' },
   { path: '/created/photography', expected: 'next', description: 'Created posts in photography tag' },
+
+  // Legacy .html aliases — proxy-issued 308 redirects (moved from next.config
+  // redirects() so the security headers apply; must win over the .html
+  // static-asset skip)
+  { path: '/login.html', expected: 'redirect:308:/login', description: 'Legacy /login.html alias 308-redirects to /login' },
+  { path: '/faq.html', expected: 'redirect:308:/faq', description: 'Legacy /faq.html alias 308-redirects to /faq' },
+  { path: '/privacy.html', expected: 'redirect:308:/privacy', description: 'Legacy /privacy.html alias 308-redirects to /privacy' },
+  { path: '/tos.html', expected: 'redirect:308:/tos', description: 'Legacy /tos.html alias 308-redirects to /tos' },
+
+  // Trailing-slash normalization issued by the proxy (with security headers)
+  { path: '/trending/', expected: 'redirect:308:/trending', description: 'Trailing slash on a sort feed 308-redirects to the slash-less form' },
+  { path: '/@alice/', expected: 'redirect:308:/@alice', description: 'Trailing slash on a profile root 308-redirects to the slash-less form' },
+  { path: '/hot/?foo=bar', expected: 'redirect:308:/hot?foo=bar', description: 'Trailing-slash redirect preserves the query string' },
+  { path: '/@alice/feed/', expected: 'rewrite:/user/alice/feed/', description: 'User feed with trailing slash still rewrites directly (branch 3 handles the slash itself — no extra hop)' },
 ];
 
 async function runTests() {
@@ -155,6 +168,11 @@ async function runTests() {
             // asserted for rewrite cases instead of silently dropped.
             actual = `rewrite:${rewriteUrl.pathname}${rewriteUrl.search}`;
           }
+        } else if (response.headers.get('location')) {
+          // A redirect the proxy issues itself (security headers + CSP ride
+          // along; asserted in __tests__/proxy.test.ts).
+          const redirectUrl = new URL(response.headers.get('location')!);
+          actual = `redirect:${response.status}:${redirectUrl.pathname}${redirectUrl.search}`;
         } else if (response.url.includes('/404')) {
           actual = '404';
         } else {

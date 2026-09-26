@@ -82,4 +82,40 @@ describe('proxy CSP plumbing', () => {
     );
   });
 
+  it('redirects legacy .html aliases with the full security header set (308)', () => {
+    const response = proxy(request('/login.html'));
+    expect(response.status).toBe(308);
+    expect(response.headers.get('location')).toBe('http://localhost:3000/login');
+    // next.config headers() does not reach proxy-issued redirects — the
+    // baseline set must ride along explicitly (audit N-02 follow-up).
+    expect(response.headers.get('X-Frame-Options')).toBe('DENY');
+    expect(response.headers.get('X-Content-Type-Options')).toBe('nosniff');
+    expect(response.headers.get('Referrer-Policy')).toBe(
+      'strict-origin-when-cross-origin'
+    );
+    expect(response.headers.get('Strict-Transport-Security')).toContain(
+      'max-age=31536000'
+    );
+    expect(response.headers.get('Cross-Origin-Opener-Policy')).toBe(
+      'same-origin'
+    );
+    expect(nonceFrom(response.headers.get('Content-Security-Policy') ?? '')).toBeTruthy();
+  });
+
+  it('issues the trailing-slash 308 itself, preserving the query string', () => {
+    const response = proxy(request('/trending/?foo=bar'));
+    expect(response.status).toBe(308);
+    expect(response.headers.get('location')).toBe(
+      'http://localhost:3000/trending?foo=bar'
+    );
+    expect(response.headers.get('X-Frame-Options')).toBe('DENY');
+    expect(
+      nonceFrom(response.headers.get('Content-Security-Policy') ?? '')
+    ).toBeTruthy();
+  });
+
+  it('does not redirect the root path or paths without a trailing slash', () => {
+    expect(proxy(request('/')).headers.get('location')).toBeNull();
+    expect(proxy(request('/trending')).headers.get('location')).toBeNull();
+  });
 });

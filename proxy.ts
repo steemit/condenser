@@ -18,6 +18,7 @@ import {
   RESERVED_ROUTES,
   SORT_TYPES,
 } from './lib/routes';
+import { applySecurityHeaders } from './lib/security-headers';
 
 /** Extra request headers NextResponse constructors accept (per-request nonce). */
 type RequestInit = Parameters<typeof NextResponse.next>[0];
@@ -29,6 +30,19 @@ const STATIC_ASSET_RE =
 
 // Internal rewrite targets and the @-exemption are derived in lib/routes.ts
 // from INTERNAL_ROUTE_PREFIXES; see the guard near the end of this file.
+
+// Legacy .html URL aliases (audit N-02 follow-up: redirects issued from
+// next.config redirects() carry no security headers — Next's redirects()
+// has no per-entry headers support — so these are issued here, where the
+// full header set plus the per-request CSP apply. They must run BEFORE the
+// static-asset skip because .html matches STATIC_ASSET_RE. Same 308 status
+// as the previous `permanent: true` next.config redirects.)
+const LEGACY_HTML_ALIASES: Record<string, string> = {
+  '/login.html': '/login',
+  '/faq.html': '/faq',
+  '/privacy.html': '/privacy',
+  '/tos.html': '/tos',
+};
 
 export function proxy(request: NextRequest) {
   // Content-Security-Policy with a per-request nonce (audit N-02 follow-up):
@@ -52,6 +66,26 @@ export function proxy(request: NextRequest) {
   return response;
 }
 
+/**
+ * A redirect the proxy issues itself. next.config headers() does not apply to
+ * these responses, so the baseline security headers are set explicitly
+ * (audit N-02 follow-up) alongside the per-request CSP the wrapper adds.
+ *
+ * The destination is a plain URL: NextURL (from nextUrl.clone()) re-applies
+ * its trailing-slash normalization when stringified, silently undoing a
+ * pathname assignment.
+ */
+function securityRedirect(url: URL): NextResponse {
+  const response = NextResponse.redirect(url, 308);
+  applySecurityHeaders(response.headers);
+  return response;
+}
+
+/** Plain redirect URL for a pathname, preserving the request's query string. */
+function redirectUrl(request: NextRequest, pathname: string): URL {
+  return new URL(pathname + request.nextUrl.search, request.url);
+}
+
 function resolveRoute(request: NextRequest, requestInit: RequestInit) {
   // Get pathname and ensure it's decoded
   // Next.js should decode it automatically, but we handle %40 (@) encoding explicitly
@@ -65,6 +99,12 @@ function resolveRoute(request: NextRequest, requestInit: RequestInit) {
     } catch {
       // If decoding fails, use original pathname
     }
+  }
+
+  // Legacy .html aliases (must precede the static-asset skip below).
+  const alias = LEGACY_HTML_ALIASES[pathname];
+  if (alias) {
+    return securityRedirect(redirectUrl(request, alias));
   }
 
   // Skip API routes, static files, and the 404 page. Static files are
@@ -245,6 +285,20 @@ function resolveRoute(request: NextRequest, requestInit: RequestInit) {
     if (!RESERVED_ROUTES.includes(segment.toLowerCase()) && !segment.startsWith('@')) {
       return NextResponse.rewrite(new URL('/404', request.url), requestInit);
     }
+  }
+
+  // Trailing-slash normalization with security headers (audit N-02
+  // follow-up): Next's implicit 308 for e.g. `/trending/` carries no security
+  // headers (its redirects short-circuit before the next.config headers()
+  // table applies), so issue the same 308 here — the proxy runs before route
+  // resolution. Placement at the END of the chain keeps every branch that
+  // already handles a trailing slash directly (e.g. branch 3's `/@user/feed/`)
+  // rewriting without an extra hop; only paths that would otherwise fall
+  // through to Next's implicit redirect are affected.
+  if (pathname !== '/' && pathname.endsWith('/')) {
+    return securityRedirect(
+      redirectUrl(request, pathname.replace(/\/+$/, '') || '/')
+    );
   }
 
   return NextResponse.next(requestInit);

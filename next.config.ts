@@ -16,6 +16,14 @@ const nextConfig: NextConfig = {
 
   // Do not advertise the server framework (removes X-Powered-By header)
   poweredByHeader: false,
+  // Disable Next's implicit trailing-slash 308 redirect: it fires BEFORE the
+  // proxy (and before next.config headers() apply), so it carries no
+  // security headers. With this flag, proxy.ts issues that redirect itself
+  // with the full header set (audit N-02 follow-up). Caveat: paths outside
+  // the proxy matcher (api / _next static / favicon) with a trailing slash
+  // now 404 instead of redirecting — the app's own clients never call those
+  // with a trailing slash.
+  skipTrailingSlashRedirect: true,
   // Enable React strict mode
   reactStrictMode: true,
   
@@ -49,36 +57,6 @@ const nextConfig: NextConfig = {
   
   // Transpile packages if needed
   transpilePackages: [],
-  
-  // Legacy URL aliases (legacy ResolveRoute.js mapped /login.html to the
-  // login page, and hosted the help/legal pages at .html paths). Declared
-  // here rather than in proxy.ts so the redirects are evaluated before the
-  // route-resolution proxy.
-  async redirects() {
-    return [
-      {
-        source: '/login.html',
-        destination: '/login',
-        permanent: true,
-      },
-      {
-        source: '/faq.html',
-        destination: '/faq',
-        permanent: true,
-      },
-      {
-        source: '/privacy.html',
-        destination: '/privacy',
-        permanent: true,
-      },
-      {
-        source: '/tos.html',
-        destination: '/tos',
-        permanent: true,
-      },
-    ];
-  },
-
 
   // Baseline security response headers on every route, including /api/*
   // route handlers and static assets (audit N-02). See securityHeaders.

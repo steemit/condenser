@@ -639,6 +639,7 @@
     "no_pending_posts": "No pending posts found. This view only shows posts within 12-36 hours of payout.",
     "no_muted_posts": "No muted posts found.",
     "no_followed_posts": "You haven't followed anyone yet! Explore Trending to find people to follow.",
+    "no_joined_communities": "You haven't joined any active communities yet!",
     "no_posts_in_tag": "No posts in #{tag} yet!",
     "no_posts_found": "No posts found.",
     "unmoderated_tag": "Unmoderated tag"

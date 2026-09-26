@@ -14,9 +14,21 @@ import Redis from 'ioredis';
 let redis: Redis | null = null;
 let redisUnavailable = false;
 
-// Prefix namespace for content cache keys. Distinct from the session prefix
-// (`steem:session:`) so a shared Redis instance can serve both safely.
-const KEY_PREFIX = process.env.REDIS_KEY_PREFIX || 'condenser';
+// Prefix namespace for content-cache keys (also namespaces the pending-
+// broadcast overlay and the rate limiter, which share this module's client).
+// Distinct from the session prefix (`steem:session:`, lib/auth/
+// redis-session.ts) so a shared Redis instance can serve both safely.
+//
+// REDIS_KEY_PREFIX is the pre-split (S8) shared name: it set BOTH stores'
+// prefixes at once, so the two could not be namespaced independently — one
+// value inevitably leaked one store's keys into the other's namespace. It
+// still works with the old both-at-once semantics for existing deployments,
+// but new setups should set REDIS_CACHE_KEY_PREFIX here and
+// REDIS_SESSION_KEY_PREFIX for sessions.
+const KEY_PREFIX =
+  process.env.REDIS_CACHE_KEY_PREFIX ||
+  process.env.REDIS_KEY_PREFIX ||
+  'condenser';
 
 /** Build a namespaced cache key. */
 export function redisKey(key: string): string {

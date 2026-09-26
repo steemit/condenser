@@ -3,9 +3,11 @@
  * POST /api/steem/overseer
  *
  * Legacy condenser called `overseer.collect` directly from the browser via
- * steem-js. Since steem-js is server-only in the rewrite, the client-side
- * analytics helpers (lib/analytics/overseer.ts) POST the collect payload
- * here and this route forwards it to the node. Analytics is best-effort:
+ * steem-js. In the rewrite steem-js is used on both ends, but only its
+ * auth/signing helpers are bundled client-side (browser.esm.js) — the browser
+ * never speaks JSON-RPC to the node — so the client-side analytics helpers
+ * (lib/analytics/overseer.ts) POST the collect payload here and this route
+ * forwards it to the node. Analytics is best-effort:
  * relay failures are logged and always answered 204 so the client UI is
  * never affected.
  *

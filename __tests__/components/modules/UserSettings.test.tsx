@@ -25,14 +25,49 @@ function makeStore() {
   return store;
 }
 
-function renderSettings(store: ReturnType<typeof makeStore>) {
-  return render(
+/**
+ * Render UserSettings and return a rerender(props) that swaps its props in
+ * place (same component instance — what a late profile refetch does).
+ */
+function renderSettings(
+  store: ReturnType<typeof makeStore>,
+  initialProfile: Record<string, string> | null = null,
+  initialAccount = 'alice'
+) {
+  const props = {
+    accountname: initialAccount,
+    profile: initialProfile as never,
+  };
+  const view = render(
     <Provider store={store}>
       <IntlWrapper>
-        <UserSettings accountname="alice" profile={null} />
+        <UserSettings {...props} />
       </IntlWrapper>
     </Provider>
   );
+  return {
+    ...view,
+    rerenderProps(next: {
+      accountname?: string;
+      profile?: Record<string, string> | null;
+    }) {
+      view.rerender(
+        <Provider store={store}>
+          <IntlWrapper>
+            <UserSettings
+              accountname={next.accountname ?? props.accountname}
+              profile={(next.profile ?? null) as never}
+            />
+          </IntlWrapper>
+        </Provider>
+      );
+    },
+  };
+}
+
+/** The Display Name input (label "Display Name", placeholder "Your display name"). */
+function nameInput(): HTMLInputElement {
+  return screen.getByPlaceholderText('Your display name') as HTMLInputElement;
 }
 
 describe('UserSettings "Save Preferences" payload whitelist', () => {
@@ -75,5 +110,50 @@ describe('UserSettings "Save Preferences" payload whitelist', () => {
     expect(body.payload).not.toHaveProperty('futureKey');
     // Visible success feedback (why nsfwPref saves through this button).
     expect(await screen.findByText('Preferences saved.')).toBeTruthy();
+  });
+});
+
+describe('UserSettings dirty-guard against late profile refetches (T15)', () => {
+  afterEach(cleanup);
+
+  it('fills the form from a profile that arrives after mount (pristine form)', async () => {
+    const store = makeStore();
+    const view = renderSettings(store, null);
+    expect(nameInput().value).toBe('');
+
+    view.rerenderProps({ profile: { name: 'Alice A.' } });
+
+    await waitFor(() => {
+      expect(nameInput().value).toBe('Alice A.');
+    });
+  });
+
+  it('does not clobber in-progress edits when the profile refetches', async () => {
+    const store = makeStore();
+    const view = renderSettings(store, { name: 'Alice A.' });
+
+    fireEvent.change(nameInput(), { target: { value: 'Alice (editing)' } });
+
+    // Late refetch with the SAME account: the user's edit must survive.
+    view.rerenderProps({ profile: { name: 'Alice A. (from chain)' } });
+    // Let any (incorrect) effect-driven overwrite flush before asserting.
+    await new Promise((r) => setTimeout(r, 0));
+    expect(nameInput().value).toBe('Alice (editing)');
+  });
+
+  it('re-arms the fill when the viewed account changes (new form context)', async () => {
+    const store = makeStore();
+    const view = renderSettings(store, { name: 'Alice A.' }, 'alice');
+
+    fireEvent.change(nameInput(), { target: { value: 'Alice (editing)' } });
+
+    // Same component instance now views a different account the same user is
+    // logged in as: the dirty flag resets and the fresh profile fills the
+    // form (switching accounts is a new form context, not an edit).
+    store.dispatch(setUser({ username: 'bob' }));
+    view.rerenderProps({ accountname: 'bob', profile: { name: 'Bob B.' } });
+    await waitFor(() => {
+      expect(nameInput().value).toBe('Bob B.');
+    });
   });
 });

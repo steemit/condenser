@@ -7,7 +7,9 @@
 # Unified API URL
 STEEM_API_URL=https://api.steemit.com
 
-STEEMD_USE_APPBASE=true
+# false = condenser_api namespace (default, matches .env.example);
+# true = appbase-style routing
+STEEMD_USE_APPBASE=false
 CHAIN_ID=0000000000000000000000000000000000000000000000000000000000000000
 ADDRESS_PREFIX=STM
 ```
@@ -45,13 +47,47 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_PASSWORD=your-redis-password
 REDIS_DB=0
-REDIS_KEY_PREFIX=steem:session:
+# Session key prefix (individual-settings mode only — REDIS_URL mode stores
+# sessions under their raw session ids, unchanged from before the split)
+REDIS_SESSION_KEY_PREFIX=steem:session:
+# Content-cache key prefix — also namespaces the pending-broadcast overlay
+# and the rate limiter, which share the cache client
+REDIS_CACHE_KEY_PREFIX=condenser
 ```
+
+> `REDIS_KEY_PREFIX` (deprecated) is the pre-split shared name that set both
+> prefixes at once. It is still honored for existing deployments — with the
+> old both-at-once semantics, and overridden by either specific variable —
+> but new deployments should use `REDIS_SESSION_KEY_PREFIX` /
+> `REDIS_CACHE_KEY_PREFIX`. Sharing one value for both stores was never safe:
+> the two defaults (`steem:session:` vs `condenser`) exist exactly so the
+> stores' keyspaces stay disjoint on a shared instance.
 
 ### Other Configuration
 ```bash
 NEXT_PUBLIC_SIGNUP_URL=https://signup.steemit.com
 ELASTICSEARCH_URL=http://localhost:9200
+
+# Image proxy prefix (lib/media/proxify-url.ts, legacy
+# $STM_Config.img_proxy_prefix). First-party post-body images are rewritten
+# to {prefix}/p/{base58}?width=&mode=fit&format=match. Default:
+# https://steemitimages.com/
+NEXT_PUBLIC_IMAGE_PROXY_PREFIX=https://steemitimages.com/
+
+# External Steemit wallet origin (lib/steemitWallet.ts — Condenser only links
+# out, the wallet itself is a separate app). Default when unset:
+# https://steemitwallet.com in production, https://wallet.steemitdev.com under
+# `next dev`.
+NEXT_PUBLIC_WALLET_URL=https://steemitwallet.com
+
+# This site's own origin for absolute SEO-metadata URLs (og:url, avatar and
+# share-image fallbacks; lib/seo.ts SITE_ORIGIN). Self-hosted deployments
+# must set it, or their og:url points at steemit.com. Must be a bare https
+# origin (https://<host>; an optional port is accepted; malformed values
+# fall back to the default with a warning). Server-side runtime read at
+# module load (a module-level constant evaluated once at module load) —
+# changing it requires a restart, not a rebuild. Default: https://steemit.com
+SITE_ORIGIN=https://steemit.com
 
 # Image upload endpoint for the settings page profile/cover upload (legacy
 # $STM_Config.upload_image). The client signs the file with the posting key
@@ -73,6 +109,22 @@ NEXT_PUBLIC_TRONADS_MOCK=0
 NEXT_PUBLIC_TRONADS_SIDEBAR_AD_PID=
 NEXT_PUBLIC_TRONADS_CONTENT_PC_AD_PID=
 NEXT_PUBLIC_TRONADS_CONTENT_MOBILE_AD_PID=
+# NOTE on NEXT_PUBLIC_TRONADS_ENV: it has two consumers — the client bundle
+# (selects which engine host the vendored TronAds SDK loads its iframes
+# from) and the proxy's Content-Security-Policy frame-src origin (lib/csp.ts
+# -> configuredTronAdsEngineOrigin). Both are effectively BUILD-time: with
+# Turbopack, Next.js's getDefineEnv unconditionally inlines every
+# NEXT_PUBLIC_* var present in the build environment into BOTH the browser
+# and the nodejs (server) bundle, so when this variable is set at build time
+# the proxy-side read is a baked-in literal too and a later runtime value is
+# ignored on both sides. The runtime lookup in the proxy only survives a
+# build that left the variable unset — and that is exactly the divergence
+# case: the CSP then follows the runtime value while the browser keeps the
+# inlined default (0), so the CSP allows the engine host the browser never
+# loads and blocks the one it does, and all TronAd slots render empty.
+# Changing the value reliably therefore means REBUILDING with it set. The
+# other TRONADS vars are likewise build-time-inlined for the client; ENV is
+# the only one the proxy reads at all.
 # Coin Marketplace right-rail module (legacy steem_market_*). No endpoint
 # configured means the module stays hidden.
 STEEM_MARKET_ENDPOINT=
@@ -90,8 +142,13 @@ NEXT_DEV_ALLOWED_ORIGINS=
 Overseer metrics (route views, user actions, activity campaigns) replicate the
 legacy `ServerApiClient.js` reporting. The client posts to
 `POST /api/steem/overseer`, which relays to the node's `overseer.collect`
-JSON-RPC method (steem-js is server-only in the rewrite, unlike legacy which
-called the node directly from the browser). No configuration is required — the
+JSON-RPC method. (steem-js is used on both ends in the rewrite: the server
+keeps it as a `serverExternalPackages` entry for all RPC, while the browser
+bundle ships the SDK's browser build via `browser.esm.js` (~290KB, measured
+285.6KB — the whole chunk, including RPC code nothing calls) but only calls
+its auth/signing/operation-builder helpers — so unlike legacy, the browser
+never speaks JSON-RPC to the node directly.)
+No configuration is required — the
 relay uses `STEEM_API_URL`. GA page views and route tags are recorded on every
 client-side navigation; `user_login` is reported server-side by
 `/api/auth/login`.

@@ -2,8 +2,10 @@
  * Client-side overseer reporting (legacy src/app/utils/ServerApiClient.js).
  *
  * Legacy called the node's `overseer.collect` JSON-RPC method directly from
- * the browser via steem-js. In the rewrite steem-js is server-only, so these
- * helpers relay through the /api/steem/overseer route handler instead. All
+ * the browser via steem-js. The rewrite still bundles steem-js client-side,
+ * but only for its auth/signing helpers (browser.esm.js) — the browser never
+ * speaks JSON-RPC to the node — so these helpers relay through the
+ * /api/steem/overseer route handler instead. All
  * calls are fire-and-forget: failures are logged, never thrown.
  *
  * Every payload carries `version: 'next'` so rewrite traffic can be told

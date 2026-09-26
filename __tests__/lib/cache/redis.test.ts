@@ -33,6 +33,58 @@ async function loadRedisModule(client: unknown) {
   return await import('@/lib/cache/redis');
 }
 
+describe('lib/cache/redis KEY_PREFIX precedence (S8 split)', () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  afterEach(() => {
+    vi.doUnmock('ioredis');
+    vi.unstubAllEnvs();
+  });
+
+  async function scanPatternFor(
+    client: unknown,
+    env: Record<string, string> = {}
+  ): Promise<string> {
+    vi.doMock('ioredis', () => ({
+      default: vi.fn(function MockRedis() {
+        return client;
+      }),
+    }));
+    vi.stubEnv('REDIS_URL', 'redis://localhost:6379');
+    // Deterministic baseline: both prefix vars unset unless a test sets them.
+    vi.stubEnv('REDIS_CACHE_KEY_PREFIX', '');
+    for (const [key, value] of Object.entries(env)) vi.stubEnv(key, value);
+    const { cacheDeleteByPrefix } = await import('@/lib/cache/redis');
+    await cacheDeleteByPrefix('k');
+    const { scan } = client as { scan: ReturnType<typeof vi.fn> };
+    return (scan.mock.calls[0] as unknown[])[2] as string;
+  }
+
+  it('defaults to the condenser namespace', async () => {
+    const { client } = makeRedisClient([['0', []]]);
+    expect(await scanPatternFor(client)).toBe('condenser:k*');
+  });
+
+  it('still honors the deprecated REDIS_KEY_PREFIX alone', async () => {
+    const { client } = makeRedisClient([['0', []]]);
+    expect(
+      await scanPatternFor(client, { REDIS_KEY_PREFIX: 'legacy' })
+    ).toBe('legacy:k*');
+  });
+
+  it('REDIS_CACHE_KEY_PREFIX wins over the deprecated REDIS_KEY_PREFIX', async () => {
+    const { client } = makeRedisClient([['0', []]]);
+    expect(
+      await scanPatternFor(client, {
+        REDIS_KEY_PREFIX: 'legacy',
+        REDIS_CACHE_KEY_PREFIX: 'cache',
+      })
+    ).toBe('cache:k*');
+  });
+});
+
 describe('lib/cache/redis cacheDeleteByPrefix', () => {
   beforeEach(() => {
     vi.resetModules();

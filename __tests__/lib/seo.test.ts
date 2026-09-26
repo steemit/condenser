@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   SITE_ORIGIN,
   buildAccountMetadata,
@@ -350,5 +350,94 @@ describe('buildAccountMetadata', () => {
     expect(meta.openGraph).toBeUndefined();
     // Twitter card still present (chat-app unfurling, independent of index).
     expect(meta.twitter?.title).toBe('@alice');
+  });
+});
+
+describe('SITE_ORIGIN env override (X9)', () => {
+  it('defaults to https://steemit.com when the env var is unset', () => {
+    expect(SITE_ORIGIN).toBe('https://steemit.com');
+  });
+
+  it('reads SITE_ORIGIN at module load and strips trailing slashes', async () => {
+    vi.resetModules();
+    vi.stubEnv('SITE_ORIGIN', 'https://condenser.example.com/');
+    try {
+      const fresh = await import('@/lib/seo');
+      expect(fresh.SITE_ORIGIN).toBe('https://condenser.example.com');
+      // og:url and fallback images follow the configured origin.
+      const meta = fresh.buildAccountMetadata('alice', null);
+      expect(meta.openGraph?.url).toBe(
+        'https://condenser.example.com/@alice'
+      );
+    } finally {
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
+  });
+
+  it.each([
+    // An RFC 6454 origin includes the port; self-hosted deployments on
+    // non-443 ports are real. "https://host:443" (explicit default port)
+    // is the classic legal origin-confusion probe, and 99999 pins the
+    // 5-digit upper bound of the pattern.
+    'https://a.com:8080',
+    'https://a.com:443',
+    'https://host:443',
+    'https://a.com:99999',
+  ])('accepts an optional port in SITE_ORIGIN (%s)', async (value) => {
+    vi.resetModules();
+    vi.stubEnv('SITE_ORIGIN', value);
+    try {
+      const fresh = await import('@/lib/seo');
+      expect(fresh.SITE_ORIGIN).toBe(value);
+      const meta = fresh.buildAccountMetadata('alice', null);
+      expect(meta.openGraph?.url).toBe(`${value}/@alice`);
+    } finally {
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
+  });
+
+  it.each([
+    // Not https, carries a path, carries a query, protocol-relative, junk.
+    'http://condenser.example.com',
+    'https://condenser.example.com/some/path',
+    'https://condenser.example.com?x=1',
+    '//condenser.example.com',
+    'not a url',
+    // Port must be pure digits and at most 5 of them (6+ digits rejected).
+    'https://a.com:999999',
+    'https://a.com:80a',
+    // Userinfo must not appear (classic origin-confusion probe).
+    'https://user@host',
+  ])('falls back to the default origin when SITE_ORIGIN is malformed (%s)', async (value) => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.resetModules();
+    vi.stubEnv('SITE_ORIGIN', value);
+    try {
+      const fresh = await import('@/lib/seo');
+      expect(fresh.SITE_ORIGIN).toBe('https://steemit.com');
+      // The malformed value must not leak into emitted metadata.
+      const meta = fresh.buildAccountMetadata('alice', null);
+      expect(meta.openGraph?.url).toBe('https://steemit.com/@alice');
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('SITE_ORIGIN'));
+    } finally {
+      warn.mockRestore();
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
+  });
+
+  it('trims surrounding whitespace before validating SITE_ORIGIN', async () => {
+    vi.resetModules();
+    vi.stubEnv('SITE_ORIGIN', '  https://condenser.example.com  ');
+    try {
+      const fresh = await import('@/lib/seo');
+      expect(fresh.SITE_ORIGIN).toBe('https://condenser.example.com');
+    } finally {
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
   });
 });

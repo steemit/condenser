@@ -120,7 +120,10 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_PASSWORD=your-redis-password
 REDIS_DB=0
-REDIS_KEY_PREFIX=steem:session:
+# Session key prefix (individual-settings mode only). Pre-split note: the old
+# shared REDIS_KEY_PREFIX set both this and the content-cache prefix at once;
+# it still works but is deprecated — see docs/CONFIGURATION.md.
+REDIS_SESSION_KEY_PREFIX=steem:session:
 ```
 
 ### Session Storage Selection

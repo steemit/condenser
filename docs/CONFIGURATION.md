@@ -47,8 +47,21 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_PASSWORD=your-redis-password
 REDIS_DB=0
-REDIS_KEY_PREFIX=steem:session:
+# Session key prefix (individual-settings mode only — REDIS_URL mode stores
+# sessions under their raw session ids, unchanged from before the split)
+REDIS_SESSION_KEY_PREFIX=steem:session:
+# Content-cache key prefix — also namespaces the pending-broadcast overlay
+# and the rate limiter, which share the cache client
+REDIS_CACHE_KEY_PREFIX=condenser
 ```
+
+> `REDIS_KEY_PREFIX` (deprecated) is the pre-split shared name that set both
+> prefixes at once. It is still honored for existing deployments — with the
+> old both-at-once semantics, and overridden by either specific variable —
+> but new deployments should use `REDIS_SESSION_KEY_PREFIX` /
+> `REDIS_CACHE_KEY_PREFIX`. Sharing one value for both stores was never safe:
+> the two defaults (`steem:session:` vs `condenser`) exist exactly so the
+> stores' keyspaces stay disjoint on a shared instance.
 
 ### Other Configuration
 ```bash

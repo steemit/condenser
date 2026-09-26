@@ -37,7 +37,12 @@ export default function SubmitPostPage() {
 
   const handleSuccess = (result: PostEditorResult) => {
     // PostEditor already cleared its draft; redirect to the new post's feed.
-    const redirectUrl = result.category ? `/created/${result.category}` : '/created';
+    // Categories are [\w.-] so encoding is a no-op for valid tags, but
+    // encode anyway for consistency with the other tag-URL builders
+    // (e.g. FeedSortDropdown.sortPath).
+    const redirectUrl = result.category
+      ? `/created/${encodeURIComponent(result.category)}`
+      : '/created';
     router.push(redirectUrl);
   };
 

@@ -13,12 +13,23 @@ export function FeedListHeader({
   sort,
   categoryTag,
   unmoderatedTagHint,
+  title,
+  hideSortSelector,
   className,
 }: {
   sort: string;
   categoryTag?: string;
   /** Show when viewing a non-community tag (legacy “Unmoderated tag”) */
   unmoderatedTagHint?: boolean;
+  /**
+   * Feed title (legacy h1.articles__h1, ≥1200px only). The generic feed
+   * pages dropped the h1 as redundant with the sort dropdown; it is used
+   * where the title carries information the dropdown does not (legacy
+   * /trending/my shows “My Communities”).
+   */
+  title?: string;
+  /** Hide the sort dropdown (legacy hides SortOrder on an empty /trending/my). */
+  hideSortSelector?: boolean;
   className?: string;
 }) {
   const t = useTranslations();
@@ -30,16 +41,22 @@ export function FeedListHeader({
       {/* legacy articles__header: flex, align-items center, space-between */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0 flex-1">
-          {/* legacy h1.articles__h1 removed: redundant with the sort dropdown */}
+          {title ? (
+            <h1 className="hidden text-lg font-bold text-foreground min-[1200px]:block">
+              {title}
+            </h1>
+          ) : null}
           {unmoderatedTagHint ? (
             <p className="mt-1 hidden text-[80%] text-muted-foreground min-[1200px]:block">
               {t("posts_index.unmoderated_tag")}
             </p>
           ) : null}
         </div>
-        <div className="shrink-0 sm:w-[300px] sm:max-w-[300px]">
-          <FeedSortDropdown sort={sort} categoryTag={categoryTag} />
-        </div>
+        {hideSortSelector ? null : (
+          <div className="shrink-0 sm:w-[300px] sm:max-w-[300px]">
+            <FeedSortDropdown sort={sort} categoryTag={categoryTag} />
+          </div>
+        )}
       </div>
     </header>
   );

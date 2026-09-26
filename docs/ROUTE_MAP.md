@@ -13,17 +13,18 @@ Sources of truth:
 `proxy.ts` intentionally follows the legacy `ResolveRoute.js` matching order.
 References to `proxy.ts` below use its numbered branch comments (1.5, 2–7,
 plus the invalid-pattern 404 guards) and named constants (`RESERVED_ROUTES`,
-`PROFILE_SECTIONS`, `SORT_TYPES`, `STATIC_ASSET_RE`) as anchors, so they do
-not drift when lines move. `RESERVED_ROUTES`, `PROFILE_SECTIONS` and
-`SORT_TYPES` are defined once in `lib/routes.ts` (the shared route
-vocabulary) and imported by `proxy.ts`, the `[sort]` feed pages,
+`PROFILE_SECTIONS`, `SORT_TYPES`, `INTERNAL_ROUTE_PREFIXES`,
+`STATIC_ASSET_RE`) as anchors, so they do not drift when lines move.
+`RESERVED_ROUTES`, `PROFILE_SECTIONS`, `SORT_TYPES` and
+`INTERNAL_ROUTE_PREFIXES` are defined once in `lib/routes.ts` (the shared
+route vocabulary) and imported by `proxy.ts`, the `[sort]` feed pages,
 PrimaryNavigation, FeedSidebarWidgets and `lib/analytics/route-tags.ts`.
 
 ## Rewrite branches in `proxy.ts`
 
 | Legacy URL pattern | Legacy page | proxy.ts branch | Next.js route | Status |
 |---|---|---|---|---|
-| `/` | `PostsIndex ['trending']` | none (no rewrite; matcher allows it) | `app/page.tsx` (client redirect to `/trending`) | Implemented |
+| `/` | `PostsIndex ['trending']` | none (no rewrite; matcher allows it) | `app/(main)/page.tsx` (server component: logged-in sessions redirect to `/trending/my` like legacy server.js, otherwise SSRs the trending `SortFeed` at `/`) | Implemented |
 | `/category/@username/permlink` | `Post` | Rewrite → `/post/<category>/<username>/<permlink>` (branch 2, Post with category); **no reserved-word check** — the legacy Post regex `<tag>/<account>/<permlink>` has none, so `/about/@a/p`, `/welcome/@a/p`, `/hot/@a/p` and `/tags/@user/permlink` all render Post pages (legacy static checks are exact-path, and CategoryFilters matches at most two segments) | `app/(main)/post/[category]/[username]/[permlink]/page.tsx` | Implemented |
 | `/@username/feed` | `PostsIndex ['home', user]` | Rewrite → `/user/<username>/feed` (branch 3, User feed) | `app/(main)/user/[username]/[section]/page.tsx` (fetches `bridge.get_account_posts` with sort `feed`, like legacy `PostsIndex ['home', user]`) | Implemented |
 | `/@username/<section>` | `UserProfile` | Rewrite → `/user/<username>/<section>` (branch 4, User profile section); `section` must be in `PROFILE_SECTIONS` | `app/(main)/user/[username]/[section]/page.tsx` | Implemented |
@@ -31,11 +32,12 @@ PrimaryNavigation, FeedSidebarWidgets and `lib/analytics/route-tags.ts`.
 | `/@username` | `UserProfile` (blog tab) | Rewrite → `/user/<username>` (branch 6, User profile root); reserved usernames rewrite to `/404` | `app/(main)/user/[username]/page.tsx` (client redirect to `/@<username>/blog`) | Implemented |
 | `/<sort>/<tag>` | `PostsIndex [sort, tag]` | Pass-through when `sort` ∈ `SORT_TYPES` and `tag` doesn't start with `@` (branch 7, Category filters) | `app/(main)/[sort]/[tag]/page.tsx` | Implemented |
 | `/<sort>` | `PostsIndex [sort]` | Pass-through when `sort` ∈ `SORT_TYPES` (the sort-only pass-through below branch 7); literal `/404` rewrites to `/404` | `app/(main)/[sort]/page.tsx` (renders `NotFound` for invalid sorts) | Implemented |
-| `/trending` | `PostsIndex ['trending']` | Pass-through (also matched by the `/<sort>` branch) | `app/(main)/trending/page.tsx` (static route shadows `[sort]`) | Implemented |
+| `/trending` | `PostsIndex ['trending']` | Pass-through (also matched by the `/<sort>` branch) | `app/(main)/[sort]/page.tsx` (no dedicated static page; the shared `SortFeed` component also backs the home page) | Implemented |
 | `/roles/<tag>` (e.g. `/roles/hive-123456`) | `CommunityRoles` | Pass-through (branch 1.5, Community roles; two segments only — `/roles/@user/permlink` falls through to branch 2 and is a Post; the accepted tag charset is wider than legacy's `[\w.-]{1,32}`, see Known gaps) | `app/(main)/roles/[tag]/page.tsx` | Implemented |
 | `/<a>/<b>/<c>` without `@` (e.g. `/bitcoin/alice/my-post`) | `NotFound` | Rewrite → `/404` (three-segment invalid-pattern guard), unless first segment is reserved or second starts with `@` | `app/(main)/404/page.tsx` | Implemented |
 | `/<a>/<b>` without `@`, non-sort (e.g. `/alice/my-post`) | `NotFound` | Rewrite → `/404` (two-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
 | `/<segment>` without `@`, non-sort, non-reserved (e.g. `/alice`) | `NotFound` | Rewrite → `/404` (single-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
+| Direct access to internal rewrite targets: any path under `/post/…`, `/post-no-category/…` or `/user/…` that the earlier branches did not consume — with or without `@` segments (e.g. `/post/a/b/c`, `/user/alice`, four-segment `/post/<cat>/@u/pl`, `/user/@a/b/c`, two-segment `/user/@alice`) | `NotFound` (legacy ResolveRoute.js has no `/post`, `/post-no-category` or `/user` routes; its regexes match at most three segments with an @-prefixed account, and UserProfile/UserFeed require a first-segment `@account`) | Rewrite → `/404` (internal-target guard, after the `/<sort>` branch; prefixes derived from `INTERNAL_ROUTE_PREFIXES` in `lib/routes.ts`). Sole exemption: the exact trailing-slash Post form `/<prefix>/@user/<permlink>/` (exactly three segments, second one `@`-prefixed, optional trailing slash) passes through so Next's implicit 308 normalization drops the slash and re-enters at branch 2 as a legacy Post URL. Slash-less three-segment `@` forms (`/post/@a/p`, `/user/@alice/blog`, `/user/@a/feed`) never reach the guard — branch 2 consumes them first (legacy Post regex parity: any `[\w.-]{1,32}` tag is a category, so legacy also served `/user/@alice/blog` as a Post page, never as UserProfile) | `app/(main)/404/page.tsx` | Implemented |
 | `/%40username/...` | (same as `@` variants) | `%40` is decoded to `@` before matching (the `%40` decode step at the top of `proxy()`) | same as the corresponding `@` routes | Implemented |
 
 `SORT_TYPES` (const in `lib/routes.ts`, imported by `proxy.ts`): `hot`,
@@ -81,7 +83,7 @@ actually exists for the reserved words themselves:
 | `/submit` | Pass-through | `app/(main)/submit/page.tsx` | Implemented (legacy used `/submit.html`) |
 | `/search` | Pass-through | `app/(main)/search/page.tsx` | Implemented |
 | `/communities` | Pass-through | `app/(main)/communities/page.tsx` | Implemented |
-| `/trending`, `/hot`, `/created`, `/payout`, `/payout_comments`, `/muted` | Pass-through (`/<sort>` branch) | `app/(main)/[sort]/page.tsx` / `app/(main)/trending/page.tsx` | Implemented |
+| `/trending`, `/hot`, `/created`, `/payout`, `/payout_comments`, `/muted` | Pass-through (`/<sort>` branch) | `app/(main)/[sort]/page.tsx` | Implemented |
 | `/promoted` | Pass-through (`/<sort>` branch; note: in `SORT_TYPES` but **not** in `RESERVED_ROUTES`) | `app/(main)/[sort]/page.tsx` | Implemented |
 | `/404` | Explicitly skipped (the static/API skip at the top of `proxy()`) | `app/(main)/404/page.tsx` | Implemented (proxy 404 target) |
 | `/api/*`, `/_next/*`, `/static/*`, any path ending in a known static extension | Skipped by the static/API skip in `proxy()`: `STATIC_ASSET_RE` is a known-extension whitelist (`.ico`, `.png`, `.css`, `.html`, …), **not** a dot check — dotted usernames/permlinks such as `/@ety001.test01` or `/@alice/post-v1.2` are NOT skipped (see "GDPR-blocked accounts" above). `api` and `_next` are additionally excluded by the `config.matcher` | `app/api/**`, `app/.well-known/**`, `public/**` | Implemented |
@@ -172,10 +174,10 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
 form a set:
 
 - **The route vocabulary lives in a single source, `lib/routes.ts`
-  (`RESERVED_ROUTES`, `PROFILE_SECTIONS`, `SORT_TYPES`); `proxy.ts`, the
-  `[sort]` feed pages, PrimaryNavigation, FeedSidebarWidgets and
-  `lib/analytics/route-tags.ts` all import it — never redefine these lists
-  locally.**
+  (`RESERVED_ROUTES`, `PROFILE_SECTIONS`, `SORT_TYPES`,
+  `INTERNAL_ROUTE_PREFIXES`); `proxy.ts`, the `[sort]` feed pages,
+  PrimaryNavigation, FeedSidebarWidgets and `lib/analytics/route-tags.ts`
+  all import it — never redefine these lists locally.**
 - **Any change to `lib/routes.ts` or to a rewrite branch in `proxy.ts` must
   update both this document and `scripts/test-proxy-routes.ts`.**
 - `scripts/test-proxy-routes.ts` runs standalone (`pnpm test:proxy`); it

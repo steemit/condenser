@@ -12,7 +12,12 @@ import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
 import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
-import { PROFILE_SECTIONS, RESERVED_ROUTES, SORT_TYPES } from "@/lib/routes";
+import {
+  PROFILE_SECTIONS,
+  RESERVED_ROUTES,
+  SORT_TYPES,
+  isPostPathname,
+} from "@/lib/routes";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { showLogin } from "@/store/slices/userSlice";
 
@@ -40,10 +45,12 @@ function profileSectionHref(username: string, segment: string) {
   return `/@${username}/${segment}`;
 }
 
-/** True when viewing global ranked feeds (/trending, /hot/food, …). */
+/** True when viewing global ranked feeds (/, /trending, /hot/food, …). */
 function isAllPostsExplore(pathname: string): boolean {
   const seg = pathname.split("/").filter(Boolean);
-  if (seg.length === 0) return false;
+  // `/` renders the trending feed (legacy ResolveRoute.js) and takes the
+  // nav Default State, which highlights All Posts.
+  if (seg.length === 0) return true;
   const sort = seg[0].toLowerCase();
   if (!GLOBAL_FEED_SORTS.has(sort)) return false;
   if (seg.length === 1) return true;
@@ -108,17 +115,13 @@ function isProfileSectionActive(
 /** Profile URL segments that are sections, not permlinks (mirrors proxy.ts PROFILE_SECTIONS). */
 const PROFILE_SECTION_SEGMENTS = new Set(PROFILE_SECTIONS);
 
-/** True for post detail URLs, with or without a category segment. */
-function isPostRoute(pathname: string): boolean {
-  // Internal rewrite targets, in case they are visited directly.
-  if (/^\/(post|post-no-category)\//.test(pathname)) return true;
-  // /category/@user/permlink
-  if (/^\/[^/]+\/@[^/]+\/[^/]+/.test(pathname)) return true;
-  // /@user/permlink (permlink is anything but a profile section)
-  const m = pathname.match(/^\/@[^/]+\/([^/]+)\/?$/);
-  if (m && !PROFILE_SECTION_SEGMENTS.has(m[1].toLowerCase())) return true;
-  return false;
-}
+/**
+ * True for post detail URLs, with or without a category segment.
+ * Shared matcher (lib/routes.ts isPostPathname): internal rewrite targets
+ * (/post/..., /post-no-category/...) never appear here — proxy.ts 404s
+ * direct access to them and usePathname() reports the pre-rewrite URL.
+ */
+const isPostRoute = isPostPathname;
 
 type IconComponent = React.ComponentType<{ className?: string }>;
 

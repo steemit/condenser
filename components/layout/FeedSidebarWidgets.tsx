@@ -16,7 +16,7 @@ import TronAd from "@/components/elements/TronAd";
 import SteemMarket from "@/components/elements/SteemMarket";
 import Announcement from "@/components/layout/Announcement";
 import { INDEX_LEFT_SIDE_AD_LIST, POST_LEFT_SIDE_AD_LIST, tronAdsConfig } from "@/lib/ads";
-import { SORT_TYPES } from "@/lib/routes";
+import { SORT_TYPES, isPostPathname } from "@/lib/routes";
 
 /** /<sort>/hive-* matcher; the alternation is derived from SORT_TYPES (lib/routes.ts). */
 const COMMUNITY_FEED_RE = new RegExp(
@@ -157,11 +157,11 @@ export function FeedSidebarWidgets() {
   const communityMatch = pathname?.match(COMMUNITY_FEED_RE);
   const community = communityMatch?.[1];
   // Post pages get the post-scoped creative tags (legacy Post.jsx right
-  // rail); feed pages get the index list.
-  const isPostPage = Boolean(
-    pathname?.match(/^\/[^/]+\/@[^/]+\/[^/]+/) ||
-      pathname?.match(/^\/@[^/]+\/[^/]+/)
-  );
+  // rail); feed pages get the index list. Shared anchored matcher
+  // (lib/routes.ts isPostPathname): the previous unanchored regexes also
+  // matched profile-section URLs like /@user/blog and /@user/feed (a bug
+  // so far masked because profile pages hide the right rail).
+  const isPostPage = isPostPathname(pathname ?? "");
   const adList = isPostPage ? POST_LEFT_SIDE_AD_LIST : INDEX_LEFT_SIDE_AD_LIST;
 
   return (

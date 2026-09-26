@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useAppSelector } from "@/store/hooks";
 import {
   fetchRankedPosts,
@@ -16,6 +18,7 @@ import { FeedListHeader } from "@/components/layout/FeedListHeader";
 
 export default function SortTagPage() {
   const { sort, tag } = useParams();
+  const t = useTranslations();
   const observer = useAppSelector((s) => s.user.current?.username);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -102,6 +105,12 @@ export default function SortTagPage() {
   }, [isValidSort, loading, hasMore, posts, order, fetchCategory, observer]);
 
   const isHiveCommunity = tagString.startsWith("hive-");
+  // Legacy /<sort>/my ("My Subscriptions") special cases (PostsIndex.jsx):
+  // a dedicated empty state, a "My Communities" title, the sort selector
+  // hidden while empty, and logged-out visitors always get the empty
+  // state — "my" is meaningless without an account.
+  const isMy = tagString.toLowerCase() === "my";
+  const showMyCallout = isMy && !loading && (posts.length === 0 || !observer);
 
   if (showNotFound) {
     return <NotFound />;
@@ -112,19 +121,35 @@ export default function SortTagPage() {
       <FeedListHeader
         sort={sortString}
         categoryTag={tagString}
+        title={isMy ? t("g.my_communities") : undefined}
+        hideSortSelector={isMy && posts.length === 0}
         unmoderatedTagHint={
           !isHiveCommunity &&
           Boolean(tagString) &&
           tagString.toLowerCase() !== "my"
         }
       />
-      <PostsList
-        posts={posts}
-        loading={loading}
-        onLoadMore={handleLoadMore}
-        order={sortString}
-        category={tagString}
-      />
+      {showMyCallout ? (
+        // Legacy Callout with noCommunitiesText (PostsIndex.jsx): the
+        // whole list is replaced while the feed is empty / logged out.
+        <div className="my-8 rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
+          <p className="mb-2">{t("posts_index.no_joined_communities")}</p>
+          <Link
+            href="/communities"
+            className="text-[1.1rem] text-accent-foreground hover:underline"
+          >
+            {t("g.explore_communities")}
+          </Link>
+        </div>
+      ) : (
+        <PostsList
+          posts={posts}
+          loading={loading}
+          onLoadMore={handleLoadMore}
+          order={sortString}
+          category={tagString}
+        />
+      )}
     </FeedLayout>
   );
 }

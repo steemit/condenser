@@ -10,12 +10,21 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { isGdprUser } from './lib/gdpr-user-list';
-import { PROFILE_SECTIONS, RESERVED_ROUTES, SORT_TYPES } from './lib/routes';
+import {
+  INTERNAL_AT_EXEMPT_RE,
+  INTERNAL_TARGET_RE,
+  PROFILE_SECTIONS,
+  RESERVED_ROUTES,
+  SORT_TYPES,
+} from './lib/routes';
 
 // Known static asset extensions served from public/ (or framework internals).
 // Anything else with a dot (usernames, permlinks) must continue routing.
 const STATIC_ASSET_RE =
   /\.(ico|png|jpe?g|gif|svg|webp|avif|css|js|map|json|xml|txt|md|webmanifest|woff2?|ttf|eot|mp4|webm|pdf|html?)$/i;
+
+// Internal rewrite targets and the @-exemption are derived in lib/routes.ts
+// from INTERNAL_ROUTE_PREFIXES; see the guard near the end of this file.
 
 export function proxy(request: NextRequest) {
   // Get pathname and ensure it's decoded
@@ -161,6 +170,28 @@ export function proxy(request: NextRequest) {
       // Pass through to [sort] route
       return NextResponse.next();
     }
+  }
+
+  // Internal rewrite targets are not addressable. Legacy has no /post,
+  // /post-no-category or /user routes — its ResolveRoute.js regexes match
+  // at most three segments with an @-prefixed account, so /post/a/b/c,
+  // /post-no-category/a/b and /user/alice were all NotFound. Anything under
+  // these prefixes that reaches this point was not consumed by the rewrites
+  // above and must 404 instead of hitting the underlying App Router routes
+  // (which would render a second, uncanonical URL for the same content —
+  // e.g. the four-segment /post/<cat>/@user/<permlink> reached
+  // /post/[category]/[username]/[permlink] with a 200).
+  // @-containing paths are exempt only in the exact trailing-slash Post form
+  // (INTERNAL_AT_EXEMPT_RE from lib/routes.ts) so /post/@user/permlink/
+  // still normalizes
+  // through branch 2; slash-less three-segment @ forms never get here
+  // because branch 2 consumes them first (legacy Post regex parity: any
+  // [\w.-]{1,32} tag is a category).
+  if (
+    INTERNAL_TARGET_RE.test(pathname) &&
+    !INTERNAL_AT_EXEMPT_RE.test(pathname)
+  ) {
+    return NextResponse.rewrite(new URL('/404', request.url));
   }
 
   // Catch invalid patterns that should be 404 (following legacy behavior)

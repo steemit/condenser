@@ -1,41 +1,87 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { normalizeUsername, formatUsername } from '@/lib/utils/username';
 import { fetchPostByPermlink } from '@/lib/api/steem';
 import { FeedLayout } from '@/components/layout/FeedLayout';
+import NotFound from '@/components/NotFound';
+
+/**
+ * Encode a URL path segment: encodeURIComponent, but keeping the
+ * path-legal '@' literal. The proxy decodes %40 on the way in, yet the
+ * canonical browser form — and what client-side matchers (isPostPathname,
+ * PrimaryNavigation) and PostFull's post links use — is the literal
+ * '@user', so the redirect target must not encode it to %40user.
+ */
+function encodeSegment(segment: string): string {
+  return encodeURIComponent(segment).replace(/%40/g, '@');
+}
 
 /**
  * Post page without category — client content.
- * Rendered by the server page shell in ./page.tsx (which owns
- * generateMetadata); keeps the original behaviour of redirecting to
- * /[category]/@[username]/[permlink] after fetching the post's category.
+ * Rendered by the server page shell in ./page.tsx (which resolves the
+ * post and owns generateMetadata).
+ *
+ * - `category` prop: the server already resolved the post; redirect to
+ *   /[category]/@[username]/[permlink] immediately (no client fetch).
+ * - no `category` prop: the server fetch failed (RPC down), so retry here.
+ *   When the post still cannot be resolved, render the 404 view at the
+ *   current URL — legacy PostPageNoCategory renders NotFound for missing
+ *   posts and never fabricates a /general/… URL.
  */
-export default function PostNoCategoryClient() {
+export default function PostNoCategoryClient({
+  category,
+  username: usernameRaw,
+  permlink,
+}: {
+  /** Category resolved by the server, when the post exists. */
+  category?: string;
+  username: string;
+  permlink: string;
+}) {
   const router = useRouter();
-  const params = useParams();
-  const usernameRaw = params.username as string;
   const username = normalizeUsername(usernameRaw);
-  const permlink = params.permlink as string;
+  const [missing, setMissing] = useState(false);
 
   useEffect(() => {
+    if (category) {
+      router.replace(
+        `/${encodeSegment(category)}/${encodeSegment(
+          formatUsername(username)
+        )}/${encodeSegment(permlink)}`
+      );
+      return;
+    }
+    let cancelled = false;
     const loadAndRedirect = async () => {
       try {
         const post = await fetchPostByPermlink(null, username, permlink);
+        if (cancelled) return;
         if (post && post.category) {
-          router.replace(`/${post.category}/${formatUsername(username)}/${permlink}`);
+          router.replace(
+            `/${encodeSegment(post.category)}/${encodeSegment(
+              formatUsername(username)
+            )}/${encodeSegment(permlink)}`
+          );
         } else {
-          router.replace(`/general/${formatUsername(username)}/${permlink}`);
+          setMissing(true);
         }
       } catch (error) {
         console.error('Error fetching post:', error);
-        router.replace(`/general/${formatUsername(username)}/${permlink}`);
+        if (!cancelled) setMissing(true);
       }
     };
 
     void loadAndRedirect();
-  }, [username, permlink, router]);
+    return () => {
+      cancelled = true;
+    };
+  }, [category, username, permlink, router]);
+
+  if (missing) {
+    return <NotFound />;
+  }
 
   return (
     <FeedLayout>

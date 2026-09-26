@@ -38,6 +38,9 @@ const PROFILE_SECTIONS = new Set([
   'communities',
 ]);
 
+// Same list as proxy.ts. Only guards usernames below (post-no-category and
+// profile-root branches); post categories carry no reserved-word check,
+// mirroring proxy.ts branch 2.
 const RESERVED_ROUTES = new Set([
   'trending', 'hot', 'created', 'payout', 'payout_comments', 'muted',
   'login', 'search', 'submit', 'about', 'faq', 'privacy', 'support', 'tos',
@@ -63,8 +66,11 @@ export function routeTagForPath(pathname: string): RouteTagInfo | null {
     return { tag: 'more_communities', params: {} };
 
   // Post pages: /category/@user/permlink or /@user/permlink.
+  // Mirrors proxy.ts branch 2: no reserved-word check on the category —
+  // analytics receives the pre-rewrite URL (usePathname(), e.g.
+  // /hot/@alice/my-post) and legacy tags every Post page unconditionally.
   const postWithCategory = pathname.match(/^\/([^/]+)\/@([^/]+)\/([^/]+)$/);
-  if (postWithCategory && !RESERVED_ROUTES.has(postWithCategory[1].toLowerCase())) {
+  if (postWithCategory) {
     return { tag: 'post', params: { permlink: postWithCategory[3] } };
   }
   const postNoCategory = pathname.match(/^\/@([^/]+)\/([^/]+)$/);

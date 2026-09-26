@@ -11,7 +11,17 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { isGdprUser } from './lib/gdpr-user-list';
 
-// Reserved routes that should not be treated as categories
+// Reserved route words. These guard against reserved words being treated as
+// usernames (branches 3-6) and keep the invalid-pattern fallthrough (below)
+// from shadowing real app routes. They are intentionally NOT applied to post
+// categories (branch 2): the legacy Post regex is <tag>/<account>/<permlink>
+// where <tag> is ([\w.-]{1,32}) with NO reserved-word exclusion — /about/@a/p,
+// /welcome/@a/p, /hot/@a/p and even /tags/@user/permlink all render Post pages
+// in legacy (its static checks are exact-path, e.g. path === '/tags', so they
+// never match a three-segment path; CategoryFilters <sort>/<tag> matches at
+// most two segments, so /hot and /hot/<tag> stay sort feeds). Do not
+// re-introduce a reserved-word check in branch 2: reserved-word categories
+// are real first tags of posts and must not 404.
 const RESERVED_ROUTES = [
   'trending', 'hot', 'created', 'payout', 'payout_comments', 'muted',
   'login', 'search', 'submit', 'about', 'faq', 'privacy', 'support', 'tos',
@@ -93,14 +103,13 @@ export function proxy(request: NextRequest) {
   }
 
   // 2. Pattern: /category/@username/permlink → Post page
+  // No reserved-word check here — see the RESERVED_ROUTES rationale above.
   const postWithCategoryMatch = pathname.match(/^\/([^\/]+)\/@([^\/]+)\/([^\/]+)$/);
   if (postWithCategoryMatch) {
     const [, category, username, permlink] = postWithCategoryMatch;
-    if (!RESERVED_ROUTES.includes(category.toLowerCase())) {
-      const url = request.nextUrl.clone();
-      url.pathname = `/post/${category}/${username}/${permlink}`;
-      return NextResponse.rewrite(url);
-    }
+    const url = request.nextUrl.clone();
+    url.pathname = `/post/${category}/${username}/${permlink}`;
+    return NextResponse.rewrite(url);
   }
 
   // 3. Pattern: /@username/feed → User feed

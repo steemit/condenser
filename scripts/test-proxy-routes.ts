@@ -8,7 +8,7 @@
 import { NextRequest } from 'next/server';
 import { proxy } from '../proxy';
 
-// Mock NextRequest for testing
+// Mock NextRequest for testing. The path may include a query string.
 function createMockRequest(pathname: string): NextRequest {
   const url = new URL(`http://localhost:3000${pathname}`);
   return new NextRequest(url);
@@ -33,10 +33,21 @@ const testCases = [
   { path: '/tos', expected: 'next', description: 'Terms of Service page (reserved, pass-through to app/(main)/tos)' },
   
   // Category + user + permlink patterns
-  { path: '/bitcoin/@alice/my-post', expected: 'rewrite:/post/bitcoin/alice/my-post', description: 'Category post' },
-  { path: '/trending/@bob/another-post', expected: 'next', description: 'Reserved category (trending)' },
-  { path: '/Trending/@bob/another-post', expected: 'next', description: 'Reserved category match is case-insensitive' },
-  
+  // Legacy ResolveRoute.js Post regex (<tag>/<account>/<permlink>, tag =
+  // [\w.-]{1,32}) has NO reserved-word check, and legacy static checks are
+  // exact-path (path === '/tags'), so reserved/sort words as the category
+  // still resolve to the Post page.
+  { path: '/bitcoin/@alice/my-post', expected: 'rewrite:/post/bitcoin/alice/my-post', description: 'Category post (non-reserved control)' },
+  { path: '/trending/@bob/another-post', expected: 'rewrite:/post/trending/bob/another-post', description: 'Reserved word "trending" as category still renders Post (legacy parity)' },
+  { path: '/Trending/@bob/another-post', expected: 'rewrite:/post/Trending/bob/another-post', description: 'Reserved category: rewrite keeps original casing' },
+  { path: '/about/@alice/my-post', expected: 'rewrite:/post/about/alice/my-post', description: 'Reserved category "about" renders Post (legacy parity)' },
+  { path: '/welcome/@alice/my-post', expected: 'rewrite:/post/welcome/alice/my-post', description: 'Reserved category "welcome" renders Post (legacy parity)' },
+  { path: '/hot/@alice/my-post', expected: 'rewrite:/post/hot/alice/my-post', description: 'Sort word "hot" as category renders Post (legacy parity)' },
+  { path: '/faq/@alice/my-post', expected: 'rewrite:/post/faq/alice/my-post', description: 'Reserved category "faq" renders Post (legacy parity)' },
+  { path: '/tags/@alice/my-post', expected: 'rewrite:/post/tags/alice/my-post', description: '"tags" as category renders Post (legacy /tags is exact-path only)' },
+  { path: '/promoted/@alice/my-post', expected: 'rewrite:/post/promoted/alice/my-post', description: 'Sort word "promoted" (not in RESERVED_ROUTES) as category renders Post' },
+  { path: '/about/@alice/my-post/', expected: 'next', description: 'Post URL with trailing slash: branch-2 regex ([^/]+) does not match, passes through — Next implicit 308 normalization drops the slash and re-enters the proxy → Post' },
+
   // User profile patterns
   { path: '/@alice', expected: 'rewrite:/user/alice', description: 'User profile root' },
   { path: '/@alice/blog', expected: 'rewrite:/user/alice/blog', description: 'User profile section' },
@@ -52,7 +63,11 @@ const testCases = [
   // URL-encoded @ (%40) handling
   { path: '/%40alice', expected: 'rewrite:/user/alice', description: 'Encoded %40 decodes to @ (profile root)' },
   { path: '/%40alice/my-post', expected: 'rewrite:/post-no-category/alice/my-post', description: 'Encoded %40 decodes to @ (post)' },
-  
+  { path: '/about/%40alice/my-post', expected: 'rewrite:/post/about/alice/my-post', description: 'Encoded %40 decodes to @ (post with category)' },
+
+  // Query strings survive rewrites (nextUrl.clone() keeps search params)
+  { path: '/steem/@alice/my-post?ref=share', expected: 'rewrite:/post/steem/alice/my-post?ref=share', description: 'Query string is preserved through a Post rewrite' },
+
   // Invalid patterns (should return 404)
   { path: '/bitcoin/alice/my-post', expected: '404', description: 'Missing @ in username' },
   { path: '/foo/bar/baz', expected: '404', description: 'Three segments without @ and no reserved word' },
@@ -66,7 +81,8 @@ const testCases = [
   
   // Community routes
   { path: '/roles/hive-123456', expected: 'next', description: 'Community roles page' },
-  
+  { path: '/roles/@alice/my-post', expected: 'rewrite:/post/roles/alice/my-post', description: '"roles" as category renders Post (the preceding /roles/<tag> branch is two-segment only)' },
+
   // GDPR-listed accounts (legacy GDPRUserList → NotFound on all four route families)
   { path: '/@thedarkoverlord', expected: '404', description: 'GDPR user: profile root' },
   { path: '/@thedarkoverlord/blog', expected: '404', description: 'GDPR user: profile section' },
@@ -114,11 +130,13 @@ async function runTests() {
         // Check if it's a rewrite response
         const rewriteHeader = response.headers.get('x-middleware-rewrite');
         if (rewriteHeader) {
-          const rewritePath = new URL(rewriteHeader).pathname;
-          if (rewritePath === '/404') {
+          const rewriteUrl = new URL(rewriteHeader);
+          if (rewriteUrl.pathname === '/404') {
             actual = '404';
           } else {
-            actual = `rewrite:${rewritePath}`;
+            // Compare pathname + search so query-string preservation is
+            // asserted for rewrite cases instead of silently dropped.
+            actual = `rewrite:${rewriteUrl.pathname}${rewriteUrl.search}`;
           }
         } else if (response.url.includes('/404')) {
           actual = '404';

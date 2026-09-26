@@ -138,6 +138,19 @@ describe('routeTagForPath', () => {
     });
   });
 
+  it('maps reserved-category posts to post (proxy branch 2 parity)', () => {
+    // Analytics sees the pre-rewrite URL (usePathname), e.g. /hot/@a/p;
+    // legacy tags every Post page unconditionally.
+    expect(routeTagForPath('/hot/@alice/hello-world')).toEqual({
+      tag: 'post',
+      params: { permlink: 'hello-world' },
+    });
+    expect(routeTagForPath('/about/@alice/hello-world')).toEqual({
+      tag: 'post',
+      params: { permlink: 'hello-world' },
+    });
+  });
+
   it('maps profile pages to user_index', () => {
     expect(routeTagForPath('/@alice')).toEqual({
       tag: 'user_index',

@@ -11,32 +11,35 @@ Sources of truth:
 - New routing: `proxy.ts` (rewrite branches, in matching order) + `app/`
 
 `proxy.ts` intentionally follows the legacy `ResolveRoute.js` matching order.
-All `proxy.ts` line references below are to the file at the repo root.
+References to `proxy.ts` below use its numbered branch comments (1.5, 2–7,
+plus the invalid-pattern 404 guards) and named constants (`RESERVED_ROUTES`,
+`SECTIONS`, `SORT_TYPES`, `STATIC_ASSET_RE`) as anchors, so they do not drift
+when lines move.
 
 ## Rewrite branches in `proxy.ts`
 
 | Legacy URL pattern | Legacy page | proxy.ts branch | Next.js route | Status |
 |---|---|---|---|---|
 | `/` | `PostsIndex ['trending']` | none (no rewrite; matcher allows it) | `app/page.tsx` (client redirect to `/trending`) | Implemented |
-| `/category/@username/permlink` | `Post` | Rewrite → `/post/<category>/<username>/<permlink>` (proxy.ts:87-96); skipped when `category` is reserved | `app/(main)/post/[category]/[username]/[permlink]/page.tsx` | Implemented |
-| `/@username/feed` | `PostsIndex ['home', user]` | Rewrite → `/user/<username>/feed` (proxy.ts:98-108) | `app/(main)/user/[username]/[section]/page.tsx` (fetches `bridge.get_account_posts` with sort `feed`, like legacy `PostsIndex ['home', user]`) | Implemented |
-| `/@username/<section>` | `UserProfile` | Rewrite → `/user/<username>/<section>` (proxy.ts:110-121); `section` must be in `SECTIONS` (proxy.ts:22-25) | `app/(main)/user/[username]/[section]/page.tsx` | Implemented |
-| `/@username/<permlink>` | `PostNoCategory` | Rewrite → `/post-no-category/<username>/<permlink>` (proxy.ts:123-133); only when second segment is not a section | `app/(main)/post-no-category/[username]/[permlink]/page.tsx` (fetches category, redirects to `/<category>/@user/permlink`) | Implemented |
-| `/@username` | `UserProfile` (blog tab) | Rewrite → `/user/<username>` (proxy.ts:135-147); reserved usernames rewrite to `/404` | `app/(main)/user/[username]/page.tsx` (client redirect to `/@<username>/blog`) | Implemented |
-| `/<sort>/<tag>` | `PostsIndex [sort, tag]` | Pass-through when `sort` ∈ `SORT_TYPES` and `tag` doesn't start with `@` (proxy.ts:149-158) | `app/(main)/[sort]/[tag]/page.tsx` | Implemented |
-| `/<sort>` | `PostsIndex [sort]` | Pass-through when `sort` ∈ `SORT_TYPES` (proxy.ts:160-173); literal `/404` rewrites to `/404` | `app/(main)/[sort]/page.tsx` (renders `NotFound` for invalid sorts) | Implemented |
+| `/category/@username/permlink` | `Post` | Rewrite → `/post/<category>/<username>/<permlink>` (branch 2, Post with category); **no reserved-word check** — the legacy Post regex `<tag>/<account>/<permlink>` has none, so `/about/@a/p`, `/welcome/@a/p`, `/hot/@a/p` and `/tags/@user/permlink` all render Post pages (legacy static checks are exact-path, and CategoryFilters matches at most two segments) | `app/(main)/post/[category]/[username]/[permlink]/page.tsx` | Implemented |
+| `/@username/feed` | `PostsIndex ['home', user]` | Rewrite → `/user/<username>/feed` (branch 3, User feed) | `app/(main)/user/[username]/[section]/page.tsx` (fetches `bridge.get_account_posts` with sort `feed`, like legacy `PostsIndex ['home', user]`) | Implemented |
+| `/@username/<section>` | `UserProfile` | Rewrite → `/user/<username>/<section>` (branch 4, User profile section); `section` must be in `SECTIONS` | `app/(main)/user/[username]/[section]/page.tsx` | Implemented |
+| `/@username/<permlink>` | `PostNoCategory` | Rewrite → `/post-no-category/<username>/<permlink>` (branch 5, Post without category); only when second segment is not a section | `app/(main)/post-no-category/[username]/[permlink]/page.tsx` (fetches category, redirects to `/<category>/@user/permlink`) | Implemented |
+| `/@username` | `UserProfile` (blog tab) | Rewrite → `/user/<username>` (branch 6, User profile root); reserved usernames rewrite to `/404` | `app/(main)/user/[username]/page.tsx` (client redirect to `/@<username>/blog`) | Implemented |
+| `/<sort>/<tag>` | `PostsIndex [sort, tag]` | Pass-through when `sort` ∈ `SORT_TYPES` and `tag` doesn't start with `@` (branch 7, Category filters) | `app/(main)/[sort]/[tag]/page.tsx` | Implemented |
+| `/<sort>` | `PostsIndex [sort]` | Pass-through when `sort` ∈ `SORT_TYPES` (the sort-only pass-through below branch 7); literal `/404` rewrites to `/404` | `app/(main)/[sort]/page.tsx` (renders `NotFound` for invalid sorts) | Implemented |
 | `/trending` | `PostsIndex ['trending']` | Pass-through (also matched by the `/<sort>` branch) | `app/(main)/trending/page.tsx` (static route shadows `[sort]`) | Implemented |
-| `/roles/<tag>` (e.g. `/roles/hive-123456`) | `CommunityRoles` | Pass-through (proxy.ts:80-85) | `app/(main)/roles/[tag]/page.tsx` | Implemented |
-| `/<a>/<b>/<c>` without `@` (e.g. `/bitcoin/alice/my-post`) | `NotFound` | Rewrite → `/404` (proxy.ts:177-184), unless first segment is reserved or second starts with `@` | `app/(main)/404/page.tsx` | Implemented |
-| `/<a>/<b>` without `@`, non-sort (e.g. `/alice/my-post`) | `NotFound` | Rewrite → `/404` (proxy.ts:186-193) | `app/(main)/404/page.tsx` | Implemented |
-| `/<segment>` without `@`, non-sort, non-reserved (e.g. `/alice`) | `NotFound` | Rewrite → `/404` (proxy.ts:195-202) | `app/(main)/404/page.tsx` | Implemented |
-| `/%40username/...` | (same as `@` variants) | `%40` is decoded to `@` before matching (proxy.ts:38-44) | same as the corresponding `@` routes | Implemented |
+| `/roles/<tag>` (e.g. `/roles/hive-123456`) | `CommunityRoles` | Pass-through (branch 1.5, Community roles; two segments only — `/roles/@user/permlink` falls through to branch 2 and is a Post) | `app/(main)/roles/[tag]/page.tsx` | Implemented |
+| `/<a>/<b>/<c>` without `@` (e.g. `/bitcoin/alice/my-post`) | `NotFound` | Rewrite → `/404` (three-segment invalid-pattern guard), unless first segment is reserved or second starts with `@` | `app/(main)/404/page.tsx` | Implemented |
+| `/<a>/<b>` without `@`, non-sort (e.g. `/alice/my-post`) | `NotFound` | Rewrite → `/404` (two-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
+| `/<segment>` without `@`, non-sort, non-reserved (e.g. `/alice`) | `NotFound` | Rewrite → `/404` (single-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
+| `/%40username/...` | (same as `@` variants) | `%40` is decoded to `@` before matching (the `%40` decode step at the top of `proxy()`) | same as the corresponding `@` routes | Implemented |
 
-`SORT_TYPES` (proxy.ts:28-30): `hot`, `trending`, `promoted`, `payout`,
+`SORT_TYPES` (const in `proxy.ts`): `hot`, `trending`, `promoted`, `payout`,
 `payout_comments`, `muted`, `created` — identical to the legacy `<sort>`
 regex alternation.
 
-`SECTIONS` (proxy.ts:22-25): `blog`, `posts`, `comments`, `replies`,
+`SECTIONS` (const in `proxy.ts`): `blog`, `posts`, `comments`, `replies`,
 `payout`, `feed`, `followers`, `followed`, `settings`, `notifications`,
 `communities` — identical to the legacy `<account-tab>` alternation.
 
@@ -48,16 +51,22 @@ a GDPR-listed account returns `NotFound`: `/@user/feed` (UserFeed),
 `/@user` + all sections (UserProfile), `/@user/permlink` (PostNoCategory),
 and `/category/@user/permlink` (Post).
 
-A single guard in `proxy.ts` (proxy.ts:58-68) covers all four families —
+A single guard in `proxy.ts` (the GDPR guard) covers all four families —
 the `@`-segment is always the first or second path segment — by rewriting
-to `/404`. Usernames containing a dot (e.g. `mateja.klaric`) never reach
-the guard: the `.` skip (proxy.ts:48-56) passes them through and they 404
-via `not-found.tsx`, which is the same net effect.
+to `/404`. Usernames containing a dot (e.g. `mateja.klaric`) reach this
+guard too: the static-asset skip only matches known file extensions, so
+dotted GDPR usernames are also rewritten to `/404`.
 
 ## Static and reserved routes
 
-`RESERVED_ROUTES` (proxy.ts:15-19) guards against reserved words being
-treated as categories or usernames. Whether a page actually exists for them:
+`RESERVED_ROUTES` (const in `proxy.ts`) guards against reserved words being
+treated as **usernames** (the `@username` branches) and keeps the
+invalid-pattern fallthrough from shadowing real app routes. It is
+deliberately **not** applied to post categories: the legacy Post regex has
+no reserved-word check, so posts whose first tag is a reserved word
+(`/about/@a/p`, `/welcome/@a/p`, `/hot/@a/p`, `/tags/@a/p`, …) must render
+the Post page, exactly as in legacy (see the first table). Whether a page
+actually exists for the reserved words themselves:
 
 | Path | proxy.ts handling | Next.js route | Status |
 |---|---|---|---|
@@ -67,8 +76,8 @@ treated as categories or usernames. Whether a page actually exists for them:
 | `/communities` | Pass-through | `app/(main)/communities/page.tsx` | Implemented |
 | `/trending`, `/hot`, `/created`, `/payout`, `/payout_comments`, `/muted` | Pass-through (`/<sort>` branch) | `app/(main)/[sort]/page.tsx` / `app/(main)/trending/page.tsx` | Implemented |
 | `/promoted` | Pass-through (`/<sort>` branch; note: in `SORT_TYPES` but **not** in `RESERVED_ROUTES`) | `app/(main)/[sort]/page.tsx` | Implemented |
-| `/404` | Explicitly skipped (proxy.ts:48-56) | `app/(main)/404/page.tsx` | Implemented (proxy 404 target) |
-| `/api/*`, `/_next/*`, `/static/*`, any path containing `.` | Skipped by proxy (proxy.ts:48-56); also excluded by the `matcher` (proxy.ts:208-219) | `app/api/**`, `app/.well-known/**`, `public/**` | Implemented |
+| `/404` | Explicitly skipped (the static/API skip at the top of `proxy()`) | `app/(main)/404/page.tsx` | Implemented (proxy 404 target) |
+| `/api/*`, `/_next/*`, `/static/*`, any path ending in a known static extension | Skipped by the static/API skip in `proxy()`: `STATIC_ASSET_RE` is a known-extension whitelist (`.ico`, `.png`, `.css`, `.html`, …), **not** a dot check — dotted usernames/permlinks such as `/@ety001.test01` or `/@alice/post-v1.2` are NOT skipped (see "GDPR-blocked accounts" above). `api` and `_next` are additionally excluded by the `config.matcher` | `app/api/**`, `app/.well-known/**`, `public/**` | Implemented |
 | `/tags` | Pass-through (reserved) | — | **Not migrated** (legacy `TagsIndex`); falls through to `not-found.tsx` |
 | `/rewards` | Pass-through (reserved) | — | **Not migrated** (legacy `Rewards`); falls through to `not-found.tsx` |
 | `/welcome` | Pass-through (reserved) | `app/(main)/welcome/page.tsx` | Implemented (legacy parity; MAIN-25) |
@@ -107,6 +116,18 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
   whose `NextURL` keeps the original trailing-slash state — so
   `/@alice/feed/` rewrites to `/user/alice/feed/` (with slash). Harmless:
   both resolve to the same route.
+- **Post segment character sets**: branch 2 captures `category`,
+  `username` and `permlink` with `[^/]+`, which is wider than legacy's
+  `<tag>` `[\w.-]{1,32}` and `<permlink>` `[A-Za-z\d-]+`. Notably, a dotted
+  permlink (e.g. `/tags/@alice/v1.2`) 404s in legacy but renders here. This
+  deviation predates the reserved-category fix (it applies to every
+  category) and now extends to reserved-word categories; tightening the
+  regex is deferred to a follow-up PR.
+- **Trailing slash on three-segment post URLs**: `/about/@alice/my-post/`
+  does not match branch 2 (`[^/]+` cannot span the trailing slash), so the
+  proxy passes it through and relies on Next's implicit 308 trailing-slash
+  normalization to redirect to the slash-less form, which then re-enters
+  the proxy and lands on Post.
 
 ## Keeping this in sync
 

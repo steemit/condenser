@@ -1,10 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { lastreadTimeMs } from '@/lib/utils/lastread';
-import type { Post, Vote } from '@/types/steem';
+import type { Account, Post, Vote } from '@/types/steem';
 
 // Types
 export type { Vote };
+
+/**
+ * Redux account cache entry: the canonical wire Account plus witness_votes
+ * as a client-side Set (legacy stored the voted-witness set, not the chain's
+ * string array). Derived so the wire shape stays owned by types/steem.ts.
+ */
+export type AccountEntry = Account & {
+  witness_votes?: Set<string>;
+};
 
 /**
  * Redux content-cache entry: the canonical wire Post plus client-only UI
@@ -15,12 +24,6 @@ export type ContentPost = Post & {
   collapsed?: boolean;
   replies?: string[];
 };
-
-export interface Account {
-  name: string;
-  witness_votes?: Set<string>;
-  [key: string]: unknown;
-}
 
 export interface NotificationItem {
   [key: string]: unknown;
@@ -52,7 +55,7 @@ interface DialogEntry {
 export interface GlobalState {
   status: Record<string, unknown>;
   content: Record<string, ContentPost>;
-  accounts: Record<string, Account>;
+  accounts: Record<string, AccountEntry>;
   headers: Record<string, unknown>;
   notifications: Record<string, Notification> & {
     loading?: boolean;
@@ -248,7 +251,7 @@ const globalSlice = createSlice({
     notificationsLoading: (state, action: PayloadAction<boolean>) => {
       state.notifications.loading = action.payload;
     },
-    receiveAccount: (state, action: PayloadAction<{ account: Account }>) => {
+    receiveAccount: (state, action: PayloadAction<{ account: AccountEntry }>) => {
       const { account } = action.payload;
       const accountName = account.name;
       if (!state.accounts[accountName]) {
@@ -260,7 +263,7 @@ const globalSlice = createSlice({
         };
       }
     },
-    receiveAccounts: (state, action: PayloadAction<{ accounts: Account[] }>) => {
+    receiveAccounts: (state, action: PayloadAction<{ accounts: AccountEntry[] }>) => {
       const { accounts } = action.payload;
       accounts.forEach((account) => {
         const accountName = account.name;

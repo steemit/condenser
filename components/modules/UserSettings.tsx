@@ -11,6 +11,7 @@ import { fetchAccount } from '@/lib/api/steem';
 import { postJsonWithCsrf } from '@/lib/api/csrf';
 import { uploadImage } from '@/lib/media/upload-image';
 import { userActionRecord } from '@/lib/analytics/overseer';
+import type { ProfileMetadata } from '@/types/steem';
 
 /** Legacy o2j.ifStringParseJSON. */
 function ifStringParseJSON(value: unknown): unknown {
@@ -39,20 +40,13 @@ function readProfileV2(account: Record<string, unknown> | null): Record<string, 
   return md && typeof md === 'object' ? (md as Record<string, unknown>) : {};
 }
 
-interface UserProfile {
-  name?: string;
-  about?: string;
-  location?: string;
-  website?: string;
-  profile_image?: string;
-  cover_image?: string;
-  [key: string]: unknown;
-}
+// `profile` is the editable profile sub-object (metadata.profile of the
+// bridge get_profile response) — canonical shape in types/steem.ts.
 
 interface UserSettingsProps {
   accountname: string;
-  profile: UserProfile | null;
-  onProfileUpdate?: (profile: UserProfile) => void;
+  profile: ProfileMetadata | null;
+  onProfileUpdate?: (profile: ProfileMetadata) => void;
 }
 
 /**
@@ -72,7 +66,7 @@ export default function UserSettings({
   const userPreferences = useAppSelector((state) => state.app.user_preferences);
   
   // Form state
-  const [formData, setFormData] = useState<UserProfile>({
+  const [formData, setFormData] = useState<ProfileMetadata>({
     name: profile?.name || '',
     about: profile?.about || '',
     location: profile?.location || '',

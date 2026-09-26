@@ -29,6 +29,7 @@ import {
   checkRateLimit,
   rateLimitResponse,
 } from '@/lib/cache/rate-limit';
+import type { Account } from '@/types/steem';
 // steem.auth.verifySignature() parses the public key and hex signature,
 // then runs verifyBuffer (SHA-256 of the raw message) — matching
 // steem.auth.sign() on the client. It returns false for malformed input
@@ -99,7 +100,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    type AccountWithPosting = {
+    // Narrowing of the canonical Account (types/steem.ts) to the posting
+    // authority fields this route reads.
+    type AccountWithPosting = Account & {
       posting?: PostingAuthority;
     };
     const accountData = account as AccountWithPosting;

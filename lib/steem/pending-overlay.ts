@@ -15,7 +15,7 @@
  */
 
 import { getRedis, redisKey } from '@/lib/cache/redis';
-import type { Post } from '@/types/steem';
+import type { Post, UserProfile } from '@/types/steem';
 
 /** Covers the P99 hivemind indexing delay by a wide margin. */
 export const PENDING_TTL_SEC = 120;
@@ -38,12 +38,9 @@ export interface PendingProfile {
   profile: Record<string, unknown>;
 }
 
-/** Shape of the bridge get_profile response relevant to the overlay. */
-export interface ProfileLike {
-  metadata?: {
-    profile?: Record<string, unknown>;
-    [key: string]: unknown;
-  };
+/** Subset of the bridge get_profile response the profile overlay touches,
+ *  derived from the canonical UserProfile. */
+export type ProfileLike = Pick<UserProfile, 'metadata'> & {
   [key: string]: unknown;
 }
 

@@ -10,11 +10,12 @@
  */
 
 import { cachedFetch, HttpError } from '@/lib/cache/client-fetch';
-import type { Post } from '@/types/steem';
+import type { Account, Post, UserProfile } from '@/types/steem';
 
 // Canonical domain types live in types/steem.ts; re-exported here so the
-// existing `import { Post } from '@/lib/api/steem'` call sites keep working.
-export type { Post };
+// existing `import { Post, UserProfile } from '@/lib/api/steem'` call sites
+// keep working.
+export type { Post, UserProfile };
 
 /**
  * Client-side staleMs / maxAgeMs per data type.
@@ -186,37 +187,6 @@ export async function fetchCommentsByPermlink(
 }
 
 /**
- * User profile interface based on bridge API get_profile response
- */
-export interface UserProfile {
-  id: number;
-  name: string;
-  created: string;
-  active: string;
-  post_count: number;
-  reputation: string;
-  blacklists: string[];
-  stats: {
-    rank: number;
-    following: number;
-    followers: number;
-  };
-  metadata: {
-    profile: {
-      name?: string;
-      about?: string;
-      location?: string;
-      website?: string;
-      profile_image?: string;
-      cover_image?: string;
-      version?: number;
-      [key: string]: unknown;
-    };
-  };
-  [key: string]: unknown;
-}
-
-/**
  * Fetch user profile from bridge API
  */
 export async function fetchUserProfile(
@@ -239,10 +209,10 @@ export async function fetchUserProfile(
 
 /** Raw condenser account (posting_json_metadata/json_metadata included).
  *  Never cached — used on settings save to merge into fresh metadata. */
-export async function fetchAccount(username: string): Promise<Record<string, unknown> | null> {
+export async function fetchAccount(username: string): Promise<Account | null> {
   const searchParams = new URLSearchParams({ username });
   try {
-    const { data } = await cachedFetch<Record<string, unknown>>(
+    const { data } = await cachedFetch<Account>(
       `/api/steem/account?${searchParams.toString()}`,
       { ...SWR.profile, noStore: true }
     );

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { getProfile } from '@/lib/steem/client';
 import { normalizeUsername } from '@/lib/utils/username';
-import { buildAccountMetadata, type SeoProfile } from '@/lib/seo';
+import { buildAccountMetadata } from '@/lib/seo';
+import type { UserProfile } from '@/types/steem';
 import UserRedirectClient from './UserRedirectClient';
 
 /**
@@ -17,10 +18,6 @@ interface PageParams {
   username: string;
 }
 
-interface BridgeProfile {
-  metadata?: { profile?: SeoProfile };
-}
-
 export async function generateMetadata({
   params,
 }: {
@@ -29,7 +26,7 @@ export async function generateMetadata({
   const { username } = await params;
   const accountname = normalizeUsername(username).toLowerCase();
   try {
-    const profile = (await getProfile({ account: accountname })) as BridgeProfile | null;
+    const profile = (await getProfile({ account: accountname })) as UserProfile | null;
     return buildAccountMetadata(accountname, profile?.metadata?.profile ?? null);
   } catch (error) {
     console.error('generateMetadata: failed to fetch profile:', error);

@@ -74,3 +74,68 @@ export interface Post {
   json_metadata?: PostJsonMetadata;
   [key: string]: unknown;
 }
+
+// ---------------------------------------------------------------------------
+// User profile (bridge get_profile response)
+// ---------------------------------------------------------------------------
+
+/**
+ * Editable profile sub-object stored under (posting_)json_metadata.profile
+ * and broadcast via account_update2. All fields are user-controlled and
+ * optional; consumers must treat them as untrusted input.
+ */
+export interface ProfileMetadata {
+  name?: string;
+  about?: string;
+  location?: string;
+  website?: string;
+  profile_image?: string;
+  cover_image?: string;
+  version?: number;
+  [key: string]: unknown;
+}
+
+/** bridge get_profile stats block. */
+export interface UserProfileStats {
+  rank: number;
+  following: number;
+  followers: number;
+}
+
+/**
+ * Bridge get_profile response.
+ *
+ * metadata (and metadata.profile) are optional: hivemind omits them for
+ * accounts that never saved profile metadata.
+ */
+export interface UserProfile {
+  id: number;
+  name: string;
+  created: string;
+  active: string;
+  post_count: number;
+  reputation: string;
+  blacklists: string[];
+  stats: UserProfileStats;
+  metadata?: {
+    profile?: ProfileMetadata;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+// ---------------------------------------------------------------------------
+// Account (condenser_api get_accounts row)
+// ---------------------------------------------------------------------------
+
+/**
+ * Condenser_api get_accounts row — intentionally minimal. The chain account
+ * carries many more fields (authorities, balances, manabars; the SDK's
+ * ExtendedAccount protocol type covers the full wire shape). App code reads
+ * a small named subset and goes through the index signature for the rest, so
+ * this does not duplicate the SDK's protocol definition.
+ */
+export interface Account {
+  name: string;
+  [key: string]: unknown;
+}

@@ -6,21 +6,15 @@ import { useTranslations } from 'next-intl';
 
 import { proxifyImageUrl } from '@/lib/media/proxify-url';
 import { safeCoverImageUrl, safeProfileWebsite } from '@/lib/profile-metadata';
+import type { ProfileMetadata } from '@/types/steem';
 import Userpic from '@/components/elements/Userpic';
 import Follow from '@/components/elements/Follow';
 import TimeAgo from '@/components/elements/TimeAgo';
 
 interface UserProfileHeaderProps {
   accountname: string;
-  profile?: {
-    name?: string;
-    about?: string;
-    location?: string;
-    website?: string;
-    profile_image?: string;
-    cover_image?: string;
-    [key: string]: unknown;
-  } | null;
+  /** Editable profile sub-object (bridge metadata.profile). */
+  profile?: ProfileMetadata | null;
   currentUser?: string;
   stats?: {
     rank: number;

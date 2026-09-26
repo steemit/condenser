@@ -41,6 +41,15 @@ export const securityHeaders: SecurityHeader[] = [
     key: 'Strict-Transport-Security',
     value: 'max-age=31536000; includeSubDomains',
   },
+  // Cross-Origin-Opener-Policy (audit N-02 follow-up, #4034 leftover):
+  // isolate this document's browsing-context group from cross-origin
+  // openers, cutting off window.opener-based XS-Leaks / tab-nabbing from any
+  // external page that opens us. Safe for this app: every window.open call
+  // site (signup / wallet / share / mobile links, audit N-23) already passes
+  // noopener,noreferrer, and login is an in-app posting-key challenge —
+  // there is no OAuth popup flow that needs an opener relationship. COOP
+  // does not affect iframes (post-body embeds), only top-level windows.
+  { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
 ];
 
 /** Apply the baseline security headers to a response (idempotent overwrite). */

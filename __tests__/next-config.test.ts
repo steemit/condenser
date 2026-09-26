@@ -37,6 +37,7 @@ describe('next.config security headers (audit N-02)', () => {
     expect(headers['Strict-Transport-Security']).toBe(
       'max-age=31536000; includeSubDomains'
     );
+    expect(headers['Cross-Origin-Opener-Policy']).toBe('same-origin');
   });
 
   it('keeps the nonce-based CSP out of the static table (proxy.ts owns it)', () => {

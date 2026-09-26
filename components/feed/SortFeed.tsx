@@ -34,8 +34,7 @@ export function SortFeed({ sort: sortString }: { sort: string }) {
   const loadingMoreRef = useRef(false);
 
   const isValidSort = SORT_TYPES.includes(sortString.toLowerCase());
-  const showNotFound =
-    !isValidSort || sortString.toLowerCase() === "404";
+  const showNotFound = !isValidSort;
 
   const order = sortString.toLowerCase() as FetchPostsParams["order"];
 

@@ -52,7 +52,7 @@ interface DialogEntry {
   data?: unknown;
 }
 
-interface GlobalState {
+export interface GlobalState {
   status: Record<string, unknown>;
   content: Record<string, Post>;
   accounts: Record<string, Account>;
@@ -428,6 +428,13 @@ const globalSlice = createSlice({
     setFollowerslist: (state, action: PayloadAction<unknown[]>) => {
       state.followerslist = action.payload;
     },
+    // Optimistic single-relationship update dispatched by the Follow
+    // component around a follow custom_json broadcast. Chain data (and the
+    // follow operation itself) carries `what` as an unordered membership
+    // array, frequently with a single element (['blog'] or ['ignore']) —
+    // positional reads (what[0]/what[1]) would misclassify those. Legacy
+    // uses member semantics (TransactionSaga.js updateFollowState:
+    // what.indexOf('blog') > -1); keep that here.
     updateFollowState: (state, action: PayloadAction<{
       follower: string;
       following: string;
@@ -453,9 +460,9 @@ const globalSlice = createSlice({
 
       const followData = state.follow.getFollowingAsync[follower];
 
-      // Determine action based on what array
-      const hasBlog = what[0] === 'blog';
-      const hasIgnore = what[1] === 'ignore';
+      // Determine action based on what array (member semantics, see above)
+      const hasBlog = what.includes('blog');
+      const hasIgnore = what.includes('ignore');
 
       // Update blog_result
       if (!followData.blog_result) {
@@ -480,6 +487,52 @@ const globalSlice = createSlice({
       // Update counts
       followData.blog_count = followData.blog_result.length;
       followData.ignore_count = followData.ignore_result.length;
+    },
+    // Marks one follow list (blog or ignore) of one follower as loading.
+    // Mirrors the `type + '_loading'` flag legacy FollowSaga sets while
+    // loadFollowsLoop pages through the chain; Follow reads it to render a
+    // loading state instead of a wrong default button.
+    followListLoading: (state, action: PayloadAction<{
+      follower: string;
+      type: 'blog' | 'ignore';
+      loading: boolean;
+    }>) => {
+      const { follower, type, loading } = action.payload;
+      if (!state.follow) {
+        state.follow = {};
+      }
+      if (!state.follow.getFollowingAsync) {
+        state.follow.getFollowingAsync = {};
+      }
+      if (!state.follow.getFollowingAsync[follower]) {
+        state.follow.getFollowingAsync[follower] = {};
+      }
+      state.follow.getFollowingAsync[follower][`${type}_loading`] = loading;
+    },
+    // Bulk initialization of one follow list (blog or ignore) from chain
+    // data. This is the rewrite of legacy FollowSaga's final merge (the
+    // `follow_inprogress` -> `follow.getFollowingAsync[account]` move that
+    // sets `<type>_result`, `<type>_count` and clears `<type>_loading`),
+    // dispatched by the loadFollowState thunk once paging completed.
+    receiveFollowList: (state, action: PayloadAction<{
+      follower: string;
+      type: 'blog' | 'ignore';
+      accounts: string[];
+    }>) => {
+      const { follower, type, accounts } = action.payload;
+      if (!state.follow) {
+        state.follow = {};
+      }
+      if (!state.follow.getFollowingAsync) {
+        state.follow.getFollowingAsync = {};
+      }
+      if (!state.follow.getFollowingAsync[follower]) {
+        state.follow.getFollowingAsync[follower] = {};
+      }
+      const followData = state.follow.getFollowingAsync[follower];
+      followData[`${type}_result`] = accounts;
+      followData[`${type}_count`] = accounts.length;
+      followData[`${type}_loading`] = false;
     },
     setPathname: (state, action: PayloadAction<string>) => {
       state.pathname = action.payload;
@@ -521,6 +574,8 @@ export const {
   setTagslist,
   setFollowerslist,
   updateFollowState,
+  followListLoading,
+  receiveFollowList,
   setPathname,
 } = globalSlice.actions;
 

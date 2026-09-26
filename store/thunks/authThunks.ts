@@ -6,6 +6,7 @@
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setUser, loginError, setAuthority, logout, setTrackingId, generateTrackingId } from '../slices/userSlice';
+import { loadFollowState } from './followThunks';
 import { clearStoredKey } from '@/lib/crypto/key-storage';
 import { postJsonWithCsrf } from '@/lib/api/csrf';
 import type { AppDispatch, RootState } from '../index';
@@ -75,6 +76,11 @@ export const loginThunk = createAsyncThunk<
           pub_keys_used: [],
         })
       );
+
+      // Legacy parity (UserSaga usernamePasswordLogin): after login the
+      // user's following/ignoring sets are loaded into global follow state
+      // so Follow/Mute buttons start from chain state.
+      dispatch(loadFollowState(finalUsername));
     } catch (error: unknown) {
       console.error('Login error:', error);
       const errorMessage =

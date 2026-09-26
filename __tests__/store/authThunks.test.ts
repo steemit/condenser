@@ -1,16 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import userReducer, { setUser } from '@/store/slices/userSlice';
-import { logoutThunk } from '@/store/thunks/authThunks';
+import globalReducer from '@/store/slices/globalSlice';
+import { loginThunk, logoutThunk } from '@/store/thunks/authThunks';
 import type { AppDispatch, RootState } from '@/store';
 
 // The thunk's dispatch signature is typed against the full app store; the
-// partial reducer under test only touches user state, so widen the type.
+// partial reducer under test only touches user/global state, so widen the type.
 type TestStore = { dispatch: AppDispatch; getState: () => RootState };
 function makeStore(): TestStore {
   return configureStore({
-    reducer: { user: userReducer },
+    reducer: { user: userReducer, global: globalReducer },
   }) as unknown as TestStore;
 }
 
@@ -54,5 +56,55 @@ describe('logoutThunk', () => {
 
     expect(store.getState().user.current).toEqual({});
     expect(store.getState().user.logged_out).toBe(true);
+  });
+});
+
+describe('loginThunk', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    // Route follow-list fetches (loadFollowState) to an empty page.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (input: string) => {
+        if (input.startsWith('/api/steem/following')) {
+          return { ok: true, json: async () => [] };
+        }
+        return { ok: true, json: async () => ({}) };
+      })
+    );
+  });
+
+  it('sets the user and seeds the follow state after login', async () => {
+    const store = makeStore();
+
+    await store.dispatch(
+      loginThunk({ username: '@Alice', password: '' })
+    );
+
+    expect(store.getState().user.current).toMatchObject({
+      username: 'alice',
+      posting_authority: true,
+      pass_auth: true,
+    });
+    expect(store.getState().user.authority.alice).toMatchObject({
+      posting: 'full',
+    });
+    // Legacy parity (UserSaga usernamePasswordLogin): login triggers the
+    // follow/ignore list load for the freshly logged-in user.
+    const followUrls = (fetch as Mock).mock.calls
+      .map((call) => String(call[0]))
+      .filter((u: string) => u.startsWith('/api/steem/following?'));
+    expect(followUrls).toHaveLength(2);
+    expect(followUrls.every((u: string) => u.includes('account=alice'))).toBe(true);
+    // loadFollowState is dispatched fire-and-forget inside the thunk.
+    await waitFor(() => {
+      expect(
+        store.getState().global.follow?.getFollowingAsync?.alice?.blog_result
+      ).toEqual([]);
+      expect(
+        store.getState().global.follow?.getFollowingAsync?.alice?.ignore_result
+      ).toEqual([]);
+    });
   });
 });

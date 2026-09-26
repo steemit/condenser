@@ -359,7 +359,12 @@ export default function SearchContent() {
               <PostsList
                 posts={posts}
                 loading={searchState.pending}
-                onLoadMore={hasMore ? handleLoadMore : undefined}
+                // Wrapped so no argument can leak into handleLoadMore's
+                // `manual` flag: PostsList currently calls onLoadMore()
+                // bare, but if it ever forwarded the scroll event, a bare
+                // handleLoadMore(event) would see a truthy `manual` and
+                // bypass the error-state retry guard above.
+                onLoadMore={hasMore ? () => handleLoadMore() : undefined}
               />
               {errorMessage ? (
                 // Load-more failure: the list stays, pagination retries —

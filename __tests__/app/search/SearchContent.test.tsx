@@ -44,7 +44,11 @@ function renderSearch() {
     </Provider>
   );
   const view = render(wrap());
-  return { store, rerenderSearch: () => view.rerender(wrap()) };
+  return {
+    store,
+    rerenderSearch: () => view.rerender(wrap()),
+    unmount: () => view.unmount(),
+  };
 }
 
 function jsonResponse(status: number, body: unknown) {
@@ -207,7 +211,7 @@ describe('SearchContent error state', () => {
       })
     );
     vi.stubGlobal('fetch', fetchMock);
-    renderSearch();
+    const { unmount } = renderSearch();
 
     expect(await screen.findByText('A post')).toBeInTheDocument();
     expect(
@@ -218,9 +222,16 @@ describe('SearchContent error state', () => {
       fetchMock.mock.calls.filter(([url]) => String(url) === '/api/search');
     expect(searchCalls()).toHaveLength(2);
 
-    // Let any (guarded) automatic re-fire have its chance.
+    // Let any (guarded) automatic re-fire have its chance. The window must
+    // clear PostsList's 150ms scroll debounce with room to spare: an
+    // unguarded loop re-fires at error+150ms and again at +300ms (each
+    // response re-renders the list and re-arms the debounce), so a shorter
+    // window (e.g. 100ms) never observes the loop. Mutation-verified:
+    // deleting the `searchState.error != null && !manual` guard in
+    // SearchContent.handleLoadMore turns the assertion below red (2 calls
+    // become 4 within this window).
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 600));
     });
     expect(searchCalls()).toHaveLength(2);
 
@@ -233,6 +244,13 @@ describe('SearchContent error state', () => {
       screen.queryByText(/Search is temporarily unavailable/i)
     ).not.toBeInTheDocument();
     expect(searchCalls()).toHaveLength(3);
+    // The retry cleared the error and 2 of 5 hits are loaded, so a
+    // legitimate automatic load-more is now armed behind PostsList's 150ms
+    // debounce and would fire a 4th request. Unmount immediately so the
+    // pending debounce dies with the component and the 3-call count stays
+    // final — no 4th request can race the assertions or fire during the
+    // async gap before afterEach cleanup.
+    unmount();
   });
 
   it('clears the previous query\'s results when the new query fails (review follow-up)', async () => {

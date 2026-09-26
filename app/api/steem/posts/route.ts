@@ -7,11 +7,8 @@
  * reach the server cache keys in lib/steem/client.ts
  * get{Ranked,Account}Posts() — an unwhitelisted sort or an unbounded
  * tag/account sprays one Redis key per variant, and a huge limit caches a
- * huge serialized list (value amplification). The limit evaluation for
- * 60/min: every caller pages strictly serially (one load-more in flight,
- * no prefetch) and identical reads are served by the 10s-fresh browser
- * L1, so legitimate paging sits far below the ceiling — see
- * RATE_LIMITS.steemPosts for the full rationale.
+ * huge serialized list (value amplification). Rate-limit evaluation
+ * rationale: see RATE_LIMITS.steemPosts in lib/cache/rate-limit.ts.
  */
 
 import { NextRequest, NextResponse } from 'next/server';

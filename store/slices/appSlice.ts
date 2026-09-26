@@ -62,9 +62,11 @@ const appSlice = createSlice({
     setLocation: (state, action: PayloadAction<{ pathname: string }>) => {
       state.location = action.payload;
     },
-    steemApiError: (state, action: PayloadAction<unknown>) => {
-      // Log error but don't update state as per original implementation
-      console.error('SteemApiError', action.payload);
+    steemApiError: () => {
+      // No state change (legacy parity) and no dispatcher in the Next.js
+      // app — Steem API failures surface through the API-route error paths
+      // and the cache layers instead. Reducers must stay side-effect free,
+      // so the legacy console.error that lived here is gone.
     },
     fetchDataBegin: (state) => {
       state.loading = true;

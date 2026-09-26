@@ -81,9 +81,8 @@ export default function SearchContent() {
       }
 
       const results = await response.json();
-      dispatch(searchResult({ 
+      dispatch(searchResult({
         hits: results.hits || { hits: [], total: { value: 0 } },
-        _scroll_id: results._scroll_id,
       }));
     } catch (error) {
       console.error('Search error:', error);
@@ -161,12 +160,11 @@ export default function SearchContent() {
       }
 
       const results = await response.json();
-      dispatch(searchResult({ 
+      dispatch(searchResult({
         hits: {
           hits: results.hits?.hits || [],
           total: results.hits?.total || { value: 0 },
         },
-        _scroll_id: results._scroll_id,
         append: true,
       }));
     } catch (error) {

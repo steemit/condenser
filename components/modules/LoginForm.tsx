@@ -166,12 +166,12 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
         // Don't fail login if storage fails, but log the error
       }
       
-      // Step 8: Update Redux state
+      // Step 8: Update Redux state. saveLogin is not part of the payload:
+      // the persistence decision is already applied above by
+      // encryptAndStoreKey (local variable), and the thunk never read it.
       await dispatch(
         loginThunk({
           username: normalizedUsername,
-          password: '', // Don't store password in Redux
-          saveLogin,
         })
       ).unwrap();
 

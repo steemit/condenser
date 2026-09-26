@@ -162,10 +162,8 @@ export function proxy(request: NextRequest) {
   const sortOnlyMatch = pathname.match(/^\/([^\/]+)$/);
   if (sortOnlyMatch) {
     const [, sort] = sortOnlyMatch;
-    // Exclude '404' from being matched as a sort type
-    if (sort.toLowerCase() === '404') {
-      return NextResponse.rewrite(new URL('/404', request.url));
-    }
+    // Literal /404 never reaches here — the static/API skip at the top of
+    // proxy() passes it through first.
     if (SORT_TYPES.includes(sort.toLowerCase())) {
       // Pass through to [sort] route
       return NextResponse.next();

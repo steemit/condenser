@@ -83,10 +83,10 @@ NEXT_PUBLIC_WALLET_URL=https://steemitwallet.com
 # This site's own origin for absolute SEO-metadata URLs (og:url, avatar and
 # share-image fallbacks; lib/seo.ts SITE_ORIGIN). Self-hosted deployments
 # must set it, or their og:url points at steemit.com. Must be a bare https
-# origin (https://<host>; malformed values fall back to the default with a
-# warning). Server-side runtime read at module load (a module-level constant
-# evaluated once at process start) — changing it requires a restart, not a
-# rebuild. Default: https://steemit.com
+# origin (https://<host>; an optional port is accepted; malformed values
+# fall back to the default with a warning). Server-side runtime read at
+# module load (a module-level constant evaluated once at module load) —
+# changing it requires a restart, not a rebuild. Default: https://steemit.com
 SITE_ORIGIN=https://steemit.com
 
 # Image upload endpoint for the settings page profile/cover upload (legacy

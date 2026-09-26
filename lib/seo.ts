@@ -23,11 +23,13 @@ import type { ProfileMetadata } from '@/types/steem';
 const DEFAULT_SITE_ORIGIN = 'https://steemit.com';
 
 /**
- * A site origin must be a bare https origin — "https://<host>", no path,
- * query, fragment, userinfo, or port. Anything else is rejected so a
- * malformed env value cannot leak into og:url / og:image.
+ * A site origin must be a bare https origin — "https://<host>" with an
+ * optional port (an RFC 6454 origin includes the port, and self-hosted
+ * deployments on non-443 ports are real), but no path, query, fragment, or
+ * userinfo. Anything else is rejected so a malformed env value cannot leak
+ * into og:url / og:image.
  */
-const SITE_ORIGIN_PATTERN = /^https:\/\/[\w.-]+$/;
+const SITE_ORIGIN_PATTERN = /^https:\/\/[\w.-]+(?::\d{1,5})?$/;
 
 function resolveSiteOrigin(): string {
   const raw = process.env.SITE_ORIGIN;

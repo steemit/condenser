@@ -139,6 +139,17 @@ const testCases = [
   { path: '/@alice/', expected: 'redirect:308:/@alice', description: 'Trailing slash on a profile root 308-redirects to the slash-less form' },
   { path: '/hot/?foo=bar', expected: 'redirect:308:/hot?foo=bar', description: 'Trailing-slash redirect preserves the query string' },
   { path: '/@alice/feed/', expected: 'rewrite:/user/alice/feed/', description: 'User feed with trailing slash still rewrites directly (branch 3 handles the slash itself — no extra hop)' },
+
+  // Open-redirect hardening of the trailing-slash 308: WHATWG URL parses a
+  // pathname like `//evil.example/x/` as a protocol-relative URL, so feeding
+  // it to new URL(pathname, base) would emit a cross-origin Location
+  // (http://evil.example/x). redirectUrl() rejects anything that escapes the
+  // request origin → unroutable (404 rewrite). The `/\evil…` form is the same
+  // vector one layer down (backslash is a path separator under http(s); the
+  // URL constructor already normalizes it to the `//` form before NextRequest
+  // sees it) — both must never produce a cross-origin Location.
+  { path: '//evil.example/x/', expected: '404', description: 'Protocol-relative pathname with trailing slash is unroutable (no cross-origin 308)' },
+  { path: '/\\evil.example/x/', expected: '404', description: 'Backslash-separated hostname with trailing slash is unroutable (no cross-origin 308)' },
 ];
 
 async function runTests() {

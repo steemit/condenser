@@ -118,4 +118,31 @@ describe('proxy CSP plumbing', () => {
     expect(proxy(request('/')).headers.get('location')).toBeNull();
     expect(proxy(request('/trending')).headers.get('location')).toBeNull();
   });
+
+  it('never emits a cross-origin Location from the trailing-slash 308 (open redirect)', () => {
+    // WHATWG URL parses `//evil.example/x/` as protocol-relative, and treats
+    // a backslash as a path separator under http(s), so feeding a
+    // request-controlled pathname into new URL(pathname, base) would emit a
+    // Location pointing at the attacker's origin. redirectUrl() must reject
+    // anything that escapes the request origin → 404 rewrite instead.
+    const sameOrigin = 'http://localhost:3000';
+    for (const hostile of [
+      '//evil.example/x/',
+      '/\\evil.example/x/',
+      '\\\\evil.example/x/',
+      '//evil.example:8080/x/',
+    ]) {
+      const response = proxy(request(hostile));
+      const location = response.headers.get('location');
+      if (location !== null) {
+        // Any redirect that does fire must stay on the request's origin.
+        expect(new URL(location).origin).toBe(sameOrigin);
+      } else {
+        // Unroutable form: rewritten to the 404 page.
+        expect(response.headers.get('x-middleware-rewrite')).toBe(
+          `${sameOrigin}/404`
+        );
+      }
+    }
+  });
 });

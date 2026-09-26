@@ -81,9 +81,26 @@ function securityRedirect(url: URL): NextResponse {
   return response;
 }
 
-/** Plain redirect URL for a pathname, preserving the request's query string. */
-function redirectUrl(request: NextRequest, pathname: string): URL {
-  return new URL(pathname + request.nextUrl.search, request.url);
+/**
+ * Plain redirect URL for a pathname, preserving the request's query string,
+ * or null when the constructed URL would escape the request's origin.
+ *
+ * The trailing-slash branch feeds this a request-controlled pathname, and
+ * WHATWG URL parses `//evil.example/x/` — and `/\evil.example/x/`, since a
+ * backslash is a path separator under the special (http/https) schemes — as
+ * a protocol-relative URL pointing at the attacker's host. A null return is
+ * handled by the callers as an unroutable path (404 rewrite), the same
+ * treatment as every other invalid form.
+ */
+function redirectUrl(request: NextRequest, pathname: string): URL | null {
+  let url: URL;
+  try {
+    url = new URL(pathname + request.nextUrl.search, request.url);
+    if (url.origin !== new URL(request.url).origin) return null;
+  } catch {
+    return null;
+  }
+  return url;
 }
 
 function resolveRoute(request: NextRequest, requestInit: RequestInit) {
@@ -104,7 +121,12 @@ function resolveRoute(request: NextRequest, requestInit: RequestInit) {
   // Legacy .html aliases (must precede the static-asset skip below).
   const alias = LEGACY_HTML_ALIASES[pathname];
   if (alias) {
-    return securityRedirect(redirectUrl(request, alias));
+    // The alias targets are constants, so this can only fail if the request
+    // URL itself is malformed — handled like any unroutable path.
+    const target = redirectUrl(request, alias);
+    return target
+      ? securityRedirect(target)
+      : NextResponse.rewrite(new URL('/404', request.url), requestInit);
   }
 
   // Skip API routes, static files, and the 404 page. Static files are
@@ -295,10 +317,19 @@ function resolveRoute(request: NextRequest, requestInit: RequestInit) {
   // already handles a trailing slash directly (e.g. branch 3's `/@user/feed/`)
   // rewriting without an extra hop; only paths that would otherwise fall
   // through to Next's implicit redirect are affected.
+  //
+  // redirectUrl() returns null (→ 404) for pathnames that WHATWG URL would
+  // parse as a protocol-relative/cross-origin target — e.g. `//evil.example/`
+  // or `/\evil.example/` (backslash is a path separator under http(s)) — so
+  // the normalization can never be turned into an open redirect.
   if (pathname !== '/' && pathname.endsWith('/')) {
-    return securityRedirect(
-      redirectUrl(request, pathname.replace(/\/+$/, '') || '/')
+    const target = redirectUrl(
+      request,
+      pathname.replace(/\/+$/, '') || '/'
     );
+    return target
+      ? securityRedirect(target)
+      : NextResponse.rewrite(new URL('/404', request.url), requestInit);
   }
 
   return NextResponse.next(requestInit);

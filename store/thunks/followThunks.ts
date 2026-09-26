@@ -43,13 +43,13 @@ interface FollowEntry {
 async function fetchFollowingPage(
   account: string,
   start: string,
-  type: FollowKind,
-  limit: number
+  type: FollowKind
 ): Promise<FollowEntry[]> {
+  // The route pages with a fixed 1000-entry size (no limit param) — the
+  // PAGE_LIMIT constant below drives the loop's done-condition only.
   const searchParams = new URLSearchParams({
     account,
     type,
-    limit: limit.toString(),
   });
   if (start) searchParams.set('start', start);
   const res = await fetch(`/api/steem/following?${searchParams.toString()}`, {
@@ -91,7 +91,7 @@ async function loadFollowList(
     // comes back short — exactly legacy loadFollowsLoop's loop condition —
     // plus two guardrails the saga lacked: a page cap and a stall check.
     for (let page = 1; ; page++) {
-      const result = await fetchFollowingPage(username, start, type, PAGE_LIMIT);
+      const result = await fetchFollowingPage(username, start, type);
       for (const e of result) {
         // Member semantics (the RPC already filters by kind; this mirrors
         // legacy's defensive whatList.forEach grouping).

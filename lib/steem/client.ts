@@ -264,10 +264,19 @@ export async function getDynamicGlobalProperties(): Promise<unknown> {
 }
 
 /**
- * Get following list
+ * Get following list (legacy getFollowingAsync shape).
+ *
+ * The page size is fixed at 1000 — legacy loadFollowsLoop's page size and
+ * the only value the sole caller (/api/steem/following) ever uses — so it
+ * is not a cache-key dimension: an open limit would spray one ~100KB key
+ * per variant (audit N-21). The key previously carried a limit suffix;
+ * dropping it simply lets old-suffixed keys expire naturally.
  */
-export async function getFollowing(account: string, start: string, type: string, limit: number): Promise<unknown[]> {
-  const key = `steem:following:${account}:${type}:${start || '0'}:${limit}`;
+const FOLLOWING_PAGE_LIMIT = 1000;
+
+export async function getFollowing(account: string, start: string, type: string): Promise<unknown[]> {
+  const key = `steem:following:${account}:${type}:${start || '0'}`;
+  const limit = FOLLOWING_PAGE_LIMIT;
   const result = await withCache(key, CACHE_TTL.followers.ttl, CACHE_TTL.followers.staleTtl, async () => {
     initializeSteemApi();
     return steem.api.getFollowingAsync(account, start, type, limit);

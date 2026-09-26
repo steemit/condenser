@@ -74,7 +74,8 @@ describe('loadFollowState', () => {
     for (const u of urls) {
       expect(u).toContain('/api/steem/following?');
       expect(u).toContain('account=alice');
-      expect(u).toContain('limit=1000');
+      // No limit param: the route pages with a fixed 1000-entry size.
+      expect(u).not.toContain('limit=');
     }
     expect(urls.some((u) => u.includes('type=blog'))).toBe(true);
     expect(urls.some((u) => u.includes('type=ignore'))).toBe(true);

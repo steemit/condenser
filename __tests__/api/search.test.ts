@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { makePostRequest } from '@/__tests__/helpers/request';
+import { makePostRequest, makeRawPostRequest } from '@/__tests__/helpers/request';
 import { POST } from '@/app/api/search/route';
 
 // Partial mock: keep the real RATE_LIMITS / rateLimitResponse, stub only the
@@ -283,6 +283,16 @@ describe('POST /api/search', () => {
     const res = await POST(makePostRequest('/api/search', { q: 'x'.repeat(70 * 1024) }));
     expect(res.status).toBe(413);
     expect(await res.json()).toEqual({ error: 'Request body too large' });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 invalid JSON for an unparseable body (not a 500)', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const res = await POST(makeRawPostRequest('/api/search', 'not-json'));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'invalid JSON' });
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });

@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server';
 import {
   csrfHeader,
   makePostRequest,
+  makeRawPostRequest,
   sessionCookieHeader,
   TEST_CSRF_TOKEN,
 } from '@/__tests__/helpers/request';
@@ -450,5 +451,13 @@ describe('POST /api/auth/login abuse wrappers (audit N-08)', () => {
     const res = await POST(request);
     expect(res.status).toBe(413);
     expect(await res.json()).toEqual({ error: 'Request body too large' });
+  });
+
+  it('returns 400 invalid JSON for an unparseable body (not a 500)', async () => {
+    const res = await POST(makeRawPostRequest('/api/auth/login', 'not-json'));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'invalid JSON' });
+    expect(checkRateLimitMock).toHaveBeenCalledTimes(1); // IP check ran, account never reached
+    expect(getAccountMock).not.toHaveBeenCalled();
   });
 });

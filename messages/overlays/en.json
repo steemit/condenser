@@ -166,7 +166,9 @@
     "highest_payout": "Highest Payout",
     "searching": "Searching...",
     "nothing_found": "Nothing was found.",
-    "enter_query_hint": "Enter a search query above to find posts, comments, and accounts."
+    "enter_query_hint": "Enter a search query above to find posts, comments, and accounts.",
+    "search_unavailable": "Search is temporarily unavailable. Please try again later.",
+    "search_failed": "Search failed. Please try again later."
   },
   "communities_jsx": {
     "search_communities": "Search communities",

@@ -1,6 +1,6 @@
 /**
  * Steem API Route: Get Following List (legacy getFollowingAsync shape)
- * GET /api/steem/following?account=username&type=blog&start=&limit=1000
+ * GET /api/steem/following?account=username&type=blog&start=
  *
  * Unlike /api/steem/followers (page-based, bridge get_following_by_page,
  * limit <= 100), this wraps condenser_api.get_following semantics: a
@@ -14,8 +14,10 @@
  * upstream RPC — arbitrary free text would spray one ~100KB Redis key per
  * `start` variant and never hit the stale fallback, so both params are
  * normalized (trim + lowercase) and validated against a bounded charset.
- * `type` is whitelisted and `limit` clamped to [1, 1000] (1000 is legacy's
- * loadFollowsLoop page size, FollowSaga.js).
+ * `type` is whitelisted. There is no `limit` param: the page size is fixed
+ * at 1000 (legacy loadFollowsLoop, FollowSaga.js) — the sole caller always
+ * pages with 1000, and an open limit would multiply the cache keys; a
+ * client-sent limit is ignored for backward compatibility.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -26,8 +28,6 @@ import {
   rateLimitResponse,
 } from '@/lib/cache/rate-limit';
 
-const MAX_LIMIT = 1000;
-const DEFAULT_LIMIT = 1000;
 const FOLLOW_KINDS = ['blog', 'ignore'] as const;
 
 // Steem account names: lowercase letters, digits, dashes and (for segmented
@@ -37,18 +37,6 @@ const FOLLOW_KINDS = ['blog', 'ignore'] as const;
 // the cache key and the RPC, not vetting names. 64 chars is a generous cap
 // (real names are 3-16) that keeps Redis keys bounded.
 const ACCOUNT_PARAM_RE = /^[a-z0-9.-]{1,64}$/;
-
-/** Parse and clamp an integer query param; non-numeric values fall back. */
-function clampIntParam(
-  raw: string | null,
-  fallback: number,
-  min: number,
-  max: number
-): number {
-  const parsed = parseInt(raw ?? '', 10);
-  if (!Number.isFinite(parsed)) return fallback;
-  return Math.min(Math.max(parsed, min), max);
-}
 
 /**
  * Normalize a Steem account-name query param: trim + lowercase. Account
@@ -78,12 +66,8 @@ export async function GET(request: NextRequest) {
     // Start-account cursor ('' = beginning of the list), same shape as
     // account but may be empty.
     const start = normalizeAccountParam(searchParams.get('start'));
-    const limit = clampIntParam(
-      searchParams.get('limit'),
-      DEFAULT_LIMIT,
-      1,
-      MAX_LIMIT
-    );
+
+    // No limit param — fixed 1000-entry pages (see module comment).
 
     if (!account) {
       return NextResponse.json(
@@ -110,7 +94,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const result = await getFollowing(account, start, type, limit);
+    const result = await getFollowing(account, start, type);
 
     return NextResponse.json(result || []);
   } catch (error: unknown) {

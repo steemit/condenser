@@ -46,12 +46,10 @@ export async function GET(request: NextRequest) {
     console.error('Error fetching unread notifications:', error);
     // Raw error only in server logs (above); clients get a generic message
     // (audit N-20: unexpected RPC internals must not reach the response).
+    // Error body is {error} only — no success-shape fields (the poller keeps
+    // the last known count on error; a fake unread_count would mask that).
     return NextResponse.json(
-      {
-        account: request.nextUrl.searchParams.get('account'),
-        unread_count: 0,
-        error: 'Failed to fetch unread notifications',
-      },
+      { error: 'Failed to fetch unread notifications' },
       { status: 500 }
     );
   }

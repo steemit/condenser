@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { readJsonWithLimit } from '@/lib/api/body-limit';
+import { clampNumberParam } from '@/lib/api/params';
 import {
   RATE_LIMITS,
   checkRateLimit,
@@ -51,18 +52,6 @@ const SORT_FIELDS = new Set(['created_at', 'payout']);
  */
 function escapeWildcard(value: string): string {
   return value.replace(/[\\*?]/g, (c) => `\\${c}`);
-}
-
-/** Parse and clamp an integer request param; non-numeric values fall back. */
-function clampIntParam(
-  raw: unknown,
-  fallback: number,
-  min: number,
-  max: number
-): number {
-  const parsed = typeof raw === 'number' && Number.isFinite(raw) ? raw : NaN;
-  if (Number.isNaN(parsed)) return fallback;
-  return Math.min(Math.max(Math.trunc(parsed), min), max);
 }
 
 export async function POST(request: NextRequest) {
@@ -129,7 +118,7 @@ export async function POST(request: NextRequest) {
     // back to the legacy default (no arbitrary ES field names, audit N-09).
     const sortField =
       typeof s === 'string' && SORT_FIELDS.has(s) ? s : 'created_at';
-    const offset = clampIntParam(from, 0, 0, MAX_FROM);
+    const offset = clampNumberParam(from, 0, 0, MAX_FROM);
 
     // Build search query
     const searchQuery: ElasticsearchQuery = {

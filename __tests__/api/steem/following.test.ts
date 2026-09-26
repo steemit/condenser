@@ -97,7 +97,7 @@ describe('GET /api/steem/following', () => {
     expect(res.status).toBe(200);
     // The route must hand the client canonical lowercase params: the Redis
     // cache key in lib/steem/client.ts is built from exactly these values.
-    expect(followingMock).toHaveBeenCalledWith('alice', 'bob', 'blog', 1000);
+    expect(followingMock).toHaveBeenCalledWith('alice', 'bob', 'blog');
   });
 
   it('accepts segmented account names with dots', async () => {
@@ -106,10 +106,10 @@ describe('GET /api/steem/following', () => {
       makeGetRequest('/api/steem/following', { account: 'alice-1.test' })
     );
     expect(res.status).toBe(200);
-    expect(followingMock).toHaveBeenCalledWith('alice-1.test', '', 'blog', 1000);
+    expect(followingMock).toHaveBeenCalledWith('alice-1.test', '', 'blog');
   });
 
-  it('passes account, start cursor, type and limit through (legacy shape)', async () => {
+  it('passes account, start cursor and type through (legacy shape)', async () => {
     followingMock.mockResolvedValue(FOLLOWING as Awaited<ReturnType<typeof getFollowing>>);
 
     const res = await GET(
@@ -117,15 +117,14 @@ describe('GET /api/steem/following', () => {
         account: 'alice',
         type: 'ignore',
         start: 'bob',
-        limit: '500',
       })
     );
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual(FOLLOWING);
-    expect(followingMock).toHaveBeenCalledWith('alice', 'bob', 'ignore', 500);
+    expect(followingMock).toHaveBeenCalledWith('alice', 'bob', 'ignore');
   });
 
-  it('defaults to the blog list with limit 1000 and no cursor', async () => {
+  it('defaults to the blog list with no cursor', async () => {
     followingMock.mockResolvedValue([]);
 
     const res = await GET(
@@ -133,7 +132,7 @@ describe('GET /api/steem/following', () => {
     );
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual([]);
-    expect(followingMock).toHaveBeenCalledWith('alice', '', 'blog', 1000);
+    expect(followingMock).toHaveBeenCalledWith('alice', '', 'blog');
   });
 
   it('returns an empty list when the RPC yields null', async () => {
@@ -146,22 +145,15 @@ describe('GET /api/steem/following', () => {
     expect(await res.json()).toEqual([]);
   });
 
-  it('clamps limit to [1, 1000] (audit N-21)', async () => {
+  it('ignores a client-sent limit (fixed 1000-entry pages, audit N-21)', async () => {
     followingMock.mockResolvedValue([]);
 
     await GET(
-      makeGetRequest('/api/steem/following', { account: 'alice', limit: '100000' })
+      makeGetRequest('/api/steem/following', { account: 'alice', limit: '500' })
     );
-    await GET(
-      makeGetRequest('/api/steem/following', { account: 'alice', limit: '-3' })
-    );
-    await GET(
-      makeGetRequest('/api/steem/following', { account: 'alice', limit: 'abc' })
-    );
-
-    expect(followingMock).toHaveBeenNthCalledWith(1, 'alice', '', 'blog', 1000);
-    expect(followingMock).toHaveBeenNthCalledWith(2, 'alice', '', 'blog', 1);
-    expect(followingMock).toHaveBeenNthCalledWith(3, 'alice', '', 'blog', 1000);
+    // No limit dimension: the RPC page size is fixed in lib/steem/client.ts
+    // and never derived from the query string.
+    expect(followingMock).toHaveBeenCalledWith('alice', '', 'blog');
   });
 
   it('returns 500 with a generic message on RPC failure (audit N-20)', async () => {

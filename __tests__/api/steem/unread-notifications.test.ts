@@ -99,15 +99,17 @@ describe('GET /api/steem/unread-notifications', () => {
     expect(getUnreadMock).toHaveBeenCalledWith({ account: 'Alice' });
   });
 
-  it('returns 500 with a generic message on RPC failure (audit N-20)', async () => {
+  it('returns 500 with a bare {error} body on RPC failure (audit N-20)', async () => {
     getUnreadMock.mockRejectedValue(new Error('boom'));
 
     const res = await GET(
       makeGetRequest('/api/steem/unread-notifications', { account: 'alice' })
     );
     expect(res.status).toBe(500);
-    const body = await res.json();
-    expect(body.error).toBe('Failed to fetch unread notifications');
-    expect(body.unread_count).toBe(0);
+    // No success-shape fields: the poller keeps the last known count on
+    // error; a fake unread_count would mask that.
+    expect(await res.json()).toEqual({
+      error: 'Failed to fetch unread notifications',
+    });
   });
 });

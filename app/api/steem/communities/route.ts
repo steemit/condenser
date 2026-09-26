@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserSubscriptions, listCommunities } from '@/lib/steem/client';
+import { clampIntParam } from '@/lib/api/params';
 
 // Param bounds (audit N-21): (query, sort, limit) feed the server cache key
 // in lib/steem/client.ts listCommunities(), so each component must be
@@ -16,18 +17,6 @@ const MAX_LIMIT = 100;
 const DEFAULT_LIMIT = 20;
 // Sort options actually exposed by the communities explore page.
 const COMMUNITY_SORTS = new Set(['rank', 'subs', 'new']);
-
-/** Parse and clamp an integer query param; non-numeric values fall back. */
-function clampIntParam(
-  raw: string | null,
-  fallback: number,
-  min: number,
-  max: number
-): number {
-  const parsed = parseInt(raw ?? '', 10);
-  if (!Number.isFinite(parsed)) return fallback;
-  return Math.min(Math.max(parsed, min), max);
-}
 
 export async function GET(request: NextRequest) {
   try {

@@ -137,9 +137,21 @@ describe('lib/api/body-limit', () => {
       if (!result.ok) expect(result.response.status).toBe(413);
     });
 
-    it('rethrows malformed JSON so the route catch keeps its error shape', async () => {
+    it('answers 400 {error: "invalid JSON"} for malformed JSON', async () => {
       const request = chunkedRequest(['not-json']);
-      await expect(readJsonWithLimit(request)).rejects.toThrow(SyntaxError);
+      const result = await readJsonWithLimit(request);
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.response.status).toBe(400);
+        expect(await result.response.json()).toEqual({ error: 'invalid JSON' });
+      }
+    });
+
+    it('treats an empty body as malformed JSON (JSON.parse("") throws)', async () => {
+      const request = new Request('http://localhost/api/x', { method: 'POST' });
+      const result = await readJsonWithLimit(request);
+      expect(result.ok).toBe(false);
+      if (!result.ok) expect(result.response.status).toBe(400);
     });
   });
 });

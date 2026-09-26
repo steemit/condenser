@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { NextRequest } from 'next/server';
-import { makePostRequest } from '@/__tests__/helpers/request';
+import { makePostRequest, makeRawPostRequest } from '@/__tests__/helpers/request';
 
 vi.mock('@/lib/steem/client', () => ({
   callSteemApi: vi.fn(),
@@ -92,7 +91,7 @@ describe('POST /api/steem/overseer', () => {
   });
 
   it('drops malformed JSON payloads with a 204 (never surfaces analytics errors)', async () => {
-    const res = await POST(makeRawRequest('not-json'));
+    const res = await POST(makeRawPostRequest('/api/steem/overseer', 'not-json'));
     expect(res.status).toBe(204);
     expect(callSteemApiMock).not.toHaveBeenCalled();
   });
@@ -127,12 +126,3 @@ describe('POST /api/steem/overseer', () => {
     expect(callSteemApiMock).not.toHaveBeenCalled();
   });
 });
-
-/** POST request with a raw (non-JSON) string body. */
-function makeRawRequest(body: string) {
-  return new NextRequest('http://localhost/api/steem/overseer', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body,
-  });
-}

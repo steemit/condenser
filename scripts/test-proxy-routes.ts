@@ -33,9 +33,19 @@ const testCases = [
   { path: '/tos', expected: 'next', description: 'Terms of Service page (reserved, pass-through to app/(main)/tos)' },
   
   // Category + user + permlink patterns
-  { path: '/bitcoin/@alice/my-post', expected: 'rewrite:/post/bitcoin/alice/my-post', description: 'Category post' },
-  { path: '/trending/@bob/another-post', expected: 'next', description: 'Reserved category (trending)' },
-  { path: '/Trending/@bob/another-post', expected: 'next', description: 'Reserved category match is case-insensitive' },
+  // Legacy ResolveRoute.js Post regex (<tag>/<account>/<permlink>, tag =
+  // [\w.-]{1,32}) has NO reserved-word check, and legacy static checks are
+  // exact-path (path === '/tags'), so reserved/sort words as the category
+  // still resolve to the Post page.
+  { path: '/bitcoin/@alice/my-post', expected: 'rewrite:/post/bitcoin/alice/my-post', description: 'Category post (non-reserved control)' },
+  { path: '/trending/@bob/another-post', expected: 'rewrite:/post/trending/bob/another-post', description: 'Reserved word "trending" as category still renders Post (legacy parity)' },
+  { path: '/Trending/@bob/another-post', expected: 'rewrite:/post/Trending/bob/another-post', description: 'Reserved category: rewrite keeps original casing' },
+  { path: '/about/@alice/my-post', expected: 'rewrite:/post/about/alice/my-post', description: 'Reserved category "about" renders Post (legacy parity)' },
+  { path: '/welcome/@alice/my-post', expected: 'rewrite:/post/welcome/alice/my-post', description: 'Reserved category "welcome" renders Post (legacy parity)' },
+  { path: '/hot/@alice/my-post', expected: 'rewrite:/post/hot/alice/my-post', description: 'Sort word "hot" as category renders Post (legacy parity)' },
+  { path: '/faq/@alice/my-post', expected: 'rewrite:/post/faq/alice/my-post', description: 'Reserved category "faq" renders Post (legacy parity)' },
+  { path: '/tags/@alice/my-post', expected: 'rewrite:/post/tags/alice/my-post', description: '"tags" as category renders Post (legacy /tags is exact-path only)' },
+  { path: '/promoted/@alice/my-post', expected: 'rewrite:/post/promoted/alice/my-post', description: 'Sort word "promoted" (not in RESERVED_ROUTES) as category renders Post' },
   
   // User profile patterns
   { path: '/@alice', expected: 'rewrite:/user/alice', description: 'User profile root' },

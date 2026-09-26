@@ -5,9 +5,14 @@ import { NextResponse } from "next/server";
  * server polled an external market endpoint (STEEM_MARKET_ENDPOINT with a
  * Token-auth header), cached it in-process with a 2h TTL, and injected it
  * into every SSR render. Here the client fetches this route instead; the
- * route does the same fetch+cache server-side. Unset endpoint means the
- * module stays hidden (legacy stored empty data and SteemMarket rendered
- * null).
+ * route does the same fetch+cache server-side.
+ *
+ * Error semantics: "not configured" (endpoint env unset) answers 503, an
+ * upstream failure with no cached copy answers 500, and valid data answers
+ * 200 — the three states stay distinguishable instead of all collapsing
+ * into a 200 with empty data. A failure with a stale copy still serves it
+ * (stale-while-error, like lib/cache/server-cache.ts). The consumer hides
+ * the module on any non-2xx, matching legacy's empty-data rendering.
  */
 
 interface Timepoint {
@@ -35,8 +40,8 @@ let cache: { data: MarketData; at: number } | null = null;
 let inflight: Promise<MarketData> | null = null;
 
 async function fetchMarket(): Promise<MarketData> {
-  const endpoint = process.env.STEEM_MARKET_ENDPOINT;
-  if (!endpoint) return {};
+  // Only reached after GET's not-configured gate; the endpoint is set.
+  const endpoint = process.env.STEEM_MARKET_ENDPOINT as string;
   const headers: Record<string, string> = {};
   const token = process.env.STEEM_MARKET_TOKEN;
   if (token) headers.Authorization = `Token ${token}`;
@@ -56,12 +61,6 @@ function getMarket(): Promise<MarketData> {
         cache = { data, at: Date.now() };
         return data;
       })
-      .catch((err) => {
-        // Serve stale past TTL rather than dropping the module; empty on
-        // the very first failure like legacy storeEmpty().
-        console.error("Steem market fetch failed:", err instanceof Error ? err.message : err);
-        return cache?.data ?? {};
-      })
       .finally(() => {
         inflight = null;
       });
@@ -70,5 +69,27 @@ function getMarket(): Promise<MarketData> {
 }
 
 export async function GET() {
-  return NextResponse.json({ data: await getMarket() });
+  if (!process.env.STEEM_MARKET_ENDPOINT) {
+    return NextResponse.json(
+      { error: "Market endpoint not configured" },
+      { status: 503 }
+    );
+  }
+  try {
+    return NextResponse.json({ data: await getMarket() });
+  } catch (error: unknown) {
+    console.error(
+      "Steem market fetch failed:",
+      error instanceof Error ? error.message : error
+    );
+    // Upstream failure: serve the stale copy when one exists; otherwise the
+    // outage is explicit (500) rather than masked as empty data.
+    if (cache) {
+      return NextResponse.json({ data: cache.data });
+    }
+    return NextResponse.json(
+      { error: "Failed to fetch market data" },
+      { status: 500 }
+    );
+  }
 }

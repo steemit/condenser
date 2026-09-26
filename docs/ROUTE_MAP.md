@@ -36,6 +36,7 @@ PrimaryNavigation, FeedSidebarWidgets and `lib/analytics/route-tags.ts`.
 | `/<a>/<b>/<c>` without `@` (e.g. `/bitcoin/alice/my-post`) | `NotFound` | Rewrite → `/404` (three-segment invalid-pattern guard), unless first segment is reserved or second starts with `@` | `app/(main)/404/page.tsx` | Implemented |
 | `/<a>/<b>` without `@`, non-sort (e.g. `/alice/my-post`) | `NotFound` | Rewrite → `/404` (two-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
 | `/<segment>` without `@`, non-sort, non-reserved (e.g. `/alice`) | `NotFound` | Rewrite → `/404` (single-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
+| Direct access to internal rewrite targets: `/post/<a>/<b>/<c>`, `/post-no-category/<a>/<b>`, `/user/<a>[/<b>]` (no `@` segment) | `NotFound` (legacy ResolveRoute.js has no `/post`, `/post-no-category` or `/user` routes; its regexes match at most three segments with an @-account) | Rewrite → `/404` (internal-target guard, after the `/<sort>` branch) — paths containing an `@` segment are exempt so e.g. `/post/@user/permlink/` still normalizes through branch 2 | `app/(main)/404/page.tsx` | Implemented |
 | `/%40username/...` | (same as `@` variants) | `%40` is decoded to `@` before matching (the `%40` decode step at the top of `proxy()`) | same as the corresponding `@` routes | Implemented |
 
 `SORT_TYPES` (const in `lib/routes.ts`, imported by `proxy.ts`): `hot`,

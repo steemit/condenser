@@ -163,6 +163,23 @@ export function proxy(request: NextRequest) {
     }
   }
 
+  // Internal rewrite targets are not addressable. Legacy has no /post,
+  // /post-no-category or /user routes — its ResolveRoute.js regexes match
+  // at most three segments with an @-prefixed account, so /post/a/b/c,
+  // /post-no-category/a/b and /user/alice were all NotFound. Anything under
+  // these prefixes that reaches this point was not consumed by the rewrites
+  // above and must 404 instead of hitting the underlying App Router routes
+  // (which would render a second, uncanonical URL for the same content).
+  // Paths containing an @-segment are exempt: they are not internal-target
+  // forms — e.g. /post/@user/permlink/ still relies on Next's trailing-slash
+  // normalization to re-enter branch 2 as a legacy Post URL.
+  const internalTargetMatch = pathname.match(
+    /^\/(?:post|post-no-category|user)(?:\/|$)/
+  );
+  if (internalTargetMatch && !pathname.includes('/@')) {
+    return NextResponse.rewrite(new URL('/404', request.url));
+  }
+
   // Catch invalid patterns that should be 404 (following legacy behavior)
   
   // Pattern: /category/username/permlink (missing @)

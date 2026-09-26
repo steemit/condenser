@@ -52,3 +52,24 @@ export const PROFILE_SECTIONS: readonly string[] = [
 export const SORT_TYPES: readonly string[] = [
   'hot', 'trending', 'promoted', 'payout', 'payout_comments', 'muted', 'created',
 ];
+
+/**
+ * True for post detail URLs in their public (browser) form:
+ * /<category>/@user/<permlink> or /@user/<permlink> (where the second
+ * segment is NOT a profile section — /@user/blog is a profile page).
+ *
+ * Shared by PrimaryNavigation (post-page nav context) and
+ * FeedSidebarWidgets (post-scoped rail ads), which previously kept two
+ * hand-rolled regex copies: the sidebar's was unanchored and matched
+ * profile-section URLs like /@user/feed, and both carried a defensive
+ * branch for internal rewrite targets (/post/..., /post-no-category/...)
+ * that can no longer appear in a browser URL — proxy.ts 404s direct
+ * access to those, and usePathname() always reports the pre-rewrite URL.
+ */
+export function isPostPathname(pathname: string): boolean {
+  // /category/@user/permlink (exactly three segments, optional slash)
+  if (/^\/[^/]+\/@[^/]+\/[^/]+\/?$/.test(pathname)) return true;
+  // /@user/permlink — anything that is not a profile section
+  const m = pathname.match(/^\/@[^/]+\/([^/]+)\/?$/);
+  return Boolean(m && !PROFILE_SECTIONS.includes(m[1].toLowerCase()));
+}

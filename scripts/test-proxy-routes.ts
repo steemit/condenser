@@ -73,6 +73,17 @@ const testCases = [
   { path: '/foo/bar/baz', expected: '404', description: 'Three segments without @ and no reserved word' },
   { path: '/alice/my-post', expected: '404', description: 'No @ prefix for user' },
   { path: '/alice', expected: '404', description: 'Single segment without @' },
+
+  // Internal rewrite targets are not addressable (legacy parity: legacy had
+  // no /post, /post-no-category or /user routes — ResolveRoute.js matches at
+  // most three segments with an @-account, so these were all NotFound).
+  { path: '/post/a/b/c', expected: '404', description: 'Direct access to /post internal target 404s (legacy: 4-segment path has no route)' },
+  { path: '/user/alice', expected: '404', description: 'Direct access to /user internal target 404s' },
+  { path: '/user/alice/blog', expected: '404', description: 'Direct access to /user section target 404s' },
+  { path: '/post-no-category/a/b', expected: '404', description: 'Direct access to /post-no-category internal target 404s' },
+  { path: '/post', expected: '404', description: 'Bare /post prefix 404s' },
+  { path: '/post/@alice/my-post', expected: 'rewrite:/post/post/alice/my-post', description: '"post" as category still renders Post (branch 2 consumes it before the internal-target guard)' },
+  { path: '/post/@alice/my-post/', expected: 'next', description: 'Trailing-slash post URL under /post passes the guard (@-segment) → Next 308 normalization re-enters branch 2' },
   
   // Reserved routes as usernames (should be 404)
   { path: '/@trending', expected: '404', description: 'Reserved route as username' },

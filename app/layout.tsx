@@ -76,6 +76,21 @@ export default async function RootLayout({
   // so they need the explicit nonce attribute.
   const nonce = (await headers()).get('x-nonce') ?? undefined;
 
+  // Dev canary: when the GA/upload inline scripts are emitted, a missing
+  // nonce means this document rendered outside the proxy matcher (which is
+  // the only thing that sets x-nonce) — the CSP would block the scripts and
+  // GA/uploads would silently stop working. Warn in dev only; production
+  // misconfiguration is caught by the proxy tests instead.
+  if (
+    process.env.NODE_ENV === 'development' &&
+    (gaId || uploadImageUrl) &&
+    !nonce
+  ) {
+    console.warn(
+      '[layout] GA/upload inline scripts rendered without a CSP nonce (x-nonce header missing) — they will be blocked when a CSP is enforced. Expected only for documents served outside the proxy.'
+    );
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body

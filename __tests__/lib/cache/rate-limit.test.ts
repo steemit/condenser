@@ -93,7 +93,8 @@ describe('lib/cache/rate-limit', () => {
     });
 
     it('allows while the counter is within the limit and reports remaining', async () => {
-      redisMocks.eval.mockResolvedValue([5, 42]);
+      // Full 3-tuple the Lua script returns: [count, ttl, first_blocked].
+      redisMocks.eval.mockResolvedValue([5, 42, 0]);
 
       const result = await checkRateLimit(requestWithHeaders({}), {
         key: 'auth:challenge',

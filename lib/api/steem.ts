@@ -10,6 +10,11 @@
  */
 
 import { cachedFetch, HttpError } from '@/lib/cache/client-fetch';
+import type { Post } from '@/types/steem';
+
+// Canonical domain types live in types/steem.ts; re-exported here so the
+// existing `import { Post } from '@/lib/api/steem'` call sites keep working.
+export type { Post };
 
 /**
  * Client-side staleMs / maxAgeMs per data type.
@@ -28,45 +33,6 @@ const SWR = {
   communityRoles: { staleMs: 30_000, maxAgeMs: 300_000 },
   notifications: { staleMs: 10_000, maxAgeMs: 30_000 },
 } as const;
-
-export interface Post {
-  author: string;
-  permlink: string;
-  category: string;
-  title: string;
-  body: string;
-  created: string;
-  net_rshares?: string;
-  children?: number;
-  // Bridge API returns only {voter, rshares}; rshares' sign is the vote
-  // direction ("0" = cleared vote). weight/percent exist only on the
-  // optimistic Redux entries written by globalSlice.voted.
-  active_votes?: Array<{
-    voter: string;
-    rshares?: string | number;
-    weight?: number;
-    percent?: number;
-  }>;
-  pending_payout_value?: string;
-  // Legacy bridge fields read by cards / voting UI.
-  stats?: {
-    gray?: boolean;
-    is_pinned?: boolean;
-    total_votes?: number;
-    [key: string]: unknown;
-  };
-  author_reputation?: string | number;
-  last_update?: string;
-  community_title?: string;
-  payout_at?: string;
-  author_payout_value?: string;
-  curator_payout_value?: string;
-  json_metadata?: {
-    tags?: string[];
-    [key: string]: unknown;
-  };
-  [key: string]: unknown;
-}
 
 export interface FetchPostsParams {
   order:

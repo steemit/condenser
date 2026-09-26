@@ -1,25 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { lastreadTimeMs } from '@/lib/utils/lastread';
+import type { Post, Vote } from '@/types/steem';
 
 // Types
-export interface Vote {
-  voter: string;
-  weight: number;
-  rshares?: string;
-  percent?: number;
-  time?: string;
-  [key: string]: unknown;
-}
+export type { Vote };
 
-export interface Post {
-  author: string;
-  permlink: string;
+/**
+ * Redux content-cache entry: the canonical wire Post plus client-only UI
+ * state (collapse flag; reply keys in tree order). Derived so the wire shape
+ * itself stays owned by types/steem.ts.
+ */
+export type ContentPost = Post & {
   collapsed?: boolean;
   replies?: string[];
-  active_votes?: Vote[];
-  [key: string]: unknown;
-}
+};
 
 export interface Account {
   name: string;
@@ -56,7 +51,7 @@ interface DialogEntry {
 
 export interface GlobalState {
   status: Record<string, unknown>;
-  content: Record<string, Post>;
+  content: Record<string, ContentPost>;
   accounts: Record<string, Account>;
   headers: Record<string, unknown>;
   notifications: Record<string, Notification> & {
@@ -143,7 +138,7 @@ const globalSlice = createSlice({
     setCollapsed: (state, action: PayloadAction<{ post: string; collapsed: boolean }>) => {
       const { post, collapsed } = action.payload;
       if (!state.content[post]) {
-        state.content[post] = {} as Post;
+        state.content[post] = {} as ContentPost;
       }
       state.content[post].collapsed = collapsed;
     },
@@ -351,11 +346,14 @@ const globalSlice = createSlice({
 
       if (parentKey && replyKey) {
         if (!state.content[parentKey]) {
+          // Reply-key stub: a deliberately partial entry — linkReply only
+          // needs the reply list; the wire fields arrive with the next
+          // receiveContent. (Same stub the pre-convergence slice built.)
           state.content[parentKey] = {
             author: parent_author,
             permlink: parent_permlink,
             replies: [],
-          } as Post;
+          } as unknown as ContentPost;
         }
         if (!state.content[parentKey].replies) {
           state.content[parentKey].replies = [];

@@ -12,11 +12,14 @@ import {
   summaryThumbnail,
   reputation,
 } from "@/lib/extract-content";
+import { hasNsfwTag, normalizeNsfwPref } from "@/lib/nsfw";
+import NsfwWarning from "@/components/elements/NsfwWarning";
 import Userpic from "@/components/elements/Userpic";
 import TimeAgo from "@/components/elements/TimeAgo";
 import Reputation from "@/components/elements/Reputation";
 import Reblog from "@/components/elements/Reblog";
 import Voting from "@/components/elements/Voting";
+import { useAppSelector } from "@/store/hooks";
 import { cn } from "@/lib/utils";
 
 interface PostSummaryProps {
@@ -33,9 +36,12 @@ interface PostSummaryProps {
 export default function PostSummary({ post, order }: PostSummaryProps) {
   const [revealNsfw, setRevealNsfw] = useState(false);
   const t = useTranslations();
+  // Legacy PostsList connect: userPreferences.nsfwPref || 'warn'.
+  const nsfwPref = normalizeNsfwPref(
+    useAppSelector((s) => s.app.user_preferences.nsfwPref)
+  );
 
-  const tags = post.json_metadata?.tags || [];
-  const isNsfw = tags.includes("nsfw");
+  const isNsfw = hasNsfwTag(post);
   const gray = Boolean(post.stats?.gray);
   const isPinned = Boolean(post.stats?.is_pinned);
   const powerUp100 = post.percent_steem_dollars === 0;
@@ -61,23 +67,17 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
     : [];
   const totalVotes = post.stats?.total_votes ?? post.active_votes?.length ?? 0;
 
-  // NSFW warn preference: show a warning bar until the user reveals it.
-  if (isNsfw && !revealNsfw) {
+  // Legacy PostSummary NSFW handling:
+  // - nsfwPref 'hide': the card is dropped from the feed entirely.
+  // - nsfwPref 'warn': placeholder card until revealed (per-card state).
+  // - nsfwPref 'show' (or revealed): full card with the nsfw title flag.
+  if (isNsfw && nsfwPref === "hide") {
+    return null;
+  }
+  if (isNsfw && nsfwPref === "warn" && !revealNsfw) {
     return (
       <li className="list-none rounded-[6px] border border-border bg-card px-2 py-3 min-[760px]:px-2 min-[760px]:py-1">
-        <div className="py-2 text-[15px] text-muted-foreground">
-          {t("postsummary_jsx.this_post_is_nsfw")}{" "}
-          <span className="font-semibold text-[#ff0264]">nsfw</span>.{" "}
-          <button
-            type="button"
-            className="text-accent-foreground underline"
-            onClick={() => setRevealNsfw(true)}
-          >
-            {t("postsummary_jsx.reveal_it")}
-          </button>{" "}
-          {t("g.or")} {t("postsummary_jsx.adjust_your")}{" "}
-          {t("postsummary_jsx.display_preferences")}.
-        </div>
+        <NsfwWarning onReveal={() => setRevealNsfw(true)} />
       </li>
     );
   }

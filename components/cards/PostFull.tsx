@@ -1,12 +1,15 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { Clock, Link2, MessageSquare } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Post } from '@/lib/api/steem';
 import { reputation } from '@/lib/extract-content';
+import { hasNsfwTag, normalizeNsfwPref } from '@/lib/nsfw';
 import MarkdownViewer from '@/components/elements/MarkdownViewer';
+import NsfwWarning from '@/components/elements/NsfwWarning';
 import Voting from '@/components/elements/Voting';
 import Reblog from '@/components/elements/Reblog';
 import ShareMenu from '@/components/elements/ShareMenu';
@@ -14,6 +17,7 @@ import TagList from '@/components/elements/TagList';
 import Userpic from '@/components/elements/Userpic';
 import TimeAgo from '@/components/elements/TimeAgo';
 import Reputation from '@/components/elements/Reputation';
+import { useAppSelector } from '@/store/hooks';
 
 interface PostFullProps {
   post: Post;
@@ -27,6 +31,15 @@ interface PostFullProps {
  */
 export default function PostFull({ post }: PostFullProps) {
   const t = useTranslations();
+  const [revealNsfw, setRevealNsfw] = useState(false);
+  // Extension beyond legacy (which gated only feed cards, see
+  // PostSummary.jsx): on the post page an nsfw post under 'warn'/'hide'
+  // shows a reveal interstitial instead of the body, so the setting stays
+  // meaningful on direct links too. 'show' renders the body untouched.
+  const nsfwPref = normalizeNsfwPref(
+    useAppSelector((s) => s.app.user_preferences.nsfwPref)
+  );
+  const gateNsfwBody = hasNsfwTag(post) && nsfwPref !== 'show' && !revealNsfw;
   const tags = post.json_metadata?.tags || [];
   const postUrl = `/${post.category}/@${post.author}/${post.permlink}`;
   const rep = reputation(post.author_reputation);
@@ -110,15 +123,19 @@ export default function PostFull({ post }: PostFullProps) {
       </div>
 
       <div className="PostFull__body mx-auto max-w-[54rem] py-4" itemProp="articleBody">
-        <MarkdownViewer
-          text={post.body || ''}
-          large
-          highQualityPost={highQualityPost}
-          noImage={noImage}
-        />
+        {gateNsfwBody ? (
+          <NsfwWarning onReveal={() => setRevealNsfw(true)} />
+        ) : (
+          <MarkdownViewer
+            text={post.body || ''}
+            large
+            highQualityPost={highQualityPost}
+            noImage={noImage}
+          />
+        )}
       </div>
 
-      <TagList tags={tags} category={post.category} />
+      {!gateNsfwBody && <TagList tags={tags} category={post.category} />}
 
       <div className="PostFull__footer mx-auto flex max-w-[54rem] flex-wrap items-center justify-between gap-2 text-[94%] leading-[2rem]">
         <div>

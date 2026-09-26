@@ -3,6 +3,7 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import appReducer from '@/store/slices/appSlice';
 import userReducer from '@/store/slices/userSlice';
 import globalReducer from '@/store/slices/globalSlice';
 import { IntlWrapper } from '@/__tests__/helpers/i18n';
@@ -31,8 +32,9 @@ function makePost(author: string, permlink: string) {
 }
 
 function renderFeed(sort: string) {
+  // PostSummary reads app.user_preferences (nsfwPref) — include the slice.
   const store = configureStore({
-    reducer: { user: userReducer, global: globalReducer },
+    reducer: { app: appReducer, user: userReducer, global: globalReducer },
   });
   return render(
     <Provider store={store}>

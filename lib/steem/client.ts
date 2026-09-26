@@ -15,6 +15,35 @@ import {
   type ProfileLike,
 } from '@/lib/steem/pending-overlay';
 
+/**
+ * Narrowed view of the SDK Api surface this client uses.
+ *
+ * steem-js 1.x generates part of its Api methods at runtime from the RPC
+ * methods registry (getFollowingAsync, getDynamicGlobalPropertiesAsync, ...)
+ * — those members only reach TypeScript through the Api class index
+ * signature as `unknown`. Api.call's declared `params: unknown[]` also does
+ * not match the params OBJECT that bridge/appbase methods take (the runtime
+ * forwards the value verbatim either way). Both gaps are bridged with this
+ * one narrowing so every call site below is precisely typed; it introduces
+ * no runtime indirection (same object reference).
+ */
+const api = steem.api as unknown as {
+  setOptions(options: Record<string, unknown>): void;
+  call(
+    method: string,
+    params: unknown,
+    callback: (err: unknown, data: unknown) => void
+  ): void;
+  getAccountsAsync(usernames: string[]): Promise<unknown[]>;
+  getDynamicGlobalPropertiesAsync(): Promise<unknown>;
+  getFollowingAsync(
+    account: string,
+    start: string,
+    type: string,
+    limit: number
+  ): Promise<unknown[]>;
+};
+
 // Initialize Steem API configuration
 let isInitialized = false;
 
@@ -54,7 +83,7 @@ export function initializeSteemApi() {
   const chainId = process.env.CHAIN_ID || '0000000000000000000000000000000000000000000000000000000000000000';
   const addressPrefix = process.env.ADDRESS_PREFIX || 'STM';
 
-  steem.api.setOptions({
+  api.setOptions({
     url: steemdUrl,
     retry: {
       retries: 10,
@@ -79,7 +108,7 @@ export async function callBridge<T = unknown>(method: string, params: unknown, p
   initializeSteemApi();
 
   return new Promise<T>((resolve, reject) => {
-    steem.api.call(pre + method, params, (err: unknown, data: unknown) => {
+    api.call(pre + method, params, (err: unknown, data: unknown) => {
       if (err) {
         console.error('Steem API call error:', {
           method: pre + method,
@@ -102,7 +131,7 @@ export async function callSteemApi<T = unknown>(method: string, params: unknown)
   initializeSteemApi();
 
   return new Promise<T>((resolve, reject) => {
-    steem.api.call(method, params, (err: unknown, data: unknown) => {
+    api.call(method, params, (err: unknown, data: unknown) => {
       if (err) {
         console.error('Steem API call error:', {
           method,
@@ -136,7 +165,7 @@ export async function checkSteemNodeHealth(): Promise<{
   try {
     const start = Date.now();
     initializeSteemApi();
-    const props = (await steem.api.getDynamicGlobalPropertiesAsync()) as {
+    const props = (await api.getDynamicGlobalPropertiesAsync()) as {
       head_block_number?: number;
     };
     const latency = Date.now() - start;
@@ -235,7 +264,7 @@ export async function getDiscussion(params: {
  */
 export async function getAccount(username: string): Promise<unknown | null> {
   initializeSteemApi();
-  const accounts = await steem.api.getAccountsAsync([username]);
+  const accounts = await api.getAccountsAsync([username]);
   return accounts && accounts.length > 0 ? accounts[0] : null;
 }
 
@@ -244,7 +273,7 @@ export async function getAccount(username: string): Promise<unknown | null> {
  */
 export async function getAccounts(usernames: string[]): Promise<unknown[]> {
   initializeSteemApi();
-  return steem.api.getAccountsAsync(usernames);
+  return api.getAccountsAsync(usernames);
 }
 
 /**
@@ -257,7 +286,7 @@ export async function getDynamicGlobalProperties(): Promise<unknown> {
     CACHE_TTL.dynamicGlobalProperties.staleTtl,
     async () => {
       initializeSteemApi();
-      return steem.api.getDynamicGlobalPropertiesAsync();
+      return api.getDynamicGlobalPropertiesAsync();
     }
   );
   return unwrap(result);
@@ -279,7 +308,7 @@ export async function getFollowing(account: string, start: string, type: string)
   const limit = FOLLOWING_PAGE_LIMIT;
   const result = await withCache(key, CACHE_TTL.followers.ttl, CACHE_TTL.followers.staleTtl, async () => {
     initializeSteemApi();
-    return steem.api.getFollowingAsync(account, start, type, limit);
+    return api.getFollowingAsync(account, start, type, limit);
   });
   return unwrap(result);
 }

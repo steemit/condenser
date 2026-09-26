@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { proxifyImageUrl } from '@/lib/media/proxify-url';
 import { safeCoverImageUrl, safeProfileWebsite } from '@/lib/profile-metadata';
-import type { ProfileMetadata } from '@/types/steem';
+import type { ProfileMetadata, UserProfileStats } from '@/types/steem';
 import Userpic from '@/components/elements/Userpic';
 import Follow from '@/components/elements/Follow';
 import TimeAgo from '@/components/elements/TimeAgo';
@@ -16,12 +16,9 @@ interface UserProfileHeaderProps {
   /** Editable profile sub-object (bridge metadata.profile). */
   profile?: ProfileMetadata | null;
   currentUser?: string;
-  stats?: {
-    rank: number;
-    following: number;
-    followers: number;
-    sp?: number;
-  };
+  /** Bridge get_profile stats block, derived from the canonical type;
+   *  `sp` is the optional derived steem-power figure. */
+  stats?: UserProfileStats & { sp?: number };
   reputation?: string;
   postCount?: number;
   created?: string;

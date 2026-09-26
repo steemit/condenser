@@ -14,7 +14,8 @@ import type { Account, Post, UserProfile } from '@/types/steem';
 
 // Canonical domain types live in types/steem.ts; re-exported here so the
 // existing `import { Post, UserProfile } from '@/lib/api/steem'` call sites
-// keep working.
+// keep working. Transitional compatibility only — once all call sites import
+// from @/types/steem directly, remove this re-export.
 export type { Post, UserProfile };
 
 /**

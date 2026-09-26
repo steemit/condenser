@@ -33,7 +33,6 @@ export interface Vote {
   rshares?: string | number;
   weight?: number;
   percent?: number;
-  time?: string;
   [key: string]: unknown;
 }
 

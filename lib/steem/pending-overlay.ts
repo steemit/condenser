@@ -42,7 +42,7 @@ export interface PendingProfile {
  *  derived from the canonical UserProfile. */
 export type ProfileLike = Pick<UserProfile, 'metadata'> & {
   [key: string]: unknown;
-}
+};
 
 /**
  * Subset of the canonical Post the overlay reads and merges, derived (not

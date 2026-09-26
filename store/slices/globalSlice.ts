@@ -3,9 +3,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { lastreadTimeMs } from '@/lib/utils/lastread';
 import type { Account, Post, Vote } from '@/types/steem';
 
-// Types
-export type { Vote };
-
 /**
  * Redux account cache entry: the canonical wire Account plus witness_votes
  * as a client-side Set (legacy stored the voted-witness set, not the chain's
@@ -24,6 +21,14 @@ export type ContentPost = Post & {
   collapsed?: boolean;
   replies?: string[];
 };
+
+/**
+ * Reply-key stub linkReply writes when the parent post is not cached yet:
+ * a deliberately partial entry — only the reply list is used until the next
+ * receiveContent delivers the wire fields (received content merges over
+ * this stub). (Same stub the pre-convergence slice built.)
+ */
+type ReplyStub = Pick<ContentPost, 'author' | 'permlink' | 'replies'>;
 
 export interface NotificationItem {
   [key: string]: unknown;
@@ -349,14 +354,15 @@ const globalSlice = createSlice({
 
       if (parentKey && replyKey) {
         if (!state.content[parentKey]) {
-          // Reply-key stub: a deliberately partial entry — linkReply only
-          // needs the reply list; the wire fields arrive with the next
-          // receiveContent. (Same stub the pre-convergence slice built.)
-          state.content[parentKey] = {
+          const stub: ReplyStub = {
             author: parent_author,
             permlink: parent_permlink,
             replies: [],
-          } as unknown as ContentPost;
+          };
+          // Single controlled widening of the deliberately partial stub
+          // (see ReplyStub): the missing wire fields arrive with the next
+          // receiveContent, which merges over this entry.
+          state.content[parentKey] = stub as ContentPost;
         }
         if (!state.content[parentKey].replies) {
           state.content[parentKey].replies = [];

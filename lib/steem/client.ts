@@ -5,7 +5,7 @@
  */
 
 // Import steem object directly as a named export
-import { steem } from '@steemit/steem-js';
+import { steem, type Api } from '@steemit/steem-js';
 import { withCache, type WithCacheResult } from '@/lib/cache/server-cache';
 import {
   applyDiscussionOverlays,
@@ -18,23 +18,30 @@ import {
 /**
  * Narrowed view of the SDK Api surface this client uses.
  *
- * steem-js 1.x generates part of its Api methods at runtime from the RPC
- * methods registry (getFollowingAsync, getDynamicGlobalPropertiesAsync, ...)
- * — those members only reach TypeScript through the Api class index
- * signature as `unknown`. Api.call's declared `params: unknown[]` also does
- * not match the params OBJECT that bridge/appbase methods take (the runtime
- * forwards the value verbatim either way). Both gaps are bridged with this
- * one narrowing so every call site below is precisely typed; it introduces
- * no runtime indirection (same object reference).
+ * Members the Api class already declares — setOptions(ApiOptions) and
+ * getAccountsAsync(Promise<ExtendedAccount[]>) — are borrowed verbatim from
+ * the SDK type via Pick. The rest of the view covers the three real gaps in
+ * the steem-js 1.x d.ts:
+ *
+ * 1. call() declares `params: unknown[]`, but bridge/appbase methods take a
+ *    params OBJECT (the runtime forwards the value verbatim either way).
+ * 2. getFollowingAsync is generated at runtime from the RPC methods
+ *    registry (follow_api.get_following) and only reaches TypeScript
+ *    through the Api index signature as `unknown`.
+ * 3. getDynamicGlobalPropertiesAsync is registry-generated too; the Api
+ *    class re-exposes only the four getAccounts* members of
+ *    ApiMethodSignatures, so it is also `unknown` through the index
+ *    signature despite being declared in that interface.
+ *
+ * The widening assertion introduces no runtime indirection (same object
+ * reference). Pinned by __tests__/lib/steem/sdk-surface.test.ts.
  */
-const api = steem.api as unknown as {
-  setOptions(options: Record<string, unknown>): void;
+type ApiView = Pick<Api, 'setOptions' | 'getAccountsAsync'> & {
   call(
     method: string,
     params: unknown,
     callback: (err: unknown, data: unknown) => void
   ): void;
-  getAccountsAsync(usernames: string[]): Promise<unknown[]>;
   getDynamicGlobalPropertiesAsync(): Promise<unknown>;
   getFollowingAsync(
     account: string,
@@ -43,6 +50,8 @@ const api = steem.api as unknown as {
     limit: number
   ): Promise<unknown[]>;
 };
+
+const api = steem.api as unknown as ApiView;
 
 // Initialize Steem API configuration
 let isInitialized = false;

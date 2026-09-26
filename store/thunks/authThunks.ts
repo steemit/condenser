@@ -113,6 +113,11 @@ export const logoutThunk = createAsyncThunk<void, void, { dispatch: AppDispatch 
     // is keyed by username and was inert until the same user returned), but
     // the rewrite drops it so a subsequent visitor on the same tab cannot
     // read the previous user's following/ignoring sets.
+    // Known race (accepted): an in-flight loadFollowState dispatched before
+    // logout can land its receiveFollowList after this reset and re-create
+    // the old user's follow entry. No UI path reads it (Follow.tsx keys by
+    // the current username), so the residue is inert like legacy's; a
+    // session-generation check is deferred.
     dispatch(resetFollowState());
 
     // Call server API logout to clear server-side session. The POST echoes

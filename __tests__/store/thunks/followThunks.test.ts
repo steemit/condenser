@@ -48,6 +48,9 @@ describe('loadFollowState', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
+    // The paging-cap path logs a warning: an expected degradation, not an
+    // error (keeps the monitoring error signal clean).
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   it('seeds blog and ignore lists from single pages', async () => {
@@ -210,8 +213,8 @@ describe('loadFollowState', () => {
 
     const blogUrls = urls.filter((u) => u.includes('type=blog'));
     expect(blogUrls).toHaveLength(20); // MAX_PAGES
-    // Truncation is surfaced, not silent.
-    expect(console.error).toHaveBeenCalled();
+    // Truncation is surfaced as a warning (expected degradation, not an error).
+    expect(console.warn).toHaveBeenCalled();
     // The data collected up to the cap is kept (no error thrown).
     const followState = store.getState().global.follow!.getFollowingAsync!.alice;
     expect(followState.blog_result).toHaveLength(20_000);

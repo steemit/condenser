@@ -21,9 +21,14 @@ import type { AppDispatch, RootState } from '../index';
 const PAGE_LIMIT = 1000;
 
 // Guardrail the legacy recursion lacked (audit follow-up): a page cap. A
-// full page whose cursor never advances would otherwise page forever. 20
-// pages x 1000 entries covers the largest real following lists with margin
-// (the biggest accounts follow ~5k users).
+// full page whose cursor never advances would otherwise page forever.
+// Chain reality (get_follow_count): the vast majority of accounts follow
+// < 1k, so 20 pages x 1000 entries is ~4x headroom over even the largest
+// real users (~5k). Bot accounts with hundreds of thousands of follows do
+// exist on chain (e.g. ~682k) and are truncated here; the loss is only
+// that account's Follow/Mute initial-state correctness — the pages
+// collected before the cap are kept and the truncation logged (warn
+// below).
 const MAX_PAGES = 20;
 
 type FollowKind = 'blog' | 'ignore';
@@ -102,13 +107,20 @@ async function loadFollowList(
       if (page >= MAX_PAGES) {
         // Cap reached with a still-full page: keep the collected data and
         // surface the truncation instead of paging (or looping) forever.
-        console.error(
+        // An expected degradation path, not an error — warn keeps the
+        // monitoring error signal clean (store/lib console.warn precedent).
+        console.warn(
           `Follow list paging cap reached for ${username}/${type} after ${page} pages; keeping ${accounts.size} accounts`
         );
         break;
       }
       start = nextStart;
     }
+    // Known race (accepted): a logout while this fetch is in flight lets
+    // this late write re-create the old user's follow entry after
+    // resetFollowState cleared it (see logoutThunk). The residue is inert —
+    // Follow.tsx reads by the current username — and on par with legacy's
+    // lazy residue; a session-generation check is deferred.
     dispatch(
       receiveFollowList({ follower: username, type, accounts: [...accounts] })
     );

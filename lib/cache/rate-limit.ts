@@ -83,7 +83,10 @@ export interface RateLimitResult {
  * - steem/following 60/min/IP — a legitimate session seeds the full
  *   following/ignoring sets at login (2 kinds, a handful of 1000-entry
  *   pages each); 60/min leaves retry headroom while bounding per-IP
- *   creation of the ~100KB cached entries behind the route.
+ *   creation of the ~100KB cached entries behind the route. Fixed-window
+ *   caveat: users behind a shared egress IP (NAT/CGNAT) logging in within
+ *   the same minute can collectively trip the 429; a kind that fails stays
+ *   empty until the next page load (the documented seeding failure mode).
  */
 export const RATE_LIMITS = {
   authChallenge: { key: 'auth:challenge', limit: 30, windowSeconds: 60 },

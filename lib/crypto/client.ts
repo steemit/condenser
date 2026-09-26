@@ -24,11 +24,55 @@ export interface SignatureResult {
 }
 
 /**
+ * Posting authority shape as returned by condenser_api.get_accounts.
+ */
+export interface PostingAuthority {
+  weight_threshold?: number;
+  key_auths?: Array<[string, number]>;
+}
+
+/**
+ * Extract the posting public keys that, on their own, satisfy the
+ * authority's weight threshold.
+ *
+ * Shared by the LoginForm client check and the /api/auth/login route so the
+ * two sides cannot drift apart (audit S4).
+ *
+ * Legacy parity (condenser-legacy src/app/redux/AuthSaga.js pubkeyThreshold
+ * + authStr): login with a single WIF grants "full" posting authority iff
+ * the summed weights of the matching key_auths entries reach
+ * weight_threshold. Since login always presents exactly one WIF, that sum
+ * reduces to the weight of the one matched entry — so "listed AND weight >=
+ * threshold" is the exact legacy semantics for this codepath. A listed key
+ * with a weight below the threshold (e.g. a weight=0 entry, which the chain
+ * does not forbid) must be rejected: legacy would classify it as
+ * 'partial'/'none' and refuse the login.
+ *
+ * weight_threshold falls back to 1 when absent or 0, matching the deleted
+ * check-authority route (`weight >= (authority.weight_threshold || 1)`) and
+ * the threshold-1 authorities every standard wallet/signup produces. A
+ * threshold of 0 is treated as 1 (fail closed) rather than vacuously
+ * satisfiable.
+ */
+export function eligiblePostingPublicKeys(
+  posting: PostingAuthority | null | undefined
+): string[] {
+  const rawThreshold = Number(posting?.weight_threshold);
+  const threshold =
+    Number.isFinite(rawThreshold) && rawThreshold > 0 ? rawThreshold : 1;
+  const keyAuths = posting?.key_auths;
+  if (!Array.isArray(keyAuths)) return [];
+  return keyAuths
+    .filter((auth) => Number(auth?.[1]) >= threshold)
+    .map((auth) => String(auth[0]));
+}
+
+/**
  * Validate if a private key is valid and matches the expected posting public key
  */
 export function validatePostingKey(
   privateKeyWif: string,
-  expectedPostingPublicKey: string
+  expectedPostingPublicKey: string | string[]
 ): KeyValidationResult {
   try {
     if (!steem.auth.isWif(privateKeyWif)) {
@@ -40,8 +84,12 @@ export function validatePostingKey(
 
     const publicKeyString = steem.auth.wifToPublic(privateKeyWif);
 
-    // Check if it matches the expected posting public key
-    if (publicKeyString !== expectedPostingPublicKey) {
+    // Check if it matches any expected posting public key (accounts may
+    // carry several posting keys — see eligiblePostingPublicKeys)
+    const expectedKeys = Array.isArray(expectedPostingPublicKey)
+      ? expectedPostingPublicKey
+      : [expectedPostingPublicKey];
+    if (!expectedKeys.includes(publicKeyString)) {
       return {
         isValid: false,
         error: 'Private key does not match the posting public key for this account',

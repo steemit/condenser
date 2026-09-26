@@ -81,6 +81,16 @@ function accountWithPostingKey(key = POSTING_KEY) {
   return { name: 'alice', posting: { key_auths: [[key, 1]] } };
 }
 
+function accountWithPostingAuthority(
+  keyAuths: Array<[string, number]>,
+  weightThreshold = 1
+) {
+  return {
+    name: 'alice',
+    posting: { weight_threshold: weightThreshold, key_auths: keyAuths },
+  };
+}
+
 describe('POST /api/auth/login', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -119,6 +129,78 @@ describe('POST /api/auth/login', () => {
     expect(res.status).toBe(401);
     const body = await res.json();
     expect(body.error).toContain('not authorized for posting');
+  });
+
+  // Audit S4: multi-posting-key accounts. Legacy AuthSaga pubkeyThreshold
+  // matched the login key against every key_auths entry — never only [0].
+  it('accepts the second posting key of a multi-key account', async () => {
+    getAccountMock.mockResolvedValue(
+      accountWithPostingAuthority([
+        ['STMfirst key', 1],
+        [POSTING_KEY, 1],
+      ])
+    );
+    loginUserMock.mockResolvedValue('new-session-token');
+    revokeSessionMock.mockResolvedValue();
+
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), csrfHeader())
+    );
+    expect(res.status).toBe(200);
+    expect((await res.json()).user.public_key).toBe(POSTING_KEY);
+  });
+
+  it('still accepts the first posting key of a multi-key account', async () => {
+    getAccountMock.mockResolvedValue(
+      accountWithPostingAuthority([
+        [POSTING_KEY, 1],
+        ['STMsecond key', 1],
+      ])
+    );
+    loginUserMock.mockResolvedValue('new-session-token');
+    revokeSessionMock.mockResolvedValue();
+
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), csrfHeader())
+    );
+    expect(res.status).toBe(200);
+  });
+
+  it('rejects a listed key whose weight alone cannot meet the threshold', async () => {
+    // weight=0 is not forbidden by the chain, but legacy authStr semantics
+    // classify this key as 'none' — it must not authenticate anyone.
+    getAccountMock.mockResolvedValue(
+      accountWithPostingAuthority([
+        ['STMkey1', 1],
+        [POSTING_KEY, 0],
+      ])
+    );
+
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), csrfHeader())
+    );
+    expect(res.status).toBe(401);
+    expect((await res.json()).error).toContain('not authorized for posting');
+    expect(loginUserMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a multi-sig posting key that only reaches the threshold together with others', async () => {
+    // threshold=2 with two weight-1 keys: a single key is 'partial', not 'full'.
+    getAccountMock.mockResolvedValue(
+      accountWithPostingAuthority(
+        [
+          [POSTING_KEY, 1],
+          ['STMkey2', 1],
+        ],
+        2
+      )
+    );
+
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), csrfHeader())
+    );
+    expect(res.status).toBe(401);
+    expect(loginUserMock).not.toHaveBeenCalled();
   });
 
   it('returns 400 when data is not valid JSON', async () => {

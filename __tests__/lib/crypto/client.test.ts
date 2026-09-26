@@ -6,6 +6,8 @@ import {
   isPublicKeyFormat,
   signAuthData,
   verifySignature,
+  eligiblePostingPublicKeys,
+  validatePostingKey,
 } from '@/lib/crypto/client';
 
 // Deterministic key pair generated from a seed (never used on-chain)
@@ -79,5 +81,102 @@ describe('signAuthData / verifySignature roundtrip', () => {
     const other = steem.auth.PrivateKey.fromSeed('condenser-crypto-client-other');
     const result = signAuthData(WIF, 'testuser', 'challenge-123', 1700000000000);
     expect(verifySignature(result.signature, result.data, other.toPublicKey().toString())).toBe(false);
+  });
+});
+
+describe('eligiblePostingPublicKeys', () => {
+  // Legacy parity (audit S4): AuthSaga pubkeyThreshold matched the login
+  // WIF against every key_auths entry (never only [0]) and required the
+  // matching key's weight to reach weight_threshold.
+  it('returns every listed key when all weights meet the threshold', () => {
+    expect(
+      eligiblePostingPublicKeys({
+        weight_threshold: 1,
+        key_auths: [
+          ['STMkey1', 1],
+          ['STMkey2', 1],
+        ],
+      })
+    ).toEqual(['STMkey1', 'STMkey2']);
+  });
+
+  it('keeps a high-weight key among several posting keys', () => {
+    expect(
+      eligiblePostingPublicKeys({
+        weight_threshold: 2,
+        key_auths: [
+          ['STMkey1', 2],
+          ['STMkey2', 1],
+        ],
+      })
+    ).toEqual(['STMkey1']);
+  });
+
+  it('drops weight=0 entries (chain does not forbid them, legacy rejects them)', () => {
+    expect(
+      eligiblePostingPublicKeys({
+        weight_threshold: 1,
+        key_auths: [
+          ['STMkey1', 1],
+          ['STMkey2', 0],
+        ],
+      })
+    ).toEqual(['STMkey1']);
+  });
+
+  it('drops multi-sig keys that cannot reach the threshold alone', () => {
+    // threshold=2, two weight-1 keys: one key alone is only 'partial' in
+    // legacy authStr semantics, so neither is login-eligible.
+    expect(
+      eligiblePostingPublicKeys({
+        weight_threshold: 2,
+        key_auths: [
+          ['STMkey1', 1],
+          ['STMkey2', 1],
+        ],
+      })
+    ).toEqual([]);
+  });
+
+  it('falls back to threshold 1 when weight_threshold is missing or 0', () => {
+    // check-authority route parity: `weight >= (authority.weight_threshold || 1)`.
+    expect(eligiblePostingPublicKeys({ key_auths: [['STMkey1', 1]] })).toEqual(['STMkey1']);
+    expect(
+      eligiblePostingPublicKeys({
+        weight_threshold: 0,
+        key_auths: [['STMkey1', 1]],
+      })
+    ).toEqual(['STMkey1']);
+  });
+
+  it('returns [] for missing/empty key_auths and non-finite weights', () => {
+    expect(eligiblePostingPublicKeys(undefined)).toEqual([]);
+    expect(eligiblePostingPublicKeys({})).toEqual([]);
+    expect(eligiblePostingPublicKeys({ weight_threshold: 1, key_auths: [] })).toEqual([]);
+    expect(
+      eligiblePostingPublicKeys({
+        weight_threshold: 1,
+        key_auths: [['STMkey1', Number.NaN]],
+      })
+    ).toEqual([]);
+  });
+});
+
+describe('validatePostingKey with multiple expected keys', () => {
+  const other = steem.auth.PrivateKey.fromSeed('condenser-crypto-multi-other');
+  const OTHER_PUB = other.toPublicKey().toString();
+
+  it('accepts a WIF matching the second key of a multi-key account', () => {
+    expect(validatePostingKey(WIF, [OTHER_PUB, PUB]).isValid).toBe(true);
+  });
+
+  it('accepts a WIF matching the first key (string overload unchanged)', () => {
+    expect(validatePostingKey(WIF, PUB).isValid).toBe(true);
+  });
+
+  it('rejects a WIF matching none of the expected keys', () => {
+    const result = validatePostingKey(WIF, [OTHER_PUB, 'STMthird key']);
+    expect(result.isValid).toBe(false);
+    expect(result.error).toContain('does not match');
   });
 });

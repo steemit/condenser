@@ -9,6 +9,7 @@
  * (audit N-06: cover_image CSS injection; N-16: website link hardening).
  */
 
+import { ABSOLUTE_HTTP_URL } from '@/lib/http-url';
 import { looksPhishy } from '@/lib/phishing';
 
 /**
@@ -23,9 +24,6 @@ import { looksPhishy } from '@/lib/phishing';
  * arbitrary CSS declarations into the server-rendered style attribute.
  */
 const CSS_METACHARACTERS = /[;(){}<>"'\\\u0000-\u0020\u007f]/;
-
-/** Only absolute http(s) URLs may become links or image sources. */
-const ABSOLUTE_HTTP_URL = /^https?:\/\//i;
 
 /**
  * Validate an on-chain profile cover_image before it is proxied and spliced

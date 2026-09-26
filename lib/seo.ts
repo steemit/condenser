@@ -13,6 +13,7 @@
 
 import type { Metadata } from 'next';
 import { extractBodySummary, extractImageLink } from '@/lib/extract-content';
+import { ABSOLUTE_HTTP_URL } from '@/lib/http-url';
 import { proxifyImageUrl } from '@/lib/media/proxify-url';
 
 /**
@@ -43,9 +44,6 @@ export const NOINDEX_ROBOTS: NonNullable<Metadata['robots']> = {
  * family; anything else falls through to the app-scheme/local URL logic.
  */
 const CANONICAL_URL_ALLOWED_HOSTS = new Set(['steemit.com', 'www.steemit.com']);
-
-/** Only absolute http(s) URLs may become metadata images (audit N-17). */
-const ABSOLUTE_HTTP_URL = /^https?:\/\//i;
 
 /**
  * URL schemes from steemscript apps.json, restricted to the apps legacy

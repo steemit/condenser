@@ -35,8 +35,9 @@ export const RESERVED_ROUTES: readonly string[] = [
 ];
 
 // User profile sections: URL segments after /@username that are profile
-// sections, not permlinks (proxy branches 3-4). Identical to the legacy
-// <account-tab> alternation. Order follows legacy.
+// sections, not permlinks (proxy branches 3-4). Membership mirrors the
+// legacy <account-tab> alternation; order differs (irrelevant — all
+// consumers do membership checks).
 export const PROFILE_SECTIONS: readonly string[] = [
   'blog', 'posts', 'comments', 'replies', 'payout', 'feed',
   'followers', 'followed', 'settings', 'notifications', 'communities',
@@ -44,6 +45,10 @@ export const PROFILE_SECTIONS: readonly string[] = [
 
 // Sort types for category filters (from the legacy CategoryFilters <sort>
 // alternation). Order follows legacy.
+// Members are interpolated into regex alternations (PrimaryNavigation
+// SORT_TAG_RE / FeedSidebarWidgets COMMUNITY_FEED_RE via join('|')) — they
+// must stay regex-safe word characters (no metacharacters); add an
+// assertion if this ever changes.
 export const SORT_TYPES: readonly string[] = [
   'hot', 'trending', 'promoted', 'payout', 'payout_comments', 'muted', 'created',
 ];

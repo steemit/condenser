@@ -122,9 +122,19 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
   whose `<sort>` and `<account-tab>` regex alternations were
   lowercase-only: `/Trending` renders the trending feed here (the
   `[sort]` page lowercases before validating) but was `NotFound` in
-  legacy, and `/@alice/BLOG` rewrites to the blog section here while
-  legacy fell through to `PostNoCategory` and treated `BLOG` as a
-  permlink.
+  legacy. For `/@alice/BLOG`, resolveRoute alone would fall through to
+  `PostNoCategory` (uppercase `BLOG` fails the `<account-tab>`
+  alternation), but legacy's production stack ran a
+  lowercase-normalization middleware before route resolution
+  (`condenser-legacy/src/server/server.js`, "normalize user name url
+  from cased params"): the `PostNoCategory` regex — whose `<permlink>`
+  charset `[\w\d-]+` admits uppercase — matched the cased URL and
+  301-redirected to `/@alice/blog`, which then rendered the
+  `UserProfile` blog page. Both stacks therefore end on the user
+  profile section route, not a permlink post: the new code routes
+  `/@alice/BLOG` as a section directly at the original-cased URL (no
+  redirect), while legacy adds one 301 hop that also normalizes the
+  URL to lowercase.
 - **Trailing slashes**: rewrites are built on `request.nextUrl.clone()`,
   whose `NextURL` keeps the original trailing-slash state — so
   `/@alice/feed/` rewrites to `/user/alice/feed/` (with slash). Harmless:

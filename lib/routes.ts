@@ -5,7 +5,7 @@
  * (PrimaryNavigation, FeedSidebarWidgets) and analytics route tagging
  * (lib/analytics/route-tags.ts).
  *
- * These lists previously existed as five hand-maintained copies; missing an
+ * These lists previously existed as six hand-maintained copies; missing an
  * edit in any one of them silently diverged routing, navigation
  * highlighting and analytics. Import from here instead of redefining them.
  *

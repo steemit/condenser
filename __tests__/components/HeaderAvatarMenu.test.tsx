@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ReactNode } from 'react';
 
 import userReducer, { setUser } from '@/store/slices/userSlice';
+import globalReducer from '@/store/slices/globalSlice';
 import { IntlWrapper } from '@/__tests__/helpers/i18n';
 
 vi.mock('next/navigation', () => ({
@@ -23,7 +24,9 @@ vi.mock('@/components/layout/SteemitLogo', () => ({
 import { Header } from '@/components/layout/Header';
 
 function makeStore() {
-  return configureStore({ reducer: { user: userReducer } });
+  // The unmocked Header renders NotificationBadge, whose hook reads (and
+  // polls into) the global notifications slot.
+  return configureStore({ reducer: { user: userReducer, global: globalReducer } });
 }
 
 describe('Header avatar menu (real base-ui dropdown, unmocked)', () => {

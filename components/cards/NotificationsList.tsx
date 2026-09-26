@@ -5,8 +5,9 @@ import { useTranslations } from 'next-intl';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { receiveNotifications, receiveUnreadNotifications, notificationsLoading } from '@/store/slices/globalSlice';
 import { broadcastCustomJson } from '@/lib/api/broadcast';
-import { fetchUnreadNotificationsCount } from '@/lib/api/steem';
+import { useUnreadNotifications } from '@/hooks/use-unread-notifications';
 import { cachedFetch } from '@/lib/cache/client-fetch';
+import { lastreadTimeMs } from '@/lib/utils/lastread';
 import LoadingIndicator from '@/components/elements/LoadingIndicator';
 import Userpic from '@/components/elements/Userpic';
 import TimeAgo from '@/components/elements/TimeAgo';
@@ -94,33 +95,22 @@ export default function NotificationsList({ username }: NotificationsListProps) 
   const notifications = (notificationsState?.notifications ??
     []) as Notification[];
   const isLastPage = notificationsState?.isLastPage || false;
+  // Single source of truth for the unread count (T16): the shared hook polls
+  // /api/steem/unread-notifications into Redux; the header badge reads the
+  // same slot.
+  const unreadCount = useUnreadNotifications(username);
   // Legacy store shape: unreadNotifications = { lastread, unread }.
-  const unreadState = (notificationsState?.unreadNotifications ?? {}) as {
-    lastread?: string;
-    unread?: number;
-  };
-  const unreadCount = Number(unreadState.unread ?? 0);
-  const lastRead = unreadState.lastread;
+  const lastRead = useAppSelector(
+    (state) =>
+      (state.global.notifications?.[username]?.unreadNotifications?.lastread as
+        | string
+        | undefined) ?? ''
+  );
 
   // Load notifications on mount
   useEffect(() => {
     if (username) {
       loadNotifications(username);
-      // Legacy FetchDataSaga.getUnreadAccountNotificationsSaga: populate the
-      // unread state (lastread + count) so rows can show unread markers.
-      fetchUnreadNotificationsCount(username)
-        .then((res) => {
-          dispatch(
-            receiveUnreadNotifications({
-              name: username,
-              unreadNotifications: {
-                lastread: res.lastread ?? '',
-                unread: res.unread_count ?? 0,
-              },
-            })
-          );
-        })
-        .catch(() => {});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
@@ -147,6 +137,9 @@ export default function NotificationsList({ username }: NotificationsListProps) 
           name: accountName,
           notifications,
           isLastPage,
+          // Cursor loads page in strictly older items; a first-page load
+          // (re)mounts must refresh the head of the list, not append to it.
+          append: Boolean(startId),
         })
       );
     } catch (error) {
@@ -165,9 +158,12 @@ export default function NotificationsList({ username }: NotificationsListProps) 
 
   const handleMarkAsRead = async () => {
     // Legacy FetchDataSaga.markNotificationsAsReadSaga: the read marker is
-    // a custom_json (id: 'notify') broadcast carrying setLastRead; hivemind
-    // needs a few seconds to index it, so legacy clears the unread state
-    // after a 6s delay.
+    // a custom_json (id: 'notify') broadcast carrying setLastRead. Legacy
+    // then waited 6s for hivemind to index it before clearing the unread
+    // state. We apply the local read marker immediately instead: the
+    // receiveUnreadNotifications stale-write guard drops later poll
+    // snapshots that still carry the pre-setLastRead lastread/unread pair,
+    // so the count zeroes at once and cannot be un-zeroed by the poll.
     if (markReadPending) return;
     setMarkReadPending(true);
     setMarkReadError('');
@@ -182,18 +178,12 @@ export default function NotificationsList({ username }: NotificationsListProps) 
         id: 'notify',
         json: JSON.stringify(['setLastRead', { date: timeNow }]),
       });
-      setTimeout(() => {
-        dispatch(
-          receiveUnreadNotifications({
-            name: username,
-            unreadNotifications: { lastread: timeNow, unread: 0 },
-          })
-        );
-        // The header badge polls on its own timer; tell it to zero now.
-        window.dispatchEvent(
-          new CustomEvent('notifications:marked-read', { detail: { username } })
-        );
-      }, 6000);
+      dispatch(
+        receiveUnreadNotifications({
+          name: username,
+          unreadNotifications: { lastread: timeNow, unread: 0 },
+        })
+      );
     } catch (error) {
       console.error('Error marking notifications as read:', error);
       setMarkReadError(t('notificationslist_jsx.mark_as_read_error'));
@@ -268,8 +258,11 @@ export default function NotificationsList({ username }: NotificationsListProps) 
             const account = firstAccount(notification.msg || '');
             const TypeIcon = TYPE_ICONS[notification.type] || Bell;
             // Legacy: a row is unread when its date is newer than lastread.
+            // Compare through lastreadTimeMs — hivemind dates are
+            // space-separated naive UTC, which strict engines (Safari)
+            // Date.parse as NaN, hiding the unread dot entirely.
             const isUnread = lastRead
-              ? Date.parse(`${lastRead}Z`) <= Date.parse(`${notification.date}Z`)
+              ? lastreadTimeMs(lastRead) <= lastreadTimeMs(notification.date)
               : false;
             const score = notification.score ?? 0;
             return (

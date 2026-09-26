@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { lastreadTimeMs } from '@/lib/utils/lastread';
+
 // Types
 export interface Vote {
   voter: string;
@@ -97,6 +99,23 @@ const postKey = (author: string, permlink: string): string | null => {
   return `${author}/${permlink}`;
 };
 
+// Ids of notification items, ignoring items without a usable id (hivemind
+// always assigns one; guard anyway so an id-less item can never be dropped
+// or double-inserted by the dedup paths below).
+const notificationIdSet = (items: NotificationItem[]): Set<unknown> => {
+  const ids = new Set<unknown>();
+  items.forEach((item) => {
+    if (item.id != null) ids.add(item.id);
+  });
+  return ids;
+};
+
+// A locally applied read marker only shadows hivemind for this long. Normal
+// hivemind index latency for setLastRead is seconds; 5 minutes covers
+// abnormal-but-recoverable lag while still bounding how long a dropped op
+// can pin the unread badge at zero (see receiveUnreadNotifications).
+const STALE_MARKER_GRACE_MS = 5 * 60_000;
+
 const initialState: GlobalState = {
   status: {},
   content: {},
@@ -140,22 +159,58 @@ const globalSlice = createSlice({
         }
       });
     },
+    // Legacy GlobalReducer RECEIVE_NOTIFICATIONS blindly concats the incoming
+    // page onto the stored list. That was survivable in legacy (class
+    // component, no strict mode), but here the list page loads the first page
+    // on every mount, so dev strict-mode double effects and client-side
+    // navigate-away-and-back both append the same page twice. Keep legacy's
+    // append shape but dedup by notification id, with direction-aware merge:
+    //   - first page (no cursor): incoming order wins; older items already
+    //     paged in that fell off the head of the feed are kept at the tail;
+    //   - cursor pagination (append: true): incoming items are strictly older
+    //     than what is stored, so they concat at the end, minus duplicates.
     receiveNotifications: (state, action: PayloadAction<{
       name: string;
       notifications: NotificationItem[];
       isLastPage?: boolean;
+      /** True when loading an older page via a last_id cursor. */
+      append?: boolean;
     }>) => {
-      const { name, notifications, isLastPage } = action.payload;
+      const { name, notifications, isLastPage, append } = action.payload;
       if (!state.notifications[name]) {
         state.notifications[name] = {
           name,
           notifications: [],
         };
       }
-      state.notifications[name].notifications = [
-        ...(state.notifications[name].notifications || []),
-        ...notifications,
-      ];
+      const existing = state.notifications[name].notifications || [];
+      // Self-dedup the incoming page first: a single page carrying the same
+      // id twice must not be stored twice — the cross-page id sets below only
+      // guard against ids already present in the stored list. Id-less items
+      // keep their never-dropped semantics.
+      const seenIds = new Set<unknown>();
+      const incoming = notifications.filter((n) => {
+        if (n.id == null) return true;
+        if (seenIds.has(n.id)) return false;
+        seenIds.add(n.id);
+        return true;
+      });
+      const incomingIds = notificationIdSet(incoming);
+      const existingIds = notificationIdSet(existing);
+      state.notifications[name].notifications = append
+        ? [
+            ...existing,
+            // Intended asymmetry: unlike a first-page reload (which replaces
+            // the stored copy of a re-seen id), a cursor page never refreshes
+            // an item already stored — the stored copy wins. Cursor pages are
+            // strictly older and fetched once, so there is nothing newer to
+            // refresh the row with anyway.
+            ...incoming.filter((n) => n.id == null || !existingIds.has(n.id)),
+          ]
+        : [
+            ...incoming,
+            ...existing.filter((n) => n.id == null || !incomingIds.has(n.id)),
+          ];
       if (isLastPage !== undefined) {
         state.notifications[name].isLastPage = isLastPage;
       }
@@ -170,6 +225,28 @@ const globalSlice = createSlice({
           name,
           notifications: [],
         };
+      }
+      // Stale-write guard: hivemind keeps serving the pre-setLastRead
+      // lastread/unread pair for a while after the setLastRead custom_json
+      // is accepted, so a poll snapshot predating the stored read marker
+      // must not overwrite it (it would un-zero the badge right after the
+      // user marked everything read). Snapshots at or past the marker —
+      // e.g. new notifications bumping the count — are applied normally.
+      //
+      // The guard only holds while the marker is fresh: hivemind indexes
+      // setLastRead within seconds, so if poll snapshots still predate the
+      // marker after STALE_MARKER_GRACE_MS the op was most likely dropped
+      // (rejected in a block, pruned) and will never be confirmed. Past the
+      // window the guard yields so hivemind's (authoritative) snapshot can
+      // heal the badge instead of pinning it at zero forever.
+      const current = state.notifications[name].unreadNotifications;
+      const currentMs = lastreadTimeMs(current?.lastread);
+      if (
+        current &&
+        Date.now() - currentMs <= STALE_MARKER_GRACE_MS &&
+        currentMs > lastreadTimeMs(unreadNotifications.lastread)
+      ) {
+        return;
       }
       state.notifications[name].unreadNotifications = unreadNotifications;
     },

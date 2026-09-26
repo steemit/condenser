@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { fetchUnreadNotificationsCount, UnreadNotificationsResponse } from '@/lib/api/steem';
+import { useUnreadNotifications } from '@/hooks/use-unread-notifications';
 
 interface NotificationBadgeProps {
   username: string;
@@ -12,88 +11,33 @@ interface NotificationBadgeProps {
 
 /**
  * NotificationBadge component
- * Displays unread notification count for a user
- * Can be used in navigation bars or profile headers
+ * Displays the unread notification count for a user (header avatar overlay).
+ *
+ * The count is NOT local state: useUnreadNotifications polls
+ * /api/steem/unread-notifications into Redux (legacy parity — the legacy
+ * header read `global.notifications[username].unreadNotifications.unread`),
+ * and this badge renders that store slot. The notifications page reads the
+ * same slot, so the badge and the list can no longer disagree (T16).
  */
-export default function NotificationBadge({ 
-  username, 
-  className = '', 
-  showZero = false 
+export default function NotificationBadge({
+  username,
+  className = '',
+  showZero = false,
 }: NotificationBadgeProps) {
   const t = useTranslations();
-  const [unreadCount, setUnreadCount] = useState<number>(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const unreadCount = useUnreadNotifications(username);
 
-  useEffect(() => {
-    if (!username) {
-      setLoading(false);
-      return;
-    }
-
-    const fetchCount = async () => {
-      setLoading(true);
-      setError(null);
-      
-      try {
-        const result: UnreadNotificationsResponse = await fetchUnreadNotificationsCount(username);
-        
-        if (result.error) {
-          setError(result.error);
-          setUnreadCount(0);
-        } else {
-          setUnreadCount(result.unread_count);
-        }
-      } catch (err) {
-        console.error('Error fetching notification count:', err);
-        setError(t('notificationslist_jsx.failed_to_load'));
-        setUnreadCount(0);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCount();
-
-    // Zero immediately when the user marks notifications as read (the list
-    // page broadcasts custom_json setLastRead and emits this event).
-    const onMarkedRead = (e: Event) => {
-      if ((e as CustomEvent).detail?.username === username) {
-        setUnreadCount(0);
-      }
-    };
-    window.addEventListener('notifications:marked-read', onMarkedRead);
-
-    // Optionally refresh count periodically
-    const interval = setInterval(fetchCount, 60000); // Refresh every minute
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('notifications:marked-read', onMarkedRead);
-    };
-  }, [username, t]);
-
-  // Don't render if loading or no username
-  if (loading || !username) {
+  // Nothing to show while logged out or before the first poll lands.
+  if (!username) {
     return null;
   }
 
-  // Don't render if zero count and showZero is false
   if (unreadCount === 0 && !showZero) {
     return null;
   }
 
-  // Error state - show a small indicator
-  if (error) {
-    return (
-      <span 
-        className={`inline-flex items-center justify-center w-2 h-2 bg-red-500 rounded-full ${className}`}
-        title={error}
-      />
-    );
-  }
-
   return (
-    <span 
+    <span
       className={`inline-flex items-center justify-center min-w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full ${className}`}
       title={t('notificationslist_jsx.unread_notifications', { count: unreadCount })}
     >

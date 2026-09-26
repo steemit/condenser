@@ -709,7 +709,7 @@ describe('POST /api/steem/broadcast', () => {
     expect(callSteemApiMock).not.toHaveBeenCalled();
   });
 
-  it('deletes the community subscribers cache exactly on community subscribe', async () => {
+  it('deletes the community subscribers cache and sweeps the communities list on subscribe (C5)', async () => {
     const tx = signedTx([
       [
         'custom_json',
@@ -729,7 +729,39 @@ describe('POST /api/steem/broadcast', () => {
     const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
     expect(deletedKeys).toContain('steem:profile:erin');
     expect(deletedKeys).toContain('steem:community-subscribers:hive-106292');
-    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
+    // C5: the list cache embeds subscriber counts (600s fresh TTL) — the
+    // unbounded sort x query x limit key space rules out exact deletes.
+    expect(cacheDeleteByPrefixMock).toHaveBeenCalledWith('steem:communities:');
+    // L1: the subscriber list entry (community-shaped URL) plus every
+    // communities list/subscriptions entry (path-shaped token).
+    expect(res.headers.get('X-Cache-Invalidate')).toBe(
+      'erin,community=hive-106292,/api/steem/communities'
+    );
+  });
+
+  it('invalidates the community caches on unsubscribe too (C5)', async () => {
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['erin'],
+          id: 'community',
+          json: JSON.stringify(['unsubscribe', { community: 'hive-106292' }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
+    expect(deletedKeys).toContain('steem:community-subscribers:hive-106292');
+    expect(cacheDeleteByPrefixMock).toHaveBeenCalledWith('steem:communities:');
+    expect(res.headers.get('X-Cache-Invalidate')).toBe(
+      'erin,community=hive-106292,/api/steem/communities'
+    );
   });
 
   it('only deletes the actor profile for reblog custom_json payloads', async () => {

@@ -253,15 +253,16 @@ export async function POST(request: NextRequest) {
 
     // Signal the browser (L1) cache to drop affected entries. Tokens are
     // comma-separated and matched by substring against cached URLs: the
-    // actor covers per-user entries, and `permlink=...` covers the
-    // post + comments entries (their URLs are author/permlink-shaped and
-    // would otherwise survive a vote/reply, serving pre-write data).
-    // Tokens are op-derived (client-controlled), so restrict them to the
-    // account/permlink charset — anything else is dropped, never trusted.
-    // Uppercase is allowed: permlinks legally contain it (base58 noise /
-    // other clients) and URLSearchParams leaves it unescaped, so dropping
-    // it would silently miss the entry it should evict (audit X9).
-    const SAFE_TOKEN = /^[A-Za-z0-9.=-]+$/;
+    // actor covers per-user entries, `permlink=...` covers the post +
+    // comments entries (author/permlink-shaped URLs), `community=...` covers
+    // the community-roles/subscribers entries, and the path-shaped
+    // `/api/steem/communities` covers every communities list/subscriptions
+    // entry (C5). Tokens are op-derived (client-controlled), so restrict
+    // them to a header-safe charset — anything else is dropped, never
+    // trusted. Uppercase is allowed: permlinks legally contain it (base58
+    // noise / other clients) and URLSearchParams leaves it unescaped, so
+    // dropping it would silently miss the entry it should evict (audit X9).
+    const SAFE_TOKEN = /^[A-Za-z0-9.=\/-]+$/;
     // Root-dimension hint (C2): `permlink=<root>` for comment-level writes
     // whose op names only a nested parent (or nothing, for delete_comment).
     // Same permlink charset bound as SAFE_TOKEN.
@@ -278,7 +279,7 @@ export async function POST(request: NextRequest) {
     }
     if (opType === 'custom_json' && opData) {
       const payload = parseCustomJsonPayload(opData.json);
-      if (payload && payload[0] === 'follow') {
+      if (payload && opData.id === 'follow' && payload[0] === 'follow') {
         // A follow also changes the TARGET's followers page (their URL is
         // account-shaped) — the actor token above already covers the
         // actor's own following page and profile entries.
@@ -286,6 +287,27 @@ export async function POST(request: NextRequest) {
         if (target && SAFE_TOKEN.test(target) && !invalidateTokens.includes(target)) {
           invalidateTokens.push(target);
         }
+      }
+      if (
+        payload &&
+        opData.id === 'community' &&
+        (payload[0] === 'subscribe' || payload[0] === 'unsubscribe')
+      ) {
+        // C5: drop the community's subscriber LIST L1 entry (its URL is
+        // community-shaped via /api/steem/community-roles) and every
+        // communities list/subscriptions entry (path-shaped token covering
+        // /api/steem/communities?... in all its sort/query/limit variants —
+        // they embed subscriber counts and subscriptions).
+        const community = String(payload[1].community || '');
+        const communityToken = `community=${community}`;
+        if (
+          community &&
+          SAFE_TOKEN.test(communityToken) &&
+          !invalidateTokens.includes(communityToken)
+        ) {
+          invalidateTokens.push(communityToken);
+        }
+        invalidateTokens.push('/api/steem/communities');
       }
     }
     if (opType === 'comment' && opData) {
@@ -528,13 +550,20 @@ async function invalidateCustomJson(opData: Record<string, unknown>): Promise<vo
     }
     case 'community': {
       // subscribe/unsubscribe changes the community's subscriber list —
-      // an exact key with a 10-minute fresh TTL (CACHE_TTL.communityRoles),
-      // previously not invalidated at all. The `steem:communities:*` list
-      // cache also embeds subscriber counts, but its key space is unbounded
-      // (sort x query x limit) so no exact delete is possible; its 10-minute
-      // TTL bounds the drift.
+      // an exact key with a 10-minute fresh TTL (CACHE_TTL.communityRoles).
       const community = String(args.community || '');
       if (community) await deleteAccountScopedKey('steem:community-subscribers:', community);
+      // C5: the communities LIST cache (steem:communities:{sort}:{query}:{limit},
+      // 600s fresh TTL) embeds subscriber counts — without this sweep,
+      // anonymous traffic saw the count drift by one for up to 10 minutes.
+      // The key space is unbounded (sort x query x limit variants, query is
+      // free text), so no exact delete is possible; this is the documented
+      // N-10 exception (see invalidateAfterBroadcast's comment) — one
+      // low-traffic list family, gated behind a signed chain op plus the
+      // 30/min/IP broadcast limit.
+      if (kind === 'subscribe' || kind === 'unsubscribe') {
+        await cacheDeleteByPrefix('steem:communities:');
+      }
       break;
     }
     default:

@@ -97,9 +97,7 @@ describe('loginThunk', () => {
   it('sets the user and seeds the follow state after login', async () => {
     const store = makeStore();
 
-    await store.dispatch(
-      loginThunk({ username: '@Alice', password: '' })
-    );
+    await store.dispatch(loginThunk({ username: '@Alice' }));
 
     expect(store.getState().user.current).toMatchObject({
       username: 'alice',

@@ -170,7 +170,6 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
       await dispatch(
         loginThunk({
           username: normalizedUsername,
-          password: '', // Don't store password in Redux
           saveLogin,
         })
       ).unwrap();

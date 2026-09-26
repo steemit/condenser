@@ -14,10 +14,7 @@ import type { AppDispatch, RootState } from '../index';
 
 export interface LoginPayload {
   username: string;
-  password: string;
   saveLogin?: boolean;
-  operationType?: string;
-  afterLoginRedirectToWelcome?: boolean;
 }
 
 /**
@@ -31,22 +28,11 @@ export const loginThunk = createAsyncThunk<
 >(
   'auth/login',
   async (payload, { dispatch, rejectWithValue }) => {
-    const {
-      username,
-      password,
-      operationType,
-    } = payload;
+    const { username } = payload;
 
     try {
       // Normalize username
-      let finalUsername = username.toLowerCase().replace(/^@/, '');
-      let userProvidedRole: string | undefined = operationType;
-
-      // Check for role specification (e.g., "alice/active")
-      if (finalUsername.includes('/')) {
-        [finalUsername, userProvidedRole] = finalUsername.split('/');
-      }
-
+      const finalUsername = username.toLowerCase().replace(/^@/, '');
 
       // The actual authentication is now handled in the LoginForm component
       // This thunk is mainly for updating Redux state after successful login

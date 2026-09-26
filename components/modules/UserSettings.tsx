@@ -75,6 +75,15 @@ export default function UserSettings({
     cover_image: profile?.cover_image || '',
   });
 
+  // Dirty-guard (T15): once the user has edited any field, a late profile
+  // refetch (hydration completing, username-driven refetch) must not clobber
+  // the in-progress edits. A ref, not state — the guard is not render data.
+  // It resets when the viewed account changes: switching accounts is a new
+  // form context whose fresh profile must fill the form even if the previous
+  // account's form had edits. Declared above the fill effect below so the
+  // reset wins when both fire for one commit.
+  const formDirtyRef = useRef(false);
+
   // UI state
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -102,9 +111,17 @@ export default function UserSettings({
   // persists the choice in a cookie.
   const language: Locale = isLocale(localePref) ? localePref : DEFAULT_LOCALE;
 
-  // Update form when profile changes
+  // New account => new form context: drop any dirty flag from the previous
+  // account's edits (see formDirtyRef above for ordering).
   useEffect(() => {
-    if (profile) {
+    formDirtyRef.current = false;
+  }, [accountname]);
+
+  // Update form when profile changes — unless the user has unsaved edits.
+  // Skipping the resync keeps them; after a successful submit the form
+  // already holds the saved values, so the skip is harmless there too.
+  useEffect(() => {
+    if (profile && !formDirtyRef.current) {
       setFormData({
         name: profile.name || '',
         about: profile.about || '',
@@ -156,8 +173,11 @@ export default function UserSettings({
   };
 
   const handleInputChange = (field: string, value: string) => {
+    // Any user edit arms the dirty-guard (T15): late profile refetches will
+    // not overwrite the form afterwards.
+    formDirtyRef.current = true;
     setFormData(prev => ({ ...prev, [field]: value }));
-    
+
     // Clear error for this field
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));

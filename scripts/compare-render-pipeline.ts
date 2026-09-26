@@ -33,7 +33,10 @@ import render from 'dom-serializer';
 
 import htmlReady from '../lib/html-ready';
 import sanitizeConfig, { noImageText } from '../lib/sanitize-config';
-import MarkdownViewer from '../components/elements/MarkdownViewer';
+import MarkdownViewer, { type MarkdownViewerProps } from '../components/elements/MarkdownViewer';
+import { NextIntlClientProvider } from 'next-intl';
+import { DEFAULT_LOCALE } from '../lib/i18n/config';
+import { enMessages } from '../lib/i18n/messages';
 
 const LEGACY_ROOT = '/home/ety001/workspace/condenser-legacy';
 const CACHE = path.join(__dirname, '.cache');
@@ -346,12 +349,33 @@ function checkReact(name: string, cond: boolean, detail: string): void {
   }
 }
 
-const ytRender = renderToStaticMarkup(
-  React.createElement(MarkdownViewer, {
-    text: 'video https://www.youtube.com/watch?v=dQw4w9WgXcQ here',
-    large: true,
-  })
-);
+// MarkdownViewer renders through next-intl's useTranslations, so the smoke
+// renders must provide a provider (mirrors __tests__/helpers/i18n.tsx).
+// Without it the script crashed before any React check could run. An explicit
+// timeZone keeps use-intl from emitting its one-shot ENVIRONMENT_FALLBACK
+// error when formatting outside a server request context. The provider's
+// published props type is a wide server/client union; narrowed here to the
+// subset this script passes (runtime-safe — extra config is optional).
+const IntlProvider = NextIntlClientProvider as unknown as React.ComponentType<{
+  locale: string;
+  messages: typeof enMessages;
+  timeZone: string;
+}>;
+
+function renderViewer(props: MarkdownViewerProps): string {
+  return renderToStaticMarkup(
+    React.createElement(
+      IntlProvider,
+      { locale: DEFAULT_LOCALE, messages: enMessages, timeZone: 'UTC' },
+      React.createElement(MarkdownViewer, props)
+    )
+  );
+}
+
+const ytRender = renderViewer({
+  text: 'video https://www.youtube.com/watch?v=dQw4w9WgXcQ here',
+  large: true,
+});
 checkReact(
   'youtube-placeholder-becomes-lazy-preview',
   ytRender.includes('videoWrapper youtube') &&
@@ -360,12 +384,10 @@ checkReact(
   ytRender
 );
 
-const threeSpeakRender = renderToStaticMarkup(
-  React.createElement(MarkdownViewer, {
-    text: 'https://3speak.online/watch?v=user/abc-123',
-    large: true,
-  })
-);
+const threeSpeakRender = renderViewer({
+  text: 'https://3speak.online/watch?v=user/abc-123',
+  large: true,
+});
 checkReact(
   'threespeak-placeholder-becomes-iframe',
   threeSpeakRender.includes(
@@ -374,12 +396,10 @@ checkReact(
   threeSpeakRender
 );
 
-const noImageRender = renderToStaticMarkup(
-  React.createElement(MarkdownViewer, {
-    text: '![photo](https://example.com/pic.jpg)',
-    noImage: true,
-  })
-);
+const noImageRender = renderViewer({
+  text: '![photo](https://example.com/pic.jpg)',
+  noImage: true,
+});
 checkReact(
   'noImage-banner-shown',
   noImageRender.includes(noImageText) &&
@@ -387,11 +407,9 @@ checkReact(
   noImageRender
 );
 
-const phishyRender = renderToStaticMarkup(
-  React.createElement(MarkdownViewer, {
-    text: '[steemit.com](https://steewit.com)',
-  })
-);
+const phishyRender = renderViewer({
+  text: '[steemit.com](https://steewit.com)',
+});
 checkReact(
   'phishing-link-unlinked',
   phishyRender.includes('phishy') && !phishyRender.includes('href="https://steewit.com"'),

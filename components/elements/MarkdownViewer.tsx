@@ -8,7 +8,7 @@ import htmlReady from '@/lib/html-ready';
 import sanitizeConfig, { noImageText } from '@/lib/sanitize-config';
 import YoutubePreview from '@/components/elements/YoutubePreview';
 
-interface MarkdownViewerProps {
+export interface MarkdownViewerProps {
   text: string;
   className?: string;
   large?: boolean;

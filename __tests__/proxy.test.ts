@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { NextRequest } from 'next/server';
 
 import { proxy } from '../proxy';
+import { classifyProxyResult, testCases } from '../scripts/test-proxy-routes';
 
 /**
  * CSP nonce plumbing through the route proxy (audit N-02 follow-up).
@@ -144,5 +145,21 @@ describe('proxy CSP plumbing', () => {
         );
       }
     }
+  });
+});
+
+/**
+ * Full route-resolution matrix, previously exercised only by the standalone
+ * `pnpm test:proxy` script (scripts/test-proxy-routes.ts) and therefore not
+ * part of `pnpm test`. The case table AND the outcome classifier are imported
+ * straight from the script — one source of truth, two runners — so every
+ * legacy-URL rewrite (user profiles, posts with/without category, %40
+ * decoding, GDPR accounts, reserved words, internal-target guards, .html
+ * aliases, trailing-slash normalization, open-redirect hostile forms) is now
+ * CI-enforced with the exact classification the script reports.
+ */
+describe('proxy route resolution matrix (scripts/test-proxy-routes.ts table)', () => {
+  it.each(testCases)('$path → $expected ($description)', ({ path, expected }) => {
+    expect(classifyProxyResult(proxy(request(path)))).toBe(expected);
   });
 });

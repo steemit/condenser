@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -98,9 +98,8 @@ describe('SearchContent error state', () => {
   });
 
   afterEach(() => {
-    // No vitest globals → RTL auto-cleanup does not register; do it
-    // explicitly (same convention as SortFeed.test.tsx).
-    cleanup();
+    // Component unmounting is handled by the central cleanup registered in
+    // vitest.setup.ts.
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
     // The hoisted params mock survives restoreAllMocks (it is a vi.fn, not

@@ -75,6 +75,23 @@ describe('lib/auth/redis-session keyPrefix (S8 split)', () => {
       expect.objectContaining({ keyPrefix: 'sess' })
     );
   });
+
+  it('REDIS_URL mode passes no keyPrefix (raw session ids)', async () => {
+    // Even with both prefix vars set, URL mode must construct the client
+    // from the bare connection string: sessions live under their raw ids
+    // there, and introducing a keyPrefix would orphan every live session
+    // on upgrade (the explicit S8 invariant this pins).
+    vi.stubEnv('REDIS_URL', 'redis://localhost:6379');
+    vi.stubEnv('REDIS_SESSION_KEY_PREFIX', 'sess');
+    vi.stubEnv('REDIS_KEY_PREFIX', 'legacy');
+    const client = makeClient();
+    const { ctor, module } = await loadSessionModule(client);
+    module.isRedisAvailable();
+    expect(ctor).toHaveBeenCalledTimes(1);
+    // Called with the URL string itself — a strict full-argument-list match,
+    // so no options object (and no keyPrefix) can sneak in.
+    expect(ctor).toHaveBeenCalledWith('redis://localhost:6379');
+  });
 });
 
 describe('lib/auth/redis-session error retirement (S9)', () => {

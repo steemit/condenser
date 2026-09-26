@@ -89,9 +89,15 @@ function uploadOrigin(): string | null {
 }
 
 /**
- * Build the CSP header value for one request. Pure apart from the two env
- * reads documented above (proxy runs on the Node.js runtime, so these are
- * runtime values, not build-time).
+ * Build the CSP header value for one request. Pure apart from the env reads
+ * documented above. Those differ by name: the SDC_* reads are plain
+ * server-side runtime values (proxy runs on the Node.js runtime), but the
+ * NEXT_PUBLIC_TRONADS_ENV lookup via configuredTronAdsEngineOrigin follows
+ * NEXT_PUBLIC_* semantics — Next.js's getDefineEnv (Turbopack) inlines any
+ * such var set in the build environment into the nodejs bundle too, so the
+ * value here is a baked-in build-time literal unless the build left the
+ * variable unset (in which case the runtime value applies here while the
+ * browser keeps its inlined default — see docs/CONFIGURATION.md).
  */
 export function buildCspHeaderValue(nonce: string): string {
   const isDev = process.env.NODE_ENV === 'development';

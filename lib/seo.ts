@@ -18,18 +18,42 @@ import { proxifyImageUrl } from '@/lib/media/proxify-url';
 import type { ProfileMetadata } from '@/types/steem';
 
 /**
+ * Default origin used when SITE_ORIGIN is unset or malformed.
+ */
+const DEFAULT_SITE_ORIGIN = 'https://steemit.com';
+
+/**
+ * A site origin must be a bare https origin — "https://<host>", no path,
+ * query, fragment, userinfo, or port. Anything else is rejected so a
+ * malformed env value cannot leak into og:url / og:image.
+ */
+const SITE_ORIGIN_PATTERN = /^https:\/\/[\w.-]+$/;
+
+function resolveSiteOrigin(): string {
+  const raw = process.env.SITE_ORIGIN;
+  if (raw) {
+    // Trailing slashes are stripped so `${SITE_ORIGIN}/path` cannot
+    // double-slash; what remains must be a bare https origin.
+    const candidate = raw.trim().replace(/\/+$/, '');
+    if (SITE_ORIGIN_PATTERN.test(candidate)) return candidate;
+    console.warn(
+      `Invalid SITE_ORIGIN value "${raw}" (expected a bare https origin like https://steemit.com); falling back to ${DEFAULT_SITE_ORIGIN}`
+    );
+  }
+  return DEFAULT_SITE_ORIGIN;
+}
+
+/**
  * Origin of this site, used for absolute URLs in metadata (avatar fallback
  * image, og:url base). Legacy read state.app.site_domain (default
  * steemit.com); here it comes from the SITE_ORIGIN env var so a self-hosted
  * deployment's og:url no longer points at steemit.com. Server-only by
- * design: every consumer is a generateMetadata RSC shell, and the root
- * layout is force-dynamic, so this is a per-request runtime value —
- * deliberately NOT NEXT_PUBLIC_ (nothing client-side reads it, and a
- * non-public var can be changed without rebuilding the bundle). Trailing
- * slashes are stripped so `${SITE_ORIGIN}/path` cannot double-slash.
+ * design: every consumer is a generateMetadata RSC shell — a server-side
+ * runtime read at module load, so changing it requires a restart (not a
+ * rebuild) — and deliberately NOT NEXT_PUBLIC_ (nothing client-side reads
+ * it, and a non-public var can be changed without rebuilding the bundle).
  */
-export const SITE_ORIGIN = (process.env.SITE_ORIGIN || 'https://steemit.com')
-  .replace(/\/+$/, '');
+export const SITE_ORIGIN = resolveSiteOrigin();
 
 /**
  * Shared robots directive for private pages: neither index the page nor

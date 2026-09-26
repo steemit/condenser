@@ -87,7 +87,16 @@ export const TRONADS_TEST_ENV = 1;
 const TRONADS_ENGINE_ORIGIN = 'https://engine.tronads.io';
 const TRONADS_TEST_ENGINE_ORIGIN = 'https://test-engine.tronads.io';
 
-/** Configured env value (NEXT_PUBLIC_TRONADS_ENV, legacy tronads_env). */
+/**
+ * Configured env value (NEXT_PUBLIC_TRONADS_ENV, legacy tronads_env).
+ * NEXT_PUBLIC_* semantics apply to both callers of this module (the client
+ * ad components and lib/csp.ts on the server): a value present in the build
+ * environment is inlined into the browser bundle AND — via Next.js's
+ * getDefineEnv — into the nodejs bundle, so runtime changes are ignored on
+ * both sides. A value set only at runtime (build left it unset) is seen by
+ * the server-side CSP read but never by the browser, which keeps the
+ * inlined default — change this variable by rebuilding with it set.
+ */
 export function tronAdsEnvValue(): number {
   return Number(process.env.NEXT_PUBLIC_TRONADS_ENV ?? 0);
 }

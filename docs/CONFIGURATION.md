@@ -82,9 +82,11 @@ NEXT_PUBLIC_WALLET_URL=https://steemitwallet.com
 
 # This site's own origin for absolute SEO-metadata URLs (og:url, avatar and
 # share-image fallbacks; lib/seo.ts SITE_ORIGIN). Self-hosted deployments
-# must set it, or their og:url points at steemit.com. Server-side runtime
-# read (all consumers are generateMetadata RSC shells; the root layout is
-# force-dynamic) — changing it needs no rebuild. Default: https://steemit.com
+# must set it, or their og:url points at steemit.com. Must be a bare https
+# origin (https://<host>; malformed values fall back to the default with a
+# warning). Server-side runtime read at module load (a module-level constant
+# evaluated once at process start) — changing it requires a restart, not a
+# rebuild. Default: https://steemit.com
 SITE_ORIGIN=https://steemit.com
 
 # Image upload endpoint for the settings page profile/cover upload (legacy
@@ -107,16 +109,22 @@ NEXT_PUBLIC_TRONADS_MOCK=0
 NEXT_PUBLIC_TRONADS_SIDEBAR_AD_PID=
 NEXT_PUBLIC_TRONADS_CONTENT_PC_AD_PID=
 NEXT_PUBLIC_TRONADS_CONTENT_MOBILE_AD_PID=
-# NOTE on NEXT_PUBLIC_TRONADS_ENV: it is read in two places — the client
-# bundle inlines it at BUILD time (selects which engine host the vendored
-# TronAds SDK loads its iframes from), while proxy.ts reads it at RUNTIME to
-# pick the frame-src origin of the Content-Security-Policy (lib/csp.ts ->
-# configuredTronAdsEngineOrigin). It must be set to the SAME value for the
-# build and for the running server: a mismatch (e.g. build with 0, run with 1)
-# makes the CSP allow the engine host the browser never loads and block the
-# one it does, so all TronAd slots render empty. The other TRONADS vars are
-# likewise build-time-inlined for the client; ENV is the only one the proxy
-# also reads at runtime.
+# NOTE on NEXT_PUBLIC_TRONADS_ENV: it has two consumers — the client bundle
+# (selects which engine host the vendored TronAds SDK loads its iframes
+# from) and the proxy's Content-Security-Policy frame-src origin (lib/csp.ts
+# -> configuredTronAdsEngineOrigin). Both are effectively BUILD-time: with
+# Turbopack, Next.js's getDefineEnv unconditionally inlines every
+# NEXT_PUBLIC_* var present in the build environment into BOTH the browser
+# and the nodejs (server) bundle, so when this variable is set at build time
+# the proxy-side read is a baked-in literal too and a later runtime value is
+# ignored on both sides. The runtime lookup in the proxy only survives a
+# build that left the variable unset — and that is exactly the divergence
+# case: the CSP then follows the runtime value while the browser keeps the
+# inlined default (0), so the CSP allows the engine host the browser never
+# loads and blocks the one it does, and all TronAd slots render empty.
+# Changing the value reliably therefore means REBUILDING with it set. The
+# other TRONADS vars are likewise build-time-inlined for the client; ENV is
+# the only one the proxy reads at all.
 # Coin Marketplace right-rail module (legacy steem_market_*). No endpoint
 # configured means the module stays hidden.
 STEEM_MARKET_ENDPOINT=
@@ -136,8 +144,10 @@ legacy `ServerApiClient.js` reporting. The client posts to
 `POST /api/steem/overseer`, which relays to the node's `overseer.collect`
 JSON-RPC method. (steem-js is used on both ends in the rewrite: the server
 keeps it as a `serverExternalPackages` entry for all RPC, while the browser
-bundle only pulls in its auth/signing helpers via `browser.esm.js`, ~290KB —
-so unlike legacy, the browser never speaks JSON-RPC to the node directly.)
+bundle ships the SDK's browser build via `browser.esm.js` (~290KB, measured
+285.6KB — the whole chunk, including RPC code nothing calls) but only calls
+its auth/signing/operation-builder helpers — so unlike legacy, the browser
+never speaks JSON-RPC to the node directly.)
 No configuration is required — the
 relay uses `STEEM_API_URL`. GA page views and route tags are recorded on every
 client-side navigation; `user_login` is reported server-side by

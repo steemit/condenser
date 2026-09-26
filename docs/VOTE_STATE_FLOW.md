@@ -140,7 +140,7 @@ charset-validated (no glob metacharacters) before entering the SCAN MATCH
 pattern, and both lowercase and raw-case key variants are swept.
 
 All Redis keys are namespaced by `redisKey()` — the actual keys carry the
-`condenser:` prefix (configurable via `REDIS_CACHE_KEY_PREFIX`; the deprecated `REDIS_KEY_PREFIX` still overrides both stores), e.g.
+`condenser:` prefix (configurable via `REDIS_CACHE_KEY_PREFIX`; the deprecated `REDIS_KEY_PREFIX` still applies to both stores unless a specific variable is set), e.g.
 `condenser:steem:pendingvote:...`. Content entries (`pendingroot`,
 `pendingchildren`) store a `{ts, post}` envelope; `ts` is the broadcaster's
 wall clock at broadcast time and powers the newer-than edit check below.

@@ -374,4 +374,42 @@ describe('SITE_ORIGIN env override (X9)', () => {
       vi.resetModules();
     }
   });
+
+  it.each([
+    // Not https, carries a path, carries a query, protocol-relative, junk.
+    'http://condenser.example.com',
+    'https://condenser.example.com/some/path',
+    'https://condenser.example.com?x=1',
+    '//condenser.example.com',
+    'not a url',
+  ])('falls back to the default origin when SITE_ORIGIN is malformed (%s)', async (value) => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.resetModules();
+    vi.stubEnv('SITE_ORIGIN', value);
+    try {
+      const fresh = await import('@/lib/seo');
+      expect(fresh.SITE_ORIGIN).toBe('https://steemit.com');
+      // The malformed value must not leak into emitted metadata.
+      const meta = fresh.buildAccountMetadata('alice', null);
+      expect(meta.openGraph?.url).toBe('https://steemit.com/@alice');
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('SITE_ORIGIN'));
+    } finally {
+      warn.mockRestore();
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
+  });
+
+  it('trims surrounding whitespace before validating SITE_ORIGIN', async () => {
+    vi.resetModules();
+    vi.stubEnv('SITE_ORIGIN', '  https://condenser.example.com  ');
+    try {
+      const fresh = await import('@/lib/seo');
+      expect(fresh.SITE_ORIGIN).toBe('https://condenser.example.com');
+    } finally {
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
+  });
 });

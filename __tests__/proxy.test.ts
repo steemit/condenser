@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { NextRequest } from 'next/server';
 
 import { proxy } from '../proxy';
+import { testCases } from '../scripts/test-proxy-routes';
 
 /**
  * CSP nonce plumbing through the route proxy (audit N-02 follow-up).
@@ -144,5 +145,44 @@ describe('proxy CSP plumbing', () => {
         );
       }
     }
+  });
+});
+
+/**
+ * Full route-resolution matrix, previously exercised only by the standalone
+ * `pnpm test:proxy` script (scripts/test-proxy-routes.ts) and therefore not
+ * part of `pnpm test`. The case table is imported straight from the script —
+ * one source of truth, two runners — so every legacy-URL rewrite (user
+ * profiles, posts with/without category, %40 decoding, GDPR accounts,
+ * reserved words, internal-target guards, .html aliases, trailing-slash
+ * normalization, open-redirect hostile forms) is now CI-enforced. The
+ * classification below mirrors the script's runner verbatim.
+ */
+describe('proxy route resolution matrix (scripts/test-proxy-routes.ts table)', () => {
+  function classify(pathname: string): string {
+    const response = proxy(request(pathname));
+    if (!response) return 'next';
+
+    const rewriteHeader = response.headers.get('x-middleware-rewrite');
+    if (rewriteHeader) {
+      const rewriteUrl = new URL(rewriteHeader);
+      if (rewriteUrl.pathname === '/404') return '404';
+      // Compare pathname + search so query-string preservation is asserted
+      // for rewrite cases instead of silently dropped.
+      return `rewrite:${rewriteUrl.pathname}${rewriteUrl.search}`;
+    }
+
+    const location = response.headers.get('location');
+    if (location) {
+      const redirectUrl = new URL(location);
+      return `redirect:${response.status}:${redirectUrl.pathname}${redirectUrl.search}`;
+    }
+
+    if (response.url.includes('/404')) return '404';
+    return 'next';
+  }
+
+  it.each(testCases)('$path → $expected ($description)', ({ path, expected }) => {
+    expect(classify(path)).toBe(expected);
   });
 });

@@ -20,6 +20,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getFollowing } from '@/lib/steem/client';
+import { clampIntParam } from '@/lib/api/params';
 import {
   RATE_LIMITS,
   checkRateLimit,
@@ -37,18 +38,6 @@ const FOLLOW_KINDS = ['blog', 'ignore'] as const;
 // the cache key and the RPC, not vetting names. 64 chars is a generous cap
 // (real names are 3-16) that keeps Redis keys bounded.
 const ACCOUNT_PARAM_RE = /^[a-z0-9.-]{1,64}$/;
-
-/** Parse and clamp an integer query param; non-numeric values fall back. */
-function clampIntParam(
-  raw: string | null,
-  fallback: number,
-  min: number,
-  max: number
-): number {
-  const parsed = parseInt(raw ?? '', 10);
-  if (!Number.isFinite(parsed)) return fallback;
-  return Math.min(Math.max(parsed, min), max);
-}
 
 /**
  * Normalize a Steem account-name query param: trim + lowercase. Account

@@ -104,4 +104,82 @@ describe('GET /api/steem/posts', () => {
     expect(res.status).toBe(500);
     expect(await res.json()).toEqual({ error: 'Failed to fetch posts' });
   });
+
+  it.each([
+    ['unknown ranked sort', { sort: 'DROP TABLE' }],
+    ['account sort used without an account', { sort: 'blog' }],
+  ])('returns 400 for an invalid sort (%s)', async (_label, query) => {
+    const res = await GET(makeGetRequest('/api/steem/posts', query));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'Invalid sort' });
+    expect(getRankedPostsMock).not.toHaveBeenCalled();
+    expect(getAccountPostsMock).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 when an account request uses a ranked sort', async () => {
+    const res = await GET(
+      makeGetRequest('/api/steem/posts', { account: 'alice', sort: 'trending' })
+    );
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'Invalid sort' });
+    expect(getAccountPostsMock).not.toHaveBeenCalled();
+  });
+
+  it('lowercases the sort before the whitelist check', async () => {
+    getRankedPostsMock.mockResolvedValue([]);
+
+    const res = await GET(makeGetRequest('/api/steem/posts', { sort: 'HOT' }));
+    expect(res.status).toBe(200);
+    expect(getRankedPostsMock).toHaveBeenCalledWith(
+      expect.objectContaining({ sort: 'hot' })
+    );
+  });
+
+  it('defaults the account sort to blog when sort is absent', async () => {
+    getAccountPostsMock.mockResolvedValue([]);
+
+    const res = await GET(
+      makeGetRequest('/api/steem/posts', { account: 'alice' })
+    );
+    expect(res.status).toBe(200);
+    expect(getAccountPostsMock).toHaveBeenCalledWith(
+      expect.objectContaining({ sort: 'blog', account: 'alice' })
+    );
+  });
+
+  it.each([
+    ['non-numeric', 'abc', 20],
+    ['oversized', '100000', 100],
+    ['negative', '-5', 1],
+  ])('clamps/defaults a %s limit to %i', async (_label, raw, expected) => {
+    getRankedPostsMock.mockResolvedValue([]);
+
+    const res = await GET(
+      makeGetRequest('/api/steem/posts', { limit: raw })
+    );
+    expect(res.status).toBe(200);
+    expect(getRankedPostsMock).toHaveBeenCalledWith(
+      expect.objectContaining({ limit: expected })
+    );
+  });
+
+  it('bounds the tag length (audit N-21)', async () => {
+    getRankedPostsMock.mockResolvedValue([]);
+
+    const longTag = 'x'.repeat(200);
+    const res = await GET(makeGetRequest('/api/steem/posts', { tag: longTag }));
+    expect(res.status).toBe(200);
+    expect(getRankedPostsMock).toHaveBeenCalledWith(
+      expect.objectContaining({ tag: 'x'.repeat(64) })
+    );
+  });
+
+  it('returns 400 for an account outside the bounded charset', async () => {
+    const res = await GET(
+      makeGetRequest('/api/steem/posts', { account: 'al ce', sort: 'blog' })
+    );
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'Invalid account name' });
+    expect(getAccountPostsMock).not.toHaveBeenCalled();
+  });
 });

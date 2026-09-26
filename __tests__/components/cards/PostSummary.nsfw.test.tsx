@@ -3,8 +3,9 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import appReducer from '@/store/slices/appSlice';
+import appReducer, { setUserPreferences } from '@/store/slices/appSlice';
 import userReducer, { setUser } from '@/store/slices/userSlice';
+import type { NsfwPref } from '@/lib/nsfw';
 import { IntlWrapper } from '@/__tests__/helpers/i18n';
 
 vi.mock('next/navigation', () => ({
@@ -36,7 +37,7 @@ function makePost(tags: string[], category = 'steem') {
 
 function renderCard(
   post: ReturnType<typeof makePost>,
-  nsfwPref: string,
+  nsfwPref: NsfwPref,
   loggedIn = false
 ) {
   const store = configureStore({
@@ -44,10 +45,7 @@ function renderCard(
   });
   if (loggedIn) store.dispatch(setUser({ username: 'alice' }));
   // Set the preference after store creation (merging reducer).
-  store.dispatch({
-    type: 'app/setUserPreferences',
-    payload: { nsfwPref },
-  });
+  store.dispatch(setUserPreferences({ nsfwPref }));
   return render(
     <Provider store={store}>
       <IntlWrapper>
@@ -88,7 +86,7 @@ describe('PostSummary nsfwPref consumption (legacy PostSummary.jsx parity)', () 
   });
 
   it('non-nsfw posts are never gated regardless of the preference', () => {
-    for (const pref of ['hide', 'warn', 'show']) {
+    for (const pref of ['hide', 'warn', 'show'] as const) {
       const { unmount } = renderCard(makePost(['photography']), pref);
       expect(screen.getByText('Hello world')).toBeTruthy();
       unmount();

@@ -3,8 +3,9 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import appReducer from '@/store/slices/appSlice';
+import appReducer, { setUserPreferences } from '@/store/slices/appSlice';
 import userReducer from '@/store/slices/userSlice';
+import type { NsfwPref } from '@/lib/nsfw';
 import { IntlWrapper } from '@/__tests__/helpers/i18n';
 
 vi.mock('next/navigation', () => ({
@@ -42,15 +43,12 @@ function makePost(tags: string[], category = 'steem') {
 
 function renderFull(
   post: ReturnType<typeof makePost>,
-  nsfwPref: string
+  nsfwPref: NsfwPref
 ) {
   const store = configureStore({
     reducer: { app: appReducer, user: userReducer },
   });
-  store.dispatch({
-    type: 'app/setUserPreferences',
-    payload: { nsfwPref },
-  });
+  store.dispatch(setUserPreferences({ nsfwPref }));
   return render(
     <Provider store={store}>
       <IntlWrapper>
@@ -92,7 +90,7 @@ describe('PostFull nsfw gate (extension beyond legacy: post-page interstitial)',
   });
 
   it('non-nsfw posts render the body untouched for every preference', () => {
-    for (const pref of ['hide', 'warn', 'show']) {
+    for (const pref of ['hide', 'warn', 'show'] as const) {
       const { unmount } = renderFull(makePost(['travel']), pref);
       expect(screen.getByTestId('markdown-viewer').textContent).toBe(
         'the actual body'

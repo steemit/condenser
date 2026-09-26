@@ -12,12 +12,24 @@ vi.mock('@/lib/auth/session', () => ({
   updateSession: vi.fn(),
 }));
 
+// Partial mock: keep the real RATE_LIMITS / rateLimitResponse, stub only the
+// Redis-backed check (audit N-08) — same pattern as the following route test.
+vi.mock('@/lib/cache/rate-limit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/cache/rate-limit')>();
+  return {
+    ...actual,
+    checkRateLimit: vi.fn(async () => ({ allowed: true })),
+  };
+});
+
 import { POST } from '@/app/api/auth/preferences/route';
 import { getSession, setSessionCookie, updateSession } from '@/lib/auth/session';
+import { checkRateLimit } from '@/lib/cache/rate-limit';
 
 const getSessionMock = getSession as unknown as Mock;
 const updateSessionMock = updateSession as unknown as Mock;
 const setSessionCookieMock = setSessionCookie as unknown as Mock;
+const checkRateLimitMock = checkRateLimit as unknown as Mock;
 
 const loggedInSession = {
   username: 'alice',
@@ -32,6 +44,39 @@ describe('POST /api/auth/preferences', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     updateSessionMock.mockResolvedValue('updated-token');
+    checkRateLimitMock.mockResolvedValue({ allowed: true });
+  });
+
+  it('checks the auth:preferences limit (30/min/IP) before touching the session', async () => {
+    getSessionMock.mockResolvedValue(loggedInSession);
+
+    await POST(
+      makePostRequest('/api/auth/preferences', { payload: { nsfwPref: 'hide' } }, csrfHeader())
+    );
+    expect(checkRateLimitMock).toHaveBeenCalledWith(expect.anything(), {
+      key: 'auth:preferences',
+      limit: 30,
+      windowSeconds: 60,
+    });
+  });
+
+  it('returns 429 with Retry-After and never reaches the session when limited', async () => {
+    checkRateLimitMock.mockResolvedValue({
+      allowed: false,
+      retryAfterSeconds: 33,
+    });
+
+    const res = await POST(
+      makePostRequest('/api/auth/preferences', { payload: { nsfwPref: 'hide' } }, csrfHeader())
+    );
+    expect(res.status).toBe(429);
+    expect(res.headers.get('Retry-After')).toBe('33');
+    expect(await res.json()).toEqual({
+      error: 'Too many requests. Please try again later.',
+    });
+    // Limited before the session lookup: no session read, no rewrite.
+    expect(getSessionMock).not.toHaveBeenCalled();
+    expect(updateSessionMock).not.toHaveBeenCalled();
   });
 
   it('rejects anonymous sessions with 401', async () => {

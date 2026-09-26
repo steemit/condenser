@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import type { NsfwPref } from '@/lib/nsfw';
+
 // Types
 export interface UserPreferences {
   locale: string | null;
-  nsfwPref: string;
+  nsfwPref: NsfwPref;
   nightmode: boolean;
   blogmode: boolean;
   currency: string;

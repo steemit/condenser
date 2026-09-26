@@ -15,9 +15,23 @@ import {
 } from '@/lib/auth/session';
 import { enforceCsrf, setCsrfCookie } from '@/lib/auth/csrf';
 import { readJsonWithLimit } from '@/lib/api/body-limit';
+import {
+  RATE_LIMITS,
+  checkRateLimit,
+  rateLimitResponse,
+} from '@/lib/cache/rate-limit';
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit first (audit N-08), before the session lookup — same order
+    // as the other auth routes: every accepted hit rewrites the session, so
+    // the endpoint must not be hammerable (this PR wired it to automated
+    // client writes).
+    const rateLimit = await checkRateLimit(request, RATE_LIMITS.authPreferences);
+    if (!rateLimit.allowed) {
+      return rateLimitResponse(rateLimit.retryAfterSeconds);
+    }
+
     const session = await getSession(request);
     if (!session?.username) {
       return NextResponse.json(

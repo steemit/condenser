@@ -74,6 +74,10 @@ export interface RateLimitResult {
  *   RPC getAccount + signature verification; the account dimension stops
  *   one credential being hammered from many IPs (and slows one attacker
  *   probing many accounts from a single IP via the IP dimension).
+ * - auth/preferences 30/min/IP — every accepted hit rewrites the session
+ *   (Redis write or JWT re-issue + Set-Cookie) after a CSRF check; the
+ *   client middleware debounces toggles to a trickle, so 30/min only binds
+ *   scripted abuse of the rewrite path.
  * - steem/broadcast 30/min/IP — the chain node enforces its own limits;
  *   this only caps the relay's abuse surface.
  * - search          30/min/IP — each request opens an ES scroll context
@@ -97,6 +101,7 @@ export const RATE_LIMITS = {
   authSession: { key: 'auth:session', limit: 120, windowSeconds: 60 },
   authLoginIp: { key: 'auth:login:ip', limit: 10, windowSeconds: 60 },
   authLoginAccount: { key: 'auth:login:acct', limit: 10, windowSeconds: 60 },
+  authPreferences: { key: 'auth:preferences', limit: 30, windowSeconds: 60 },
   steemBroadcast: { key: 'steem:broadcast', limit: 30, windowSeconds: 60 },
   search: { key: 'search', limit: 30, windowSeconds: 60 },
   steemOverseer: { key: 'steem:overseer', limit: 60, windowSeconds: 60 },

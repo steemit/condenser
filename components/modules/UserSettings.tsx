@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setLocale, setUserPreferences } from '@/store/slices/appSlice';
 import { LOCALES, LOCALE_LABELS, DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/config';
+import { normalizeNsfwPref } from '@/lib/nsfw';
 import { broadcastAccountUpdate } from '@/lib/api/broadcast';
 import { fetchAccount } from '@/lib/api/steem';
 import { postJsonWithCsrf } from '@/lib/api/csrf';
@@ -488,7 +489,9 @@ export default function UserSettings({
                 dispatch(
                   setUserPreferences({
                     ...userPreferences,
-                    nsfwPref: e.target.value,
+                    // The <select> only offers the three legal values; the
+                    // coercion keeps the store's NsfwPref type honest.
+                    nsfwPref: normalizeNsfwPref(e.target.value),
                   })
                 )
               }

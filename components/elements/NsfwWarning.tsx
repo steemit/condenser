@@ -45,12 +45,8 @@ export default function NsfwWarning({ onReveal }: { onReveal: () => void }) {
         </span>
       ) : (
         <span>
-          <a
-            href={signupUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-accent-foreground underline"
-          >
+          {/* Legacy PostSummary.jsx:315 — plain same-window signup link. */}
+          <a href={signupUrl} className="text-accent-foreground underline">
             {t("postsummary_jsx.create_an_account")}
           </a>{" "}
           {t("postsummary_jsx.to_save_your_preferences")}.

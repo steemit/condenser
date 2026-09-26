@@ -10,34 +10,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { isGdprUser } from './lib/gdpr-user-list';
-
-// Reserved route words. These guard against reserved words being treated as
-// usernames (branches 3-6) and keep the invalid-pattern fallthrough (below)
-// from shadowing real app routes. They are intentionally NOT applied to post
-// categories (branch 2): the legacy Post regex is <tag>/<account>/<permlink>
-// where <tag> is ([\w.-]{1,32}) with NO reserved-word exclusion — /about/@a/p,
-// /welcome/@a/p, /hot/@a/p and even /tags/@user/permlink all render Post pages
-// in legacy (its static checks are exact-path, e.g. path === '/tags', so they
-// never match a three-segment path; CategoryFilters <sort>/<tag> matches at
-// most two segments, so /hot and /hot/<tag> stay sort feeds). Do not
-// re-introduce a reserved-word check in branch 2: reserved-word categories
-// are real first tags of posts and must not 404.
-const RESERVED_ROUTES = [
-  'trending', 'hot', 'created', 'payout', 'payout_comments', 'muted',
-  'login', 'search', 'submit', 'about', 'faq', 'privacy', 'support', 'tos',
-  'communities', 'tags', 'rewards', 'roles', 'welcome', 'api', '_next'
-];
-
-// User profile sections
-const SECTIONS = [
-  'blog', 'posts', 'comments', 'replies', 'payout', 'feed',
-  'followers', 'followed', 'settings', 'notifications', 'communities'
-];
-
-// Sort types for category filters (from legacy CategoryFilters regex)
-const SORT_TYPES = [
-  'hot', 'trending', 'promoted', 'payout', 'payout_comments', 'muted', 'created'
-];
+import { PROFILE_SECTIONS, RESERVED_ROUTES, SORT_TYPES } from './lib/routes';
 
 // Known static asset extensions served from public/ (or framework internals).
 // Anything else with a dot (usernames, permlinks) must continue routing.
@@ -103,7 +76,8 @@ export function proxy(request: NextRequest) {
   }
 
   // 2. Pattern: /category/@username/permlink → Post page
-  // No reserved-word check here — see the RESERVED_ROUTES rationale above.
+  // No reserved-word check here — see the RESERVED_ROUTES rationale in
+  // lib/routes.ts.
   const postWithCategoryMatch = pathname.match(/^\/([^\/]+)\/@([^\/]+)\/([^\/]+)$/);
   if (postWithCategoryMatch) {
     const [, category, username, permlink] = postWithCategoryMatch;
@@ -128,8 +102,8 @@ export function proxy(request: NextRequest) {
   const userSectionMatch = pathname.match(/^\/@([^\/]+)\/([^\/]+)$/);
   if (userSectionMatch) {
     const [, username, section] = userSectionMatch;
-    if (!RESERVED_ROUTES.includes(username.toLowerCase()) && 
-        SECTIONS.includes(section.toLowerCase())) {
+    if (!RESERVED_ROUTES.includes(username.toLowerCase()) &&
+        PROFILE_SECTIONS.includes(section.toLowerCase())) {
       // Rewrite to user/[username]/[section] route
       const url = request.nextUrl.clone();
       url.pathname = `/user/${username}/${section}`;
@@ -141,8 +115,8 @@ export function proxy(request: NextRequest) {
   const postNoCategoryMatch = pathname.match(/^\/@([^\/]+)\/([^\/]+)$/);
   if (postNoCategoryMatch) {
     const [, username, permlink] = postNoCategoryMatch;
-    if (!RESERVED_ROUTES.includes(username.toLowerCase()) && 
-        !SECTIONS.includes(permlink.toLowerCase())) {
+    if (!RESERVED_ROUTES.includes(username.toLowerCase()) &&
+        !PROFILE_SECTIONS.includes(permlink.toLowerCase())) {
       const url = request.nextUrl.clone();
       url.pathname = `/post-no-category/${username}/${permlink}`;
       return NextResponse.rewrite(url);

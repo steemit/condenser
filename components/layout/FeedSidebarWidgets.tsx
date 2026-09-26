@@ -16,6 +16,12 @@ import TronAd from "@/components/elements/TronAd";
 import SteemMarket from "@/components/elements/SteemMarket";
 import Announcement from "@/components/layout/Announcement";
 import { INDEX_LEFT_SIDE_AD_LIST, POST_LEFT_SIDE_AD_LIST, tronAdsConfig } from "@/lib/ads";
+import { SORT_TYPES } from "@/lib/routes";
+
+/** /<sort>/hive-* matcher; the alternation is derived from SORT_TYPES (lib/routes.ts). */
+const COMMUNITY_FEED_RE = new RegExp(
+  `^\\/(?:${SORT_TYPES.join("|")})\\/(hive-[^/]+)/`
+);
 
 /** Legacy c-sidebar__module chrome. */
 function SidebarModule({
@@ -148,9 +154,7 @@ export function FeedSidebarWidgets() {
   const username = useAppSelector((s) => s.user.current?.username);
   const trackingId = useAppSelector((s) => s.user.trackingId);
 
-  const communityMatch = pathname?.match(
-    /^\/(?:trending|hot|created|promoted|payout|payout_comments|muted)\/(hive-[^/]+)/
-  );
+  const communityMatch = pathname?.match(COMMUNITY_FEED_RE);
   const community = communityMatch?.[1];
   // Post pages get the post-scoped creative tags (legacy Post.jsx right
   // rail); feed pages get the index list.

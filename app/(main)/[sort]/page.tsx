@@ -9,20 +9,11 @@ import {
   type FetchPostsParams,
   type Post,
 } from "@/lib/api/steem";
+import { SORT_TYPES } from "@/lib/routes";
 import PostsList from "@/components/cards/PostsList";
 import NotFound from "@/components/NotFound";
 import { FeedLayout } from "@/components/layout/FeedLayout";
 import { FeedListHeader } from "@/components/layout/FeedListHeader";
-
-const VALID_SORTS = [
-  "hot",
-  "trending",
-  "promoted",
-  "payout",
-  "payout_comments",
-  "muted",
-  "created",
-];
 
 export default function SortPage() {
   const dispatch = useAppDispatch();
@@ -34,7 +25,7 @@ export default function SortPage() {
   const loadingMoreRef = useRef(false);
 
   const sortString = (Array.isArray(sort) ? sort[0] : sort) ?? "";
-  const isValidSort = VALID_SORTS.includes(sortString.toLowerCase());
+  const isValidSort = SORT_TYPES.includes(sortString.toLowerCase());
   const showNotFound =
     !isValidSort || sortString.toLowerCase() === "404";
 

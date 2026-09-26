@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { normalizeUsername } from '@/lib/utils/username';
 import { FeedLayout } from '@/components/layout/FeedLayout';
 
@@ -13,6 +14,7 @@ import { FeedLayout } from '@/components/layout/FeedLayout';
 export default function UserRedirectClient() {
   const params = useParams();
   const router = useRouter();
+  const t = useTranslations();
   const usernameRaw = params.username as string;
   const username = normalizeUsername(usernameRaw);
 
@@ -24,7 +26,7 @@ export default function UserRedirectClient() {
   return (
     <FeedLayout hideRightRail>
       <div className="flex flex-col items-center justify-center gap-2 py-12">
-        <p className="text-muted-foreground">Loading...</p>
+        <p className="text-muted-foreground">{t('g.loading')}...</p>
       </div>
     </FeedLayout>
   );

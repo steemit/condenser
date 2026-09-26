@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { normalizeUsername, formatUsername } from '@/lib/utils/username';
 import { fetchPostByPermlink } from '@/lib/api/steem';
 import { FeedLayout } from '@/components/layout/FeedLayout';
@@ -41,6 +42,7 @@ export default function PostNoCategoryClient({
   permlink: string;
 }) {
   const router = useRouter();
+  const t = useTranslations();
   const username = normalizeUsername(usernameRaw);
   const [missing, setMissing] = useState(false);
 
@@ -86,7 +88,7 @@ export default function PostNoCategoryClient({
   return (
     <FeedLayout>
       <div className="flex flex-col items-center justify-center gap-2 py-12">
-        <p className="text-muted-foreground">Loading...</p>
+        <p className="text-muted-foreground">{t('g.loading')}...</p>
       </div>
     </FeedLayout>
   );

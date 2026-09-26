@@ -87,6 +87,10 @@ export interface RateLimitResult {
  *   caveat: users behind a shared egress IP (NAT/CGNAT) logging in within
  *   the same minute can collectively trip the 429; a kind that fails stays
  *   empty until the next page load (the documented seeding failure mode).
+ * - steem/followers 60/min/IP — profile pages page through followers/
+ *   following lists (page-based, limit <= 100); same per-IP ceiling as
+ *   steem/following for the same key-spray rationale (the account/page
+ *   params reach the server cache keys in get{Followers,Following}ByPage).
  */
 export const RATE_LIMITS = {
   authChallenge: { key: 'auth:challenge', limit: 30, windowSeconds: 60 },
@@ -97,6 +101,7 @@ export const RATE_LIMITS = {
   search: { key: 'search', limit: 30, windowSeconds: 60 },
   steemOverseer: { key: 'steem:overseer', limit: 60, windowSeconds: 60 },
   steemFollowing: { key: 'steem:following', limit: 60, windowSeconds: 60 },
+  steemFollowers: { key: 'steem:followers', limit: 60, windowSeconds: 60 },
 } as const satisfies Record<string, RateLimitRule>;
 
 const UNKNOWN_IP = 'unknown';

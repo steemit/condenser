@@ -9,6 +9,7 @@
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { buildCspHeaderValue, generateCspNonce } from './lib/csp';
 import { isGdprUser } from './lib/gdpr-user-list';
 import {
   INTERNAL_AT_EXEMPT_RE,
@@ -17,6 +18,9 @@ import {
   RESERVED_ROUTES,
   SORT_TYPES,
 } from './lib/routes';
+
+/** Extra request headers NextResponse constructors accept (per-request nonce). */
+type RequestInit = Parameters<typeof NextResponse.next>[0];
 
 // Known static asset extensions served from public/ (or framework internals).
 // Anything else with a dot (usernames, permlinks) must continue routing.
@@ -27,10 +31,32 @@ const STATIC_ASSET_RE =
 // from INTERNAL_ROUTE_PREFIXES; see the guard near the end of this file.
 
 export function proxy(request: NextRequest) {
+  // Content-Security-Policy with a per-request nonce (audit N-02 follow-up):
+  // the policy is attached to the REQUEST headers — that is how Next.js's
+  // render pipeline discovers the nonce and stamps it on the framework /
+  // bootstrap scripts it emits — and mirrored onto the response. Both headers
+  // are SET (never appended), so a client cannot spoof a nonce past the
+  // render pipeline by sending its own. Every route renders per-request
+  // (app/layout.tsx `dynamic = 'force-dynamic'`), so no cached or static
+  // document can carry a stale nonce.
+  const nonce = generateCspNonce();
+  const csp = buildCspHeaderValue(nonce);
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-nonce', nonce); // consumed by app/layout.tsx
+  requestHeaders.set('Content-Security-Policy', csp);
+
+  const response = resolveRoute(request, {
+    request: { headers: requestHeaders },
+  });
+  response.headers.set('Content-Security-Policy', csp);
+  return response;
+}
+
+function resolveRoute(request: NextRequest, requestInit: RequestInit) {
   // Get pathname and ensure it's decoded
   // Next.js should decode it automatically, but we handle %40 (@) encoding explicitly
   let { pathname } = request.nextUrl;
-  
+
   // Decode URL-encoded @ symbols (%40) if present
   // This handles cases where @ might be encoded in the URL
   if (pathname.includes('%40')) {
@@ -52,7 +78,7 @@ export function proxy(request: NextRequest) {
     pathname === '/404' ||
     STATIC_ASSET_RE.test(pathname)
   ) {
-    return NextResponse.next();
+    return NextResponse.next(requestInit);
   }
 
   // GDPR-listed accounts 404 on every route family that exposes them
@@ -64,7 +90,7 @@ export function proxy(request: NextRequest) {
   // only matches known file extensions.
   const gdprMatch = pathname.match(/^\/(?:[^\/]+\/)?@([^\/]+)/);
   if (gdprMatch && isGdprUser(gdprMatch[1])) {
-    return NextResponse.rewrite(new URL('/404', request.url));
+    return NextResponse.rewrite(new URL('/404', request.url), requestInit);
   }
 
   // Follow legacy route matching order (ResolveRoute.js):
@@ -81,7 +107,7 @@ export function proxy(request: NextRequest) {
   const communityRolesMatch = pathname.match(/^\/roles\/([^\/]+)$/);
   if (communityRolesMatch) {
     // Pass through to roles/[tag] route
-    return NextResponse.next();
+    return NextResponse.next(requestInit);
   }
 
   // 2. Pattern: /category/@username/permlink → Post page
@@ -92,7 +118,7 @@ export function proxy(request: NextRequest) {
     const [, category, username, permlink] = postWithCategoryMatch;
     const url = request.nextUrl.clone();
     url.pathname = `/post/${category}/${username}/${permlink}`;
-    return NextResponse.rewrite(url);
+    return NextResponse.rewrite(url, requestInit);
   }
 
   // 3. Pattern: /@username/feed → User feed
@@ -103,7 +129,7 @@ export function proxy(request: NextRequest) {
       // Rewrite to user/[username]/[section] route (feed is a section)
       const url = request.nextUrl.clone();
       url.pathname = `/user/${username}/feed`;
-      return NextResponse.rewrite(url);
+      return NextResponse.rewrite(url, requestInit);
     }
   }
 
@@ -116,7 +142,7 @@ export function proxy(request: NextRequest) {
       // Rewrite to user/[username]/[section] route
       const url = request.nextUrl.clone();
       url.pathname = `/user/${username}/${section}`;
-      return NextResponse.rewrite(url);
+      return NextResponse.rewrite(url, requestInit);
     }
   }
 
@@ -128,7 +154,7 @@ export function proxy(request: NextRequest) {
         !PROFILE_SECTIONS.includes(permlink.toLowerCase())) {
       const url = request.nextUrl.clone();
       url.pathname = `/post-no-category/${username}/${permlink}`;
-      return NextResponse.rewrite(url);
+      return NextResponse.rewrite(url, requestInit);
     }
   }
 
@@ -140,10 +166,10 @@ export function proxy(request: NextRequest) {
       // Rewrite to user/[username] route (redirects to user/[username]/blog)
       const url = request.nextUrl.clone();
       url.pathname = `/user/${username}`;
-      return NextResponse.rewrite(url);
+      return NextResponse.rewrite(url, requestInit);
     }
     // Reserved route used as username - should be 404
-    return NextResponse.rewrite(new URL('/404', request.url));
+    return NextResponse.rewrite(new URL('/404', request.url), requestInit);
   }
 
   // 7. Pattern: /[sort]/[tag] → Category filters (including communities)
@@ -153,7 +179,7 @@ export function proxy(request: NextRequest) {
     const [, sort, tag] = categoryFiltersMatch;
     if (SORT_TYPES.includes(sort.toLowerCase()) && !tag.startsWith('@')) {
       // Pass through to [sort]/[tag] route
-      return NextResponse.next();
+      return NextResponse.next(requestInit);
     }
   }
 
@@ -166,7 +192,7 @@ export function proxy(request: NextRequest) {
     // proxy() passes it through first.
     if (SORT_TYPES.includes(sort.toLowerCase())) {
       // Pass through to [sort] route
-      return NextResponse.next();
+      return NextResponse.next(requestInit);
     }
   }
 
@@ -189,7 +215,7 @@ export function proxy(request: NextRequest) {
     INTERNAL_TARGET_RE.test(pathname) &&
     !INTERNAL_AT_EXEMPT_RE.test(pathname)
   ) {
-    return NextResponse.rewrite(new URL('/404', request.url));
+    return NextResponse.rewrite(new URL('/404', request.url), requestInit);
   }
 
   // Catch invalid patterns that should be 404 (following legacy behavior)
@@ -199,7 +225,7 @@ export function proxy(request: NextRequest) {
   if (invalidThreeSegment) {
     const [, first, second] = invalidThreeSegment;
     if (!RESERVED_ROUTES.includes(first.toLowerCase()) && !second.startsWith('@')) {
-      return NextResponse.rewrite(new URL('/404', request.url));
+      return NextResponse.rewrite(new URL('/404', request.url), requestInit);
     }
   }
 
@@ -208,7 +234,7 @@ export function proxy(request: NextRequest) {
   if (invalidTwoSegment) {
     const [, first] = invalidTwoSegment;
     if (!RESERVED_ROUTES.includes(first.toLowerCase()) && !first.startsWith('@')) {
-      return NextResponse.rewrite(new URL('/404', request.url));
+      return NextResponse.rewrite(new URL('/404', request.url), requestInit);
     }
   }
 
@@ -217,11 +243,11 @@ export function proxy(request: NextRequest) {
   if (invalidSingleSegment) {
     const [, segment] = invalidSingleSegment;
     if (!RESERVED_ROUTES.includes(segment.toLowerCase()) && !segment.startsWith('@')) {
-      return NextResponse.rewrite(new URL('/404', request.url));
+      return NextResponse.rewrite(new URL('/404', request.url), requestInit);
     }
   }
 
-  return NextResponse.next();
+  return NextResponse.next(requestInit);
 }
 
 export const config = {

@@ -47,7 +47,7 @@ describe('POST /api/auth/preferences', () => {
     checkRateLimitMock.mockResolvedValue({ allowed: true });
   });
 
-  it('checks the auth:preferences limit (30/min/IP) before touching the session', async () => {
+  it('checks the auth:preferences limit (60/min/IP) before touching the session', async () => {
     getSessionMock.mockResolvedValue(loggedInSession);
 
     await POST(
@@ -55,7 +55,7 @@ describe('POST /api/auth/preferences', () => {
     );
     expect(checkRateLimitMock).toHaveBeenCalledWith(expect.anything(), {
       key: 'auth:preferences',
-      limit: 30,
+      limit: 60,
       windowSeconds: 60,
     });
   });

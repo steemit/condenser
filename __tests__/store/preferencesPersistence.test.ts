@@ -96,29 +96,51 @@ describe('preferencesPersistence middleware (legacy SagaShared parity)', () => {
     });
   });
 
-  it('skips the request for anonymous visitors (route requires a session)', async () => {
+  it('skips the flush for anonymous visitors (route requires a session)', async () => {
     const store = makeStore(false);
 
     store.dispatch(toggleNightmode());
     await vi.advanceTimersByTimeAsync(100);
 
+    // The debounce arms regardless of login state; the flush-time gate is
+    // what skips the POST. Redux still applied the toggle.
     expect(postJsonWithCsrfMock).not.toHaveBeenCalled();
-    // Redux still applied the toggle; only persistence is skipped.
     expect(store.getState().app.user_preferences.nightmode).toBe(true);
   });
 
-  it('cancels the pending timer on logout — no POST after the session is gone', async () => {
+  it('keeps a toggle dispatched anonymously when a login lands inside the debounce window', async () => {
+    postJsonWithCsrfMock.mockResolvedValue({ ok: true });
+    const store = makeStore(false);
+
+    store.dispatch(toggleNightmode());
+    // Login inside the window: the pending toggle now belongs to a valid
+    // session — this is why the dispatch path does not filter on login.
+    store.dispatch(setUser({ username: 'alice' }));
+    await vi.advanceTimersByTimeAsync(100);
+
+    expect(postJsonWithCsrfMock).toHaveBeenCalledTimes(1);
+    expect(postJsonWithCsrfMock).toHaveBeenCalledWith('/api/auth/preferences', {
+      payload: { nightmode: true, blogmode: false },
+    });
+  });
+
+  it('cancels the pending timer on logout — a re-login inside the window must not resurrect it', async () => {
     postJsonWithCsrfMock.mockResolvedValue({ ok: true });
     const store = makeStore(true);
 
     store.dispatch(toggleNightmode());
     store.dispatch(logout());
+    // Re-login through a path the middleware does not watch: if the
+    // cancellation branch were deleted, the surviving timer's flush would
+    // pass the login gate and POST — that is what isolates this test from
+    // the flush-time gate above.
+    store.dispatch(setUser({ username: 'alice' }));
     await vi.advanceTimersByTimeAsync(100);
 
     expect(postJsonWithCsrfMock).not.toHaveBeenCalled();
   });
 
-  it('re-checks login at flush time, not only dispatch time', async () => {
+  it('skips the flush when the account was cleared through an unwatched path', async () => {
     postJsonWithCsrfMock.mockResolvedValue({ ok: true });
     const store = makeStore(true);
 

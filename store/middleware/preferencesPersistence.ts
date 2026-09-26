@@ -49,9 +49,10 @@ export function createPreferencesPersistenceMiddleware(
   let timer: ReturnType<typeof setTimeout> | null = null;
 
   const flush = async (getState: () => RootState) => {
-    // Re-check login at flush time, not just dispatch time: the debounce
-    // window can straddle a logout (skip — the POST would only 401) or a
-    // login (the pending toggle belongs to the now-valid session).
+    // The login gate lives HERE, at flush time — the only place it is
+    // checked: the debounce window can straddle a logout (skip — the POST
+    // would only 401) or a login (the pending toggle belongs to the
+    // now-valid session).
     const state = getState();
     if (!state.user.current?.username) return;
 
@@ -67,6 +68,12 @@ export function createPreferencesPersistenceMiddleware(
       const res = await postJsonWithCsrf('/api/auth/preferences', { payload });
       if (!res.ok) {
         // 401 (not logged in) and friends: nothing the UI should do.
+        // The one race left is a POST already on the wire when a logout
+        // lands: with Redis sessions the logout revokes the session id, so
+        // the route 401s and lands here; in JWT-fallback mode the
+        // superseded token cannot be revoked, so the write goes to the
+        // orphaned session — the documented revocation residual (see
+        // revokeSession in lib/auth/session.ts).
         console.warn(
           'Failed to persist user preferences:',
           res.status
@@ -83,13 +90,12 @@ export function createPreferencesPersistenceMiddleware(
     const type = (action as { type: string }).type;
 
     if (PERSISTED_ACTION_TYPES.has(type)) {
-      // Skip anonymous visitors up front: the route requires a session and
-      // would 401 (legacy's anonymous POSTs failed the same way, just
-      // server-side). Their toggles stay Redux-only for this page load.
-      // (flush re-checks in case login lands inside the debounce window.)
-      const state = getState() as RootState;
-      if (!state.user.current?.username) return result;
-
+      // Always arm the debounce, regardless of login state at dispatch
+      // time: the flush-time re-check below owns the login gate. Filtering
+      // anonymous dispatches up front would silently drop a toggle that
+      // lands inside the debounce window before a login — the pending
+      // toggle then belongs to the now-valid session. The cost is that an
+      // anonymous toggle arms a timer whose flush skips; harmless.
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         timer = null;

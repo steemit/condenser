@@ -147,8 +147,21 @@ export async function POST(request: NextRequest) {
         operations?: unknown;
         signatures?: unknown[];
       };
+      /**
+       * Optional client hint naming the ROOT discussion a comment-level
+       * write belongs to (C2). A depth>=2 reply's op names only its
+       * immediate parent, and delete_comment carries no parent at all —
+       * but the L1 entries that must refresh (/api/steem/post and
+       * /api/steem/comments) are keyed by the ROOT permlink. The client
+       * rendering the discussion knows the root and supplies it here;
+       * tokens stay op+hint-derived and charset-checked either way, and a
+       * hostile hint can at worst evict the sender's own browser entries.
+       */
+      cacheContext?: {
+        rootPermlink?: unknown;
+      };
     };
-    const { signedTransaction } = body;
+    const { signedTransaction, cacheContext } = body;
 
     if (!signedTransaction) {
       return NextResponse.json(
@@ -245,7 +258,19 @@ export async function POST(request: NextRequest) {
     // would otherwise survive a vote/reply, serving pre-write data).
     // Tokens are op-derived (client-controlled), so restrict them to the
     // account/permlink charset — anything else is dropped, never trusted.
-    const SAFE_TOKEN = /^[a-z0-9.=-]+$/;
+    // Uppercase is allowed: permlinks legally contain it (base58 noise /
+    // other clients) and URLSearchParams leaves it unescaped, so dropping
+    // it would silently miss the entry it should evict (audit X9).
+    const SAFE_TOKEN = /^[A-Za-z0-9.=-]+$/;
+    // Root-dimension hint (C2): `permlink=<root>` for comment-level writes
+    // whose op names only a nested parent (or nothing, for delete_comment).
+    // Same permlink charset bound as SAFE_TOKEN.
+    const ROOT_PERMLINK_RE = /^[A-Za-z0-9.-]{1,256}$/;
+    const rootPermlink =
+      typeof cacheContext?.rootPermlink === 'string' &&
+      ROOT_PERMLINK_RE.test(cacheContext.rootPermlink)
+        ? cacheContext.rootPermlink
+        : undefined;
     const invalidateTokens: string[] = [];
     if (actor && SAFE_TOKEN.test(actor)) invalidateTokens.push(actor);
     if (opType === 'vote' && permlink && SAFE_TOKEN.test(`permlink=${permlink}`)) {
@@ -279,6 +304,16 @@ export async function POST(request: NextRequest) {
           invalidateTokens.push(`permlink=${ownPermlink}`);
         }
       }
+    }
+    if ((opType === 'vote' || opType === 'comment' || opType === 'delete_comment') && rootPermlink) {
+      // C2: comment-level writes (vote/reply/edit/delete on a COMMENT) also
+      // drop the ROOT discussion's L1 entries — /api/steem/post and
+      // /api/steem/comments are keyed by the root permlink, which the op
+      // itself does not carry at depth>=2 (and never for delete_comment).
+      // For root-level writes this duplicates an op-derived token, hence
+      // the dedupe check.
+      const rootToken = `permlink=${rootPermlink}`;
+      if (!invalidateTokens.includes(rootToken)) invalidateTokens.push(rootToken);
     }
     if (invalidateTokens.length > 0) {
       response.headers.set('X-Cache-Invalidate', invalidateTokens.join(','));

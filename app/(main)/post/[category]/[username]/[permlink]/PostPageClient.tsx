@@ -116,7 +116,13 @@ export default function PostPageClient() {
       permlink: commentPermlink,
     });
     try {
-      await broadcastDeleteComment({ author, permlink: commentPermlink });
+      // The delete op carries no parent reference; the root context lets the
+      // broadcast response also drop the discussion's L1 entries (C2).
+      await broadcastDeleteComment({
+        author,
+        permlink: commentPermlink,
+        rootPermlink: post?.permlink,
+      });
       setComments((prevComments) =>
         prevComments.filter(
           (c) => !(c.author === author && c.permlink === commentPermlink)

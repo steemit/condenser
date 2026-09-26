@@ -414,6 +414,140 @@ describe('POST /api/steem/broadcast', () => {
     expect(res.headers.get('X-Cache-Invalidate')).toBe('alice');
   });
 
+  it('keeps permlink tokens containing uppercase (audit X9)', async () => {
+    // base58 noise segments (and other clients' permlinks) legally contain
+    // uppercase; URLSearchParams leaves it unescaped in the L1 key, so the
+    // token must survive the safe-charset filter to match anything.
+    const tx = signedTx([
+      ['vote', { voter: 'alice', author: 'bob', permlink: 're-Bob-2026-Ab3xZ', weight: 10000 }],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe(
+      'alice,permlink=re-Bob-2026-Ab3xZ'
+    );
+  });
+
+  it('emits a root-dimension token for a depth-2 reply via cacheContext (C2)', async () => {
+    // parent_permlink names the parent COMMENT, not the root post — only
+    // the client-supplied root context names the entries that must evict.
+    const tx = signedTx([
+      [
+        'comment',
+        {
+          parent_author: 'carol',
+          parent_permlink: 're-my-post-123',
+          author: 'erin',
+          permlink: 're-re-my-post-456',
+          title: '',
+          body: 'nested',
+          json_metadata: '{}',
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: 'my-post' },
+      })
+    );
+    expect(res.status).toBe(200);
+    // parent token (legacy behaviour, matches nothing useful at depth 2)
+    // plus the root token that actually matches the post/comments URLs.
+    expect(res.headers.get('X-Cache-Invalidate')).toBe(
+      'erin,permlink=re-my-post-123,permlink=my-post'
+    );
+  });
+
+  it('dedupes the root token when it equals the op-derived one (top-level reply)', async () => {
+    const tx = signedTx([
+      [
+        'comment',
+        {
+          parent_author: 'bob',
+          parent_permlink: 'my-post',
+          author: 'erin',
+          permlink: 're-my-post',
+          title: '',
+          body: 'Nice',
+          json_metadata: '{}',
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: 'my-post' },
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('erin,permlink=my-post');
+  });
+
+  it('emits the root token for delete_comment via cacheContext (C2)', async () => {
+    // The delete op carries no parent reference at all; without the hint
+    // the discussion's L1 entries survived for the whole 15s fresh window.
+    const tx = signedTx([['delete_comment', { author: 'erin', permlink: 're-my-post' }]]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: 'my-post' },
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('erin,permlink=my-post');
+  });
+
+  it('emits the root token for a comment vote via cacheContext (C2)', async () => {
+    const tx = signedTx([
+      ['vote', { voter: 'alice', author: 'carol', permlink: 're-my-post', weight: 10000 }],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: 'my-post' },
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe(
+      'alice,permlink=re-my-post,permlink=my-post'
+    );
+  });
+
+  it('ignores a cacheContext that leaves the permlink charset', async () => {
+    const tx = signedTx([['delete_comment', { author: 'erin', permlink: 're-my-post' }]]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: 'bad\r\nroot*glob' },
+      })
+    );
+    expect(res.status).toBe(200);
+    // Hint dropped — behaviour falls back to the pre-C2 op-derived tokens.
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('erin');
+  });
+
+  it('ignores a non-string cacheContext.rootPermlink', async () => {
+    const tx = signedTx([['delete_comment', { author: 'erin', permlink: 're-my-post' }]]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: { evil: true } },
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('erin');
+  });
+
   it('rejects non-client operations (transfer) with 400 and never relays them', async () => {
     // audit N-10: the relay only accepts the operation set the client itself
     // constructs; transfer is not one of them.

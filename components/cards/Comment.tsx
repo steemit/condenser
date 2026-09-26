@@ -28,6 +28,12 @@ interface CommentProps {
   comment: Comment;
   depth?: number;
   sortOrder?: 'votes' | 'new' | 'trending';
+  /**
+   * Root post permlink of the discussion (C2): comment-level writes from
+   * this subtree (reply/edit/delete/vote) invalidate L1 entries keyed by
+   * the ROOT permlink, which the ops themselves don't carry at depth >= 2.
+   */
+  rootPermlink?: string;
   /** Called after a reply to this comment was broadcast successfully. */
   onReply?: (result: PostEditorResult) => void;
   onEdit?: (author: string, permlink: string, body: string) => void;
@@ -46,6 +52,7 @@ export default function Comment({
   comment,
   depth = 1,
   sortOrder = 'trending',
+  rootPermlink,
   onReply,
   onEdit,
   onDelete,
@@ -186,7 +193,7 @@ export default function Comment({
 
               {/* footer */}
               <div className="Comment__footer flex flex-wrap items-center gap-x-3 gap-y-1 rounded-b-[6px] border border-border bg-card px-[10px] pb-[5px] pt-[3px] text-[90%]">
-                <Voting post={comment} isComment />
+                <Voting post={comment} isComment rootPermlink={rootPermlink} />
                 <button
                   type="button"
                   onClick={() => {
@@ -232,6 +239,7 @@ export default function Comment({
                     parentPermlink={
                       showReply ? comment.permlink : comment.parent_permlink
                     }
+                    rootPermlink={rootPermlink}
                     commentPermlink={showEdit ? comment.permlink : undefined}
                     body={showEdit ? comment.body : undefined}
                     onSuccess={(result) => {
@@ -274,6 +282,7 @@ export default function Comment({
                   comment={reply}
                   depth={depth + 1}
                   sortOrder={sortOrder}
+                  rootPermlink={rootPermlink}
                   onReply={onReply}
                   onEdit={onEdit}
                   onDelete={onDelete}

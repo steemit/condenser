@@ -67,6 +67,8 @@ export const SORT_TYPES: readonly string[] = [
  * access to those, and usePathname() always reports the pre-rewrite URL.
  */
 export function isPostPathname(pathname: string): boolean {
+  // usePathname() reports null outside an App Router context.
+  if (!pathname) return false;
   // /category/@user/permlink (exactly three segments, optional slash)
   if (/^\/[^/]+\/@[^/]+\/[^/]+\/?$/.test(pathname)) return true;
   // /@user/permlink — anything that is not a profile section

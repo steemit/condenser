@@ -31,7 +31,7 @@ PrimaryNavigation, FeedSidebarWidgets and `lib/analytics/route-tags.ts`.
 | `/@username` | `UserProfile` (blog tab) | Rewrite → `/user/<username>` (branch 6, User profile root); reserved usernames rewrite to `/404` | `app/(main)/user/[username]/page.tsx` (client redirect to `/@<username>/blog`) | Implemented |
 | `/<sort>/<tag>` | `PostsIndex [sort, tag]` | Pass-through when `sort` ∈ `SORT_TYPES` and `tag` doesn't start with `@` (branch 7, Category filters) | `app/(main)/[sort]/[tag]/page.tsx` | Implemented |
 | `/<sort>` | `PostsIndex [sort]` | Pass-through when `sort` ∈ `SORT_TYPES` (the sort-only pass-through below branch 7); literal `/404` rewrites to `/404` | `app/(main)/[sort]/page.tsx` (renders `NotFound` for invalid sorts) | Implemented |
-| `/trending` | `PostsIndex ['trending']` | Pass-through (also matched by the `/<sort>` branch) | `app/(main)/trending/page.tsx` (static route shadows `[sort]`) | Implemented |
+| `/trending` | `PostsIndex ['trending']` | Pass-through (also matched by the `/<sort>` branch) | `app/(main)/[sort]/page.tsx` (no dedicated static page; the shared `SortFeed` component also backs the home page) | Implemented |
 | `/roles/<tag>` (e.g. `/roles/hive-123456`) | `CommunityRoles` | Pass-through (branch 1.5, Community roles; two segments only — `/roles/@user/permlink` falls through to branch 2 and is a Post; the accepted tag charset is wider than legacy's `[\w.-]{1,32}`, see Known gaps) | `app/(main)/roles/[tag]/page.tsx` | Implemented |
 | `/<a>/<b>/<c>` without `@` (e.g. `/bitcoin/alice/my-post`) | `NotFound` | Rewrite → `/404` (three-segment invalid-pattern guard), unless first segment is reserved or second starts with `@` | `app/(main)/404/page.tsx` | Implemented |
 | `/<a>/<b>` without `@`, non-sort (e.g. `/alice/my-post`) | `NotFound` | Rewrite → `/404` (two-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
@@ -82,7 +82,7 @@ actually exists for the reserved words themselves:
 | `/submit` | Pass-through | `app/(main)/submit/page.tsx` | Implemented (legacy used `/submit.html`) |
 | `/search` | Pass-through | `app/(main)/search/page.tsx` | Implemented |
 | `/communities` | Pass-through | `app/(main)/communities/page.tsx` | Implemented |
-| `/trending`, `/hot`, `/created`, `/payout`, `/payout_comments`, `/muted` | Pass-through (`/<sort>` branch) | `app/(main)/[sort]/page.tsx` / `app/(main)/trending/page.tsx` | Implemented |
+| `/trending`, `/hot`, `/created`, `/payout`, `/payout_comments`, `/muted` | Pass-through (`/<sort>` branch) | `app/(main)/[sort]/page.tsx` | Implemented |
 | `/promoted` | Pass-through (`/<sort>` branch; note: in `SORT_TYPES` but **not** in `RESERVED_ROUTES`) | `app/(main)/[sort]/page.tsx` | Implemented |
 | `/404` | Explicitly skipped (the static/API skip at the top of `proxy()`) | `app/(main)/404/page.tsx` | Implemented (proxy 404 target) |
 | `/api/*`, `/_next/*`, `/static/*`, any path ending in a known static extension | Skipped by the static/API skip in `proxy()`: `STATIC_ASSET_RE` is a known-extension whitelist (`.ico`, `.png`, `.css`, `.html`, …), **not** a dot check — dotted usernames/permlinks such as `/@ety001.test01` or `/@alice/post-v1.2` are NOT skipped (see "GDPR-blocked accounts" above). `api` and `_next` are additionally excluded by the `config.matcher` | `app/api/**`, `app/.well-known/**`, `public/**` | Implemented |

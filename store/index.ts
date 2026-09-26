@@ -8,6 +8,7 @@ import communityReducer from './slices/communitySlice';
 import userProfilesReducer from './slices/userProfilesSlice';
 import searchReducer from './slices/searchSlice';
 import adReducer from './slices/adSlice';
+import { createPreferencesPersistenceMiddleware } from './middleware/preferencesPersistence';
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,9 @@ export const store = configureStore({
     search: searchReducer,
     ad: adReducer,
   },
+  // Legacy SagaShared: preference toggles auto-persist to the session.
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(createPreferencesPersistenceMiddleware()),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

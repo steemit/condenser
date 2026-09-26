@@ -289,6 +289,9 @@ describe('lib/cache/rate-limit', () => {
       expect(RATE_LIMITS.steemBroadcast).toEqual({ key: 'steem:broadcast', limit: 30, windowSeconds: 60 });
       expect(RATE_LIMITS.search).toEqual({ key: 'search', limit: 30, windowSeconds: 60 });
       expect(RATE_LIMITS.steemOverseer).toEqual({ key: 'steem:overseer', limit: 60, windowSeconds: 60 });
+      // Above the 800ms-debounce ceiling (75/min) with headroom for the
+      // Settings page's manual saves sharing the same bucket.
+      expect(RATE_LIMITS.authPreferences).toEqual({ key: 'auth:preferences', limit: 60, windowSeconds: 60 });
     });
   });
 });

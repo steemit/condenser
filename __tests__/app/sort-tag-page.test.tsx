@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import userReducer, { setUser } from '@/store/slices/userSlice';
 import globalReducer from '@/store/slices/globalSlice';
+import appReducer from '@/store/slices/appSlice';
 import { IntlWrapper } from '@/__tests__/helpers/i18n';
 
 let mockParams: Record<string, string | string[]> = {};
@@ -35,8 +36,9 @@ function makePost(author: string, permlink: string) {
 }
 
 function renderPage(loggedIn: boolean) {
+  // PostSummary reads app.user_preferences (nsfwPref) — include the slice.
   const store = configureStore({
-    reducer: { user: userReducer, global: globalReducer },
+    reducer: { app: appReducer, user: userReducer, global: globalReducer },
   });
   if (loggedIn) {
     store.dispatch(setUser({ username: 'alice', posting_authority: true }));

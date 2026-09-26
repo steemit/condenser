@@ -16,6 +16,8 @@ import { useEffect } from 'react';
 import { useAppDispatch } from '@/store/hooks';
 import { setTrackingId, setUser } from '@/store/slices/userSlice';
 import { setUserPreferences } from '@/store/slices/appSlice';
+import type { UserPreferences } from '@/store/slices/appSlice';
+import { normalizeNsfwPref } from '@/lib/nsfw';
 import { loadFollowState } from '@/store/thunks/followThunks';
 
 // One hydration attempt per page load is enough: the session cookie lives
@@ -52,9 +54,18 @@ export function useSessionHydration() {
         // this in-flight snapshot resolves, the dispatch reverts the Redux
         // state until next reload; the server-side state stays correct.
         if (data.session?.userPreferences) {
+          // Strip the cookie-managed locale and pull the raw nsfwPref for
+          // normalization below: an out-of-range stored value would
+          // otherwise bind straight into the Settings <select> and render
+          // a blank option.
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { locale: _locale, ...rest } = data.session.userPreferences;
-          dispatch(setUserPreferences(rest));
+          const { locale: _locale, nsfwPref: rawNsfw, ...rest } = data.session.userPreferences as Record<string, unknown>;
+          dispatch(
+            setUserPreferences({
+              ...rest,
+              nsfwPref: normalizeNsfwPref(rawNsfw),
+            } as Partial<UserPreferences>)
+          );
         }
         if (!data.authenticated) return;
         const username = data.session?.username;

@@ -10,10 +10,11 @@ import {
 } from '@/hooks/use-session-hydration';
 import userReducer from '@/store/slices/userSlice';
 import globalReducer from '@/store/slices/globalSlice';
+import appReducer from '@/store/slices/appSlice';
 
 function makeStore() {
   return configureStore({
-    reducer: { user: userReducer, global: globalReducer },
+    reducer: { user: userReducer, global: globalReducer, app: appReducer },
   });
 }
 
@@ -98,6 +99,28 @@ describe('useSessionHydration', () => {
         String(call[0]).startsWith('/api/steem/following')
       )
     ).toBe(false);
+  });
+
+  it('normalizes an out-of-range stored nsfwPref instead of binding it raw', async () => {
+    mockSessionResponse({
+      authenticated: false,
+      session: {
+        uid: 'uid-3',
+        userPreferences: { nsfwPref: 'garbage', nightmode: true, locale: 'zh' },
+      },
+    });
+    const store = makeStore();
+
+    renderHook(() => useSessionHydration(), { wrapper: wrapper(store) });
+
+    await waitFor(() => {
+      // Coerced to the legacy default; a raw out-of-range value would
+      // render a blank option in the Settings <select>.
+      expect(store.getState().app.user_preferences.nsfwPref).toBe('warn');
+    });
+    expect(store.getState().app.user_preferences.nightmode).toBe(true);
+    // locale is cookie-managed: hydration never stomps it.
+    expect(store.getState().app.user_preferences.locale).toBeNull();
   });
 
   it('leaves the user logged out when the fetch fails', async () => {

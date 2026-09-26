@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setLocale, setUserPreferences } from '@/store/slices/appSlice';
 import { LOCALES, LOCALE_LABELS, DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/config';
+import { normalizeNsfwPref } from '@/lib/nsfw';
 import { broadcastAccountUpdate } from '@/lib/api/broadcast';
 import { fetchAccount } from '@/lib/api/steem';
 import { postJsonWithCsrf } from '@/lib/api/csrf';
@@ -488,7 +489,9 @@ export default function UserSettings({
                 dispatch(
                   setUserPreferences({
                     ...userPreferences,
-                    nsfwPref: e.target.value,
+                    // The <select> only offers the three legal values; the
+                    // coercion keeps the store's NsfwPref type honest.
+                    nsfwPref: normalizeNsfwPref(e.target.value),
                   })
                 )
               }
@@ -537,9 +540,20 @@ export default function UserSettings({
               setPrefsMessage('');
               setPrefsError('');
               try {
-                // Echoes the session's CSRF token (audit N-22).
+                // Echoes the session's CSRF token (audit N-22). The payload
+                // is an explicit whitelist, not the whole user_preferences
+                // map: locale is cookie-managed by I18nProvider, and any
+                // unknown key the hydration merge brought into Redux must
+                // not round-trip into the session. The list mirrors what
+                // this page persists (nsfwPref) plus the toggles the
+                // persistence middleware owns (nightmode/blogmode) — the
+                // two save paths stay consistent with each other.
                 const res = await postJsonWithCsrf('/api/auth/preferences', {
-                  payload: userPreferences,
+                  payload: {
+                    nightmode: userPreferences.nightmode,
+                    blogmode: userPreferences.blogmode,
+                    nsfwPref: userPreferences.nsfwPref,
+                  },
                 });
                 if (!res.ok) {
                   // Surface the translated failure message; log the server

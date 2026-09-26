@@ -18,8 +18,12 @@ import { enforceCsrf, setCsrfCookie } from '@/lib/auth/csrf';
 import { readJsonWithLimit } from '@/lib/api/body-limit';
 // eligiblePostingPublicKeys is the pure, isomorphic posting-authority
 // predicate shared with the LoginForm client check, so both sides validate
-// login keys identically (audit S4).
-import { eligiblePostingPublicKeys } from '@/lib/crypto/client';
+// login keys identically (audit S4). PostingAuthority is its authority-shape
+// type — import it rather than re-declaring a duplicate locally.
+import {
+  eligiblePostingPublicKeys,
+  type PostingAuthority,
+} from '@/lib/crypto/client';
 import {
   RATE_LIMITS,
   checkRateLimit,
@@ -95,12 +99,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    type AccountPostingAuthority = {
-      weight_threshold?: number;
-      key_auths?: Array<[string, number]>;
-    };
     type AccountWithPosting = {
-      posting?: AccountPostingAuthority;
+      posting?: PostingAuthority;
     };
     const accountData = account as AccountWithPosting;
 

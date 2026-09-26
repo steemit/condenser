@@ -149,6 +149,34 @@ describe('eligiblePostingPublicKeys', () => {
     ).toEqual(['STMkey1']);
   });
 
+  it('falls back to threshold 1 for malformed thresholds (defense in depth)', () => {
+    // Unreachable from the chain (uint32), but the account object arrives
+    // over RPC: only a positive safe integer is honored as the threshold,
+    // anything else snaps to the fail-closed default of 1 rather than
+    // feeding a garbage bound into the weight comparison.
+    const keyAuths: Array<[string, number]> = [['STMkey1', 1]];
+    expect(
+      eligiblePostingPublicKeys({
+        weight_threshold: Number.POSITIVE_INFINITY,
+        key_auths: keyAuths,
+      })
+    ).toEqual(['STMkey1']);
+    expect(
+      eligiblePostingPublicKeys({
+        weight_threshold: Number.NaN,
+        key_auths: keyAuths,
+      })
+    ).toEqual(['STMkey1']);
+    // Finite but beyond the safe-integer range must not be taken at face
+    // value (it would reject every real weight).
+    expect(
+      eligiblePostingPublicKeys({
+        weight_threshold: Number.MAX_VALUE,
+        key_auths: keyAuths,
+      })
+    ).toEqual(['STMkey1']);
+  });
+
   it('returns [] for missing/empty key_auths and non-finite weights', () => {
     expect(eligiblePostingPublicKeys(undefined)).toEqual([]);
     expect(eligiblePostingPublicKeys({})).toEqual([]);
@@ -177,6 +205,6 @@ describe('validatePostingKey with multiple expected keys', () => {
   it('rejects a WIF matching none of the expected keys', () => {
     const result = validatePostingKey(WIF, [OTHER_PUB, 'STMthird key']);
     expect(result.isValid).toBe(false);
-    expect(result.error).toContain('does not match');
+    expect(result.error).toContain('does not match any eligible posting public key');
   });
 });

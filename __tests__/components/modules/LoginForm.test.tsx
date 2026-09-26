@@ -34,7 +34,7 @@ const { validatePostingKeyMock, PUB_BY_WIF } = vi.hoisted(() => {
       if (!expectedKeys.includes(pub)) {
         return {
           isValid: false,
-          error: 'Private key does not match the posting public key for this account',
+          error: 'Private key does not match any eligible posting public key for this account',
         };
       }
       return { isValid: true, publicKey: pub };
@@ -191,7 +191,7 @@ describe('LoginForm posting-key matching (audit S4)', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(/does not match the posting public key/i)
+        screen.getByText(/does not match any eligible posting public key/i)
       ).toBeInTheDocument();
     });
     expect(postJsonWithCsrfMock).not.toHaveBeenCalled();
@@ -220,7 +220,7 @@ describe('LoginForm posting-key matching (audit S4)', () => {
     });
     await waitFor(() => {
       expect(
-        screen.getByText(/does not match the posting public key/i)
+        screen.getByText(/does not match any eligible posting public key/i)
       ).toBeInTheDocument();
     });
     expect(postJsonWithCsrfMock).not.toHaveBeenCalled();

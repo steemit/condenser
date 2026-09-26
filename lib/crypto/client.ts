@@ -1,12 +1,15 @@
 /**
- * Client-side cryptographic utilities
- * Handles private key validation and signing operations
- * Only supports posting key authentication for security
+ * Cryptographic utilities for posting-key-only authentication.
  *
- * All operations go through the steem-js SDK high-level auth helpers
- * (steem.auth.*). Do not drop down to the ecc classes (PrivateKey /
- * PublicKey / Signature) — their API changed in steem-js 1.x and
- * hand-rolled usage has broken login twice already.
+ * Isomorphic module with two kinds of exports:
+ * - Crypto operations (WIF validation, signing, key derivation) run in the
+ *   browser login flow and go through the steem-js SDK high-level auth
+ *   helpers (steem.auth.*). Do not drop down to the ecc classes (PrivateKey /
+ *   PublicKey / Signature) — their API changed in steem-js 1.x and
+ *   hand-rolled usage has broken login twice already.
+ * - Pure predicates over posting-authority data (eligiblePostingPublicKeys)
+ *   touch no crypto and no steem-js, and are shared by the LoginForm client
+ *   check and the /api/auth/login route so the two sides cannot drift.
  */
 
 import { steem } from '@steemit/steem-js';
@@ -48,18 +51,42 @@ export interface PostingAuthority {
  * does not forbid) must be rejected: legacy would classify it as
  * 'partial'/'none' and refuse the login.
  *
- * weight_threshold falls back to 1 when absent or 0, matching the deleted
- * check-authority route (`weight >= (authority.weight_threshold || 1)`) and
- * the threshold-1 authorities every standard wallet/signup produces. A
- * threshold of 0 is treated as 1 (fail closed) rather than vacuously
- * satisfiable.
+ * Known divergences from legacy (deliberate, documented for future work):
+ *
+ * - account_auths is not considered. Legacy threshold() recursed into
+ *   account_auths, so a login key could reach 'full' by combining its own
+ *   weight with weights reachable through sub-account authorities. This
+ *   predicate ignores account_auths entirely, so the rare authority whose
+ *   threshold is only reachable via key_auths + account_auths combined is
+ *   rejected here — a fail-closed divergence from legacy 'full'. Full
+ *   alignment would require recursive account resolution on the login-route
+ *   side (deferred).
+ *
+ * - The sum-to-single-entry equivalence above assumes the same pubkey never
+ *   appears in key_auths more than once. On-chain authority storage dedupes
+ *   key_auths entries, so duplicate entries are practically unreachable;
+ *   if one ever did appear, this predicate would evaluate each entry's own
+ *   weight (effectively max per pubkey) rather than the legacy sum across
+ *   duplicates.
+ *
+ * weight_threshold falls back to 1 when absent, 0, or any non-safe-integer
+ * (NaN / Infinity / fractional / beyond 2^53 — unreachable from the chain's
+ * uint32), matching the deleted check-authority route
+ * (`weight >= (authority.weight_threshold || 1)`) and the threshold-1
+ * authorities every standard wallet/signup produces. A threshold of 0 is
+ * treated as 1 (fail closed) rather than vacuously satisfiable.
  */
 export function eligiblePostingPublicKeys(
   posting: PostingAuthority | null | undefined
 ): string[] {
+  // Only a positive safe integer is honored as the threshold; every other
+  // shape (absent, 0, NaN, Infinity, fractional, beyond 2^53 — unreachable
+  // from the chain's uint32) snaps to the fail-closed default of 1 instead
+  // of feeding a malformed bound into the weight comparison
+  // (defense in depth).
   const rawThreshold = Number(posting?.weight_threshold);
   const threshold =
-    Number.isFinite(rawThreshold) && rawThreshold > 0 ? rawThreshold : 1;
+    Number.isSafeInteger(rawThreshold) && rawThreshold > 0 ? rawThreshold : 1;
   const keyAuths = posting?.key_auths;
   if (!Array.isArray(keyAuths)) return [];
   return keyAuths
@@ -68,7 +95,8 @@ export function eligiblePostingPublicKeys(
 }
 
 /**
- * Validate if a private key is valid and matches the expected posting public key
+ * Validate if a private key is valid and matches any of the expected
+ * posting public keys
  */
 export function validatePostingKey(
   privateKeyWif: string,
@@ -92,7 +120,7 @@ export function validatePostingKey(
     if (!expectedKeys.includes(publicKeyString)) {
       return {
         isValid: false,
-        error: 'Private key does not match the posting public key for this account',
+        error: 'Private key does not match any eligible posting public key for this account',
       };
     }
 

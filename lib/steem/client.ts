@@ -36,7 +36,6 @@ const CACHE_TTL = {
   // Personalised — cached for anonymous traffic only
   posts: { ttl: 3, staleTtl: 300 },
   post: { ttl: 30, staleTtl: 600 },
-  comments: { ttl: 60, staleTtl: 600 },
   profile: { ttl: 30, staleTtl: 300 },
   followers: { ttl: 30, staleTtl: 300 },
 } as const;
@@ -272,18 +271,6 @@ export async function getFollowing(account: string, start: string, type: string,
   const result = await withCache(key, CACHE_TTL.followers.ttl, CACHE_TTL.followers.staleTtl, async () => {
     initializeSteemApi();
     return steem.api.getFollowingAsync(account, start, type, limit);
-  });
-  return unwrap(result);
-}
-
-/**
- * Get followers list
- */
-export async function getFollowers(account: string, start: string, type: string, limit: number): Promise<unknown[]> {
-  const key = `steem:followers:${account}:${type}:${start || '0'}:${limit}`;
-  const result = await withCache(key, CACHE_TTL.followers.ttl, CACHE_TTL.followers.staleTtl, async () => {
-    initializeSteemApi();
-    return steem.api.getFollowersAsync(account, start, type, limit);
   });
   return unwrap(result);
 }

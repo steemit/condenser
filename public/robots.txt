@@ -1,0 +1,7 @@
+# Ported verbatim from legacy src/server/server.js (mount('/robots.txt')):
+# "User-agent: *\nAllow: /". Legacy allowed full crawling with no Disallow
+# rules and no Sitemap directive; that behavior is preserved here. Note the
+# noindex pages (user settings/notifications, /404) must stay crawlable so
+# crawlers can see their robots meta — do not add them as Disallow entries.
+User-agent: *
+Allow: /

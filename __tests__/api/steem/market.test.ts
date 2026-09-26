@@ -3,7 +3,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // The market route keeps module-level cache/inflight state, so each test
 // imports a fresh module copy (vi.resetModules + dynamic import).
-vi.mock('@/lib/steem/client', () => ({}));
 
 const MARKET = {
   steem: {

@@ -11,8 +11,9 @@ import { NextResponse } from "next/server";
  * upstream failure with no cached copy answers 500, and valid data answers
  * 200 — the three states stay distinguishable instead of all collapsing
  * into a 200 with empty data. A failure with a stale copy still serves it
- * (stale-while-error, like lib/cache/server-cache.ts). The consumer hides
- * the module on any non-2xx, matching legacy's empty-data rendering.
+ * (an indefinite stale fallback — unchanged from the route's behavior
+ * before these states were split). The consumer hides the module on any
+ * non-2xx, matching legacy's empty-data rendering.
  */
 
 interface Timepoint {

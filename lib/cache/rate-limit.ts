@@ -101,6 +101,21 @@ export interface RateLimitResult {
  *   following lists (page-based, limit <= 100); same per-IP ceiling as
  *   steem/following for the same key-spray rationale (the account/page
  *   params reach the server cache keys in get{Followers,Following}ByPage).
+ * - steem/posts     60/min/IP — the feed route (ranked + account, audit
+ *   N-21 follow-up). Limit evaluation for the main feed route: every
+ *   caller pages strictly serially (SortFeed / tag pages / profile
+ *   sections keep one load-more in flight and there is no prefetch), and
+ *   repeated identical reads are served by the 10s-fresh browser L1
+ *   before reaching the network, so a fast human scroller sits far below
+ *   the ceiling (each page appends 20 cards that must be scrolled past);
+ *   anything near 60/min is scripted. 60/min matches the
+ *   followers/following tier and bounds per-IP creation of the
+ *   steem:posts:{ranked,account}:* cache entries whose tag/account
+ *   dimensions are free-form. Fixed-window NAT/CGNAT caveat as for
+ *   steem/followers: users behind one shared egress IP each cost ~1
+ *   request per page load; if they collectively trip the 429 the caller
+ *   treats it like a transient fetch failure (pagination stops, reload
+ *   recovers).
  */
 export const RATE_LIMITS = {
   authChallenge: { key: 'auth:challenge', limit: 30, windowSeconds: 60 },
@@ -113,6 +128,7 @@ export const RATE_LIMITS = {
   steemOverseer: { key: 'steem:overseer', limit: 60, windowSeconds: 60 },
   steemFollowing: { key: 'steem:following', limit: 60, windowSeconds: 60 },
   steemFollowers: { key: 'steem:followers', limit: 60, windowSeconds: 60 },
+  steemPosts: { key: 'steem:posts', limit: 60, windowSeconds: 60 },
 } as const satisfies Record<string, RateLimitRule>;
 
 const UNKNOWN_IP = 'unknown';

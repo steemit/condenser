@@ -6,16 +6,29 @@ vi.mock('@/lib/steem/client', () => ({
   getAccountPosts: vi.fn(),
 }));
 
+// Partial mock: keep the real RATE_LIMITS / rateLimitResponse, stub only the
+// Redis-backed check (audit N-08) — same pattern as followers.test.ts.
+vi.mock('@/lib/cache/rate-limit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/cache/rate-limit')>();
+  return {
+    ...actual,
+    checkRateLimit: vi.fn(async () => ({ allowed: true })),
+  };
+});
+
 import { GET } from '@/app/api/steem/posts/route';
 import { getAccountPosts, getRankedPosts } from '@/lib/steem/client';
+import { checkRateLimit } from '@/lib/cache/rate-limit';
 
 const getRankedPostsMock = vi.mocked(getRankedPosts);
 const getAccountPostsMock = vi.mocked(getAccountPosts);
+const checkRateLimitMock = vi.mocked(checkRateLimit);
 
 describe('GET /api/steem/posts', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
+    checkRateLimitMock.mockResolvedValue({ allowed: true });
   });
 
   it('defaults to trending ranked posts', async () => {
@@ -125,14 +138,39 @@ describe('GET /api/steem/posts', () => {
     expect(getAccountPostsMock).not.toHaveBeenCalled();
   });
 
-  it('lowercases the sort before the whitelist check', async () => {
+  it('lowercases and trims the sort before the whitelist check', async () => {
     getRankedPostsMock.mockResolvedValue([]);
 
-    const res = await GET(makeGetRequest('/api/steem/posts', { sort: 'HOT' }));
+    const res = await GET(makeGetRequest('/api/steem/posts', { sort: '  HOT  ' }));
     expect(res.status).toBe(200);
     expect(getRankedPostsMock).toHaveBeenCalledWith(
       expect.objectContaining({ sort: 'hot' })
     );
+  });
+
+  it('checks the steem:posts limit (60/min/IP) before anything else', async () => {
+    getRankedPostsMock.mockResolvedValue([]);
+
+    await GET(makeGetRequest('/api/steem/posts'));
+
+    expect(checkRateLimitMock).toHaveBeenCalledWith(expect.anything(), {
+      key: 'steem:posts',
+      limit: 60,
+      windowSeconds: 60,
+    });
+  });
+
+  it('returns 429 with Retry-After and never queries when limited', async () => {
+    checkRateLimitMock.mockResolvedValue({ allowed: false, retryAfterSeconds: 30 });
+
+    const res = await GET(makeGetRequest('/api/steem/posts'));
+    expect(res.status).toBe(429);
+    expect(res.headers.get('Retry-After')).toBe('30');
+    expect(await res.json()).toEqual({
+      error: 'Too many requests. Please try again later.',
+    });
+    expect(getRankedPostsMock).not.toHaveBeenCalled();
+    expect(getAccountPostsMock).not.toHaveBeenCalled();
   });
 
   it('defaults the account sort to blog when sort is absent', async () => {

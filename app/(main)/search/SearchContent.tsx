@@ -90,6 +90,10 @@ export default function SearchContent() {
 
     dispatch(searchPending({ pending: true }));
     dispatch(searchDispatch());
+    // A new search is not an append: drop the previous query's hits up
+    // front, so a failure renders a pure error card instead of the new
+    // query over the old query's results.
+    dispatch(searchResult({ hits: { hits: [], total: { value: 0 } } }));
 
     try {
       const response = await fetch('/api/search', {
@@ -153,9 +157,9 @@ export default function SearchContent() {
   const handleDepthChange = (newDepth: number) => {
     setDepth(newDepth);
     dispatch(searchDepth(newDepth));
-    if (query.trim()) {
-      performSearch(query, sort, newDepth);
-    }
+    // No explicit performSearch here: the effect above already re-runs on
+    // the depth change — calling it directly as well would double-fetch,
+    // and the two responses race for the final result.
   };
 
   // Redux search results are stored as untyped legacy payloads.
@@ -175,8 +179,14 @@ export default function SearchContent() {
   // long as loaded hits < the reported total.
   const hasMore = hits.length < searchState.total_result;
 
-  const handleLoadMore = async () => {
+  const handleLoadMore = async (manual = false) => {
     if (!query.trim() || searchState.pending || !hasMore) return;
+    // While an error is showing, only an explicit retry (the error card's
+    // button) may fetch again. PostsList's scroll effect re-fires whenever
+    // this callback's identity changes — including on the very re-render
+    // that shows the error — so an unguarded automatic call would retry in
+    // a loop for as long as the viewport sits at the bottom of the list.
+    if (searchState.error != null && !manual) return;
 
     try {
       dispatch(searchPending({ pending: true }));
@@ -321,23 +331,29 @@ export default function SearchContent() {
           ) : errorMessage && posts.length === 0 ? (
             // Structured API failure (502/503/500 from /api/search) — an
             // error state with a retry, not "nothing found".
-            <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center">
-              <p className="text-foreground">{errorMessage}</p>
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-4"
-                onClick={() => performSearch(query, sort, depth)}
-              >
-                {t("g.try_again")}
-              </Button>
-            </div>
+            <SearchErrorCard
+              message={errorMessage}
+              onRetry={() => performSearch(query, sort, depth)}
+              className="py-8"
+            />
           ) : posts.length === 0 ? (
             <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
               {t("search_jsx.nothing_found")}
             </div>
           ) : depth === 2 ? (
-            <SearchUserList hits={hits} />
+            <>
+              <SearchUserList hits={hits} />
+              {errorMessage ? (
+                // Same contract as the posts branch: a failure while hits
+                // are displayed surfaces below the list instead of
+                // rendering silently.
+                <SearchErrorCard
+                  message={errorMessage}
+                  onRetry={() => handleLoadMore(true)}
+                  className="mt-4"
+                />
+              ) : null}
+            </>
           ) : (
             <>
               <PostsList
@@ -345,18 +361,15 @@ export default function SearchContent() {
                 loading={searchState.pending}
                 onLoadMore={hasMore ? handleLoadMore : undefined}
               />
-              {errorMessage && posts.length > 0 ? (
-                // Load-more failure: the list stays, pagination retries.
-                <div className="mt-4 flex flex-col items-center gap-2 rounded-[6px] border border-border bg-card px-6 py-4 text-center">
-                  <p className="text-foreground">{errorMessage}</p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleLoadMore}
-                  >
-                    {t("g.try_again")}
-                  </Button>
-                </div>
+              {errorMessage ? (
+                // Load-more failure: the list stays, pagination retries —
+                // only via the button (handleLoadMore guards the
+                // automatic PostsList re-fire while an error is showing).
+                <SearchErrorCard
+                  message={errorMessage}
+                  onRetry={() => handleLoadMore(true)}
+                  className="mt-4"
+                />
               ) : null}
             </>
           )}
@@ -367,6 +380,36 @@ export default function SearchContent() {
         </div>
       )}
     </FeedLayout>
+  );
+}
+
+/**
+ * Error card shared by every result branch: full-width when it replaces an
+ * empty result list, compact (mt-4) when it sits below an already-rendered
+ * list after a load-more failure. Retry is always explicit — the button.
+ */
+function SearchErrorCard({
+  message,
+  onRetry,
+  className,
+}: {
+  message: string;
+  onRetry: () => void;
+  className?: string;
+}) {
+  const t = useTranslations();
+  return (
+    <div
+      className={cn(
+        "flex flex-col items-center gap-2 rounded-[6px] border border-border bg-card px-6 py-4 text-center",
+        className
+      )}
+    >
+      <p className="text-foreground">{message}</p>
+      <Button variant="outline" size="sm" onClick={onRetry}>
+        {t("g.try_again")}
+      </Button>
+    </div>
   );
 }
 

@@ -29,10 +29,7 @@ interface UserState {
   termsDefault?: unknown;
   saveLoginConfirm?: unknown;
   pub_keys_used: string[] | null;
-  locale: string;
   show_side_panel: boolean;
-  maybeLoggedIn: boolean;
-  showAnnouncement: boolean;
   trackingId: string;
   show_promote_post_modal: boolean;
   show_post_advanced_settings_modal: string;
@@ -58,10 +55,7 @@ const initialState: UserState = {
   show_login_warning: false,
   show_terms_modal: false,
   pub_keys_used: null,
-  locale: 'en', // DEFAULT_LANGUAGE
   show_side_panel: false,
-  maybeLoggedIn: false,
-  showAnnouncement: false,
   trackingId: '',
   show_promote_post_modal: false,
   show_post_advanced_settings_modal: '',
@@ -157,9 +151,6 @@ const userSlice = createSlice({
         state.authority[username].active = 'none';
         state.authority[username].owner = 'none';
       }
-    },
-    changeLanguage: (state, action: PayloadAction<string>) => {
-      state.locale = action.payload;
     },
     showPromotePost: (state) => {
       state.show_promote_post_modal = true;
@@ -275,18 +266,6 @@ const userSlice = createSlice({
       state.show_post_templates_modal = '';
       state.on_post_templates_close_modal = null;
     },
-    showAnnouncement: (state) => {
-      if (typeof window !== 'undefined' && window.sessionStorage) {
-        sessionStorage.setItem('hideAnnouncement', 'false');
-      }
-      state.showAnnouncement = true;
-    },
-    hideAnnouncement: (state) => {
-      if (typeof window !== 'undefined' && window.sessionStorage) {
-        sessionStorage.setItem('hideAnnouncement', 'true');
-      }
-      state.showAnnouncement = false;
-    },
     showImageViewer: (state, action: PayloadAction<{ url: string }>) => {
       state.show_image_viewer = true;
       state.image_viewer_url = action.payload.url;
@@ -308,7 +287,6 @@ export const {
   saveLoginConfirm,
   saveLogin,
   removeHighSecurityKeys,
-  changeLanguage,
   showPromotePost,
   hidePromotePost,
   checkKeyType,
@@ -331,8 +309,6 @@ export const {
   hidePostDrafts,
   showPostTemplates,
   hidePostTemplates,
-  showAnnouncement,
-  hideAnnouncement,
   showImageViewer,
   hideImageViewer,
 } = userSlice.actions;

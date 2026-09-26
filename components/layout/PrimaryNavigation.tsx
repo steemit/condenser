@@ -12,18 +12,12 @@ import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
 import { getSteemitWalletBaseUrl } from "@/lib/steemitWallet";
+import { PROFILE_SECTIONS, RESERVED_ROUTES, SORT_TYPES } from "@/lib/routes";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { showLogin } from "@/store/slices/userSlice";
 
-const GLOBAL_FEED_SORTS = new Set([
-  "trending",
-  "hot",
-  "created",
-  "promoted",
-  "payout",
-  "payout_comments",
-  "muted",
-]);
+/** Sorts that drive global ranked feeds (/trending, /hot/food, …). */
+const GLOBAL_FEED_SORTS = new Set(SORT_TYPES);
 
 /**
  * Second-level items under "My Profile" (legacy ProfileNavigation).
@@ -72,41 +66,18 @@ function isMyFriendsRoute(pathname: string, username: string | undefined) {
   );
 }
 
+/** /<sort>/<tag> matcher; the alternation is derived from SORT_TYPES (lib/routes.ts). */
+const SORT_TAG_RE = new RegExp(`^\\/(${SORT_TYPES.join("|")})\\/(.+)$`);
+
 function isMySubscriptionsRoute(pathname: string) {
   if (pathname === "/trending/my") return true;
-  const m = pathname.match(
-    /^\/(trending|hot|created|promoted|payout|payout_comments|muted)\/(.+)$/
-  );
+  const m = pathname.match(SORT_TAG_RE);
   if (!m) return false;
   return m[2].toLowerCase() === "my";
 }
 
 /** Usernames that must not be treated as profile paths (aligned with proxy.ts). */
-const RESERVED_USERNAMES = new Set(
-  [
-    "trending",
-    "hot",
-    "created",
-    "payout",
-    "payout_comments",
-    "muted",
-    "login",
-    "search",
-    "submit",
-    "about",
-    "faq",
-    "privacy",
-    "support",
-    "tos",
-    "communities",
-    "tags",
-    "rewards",
-    "roles",
-    "welcome",
-    "api",
-    "_next",
-  ].map((s) => s.toLowerCase())
-);
+const RESERVED_USERNAMES = new Set(RESERVED_ROUTES);
 
 /**
  * Parse the viewed profile username from profile-section URLs
@@ -134,20 +105,8 @@ function isProfileSectionActive(
   return pathname === profileSectionHref(username, segment);
 }
 
-/** Profile URL segments that are sections, not permlinks (mirrors proxy.ts SECTIONS). */
-const PROFILE_SECTION_SEGMENTS = new Set([
-  "blog",
-  "posts",
-  "comments",
-  "replies",
-  "payout",
-  "feed",
-  "followers",
-  "followed",
-  "settings",
-  "notifications",
-  "communities",
-]);
+/** Profile URL segments that are sections, not permlinks (mirrors proxy.ts PROFILE_SECTIONS). */
+const PROFILE_SECTION_SEGMENTS = new Set(PROFILE_SECTIONS);
 
 /** True for post detail URLs, with or without a category segment. */
 function isPostRoute(pathname: string): boolean {

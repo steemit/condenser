@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useAppDispatch } from "@/store/hooks";
-import { setPathname } from "@/store/slices/globalSlice";
 import {
   fetchCommunityRoles,
   fetchCommunitySubscribers,
@@ -93,7 +91,6 @@ function CommunityMemberCard({
 }
 
 export default function CommunityRolesPage() {
-  const dispatch = useAppDispatch();
   const t = useTranslations();
   const params = useParams();
   const tag = (Array.isArray(params.tag) ? params.tag[0] : params.tag) ?? "";
@@ -101,10 +98,6 @@ export default function CommunityRolesPage() {
   const [subscribers, setSubscribers] = useState<CommunitySubscriber[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"roles" | "subscribers">("roles");
-
-  useEffect(() => {
-    dispatch(setPathname(`/roles/${tag}`));
-  }, [dispatch, tag]);
 
   useEffect(() => {
     const loadData = async () => {

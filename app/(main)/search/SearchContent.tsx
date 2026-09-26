@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setPathname } from "@/store/slices/globalSlice";
 import {
   searchDispatch,
   searchPending,
@@ -52,10 +51,6 @@ export default function SearchContent() {
   const [localQuery, setLocalQuery] = useState(query);
   const [sort, setSort] = useState(sortParam);
   const [depth, setDepth] = useState(0);
-
-  useEffect(() => {
-    dispatch(setPathname("/search"));
-  }, [dispatch]);
 
   const performSearch = useCallback(
     async (

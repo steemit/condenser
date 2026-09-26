@@ -13,8 +13,11 @@ Sources of truth:
 `proxy.ts` intentionally follows the legacy `ResolveRoute.js` matching order.
 References to `proxy.ts` below use its numbered branch comments (1.5, 2–7,
 plus the invalid-pattern 404 guards) and named constants (`RESERVED_ROUTES`,
-`SECTIONS`, `SORT_TYPES`, `STATIC_ASSET_RE`) as anchors, so they do not drift
-when lines move.
+`PROFILE_SECTIONS`, `SORT_TYPES`, `STATIC_ASSET_RE`) as anchors, so they do
+not drift when lines move. `RESERVED_ROUTES`, `PROFILE_SECTIONS` and
+`SORT_TYPES` are defined once in `lib/routes.ts` (the shared route
+vocabulary) and imported by `proxy.ts`, the `[sort]` feed pages,
+PrimaryNavigation, FeedSidebarWidgets and `lib/analytics/route-tags.ts`.
 
 ## Rewrite branches in `proxy.ts`
 
@@ -23,25 +26,28 @@ when lines move.
 | `/` | `PostsIndex ['trending']` | none (no rewrite; matcher allows it) | `app/page.tsx` (client redirect to `/trending`) | Implemented |
 | `/category/@username/permlink` | `Post` | Rewrite → `/post/<category>/<username>/<permlink>` (branch 2, Post with category); **no reserved-word check** — the legacy Post regex `<tag>/<account>/<permlink>` has none, so `/about/@a/p`, `/welcome/@a/p`, `/hot/@a/p` and `/tags/@user/permlink` all render Post pages (legacy static checks are exact-path, and CategoryFilters matches at most two segments) | `app/(main)/post/[category]/[username]/[permlink]/page.tsx` | Implemented |
 | `/@username/feed` | `PostsIndex ['home', user]` | Rewrite → `/user/<username>/feed` (branch 3, User feed) | `app/(main)/user/[username]/[section]/page.tsx` (fetches `bridge.get_account_posts` with sort `feed`, like legacy `PostsIndex ['home', user]`) | Implemented |
-| `/@username/<section>` | `UserProfile` | Rewrite → `/user/<username>/<section>` (branch 4, User profile section); `section` must be in `SECTIONS` | `app/(main)/user/[username]/[section]/page.tsx` | Implemented |
+| `/@username/<section>` | `UserProfile` | Rewrite → `/user/<username>/<section>` (branch 4, User profile section); `section` must be in `PROFILE_SECTIONS` | `app/(main)/user/[username]/[section]/page.tsx` | Implemented |
 | `/@username/<permlink>` | `PostNoCategory` | Rewrite → `/post-no-category/<username>/<permlink>` (branch 5, Post without category); only when second segment is not a section | `app/(main)/post-no-category/[username]/[permlink]/page.tsx` (fetches category, redirects to `/<category>/@user/permlink`) | Implemented |
 | `/@username` | `UserProfile` (blog tab) | Rewrite → `/user/<username>` (branch 6, User profile root); reserved usernames rewrite to `/404` | `app/(main)/user/[username]/page.tsx` (client redirect to `/@<username>/blog`) | Implemented |
 | `/<sort>/<tag>` | `PostsIndex [sort, tag]` | Pass-through when `sort` ∈ `SORT_TYPES` and `tag` doesn't start with `@` (branch 7, Category filters) | `app/(main)/[sort]/[tag]/page.tsx` | Implemented |
 | `/<sort>` | `PostsIndex [sort]` | Pass-through when `sort` ∈ `SORT_TYPES` (the sort-only pass-through below branch 7); literal `/404` rewrites to `/404` | `app/(main)/[sort]/page.tsx` (renders `NotFound` for invalid sorts) | Implemented |
 | `/trending` | `PostsIndex ['trending']` | Pass-through (also matched by the `/<sort>` branch) | `app/(main)/trending/page.tsx` (static route shadows `[sort]`) | Implemented |
-| `/roles/<tag>` (e.g. `/roles/hive-123456`) | `CommunityRoles` | Pass-through (branch 1.5, Community roles; two segments only — `/roles/@user/permlink` falls through to branch 2 and is a Post) | `app/(main)/roles/[tag]/page.tsx` | Implemented |
+| `/roles/<tag>` (e.g. `/roles/hive-123456`) | `CommunityRoles` | Pass-through (branch 1.5, Community roles; two segments only — `/roles/@user/permlink` falls through to branch 2 and is a Post; the accepted tag charset is wider than legacy's `[\w.-]{1,32}`, see Known gaps) | `app/(main)/roles/[tag]/page.tsx` | Implemented |
 | `/<a>/<b>/<c>` without `@` (e.g. `/bitcoin/alice/my-post`) | `NotFound` | Rewrite → `/404` (three-segment invalid-pattern guard), unless first segment is reserved or second starts with `@` | `app/(main)/404/page.tsx` | Implemented |
 | `/<a>/<b>` without `@`, non-sort (e.g. `/alice/my-post`) | `NotFound` | Rewrite → `/404` (two-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
 | `/<segment>` without `@`, non-sort, non-reserved (e.g. `/alice`) | `NotFound` | Rewrite → `/404` (single-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
 | `/%40username/...` | (same as `@` variants) | `%40` is decoded to `@` before matching (the `%40` decode step at the top of `proxy()`) | same as the corresponding `@` routes | Implemented |
 
-`SORT_TYPES` (const in `proxy.ts`): `hot`, `trending`, `promoted`, `payout`,
-`payout_comments`, `muted`, `created` — identical to the legacy `<sort>`
-regex alternation.
+`SORT_TYPES` (const in `lib/routes.ts`, imported by `proxy.ts`): `hot`,
+`trending`, `promoted`, `payout`, `payout_comments`, `muted`, `created` —
+identical to the legacy `<sort>` regex alternation.
 
-`SECTIONS` (const in `proxy.ts`): `blog`, `posts`, `comments`, `replies`,
-`payout`, `feed`, `followers`, `followed`, `settings`, `notifications`,
-`communities` — identical to the legacy `<account-tab>` alternation.
+`PROFILE_SECTIONS` (const in `lib/routes.ts`, imported by `proxy.ts`):
+`blog`, `posts`, `comments`, `replies`, `payout`, `feed`, `followers`,
+`followed`, `settings`, `notifications`, `communities` — identical to the
+legacy `<account-tab>` alternation. The `[sort]` feed pages, the
+navigation/sidebar components and analytics route tagging validate against
+these same shared lists.
 
 ## GDPR-blocked accounts
 
@@ -59,8 +65,9 @@ dotted GDPR usernames are also rewritten to `/404`.
 
 ## Static and reserved routes
 
-`RESERVED_ROUTES` (const in `proxy.ts`) guards against reserved words being
-treated as **usernames** (the `@username` branches) and keeps the
+`RESERVED_ROUTES` (const in `lib/routes.ts`, imported by `proxy.ts`) guards
+against reserved words being treated as **usernames** (the `@username`
+branches) and keeps the
 invalid-pattern fallthrough from shadowing real app routes. It is
 deliberately **not** applied to post categories: the legacy Post regex has
 no reserved-word check, so posts whose first tag is a reserved word
@@ -93,12 +100,12 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
 |---|---|---|
 | `/welcome` | `Welcome` | Implemented at `/welcome` (`app/(main)/welcome/page.tsx`) |
 | `/faq.html`, `/privacy.html`, `/tos.html` | `Faq` / `Privacy` / `Tos` | Implemented at `/faq` / `/privacy` / `/tos`; `.html` URLs 301-redirect (next.config.ts) |
-| `/about.html`, `/support.html` | `About` / `Support` | Not migrated — paths contain `.`, so the proxy skips them and they 404 |
-| `/login.html`, `/submit.html` | `Login` / `SubmitPost` | Replaced by `/login` and `/submit`; the `.html` URLs 404 |
+| `/about.html`, `/support.html` | `About` / `Support` | Not migrated — the URLs end in the known `.html` static extension, so the proxy skips them and they 404 |
+| `/login.html`, `/submit.html` | `Login` / `SubmitPost` | Replaced by `/login` and `/submit`; `/login.html` 301-redirects to `/login` (next.config.ts), `/submit.html` is not redirected and 404s (`.html` static extension) |
 | `/tags` | `TagsIndex` | Not migrated — 404 |
 | `/rewards` | `Rewards` | Not migrated — 404 |
-| `/<tag>/@user/permlink.json` | `PostJson` | Not migrated — contains `.`, proxy skips → 404 |
-| `/@user.json` | `UserJson` | Not migrated — contains `.`, proxy skips → 404 |
+| `/<tag>/@user/permlink.json` | `PostJson` | Not migrated — ends in the known `.json` static extension, proxy skips → 404 |
+| `/@user.json` | `UserJson` | Not migrated — ends in the known `.json` static extension, proxy skips → 404 |
 | `/xss/test` (dev only) | `XSSTest` | Not migrated |
 | `/benchmark` (offline SSR test) | `Benchmark` | Not migrated |
 
@@ -111,7 +118,23 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
   (which would attempt a `UserProfile` render).
 - **Case handling**: proxy checks are case-insensitive
   (`toLowerCase()`), but rewrites preserve the original casing of
-  `username`/`section`/`permlink` segments.
+  `username`/`section`/`permlink` segments. This diverges from legacy,
+  whose `<sort>` and `<account-tab>` regex alternations were
+  lowercase-only: `/Trending` renders the trending feed here (the
+  `[sort]` page lowercases before validating) but was `NotFound` in
+  legacy. For `/@alice/BLOG`, resolveRoute alone would fall through to
+  `PostNoCategory` (uppercase `BLOG` fails the `<account-tab>`
+  alternation), but legacy's production stack ran a
+  lowercase-normalization middleware before route resolution
+  (`condenser-legacy/src/server/server.js`, "normalize user name url
+  from cased params"): the `PostNoCategory` regex — whose `<permlink>`
+  charset `[\w\d-]+` admits uppercase — matched the cased URL and
+  301-redirected to `/@alice/blog`, which then rendered the
+  `UserProfile` blog page. Both stacks therefore end on the user
+  profile section route, not a permlink post: the new code routes
+  `/@alice/BLOG` as a section directly at the original-cased URL (no
+  redirect), while legacy adds one 301 hop that also normalizes the
+  URL to lowercase.
 - **Trailing slashes**: rewrites are built on `request.nextUrl.clone()`,
   whose `NextURL` keeps the original trailing-slash state — so
   `/@alice/feed/` rewrites to `/user/alice/feed/` (with slash). Harmless:
@@ -128,16 +151,36 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
   proxy passes it through and relies on Next's implicit 308 trailing-slash
   normalization to redirect to the slash-less form, which then re-enters
   the proxy and lands on Post.
+- **Static-extension URLs that legacy routed**: paths ending in a known
+  static extension (`STATIC_ASSET_RE`) are skipped before any route
+  matching, but legacy had no such check. `/@user.md` matched legacy's
+  `<account>` regex (`@[\w.\d-]+` admits dots) and rendered the profile;
+  here it is skipped as a static file and 404s. Tag feeds are affected the
+  same way: `/trending/foo.md` was a legacy CategoryFilters feed (`<tag>`
+  `[\w.-]{1,32}` admits dots) but 404s here. (The `.json` variants are a
+  separate, intentional gap — legacy served PostJson/UserJson API stubs,
+  see "Intentionally absent legacy routes".)
+- **`/roles/<tag>` tag charset**: branch 1.5 accepts any non-slash segment
+  (`[^/]+`), so `/roles/@foo` passes through to the roles page (which
+  renders its community-management shell with empty lists); legacy's
+  CommunityRoles regex used the `<tag>` charset `[\w.-]{1,32}`, which
+  excludes `@`, so `/roles/@foo` was `NotFound`.
 
 ## Keeping this in sync
 
-`proxy.ts`, this document, and `scripts/test-proxy-routes.ts` form a set:
+`lib/routes.ts`, `proxy.ts`, this document, and `scripts/test-proxy-routes.ts`
+form a set:
 
-- **Any change to a rewrite branch, `RESERVED_ROUTES`, `SECTIONS`, or
-  `SORT_TYPES` in `proxy.ts` must update both this table and
-  `scripts/test-proxy-routes.ts`.**
+- **The route vocabulary lives in a single source, `lib/routes.ts`
+  (`RESERVED_ROUTES`, `PROFILE_SECTIONS`, `SORT_TYPES`); `proxy.ts`, the
+  `[sort]` feed pages, PrimaryNavigation, FeedSidebarWidgets and
+  `lib/analytics/route-tags.ts` all import it — never redefine these lists
+  locally.**
+- **Any change to `lib/routes.ts` or to a rewrite branch in `proxy.ts` must
+  update both this document and `scripts/test-proxy-routes.ts`.**
 - `scripts/test-proxy-routes.ts` runs standalone (`pnpm test:proxy`); it
   imports `proxy()` directly with mocked `NextRequest` objects and asserts
   the rewrite/pass-through/404 outcome of each branch — no dev server needed.
-- When a new App Router page is added under `app/`, check whether `proxy.ts`
-  needs the route in `RESERVED_ROUTES` and update the tables above.
+- When a new App Router page is added under `app/`, check whether
+  `lib/routes.ts` needs the route in `RESERVED_ROUTES` and update the
+  tables above.

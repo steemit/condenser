@@ -1,5 +1,9 @@
 # Route Proxy Refactoring - Completion Status
 
+> Status: superseded by docs/ROUTE_MAP.md (kept as historical record).
+> Line-number references below refer to a proxy.ts layout that no longer
+> exists; do not use them as navigation.
+
 ## ✅ Implementation Status: COMPLETE
 
 ### 1. Extract Constants ✅

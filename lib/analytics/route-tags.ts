@@ -5,6 +5,7 @@
  */
 
 import type { RouteTag } from './overseer';
+import { PROFILE_SECTIONS, RESERVED_ROUTES, SORT_TYPES } from '@/lib/routes';
 
 type Primitive = string | number | boolean | null | undefined;
 
@@ -13,39 +14,13 @@ export interface RouteTagInfo {
   params: Record<string, Primitive>;
 }
 
-const SORT_TYPES = new Set([
-  'hot',
-  'trending',
-  'promoted',
-  'payout',
-  'payout_comments',
-  'muted',
-  'created',
-]);
-
-// Same list as proxy.ts — profile URL segments that are sections.
-const PROFILE_SECTIONS = new Set([
-  'blog',
-  'posts',
-  'comments',
-  'replies',
-  'payout',
-  'feed',
-  'followers',
-  'followed',
-  'settings',
-  'notifications',
-  'communities',
-]);
-
-// Same list as proxy.ts. Only guards usernames below (post-no-category and
-// profile-root branches); post categories carry no reserved-word check,
-// mirroring proxy.ts branch 2.
-const RESERVED_ROUTES = new Set([
-  'trending', 'hot', 'created', 'payout', 'payout_comments', 'muted',
-  'login', 'search', 'submit', 'about', 'faq', 'privacy', 'support', 'tos',
-  'communities', 'tags', 'rewards', 'roles', 'welcome', 'api', '_next',
-]);
+// Set lookups over the shared route vocabulary (lib/routes.ts — the same
+// lists proxy.ts consumes).
+const SORT_TYPES_SET = new Set(SORT_TYPES);
+const PROFILE_SECTIONS_SET = new Set(PROFILE_SECTIONS);
+// Only guards usernames below (post-no-category and profile-root branches);
+// post categories carry no reserved-word check, mirroring proxy.ts branch 2.
+const RESERVED_ROUTES_SET = new Set(RESERVED_ROUTES);
 
 /**
  * Returns the route tag + params for a path, or null for paths legacy does
@@ -76,15 +51,15 @@ export function routeTagForPath(pathname: string): RouteTagInfo | null {
   const postNoCategory = pathname.match(/^\/@([^/]+)\/([^/]+)$/);
   if (
     postNoCategory &&
-    !RESERVED_ROUTES.has(postNoCategory[1].toLowerCase()) &&
-    !PROFILE_SECTIONS.has(postNoCategory[2].toLowerCase())
+    !RESERVED_ROUTES_SET.has(postNoCategory[1].toLowerCase()) &&
+    !PROFILE_SECTIONS_SET.has(postNoCategory[2].toLowerCase())
   ) {
     return { tag: 'post', params: { permlink: postNoCategory[2] } };
   }
 
   // User profile: /@user and /@user/<section>. The own feed (/@user/feed)
   // is legacy PostsIndex home feed → 'category' with is_user_feed.
-  if (postNoCategory && PROFILE_SECTIONS.has(postNoCategory[2].toLowerCase())) {
+  if (postNoCategory && PROFILE_SECTIONS_SET.has(postNoCategory[2].toLowerCase())) {
     const user = postNoCategory[1];
     const section = postNoCategory[2].toLowerCase();
     if (section === 'feed') {
@@ -96,12 +71,12 @@ export function routeTagForPath(pathname: string): RouteTagInfo | null {
     return { tag: 'user_index', params: { username: user, section } };
   }
   const userRoot = pathname.match(/^\/@([^/]+)\/?$/);
-  if (userRoot && !RESERVED_ROUTES.has(userRoot[1].toLowerCase())) {
+  if (userRoot && !RESERVED_ROUTES_SET.has(userRoot[1].toLowerCase())) {
     return { tag: 'user_index', params: { username: userRoot[1], section: 'blog' } };
   }
 
   // Feed pages: /[sort] and /[sort]/[tag].
-  if (seg.length >= 1 && SORT_TYPES.has(seg[0].toLowerCase())) {
+  if (seg.length >= 1 && SORT_TYPES_SET.has(seg[0].toLowerCase())) {
     const order = seg[0].toLowerCase();
     if (seg.length === 1) return { tag: 'index', params: { order } };
     const tag = seg[1];

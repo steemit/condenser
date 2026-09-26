@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setPathname } from "@/store/slices/globalSlice";
+import { useAppSelector } from "@/store/hooks";
 import { fetchRankedPosts, Post } from "@/lib/api/steem";
 import PostsList from "@/components/cards/PostsList";
 import { FeedLayout } from "@/components/layout/FeedLayout";
@@ -12,16 +11,11 @@ import { FeedListHeader } from "@/components/layout/FeedListHeader";
  * Trending posts — Legacy PostsIndex with order trending.
  */
 export default function TrendingPage() {
-  const dispatch = useAppDispatch();
   const observer = useAppSelector((s) => s.user.current?.username);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const loadingMoreRef = useRef(false);
-
-  useEffect(() => {
-    dispatch(setPathname("/trending"));
-  }, [dispatch]);
 
   useEffect(() => {
     const loadPosts = async () => {

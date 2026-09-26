@@ -2,30 +2,19 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setPathname } from "@/store/slices/globalSlice";
+import { useAppSelector } from "@/store/hooks";
 import {
   fetchRankedPosts,
   type FetchPostsParams,
   type Post,
 } from "@/lib/api/steem";
+import { SORT_TYPES } from "@/lib/routes";
 import PostsList from "@/components/cards/PostsList";
 import NotFound from "@/components/NotFound";
 import { FeedLayout } from "@/components/layout/FeedLayout";
 import { FeedListHeader } from "@/components/layout/FeedListHeader";
 
-const VALID_SORTS = [
-  "hot",
-  "trending",
-  "promoted",
-  "payout",
-  "payout_comments",
-  "muted",
-  "created",
-];
-
 export default function SortPage() {
-  const dispatch = useAppDispatch();
   const { sort } = useParams();
   const observer = useAppSelector((s) => s.user.current?.username);
   const [posts, setPosts] = useState<Post[]>([]);
@@ -34,14 +23,9 @@ export default function SortPage() {
   const loadingMoreRef = useRef(false);
 
   const sortString = (Array.isArray(sort) ? sort[0] : sort) ?? "";
-  const isValidSort = VALID_SORTS.includes(sortString.toLowerCase());
+  const isValidSort = SORT_TYPES.includes(sortString.toLowerCase());
   const showNotFound =
     !isValidSort || sortString.toLowerCase() === "404";
-
-  useEffect(() => {
-    if (!isValidSort) return;
-    dispatch(setPathname(`/${sortString}`));
-  }, [dispatch, sortString, isValidSort]);
 
   // Normalize the sort for API calls; proxy.ts lowercases only for validation
   // and passes the raw-cased segment through, so `/Trending` must still query

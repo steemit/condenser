@@ -174,6 +174,13 @@ describe('routeTagForPath', () => {
     expect(routeTagForPath('/communities')).toEqual({ tag: 'more_communities', params: {} });
   });
 
+  it('maps / to the trending index (legacy PostsIndex setRouteTag)', () => {
+    expect(routeTagForPath('/')).toEqual({
+      tag: 'index',
+      params: { order: 'trending' },
+    });
+  });
+
   it('returns null for untracked paths', () => {
     expect(routeTagForPath('/login')).toBeNull();
     expect(routeTagForPath('/search')).toBeNull();

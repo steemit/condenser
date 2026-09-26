@@ -23,7 +23,7 @@ PrimaryNavigation, FeedSidebarWidgets and `lib/analytics/route-tags.ts`.
 
 | Legacy URL pattern | Legacy page | proxy.ts branch | Next.js route | Status |
 |---|---|---|---|---|
-| `/` | `PostsIndex ['trending']` | none (no rewrite; matcher allows it) | `app/page.tsx` (client redirect to `/trending`) | Implemented |
+| `/` | `PostsIndex ['trending']` | none (no rewrite; matcher allows it) | `app/(main)/page.tsx` (server component: logged-in sessions redirect to `/trending/my` like legacy server.js, otherwise SSRs the trending `SortFeed` at `/`) | Implemented |
 | `/category/@username/permlink` | `Post` | Rewrite → `/post/<category>/<username>/<permlink>` (branch 2, Post with category); **no reserved-word check** — the legacy Post regex `<tag>/<account>/<permlink>` has none, so `/about/@a/p`, `/welcome/@a/p`, `/hot/@a/p` and `/tags/@user/permlink` all render Post pages (legacy static checks are exact-path, and CategoryFilters matches at most two segments) | `app/(main)/post/[category]/[username]/[permlink]/page.tsx` | Implemented |
 | `/@username/feed` | `PostsIndex ['home', user]` | Rewrite → `/user/<username>/feed` (branch 3, User feed) | `app/(main)/user/[username]/[section]/page.tsx` (fetches `bridge.get_account_posts` with sort `feed`, like legacy `PostsIndex ['home', user]`) | Implemented |
 | `/@username/<section>` | `UserProfile` | Rewrite → `/user/<username>/<section>` (branch 4, User profile section); `section` must be in `PROFILE_SECTIONS` | `app/(main)/user/[username]/[section]/page.tsx` | Implemented |

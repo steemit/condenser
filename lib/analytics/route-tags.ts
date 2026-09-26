@@ -40,6 +40,10 @@ export function routeTagForPath(pathname: string): RouteTagInfo | null {
   if (seg.length === 1 && seg[0] === 'communities')
     return { tag: 'more_communities', params: {} };
 
+  // `/` renders the trending PostsIndex (legacy ResolveRoute.js maps `/`
+  // → PostsIndex ['trending']; its setRouteTag dispatches 'index').
+  if (seg.length === 0) return { tag: 'index', params: { order: 'trending' } };
+
   // Post pages: /category/@user/permlink or /@user/permlink.
   // Mirrors proxy.ts branch 2: no reserved-word check on the category —
   // analytics receives the pre-rewrite URL (usePathname(), e.g.

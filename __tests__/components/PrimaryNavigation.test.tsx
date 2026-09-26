@@ -73,6 +73,13 @@ describe('PrimaryNavigation post-page context (legacy previousUrl)', () => {
     expect(isActive(itemByLabel('All Posts'))).toBe(true);
     expect(window.localStorage.getItem('previousUrl')).toBe('/trending');
   });
+
+  it('highlights All Posts at / (home renders the trending feed, legacy Default State)', () => {
+    renderNav('/');
+    expect(isActive(itemByLabel('All Posts'))).toBe(true);
+    // Non-post page: / itself becomes the stored referrer.
+    expect(window.localStorage.getItem('previousUrl')).toBe('/');
+  });
 });
 
 describe('PrimaryNavigation profile group identity', () => {

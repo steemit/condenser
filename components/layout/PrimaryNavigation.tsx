@@ -45,10 +45,12 @@ function profileSectionHref(username: string, segment: string) {
   return `/@${username}/${segment}`;
 }
 
-/** True when viewing global ranked feeds (/trending, /hot/food, …). */
+/** True when viewing global ranked feeds (/, /trending, /hot/food, …). */
 function isAllPostsExplore(pathname: string): boolean {
   const seg = pathname.split("/").filter(Boolean);
-  if (seg.length === 0) return false;
+  // `/` renders the trending feed (legacy ResolveRoute.js) and takes the
+  // nav Default State, which highlights All Posts.
+  if (seg.length === 0) return true;
   const sort = seg[0].toLowerCase();
   if (!GLOBAL_FEED_SORTS.has(sort)) return false;
   if (seg.length === 1) return true;

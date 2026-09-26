@@ -239,10 +239,24 @@ export interface SeoProfile {
   profile_image?: string;
 }
 
+/** Options for buildAccountMetadata. */
+export interface AccountMetadataOptions {
+  /**
+   * Emit robots noindex for private/semi-private account UI pages
+   * (settings, notifications). Legacy had no noindex anywhere, but these
+   * sections render account UI rather than public content, so they are
+   * excluded from indexing. Canonical/OpenGraph are omitted in this mode:
+   * noindex takes precedence over rel=canonical (Google guidance: do not
+   * combine the two signals on the same page).
+   */
+  noindex?: boolean;
+}
+
 /** Legacy addAccountMeta mapped to the Next.js Metadata API. */
 export function buildAccountMetadata(
   accountname: string,
-  profile: SeoProfile | null
+  profile: SeoProfile | null,
+  options: AccountMetadataOptions = {}
 ): Metadata {
   const name = profile?.name || accountname;
   const about = profile?.about || 'Steemit: Communities Without Borders.';
@@ -258,6 +272,11 @@ export function buildAccountMetadata(
   return {
     title,
     description,
+    // Private/semi-private UI pages self-declare noindex (Google treats
+    // noindex + follow:false as "neither index nor crawl links from here").
+    ...(options.noindex && {
+      robots: { index: false, follow: false },
+    }),
     twitter: {
       card: 'summary',
       site: '@steemit',

@@ -23,19 +23,34 @@ interface BridgeProfile {
   metadata?: { profile?: SeoProfile };
 }
 
+/**
+ * Sections that render account UI instead of public content: settings is the
+ * own-account settings editor (gated to its owner) and notifications is the
+ * signed-in user's inbox. Both are emitted with robots noindex. Legacy had no
+ * noindex anywhere, but these pages carry no indexable content; every other
+ * section (blog, comments, followers, ...) stays indexable for legacy parity.
+ */
+const PRIVATE_SECTIONS = new Set(['settings', 'notifications']);
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<PageParams>;
 }): Promise<Metadata> {
-  const { username } = await params;
+  const { username, section } = await params;
   const accountname = normalizeUsername(username).toLowerCase();
+  // Private sections stay noindex even on the fetch-failure fallback.
+  const robots = PRIVATE_SECTIONS.has(section)
+    ? { index: false, follow: false }
+    : undefined;
   try {
     const profile = (await getProfile({ account: accountname })) as BridgeProfile | null;
-    return buildAccountMetadata(accountname, profile?.metadata?.profile ?? null);
+    return buildAccountMetadata(accountname, profile?.metadata?.profile ?? null, {
+      noindex: PRIVATE_SECTIONS.has(section),
+    });
   } catch (error) {
     console.error('generateMetadata: failed to fetch profile:', error);
-    return { title: 'Steemit' };
+    return robots ? { title: 'Steemit', robots } : { title: 'Steemit' };
   }
 }
 

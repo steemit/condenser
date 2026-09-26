@@ -292,4 +292,14 @@ describe('buildAccountMetadata', () => {
       `${SITE_ORIGIN}/images/steemit-twshare-2.png`,
     ]);
   });
+
+  it('emits robots noindex,nofollow for private sections (settings/notifications)', () => {
+    const meta = buildAccountMetadata('alice', null, { noindex: true });
+    expect(meta.robots).toEqual({ index: false, follow: false });
+  });
+
+  it('emits no robots field by default (indexable, legacy parity)', () => {
+    const meta = buildAccountMetadata('alice', null);
+    expect(meta.robots).toBeUndefined();
+  });
 });

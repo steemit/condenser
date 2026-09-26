@@ -10,12 +10,14 @@ import {
   searchResult,
   searchReset,
   searchDepth,
+  searchError,
 } from "@/store/slices/searchSlice";
 import PostsList from "@/components/cards/PostsList";
 import { Post } from "@/lib/api/steem";
 import { FeedLayout } from "@/components/layout/FeedLayout";
 import { SearchIcon } from "lucide-react";
 import Userpic from "@/components/elements/Userpic";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /** Elasticsearch hit shape (minimal fields used for Post mapping). */
@@ -35,6 +37,32 @@ interface SearchHitSource {
 }
 
 /**
+ * Classify a failed /api/search response.
+ *
+ * The route answers non-2xx with {error, code?}: 502 SEARCH_BACKEND_ERROR
+ * (ES returned an error), 503 SEARCH_UNAVAILABLE (ES unreachable/timeout),
+ * 500 for anything unexpected. The structured detail goes to the log; the
+ * returned semantic kind is localized at render time (searchSlice.error).
+ */
+async function searchErrorKind(response: Response): Promise<'unavailable' | 'failed'> {
+  let unavailable = response.status === 502 || response.status === 503;
+  try {
+    const body = (await response.json()) as { error?: unknown; code?: unknown };
+    console.error(
+      "Search request failed:",
+      response.status,
+      body.code ?? body.error
+    );
+    if (body.code === "SEARCH_UNAVAILABLE" || body.code === "SEARCH_BACKEND_ERROR") {
+      unavailable = true;
+    }
+  } catch {
+    console.error("Search request failed:", response.status);
+  }
+  return unavailable ? "unavailable" : "failed";
+}
+
+/**
  * SearchContent component
  * Handles search functionality with useSearchParams
  */
@@ -43,10 +71,10 @@ export default function SearchContent() {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const t = useTranslations();
-  
+
   const query = searchParams.get('q') || '';
   const sortParam = searchParams.get('s') || 'created_at';
-  
+
   const searchState = useAppSelector((state) => state.search);
   const [localQuery, setLocalQuery] = useState(query);
   const [sort, setSort] = useState(sortParam);
@@ -77,7 +105,10 @@ export default function SearchContent() {
       });
 
       if (!response.ok) {
-        throw new Error(`Search request failed: ${response.statusText}`);
+        // Surface the structured failure as an error state — not as an
+        // empty result set ("nothing found" would mask the outage).
+        dispatch(searchError({ kind: await searchErrorKind(response) }));
+        return;
       }
 
       const results = await response.json();
@@ -86,8 +117,8 @@ export default function SearchContent() {
       }));
     } catch (error) {
       console.error('Search error:', error);
-      // Dispatch empty results on error
-      dispatch(searchResult({ hits: { hits: [], total: { value: 0 } } }));
+      // Network-level failure — same "temporarily unavailable" state.
+      dispatch(searchError({ kind: 'unavailable' }));
     } finally {
       dispatch(searchPending({ pending: false }));
     }
@@ -130,6 +161,14 @@ export default function SearchContent() {
   // Redux search results are stored as untyped legacy payloads.
   const hits = searchState.result as SearchHitSource[];
 
+  // Semantic error kind from the slice, localized here (searchSlice stores
+  // no display strings).
+  const errorMessage = searchState.error
+    ? searchState.error === 'unavailable'
+      ? t('search_jsx.search_unavailable')
+      : t('search_jsx.search_failed')
+    : null;
+
   // Offset pagination (audit N-09): the first query no longer opens an ES
   // scroll context, so responses carry no _scroll_id. "Load more" requests
   // the next page with a `from` offset instead; there are more pages as
@@ -156,7 +195,10 @@ export default function SearchContent() {
       });
 
       if (!response.ok) {
-        throw new Error(`Search request failed: ${response.statusText}`);
+        // Keep the already-rendered pages; surface a retryable error below
+        // the list instead of silently stopping pagination.
+        dispatch(searchError({ kind: await searchErrorKind(response) }));
+        return;
       }
 
       const results = await response.json();
@@ -169,6 +211,7 @@ export default function SearchContent() {
       }));
     } catch (error) {
       console.error('Error loading more results:', error);
+      dispatch(searchError({ kind: 'unavailable' }));
     } finally {
       dispatch(searchPending({ pending: false }));
     }
@@ -275,6 +318,20 @@ export default function SearchContent() {
             <div className="flex flex-col items-center justify-center gap-2 py-12">
               <p className="text-muted-foreground">{t("search_jsx.searching")}</p>
             </div>
+          ) : errorMessage && posts.length === 0 ? (
+            // Structured API failure (502/503/500 from /api/search) — an
+            // error state with a retry, not "nothing found".
+            <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center">
+              <p className="text-foreground">{errorMessage}</p>
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-4"
+                onClick={() => performSearch(query, sort, depth)}
+              >
+                {t("g.try_again")}
+              </Button>
+            </div>
           ) : posts.length === 0 ? (
             <div className="rounded-[6px] border border-border bg-card px-6 py-8 text-center text-muted-foreground">
               {t("search_jsx.nothing_found")}
@@ -282,11 +339,26 @@ export default function SearchContent() {
           ) : depth === 2 ? (
             <SearchUserList hits={hits} />
           ) : (
-            <PostsList
-              posts={posts}
-              loading={searchState.pending}
-              onLoadMore={hasMore ? handleLoadMore : undefined}
-            />
+            <>
+              <PostsList
+                posts={posts}
+                loading={searchState.pending}
+                onLoadMore={hasMore ? handleLoadMore : undefined}
+              />
+              {errorMessage && posts.length > 0 ? (
+                // Load-more failure: the list stays, pagination retries.
+                <div className="mt-4 flex flex-col items-center gap-2 rounded-[6px] border border-border bg-card px-6 py-4 text-center">
+                  <p className="text-foreground">{errorMessage}</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleLoadMore}
+                  >
+                    {t("g.try_again")}
+                  </Button>
+                </div>
+              ) : null}
+            </>
           )}
         </>
       ) : (

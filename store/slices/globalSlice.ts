@@ -108,6 +108,20 @@ const notificationIdSet = (items: NotificationItem[]): Set<unknown> => {
   return ids;
 };
 
+// Parse a last-read marker as UTC milliseconds. Hivemind's
+// bridge.unread_notifications returns 'YYYY-MM-DD HH:MM:SS' and the
+// setLastRead broadcast sends 'YYYY-MM-DDTHH:MM:SS' — both naive UTC.
+// Date.parse would read a designator-less timestamp as local time (and some
+// engines reject the space-separated form outright), so normalize first.
+const lastreadTimeMs = (value: unknown): number => {
+  if (typeof value !== 'string' || value === '') return 0;
+  const normalized = /[zZ]|[+-]\d{2}:?\d{2}$/.test(value)
+    ? value.replace(' ', 'T')
+    : `${value.replace(' ', 'T')}Z`;
+  const ms = Date.parse(normalized);
+  return Number.isNaN(ms) ? 0 : ms;
+};
+
 const initialState: GlobalState = {
   status: {},
   content: {},
@@ -201,6 +215,19 @@ const globalSlice = createSlice({
           name,
           notifications: [],
         };
+      }
+      // Stale-write guard: hivemind keeps serving the pre-setLastRead
+      // lastread/unread pair for a while after the setLastRead custom_json
+      // is accepted, so a poll snapshot predating the stored read marker
+      // must not overwrite it (it would un-zero the badge right after the
+      // user marked everything read). Snapshots at or past the marker —
+      // e.g. new notifications bumping the count — are applied normally.
+      const current = state.notifications[name].unreadNotifications;
+      if (
+        current &&
+        lastreadTimeMs(current.lastread) > lastreadTimeMs(unreadNotifications.lastread)
+      ) {
+        return;
       }
       state.notifications[name].unreadNotifications = unreadNotifications;
     },

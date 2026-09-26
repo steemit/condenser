@@ -4,6 +4,7 @@ import globalReducer, {
   followListLoading,
   receiveFollowList,
   receiveNotifications,
+  receiveUnreadNotifications,
   resetFollowState,
   updateFollowState,
 } from '@/store/slices/globalSlice';
@@ -313,6 +314,126 @@ describe('globalSlice follow state', () => {
         receiveNotifications({ name: 'alice', notifications: page([0]), isLastPage: true, append: true })
       );
       expect(state.notifications.alice.isLastPage).toBe(true);
+    });
+  });
+
+  describe('receiveUnreadNotifications (stale-write guard, T16)', () => {
+    it('stores the first snapshot and seeds the entry', () => {
+      const state = stateAfter(
+        undefined,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: '2026-09-26 09:00:00', unread: 5 },
+        })
+      );
+      expect(state.notifications.alice.unreadNotifications).toEqual({
+        lastread: '2026-09-26 09:00:00',
+        unread: 5,
+      });
+    });
+
+    it('rejects a poll snapshot predating the stored read marker', () => {
+      // The user marked everything read at 10:00; hivemind still serves the
+      // pre-setLastRead pair (lastread 09:59, unread 7). Writing it back
+      // would un-zero the badge right after the mark (T16 race).
+      let state = stateAfter(
+        undefined,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: '2026-09-26T10:00:00', unread: 0 },
+        })
+      );
+      state = stateAfter(
+        state,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: '2026-09-26T09:59:00', unread: 7 },
+        })
+      );
+      expect(state.notifications.alice.unreadNotifications).toEqual({
+        lastread: '2026-09-26T10:00:00',
+        unread: 0,
+      });
+    });
+
+    it('applies a poll snapshot at or past the stored read marker', () => {
+      let state = stateAfter(
+        undefined,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: '2026-09-26T10:00:00', unread: 0 },
+        })
+      );
+      // Same marker, refreshed values: allowed.
+      state = stateAfter(
+        state,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: '2026-09-26T10:00:00', unread: 2 },
+        })
+      );
+      expect(state.notifications.alice.unreadNotifications?.unread).toBe(2);
+      // Newer marker (indexed setLastRead): allowed.
+      state = stateAfter(
+        state,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: '2026-09-26T10:05:00', unread: 3 },
+        })
+      );
+      expect(state.notifications.alice.unreadNotifications).toEqual({
+        lastread: '2026-09-26T10:05:00',
+        unread: 3,
+      });
+    });
+
+    it('compares hivemind space-separated timestamps against naive-T markers', () => {
+      // bridge.unread_notifications emits 'YYYY-MM-DD HH:MM:SS'; the
+      // mark-read dispatch emits 'YYYY-MM-DDTHH:MM:SS'. Both are naive UTC
+      // and must compare chronologically, not lexically (' ' < 'T').
+      let state = stateAfter(
+        undefined,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: '2026-09-26 09:00:00', unread: 5 },
+        })
+      );
+      state = stateAfter(
+        state,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: '2026-09-26T09:30:00', unread: 0 },
+        })
+      );
+      expect(state.notifications.alice.unreadNotifications?.unread).toBe(0);
+      // Stale space-separated poll snapshot: still predates the marker.
+      state = stateAfter(
+        state,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: '2026-09-26 09:15:00', unread: 4 },
+        })
+      );
+      expect(state.notifications.alice.unreadNotifications?.unread).toBe(0);
+    });
+
+    it('keeps accounts isolated', () => {
+      let state = stateAfter(
+        undefined,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: '2026-09-26T10:00:00', unread: 0 },
+        })
+      );
+      state = stateAfter(
+        state,
+        receiveUnreadNotifications({
+          name: 'bob',
+          unreadNotifications: { lastread: '2026-09-26T09:00:00', unread: 9 },
+        })
+      );
+      expect(state.notifications.bob.unreadNotifications?.unread).toBe(9);
+      expect(state.notifications.alice.unreadNotifications?.unread).toBe(0);
     });
   });
 });

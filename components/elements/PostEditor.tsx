@@ -41,6 +41,15 @@ interface PostEditorProps {
   parentAuthor?: string;
   /** Parent comment/post permlink (submit_comment and edit). */
   parentPermlink?: string;
+  /**
+   * Root post permlink of the discussion this editor posts into (C2). At
+   * depth >= 2 the op names only the immediate parent comment, but the L1
+   * entries that must refresh after the write are keyed by the ROOT
+   * permlink — this threads that dimension into the broadcast's cache
+   * context. Optional: omitted parents (stories, standalone contexts)
+   * simply keep the op-derived invalidation.
+   */
+  rootPermlink?: string;
   /** Existing permlink (edit only — edits reuse the original permlink). */
   commentPermlink?: string;
   category?: string;
@@ -134,6 +143,7 @@ export default function PostEditor({
   type,
   parentAuthor: parentAuthorProp,
   parentPermlink: parentPermlinkProp,
+  rootPermlink,
   commentPermlink,
   category: initialCategory,
   title: initialTitle,
@@ -322,6 +332,9 @@ export default function PostEditor({
         title: trimmedTitle,
         body: trimmedBody,
         jsonMetadata,
+        // Root posts ARE the root; comments/edits forward the discussion's
+        // root so the server can emit a root-dimension L1 token (C2).
+        rootPermlink: isStory ? permlink : rootPermlink,
         // Root posts only: legacy never attaches comment_options to comments
         // or edits.
         commentOptions: isStory

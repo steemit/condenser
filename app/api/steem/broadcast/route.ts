@@ -21,7 +21,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { initializeSteemApi, callSteemApi } from '@/lib/steem/client';
-import { cacheDelete } from '@/lib/cache/redis';
+import { cacheDelete, cacheDeleteByPrefix } from '@/lib/cache/redis';
 import { MAX_BROADCAST_BODY_BYTES, readJsonWithLimit } from '@/lib/api/body-limit';
 import {
   RATE_LIMITS,
@@ -147,8 +147,21 @@ export async function POST(request: NextRequest) {
         operations?: unknown;
         signatures?: unknown[];
       };
+      /**
+       * Optional client hint naming the ROOT discussion a comment-level
+       * write belongs to (C2). A depth>=2 reply's op names only its
+       * immediate parent, and delete_comment carries no parent at all —
+       * but the L1 entries that must refresh (/api/steem/post and
+       * /api/steem/comments) are keyed by the ROOT permlink. The client
+       * rendering the discussion knows the root and supplies it here;
+       * tokens stay op+hint-derived and charset-checked either way, and a
+       * hostile hint can at worst evict the sender's own browser entries.
+       */
+      cacheContext?: {
+        rootPermlink?: unknown;
+      };
     };
-    const { signedTransaction } = body;
+    const { signedTransaction, cacheContext } = body;
 
     if (!signedTransaction) {
       return NextResponse.json(
@@ -240,16 +253,75 @@ export async function POST(request: NextRequest) {
 
     // Signal the browser (L1) cache to drop affected entries. Tokens are
     // comma-separated and matched by substring against cached URLs: the
-    // actor covers per-user entries, and `permlink=...` covers the
-    // post + comments entries (their URLs are author/permlink-shaped and
-    // would otherwise survive a vote/reply, serving pre-write data).
-    // Tokens are op-derived (client-controlled), so restrict them to the
-    // account/permlink charset — anything else is dropped, never trusted.
-    const SAFE_TOKEN = /^[a-z0-9.=-]+$/;
+    // actor covers per-user entries, `permlink=...` covers the post +
+    // comments entries (author/permlink-shaped URLs), `community=...` covers
+    // the community-roles/subscribers entries, and the path-shaped
+    // `/api/steem/communities` covers every communities list/subscriptions
+    // entry (C5). Tokens are op-derived (client-controlled), so restrict
+    // them to a header-safe charset — anything else is dropped, never
+    // trusted. Uppercase is allowed: permlinks legally contain it (base58
+    // noise / other clients) and URLSearchParams leaves it unescaped, so
+    // dropping it would silently miss the entry it should evict (audit X9).
+    const SAFE_TOKEN = /^[A-Za-z0-9.=\/-]+$/;
+    // Root-dimension hint (C2): `permlink=<root>` for comment-level writes
+    // whose op names only a nested parent (or nothing, for delete_comment).
+    // Same permlink charset bound as SAFE_TOKEN.
+    const ROOT_PERMLINK_RE = /^[A-Za-z0-9.-]{1,256}$/;
+    const rootPermlink =
+      typeof cacheContext?.rootPermlink === 'string' &&
+      ROOT_PERMLINK_RE.test(cacheContext.rootPermlink)
+        ? cacheContext.rootPermlink
+        : undefined;
     const invalidateTokens: string[] = [];
     if (actor && SAFE_TOKEN.test(actor)) invalidateTokens.push(actor);
     if (opType === 'vote' && permlink && SAFE_TOKEN.test(`permlink=${permlink}`)) {
       invalidateTokens.push(`permlink=${permlink}`);
+    }
+    if (opType === 'custom_json' && opData) {
+      const payload = parseCustomJsonPayload(opData.json);
+      if (payload && opData.id === 'follow' && payload[0] === 'follow') {
+        // A follow also changes the TARGET's followers page (their URL is
+        // account-shaped) — the actor token above already covers the
+        // actor's own following page and profile entries.
+        const target = String(payload[1].following || '');
+        if (target && SAFE_TOKEN.test(target)) {
+          if (!invalidateTokens.includes(target)) {
+            invalidateTokens.push(target);
+          }
+          // Chain account names are always lowercase — also push the
+          // lowercase variant so a mixed-case payload still matches this
+          // client's lowercased L1 URLs (defensive, mirroring the L2
+          // dual-variant sweep).
+          const lowered = target.toLowerCase();
+          if (
+            lowered !== target &&
+            !invalidateTokens.includes(lowered)
+          ) {
+            invalidateTokens.push(lowered);
+          }
+        }
+      }
+      if (
+        payload &&
+        opData.id === 'community' &&
+        (payload[0] === 'subscribe' || payload[0] === 'unsubscribe')
+      ) {
+        // C5: drop the community's subscriber LIST L1 entry (its URL is
+        // community-shaped via /api/steem/community-roles) and every
+        // communities list/subscriptions entry (path-shaped token covering
+        // /api/steem/communities?... in all its sort/query/limit variants —
+        // they embed subscriber counts and subscriptions).
+        const community = String(payload[1].community || '');
+        const communityToken = `community=${community}`;
+        if (
+          community &&
+          SAFE_TOKEN.test(communityToken) &&
+          !invalidateTokens.includes(communityToken)
+        ) {
+          invalidateTokens.push(communityToken);
+        }
+        invalidateTokens.push('/api/steem/communities');
+      }
     }
     if (opType === 'comment' && opData) {
       const parentPermlink = opData.parent_permlink as string | undefined;
@@ -267,6 +339,16 @@ export async function POST(request: NextRequest) {
           invalidateTokens.push(`permlink=${ownPermlink}`);
         }
       }
+    }
+    if ((opType === 'vote' || opType === 'comment' || opType === 'delete_comment') && rootPermlink) {
+      // C2: comment-level writes (vote/reply/edit/delete on a COMMENT) also
+      // drop the ROOT discussion's L1 entries — /api/steem/post and
+      // /api/steem/comments are keyed by the root permlink, which the op
+      // itself does not carry at depth>=2 (and never for delete_comment).
+      // For root-level writes this duplicates an op-derived token, hence
+      // the dedupe check.
+      const rootToken = `permlink=${rootPermlink}`;
+      if (!invalidateTokens.includes(rootToken)) invalidateTokens.push(rootToken);
     }
     if (invalidateTokens.length > 0) {
       response.headers.set('X-Cache-Invalidate', invalidateTokens.join(','));
@@ -318,6 +400,17 @@ export async function POST(request: NextRequest) {
  * fully-known key (observer reads bypass the cache; see getProfile) with a
  * 30s fresh TTL, and the exact delete guarantees the next read refetches
  * instead of serving the pre-write value for the remaining TTL.
+ *
+ * Two documented exceptions use ACCOUNT-SCOPED prefix deletes
+ * (deleteAccountScopedPrefix): the follow lists (C1) and the communities
+ * list (C5). Their keys embed per-request dimensions (page/limit/cursor or
+ * sort/query/limit variants) after the account/family segment, so exact
+ * keys are unknowable and the entries carry 30s-10min fresh TTLs during
+ * which a write would visibly revert. The blast radius is confined to the
+ * accounts involved in the (signed, chain-accepted) operation or to a
+ * single low-traffic list family — not the shared profile/feed keyspace
+ * N-10 protected — and the cost is bounded by the steem:broadcast rate
+ * limit (30/min/IP) on top of the chain's own operation fees.
  */
 async function invalidateAfterBroadcast(operations: Array<[string, Record<string, unknown>]>): Promise<void> {
   for (const [opName, opData] of operations) {
@@ -371,6 +464,43 @@ async function deleteAccountScopedKey(prefix: string, account: string): Promise<
   }
 }
 
+/**
+ * Steem account charset, bounded and free of glob metacharacters. Required
+ * before any client-controlled value may enter a Redis MATCH pattern: SCAN
+ * patterns interpret * ? [ ] and friends, so an unsanitized account could
+ * widen a "scoped" prefix delete into a keyspace-wide sweep. The RAW
+ * variant also permits uppercase (case is not a glob metacharacter). The
+ * dual-variant sweep is DEFENSIVE: the follow-page read routes normalize
+ * their params (trim + lowercase), so their raw-case keys cannot exist
+ * today — the raw branch stays correct only if a future read route drops
+ * that normalization. (The profile family genuinely caches under the
+ * reader's casing, but it goes through deleteAccountScopedKey's exact-key
+ * deletes, not this prefix path.)
+ */
+const ACCOUNT_KEY_RE = /^[a-z0-9.-]{1,64}$/;
+const RAW_ACCOUNT_KEY_RE = /^[A-Za-z0-9.-]{1,64}$/;
+
+/**
+ * Delete `{prefix}{account}:*` — the account-scoped sibling of
+ * deleteAccountScopedKey for cache families whose keys carry per-request
+ * dimensions (page/limit/cursor variants) after the account segment, making
+ * exact keys unknowable. The trailing ':' keeps names that are prefixes of
+ * each other (alice / alice2) from colliding.
+ */
+async function deleteAccountScopedPrefix(prefix: string, account: string): Promise<void> {
+  const trimmed = account.trim();
+  const normalized = trimmed.toLowerCase();
+  if (!ACCOUNT_KEY_RE.test(normalized)) return;
+  const deletes = [cacheDeleteByPrefix(`${prefix}${normalized}:`)];
+  // Compare against the TRIMMED raw form: a whitespace-only difference (e.g.
+  // " dave ") would otherwise repeat the same SCAN twice. Only a genuine
+  // casing difference adds a second, distinct prefix.
+  if (trimmed !== normalized && RAW_ACCOUNT_KEY_RE.test(trimmed)) {
+    deletes.push(cacheDeleteByPrefix(`${prefix}${trimmed}:`));
+  }
+  await Promise.all(deletes);
+}
+
 /** Parse a `["kind", {…}]`-shaped custom_json payload; null when unshaped. */
 function parseCustomJsonPayload(raw: unknown): [string, Record<string, unknown>] | null {
   if (typeof raw !== 'string') return null;
@@ -413,10 +543,41 @@ async function invalidateCustomJson(opData: Record<string, unknown>): Promise<vo
   switch (opData.id) {
     case 'follow': {
       if (kind === 'follow') {
+        const follower = String(args.follower || '');
+        const following = String(args.following || '');
         // follow/unfollow/ignore also shifts the TARGET's cached
         // follower-count profile — one exact key, not every user's profile.
-        const following = String(args.following || '');
         if (following) await deleteAccountScopedKey('steem:profile:', following);
+        // C1: the two accounts' follow-list caches (30s fresh / 330s total
+        // TTL). A follow changes the follower's following pages
+        // (getFollowingByPage) and the login follow-state seeds
+        // (getFollowing, /api/steem/following), and the target's followers
+        // pages (getFollowersByPage) — without these deletes both sides
+        // revert within the window ("the follow didn't save"). The payload's
+        // follower/following name the lists (the chain enforces follower ==
+        // posting auth); page/limit/cursor variants make exact keys
+        // unknowable, hence the scoped prefix deletes (see the N-10 note on
+        // invalidateAfterBroadcast).
+        //
+        // All three follow-list families are swept UNCONDITIONALLY. The
+        // ignore-seed family (`steem:following:`) must drop for every
+        // follow-kind write (login seeds embed the mute state). The PAGE
+        // families cannot be payload-gated: Follow.tsx's handleUnfollow
+        // sends what=['','ignore'] when unfollowing a muted user (it keeps
+        // ignoreWhat), which is byte-identical to a pure mute payload —
+        // the server cannot distinguish them, yet the unfollow variant
+        // DOES change blog page membership. Gating on `what` would miss it
+        // and reopen the C1 "unfollow didn't save" window (30s fresh /
+        // 330s stale). A pure mute merely pays two SCANs it didn't need;
+        // mutes are rare, so unconditional sweeping is the only provably
+        // correct option (review consensus, PR #4047).
+        if (follower) {
+          await deleteAccountScopedPrefix('steem:following:', follower);
+          await deleteAccountScopedPrefix('steem:following-page:', follower);
+        }
+        if (following) {
+          await deleteAccountScopedPrefix('steem:followers-page:', following);
+        }
       }
       // kind === 'reblog': the post lands in the REBLOGGER's blog list (a
       // 3s-TTL list cache, left to natural expiry); the target author's
@@ -425,13 +586,20 @@ async function invalidateCustomJson(opData: Record<string, unknown>): Promise<vo
     }
     case 'community': {
       // subscribe/unsubscribe changes the community's subscriber list —
-      // an exact key with a 10-minute fresh TTL (CACHE_TTL.communityRoles),
-      // previously not invalidated at all. The `steem:communities:*` list
-      // cache also embeds subscriber counts, but its key space is unbounded
-      // (sort x query x limit) so no exact delete is possible; its 10-minute
-      // TTL bounds the drift.
+      // an exact key with a 10-minute fresh TTL (CACHE_TTL.communityRoles).
       const community = String(args.community || '');
       if (community) await deleteAccountScopedKey('steem:community-subscribers:', community);
+      // C5: the communities LIST cache (steem:communities:{sort}:{query}:{limit},
+      // 600s fresh TTL) embeds subscriber counts — without this sweep,
+      // anonymous traffic saw the count drift by one for up to 10 minutes.
+      // The key space is unbounded (sort x query x limit variants, query is
+      // free text), so no exact delete is possible; this is the documented
+      // N-10 exception (see invalidateAfterBroadcast's comment) — one
+      // low-traffic list family, gated behind a signed chain op plus the
+      // 30/min/IP broadcast limit.
+      if (kind === 'subscribe' || kind === 'unsubscribe') {
+        await cacheDeleteByPrefix('steem:communities:');
+      }
       break;
     }
     default:

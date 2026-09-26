@@ -123,6 +123,7 @@ export default function CommentsList({
             type="submit_comment"
             parentAuthor={postAuthor}
             parentPermlink={postPermlink}
+            rootPermlink={postPermlink}
             onSuccess={onReply}
           />
         </div>
@@ -141,6 +142,7 @@ export default function CommentsList({
               depth={1}
               sortOrder={currentSortOrder}
               replies={comment.repliesData ?? []}
+              rootPermlink={postPermlink}
               onReply={onReply}
               onEdit={onEdit}
               onDelete={onDelete}

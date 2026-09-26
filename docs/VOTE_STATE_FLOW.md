@@ -110,18 +110,34 @@ flowchart LR
 
 | Op | Overlay write (Redis, 120s TTL) | L2 (Redis) invalidation | L1 `X-Cache-Invalidate` tokens |
 |---|---|---|---|
-| `vote` | `steem:pendingvote:{author}:{permlink}` field voter → `{weight, ts}` (weight 0 = cancel) | exact-key DEL `steem:profile:{voter}`, `steem:profile:{author}` — **`steem:post:` deliberately untouched** (a delete would re-cache pre-vote data for a full TTL while hivemind lags) and **list caches (`steem:posts:ranked:*`, `steem:posts:account:*`) left to their 3s fresh TTL + the vote overlay** | `{voter}`, `permlink={permlink}` |
+| `vote` | `steem:pendingvote:{author}:{permlink}` field voter → `{weight, ts}` (weight 0 = cancel) | exact-key DEL `steem:profile:{voter}`, `steem:profile:{author}` — **`steem:post:` deliberately untouched** (a delete would re-cache pre-vote data for a full TTL while hivemind lags) and **list caches (`steem:posts:ranked:*`, `steem:posts:account:*`) left to their 3s fresh TTL + the vote overlay** | `{voter}`, `permlink={permlink}`; **votes on a comment additionally carry `permlink={rootPermlink}`** from the client's cacheContext (C2) |
 | `comment` (root post / edit) | `steem:pendingroot:{author}:{permlink}` → synthesized bridge-shaped post | exact-key DEL `steem:profile:{author}` (account-post lists are 3s-TTL caches, natural expiry) | `{author}`, `permlink={permlink}` (drops the post's own L1 entry on edits) |
-| `comment` (reply) | `steem:pendingchildren:{parentAuthor}:{parentPermlink}` field `{author}/{permlink}` → post | same as above | `{author}`, `permlink={parent_permlink}` (drops the parent discussion's post+comments entries) |
-| `delete_comment` | `steem:pendingtomb:{author}:{permlink}` | exact-key DEL `steem:profile:{author}` | `{author}` only — the op carries no parent reference, so the parent's L1 entry goes stale within 15s and self-revalidates on the next read |
-| `custom_json` | none | exact-key DEL `steem:profile:{actor}`; `follow` also DELs the target's `steem:profile:{following}`; `community` also DELs `steem:community-subscribers:{community}` | `{actor}` |
+| `comment` (reply) | `steem:pendingchildren:{parentAuthor}:{parentPermlink}` field `{author}/{permlink}` → post | same as above | `{author}`, `permlink={parent_permlink}` (drops the parent discussion's post+comments entries), **plus `permlink={rootPermlink}` when the client supplied the discussion's root (C2)** — at depth ≥ 2 the parent is a COMMENT, so the parent token alone matches nothing |
+| `delete_comment` | `steem:pendingtomb:{author}:{permlink}` | exact-key DEL `steem:profile:{author}` | `{author}` plus **`permlink={rootPermlink}` when the client supplied the root (C2)** — the op itself carries no parent reference, so without the hint the parent discussion goes stale within 15s and self-revalidates |
+| `custom_json` (follow kind) | none | exact-key DEL `steem:profile:{actor}`, `steem:profile:{target}`; **account-scoped prefix deletes `steem:following-page:{follower}:*`, `steem:following:{follower}:*`, `steem:followers-page:{target}:*` (C1)** | `{actor}`, `{target}` (drops the target's followers-page entries) |
+| `custom_json` (community subscribe/unsubscribe) | none | exact-key DEL `steem:community-subscribers:{community}`; **prefix sweep `steem:communities:*` (C5)** | `{actor}`, `community={community}`, `/api/steem/communities` (path-shaped) |
+| `custom_json` (reblog / notify) | none | exact-key DEL `steem:profile:{actor}` | `{actor}` |
 | `account_update2` | `steem:pendingprofile:{account}` → the complete new `profile` sub-object (parsed from `posting_json_metadata`) | exact-key DEL `steem:profile:{account}` | `{account}` (drops the user's profile + account-post L1 entries) |
 
-Since audit N-10 every L2 invalidation on the broadcast path is a fully-known
-exact-key DEL — no prefix sweeps (`cacheDeleteByPrefix` SCANs the whole
-keyspace regardless of match count, which let any registered account punch
-the shared cache through at ~zero cost). List caches are covered by their
-3-second fresh TTL plus the overlay instead of being swept.
+Since audit N-10 every L2 invalidation on the broadcast path is a
+fully-known exact-key DEL — no blanket prefix sweeps (`cacheDeleteByPrefix`
+SCANs the whole keyspace regardless of match count, which let any
+registered account punch the shared cache through at ~zero cost). List
+caches are covered by their 3-second fresh TTL plus the overlay instead of
+being swept.
+
+Two documented exceptions use **account-/family-scoped** prefix deletes
+(C1/C5): the follow lists (`steem:following-page:{account}:*`,
+`steem:following:{account}:*`, `steem:followers-page:{account}:*`) and the
+communities list (`steem:communities:*`). These key families embed
+per-request dimensions (page/limit/cursor or sort/query/limit variants) so
+exact keys are unknowable, and their 30s–10min fresh TTLs made writes
+visibly revert. The blast radius is confined to the accounts named in the
+signed operation or to a single low-traffic list family — never the shared
+profile/feed keyspace N-10 protected — and the cost is bounded by the
+`steem:broadcast` rate limit (30/min/IP) on top of chain fees. Values are
+charset-validated (no glob metacharacters) before entering the SCAN MATCH
+pattern, and both lowercase and raw-case key variants are swept.
 
 All Redis keys are namespaced by `redisKey()` — the actual keys carry the
 `condenser:` prefix (configurable via `REDIS_KEY_PREFIX`), e.g.
@@ -129,13 +145,26 @@ All Redis keys are namespaced by `redisKey()` — the actual keys carry the
 `pendingchildren`) store a `{ts, post}` envelope; `ts` is the broadcaster's
 wall clock at broadcast time and powers the newer-than edit check below.
 
-Tokens are sanitized to the account/permlink charset (`/^[a-z0-9.=-]+$/`)
-before entering the header — op data is client-controlled and never trusted.
+Tokens are sanitized to a header-safe account/permlink/path charset
+(`/^[A-Za-z0-9.=/-]+$/` — uppercase is legal in permlinks and `/` enables
+path-shaped tokens like `/api/steem/communities`) before entering the
+header — op data is client-controlled and never trusted. Comment-level
+writes (vote/reply/edit/delete on a comment) additionally carry a
+client-supplied `cacheContext.rootPermlink` hint naming the root
+discussion, which the ops themselves cannot express at depth ≥ 2 (and
+never for `delete_comment`); the server re-validates it against the
+permlink charset, and a hostile hint can at worst evict entries in the
+sender's own browser.
 
 The L1 tokens are applied by `invalidateFromResponse()`
 (`lib/cache/client-fetch.ts`), called both from `cachedFetch` (GET paths) and
 from `broadcastSignedTransaction` (`lib/api/broadcast.ts`) — the broadcast POST
-is a raw fetch, so the client applies the header explicitly.
+is a raw fetch, so the client applies the header explicitly. A stale- or
+miss-triggered fetch that was in flight when an invalidation landed drops
+its write-back instead of caching the pre-write snapshot: `clientCache`
+tracks an invalidation epoch, and the fetch path re-checks it before
+`set()` (C3) — otherwise a background refresh could resurrect the evicted
+entry with a fresh window and silently undo the invalidation.
 
 ## Content overlay merge semantics (`getDiscussion`)
 
@@ -194,9 +223,13 @@ the window:
   the overlay guarantees the post's URL itself.
 - A pending reply whose parent is tombstoned in the same window briefly renders
   as a top-level comment; self-heals on TTL expiry.
-- `delete_comment` cannot invalidate the parent discussion's L1 entry (the op
-  carries no parent reference); the parent goes stale within 15s and
-  self-revalidates on the next read.
+- `delete_comment` invalidates the parent discussion's L1 entry only when the
+  posting client supplies `cacheContext.rootPermlink` (the post page does; the
+  op itself carries no parent reference). Without the hint the parent goes
+  stale within 15s and self-revalidates on the next read.
+- The follow-list and communities-list prefix deletes are scoped but still
+  SCAN-based: a broadcast-heavy client can force repeated scans of the Redis
+  keyspace (bounded by the 30/min/IP broadcast limit and chain fees).
 
 ## Key files
 

@@ -36,17 +36,40 @@ async function getPrivateKeyForSigning(): Promise<string> {
 }
 
 /**
+ * Optional cache-invalidation context sent alongside the signed transaction.
+ *
+ * `rootPermlink` names the ROOT discussion a comment-level write belongs to
+ * (C2): a depth>=2 reply's op names only its immediate parent, and
+ * delete_comment carries no parent reference at all — but the L1 entries
+ * that must refresh after the write (/api/steem/post, /api/steem/comments)
+ * are keyed by the ROOT permlink. The component rendering the discussion
+ * knows the root and passes it down so the server can emit a
+ * root-dimension X-Cache-Invalidate token. The server re-validates the
+ * charset before using it; a bogus value only misses an eviction in the
+ * sender's own browser.
+ */
+export interface BroadcastCacheContext {
+  rootPermlink?: string;
+}
+
+/**
  * Broadcast a signed transaction to the Steem network
  */
-async function broadcastSignedTransaction(signedTransaction: SignedTransaction): Promise<{ success: boolean; result: unknown; transactionId?: string; permlink?: string }> {
+async function broadcastSignedTransaction(
+  signedTransaction: SignedTransaction,
+  cacheContext?: BroadcastCacheContext
+): Promise<{ success: boolean; result: unknown; transactionId?: string; permlink?: string }> {
+  // Only carry the context when it names something — an empty object would
+  // be dead weight on every vote/post broadcast.
+  const hasCacheContext = Boolean(cacheContext?.rootPermlink);
   const response = await fetch('/api/steem/broadcast', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      signedTransaction,
-    }),
+    body: JSON.stringify(
+      hasCacheContext ? { signedTransaction, cacheContext } : { signedTransaction }
+    ),
   });
 
   if (!response.ok) {
@@ -76,10 +99,12 @@ export async function broadcastComment(
     /** Payout/beneficiary options (root posts only); appended as a
      * comment_options op right after the comment op. */
     commentOptions?: CommentOptionsConfig;
+    /** Root discussion permlink (comments/edits at any depth, C2). */
+    rootPermlink?: string;
   }
 ): Promise<{ success: boolean; result: unknown; transactionId?: string; permlink?: string }> {
   const privateKey = await getPrivateKeyForSigning();
-  
+
   const signedTransaction = await signCommentOperation(privateKey, {
     parentAuthor: params.parentAuthor,
     parentPermlink: params.parentPermlink,
@@ -90,7 +115,9 @@ export async function broadcastComment(
     jsonMetadata: params.jsonMetadata,
   }, params.commentOptions);
 
-  return broadcastSignedTransaction(signedTransaction);
+  return broadcastSignedTransaction(signedTransaction, {
+    rootPermlink: params.rootPermlink,
+  });
 }
 
 /**
@@ -102,10 +129,12 @@ export async function broadcastVote(
     author: string;
     permlink: string;
     weight: number; // -10000 to 10000
+    /** Root discussion permlink when voting on a COMMENT (C2). */
+    rootPermlink?: string;
   }
 ): Promise<{ success: boolean; result: unknown; transactionId?: string; permlink?: string }> {
   const privateKey = await getPrivateKeyForSigning();
-  
+
   const signedTransaction = await signVoteOperation(privateKey, {
     voter: params.voter,
     author: params.author,
@@ -113,7 +142,9 @@ export async function broadcastVote(
     weight: params.weight,
   });
 
-  return broadcastSignedTransaction(signedTransaction);
+  return broadcastSignedTransaction(signedTransaction, {
+    rootPermlink: params.rootPermlink,
+  });
 }
 
 /**
@@ -156,6 +187,9 @@ export async function broadcastDeleteComment(
   params: {
     author: string;
     permlink: string;
+    /** Root discussion permlink (C2) — the delete op carries no parent
+     * reference, so the root context must come from the caller. */
+    rootPermlink?: string;
   }
 ): Promise<{ success: boolean; result: unknown; transactionId?: string; permlink?: string }> {
   const privateKey = await getPrivateKeyForSigning();
@@ -165,7 +199,9 @@ export async function broadcastDeleteComment(
     permlink: params.permlink,
   });
 
-  return broadcastSignedTransaction(signedTransaction);
+  return broadcastSignedTransaction(signedTransaction, {
+    rootPermlink: params.rootPermlink,
+  });
 }
 
 /**

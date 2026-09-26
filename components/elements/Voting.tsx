@@ -20,6 +20,13 @@ interface VotingProps {
   showList?: boolean;
   enableSlider?: boolean;
   isComment?: boolean;
+  /**
+   * Root post permlink when voting on a COMMENT (C2): the vote op names
+   * only the comment, but the L1 entries that must refresh (post/comments)
+   * are keyed by the ROOT permlink. Post-level Voting omits it — there the
+   * voted permlink already IS the root.
+   */
+  rootPermlink?: string;
 }
 
 const MAX_WEIGHT = 10000;
@@ -125,6 +132,7 @@ export default function Voting({
   showList = true,
   enableSlider = false,
   isComment = false,
+  rootPermlink,
 }: VotingProps) {
   const dispatch = useAppDispatch();
   const t = useTranslations();
@@ -239,6 +247,9 @@ export default function Voting({
         author: post.author,
         permlink: post.permlink,
         weight,
+        // Comment votes must also drop the ROOT discussion's L1 entries —
+        // their URLs are keyed by the root permlink (C2).
+        rootPermlink: isComment ? rootPermlink : undefined,
       });
     } catch (err) {
       console.error('Vote broadcast error:', err);

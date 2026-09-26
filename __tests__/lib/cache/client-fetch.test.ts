@@ -1,6 +1,12 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cachedFetch, invalidateFromResponse } from '@/lib/cache/client-fetch';
 import { clientCache } from '@/lib/cache/client-cache';
+
+// Tests stub the global fetch — always restore it so later suites in this
+// file (and the jsdom environment) see the real binding.
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 const OPTS = { staleMs: 15_000, maxAgeMs: 120_000 };
 
@@ -75,5 +81,124 @@ describe('invalidateFromResponse', () => {
     const feed = await cachedFetch('/api/steem/posts?sort=trending&limit=20', OPTS);
     expect(feed.data).toEqual(['feed']);
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('invalidation vs in-flight fetches (C3)', () => {
+  beforeEach(() => {
+    clientCache.clear();
+    vi.restoreAllMocks();
+  });
+
+  /** fetch stub whose response can be released mid-test. */
+  function deferredFetch() {
+    let resolveFetch!: (r: Response) => void;
+    const fetchMock = vi.fn().mockImplementation(
+      () => new Promise<Response>((resolve) => (resolveFetch = resolve))
+    );
+    vi.stubGlobal('fetch', fetchMock);
+    // A wrapper (not the captured binding) so the call site always reads the
+    // resolver assigned by the latest fetch invocation.
+    return { fetchMock, release: (r: Response) => resolveFetch(r) };
+  }
+
+  it('does not resurrect an evicted entry from an in-flight background refresh', async () => {
+    const { fetchMock, release } = deferredFetch();
+
+    // Seed an already-stale entry so the read returns it and fires a
+    // background refresh (negative staleMs puts staleAt in the past).
+    clientCache.set('/api/steem/post?author=bob&permlink=p', { title: 'old' }, -1, 120_000);
+    const first = await cachedFetch('/api/steem/post?author=bob&permlink=p', OPTS);
+    expect(first).toEqual({ data: { title: 'old' }, stale: true });
+
+    // A write completes while the refresh is in flight → the entry is evicted.
+    invalidateFromResponse(
+      new Response(null, { headers: { 'X-Cache-Invalidate': 'permlink=p' } })
+    );
+
+    // The refresh resolves with the PRE-write snapshot it captured earlier.
+    release(jsonResponse({ title: 'pre-write' }));
+    await new Promise((r) => setTimeout(r, 0)); // let the .then chain settle
+
+    // The eviction must hold: the next read goes to the network instead of
+    // serving the resurrected snapshot from a fresh window.
+    fetchMock.mockResolvedValue(jsonResponse({ title: 'fresh' }));
+    const second = await cachedFetch('/api/steem/post?author=bob&permlink=p', OPTS);
+    expect(second).toEqual({ data: { title: 'fresh' }, stale: false });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('drops the write-back when any invalidation raced the refresh (conservative)', async () => {
+    const { fetchMock, release } = deferredFetch();
+
+    clientCache.set('/api/steem/post?author=bob&permlink=p', { title: 'old' }, -1, 120_000);
+    await cachedFetch('/api/steem/post?author=bob&permlink=p', OPTS);
+
+    // An invalidation whose token matches neither the store nor this URL
+    // still drops the write-back: the epoch guard is global by design, not
+    // per-URL (an exact token-vs-URL verdict would need an in-flight
+    // registry), so unrelated writes also drop racing refreshes — one extra
+    // refetch — rather than risk a resurrection.
+    invalidateFromResponse(
+      new Response(null, { headers: { 'X-Cache-Invalidate': 'someoneelse' } })
+    );
+
+    release(jsonResponse({ title: 'refreshed' }));
+    await new Promise((r) => setTimeout(r, 0));
+
+    // The old entry survives (SWR serves it stale) and a new refresh runs;
+    // the dropped write-back costs one network hit, nothing more.
+    fetchMock.mockResolvedValueOnce(jsonResponse({ title: 'converged' }));
+    const second = await cachedFetch('/api/steem/post?author=bob&permlink=p', OPTS);
+    expect(second).toEqual({ data: { title: 'old' }, stale: true });
+    await new Promise((r) => setTimeout(r, 0)); // second refresh settles
+
+    // No invalidation raced the second refresh → its write-back lands.
+    const third = await cachedFetch('/api/steem/post?author=bob&permlink=p', OPTS);
+    expect(third).toEqual({ data: { title: 'converged' }, stale: false });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not cache a blocking fetch that raced an invalidation', async () => {
+    const { fetchMock, release } = deferredFetch();
+
+    // No cache yet → the read blocks on fetch. Release order: the write's
+    // invalidation lands BEFORE the response does.
+    const pending = cachedFetch('/api/steem/post?author=bob&permlink=p', OPTS);
+    invalidateFromResponse(
+      new Response(null, { headers: { 'X-Cache-Invalidate': 'permlink=p' } })
+    );
+    release(jsonResponse({ title: 'pre-write' }));
+    expect(await pending).toEqual({ data: { title: 'pre-write' }, stale: false });
+
+    // The racing snapshot must not have been cached: the next read refetches.
+    fetchMock.mockResolvedValue(jsonResponse({ title: 'fresh' }));
+    const second = await cachedFetch('/api/steem/post?author=bob&permlink=p', OPTS);
+    expect(second.data).toEqual({ title: 'fresh' });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('clientCache invalidation epoch', () => {
+  beforeEach(() => {
+    clientCache.clear();
+    vi.restoreAllMocks();
+  });
+
+  it('advances on every invalidate() call and on clear()', () => {
+    const before = clientCache.getInvalidationEpoch();
+
+    // Even a match-less invalidate advances the epoch: the guard is global
+    // by design (per-URL precision would need an in-flight registry), so any
+    // invalidation invalidates every in-flight fetch.
+    clientCache.invalidate('no-such-prefix');
+    expect(clientCache.getInvalidationEpoch()).toBe(before + 1);
+
+    clientCache.set('/api/steem/post?author=bob&permlink=p', { a: 1 }, 1000, 2000);
+    clientCache.invalidate('permlink=p');
+    expect(clientCache.getInvalidationEpoch()).toBe(before + 2);
+
+    clientCache.clear();
+    expect(clientCache.getInvalidationEpoch()).toBe(before + 3);
   });
 });

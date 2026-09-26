@@ -351,15 +351,25 @@ describe('POST /api/steem/broadcast', () => {
     const res = await POST(
       makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
     );
-    expect(res.headers.get('X-Cache-Invalidate')).toBe('carol');
+    // Actor token + the follow target's token (drops the target's
+    // followers-page L1 entries; the actor token covers the actor's own
+    // following page) — see C1.
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('carol,dave');
     const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
     // The actor's and the follow target's profiles, exactly — the old code
     // swept the whole `steem:profile:` prefix (audit N-10).
     expect(deletedKeys).toContain('steem:profile:carol');
     expect(deletedKeys).toContain('steem:profile:dave');
     expect(deletedKeys).not.toContain('steem:profile:erin');
-    // No prefix SCAN sweeps: no `steem:posts:ranked:` flush either.
-    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
+    // Follow lists are dropped account-scoped (C1): the follower's following
+    // pages + follow-state seeds, the target's followers pages.
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    expect(sweptPrefixes).toContain('steem:following-page:carol:');
+    expect(sweptPrefixes).toContain('steem:following:carol:');
+    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+    // Scoped to the two accounts only — nobody else's list entries.
+    expect(sweptPrefixes).not.toContain('steem:followers-page:');
+    expect(sweptPrefixes).not.toContain('steem:following-page:');
   });
 
   it('uses the author for comment ops and invalidates account posts', async () => {
@@ -402,6 +412,140 @@ describe('POST /api/steem/broadcast', () => {
     // Broadcast still succeeds; only the hostile token is dropped.
     expect(res.status).toBe(200);
     expect(res.headers.get('X-Cache-Invalidate')).toBe('alice');
+  });
+
+  it('keeps permlink tokens containing uppercase (audit X9)', async () => {
+    // base58 noise segments (and other clients' permlinks) legally contain
+    // uppercase; URLSearchParams leaves it unescaped in the L1 key, so the
+    // token must survive the safe-charset filter to match anything.
+    const tx = signedTx([
+      ['vote', { voter: 'alice', author: 'bob', permlink: 're-Bob-2026-Ab3xZ', weight: 10000 }],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe(
+      'alice,permlink=re-Bob-2026-Ab3xZ'
+    );
+  });
+
+  it('emits a root-dimension token for a depth-2 reply via cacheContext (C2)', async () => {
+    // parent_permlink names the parent COMMENT, not the root post — only
+    // the client-supplied root context names the entries that must evict.
+    const tx = signedTx([
+      [
+        'comment',
+        {
+          parent_author: 'carol',
+          parent_permlink: 're-my-post-123',
+          author: 'erin',
+          permlink: 're-re-my-post-456',
+          title: '',
+          body: 'nested',
+          json_metadata: '{}',
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: 'my-post' },
+      })
+    );
+    expect(res.status).toBe(200);
+    // parent token (legacy behaviour, matches nothing useful at depth 2)
+    // plus the root token that actually matches the post/comments URLs.
+    expect(res.headers.get('X-Cache-Invalidate')).toBe(
+      'erin,permlink=re-my-post-123,permlink=my-post'
+    );
+  });
+
+  it('dedupes the root token when it equals the op-derived one (top-level reply)', async () => {
+    const tx = signedTx([
+      [
+        'comment',
+        {
+          parent_author: 'bob',
+          parent_permlink: 'my-post',
+          author: 'erin',
+          permlink: 're-my-post',
+          title: '',
+          body: 'Nice',
+          json_metadata: '{}',
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: 'my-post' },
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('erin,permlink=my-post');
+  });
+
+  it('emits the root token for delete_comment via cacheContext (C2)', async () => {
+    // The delete op carries no parent reference at all; without the hint
+    // the discussion's L1 entries survived for the whole 15s fresh window.
+    const tx = signedTx([['delete_comment', { author: 'erin', permlink: 're-my-post' }]]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: 'my-post' },
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('erin,permlink=my-post');
+  });
+
+  it('emits the root token for a comment vote via cacheContext (C2)', async () => {
+    const tx = signedTx([
+      ['vote', { voter: 'alice', author: 'carol', permlink: 're-my-post', weight: 10000 }],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: 'my-post' },
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe(
+      'alice,permlink=re-my-post,permlink=my-post'
+    );
+  });
+
+  it('ignores a cacheContext that leaves the permlink charset', async () => {
+    const tx = signedTx([['delete_comment', { author: 'erin', permlink: 're-my-post' }]]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: 'bad\r\nroot*glob' },
+      })
+    );
+    expect(res.status).toBe(200);
+    // Hint dropped — behaviour falls back to the pre-C2 op-derived tokens.
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('erin');
+  });
+
+  it('ignores a non-string cacheContext.rootPermlink', async () => {
+    const tx = signedTx([['delete_comment', { author: 'erin', permlink: 're-my-post' }]]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', {
+        signedTransaction: tx,
+        cacheContext: { rootPermlink: { evil: true } },
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('erin');
   });
 
   it('rejects non-client operations (transfer) with 400 and never relays them', async () => {
@@ -565,7 +709,7 @@ describe('POST /api/steem/broadcast', () => {
     expect(callSteemApiMock).not.toHaveBeenCalled();
   });
 
-  it('deletes the community subscribers cache exactly on community subscribe', async () => {
+  it('deletes the community subscribers cache and sweeps the communities list on subscribe (C5)', async () => {
     const tx = signedTx([
       [
         'custom_json',
@@ -585,7 +729,39 @@ describe('POST /api/steem/broadcast', () => {
     const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
     expect(deletedKeys).toContain('steem:profile:erin');
     expect(deletedKeys).toContain('steem:community-subscribers:hive-106292');
-    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
+    // C5: the list cache embeds subscriber counts (600s fresh TTL) — the
+    // unbounded sort x query x limit key space rules out exact deletes.
+    expect(cacheDeleteByPrefixMock).toHaveBeenCalledWith('steem:communities:');
+    // L1: the subscriber list entry (community-shaped URL) plus every
+    // communities list/subscriptions entry (path-shaped token).
+    expect(res.headers.get('X-Cache-Invalidate')).toBe(
+      'erin,community=hive-106292,/api/steem/communities'
+    );
+  });
+
+  it('invalidates the community caches on unsubscribe too (C5)', async () => {
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['erin'],
+          id: 'community',
+          json: JSON.stringify(['unsubscribe', { community: 'hive-106292' }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
+    expect(deletedKeys).toContain('steem:community-subscribers:hive-106292');
+    expect(cacheDeleteByPrefixMock).toHaveBeenCalledWith('steem:communities:');
+    expect(res.headers.get('X-Cache-Invalidate')).toBe(
+      'erin,community=hive-106292,/api/steem/communities'
+    );
   });
 
   it('only deletes the actor profile for reblog custom_json payloads', async () => {
@@ -610,7 +786,166 @@ describe('POST /api/steem/broadcast', () => {
     // author's cached entries are unchanged.
     expect(deletedKeys).toContain('steem:profile:carol');
     expect(deletedKeys).not.toContain('steem:profile:dave');
+    // Reblogs don't touch follow lists — no prefix sweeps at all.
     expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
+  });
+
+  it('invalidates follow lists for unfollow (what: []) the same as follow (C1)', async () => {
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify(['follow', { follower: 'carol', following: 'dave', what: [] }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('carol,dave');
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    // Unfollow removes blog membership — the page families change and are
+    // swept (unconditionally, like every follow-kind write).
+    expect(sweptPrefixes).toContain('steem:following-page:carol:');
+    expect(sweptPrefixes).toContain('steem:following:carol:');
+    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+  });
+
+  it('sweeps all follow-list families even for a pure mute (unconditional)', async () => {
+    // A mute (what: ['ignore']) doesn't move anybody between the blog list
+    // pages, but the sweep is unconditional anyway: the ['','ignore']
+    // payload is indistinguishable from an unfollow-that-changed-membership
+    // (see the next test), and a pure mute only pays two extra SCANs.
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify(['follow', { follower: 'carol', following: 'dave', what: ['ignore'] }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    expect(sweptPrefixes).toContain('steem:following:carol:');
+    expect(sweptPrefixes).toContain('steem:following-page:carol:');
+    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+  });
+
+  it('sweeps the page families for the ["", "ignore"] unfollow-keep-muted payload (C1)', async () => {
+    // Follow.tsx handleUnfollow keeps ignoreWhat, so unfollowing a muted
+    // user sends what=['','ignore'] — byte-identical to a pure mute. This
+    // write DOES remove blog page membership; a payload-level gate would
+    // miss it and reopen the "unfollow didn't save" window. The page
+    // families must be swept unconditionally.
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify(['follow', { follower: 'carol', following: 'dave', what: ['', 'ignore'] }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    expect(sweptPrefixes).toContain('steem:following:carol:');
+    expect(sweptPrefixes).toContain('steem:following-page:carol:');
+    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+  });
+
+  it('sweeps both case variants of a mixed-case follow payload account (C1)', async () => {
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify(['follow', { follower: 'carol', following: 'Dave', what: ['blog'] }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    // Defensive dual-variant sweep: the page routes normalize to lowercase,
+    // so the raw variant cannot match today — it stays correct only if a
+    // future read route drops that normalization.
+    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+    expect(sweptPrefixes).toContain('steem:followers-page:Dave:');
+    // The L1 tokens mirror the dual variants (chain names are lowercase, so
+    // a lowercased URL still matches the mixed-case payload).
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('carol,Dave,dave');
+  });
+
+  it('sweeps a whitespace-padded payload name once, not twice (deduped prefix)', async () => {
+    // " dave " trims to 'dave' — a whitespace-only difference must not count
+    // as a "raw variant" and repeat the same full-keyspace SCAN.
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify(['follow', { follower: 'carol', following: ' dave ', what: ['blog'] }]),
+        },
+      ],
+    ]);
+
+    await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
+    const swept = cacheDeleteByPrefixMock.mock.calls
+      .map((c) => c[0])
+      .filter((p) => p.startsWith('steem:followers-page:'));
+    expect(swept).toEqual(['steem:followers-page:dave:']);
+  });
+
+  it('skips the follow-list sweep for payload names outside the account charset (C1)', async () => {
+    // The chain rejects invalid account names, so this broadcast fails and
+    // nothing should be invalidated — but the guard must hold even if a
+    // relay ever let one through: glob metacharacters in a MATCH pattern
+    // would widen the scoped sweep.
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify([
+            'follow',
+            { follower: 'carol', following: 'dav*e?[$x', what: ['blog'] },
+          ]),
+        },
+      ],
+    ]);
+
+    await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    expect(sweptPrefixes).toContain('steem:following-page:carol:');
+    for (const prefix of sweptPrefixes) {
+      expect(prefix).not.toContain('*');
+      expect(prefix).not.toContain('?');
+      expect(prefix).not.toContain('[');
+    }
   });
 
   it('deletes both case variants of a mixed-case account profile key', async () => {

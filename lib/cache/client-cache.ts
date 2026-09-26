@@ -27,6 +27,25 @@ export interface CacheRead<T> {
 class ClientCache {
   private store = new Map<string, CacheEntry<unknown>>();
   private insertionOrder: string[] = [];
+  /**
+   * Bumped by every invalidate()/clear() call. Lets in-flight fetches detect
+   * that an invalidation happened while they were away (C3): a fetch that
+   * started before a write's invalidation holds a pre-write snapshot, and
+   * caching it would resurrect the (evicted or not-yet-present) entry with a
+   * fresh window — see backgroundRefresh() in client-fetch.ts. Bumped even
+   * when invalidate() matches nothing: the epoch is deliberately GLOBAL
+   * rather than per-URL. A per-fetch exact verdict IS possible (the in-flight
+   * URL could be substring-matched against the invalidation tokens), but
+   * that needs an in-flight-URL registry; the global epoch trades that
+   * bookkeeping for simplicity, at the cost of unrelated in-flight
+   * refreshes being dropped once — one extra refetch, never a resurrection.
+   */
+  private invalidationEpoch = 0;
+
+  /** Current invalidation epoch; compare before/after a fetch to detect eviction. */
+  getInvalidationEpoch(): number {
+    return this.invalidationEpoch;
+  }
 
   get<T>(key: string): CacheRead<T> | null {
     const entry = this.store.get(key);
@@ -85,11 +104,15 @@ class ClientCache {
       this.store.delete(key);
       this.removeFromOrder(key);
     }
+    // Always bump — see the field comment for why a match-less invalidate
+    // still invalidates in-flight fetches.
+    this.invalidationEpoch++;
   }
 
   clear(): void {
     this.store.clear();
     this.insertionOrder = [];
+    this.invalidationEpoch++;
   }
 
   private removeFromOrder(key: string): void {

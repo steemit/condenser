@@ -276,6 +276,109 @@ describe('PostEditor', () => {
     expect(broadcastCommentMock).toHaveBeenCalledTimes(1);
   });
 
+  // Legacy ReplyEditor.jsx:1180/1383-1399 (#4044 leftover): posts wrapped in
+  // <html>…</html> are raw-HTML posts — the wrapper itself is exempt from the
+  // rtags whitelist (MarkdownViewer renders this shape, so submissions must
+  // not be rejected for it) while inner non-whitelisted tags still are.
+  it('accepts an <html>-wrapped raw post and exempts the wrapper tag (legacy isHtml)', async () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    const user = userEvent.setup();
+    const onSuccess = vi.fn();
+    broadcastCommentMock.mockResolvedValue({ success: true, result: {} });
+
+    render(
+      <PostEditor
+        type="submit_comment"
+        parentAuthor="bob"
+        parentPermlink="bob-post"
+        onSuccess={onSuccess}
+        body={'<html><p>raw <b>html</b> body</p></html>'}
+      />,
+      { wrapper: wrapper(store) }
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+    const args = broadcastCommentMock.mock.calls[0][0];
+    // Body broadcast verbatim (no markdown rendering pass).
+    expect(args.body).toBe('<html><p>raw <b>html</b> body</p></html>');
+  });
+
+  it('still rejects non-whitelisted inner tags inside an <html>-wrapped post', async () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    const user = userEvent.setup();
+    broadcastCommentMock.mockResolvedValue({ success: true, result: {} });
+
+    render(
+      <PostEditor
+        type="submit_comment"
+        parentAuthor="bob"
+        parentPermlink="bob-post"
+        body={'<html><p>ok</p><marquee>bad</marquee></html>'}
+      />,
+      { wrapper: wrapper(store) }
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    const error = await screen.findByText(/Please remove the following HTML elements/);
+    // The offending inner tag is listed; the <html> wrapper is NOT.
+    expect(error.textContent).toContain('<marquee>');
+    expect(error.textContent).not.toContain('<html>');
+    expect(broadcastCommentMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a body starting with <html> that is not fully wrapped (legacy wrapper rule)', async () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    const user = userEvent.setup();
+    broadcastCommentMock.mockResolvedValue({ success: true, result: {} });
+
+    render(
+      <PostEditor
+        type="submit_comment"
+        parentAuthor="bob"
+        parentPermlink="bob-post"
+        body={'<html><p>never closed'}
+      />,
+      { wrapper: wrapper(store) }
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    expect(
+      await screen.findByText('HTML posts must begin with <html> and end with </html>')
+    ).toBeInTheDocument();
+    expect(broadcastCommentMock).not.toHaveBeenCalled();
+  });
+
+  it('marks <html>-wrapped stories with format html in json_metadata (legacy parity)', async () => {
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    const user = userEvent.setup();
+    const onSuccess = vi.fn();
+    broadcastCommentMock.mockResolvedValue({ success: true, result: {} });
+
+    render(<PostEditor type="submit_story" onSuccess={onSuccess} />, {
+      wrapper: wrapper(store),
+    });
+
+    await user.type(screen.getByPlaceholderText('Title'), 'Raw Post');
+    await user.type(
+      screen.getByPlaceholderText('Write your story...'),
+      '<html><p>raw story</p></html>'
+    );
+    await user.type(screen.getByPlaceholderText(/Tag \(up to 8 tags\)/), 'test{Enter}');
+    await user.click(screen.getByRole('button', { name: 'Post' }));
+
+    await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+    const meta = JSON.parse(broadcastCommentMock.mock.calls[0][0].jsonMetadata);
+    expect(meta.format).toBe('html');
+  });
+
   it('shows the payout selector and beneficiaries editor only for stories', () => {
     const store = makeStore();
     store.dispatch(setUser({ username: 'alice' }));

@@ -1,47 +1,14 @@
 import type { NextConfig } from "next";
 
-// Baseline security response headers (audit N-02). Applied to every route,
-// including /api/* route handlers and immutable static assets under
-// /_next/static - none of these directives alter JSON bodies or asset
-// delivery, so a single catch-all rule is safe.
+// Baseline security response headers (audit N-02). Defined in
+// lib/security-headers.ts so proxy.ts can apply the same set to responses it
+// issues itself (redirects), which this headers() table does not cover.
 //
-// The Content-Security-Policy here is deliberately minimal: only directives
-// that need no per-request nonce infrastructure (frame-ancestors / object-src
-// / base-uri / form-action). A full CSP with script-src etc. requires nonce
-// plumbing through the render pipeline and must be coordinated with the
-// anonymous-page public caching work (PR #4032); tracked as a follow-up.
-export const securityHeaders = [
-  // Clickjacking: refuse to be framed at all (the app never embeds itself;
-  // post-body embeds are iframes we render, not the reverse). Modern
-  // browsers prefer the CSP frame-ancestors directive below, this covers
-  // the rest.
-  { key: 'X-Frame-Options', value: 'DENY' },
-  // MIME sniffing: stop browsers re-interpreting declared content types.
-  { key: 'X-Content-Type-Options', value: 'nosniff' },
-  // Referrer leakage: full URL same-origin, origin-only cross-origin,
-  // nothing on downgrade.
-  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  // Permission hardening: the app uses no camera/mic/geolocation, so
-  // disable the APIs outright instead of leaving them promptable.
-  {
-    key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=()',
-  },
-  // Force HTTPS for a year on all subdomains once a client has seen the
-  // site over HTTPS. Ignored by browsers on plain-HTTP responses, so local
-  // dev over http://localhost is unaffected.
-  {
-    key: 'Strict-Transport-Security',
-    value: 'max-age=31536000; includeSubDomains',
-  },
-  // Minimal CSP - see comment above for why script/style/img directives
-  // are out of scope here.
-  {
-    key: 'Content-Security-Policy',
-    value:
-      "frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'",
-  },
-];
+// The Content-Security-Policy is NOT set here anymore: it is nonce-based and
+// built per request in lib/csp.ts, set by proxy.ts (see audit N-02 follow-up).
+// Routes excluded from the proxy matcher (api / _next static / favicon) do
+// not get a CSP — none of them serve documents.
+import { securityHeaders } from "./lib/security-headers";
 
 const nextConfig: NextConfig = {
   // Enable standalone output for Docker
@@ -49,6 +16,14 @@ const nextConfig: NextConfig = {
 
   // Do not advertise the server framework (removes X-Powered-By header)
   poweredByHeader: false,
+  // Disable Next's implicit trailing-slash 308 redirect: it fires BEFORE the
+  // proxy (and before next.config headers() apply), so it carries no
+  // security headers. With this flag, proxy.ts issues that redirect itself
+  // with the full header set (audit N-02 follow-up). Caveat: paths outside
+  // the proxy matcher (api / _next static / favicon) with a trailing slash
+  // now 404 instead of redirecting — the app's own clients never call those
+  // with a trailing slash.
+  skipTrailingSlashRedirect: true,
   // Enable React strict mode
   reactStrictMode: true,
   
@@ -82,35 +57,6 @@ const nextConfig: NextConfig = {
   
   // Transpile packages if needed
   transpilePackages: [],
-
-  // Legacy URL aliases (legacy ResolveRoute.js mapped /login.html to the
-  // login page, and hosted the help/legal pages at .html paths). Declared
-  // here rather than in proxy.ts so the redirects are evaluated before the
-  // route-resolution proxy.
-  async redirects() {
-    return [
-      {
-        source: '/login.html',
-        destination: '/login',
-        permanent: true,
-      },
-      {
-        source: '/faq.html',
-        destination: '/faq',
-        permanent: true,
-      },
-      {
-        source: '/privacy.html',
-        destination: '/privacy',
-        permanent: true,
-      },
-      {
-        source: '/tos.html',
-        destination: '/tos',
-        permanent: true,
-      },
-    ];
-  },
 
   // Baseline security response headers on every route, including /api/*
   // route handlers and static assets (audit N-02). See securityHeaders.

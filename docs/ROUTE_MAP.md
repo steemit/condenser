@@ -37,7 +37,7 @@ PrimaryNavigation, FeedSidebarWidgets and `lib/analytics/route-tags.ts`.
 | `/<a>/<b>/<c>` without `@` (e.g. `/bitcoin/alice/my-post`) | `NotFound` | Rewrite → `/404` (three-segment invalid-pattern guard), unless first segment is reserved or second starts with `@` | `app/(main)/404/page.tsx` | Implemented |
 | `/<a>/<b>` without `@`, non-sort (e.g. `/alice/my-post`) | `NotFound` | Rewrite → `/404` (two-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
 | `/<segment>` without `@`, non-sort, non-reserved (e.g. `/alice`) | `NotFound` | Rewrite → `/404` (single-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
-| Direct access to internal rewrite targets: any path under `/post/…`, `/post-no-category/…` or `/user/…` that the earlier branches did not consume — with or without `@` segments (e.g. `/post/a/b/c`, `/user/alice`, four-segment `/post/<cat>/@u/pl`, `/user/@a/b/c`, two-segment `/user/@alice`) | `NotFound` (legacy ResolveRoute.js has no `/post`, `/post-no-category` or `/user` routes; its regexes match at most three segments with an @-prefixed account, and UserProfile/UserFeed require a first-segment `@account`) | Rewrite → `/404` (internal-target guard, after the `/<sort>` branch; prefixes derived from `INTERNAL_ROUTE_PREFIXES` in `lib/routes.ts`). Sole exemption: the exact trailing-slash Post form `/<prefix>/@user/<permlink>/` (exactly three segments, second one `@`-prefixed, optional trailing slash) passes through so Next's implicit 308 normalization drops the slash and re-enters at branch 2 as a legacy Post URL. Slash-less three-segment `@` forms (`/post/@a/p`, `/user/@alice/blog`, `/user/@a/feed`) never reach the guard — branch 2 consumes them first (legacy Post regex parity: any `[\w.-]{1,32}` tag is a category, so legacy also served `/user/@alice/blog` as a Post page, never as UserProfile) | `app/(main)/404/page.tsx` | Implemented |
+| Direct access to internal rewrite targets: any path under `/post/…`, `/post-no-category/…` or `/user/…` that the earlier branches did not consume — with or without `@` segments (e.g. `/post/a/b/c`, `/user/alice`, four-segment `/post/<cat>/@u/pl`, `/user/@a/b/c`, two-segment `/user/@alice`) | `NotFound` (legacy ResolveRoute.js has no `/post`, `/post-no-category` or `/user` routes; its regexes match at most three segments with an @-prefixed account, and UserProfile/UserFeed require a first-segment `@account`) | Rewrite → `/404` (internal-target guard, after the `/<sort>` branch; prefixes derived from `INTERNAL_ROUTE_PREFIXES` in `lib/routes.ts`). Sole exemption: the exact trailing-slash Post form `/<prefix>/@user/<permlink>/` (exactly three segments, second one `@`-prefixed, optional trailing slash) passes through so the proxy-issued trailing-slash 308 (see the trailing-slash normalization note below) drops the slash and re-enters at branch 2 as a legacy Post URL. Slash-less three-segment `@` forms (`/post/@a/p`, `/user/@alice/blog`, `/user/@a/feed`) never reach the guard — branch 2 consumes them first (legacy Post regex parity: any `[\w.-]{1,32}` tag is a category, so legacy also served `/user/@alice/blog` as a Post page, never as UserProfile) | `app/(main)/404/page.tsx` | Implemented |
 | `/%40username/...` | (same as `@` variants) | `%40` is decoded to `@` before matching (the `%40` decode step at the top of `proxy()`) | same as the corresponding `@` routes | Implemented |
 
 `SORT_TYPES` (const in `lib/routes.ts`, imported by `proxy.ts`): `hot`,
@@ -101,9 +101,9 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
 | Legacy route | Legacy page | Status in new app |
 |---|---|---|
 | `/welcome` | `Welcome` | Implemented at `/welcome` (`app/(main)/welcome/page.tsx`) |
-| `/faq.html`, `/privacy.html`, `/tos.html` | `Faq` / `Privacy` / `Tos` | Implemented at `/faq` / `/privacy` / `/tos`; `.html` URLs 301-redirect (next.config.ts) |
-| `/about.html`, `/support.html` | `About` / `Support` | Not migrated — the URLs end in the known `.html` static extension, so the proxy skips them and they 404 |
-| `/login.html`, `/submit.html` | `Login` / `SubmitPost` | Replaced by `/login` and `/submit`; `/login.html` 301-redirects to `/login` (next.config.ts), `/submit.html` is not redirected and 404s (`.html` static extension) |
+| `/faq.html`, `/privacy.html`, `/tos.html` | `Faq` / `Privacy` / `Tos` | Implemented at `/faq` / `/privacy` / `/tos`; `.html` URLs 308-redirect (proxy.ts `LEGACY_HTML_ALIASES`, so security headers ride along) |
+| `/about.html`, `/support.html` | `About` / `Support` | Not migrated. The proxy skips them (`.html` is a known static extension), but that only bypasses the proxy's rewrite chain — the App Router's dynamic `[sort]` route still matches the segment, so they serve **HTTP 200 with the in-shell not-found view** (SortFeed renders `NotFound` for an unknown sort), not a 404 status (pre-existing on base and this branch; live-verified 2026-09) |
+| `/login.html`, `/submit.html` | `Login` / `SubmitPost` | Replaced by `/login` and `/submit`; `/login.html` 308-redirects to `/login` (proxy.ts `LEGACY_HTML_ALIASES`, evaluated before the `.html` static-asset skip). `/submit.html` is not aliased: the proxy skips it (`.html` static extension) and the `[sort]` route serves it as HTTP 200 with the in-shell not-found view — same pre-existing behavior as `/about.html` above, not a 404 status |
 | `/tags` | `TagsIndex` | Not migrated — 404 |
 | `/rewards` | `Rewards` | Not migrated — 404 |
 | `/<tag>/@user/permlink.json` | `PostJson` | Not migrated — ends in the known `.json` static extension, proxy skips → 404 |
@@ -148,19 +148,25 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
   deviation predates the reserved-category fix (it applies to every
   category) and now extends to reserved-word categories; tightening the
   regex is deferred to a follow-up PR.
-- **Trailing slash on three-segment post URLs**: `/about/@alice/my-post/`
-  does not match branch 2 (`[^/]+` cannot span the trailing slash), so the
-  proxy passes it through and relies on Next's implicit 308 trailing-slash
-  normalization to redirect to the slash-less form, which then re-enters
-  the proxy and lands on Post.
+- **Trailing slash normalization**: any document path that survives route
+  matching with a trailing slash (e.g. `/about/@alice/my-post/`, which does
+  not match branch 2 — `[^/]+` cannot span the slash — or `/trending/`) gets
+  a 308 redirect to the slash-less form **issued by the proxy itself** at the
+  end of `resolveRoute`, so the security headers and per-request CSP ride
+  along (Next's own implicit 308 short-circuits before the next.config
+  `headers()` table applies). Branches that handle a trailing slash directly
+  (e.g. branch 3's `/@user/feed/`) still rewrite without the extra hop.
 - **Static-extension URLs that legacy routed**: paths ending in a known
   static extension (`STATIC_ASSET_RE`) are skipped before any route
-  matching, but legacy had no such check. `/@user.md` matched legacy's
-  `<account>` regex (`@[\w.\d-]+` admits dots) and rendered the profile;
-  here it is skipped as a static file and 404s. Tag feeds are affected the
-  same way: `/trending/foo.md` was a legacy CategoryFilters feed (`<tag>`
-  `[\w.-]{1,32}` admits dots) but 404s here. (The `.json` variants are a
-  separate, intentional gap — legacy served PostJson/UserJson API stubs,
+  matching, but legacy had no such check — and the skip only bypasses the
+  proxy, not the App Router's own dynamic routes. `/@user.md` matched
+  legacy's `<account>` regex (`@[\w.\d-]+` admits dots) and rendered the
+  profile; here it falls through to the `[sort]` route, which renders the
+  in-shell not-found view (HTTP 200 — no profile). Tag feeds, however,
+  still work exactly like legacy: `/trending/foo.md` falls through to the
+  `[sort]/[tag]` route and renders the `foo.md` tag feed (200). Both are
+  pre-existing behaviors (live-verified 2026-09). (The `.json` variants are
+  a separate, intentional gap — legacy served PostJson/UserJson API stubs,
   see "Intentionally absent legacy routes".)
 - **`/roles/<tag>` tag charset**: branch 1.5 accepts any non-slash segment
   (`[^/]+`), so `/roles/@foo` passes through to the roles page (which

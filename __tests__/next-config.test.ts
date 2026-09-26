@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import nextConfig, { securityHeaders } from '../next.config';
+import nextConfig from '../next.config';
+import { securityHeaders } from '../lib/security-headers';
 
 type NextConfigLike = {
   poweredByHeader?: boolean;
@@ -36,28 +37,15 @@ describe('next.config security headers (audit N-02)', () => {
     expect(headers['Strict-Transport-Security']).toBe(
       'max-age=31536000; includeSubDomains'
     );
+    expect(headers['Cross-Origin-Opener-Policy']).toBe('same-origin');
   });
 
-  it('keeps the CSP free of directives that need nonce infrastructure', () => {
-    const csp = headerMap()['Content-Security-Policy'];
-    expect(csp).toBeDefined();
-    // Only the nonce-less directives are allowed in this baseline; adding
-    // script-src/style-src/img-src without nonce plumbing would break the
-    // app (see audit N-02 follow-up notes).
-    const directives = (csp ?? '')
-      .split(';')
-      .map((d) => d.trim().split(/\s+/)[0])
-      .filter(Boolean)
-      .sort();
-    expect(directives).toEqual([
-      'base-uri',
-      'form-action',
-      'frame-ancestors',
-      'object-src',
-    ]);
-    expect(csp).toContain("frame-ancestors 'self'");
-    expect(csp).toContain("object-src 'none'");
-    expect(csp).toContain("base-uri 'self'");
-    expect(csp).toContain("form-action 'self'");
+  it('keeps the nonce-based CSP out of the static table (proxy.ts owns it)', () => {
+    // The CSP is per-request (nonce) and set by proxy.ts; a static CSP here
+    // would either break the app (script-src without the request nonce) or
+    // be enforced twice against documents. Directives that need no nonce
+    // live in the proxy-built policy (lib/csp.ts), asserted in
+    // __tests__/lib/csp.test.ts.
+    expect(headerMap()['Content-Security-Policy']).toBeUndefined();
   });
 });

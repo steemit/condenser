@@ -75,11 +75,44 @@ export const BOTTOM_AD_LIST: AdItem[] = [
  * Tron ad network configuration (legacy tronads_* env mapping,
  * config/custom-environment-variables.json).
  */
+
+/**
+ * Vendored SDK env value that selects the TEST engine host
+ * (public/js/tron-ads-sdk-1.0.49.js: `1 === options.env ?
+ * 'https://test-engine.tronads.io/…' : 'https://engine.tronads.io/…'`).
+ */
+export const TRONADS_TEST_ENV = 1;
+
+/** Engine origins hardcoded in the vendored SDK, keyed by env. */
+const TRONADS_ENGINE_ORIGIN = 'https://engine.tronads.io';
+const TRONADS_TEST_ENGINE_ORIGIN = 'https://test-engine.tronads.io';
+
+/** Configured env value (NEXT_PUBLIC_TRONADS_ENV, legacy tronads_env). */
+export function tronAdsEnvValue(): number {
+  return Number(process.env.NEXT_PUBLIC_TRONADS_ENV ?? 0);
+}
+
+/**
+ * Engine origin the vendored SDK loads its ad iframes from for a given env.
+ * Shared with lib/csp.ts so frame-src lists exactly the origin the SDK will
+ * use under the configured env — not both hardcoded hosts in every policy.
+ */
+export function tronAdsEngineOrigin(env: number): string {
+  return env === TRONADS_TEST_ENV
+    ? TRONADS_TEST_ENGINE_ORIGIN
+    : TRONADS_ENGINE_ORIGIN;
+}
+
+/** Engine origin for the CONFIGURED env (what TronAd slots will embed). */
+export function configuredTronAdsEngineOrigin(): string {
+  return tronAdsEngineOrigin(tronAdsEnvValue());
+}
+
 export const tronAdsConfig = {
   enabled: ['1', 'true'].includes(
     (process.env.NEXT_PUBLIC_TRONADS_ENABLED ?? '').toLowerCase()
   ),
-  env: Number(process.env.NEXT_PUBLIC_TRONADS_ENV ?? 0),
+  env: tronAdsEnvValue(),
   isMock: Number(process.env.NEXT_PUBLIC_TRONADS_MOCK ?? 0),
   sidebarPid: process.env.NEXT_PUBLIC_TRONADS_SIDEBAR_AD_PID ?? '',
   contentPcPid: process.env.NEXT_PUBLIC_TRONADS_CONTENT_PC_AD_PID ?? '',

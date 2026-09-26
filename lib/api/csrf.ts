@@ -8,7 +8,13 @@
  * header — use postJsonWithCsrf for those calls.
  */
 
-const CSRF_COOKIE_NAME = 'steem-csrf';
+/**
+ * Single definition of the double-submit cookie name (#4044 leftover: this
+ * was declared both here and in lib/auth/csrf.ts). Declared in this
+ * dependency-free client module so the server-side lib/auth/csrf.ts can
+ * import it without pulling next/server into the client bundle.
+ */
+export const CSRF_COOKIE_NAME = 'steem-csrf';
 
 /** Read the double-submit token from the cookie jar (null when absent). */
 export function getCsrfToken(): string | null {

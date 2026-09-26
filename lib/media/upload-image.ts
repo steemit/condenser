@@ -9,13 +9,14 @@
 
 import { steem } from '@steemit/steem-js';
 import { getCachedKey, decryptAndRetrieveKey } from '@/lib/crypto/key-storage';
-
-const DEFAULT_UPLOAD_URL = 'https://steemitimages.com';
+import { DEFAULT_UPLOAD_URL } from '@/lib/media/upload-url';
 
 // Runtime config, inlined into the SSR HTML by the root layout from
 // SDC_UPLOAD_IMAGE_URL (legacy $STM_Config.upload_image parity). Read at
 // call time, never baked into the bundle — published images stay
-// environment-agnostic (same rationale as the GA id injection).
+// environment-agnostic (same rationale as the GA id injection). The default
+// is shared with lib/csp.ts (which must allow the same origin in
+// connect-src) via lib/media/upload-url.ts.
 function uploadBaseUrl(): string {
   const url =
     (globalThis as { __SDC_UPLOAD_IMAGE_URL__?: string })

@@ -19,9 +19,13 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import type { SessionData } from '@/lib/auth/session';
+import { CSRF_COOKIE_NAME } from '@/lib/api/csrf';
 
-/** Non-HttpOnly mirror of SessionData.csrfToken (double-submit cookie). */
-export const CSRF_COOKIE_NAME = 'steem-csrf';
+// Re-exported so both sides of the double-submit contract can import the
+// cookie name from their "own" module; the definition lives once in the
+// dependency-free client helper (#4044 leftover cleanup).
+export { CSRF_COOKIE_NAME };
+
 /** Header the client must echo the token back with. */
 export const CSRF_HEADER_NAME = 'X-CSRF-Token';
 

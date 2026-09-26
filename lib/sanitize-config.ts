@@ -29,8 +29,12 @@ interface IframeRule {
   fn: (src: string) => string | null;
 }
 
-/** Whitelist of allowed iframe embed origins. Non-matching src → placeholder. */
-const iframeWhitelist: IframeRule[] = [
+/**
+ * Whitelist of allowed iframe embed origins. Non-matching src → placeholder.
+ * Exported for the sync test that pins it against IFRAME_EMBED_HOSTS; the
+ * filtering behavior itself is unchanged.
+ */
+export const iframeWhitelist: IframeRule[] = [
   {
     re: /^(https?:)?\/\/player.vimeo.com\/video\/.*/i,
     fn: (src) => {
@@ -71,6 +75,24 @@ const iframeWhitelist: IframeRule[] = [
     fn: (src) => src,
   },
 ];
+
+/**
+ * Hosts of the iframe embed whitelist above (host part of each rule's
+ * URL-prefix regex, same order). Exported so lib/csp.ts can DERIVE its
+ * frame-src list instead of maintaining a second literal copy — the CSP is
+ * a second, independent enforcement layer over the same whitelist, and the
+ * two must never drift apart. The rules themselves stay in their legacy
+ * URL-prefix shapes (paths and schemes vary per provider), so only the host
+ * portion is shared; __tests__/lib/csp.test.ts pins the correspondence.
+ */
+export const IFRAME_EMBED_HOSTS = [
+  'player.vimeo.com',
+  'www.youtube.com',
+  '3speak.online',
+  'w.soundcloud.com',
+  'player.twitch.tv',
+  'emb.d.tube',
+] as const;
 
 /**
  * Tags the rendering pipeline lets through. Exported for the editor's

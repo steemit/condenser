@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { lastreadTimeMs } from '@/lib/utils/lastread';
+
 // Types
 export interface Vote {
   voter: string;
@@ -108,19 +110,11 @@ const notificationIdSet = (items: NotificationItem[]): Set<unknown> => {
   return ids;
 };
 
-// Parse a last-read marker as UTC milliseconds. Hivemind's
-// bridge.unread_notifications returns 'YYYY-MM-DD HH:MM:SS' and the
-// setLastRead broadcast sends 'YYYY-MM-DDTHH:MM:SS' — both naive UTC.
-// Date.parse would read a designator-less timestamp as local time (and some
-// engines reject the space-separated form outright), so normalize first.
-const lastreadTimeMs = (value: unknown): number => {
-  if (typeof value !== 'string' || value === '') return 0;
-  const normalized = /[zZ]|[+-]\d{2}:?\d{2}$/.test(value)
-    ? value.replace(' ', 'T')
-    : `${value.replace(' ', 'T')}Z`;
-  const ms = Date.parse(normalized);
-  return Number.isNaN(ms) ? 0 : ms;
-};
+// A locally applied read marker only shadows hivemind for this long. Normal
+// hivemind index latency for setLastRead is seconds; 5 minutes covers
+// abnormal-but-recoverable lag while still bounding how long a dropped op
+// can pin the unread badge at zero (see receiveUnreadNotifications).
+const STALE_MARKER_GRACE_MS = 5 * 60_000;
 
 const initialState: GlobalState = {
   status: {},
@@ -190,15 +184,31 @@ const globalSlice = createSlice({
         };
       }
       const existing = state.notifications[name].notifications || [];
-      const incomingIds = notificationIdSet(notifications);
+      // Self-dedup the incoming page first: a single page carrying the same
+      // id twice must not be stored twice — the cross-page id sets below only
+      // guard against ids already present in the stored list. Id-less items
+      // keep their never-dropped semantics.
+      const seenIds = new Set<unknown>();
+      const incoming = notifications.filter((n) => {
+        if (n.id == null) return true;
+        if (seenIds.has(n.id)) return false;
+        seenIds.add(n.id);
+        return true;
+      });
+      const incomingIds = notificationIdSet(incoming);
       const existingIds = notificationIdSet(existing);
       state.notifications[name].notifications = append
         ? [
             ...existing,
-            ...notifications.filter((n) => n.id == null || !existingIds.has(n.id)),
+            // Intended asymmetry: unlike a first-page reload (which replaces
+            // the stored copy of a re-seen id), a cursor page never refreshes
+            // an item already stored — the stored copy wins. Cursor pages are
+            // strictly older and fetched once, so there is nothing newer to
+            // refresh the row with anyway.
+            ...incoming.filter((n) => n.id == null || !existingIds.has(n.id)),
           ]
         : [
-            ...notifications,
+            ...incoming,
             ...existing.filter((n) => n.id == null || !incomingIds.has(n.id)),
           ];
       if (isLastPage !== undefined) {
@@ -222,10 +232,19 @@ const globalSlice = createSlice({
       // must not overwrite it (it would un-zero the badge right after the
       // user marked everything read). Snapshots at or past the marker —
       // e.g. new notifications bumping the count — are applied normally.
+      //
+      // The guard only holds while the marker is fresh: hivemind indexes
+      // setLastRead within seconds, so if poll snapshots still predate the
+      // marker after STALE_MARKER_GRACE_MS the op was most likely dropped
+      // (rejected in a block, pruned) and will never be confirmed. Past the
+      // window the guard yields so hivemind's (authoritative) snapshot can
+      // heal the badge instead of pinning it at zero forever.
       const current = state.notifications[name].unreadNotifications;
+      const currentMs = lastreadTimeMs(current?.lastread);
       if (
         current &&
-        lastreadTimeMs(current.lastread) > lastreadTimeMs(unreadNotifications.lastread)
+        Date.now() - currentMs <= STALE_MARKER_GRACE_MS &&
+        currentMs > lastreadTimeMs(unreadNotifications.lastread)
       ) {
         return;
       }

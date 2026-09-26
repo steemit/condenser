@@ -32,14 +32,22 @@ export function useUnreadNotifications(username: string | undefined): number {
     const entry = state.global.notifications?.[username]?.unreadNotifications as
       | { unread?: number | string }
       | undefined;
-    return Number(entry?.unread ?? 0);
+    const count = Number(entry?.unread ?? 0);
+    // Non-numeric text in the slot must not surface as NaN (the badge would
+    // render "NaN"); fall back to 0.
+    return Number.isFinite(count) ? count : 0;
   });
 
   useEffect(() => {
     if (!username) return;
 
     let cancelled = false;
+    let inFlight = false;
     const poll = async () => {
+      // Re-entrancy guard: an interval tick landing while a slow poll is
+      // still awaiting would stack a duplicate request; skip this tick.
+      if (inFlight) return;
+      inFlight = true;
       try {
         const res = await fetchUnreadNotificationsCount(username);
         // Route errors (session mismatch, 5xx) come back as {error}; keep
@@ -56,6 +64,8 @@ export function useUnreadNotifications(username: string | undefined): number {
         );
       } catch {
         // Network failure — the next tick retries.
+      } finally {
+        inFlight = false;
       }
     };
 

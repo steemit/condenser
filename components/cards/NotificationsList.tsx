@@ -7,6 +7,7 @@ import { receiveNotifications, receiveUnreadNotifications, notificationsLoading 
 import { broadcastCustomJson } from '@/lib/api/broadcast';
 import { useUnreadNotifications } from '@/hooks/use-unread-notifications';
 import { cachedFetch } from '@/lib/cache/client-fetch';
+import { lastreadTimeMs } from '@/lib/utils/lastread';
 import LoadingIndicator from '@/components/elements/LoadingIndicator';
 import Userpic from '@/components/elements/Userpic';
 import TimeAgo from '@/components/elements/TimeAgo';
@@ -257,8 +258,11 @@ export default function NotificationsList({ username }: NotificationsListProps) 
             const account = firstAccount(notification.msg || '');
             const TypeIcon = TYPE_ICONS[notification.type] || Bell;
             // Legacy: a row is unread when its date is newer than lastread.
+            // Compare through lastreadTimeMs — hivemind dates are
+            // space-separated naive UTC, which strict engines (Safari)
+            // Date.parse as NaN, hiding the unread dot entirely.
             const isUnread = lastRead
-              ? Date.parse(`${lastRead}Z`) <= Date.parse(`${notification.date}Z`)
+              ? lastreadTimeMs(lastRead) <= lastreadTimeMs(notification.date)
               : false;
             const score = notification.score ?? 0;
             return (

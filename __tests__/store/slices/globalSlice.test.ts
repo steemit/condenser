@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import globalReducer, {
   followListLoading,
@@ -315,9 +315,68 @@ describe('globalSlice follow state', () => {
       );
       expect(state.notifications.alice.isLastPage).toBe(true);
     });
+
+    it('self-dedups a duplicate id inside a single incoming page', () => {
+      // One page carrying [5, 5, 3] must store 5 once — the cross-page id
+      // check alone would pass both copies of 5 through.
+      const state = stateAfter(
+        undefined,
+        receiveNotifications({ name: 'alice', notifications: page([5, 5, 3]) })
+      );
+      expect(state.notifications.alice.notifications.map((n) => n.id)).toEqual([5, 3]);
+    });
+
+    it('self-dedups a duplicate id inside an appended cursor page', () => {
+      let state = stateAfter(
+        undefined,
+        receiveNotifications({ name: 'alice', notifications: page([3, 2, 1]) })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'alice', notifications: page([1, 1, 0]), append: true })
+      );
+      expect(state.notifications.alice.notifications.map((n) => n.id)).toEqual([3, 2, 1, 0]);
+    });
+
+    it('keeps the stored copy when a cursor page re-sends an existing id (append asymmetry)', () => {
+      // Mirror of the first-page replacement test: the append path lets the
+      // stored copy win instead of refreshing it.
+      let state = stateAfter(
+        undefined,
+        receiveNotifications({ name: 'alice', notifications: [{ id: 1, type: 'vote', msg: 'old' }] })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({
+          name: 'alice',
+          notifications: [{ id: 1, type: 'vote', msg: 'new' }],
+          append: true,
+        })
+      );
+      expect(state.notifications.alice.notifications).toHaveLength(1);
+      expect(state.notifications.alice.notifications[0].msg).toBe('old');
+    });
   });
 
   describe('receiveUnreadNotifications (stale-write guard, T16)', () => {
+    // The guard only holds while the stored marker is fresh (5 min decay),
+    // so every test in this block runs against a pinned clock instead of
+    // the real one — fixed marker dates would otherwise make the suite
+    // time-of-day dependent.
+    beforeEach(() => {
+      vi.useFakeTimers();
+      // 2 minutes after the markers used below: inside the grace window.
+      vi.setSystemTime(new Date('2026-09-26T10:02:00Z'));
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    // Naive-UTC timestamp this far from the pinned "now".
+    const naiveFromNow = (offsetMs: number) =>
+      new Date(Date.now() + offsetMs).toISOString().slice(0, 19);
+
     it('stores the first snapshot and seeds the entry', () => {
       const state = stateAfter(
         undefined,
@@ -395,23 +454,24 @@ describe('globalSlice follow state', () => {
         undefined,
         receiveUnreadNotifications({
           name: 'alice',
-          unreadNotifications: { lastread: '2026-09-26 09:00:00', unread: 5 },
+          unreadNotifications: { lastread: '2026-09-26 10:00:00', unread: 5 },
         })
       );
       state = stateAfter(
         state,
         receiveUnreadNotifications({
           name: 'alice',
-          unreadNotifications: { lastread: '2026-09-26T09:30:00', unread: 0 },
+          unreadNotifications: { lastread: '2026-09-26T10:01:30', unread: 0 },
         })
       );
       expect(state.notifications.alice.unreadNotifications?.unread).toBe(0);
-      // Stale space-separated poll snapshot: still predates the marker.
+      // Stale space-separated poll snapshot: lexically ' ' sorts before
+      // 'T', but chronologically 10:01:00 predates 10:01:30 — guard fires.
       state = stateAfter(
         state,
         receiveUnreadNotifications({
           name: 'alice',
-          unreadNotifications: { lastread: '2026-09-26 09:15:00', unread: 4 },
+          unreadNotifications: { lastread: '2026-09-26 10:01:00', unread: 4 },
         })
       );
       expect(state.notifications.alice.unreadNotifications?.unread).toBe(0);
@@ -434,6 +494,50 @@ describe('globalSlice follow state', () => {
       );
       expect(state.notifications.bob.unreadNotifications?.unread).toBe(9);
       expect(state.notifications.alice.unreadNotifications?.unread).toBe(0);
+    });
+
+    it('still drops a pre-marker snapshot while the marker is fresh (decay)', () => {
+      // Marker applied 1 minute ago; hivemind still serves the pre-op pair.
+      let state = stateAfter(
+        undefined,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: naiveFromNow(-60_000), unread: 0 },
+        })
+      );
+      state = stateAfter(
+        state,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: naiveFromNow(-120_000), unread: 7 },
+        })
+      );
+      expect(state.notifications.alice.unreadNotifications?.unread).toBe(0);
+    });
+
+    it('lets a pre-marker snapshot through once the marker exceeds the grace window (self-heal)', () => {
+      // The setLastRead op was dropped (never indexed): 6 minutes after the
+      // local marker hivemind's snapshot — though older — is the only
+      // authoritative state left. Pinning the badge at 0 forever would hide
+      // real unread counts, so the guard yields.
+      let state = stateAfter(
+        undefined,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: naiveFromNow(-6 * 60_000), unread: 0 },
+        })
+      );
+      state = stateAfter(
+        state,
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: naiveFromNow(-7 * 60_000), unread: 7 },
+        })
+      );
+      expect(state.notifications.alice.unreadNotifications).toEqual({
+        lastread: naiveFromNow(-7 * 60_000),
+        unread: 7,
+      });
     });
   });
 });

@@ -29,6 +29,9 @@ describe('useUnreadNotifications (T16 single source of truth)', () => {
   beforeEach(() => {
     fetchMock.mockReset();
     vi.useFakeTimers();
+    // Pin the clock: the reducer's stale-write guard decays after 5 minutes,
+    // so markers in the fixtures below must stay fresh relative to "now".
+    vi.setSystemTime(new Date('2026-09-26T10:02:00Z'));
   });
 
   afterEach(() => {
@@ -163,5 +166,56 @@ describe('useUnreadNotifications (T16 single source of truth)', () => {
       await vi.advanceTimersByTimeAsync(60_000);
     });
     expect(result.current).toBe(0);
+  });
+
+  it('falls back to 0 when the stored unread slot holds non-numeric text', async () => {
+    // Number('NaN') is NaN — without the finite-guard the badge would
+    // render "NaN" instead of a count.
+    const store = makeStore();
+    fetchMock.mockRejectedValue(new Error('not needed'));
+
+    const { result } = renderHook(() => useUnreadNotifications('alice'), {
+      wrapper: wrapper(store),
+    });
+    await act(async () => {});
+    act(() => {
+      store.dispatch(
+        receiveUnreadNotifications({
+          name: 'alice',
+          unreadNotifications: { lastread: '2026-09-26 09:00:00', unread: 'NaN' },
+        })
+      );
+    });
+    expect(result.current).toBe(0);
+  });
+
+  it('skips an interval tick while a poll is still in flight', async () => {
+    let resolvePoll: ((value: unknown) => void) | undefined;
+    fetchMock.mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          resolvePoll = resolve;
+        })
+    );
+    const store = makeStore();
+
+    renderHook(() => useUnreadNotifications('alice'), { wrapper: wrapper(store) });
+    await act(async () => {});
+    expect(fetchMock).toHaveBeenCalledTimes(1); // initial poll, still pending
+
+    // 60s tick lands while the first poll awaits — must not stack a call.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(60_000);
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    // The pending poll resolves; the following tick polls normally again.
+    await act(async () => {
+      resolvePoll?.({ account: 'alice', unread_count: 2, lastread: '2026-09-26 09:00:00' });
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(60_000);
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 });

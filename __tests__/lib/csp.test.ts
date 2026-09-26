@@ -1,7 +1,16 @@
 // @vitest-environment node
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import {
+  configuredTronAdsEngineOrigin,
+  tronAdsEngineOrigin,
+  TRONADS_TEST_ENV,
+} from '@/lib/ads';
 import { buildCspHeaderValue, generateCspNonce } from '@/lib/csp';
+import {
+  IFRAME_EMBED_HOSTS,
+  iframeWhitelist,
+} from '@/lib/sanitize-config';
 
 /**
  * Parse a CSP header value into directive → sources (first source is the
@@ -27,7 +36,9 @@ describe('lib/csp (audit N-02 follow-up: nonce-based CSP)', () => {
       for (let i = 0; i < 100; i++) seen.add(generateCspNonce());
       expect(seen.size).toBe(100);
       for (const nonce of seen) {
-        // base64 of a 128-bit UUID: 22+ chars of base64 alphabet.
+        // base64 of the 36-char UUID string: 48 chars, no padding. The
+        // {20,} floor is deliberately loose — it only guards against a
+        // regression to a trivially short nonce source.
         expect(nonce).toMatch(/^[A-Za-z0-9+/]{20,}={0,2}$/);
       }
     });
@@ -99,10 +110,13 @@ describe('lib/csp (audit N-02 follow-up: nonce-based CSP)', () => {
       expect(d['img-src']).toEqual(['*', 'data:']);
     });
 
-    it('frame-src enumerates the sanitize-config embed whitelist plus TronAd hosts', () => {
+    it('frame-src enumerates the sanitize-config embed whitelist plus the production TronAd engine', () => {
+      // Default env (anything but 1): the vendored SDK loads from
+      // engine.tronads.io, so that is the only TronAd origin listed.
+      vi.stubEnv('NEXT_PUBLIC_TRONADS_ENV', '0');
       const d = parse(buildCspHeaderValue('N'));
       const frames = d['frame-src'];
-      for (const origin of [
+      for (const source of [
         "'self'",
         'https://player.vimeo.com',
         'https://www.youtube.com',
@@ -111,13 +125,70 @@ describe('lib/csp (audit N-02 follow-up: nonce-based CSP)', () => {
         'https://player.twitch.tv',
         'https://emb.d.tube',
         'https://engine.tronads.io',
-        'https://test-engine.tronads.io',
       ]) {
-        expect(frames).toContain(origin);
+        expect(frames).toContain(source);
       }
+      expect(frames).not.toContain('https://test-engine.tronads.io');
       // No blanket https: like the legacy frame-src — this stack has a
       // finite, known set of frame origins.
       expect(frames).not.toContain('https:');
+    });
+
+    it('frame-src switches to the TEST TronAd engine when the configured env is the test env', () => {
+      // The vendored SDK hardcodes both hosts and picks per `env === 1`
+      // (public/js/tron-ads-sdk-1.0.49.js); the CSP must list exactly the
+      // one the configured env selects — never the test host in a
+      // production-shaped policy.
+      vi.stubEnv('NEXT_PUBLIC_TRONADS_ENV', String(TRONADS_TEST_ENV));
+      const d = parse(buildCspHeaderValue('N'));
+      expect(d['frame-src']).toContain('https://test-engine.tronads.io');
+      expect(d['frame-src']).not.toContain('https://engine.tronads.io');
+    });
+
+    it('derives frame-src embed origins from the sanitize-config whitelist (no drift)', () => {
+      // frame-src is DERIVED from IFRAME_EMBED_HOSTS in lib/csp.ts; this
+      // pins the derivation so a future re-inline of the list into a literal
+      // that misses a host fails here.
+      const frames = parse(buildCspHeaderValue('N'))['frame-src'];
+      for (const host of IFRAME_EMBED_HOSTS) {
+        expect(frames).toContain(`https://${host}`);
+      }
+      // And the exported host list itself tracks the actual whitelist rules
+      // (host part of each rule's URL-prefix regex, backslash-escapes
+      // ignored): a rule added/renamed without updating the export fails
+      // here — the CSP would silently stop covering it.
+      expect(iframeWhitelist).toHaveLength(IFRAME_EMBED_HOSTS.length);
+      const ruleSources = iframeWhitelist.map((rule) =>
+        rule.re.source.replace(/\\/g, '')
+      );
+      for (const host of IFRAME_EMBED_HOSTS) {
+        expect(
+          ruleSources.some((source) => source.includes(host)),
+          `no iframe whitelist rule matches host ${host}`
+        ).toBe(true);
+      }
+    });
+
+    it('tronAdsEngineOrigin mirrors the vendored SDK host selection', () => {
+      expect(tronAdsEngineOrigin(TRONADS_TEST_ENV)).toBe(
+        'https://test-engine.tronads.io'
+      );
+      // Every other env value — 0 (unset default) included — is production.
+      expect(tronAdsEngineOrigin(0)).toBe('https://engine.tronads.io');
+      expect(tronAdsEngineOrigin(2)).toBe('https://engine.tronads.io');
+      vi.stubEnv('NEXT_PUBLIC_TRONADS_ENV', '1');
+      expect(configuredTronAdsEngineOrigin()).toBe(
+        'https://test-engine.tronads.io'
+      );
+    });
+
+    it("media-src stays 'self' (legacy gateway.pinata.cloud entry is dead: no media tags survive sanitize)", () => {
+      // allowedTags (ported from master) has no video/audio/source/track,
+      // and the IPFS-gateway URL rewriting legacy needed pinata for is
+      // disabled there (ipfs_prefix: false) and a pass-through here — see
+      // the media-src rationale in lib/csp.ts.
+      const d = parse(buildCspHeaderValue('N'));
+      expect(d['media-src']).toEqual(["'self'"]);
     });
 
     it('omits GA endpoints when GA is not configured', () => {
@@ -145,6 +216,16 @@ describe('lib/csp (audit N-02 follow-up: nonce-based CSP)', () => {
       );
       const d = parse(buildCspHeaderValue('N'));
       expect(d['connect-src']).toContain('https://upload.example.com');
+    });
+
+    it('falls back to the default upload origin when SDC_UPLOAD_IMAGE_URL is unset (legacy parity)', () => {
+      // lib/media/upload-image.ts posts to DEFAULT_UPLOAD_URL when the env
+      // is unset, so the CSP must allow that same origin under the same
+      // condition — both read the one shared constant (lib/media/upload-url).
+      vi.stubEnv('NODE_ENV', 'production');
+      vi.stubEnv('SDC_UPLOAD_IMAGE_URL', '');
+      const d = parse(buildCspHeaderValue('N'));
+      expect(d['connect-src']).toContain('https://steemitimages.com');
     });
 
     it('ignores non-http(s) upload endpoints', () => {

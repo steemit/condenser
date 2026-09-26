@@ -33,16 +33,32 @@
  *  - img-src * data: post bodies embed arbitrary third-party images (only
  *    first-party ones are proxied through steemitimages.com), same as legacy.
  *  - frame-src enumerates the 6 embed origins of lib/sanitize-config.ts's
- *    iframe whitelist plus the TronAd engine hosts — a second, independent
- *    layer over the render-pipeline whitelist.
+ *    iframe whitelist (derived from its exported IFRAME_EMBED_HOSTS, so the
+ *    two layers cannot drift) plus the TronAd engine origin for the
+ *    CONFIGURED env (lib/ads.ts configuredTronAdsEngineOrigin) — a second,
+ *    independent layer over the render-pipeline whitelist.
  *  - connect-src 'self' (all chain/auth traffic goes through /api) plus GA
  *    collect endpoints when GA is configured, plus the image-upload endpoint
- *    origin when SDC_UPLOAD_IMAGE_URL is configured (the settings-page upload
- *    helper posts directly there). `ws:` is appended in development for the
- *    HMR websocket.
+ *    origin — the SDC_UPLOAD_IMAGE_URL origin when set, else the same
+ *    DEFAULT_UPLOAD_URL fallback lib/media/upload-image.ts posts to (legacy
+ *    always allowed the upload host). `ws:` is appended in development for
+ *    the HMR websocket.
+ *  - media-src stays 'self': legacy production helmet additionally listed
+ *    gateway.pinata.cloud, but that entry is dead on this stack — the
+ *    sanitize whitelist (allowedTags, ported from master) has no
+ *    video/audio/source/track tags, so post bodies cannot emit media
+ *    elements at all, and legacy's IPFS-gateway URL rewriting
+ *    (HtmlReady ipfsPrefix) is disabled there too (ipfs_prefix: false in
+ *    every shipped condenser-legacy config) and a pass-through here
+ *    (lib/html-ready.ts). Pinning 'self' keeps the directive total while
+ *    dropping an origin nothing can load from.
  *  - upgrade-insecure-requests is deliberately omitted: dev runs on plain
  *    HTTP and HSTS already pins production clients to HTTPS.
  */
+
+import { configuredTronAdsEngineOrigin } from '@/lib/ads';
+import { DEFAULT_UPLOAD_URL } from '@/lib/media/upload-url';
+import { IFRAME_EMBED_HOSTS } from '@/lib/sanitize-config';
 
 /** CSPRNG nonce, base64-encoded (matches the Next.js guide's pattern). */
 export function generateCspNonce(): string {
@@ -55,10 +71,14 @@ const GA_SCRIPT_ORIGINS = [
   'https://www.google-analytics.com',
 ];
 
-/** Origin of a configured upload endpoint, or null when unset/malformed. */
+/**
+ * Origin of the upload endpoint. Falls back to the DEFAULT_UPLOAD_URL
+ * constant shared with lib/media/upload-image.ts, mirroring the client's
+ * fallback when SDC_UPLOAD_IMAGE_URL is unset — whatever origin uploads
+ * actually target must be in connect-src or the upload fetch is blocked.
+ */
 function uploadOrigin(): string | null {
-  const raw = process.env.SDC_UPLOAD_IMAGE_URL;
-  if (!raw) return null;
+  const raw = process.env.SDC_UPLOAD_IMAGE_URL || DEFAULT_UPLOAD_URL;
   try {
     const url = new URL(raw);
     if (url.protocol !== 'https:' && url.protocol !== 'http:') return null;
@@ -87,6 +107,17 @@ export function buildCspHeaderValue(nonce: string): string {
   if (upload) connectSources.push(upload);
   if (isDev) connectSources.push('ws:'); // HMR websocket (plain-HTTP dev server)
 
+  // frame-src: DERIVED from sanitize-config's exported embed whitelist (a
+  // literal copy here would be a third place to forget) plus the TronAd
+  // engine origin for the configured env only. The vendored SDK hardcodes
+  // BOTH engine hosts and picks per `env === 1` (see lib/ads.ts), so a
+  // policy that matches the deployment lists exactly one of them.
+  const frameSources = [
+    "'self'",
+    ...IFRAME_EMBED_HOSTS.map((host) => `https://${host}`),
+    configuredTronAdsEngineOrigin(),
+  ];
+
   const directives = [
     "default-src 'self'",
     `script-src ${scriptSources.join(' ')}`,
@@ -106,8 +137,10 @@ export function buildCspHeaderValue(nonce: string): string {
     'img-src * data:',
     "font-src 'self' data: https://fonts.gstatic.com",
     `connect-src ${connectSources.join(' ')}`,
-    // sanitize-config.ts iframe whitelist + TronAd engine hosts.
-    "frame-src 'self' https://player.vimeo.com https://www.youtube.com https://3speak.online https://w.soundcloud.com https://player.twitch.tv https://emb.d.tube https://engine.tronads.io https://test-engine.tronads.io",
+    `frame-src ${frameSources.join(' ')}`,
+    // 'self' only — see the media-src rationale in the module comment (the
+    // legacy gateway.pinata.cloud entry is dead on this stack: no media
+    // elements survive sanitize, no IPFS gateway rewriting).
     "media-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",

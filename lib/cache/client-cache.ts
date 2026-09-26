@@ -33,10 +33,12 @@ class ClientCache {
    * started before a write's invalidation holds a pre-write snapshot, and
    * caching it would resurrect the (evicted or not-yet-present) entry with a
    * fresh window — see backgroundRefresh() in client-fetch.ts. Bumped even
-   * when invalidate() matches nothing: the fetch's key is not in the store
-   * yet, so the store cannot tell whether the token targeted it — erring
-   * toward "don't cache" costs one refetch, erring the other way silently
-   * undoes the invalidation.
+   * when invalidate() matches nothing: the epoch is deliberately GLOBAL
+   * rather than per-URL. A per-fetch exact verdict IS possible (the in-flight
+   * URL could be substring-matched against the invalidation tokens), but
+   * that needs an in-flight-URL registry; the global epoch trades that
+   * bookkeeping for simplicity, at the cost of unrelated in-flight
+   * refreshes being dropped once — one extra refetch, never a resurrection.
    */
   private invalidationEpoch = 0;
 

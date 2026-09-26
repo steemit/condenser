@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { clientCache } from '@/lib/cache/client-cache';
 
 vi.mock('@/lib/crypto/transaction-signer', () => ({
   signCommentOperation: vi.fn(async () => ({ ref_block_num: 1, ref_block_prefix: 2, expiration: 'x', operations: [], extensions: [], signatures: ['SIG'] })),
@@ -25,6 +26,11 @@ function okResponse() {
 describe('broadcast client cacheContext (C2)', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    clientCache.clear();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it('sends cacheContext.rootPermlink alongside the signed transaction', async () => {
@@ -59,20 +65,29 @@ describe('broadcast client cacheContext (C2)', () => {
   });
 
   it('applies the write response invalidation tokens to L1 (per write-path contract)', async () => {
-    // Indirect assertion: invalidateFromResponse must not throw on the
-    // broadcast response; the eviction behaviour itself is covered in
-    // __tests__/lib/cache/client-fetch.test.ts.
+    // Seed L1 directly (same API as client-fetch.test.ts): the post entry's
+    // URL carries the vote's `permlink=root-p` token; the feed entry matches
+    // no token and must survive.
+    clientCache.set('/api/steem/post?author=bob&permlink=root-p', { title: 'old' }, 15_000, 120_000);
+    clientCache.set('/api/steem/posts?sort=trending&limit=20', ['feed'], 15_000, 120_000);
     const fetchMock = vi.fn().mockResolvedValue(okResponse());
     vi.stubGlobal('fetch', fetchMock);
 
-    await expect(
-      broadcastVote({
-        voter: 'erin',
-        author: 'bob',
-        permlink: 'root-p',
-        weight: 100,
-        rootPermlink: 'root-p',
-      })
-    ).resolves.toEqual({ success: true });
+    await broadcastVote({
+      voter: 'erin',
+      author: 'bob',
+      permlink: 'root-p',
+      weight: 100,
+      rootPermlink: 'root-p',
+    });
+
+    // broadcastSignedTransaction applies X-Cache-Invalidate ('erin,
+    // permlink=root-p') to L1: the matching entry is evicted (next read goes
+    // to the network), the unrelated one is untouched.
+    expect(clientCache.get('/api/steem/post?author=bob&permlink=root-p')).toBeNull();
+    expect(clientCache.get('/api/steem/posts?sort=trending&limit=20')).toEqual({
+      data: ['feed'],
+      stale: false,
+    });
   });
 });

@@ -99,7 +99,11 @@ function backgroundRefresh(url: string, opts: CachedFetchOptions): void {
   // response predates the write and caching it would resurrect the evicted
   // entry with a fresh window — silently undoing the invalidation. Drop it
   // instead; the next read refetches (GET responses carry no invalidation
-  // header, so only a concurrent write can move the epoch).
+  // header, so only a concurrent write can move the epoch). The epoch is
+  // global by design: a per-fetch exact verdict (substring-matching this URL
+  // against the racing tokens) is possible but needs an in-flight registry —
+  // the simplicity trade-off is that unrelated writes also drop a racing
+  // refresh, costing one extra refetch.
   const epochBefore = clientCache.getInvalidationEpoch();
   fetch(url)
     .then(async (res) => {

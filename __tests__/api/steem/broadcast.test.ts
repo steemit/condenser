@@ -809,9 +809,36 @@ describe('POST /api/steem/broadcast', () => {
     expect(res.status).toBe(200);
     expect(res.headers.get('X-Cache-Invalidate')).toBe('carol,dave');
     const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    // No 'blog' but also no kept 'ignore': unfollow removes blog membership,
+    // so the page families still change and are swept.
     expect(sweptPrefixes).toContain('steem:following-page:carol:');
     expect(sweptPrefixes).toContain('steem:following:carol:');
     expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+  });
+
+  it('sweeps only the ignore-state seeds for a pure mute (what lacks blog)', async () => {
+    // A mute (what: ['ignore']) moves nobody between the blog list pages —
+    // only the login follow-state seeds (which embed the mute state) change.
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify(['follow', { follower: 'carol', following: 'dave', what: ['ignore'] }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    expect(sweptPrefixes).toContain('steem:following:carol:');
+    expect(sweptPrefixes).not.toContain('steem:following-page:carol:');
+    expect(sweptPrefixes).not.toContain('steem:followers-page:dave:');
   });
 
   it('sweeps both case variants of a mixed-case follow payload account (C1)', async () => {
@@ -827,12 +854,38 @@ describe('POST /api/steem/broadcast', () => {
       ],
     ]);
 
-    await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
+    const res = await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
     const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
-    // Read routes cache under whichever casing the reader used; both the
-    // normalized and the raw variants must go, same as exact-key deletes.
+    // Defensive dual-variant sweep: the page routes normalize to lowercase,
+    // so the raw variant cannot match today — it stays correct only if a
+    // future read route drops that normalization.
     expect(sweptPrefixes).toContain('steem:followers-page:dave:');
     expect(sweptPrefixes).toContain('steem:followers-page:Dave:');
+    // The L1 tokens mirror the dual variants (chain names are lowercase, so
+    // a lowercased URL still matches the mixed-case payload).
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('carol,Dave,dave');
+  });
+
+  it('sweeps a whitespace-padded payload name once, not twice (deduped prefix)', async () => {
+    // " dave " trims to 'dave' — a whitespace-only difference must not count
+    // as a "raw variant" and repeat the same full-keyspace SCAN.
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify(['follow', { follower: 'carol', following: ' dave ', what: ['blog'] }]),
+        },
+      ],
+    ]);
+
+    await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
+    const swept = cacheDeleteByPrefixMock.mock.calls
+      .map((c) => c[0])
+      .filter((p) => p.startsWith('steem:followers-page:'));
+    expect(swept).toEqual(['steem:followers-page:dave:']);
   });
 
   it('skips the follow-list sweep for payload names outside the account charset (C1)', async () => {

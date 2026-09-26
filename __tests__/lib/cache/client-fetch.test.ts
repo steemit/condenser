@@ -1,6 +1,12 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cachedFetch, invalidateFromResponse } from '@/lib/cache/client-fetch';
 import { clientCache } from '@/lib/cache/client-cache';
+
+// Tests stub the global fetch — always restore it so later suites in this
+// file (and the jsdom environment) see the real binding.
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 const OPTS = { staleMs: 15_000, maxAgeMs: 120_000 };
 
@@ -128,10 +134,11 @@ describe('invalidation vs in-flight fetches (C3)', () => {
     clientCache.set('/api/steem/post?author=bob&permlink=p', { title: 'old' }, -1, 120_000);
     await cachedFetch('/api/steem/post?author=bob&permlink=p', OPTS);
 
-    // An invalidation whose token matches nothing in the store still raced
-    // the refresh: the guard cannot know whether the token targeted this URL
-    // (the URL's entry is not always in the store), so the write-back is
-    // dropped — one extra refetch — rather than risk a resurrection.
+    // An invalidation whose token matches neither the store nor this URL
+    // still drops the write-back: the epoch guard is global by design, not
+    // per-URL (an exact token-vs-URL verdict would need an in-flight
+    // registry), so unrelated writes also drop racing refreshes — one extra
+    // refetch — rather than risk a resurrection.
     invalidateFromResponse(
       new Response(null, { headers: { 'X-Cache-Invalidate': 'someoneelse' } })
     );
@@ -181,8 +188,9 @@ describe('clientCache invalidation epoch', () => {
   it('advances on every invalidate() call and on clear()', () => {
     const before = clientCache.getInvalidationEpoch();
 
-    // Even a match-less invalidate advances the epoch: an in-flight fetch's
-    // key is not always in the store, so the guard cannot rely on matches.
+    // Even a match-less invalidate advances the epoch: the guard is global
+    // by design (per-URL precision would need an in-flight registry), so any
+    // invalidation invalidates every in-flight fetch.
     clientCache.invalidate('no-such-prefix');
     expect(clientCache.getInvalidationEpoch()).toBe(before + 1);
 

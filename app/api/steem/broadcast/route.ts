@@ -284,8 +284,21 @@ export async function POST(request: NextRequest) {
         // account-shaped) — the actor token above already covers the
         // actor's own following page and profile entries.
         const target = String(payload[1].following || '');
-        if (target && SAFE_TOKEN.test(target) && !invalidateTokens.includes(target)) {
-          invalidateTokens.push(target);
+        if (target && SAFE_TOKEN.test(target)) {
+          if (!invalidateTokens.includes(target)) {
+            invalidateTokens.push(target);
+          }
+          // Chain account names are always lowercase — also push the
+          // lowercase variant so a mixed-case payload still matches this
+          // client's lowercased L1 URLs (defensive, mirroring the L2
+          // dual-variant sweep).
+          const lowered = target.toLowerCase();
+          if (
+            lowered !== target &&
+            !invalidateTokens.includes(lowered)
+          ) {
+            invalidateTokens.push(lowered);
+          }
         }
       }
       if (
@@ -456,8 +469,13 @@ async function deleteAccountScopedKey(prefix: string, account: string): Promise<
  * before any client-controlled value may enter a Redis MATCH pattern: SCAN
  * patterns interpret * ? [ ] and friends, so an unsanitized account could
  * widen a "scoped" prefix delete into a keyspace-wide sweep. The RAW
- * variant also permits uppercase — case is not a glob metacharacter, and
- * read routes cache under whichever casing the reader used.
+ * variant also permits uppercase (case is not a glob metacharacter). The
+ * dual-variant sweep is DEFENSIVE: the follow-page read routes normalize
+ * their params (trim + lowercase), so their raw-case keys cannot exist
+ * today — the raw branch stays correct only if a future read route drops
+ * that normalization. (The profile family genuinely caches under the
+ * reader's casing, but it goes through deleteAccountScopedKey's exact-key
+ * deletes, not this prefix path.)
  */
 const ACCOUNT_KEY_RE = /^[a-z0-9.-]{1,64}$/;
 const RAW_ACCOUNT_KEY_RE = /^[A-Za-z0-9.-]{1,64}$/;
@@ -470,12 +488,17 @@ const RAW_ACCOUNT_KEY_RE = /^[A-Za-z0-9.-]{1,64}$/;
  * each other (alice / alice2) from colliding.
  */
 async function deleteAccountScopedPrefix(prefix: string, account: string): Promise<void> {
-  const normalized = account.trim().toLowerCase();
+  const trimmed = account.trim();
+  const normalized = trimmed.toLowerCase();
   if (!ACCOUNT_KEY_RE.test(normalized)) return;
-  await cacheDeleteByPrefix(`${prefix}${normalized}:`);
-  if (normalized !== account && RAW_ACCOUNT_KEY_RE.test(account.trim())) {
-    await cacheDeleteByPrefix(`${prefix}${account.trim()}:`);
+  const deletes = [cacheDeleteByPrefix(`${prefix}${normalized}:`)];
+  // Compare against the TRIMMED raw form: a whitespace-only difference (e.g.
+  // " dave ") would otherwise repeat the same SCAN twice. Only a genuine
+  // casing difference adds a second, distinct prefix.
+  if (trimmed !== normalized && RAW_ACCOUNT_KEY_RE.test(trimmed)) {
+    deletes.push(cacheDeleteByPrefix(`${prefix}${trimmed}:`));
   }
+  await Promise.all(deletes);
 }
 
 /** Parse a `["kind", {…}]`-shaped custom_json payload; null when unshaped. */
@@ -535,11 +558,23 @@ async function invalidateCustomJson(opData: Record<string, unknown>): Promise<vo
         // posting auth); page/limit/cursor variants make exact keys
         // unknowable, hence the scoped prefix deletes (see the N-10 note on
         // invalidateAfterBroadcast).
+        //
+        // The ignore-seed family (`steem:following:`) is always swept — the
+        // login seeds embed the mute state, so every follow-kind write must
+        // drop it. The PAGE families are gated on the write touching the
+        // BLOG dimension: a pure mute/unmute (what carries 'ignore' but not
+        // 'blog') moves nobody between the blog list pages. A follow
+        // ('blog' present) and an unfollow (no 'blog' left and no 'ignore'
+        // kept) both change page membership and still sweep.
+        const what = Array.isArray(args.what) ? args.what.map(String) : [];
+        const touchesBlog = what.includes('blog') || !what.includes('ignore');
         if (follower) {
-          await deleteAccountScopedPrefix('steem:following-page:', follower);
           await deleteAccountScopedPrefix('steem:following:', follower);
+          if (touchesBlog) {
+            await deleteAccountScopedPrefix('steem:following-page:', follower);
+          }
         }
-        if (following) {
+        if (following && touchesBlog) {
           await deleteAccountScopedPrefix('steem:followers-page:', following);
         }
       }

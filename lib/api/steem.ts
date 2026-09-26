@@ -10,6 +10,13 @@
  */
 
 import { cachedFetch, HttpError } from '@/lib/cache/client-fetch';
+import type { Account, Post, UserProfile } from '@/types/steem';
+
+// Canonical domain types live in types/steem.ts; re-exported here so the
+// existing `import { Post, UserProfile } from '@/lib/api/steem'` call sites
+// keep working. Transitional compatibility only — once all call sites import
+// from @/types/steem directly, remove this re-export.
+export type { Post, UserProfile };
 
 /**
  * Client-side staleMs / maxAgeMs per data type.
@@ -28,45 +35,6 @@ const SWR = {
   communityRoles: { staleMs: 30_000, maxAgeMs: 300_000 },
   notifications: { staleMs: 10_000, maxAgeMs: 30_000 },
 } as const;
-
-export interface Post {
-  author: string;
-  permlink: string;
-  category: string;
-  title: string;
-  body: string;
-  created: string;
-  net_rshares?: string;
-  children?: number;
-  // Bridge API returns only {voter, rshares}; rshares' sign is the vote
-  // direction ("0" = cleared vote). weight/percent exist only on the
-  // optimistic Redux entries written by globalSlice.voted.
-  active_votes?: Array<{
-    voter: string;
-    rshares?: string | number;
-    weight?: number;
-    percent?: number;
-  }>;
-  pending_payout_value?: string;
-  // Legacy bridge fields read by cards / voting UI.
-  stats?: {
-    gray?: boolean;
-    is_pinned?: boolean;
-    total_votes?: number;
-    [key: string]: unknown;
-  };
-  author_reputation?: string | number;
-  last_update?: string;
-  community_title?: string;
-  payout_at?: string;
-  author_payout_value?: string;
-  curator_payout_value?: string;
-  json_metadata?: {
-    tags?: string[];
-    [key: string]: unknown;
-  };
-  [key: string]: unknown;
-}
 
 export interface FetchPostsParams {
   order:
@@ -220,37 +188,6 @@ export async function fetchCommentsByPermlink(
 }
 
 /**
- * User profile interface based on bridge API get_profile response
- */
-export interface UserProfile {
-  id: number;
-  name: string;
-  created: string;
-  active: string;
-  post_count: number;
-  reputation: string;
-  blacklists: string[];
-  stats: {
-    rank: number;
-    following: number;
-    followers: number;
-  };
-  metadata: {
-    profile: {
-      name?: string;
-      about?: string;
-      location?: string;
-      website?: string;
-      profile_image?: string;
-      cover_image?: string;
-      version?: number;
-      [key: string]: unknown;
-    };
-  };
-  [key: string]: unknown;
-}
-
-/**
  * Fetch user profile from bridge API
  */
 export async function fetchUserProfile(
@@ -273,10 +210,10 @@ export async function fetchUserProfile(
 
 /** Raw condenser account (posting_json_metadata/json_metadata included).
  *  Never cached — used on settings save to merge into fresh metadata. */
-export async function fetchAccount(username: string): Promise<Record<string, unknown> | null> {
+export async function fetchAccount(username: string): Promise<Account | null> {
   const searchParams = new URLSearchParams({ username });
   try {
-    const { data } = await cachedFetch<Record<string, unknown>>(
+    const { data } = await cachedFetch<Account>(
       `/api/steem/account?${searchParams.toString()}`,
       { ...SWR.profile, noStore: true }
     );

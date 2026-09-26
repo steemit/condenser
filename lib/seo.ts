@@ -15,6 +15,7 @@ import type { Metadata } from 'next';
 import { extractBodySummary, extractImageLink } from '@/lib/extract-content';
 import { ABSOLUTE_HTTP_URL } from '@/lib/http-url';
 import { proxifyImageUrl } from '@/lib/media/proxify-url';
+import type { ProfileMetadata } from '@/types/steem';
 
 /**
  * Origin of this site, used for absolute URLs in metadata (avatar fallback
@@ -240,12 +241,9 @@ export function buildPostMetadata(post: SeoPost): Metadata {
   };
 }
 
-/** Profile subset legacy addAccountMeta consumed. */
-export interface SeoProfile {
-  name?: string;
-  about?: string;
-  profile_image?: string;
-}
+/** Profile subset legacy addAccountMeta consumed, derived from the
+ *  canonical ProfileMetadata instead of redeclaring the fields. */
+export type SeoProfile = Pick<ProfileMetadata, 'name' | 'about' | 'profile_image'>;
 
 /** Options for buildAccountMetadata. */
 export interface AccountMetadataOptions {

@@ -3,14 +3,11 @@
  * Signs transactions locally before sending to API
  */
 
-// Import steem object directly as a named export
-import { steem } from '@steemit/steem-js';
+// Import steem object directly as a named export; Transaction is re-exported
+// by the SDK package root (dist/index.d.ts), so no deep dist/ path is needed.
+import { steem, type Transaction } from '@steemit/steem-js';
 
 import type { CommentOptionsConfig } from '@/lib/utils/comment-options';
-
-// Import types directly from dist (these are TypeScript definition files)
-// @ts-expect-error - TypeScript can't resolve these paths, but they exist at runtime
-import type { Transaction } from '@steemit/steem-js/dist/types';
 
 // Get operation factories from steem object at runtime
 const createComment = steem.operations.createComment;

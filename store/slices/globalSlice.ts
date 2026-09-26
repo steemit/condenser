@@ -1,31 +1,34 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { lastreadTimeMs } from '@/lib/utils/lastread';
+import type { Account, Post, Vote } from '@/types/steem';
 
-// Types
-export interface Vote {
-  voter: string;
-  weight: number;
-  rshares?: string;
-  percent?: number;
-  time?: string;
-  [key: string]: unknown;
-}
+/**
+ * Redux account cache entry: the canonical wire Account plus witness_votes
+ * as a client-side Set (legacy stored the voted-witness set, not the chain's
+ * string array). Derived so the wire shape stays owned by types/steem.ts.
+ */
+export type AccountEntry = Account & {
+  witness_votes?: Set<string>;
+};
 
-export interface Post {
-  author: string;
-  permlink: string;
+/**
+ * Redux content-cache entry: the canonical wire Post plus client-only UI
+ * state (collapse flag; reply keys in tree order). Derived so the wire shape
+ * itself stays owned by types/steem.ts.
+ */
+export type ContentPost = Post & {
   collapsed?: boolean;
   replies?: string[];
-  active_votes?: Vote[];
-  [key: string]: unknown;
-}
+};
 
-export interface Account {
-  name: string;
-  witness_votes?: Set<string>;
-  [key: string]: unknown;
-}
+/**
+ * Reply-key stub linkReply writes when the parent post is not cached yet:
+ * a deliberately partial entry — only the reply list is used until the next
+ * receiveContent delivers the wire fields (received content merges over
+ * this stub). (Same stub the pre-convergence slice built.)
+ */
+type ReplyStub = Pick<ContentPost, 'author' | 'permlink' | 'replies'>;
 
 export interface NotificationItem {
   [key: string]: unknown;
@@ -56,8 +59,8 @@ interface DialogEntry {
 
 export interface GlobalState {
   status: Record<string, unknown>;
-  content: Record<string, Post>;
-  accounts: Record<string, Account>;
+  content: Record<string, ContentPost>;
+  accounts: Record<string, AccountEntry>;
   headers: Record<string, unknown>;
   notifications: Record<string, Notification> & {
     loading?: boolean;
@@ -143,7 +146,7 @@ const globalSlice = createSlice({
     setCollapsed: (state, action: PayloadAction<{ post: string; collapsed: boolean }>) => {
       const { post, collapsed } = action.payload;
       if (!state.content[post]) {
-        state.content[post] = {} as Post;
+        state.content[post] = {} as ContentPost;
       }
       state.content[post].collapsed = collapsed;
     },
@@ -253,7 +256,7 @@ const globalSlice = createSlice({
     notificationsLoading: (state, action: PayloadAction<boolean>) => {
       state.notifications.loading = action.payload;
     },
-    receiveAccount: (state, action: PayloadAction<{ account: Account }>) => {
+    receiveAccount: (state, action: PayloadAction<{ account: AccountEntry }>) => {
       const { account } = action.payload;
       const accountName = account.name;
       if (!state.accounts[accountName]) {
@@ -265,7 +268,7 @@ const globalSlice = createSlice({
         };
       }
     },
-    receiveAccounts: (state, action: PayloadAction<{ accounts: Account[] }>) => {
+    receiveAccounts: (state, action: PayloadAction<{ accounts: AccountEntry[] }>) => {
       const { accounts } = action.payload;
       accounts.forEach((account) => {
         const accountName = account.name;
@@ -351,11 +354,15 @@ const globalSlice = createSlice({
 
       if (parentKey && replyKey) {
         if (!state.content[parentKey]) {
-          state.content[parentKey] = {
+          const stub: ReplyStub = {
             author: parent_author,
             permlink: parent_permlink,
             replies: [],
-          } as Post;
+          };
+          // Single controlled widening of the deliberately partial stub
+          // (see ReplyStub): the missing wire fields arrive with the next
+          // receiveContent, which merges over this entry.
+          state.content[parentKey] = stub as ContentPost;
         }
         if (!state.content[parentKey].replies) {
           state.content[parentKey].replies = [];

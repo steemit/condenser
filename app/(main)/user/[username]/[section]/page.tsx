@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { getProfile } from '@/lib/steem/client';
 import { normalizeUsername } from '@/lib/utils/username';
-import { buildAccountMetadata, NOINDEX_ROBOTS, type SeoProfile } from '@/lib/seo';
+import { buildAccountMetadata, NOINDEX_ROBOTS } from '@/lib/seo';
+import type { UserProfile } from '@/types/steem';
 import UserSectionClient from './UserSectionClient';
 
 /**
@@ -17,10 +18,6 @@ import UserSectionClient from './UserSectionClient';
 interface PageParams {
   username: string;
   section: string;
-}
-
-interface BridgeProfile {
-  metadata?: { profile?: SeoProfile };
 }
 
 /**
@@ -43,7 +40,7 @@ export async function generateMetadata({
   // private sections stay noindex even on the fetch-failure fallback.
   const isPrivate = PRIVATE_SECTIONS.has(section.toLowerCase());
   try {
-    const profile = (await getProfile({ account: accountname })) as BridgeProfile | null;
+    const profile = (await getProfile({ account: accountname })) as UserProfile | null;
     return buildAccountMetadata(accountname, profile?.metadata?.profile ?? null, {
       noindex: isPrivate,
     });

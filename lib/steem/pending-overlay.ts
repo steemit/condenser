@@ -15,6 +15,7 @@
  */
 
 import { getRedis, redisKey } from '@/lib/cache/redis';
+import type { Post, UserProfile } from '@/types/steem';
 
 /** Covers the P99 hivemind indexing delay by a wide margin. */
 export const PENDING_TTL_SEC = 120;
@@ -37,32 +38,23 @@ export interface PendingProfile {
   profile: Record<string, unknown>;
 }
 
-/** Shape of the bridge get_profile response relevant to the overlay. */
-export interface ProfileLike {
-  metadata?: {
-    profile?: Record<string, unknown>;
-    [key: string]: unknown;
-  };
+/** Subset of the bridge get_profile response the profile overlay touches,
+ *  derived from the canonical UserProfile. */
+export type ProfileLike = Pick<UserProfile, 'metadata'> & {
   [key: string]: unknown;
-}
+};
 
-export interface PostLike {
-  author?: string;
-  permlink?: string;
-  active_votes?: Array<{
-    voter: string;
-    rshares?: string | number;
-    weight?: number;
-    percent?: number;
-  }>;
-  stats?: {
-    total_votes?: number;
-    [key: string]: unknown;
-  };
-  last_update?: string;
-  created?: string;
+/**
+ * Subset of the canonical Post the overlay reads and merges, derived (not
+ * redeclared) from types/steem.ts. All named fields are optional on purpose:
+ * the overlay guards on missing author/permlink before consulting Redis, and
+ * partially-indexed bridge rows are normal inside the merge window.
+ */
+export type PostLike = Partial<
+  Pick<Post, 'author' | 'permlink' | 'active_votes' | 'stats' | 'last_update' | 'created'>
+> & {
   [key: string]: unknown;
-}
+};
 
 function voteKey(author: string, permlink: string): string {
   return redisKey(`steem:pendingvote:${author}:${permlink}`);

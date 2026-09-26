@@ -21,7 +21,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { initializeSteemApi, callSteemApi } from '@/lib/steem/client';
-import { cacheDelete } from '@/lib/cache/redis';
+import { cacheDelete, cacheDeleteByPrefix } from '@/lib/cache/redis';
 import { MAX_BROADCAST_BODY_BYTES, readJsonWithLimit } from '@/lib/api/body-limit';
 import {
   RATE_LIMITS,
@@ -251,6 +251,18 @@ export async function POST(request: NextRequest) {
     if (opType === 'vote' && permlink && SAFE_TOKEN.test(`permlink=${permlink}`)) {
       invalidateTokens.push(`permlink=${permlink}`);
     }
+    if (opType === 'custom_json' && opData) {
+      const payload = parseCustomJsonPayload(opData.json);
+      if (payload && payload[0] === 'follow') {
+        // A follow also changes the TARGET's followers page (their URL is
+        // account-shaped) — the actor token above already covers the
+        // actor's own following page and profile entries.
+        const target = String(payload[1].following || '');
+        if (target && SAFE_TOKEN.test(target) && !invalidateTokens.includes(target)) {
+          invalidateTokens.push(target);
+        }
+      }
+    }
     if (opType === 'comment' && opData) {
       const parentPermlink = opData.parent_permlink as string | undefined;
       if (opData.parent_author) {
@@ -318,6 +330,17 @@ export async function POST(request: NextRequest) {
  * fully-known key (observer reads bypass the cache; see getProfile) with a
  * 30s fresh TTL, and the exact delete guarantees the next read refetches
  * instead of serving the pre-write value for the remaining TTL.
+ *
+ * Two documented exceptions use ACCOUNT-SCOPED prefix deletes
+ * (deleteAccountScopedPrefix): the follow lists (C1) and the communities
+ * list (C5). Their keys embed per-request dimensions (page/limit/cursor or
+ * sort/query/limit variants) after the account/family segment, so exact
+ * keys are unknowable and the entries carry 30s-10min fresh TTLs during
+ * which a write would visibly revert. The blast radius is confined to the
+ * accounts involved in the (signed, chain-accepted) operation or to a
+ * single low-traffic list family — not the shared profile/feed keyspace
+ * N-10 protected — and the cost is bounded by the steem:broadcast rate
+ * limit (30/min/IP) on top of the chain's own operation fees.
  */
 async function invalidateAfterBroadcast(operations: Array<[string, Record<string, unknown>]>): Promise<void> {
   for (const [opName, opData] of operations) {
@@ -371,6 +394,33 @@ async function deleteAccountScopedKey(prefix: string, account: string): Promise<
   }
 }
 
+/**
+ * Steem account charset, bounded and free of glob metacharacters. Required
+ * before any client-controlled value may enter a Redis MATCH pattern: SCAN
+ * patterns interpret * ? [ ] and friends, so an unsanitized account could
+ * widen a "scoped" prefix delete into a keyspace-wide sweep. The RAW
+ * variant also permits uppercase — case is not a glob metacharacter, and
+ * read routes cache under whichever casing the reader used.
+ */
+const ACCOUNT_KEY_RE = /^[a-z0-9.-]{1,64}$/;
+const RAW_ACCOUNT_KEY_RE = /^[A-Za-z0-9.-]{1,64}$/;
+
+/**
+ * Delete `{prefix}{account}:*` — the account-scoped sibling of
+ * deleteAccountScopedKey for cache families whose keys carry per-request
+ * dimensions (page/limit/cursor variants) after the account segment, making
+ * exact keys unknowable. The trailing ':' keeps names that are prefixes of
+ * each other (alice / alice2) from colliding.
+ */
+async function deleteAccountScopedPrefix(prefix: string, account: string): Promise<void> {
+  const normalized = account.trim().toLowerCase();
+  if (!ACCOUNT_KEY_RE.test(normalized)) return;
+  await cacheDeleteByPrefix(`${prefix}${normalized}:`);
+  if (normalized !== account && RAW_ACCOUNT_KEY_RE.test(account.trim())) {
+    await cacheDeleteByPrefix(`${prefix}${account.trim()}:`);
+  }
+}
+
 /** Parse a `["kind", {…}]`-shaped custom_json payload; null when unshaped. */
 function parseCustomJsonPayload(raw: unknown): [string, Record<string, unknown>] | null {
   if (typeof raw !== 'string') return null;
@@ -413,10 +463,28 @@ async function invalidateCustomJson(opData: Record<string, unknown>): Promise<vo
   switch (opData.id) {
     case 'follow': {
       if (kind === 'follow') {
+        const follower = String(args.follower || '');
+        const following = String(args.following || '');
         // follow/unfollow/ignore also shifts the TARGET's cached
         // follower-count profile — one exact key, not every user's profile.
-        const following = String(args.following || '');
         if (following) await deleteAccountScopedKey('steem:profile:', following);
+        // C1: the two accounts' follow-list caches (30s fresh / 330s total
+        // TTL). A follow changes the follower's following pages
+        // (getFollowingByPage) and the login follow-state seeds
+        // (getFollowing, /api/steem/following), and the target's followers
+        // pages (getFollowersByPage) — without these deletes both sides
+        // revert within the window ("the follow didn't save"). The payload's
+        // follower/following name the lists (the chain enforces follower ==
+        // posting auth); page/limit/cursor variants make exact keys
+        // unknowable, hence the scoped prefix deletes (see the N-10 note on
+        // invalidateAfterBroadcast).
+        if (follower) {
+          await deleteAccountScopedPrefix('steem:following-page:', follower);
+          await deleteAccountScopedPrefix('steem:following:', follower);
+        }
+        if (following) {
+          await deleteAccountScopedPrefix('steem:followers-page:', following);
+        }
       }
       // kind === 'reblog': the post lands in the REBLOGGER's blog list (a
       // 3s-TTL list cache, left to natural expiry); the target author's

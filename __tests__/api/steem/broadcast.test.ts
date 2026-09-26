@@ -351,15 +351,25 @@ describe('POST /api/steem/broadcast', () => {
     const res = await POST(
       makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
     );
-    expect(res.headers.get('X-Cache-Invalidate')).toBe('carol');
+    // Actor token + the follow target's token (drops the target's
+    // followers-page L1 entries; the actor token covers the actor's own
+    // following page) — see C1.
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('carol,dave');
     const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
     // The actor's and the follow target's profiles, exactly — the old code
     // swept the whole `steem:profile:` prefix (audit N-10).
     expect(deletedKeys).toContain('steem:profile:carol');
     expect(deletedKeys).toContain('steem:profile:dave');
     expect(deletedKeys).not.toContain('steem:profile:erin');
-    // No prefix SCAN sweeps: no `steem:posts:ranked:` flush either.
-    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
+    // Follow lists are dropped account-scoped (C1): the follower's following
+    // pages + follow-state seeds, the target's followers pages.
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    expect(sweptPrefixes).toContain('steem:following-page:carol:');
+    expect(sweptPrefixes).toContain('steem:following:carol:');
+    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+    // Scoped to the two accounts only — nobody else's list entries.
+    expect(sweptPrefixes).not.toContain('steem:followers-page:');
+    expect(sweptPrefixes).not.toContain('steem:following-page:');
   });
 
   it('uses the author for comment ops and invalidates account posts', async () => {
@@ -610,7 +620,83 @@ describe('POST /api/steem/broadcast', () => {
     // author's cached entries are unchanged.
     expect(deletedKeys).toContain('steem:profile:carol');
     expect(deletedKeys).not.toContain('steem:profile:dave');
+    // Reblogs don't touch follow lists — no prefix sweeps at all.
     expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
+  });
+
+  it('invalidates follow lists for unfollow (what: []) the same as follow (C1)', async () => {
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify(['follow', { follower: 'carol', following: 'dave', what: [] }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('X-Cache-Invalidate')).toBe('carol,dave');
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    expect(sweptPrefixes).toContain('steem:following-page:carol:');
+    expect(sweptPrefixes).toContain('steem:following:carol:');
+    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+  });
+
+  it('sweeps both case variants of a mixed-case follow payload account (C1)', async () => {
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify(['follow', { follower: 'carol', following: 'Dave', what: ['blog'] }]),
+        },
+      ],
+    ]);
+
+    await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    // Read routes cache under whichever casing the reader used; both the
+    // normalized and the raw variants must go, same as exact-key deletes.
+    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+    expect(sweptPrefixes).toContain('steem:followers-page:Dave:');
+  });
+
+  it('skips the follow-list sweep for payload names outside the account charset (C1)', async () => {
+    // The chain rejects invalid account names, so this broadcast fails and
+    // nothing should be invalidated — but the guard must hold even if a
+    // relay ever let one through: glob metacharacters in a MATCH pattern
+    // would widen the scoped sweep.
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['carol'],
+          id: 'follow',
+          json: JSON.stringify([
+            'follow',
+            { follower: 'carol', following: 'dav*e?[$x', what: ['blog'] },
+          ]),
+        },
+      ],
+    ]);
+
+    await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
+    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    expect(sweptPrefixes).toContain('steem:following-page:carol:');
+    for (const prefix of sweptPrefixes) {
+      expect(prefix).not.toContain('*');
+      expect(prefix).not.toContain('?');
+      expect(prefix).not.toContain('[');
+    }
   });
 
   it('deletes both case variants of a mixed-case account profile key', async () => {

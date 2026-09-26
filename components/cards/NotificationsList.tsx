@@ -147,6 +147,9 @@ export default function NotificationsList({ username }: NotificationsListProps) 
           name: accountName,
           notifications,
           isLastPage,
+          // Cursor loads page in strictly older items; a first-page load
+          // (re)mounts must refresh the head of the list, not append to it.
+          append: Boolean(startId),
         })
       );
     } catch (error) {

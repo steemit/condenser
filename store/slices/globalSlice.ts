@@ -97,6 +97,17 @@ const postKey = (author: string, permlink: string): string | null => {
   return `${author}/${permlink}`;
 };
 
+// Ids of notification items, ignoring items without a usable id (hivemind
+// always assigns one; guard anyway so an id-less item can never be dropped
+// or double-inserted by the dedup paths below).
+const notificationIdSet = (items: NotificationItem[]): Set<unknown> => {
+  const ids = new Set<unknown>();
+  items.forEach((item) => {
+    if (item.id != null) ids.add(item.id);
+  });
+  return ids;
+};
+
 const initialState: GlobalState = {
   status: {},
   content: {},
@@ -140,22 +151,42 @@ const globalSlice = createSlice({
         }
       });
     },
+    // Legacy GlobalReducer RECEIVE_NOTIFICATIONS blindly concats the incoming
+    // page onto the stored list. That was survivable in legacy (class
+    // component, no strict mode), but here the list page loads the first page
+    // on every mount, so dev strict-mode double effects and client-side
+    // navigate-away-and-back both append the same page twice. Keep legacy's
+    // append shape but dedup by notification id, with direction-aware merge:
+    //   - first page (no cursor): incoming order wins; older items already
+    //     paged in that fell off the head of the feed are kept at the tail;
+    //   - cursor pagination (append: true): incoming items are strictly older
+    //     than what is stored, so they concat at the end, minus duplicates.
     receiveNotifications: (state, action: PayloadAction<{
       name: string;
       notifications: NotificationItem[];
       isLastPage?: boolean;
+      /** True when loading an older page via a last_id cursor. */
+      append?: boolean;
     }>) => {
-      const { name, notifications, isLastPage } = action.payload;
+      const { name, notifications, isLastPage, append } = action.payload;
       if (!state.notifications[name]) {
         state.notifications[name] = {
           name,
           notifications: [],
         };
       }
-      state.notifications[name].notifications = [
-        ...(state.notifications[name].notifications || []),
-        ...notifications,
-      ];
+      const existing = state.notifications[name].notifications || [];
+      const incomingIds = notificationIdSet(notifications);
+      const existingIds = notificationIdSet(existing);
+      state.notifications[name].notifications = append
+        ? [
+            ...existing,
+            ...notifications.filter((n) => n.id == null || !existingIds.has(n.id)),
+          ]
+        : [
+            ...notifications,
+            ...existing.filter((n) => n.id == null || !incomingIds.has(n.id)),
+          ];
       if (isLastPage !== undefined) {
         state.notifications[name].isLastPage = isLastPage;
       }

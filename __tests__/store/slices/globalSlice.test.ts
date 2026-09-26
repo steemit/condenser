@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import globalReducer, {
   followListLoading,
   receiveFollowList,
+  receiveNotifications,
   resetFollowState,
   updateFollowState,
 } from '@/store/slices/globalSlice';
@@ -189,6 +190,129 @@ describe('globalSlice follow state', () => {
       );
       state = stateAfter(state, resetFollowState());
       expect(state.follow).toBeUndefined();
+    });
+  });
+
+  describe('receiveNotifications (id dedup, T4)', () => {
+    const page = (ids: number[]) => ids.map((id) => ({ id, type: 'vote', msg: `n${id}` }));
+
+    it('does not duplicate the first page when dispatched twice', () => {
+      // Dev strict mode runs the mount effect twice and the SWR cache
+      // returns the same page for both — legacy's blind concat appended it
+      // twice (T4).
+      let state = stateAfter(
+        undefined,
+        receiveNotifications({ name: 'alice', notifications: page([3, 2, 1]) })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'alice', notifications: page([3, 2, 1]) })
+      );
+      expect(state.notifications.alice.notifications.map((n) => n.id)).toEqual([3, 2, 1]);
+    });
+
+    it('appends cursor pages after the existing list', () => {
+      let state = stateAfter(
+        undefined,
+        receiveNotifications({ name: 'alice', notifications: page([3, 2, 1]) })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'alice', notifications: page([0, -1]), append: true })
+      );
+      expect(state.notifications.alice.notifications.map((n) => n.id)).toEqual([3, 2, 1, 0, -1]);
+    });
+
+    it('does not duplicate a cursor page dispatched twice (double load-more)', () => {
+      let state = stateAfter(
+        undefined,
+        receiveNotifications({ name: 'alice', notifications: page([3, 2, 1]) })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'alice', notifications: page([0, -1]), append: true })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'alice', notifications: page([0, -1]), append: true })
+      );
+      expect(state.notifications.alice.notifications.map((n) => n.id)).toEqual([3, 2, 1, 0, -1]);
+    });
+
+    it('refreshes the head of the list on a first-page reload and keeps older paged-in items', () => {
+      // User paginated to [3..-1], navigates away and back while two new
+      // notifications (5, 4) arrived: the first page now is [5, 4, 3, 2].
+      // Expected: new items up front, previously paged items retained at the
+      // tail, no duplicates.
+      let state = stateAfter(
+        undefined,
+        receiveNotifications({ name: 'alice', notifications: page([3, 2, 1]) })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'alice', notifications: page([0, -1]), append: true })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'alice', notifications: page([5, 4, 3, 2]) })
+      );
+      expect(state.notifications.alice.notifications.map((n) => n.id)).toEqual([5, 4, 3, 2, 1, 0, -1]);
+    });
+
+    it('replaces the stored copy of an item refreshed by a first-page reload', () => {
+      let state = stateAfter(
+        undefined,
+        receiveNotifications({ name: 'alice', notifications: [{ id: 1, type: 'vote', msg: 'old' }] })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'alice', notifications: [{ id: 1, type: 'vote', msg: 'new' }] })
+      );
+      expect(state.notifications.alice.notifications).toHaveLength(1);
+      expect(state.notifications.alice.notifications[0].msg).toBe('new');
+    });
+
+    it('keeps accounts isolated (session binding, #4043)', () => {
+      let state = stateAfter(
+        undefined,
+        receiveNotifications({ name: 'alice', notifications: page([1]) })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'bob', notifications: page([9]) })
+      );
+      expect(state.notifications.alice.notifications.map((n) => n.id)).toEqual([1]);
+      expect(state.notifications.bob.notifications.map((n) => n.id)).toEqual([9]);
+    });
+
+    it('keeps id-less items on both merge paths', () => {
+      let state = stateAfter(
+        undefined,
+        receiveNotifications({ name: 'alice', notifications: [{ type: 'vote' }] })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'alice', notifications: page([1]) })
+      );
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'alice', notifications: [{ type: 'follow' }], append: true })
+      );
+      const items = state.notifications.alice.notifications;
+      expect(items).toHaveLength(3);
+    });
+
+    it('stores isLastPage when provided', () => {
+      let state = stateAfter(
+        undefined,
+        receiveNotifications({ name: 'alice', notifications: page([1]), isLastPage: false })
+      );
+      expect(state.notifications.alice.isLastPage).toBe(false);
+      state = stateAfter(
+        state,
+        receiveNotifications({ name: 'alice', notifications: page([0]), isLastPage: true, append: true })
+      );
+      expect(state.notifications.alice.isLastPage).toBe(true);
     });
   });
 });

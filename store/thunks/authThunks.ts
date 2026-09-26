@@ -6,6 +6,7 @@
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setUser, loginError, setAuthority, logout, setTrackingId, generateTrackingId } from '../slices/userSlice';
+import { resetFollowState } from '../slices/globalSlice';
 import { loadFollowState } from './followThunks';
 import { clearStoredKey } from '@/lib/crypto/key-storage';
 import { postJsonWithCsrf } from '@/lib/api/csrf';
@@ -107,6 +108,12 @@ export const logoutThunk = createAsyncThunk<void, void, { dispatch: AppDispatch 
 
     // Dispatch logout action
     dispatch(logout());
+
+    // State hygiene beyond legacy: LOGOUT never cleared global.follow (it
+    // is keyed by username and was inert until the same user returned), but
+    // the rewrite drops it so a subsequent visitor on the same tab cannot
+    // read the previous user's following/ignoring sets.
+    dispatch(resetFollowState());
 
     // Call server API logout to clear server-side session. The POST echoes
     // the CSRF token (audit N-22); postJsonWithCsrf refreshes the session

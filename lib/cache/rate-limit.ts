@@ -80,6 +80,10 @@ export interface RateLimitResult {
  *   (1m keepalive) that must be aged out (see audit N-09).
  * - steem/overseer  60/min/IP — analytics fire on every navigation; higher
  *   ceiling than the rest, still bounded.
+ * - steem/following 60/min/IP — a legitimate session seeds the full
+ *   following/ignoring sets at login (2 kinds, a handful of 1000-entry
+ *   pages each); 60/min leaves retry headroom while bounding per-IP
+ *   creation of the ~100KB cached entries behind the route.
  */
 export const RATE_LIMITS = {
   authChallenge: { key: 'auth:challenge', limit: 30, windowSeconds: 60 },
@@ -89,6 +93,7 @@ export const RATE_LIMITS = {
   steemBroadcast: { key: 'steem:broadcast', limit: 30, windowSeconds: 60 },
   search: { key: 'search', limit: 30, windowSeconds: 60 },
   steemOverseer: { key: 'steem:overseer', limit: 60, windowSeconds: 60 },
+  steemFollowing: { key: 'steem:following', limit: 60, windowSeconds: 60 },
 } as const satisfies Record<string, RateLimitRule>;
 
 const UNKNOWN_IP = 'unknown';

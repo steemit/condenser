@@ -3,7 +3,7 @@ import { waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import userReducer, { setUser } from '@/store/slices/userSlice';
-import globalReducer from '@/store/slices/globalSlice';
+import globalReducer, { receiveFollowList } from '@/store/slices/globalSlice';
 import { loginThunk, logoutThunk } from '@/store/thunks/authThunks';
 import type { AppDispatch, RootState } from '@/store';
 
@@ -56,6 +56,25 @@ describe('logoutThunk', () => {
 
     expect(store.getState().user.current).toEqual({});
     expect(store.getState().user.logged_out).toBe(true);
+  });
+
+  it('clears the follow state on logout (state hygiene beyond legacy)', async () => {
+    // Legacy LOGOUT never cleared global.follow (keyed by username, inert
+    // until the same user returned); the rewrite drops it so a subsequent
+    // visitor on the same tab cannot read the previous user's sets.
+    const store = makeStore();
+    store.dispatch(setUser({ username: 'alice' }));
+    store.dispatch(
+      receiveFollowList({ follower: 'alice', type: 'blog', accounts: ['bob'] })
+    );
+    store.dispatch(
+      receiveFollowList({ follower: 'alice', type: 'ignore', accounts: ['mallory'] })
+    );
+    expect(store.getState().global.follow?.getFollowingAsync?.alice).toBeDefined();
+
+    await store.dispatch(logoutThunk());
+
+    expect(store.getState().global.follow?.getFollowingAsync).toBeUndefined();
   });
 });
 

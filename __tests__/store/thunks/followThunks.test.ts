@@ -141,6 +141,83 @@ describe('loadFollowState', () => {
     expect(store.getState().global.follow!.getFollowingAsync!.alice.blog_result).toEqual(['bob']);
   });
 
+  it('skips a list already being loaded (hydration × login double dispatch)', async () => {
+    // Legacy loadFollows returns early on `<type>_loading` (FollowSaga.js);
+    // this collapses the window where useSessionHydration and loginThunk
+    // dispatch loadFollowState concurrently.
+    const releasers: Array<() => void> = [];
+    const fetchMock = vi.fn(
+      () =>
+        new Promise((resolve) => {
+          releasers.push(() =>
+            resolve({ ok: true, json: async () => [entry('bob', ['blog'])] })
+          );
+        })
+    );
+    vi.stubGlobal('fetch', fetchMock);
+    const store = makeStore();
+
+    const pending = store.dispatch(loadFollowState('alice'));
+    // Loading flags are set synchronously before the fetches suspend.
+    expect(store.getState().global.follow!.getFollowingAsync!.alice.blog_loading).toBe(true);
+    expect(store.getState().global.follow!.getFollowingAsync!.alice.ignore_loading).toBe(true);
+
+    // A second dispatch while the first is in flight must not fetch.
+    await store.dispatch(loadFollowState('alice'));
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+
+    releasers.forEach((release) => release());
+    await pending;
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    const followState = store.getState().global.follow!.getFollowingAsync!.alice;
+    expect(followState.blog_loading).toBe(false);
+    expect(followState.ignore_loading).toBe(false);
+    expect(followState.blog_result).toEqual(['bob']);
+    expect(followState.ignore_result).toEqual([]);
+  });
+
+  it('stops paging when the cursor does not advance (stalled RPC)', async () => {
+    // Two identical full pages: after page 2 the cursor repeats page 1's
+    // cursor — the loop must terminate instead of fetching forever.
+    const fullPage = Array.from({ length: 1000 }, (_, i) => entry(`user${i}`, ['blog']));
+    const urls = stubFollowingRoute({
+      blog: [fullPage, fullPage],
+      ignore: [[]],
+    });
+    const store = makeStore();
+
+    await store.dispatch(loadFollowState('alice'));
+
+    const blogUrls = urls.filter((u) => u.includes('type=blog'));
+    expect(blogUrls).toHaveLength(2);
+    expect(blogUrls[1]).toContain('start=user999');
+    // Whatever was collected before the stall is kept and landed.
+    const followState = store.getState().global.follow!.getFollowingAsync!.alice;
+    expect(followState.blog_result).toHaveLength(1000);
+    expect(followState.blog_loading).toBe(false);
+  });
+
+  it('stops at the page cap on an interminably long list and keeps collected data', async () => {
+    // 25 advancing full pages — more than the 20-page cap.
+    const fullPages = Array.from({ length: 25 }, (_, p) =>
+      Array.from({ length: 1000 }, (_, i) => entry(`p${p}u${i}`, ['blog']))
+    );
+    const urls = stubFollowingRoute({ blog: fullPages, ignore: [[]] });
+    const store = makeStore();
+
+    await store.dispatch(loadFollowState('alice'));
+
+    const blogUrls = urls.filter((u) => u.includes('type=blog'));
+    expect(blogUrls).toHaveLength(20); // MAX_PAGES
+    // Truncation is surfaced, not silent.
+    expect(console.error).toHaveBeenCalled();
+    // The data collected up to the cap is kept (no error thrown).
+    const followState = store.getState().global.follow!.getFollowingAsync!.alice;
+    expect(followState.blog_result).toHaveLength(20_000);
+    expect(followState.blog_loading).toBe(false);
+  });
+
   it('fetches nothing for an empty username', async () => {
     const urls = stubFollowingRoute({ blog: [[]], ignore: [[]] });
     const store = makeStore();

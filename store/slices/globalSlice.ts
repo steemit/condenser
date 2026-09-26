@@ -492,6 +492,9 @@ const globalSlice = createSlice({
     // Mirrors the `type + '_loading'` flag legacy FollowSaga sets while
     // loadFollowsLoop pages through the chain; Follow reads it to render a
     // loading state instead of a wrong default button.
+    // NOT part of the deprecated read-cache skeleton above: this is live
+    // interaction write-path state, kept current by loadFollowState (see
+    // PR #4046 for the rationale).
     followListLoading: (state, action: PayloadAction<{
       follower: string;
       type: 'blog' | 'ignore';
@@ -514,6 +517,9 @@ const globalSlice = createSlice({
     // `follow_inprogress` -> `follow.getFollowingAsync[account]` move that
     // sets `<type>_result`, `<type>_count` and clears `<type>_loading`),
     // dispatched by the loadFollowState thunk once paging completed.
+    // NOT part of the deprecated read-cache skeleton above: this is live
+    // interaction write-path state, kept current by loadFollowState (see
+    // PR #4046 for the rationale).
     receiveFollowList: (state, action: PayloadAction<{
       follower: string;
       type: 'blog' | 'ignore';
@@ -533,6 +539,14 @@ const globalSlice = createSlice({
       followData[`${type}_result`] = accounts;
       followData[`${type}_count`] = accounts.length;
       followData[`${type}_loading`] = false;
+    },
+    // Clears all per-follower follow state. Dispatched by logoutThunk as
+    // state hygiene: legacy LOGOUT never cleared global.follow (it was
+    // keyed by username and thus inert until the same user returned), but
+    // the rewrite drops it so a subsequent visitor on the same tab cannot
+    // read the previous user's following/ignoring sets.
+    resetFollowState: (state) => {
+      state.follow = undefined;
     },
     setPathname: (state, action: PayloadAction<string>) => {
       state.pathname = action.payload;
@@ -576,6 +590,7 @@ export const {
   updateFollowState,
   followListLoading,
   receiveFollowList,
+  resetFollowState,
   setPathname,
 } = globalSlice.actions;
 

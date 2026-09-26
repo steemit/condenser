@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import globalReducer, {
   followListLoading,
   receiveFollowList,
+  resetFollowState,
   updateFollowState,
 } from '@/store/slices/globalSlice';
 import type { GlobalState } from '@/store/slices/globalSlice';
@@ -157,6 +158,37 @@ describe('globalSlice follow state', () => {
       );
       expect(state.follow!.getFollowingAsync!.dave.blog_result).toEqual(['erin']);
       expect(state.follow!.getFollowingAsync!.alice.blog_result).toEqual(['bob']);
+    });
+
+    // Documented semantics (legacy merge parity, PR #4046): the chain
+    // snapshot replaces the whole per-kind list. An optimistic write that
+    // is still in flight when the snapshot lands is overwritten wholesale —
+    // the button bounces back even though the broadcast succeeded (the
+    // ≤30s cache window in the following route makes this reachable).
+    it('overwrites an in-flight optimistic write for the same follower (whole-list replacement)', () => {
+      let state = stateAfter(
+        undefined,
+        updateFollowState({ follower: 'alice', following: 'bob', what: ['blog'] })
+      );
+      // The chain snapshot does not include 'bob' yet.
+      state = stateAfter(
+        state,
+        receiveFollowList({ follower: 'alice', type: 'blog', accounts: ['carol'] })
+      );
+      const entry = state.follow!.getFollowingAsync!.alice;
+      expect(entry.blog_result).toEqual(['carol']);
+      expect(entry.blog_count).toBe(1);
+    });
+  });
+
+  describe('resetFollowState', () => {
+    it('clears all per-follower follow state', () => {
+      let state = stateAfter(
+        undefined,
+        updateFollowState({ follower: 'alice', following: 'bob', what: ['blog'] })
+      );
+      state = stateAfter(state, resetFollowState());
+      expect(state.follow).toBeUndefined();
     });
   });
 });

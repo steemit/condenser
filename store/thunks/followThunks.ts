@@ -20,6 +20,12 @@ import type { AppDispatch, RootState } from '../index';
 // (FollowSaga.js loadFollowsLoop default limit).
 const PAGE_LIMIT = 1000;
 
+// Guardrail the legacy recursion lacked (audit follow-up): a page cap. A
+// full page whose cursor never advances would otherwise page forever. 20
+// pages x 1000 entries covers the largest real following lists with margin
+// (the biggest accounts follow ~5k users).
+const MAX_PAGES = 20;
+
 type FollowKind = 'blog' | 'ignore';
 
 interface FollowEntry {
@@ -58,11 +64,17 @@ async function loadFollowList(
   username: string,
   type: FollowKind,
   dispatch: AppDispatch,
-  isLoaded: (type: FollowKind) => boolean
+  getState: () => RootState
 ): Promise<void> {
-  // Legacy loadFollows skips when `<type>_result` is already present — the
-  // in-memory map is kept fresh by updateFollowState's optimistic writes.
-  if (isLoaded(type)) return;
+  const entry = getState().global.follow?.getFollowingAsync?.[username];
+  // Legacy loadFollows returns early while `<type>_loading` is true
+  // (FollowSaga.js): this collapses the narrow window where session
+  // hydration and loginThunk dispatch loadFollowState concurrently, so the
+  // same list is never fetched twice.
+  if (entry?.[`${type}_loading`]) return;
+  // Legacy loadFollows then skips when `<type>_result` is already present —
+  // the in-memory map is kept fresh by updateFollowState's optimistic writes.
+  if (entry?.[`${type}_result`]) return;
 
   dispatch(followListLoading({ follower: username, type, loading: true }));
   try {
@@ -71,19 +83,31 @@ async function loadFollowList(
     const accounts = new Set<string>();
     let start = '';
     // Page with the last account name as the start cursor until a page
-    // comes back short — exactly legacy loadFollowsLoop's loop condition.
-    for (;;) {
-      const page = await fetchFollowingPage(username, start, type, PAGE_LIMIT);
-      for (const entry of page) {
+    // comes back short — exactly legacy loadFollowsLoop's loop condition —
+    // plus two guardrails the saga lacked: a page cap and a stall check.
+    for (let page = 1; ; page++) {
+      const result = await fetchFollowingPage(username, start, type, PAGE_LIMIT);
+      for (const e of result) {
         // Member semantics (the RPC already filters by kind; this mirrors
         // legacy's defensive whatList.forEach grouping).
-        if (entry.following && entry.what?.includes(type)) {
-          accounts.add(entry.following);
+        if (e.following && e.what?.includes(type)) {
+          accounts.add(e.following);
         }
       }
-      if (page.length < PAGE_LIMIT) break;
-      start = page[page.length - 1]?.following ?? '';
-      if (!start) break; // lost cursor — bail instead of looping forever
+      if (result.length < PAGE_LIMIT) break;
+      const nextStart = result[result.length - 1]?.following ?? '';
+      // Lost or stalled cursor (e.g. the RPC returning the same page for
+      // the same cursor): bail and keep what was already collected.
+      if (!nextStart || nextStart === start) break;
+      if (page >= MAX_PAGES) {
+        // Cap reached with a still-full page: keep the collected data and
+        // surface the truncation instead of paging (or looping) forever.
+        console.error(
+          `Follow list paging cap reached for ${username}/${type} after ${page} pages; keeping ${accounts.size} accounts`
+        );
+        break;
+      }
+      start = nextStart;
     }
     dispatch(
       receiveFollowList({ follower: username, type, accounts: [...accounts] })
@@ -107,14 +131,10 @@ export const loadFollowState = createAsyncThunk<
   { dispatch: AppDispatch; state: RootState }
 >('follow/loadFollowState', async (username, { dispatch, getState }) => {
   if (!username) return;
-  const isLoaded = (type: FollowKind) =>
-    Boolean(
-      getState().global.follow?.getFollowingAsync?.[username]?.[`${type}_result`]
-    );
   // Legacy forks both loads concurrently (UserSaga.js yield fork x2).
   await Promise.all(
     (['blog', 'ignore'] as const).map((type) =>
-      loadFollowList(username, type, dispatch, isLoaded)
+      loadFollowList(username, type, dispatch, getState)
     )
   );
 });

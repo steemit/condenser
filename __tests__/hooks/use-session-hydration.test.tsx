@@ -9,9 +9,12 @@ import {
   useSessionHydration,
 } from '@/hooks/use-session-hydration';
 import userReducer from '@/store/slices/userSlice';
+import globalReducer from '@/store/slices/globalSlice';
 
 function makeStore() {
-  return configureStore({ reducer: { user: userReducer } });
+  return configureStore({
+    reducer: { user: userReducer, global: globalReducer },
+  });
 }
 
 function wrapper(store: ReturnType<typeof makeStore>) {
@@ -20,8 +23,15 @@ function wrapper(store: ReturnType<typeof makeStore>) {
   };
 }
 
+/** Route fetch by URL: the session endpoint gets the given body, the
+ *  following endpoint (loadFollowState) gets an empty page. */
 function mockSessionResponse(body: unknown, ok = true) {
-  (fetch as Mock).mockResolvedValue({ ok, json: async () => body });
+  (fetch as Mock).mockImplementation(async (input: string) => {
+    if (input.startsWith('/api/steem/following')) {
+      return { ok: true, json: async () => [] };
+    }
+    return { ok, json: async () => body };
+  });
 }
 
 describe('useSessionHydration', () => {
@@ -50,6 +60,26 @@ describe('useSessionHydration', () => {
     });
   });
 
+  it('loads the follow state after restoring an authenticated session', async () => {
+    mockSessionResponse({
+      authenticated: true,
+      session: { username: 'alice', uid: 'uid-1' },
+    });
+    const store = makeStore();
+
+    renderHook(() => useSessionHydration(), { wrapper: wrapper(store) });
+
+    await waitFor(() => {
+      const follow = store.getState().global.follow?.getFollowingAsync?.alice;
+      return follow?.blog_result !== undefined && follow?.ignore_result !== undefined;
+    });
+    const calledUrls = (fetch as Mock).mock.calls.map((call) => String(call[0]));
+    expect(calledUrls).toContain('/api/auth/session');
+    expect(
+      calledUrls.filter((u: string) => u.startsWith('/api/steem/following?'))
+    ).toHaveLength(2);
+  });
+
   it('leaves the user logged out when the session is unauthenticated', async () => {
     mockSessionResponse({ authenticated: false, session: null });
     const store = makeStore();
@@ -62,6 +92,12 @@ describe('useSessionHydration', () => {
       });
     });
     expect(store.getState().user.current).toEqual({});
+    // Anonymous visitors never fetch follow lists.
+    expect(
+      (fetch as Mock).mock.calls.some((call) =>
+        String(call[0]).startsWith('/api/steem/following')
+      )
+    ).toBe(false);
   });
 
   it('leaves the user logged out when the fetch fails', async () => {

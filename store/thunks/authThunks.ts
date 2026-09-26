@@ -6,6 +6,8 @@
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setUser, loginError, setAuthority, logout, setTrackingId, generateTrackingId } from '../slices/userSlice';
+import { resetFollowState } from '../slices/globalSlice';
+import { loadFollowState } from './followThunks';
 import { clearStoredKey } from '@/lib/crypto/key-storage';
 import { postJsonWithCsrf } from '@/lib/api/csrf';
 import type { AppDispatch, RootState } from '../index';
@@ -75,6 +77,11 @@ export const loginThunk = createAsyncThunk<
           pub_keys_used: [],
         })
       );
+
+      // Legacy parity (UserSaga usernamePasswordLogin): after login the
+      // user's following/ignoring sets are loaded into global follow state
+      // so Follow/Mute buttons start from chain state.
+      dispatch(loadFollowState(finalUsername));
     } catch (error: unknown) {
       console.error('Login error:', error);
       const errorMessage =
@@ -101,6 +108,17 @@ export const logoutThunk = createAsyncThunk<void, void, { dispatch: AppDispatch 
 
     // Dispatch logout action
     dispatch(logout());
+
+    // State hygiene beyond legacy: LOGOUT never cleared global.follow (it
+    // is keyed by username and was inert until the same user returned), but
+    // the rewrite drops it so a subsequent visitor on the same tab cannot
+    // read the previous user's following/ignoring sets.
+    // Known race (accepted): an in-flight loadFollowState dispatched before
+    // logout can land its receiveFollowList after this reset and re-create
+    // the old user's follow entry. No UI path reads it (Follow.tsx keys by
+    // the current username), so the residue is inert like legacy's; a
+    // session-generation check is deferred.
+    dispatch(resetFollowState());
 
     // Call server API logout to clear server-side session. The POST echoes
     // the CSRF token (audit N-22); postJsonWithCsrf refreshes the session

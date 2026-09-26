@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import { useAppDispatch } from '@/store/hooks';
 import { setTrackingId, setUser } from '@/store/slices/userSlice';
 import { setUserPreferences } from '@/store/slices/appSlice';
+import { loadFollowState } from '@/store/thunks/followThunks';
 
 // One hydration attempt per page load is enough: the session cookie lives
 // for 30 days, and on failure the UI simply stays logged out until the next
@@ -67,6 +68,11 @@ export function useSessionHydration() {
             pass_auth: true,
           })
         );
+        // Legacy parity (UserSaga usernamePasswordLogin): a logged-in user's
+        // following/ignoring sets are loaded into global follow state right
+        // after identity is restored, so Follow/Mute buttons render the
+        // chain state instead of a wrong default.
+        dispatch(loadFollowState(username));
       })
       .catch(() => {
         // Network/session errors leave the UI logged out.

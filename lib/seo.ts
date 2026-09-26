@@ -269,14 +269,39 @@ export function buildAccountMetadata(
   const title = `@${accountname}`;
   const description = `The latest posts from ${name}. Follow me at @${accountname}. ${about}`;
 
+  // All ~11 profile sections (blog/posts/comments/replies/payout/feed/
+  // followers/followed/communities/...) previously emitted identical
+  // metadata with no canonical — a duplicate-content signal. Point every
+  // section at the profile root instead. The canonical is kept relative:
+  // this app sets no metadataBase, so Next.js emits it verbatim and crawlers
+  // resolve it against the served origin (correct on any host, independent
+  // of the SITE_ORIGIN constant).
+  const canonical = `/@${accountname}`;
+
+  // Legacy addAccountMeta emitted Twitter-card meta only — no OpenGraph for
+  // accounts. This is a minimal og:profile addition (title/url/type) aligned
+  // with the post-page og shape; og:url must be absolute per the OG spec.
+  const openGraph = {
+    title,
+    type: 'profile' as const,
+    url: `${SITE_ORIGIN}/@${accountname}`,
+    username: accountname,
+    description,
+    images: [profileImage],
+    siteName: 'Steemit',
+  };
+
   return {
     title,
     description,
     // Private/semi-private UI pages self-declare noindex (Google treats
     // noindex + follow:false as "neither index nor crawl links from here").
+    // In that mode canonical/og are omitted: noindex takes precedence over
+    // rel=canonical (Google guidance: do not combine the two signals).
     ...(options.noindex && {
       robots: { index: false, follow: false },
     }),
+    ...(!options.noindex && { alternates: { canonical }, openGraph }),
     twitter: {
       card: 'summary',
       site: '@steemit',

@@ -302,4 +302,49 @@ describe('buildAccountMetadata', () => {
     const meta = buildAccountMetadata('alice', null);
     expect(meta.robots).toBeUndefined();
   });
+
+  it('canonical points every section at the profile root (relative path)', () => {
+    const meta = buildAccountMetadata('alice', null);
+    // Relative: independent of the SITE_ORIGIN constant and of the served
+    // host; Next.js passes it through verbatim (no metadataBase is set).
+    expect(meta.alternates?.canonical).toBe('/@alice');
+  });
+
+  it('adds a minimal og:profile block (legacy had Twitter cards only)', () => {
+    const meta = buildAccountMetadata('alice', {
+      name: 'Alice A.',
+      about: 'Photographer',
+      profile_image: 'https://example.com/avatar.png',
+    });
+    expect(meta.openGraph).toMatchObject({
+      title: '@alice',
+      type: 'profile',
+      url: `${SITE_ORIGIN}/@alice`,
+      username: 'alice',
+      description:
+        'The latest posts from Alice A.. Follow me at @alice. Photographer',
+      images: ['https://example.com/avatar.png'],
+      siteName: 'Steemit',
+    });
+  });
+
+  it('proxies a first-party og:image through the image proxy (audit N-17)', () => {
+    const meta = buildAccountMetadata('alice', {
+      profile_image: 'https://steemitimages.com/u/alice/avatar/large',
+    });
+    const ogImage = String(
+      (meta.openGraph?.images as { url?: string }[] | undefined)?.[0]?.url ??
+        meta.openGraph?.images
+    );
+    expect(ogImage).toMatch(/^https:\/\/steemitimages\.com\/p\//);
+  });
+
+  it('omits canonical and og on noindex pages (conflicting signals)', () => {
+    const meta = buildAccountMetadata('alice', null, { noindex: true });
+    expect(meta.robots).toEqual({ index: false, follow: false });
+    expect(meta.alternates).toBeUndefined();
+    expect(meta.openGraph).toBeUndefined();
+    // Twitter card still present (chat-app unfurling, independent of index).
+    expect(meta.twitter?.title).toBe('@alice');
+  });
 });

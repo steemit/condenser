@@ -10,6 +10,9 @@ vi.mock('@/lib/steem/client', () => ({
 import UserProfileSectionPage, {
   generateMetadata,
 } from '@/app/(main)/user/[username]/[section]/page';
+import UserProfileRootPage, {
+  generateMetadata as generateRootMetadata,
+} from '@/app/(main)/user/[username]/page';
 
 const PROFILE_FIXTURE = {
   metadata: {
@@ -55,6 +58,27 @@ describe('UserProfileSectionPage generateMetadata (robots / indexability)', () =
     expect(meta.robots).toBeUndefined();
   });
 
+  it.each(['blog', 'comments', 'settings', 'notifications'])(
+    'canonical of every section points at the profile root /@alice (%s)',
+    async (section) => {
+      const meta = await generateMetadata(sectionParams('@alice', section));
+      if (section === 'settings' || section === 'notifications') {
+        // noindex pages omit canonical (noindex wins over rel=canonical).
+        expect(meta.alternates).toBeUndefined();
+      } else {
+        expect(meta.alternates?.canonical).toBe('/@alice');
+      }
+    }
+  );
+
+  it('carries og:profile metadata on public sections', async () => {
+    const meta = await generateMetadata(sectionParams('@alice', 'blog'));
+    expect(meta.openGraph).toMatchObject({
+      type: 'profile',
+      title: '@alice',
+    });
+  });
+
   it('still emits noindex when the profile fetch fails', async () => {
     getProfileMock.mockRejectedValue(new Error('rpc down'));
     const meta = await generateMetadata(sectionParams('@alice', 'settings'));
@@ -66,3 +90,18 @@ describe('UserProfileSectionPage generateMetadata (robots / indexability)', () =
   });
 });
 
+describe('UserProfilePage (root) generateMetadata', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    getProfileMock.mockResolvedValue(PROFILE_FIXTURE);
+  });
+
+  it('canonical points at the profile root itself', async () => {
+    const meta = await generateRootMetadata({
+      params: Promise.resolve({ username: '@alice' }),
+    });
+    expect(meta.alternates?.canonical).toBe('/@alice');
+    expect(meta.robots).toBeUndefined();
+    expect(typeof UserProfileRootPage).toBe('function');
+  });
+});

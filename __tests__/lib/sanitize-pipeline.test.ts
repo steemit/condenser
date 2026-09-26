@@ -133,7 +133,10 @@ function expectNoScriptTag(html: string): void {
 
 /** No real tag carries an on* event-handler attribute. */
 function expectNoEventHandlers(html: string): void {
-  expect(html).not.toMatch(/<[a-zA-Z][^>]*[\s"']on[a-zA-Z]+\s*=/i);
+  // The separator class includes '/' because HTML5 tokenization treats a
+  // solidus in a tag as an attribute separator: `<img src=x/onerror=…>` is
+  // an onerror attribute, not part of the src value (#4042 leftover).
+  expect(html).not.toMatch(/<[a-zA-Z][^>]*[\s"'\/]on[a-zA-Z]+\s*=/i);
 }
 
 /**
@@ -144,8 +147,10 @@ function expectNoEventHandlers(html: string): void {
  * https:// — e.g. href="https://javascript:alert(1)" — which is inert.)
  */
 function expectNoActiveScriptUrl(html: string): void {
+  // Same '/' separator note as expectNoEventHandlers: `<a/href=…>` is an
+  // href attribute under HTML5 tokenization rules.
   expect(html).not.toMatch(
-    /<[a-zA-Z][^>]*\s(href|src)\s*=\s*["']?\s*(javascript|vbscript|data:text\/html)\s*:/i
+    /<[a-zA-Z][^>]*[\s"'\/](href|src)\s*=\s*["']?\s*(javascript|vbscript|data:text\/html)\s*:/i
   );
 }
 
@@ -515,15 +520,25 @@ describe('sanitize pipeline: mXSS vectors', () => {
     expectNoEventHandlers(html);
   });
 
-  // 4.6 <style><![CDATA[…]]></style> → style (not an allowed tag) dropped
-  it('4.6 drops a style/CDATA payload without emitting <style', () => {
+  // 4.6 <style><![CDATA[…]]></style> → style (not an allowed tag) dropped.
+  //     The CDATA absence check is case-insensitive: a mixed-case marker
+  //     (`<![CDaTa[`) surviving to the output would be just as live (#4042
+  //     leftover regex tightening).
+  it('4.6 drops style/CDATA payloads without emitting <style or any-case CDATA', () => {
     const { html } = renderPost(
       '<style><![CDATA[<img src=x onerror=alert(1)>]]></style>'
     );
     expect(html).not.toContain('<style');
-    expect(html).not.toContain('cdata');
+    expect(html).not.toMatch(/cdata/i);
     expectNoEventHandlers(html);
     expect(html).not.toContain('onerror');
+
+    const mixed = renderPost(
+      '<STYLE><![CDaTa[<img src=x onerror=alert(1)>]]></STYLE>'
+    );
+    expect(mixed.html).not.toMatch(/<style/i);
+    expect(mixed.html).not.toMatch(/cdata/i);
+    expectNoEventHandlers(mixed.html);
   });
 
   // 4.7 svg foreignObject + iframe srcdoc → srcdoc is not an allowed iframe
@@ -615,6 +630,36 @@ describe('sanitize pipeline: DOM clobbering', () => {
     const { html } = renderPost('<img name="body" src="https://example.com/x.png">');
     expect(html).not.toMatch(/\sname\s*=/i);
     expect(html).toContain('src="https://example.com/x.png"');
+  });
+
+  // 5.3/5.4 pin the S7 gap from audit #4042: tags WITHOUT a transformTags
+  // entry (p, h1, …) also have no allowedAttributes entry, so ALL their
+  // attributes are dropped. A future widening of allowedAttributes (e.g.
+  // adding a global id, or re-enabling handlers on some tag) must turn
+  // these red — previously these relaxations would have gone unpinned.
+  it('5.3 strips id from a non-transform tag (<p id="location">)', () => {
+    const { html } = renderPost('<p id="location">clobber</p>');
+    expect(html).not.toMatch(/\sid\s*=\s*["']?location/i);
+    expect(html).toContain('<p>clobber</p>');
+  });
+
+  it('5.4 strips event handlers from a non-transform tag (<h1 onclick>)', () => {
+    const { html } = renderPost('<h1 onclick="alert(1)">Title</h1>');
+    expectNoEventHandlers(html);
+    expect(html).not.toContain('onclick');
+    expect(html).toContain('<h1>Title</h1>');
+  });
+
+  // 5.5 the HTML5 solidus attribute separator must not smuggle an attribute
+  // past the filters (#4042 leftover regex tightening): `<img src=x/onerror=…`
+  // is an onerror attribute under HTML5 tokenization.
+  it('5.5 neutralizes solidus-separated attribute payloads', () => {
+    const { html } = renderPost('<html><img src=x/onerror=alert(1)></html>');
+    expectNoEventHandlers(html);
+    expect(html).not.toContain('<img');
+    const { html: mdRoute } = renderPost('head\n\n<a/href="javascript:alert(1)">x</a>\n\ntail');
+    expectNoActiveScriptUrl(mdRoute);
+    expect(mdRoute).not.toContain('<a');
   });
 });
 

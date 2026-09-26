@@ -80,6 +80,13 @@ NEXT_PUBLIC_IMAGE_PROXY_PREFIX=https://steemitimages.com/
 # `next dev`.
 NEXT_PUBLIC_WALLET_URL=https://steemitwallet.com
 
+# This site's own origin for absolute SEO-metadata URLs (og:url, avatar and
+# share-image fallbacks; lib/seo.ts SITE_ORIGIN). Self-hosted deployments
+# must set it, or their og:url points at steemit.com. Server-side runtime
+# read (all consumers are generateMetadata RSC shells; the root layout is
+# force-dynamic) — changing it needs no rebuild. Default: https://steemit.com
+SITE_ORIGIN=https://steemit.com
+
 # Image upload endpoint for the settings page profile/cover upload (legacy
 # $STM_Config.upload_image). The client signs the file with the posting key
 # and POSTs it here. Read at request time and inlined into the SSR HTML (like

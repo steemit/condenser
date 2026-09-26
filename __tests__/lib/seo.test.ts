@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   SITE_ORIGIN,
   buildAccountMetadata,
@@ -350,5 +350,28 @@ describe('buildAccountMetadata', () => {
     expect(meta.openGraph).toBeUndefined();
     // Twitter card still present (chat-app unfurling, independent of index).
     expect(meta.twitter?.title).toBe('@alice');
+  });
+});
+
+describe('SITE_ORIGIN env override (X9)', () => {
+  it('defaults to https://steemit.com when the env var is unset', () => {
+    expect(SITE_ORIGIN).toBe('https://steemit.com');
+  });
+
+  it('reads SITE_ORIGIN at module load and strips trailing slashes', async () => {
+    vi.resetModules();
+    vi.stubEnv('SITE_ORIGIN', 'https://condenser.example.com/');
+    try {
+      const fresh = await import('@/lib/seo');
+      expect(fresh.SITE_ORIGIN).toBe('https://condenser.example.com');
+      // og:url and fallback images follow the configured origin.
+      const meta = fresh.buildAccountMetadata('alice', null);
+      expect(meta.openGraph?.url).toBe(
+        'https://condenser.example.com/@alice'
+      );
+    } finally {
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
   });
 });

@@ -20,10 +20,16 @@ import type { ProfileMetadata } from '@/types/steem';
 /**
  * Origin of this site, used for absolute URLs in metadata (avatar fallback
  * image, og:url base). Legacy read state.app.site_domain (default
- * steemit.com); this app has no site-domain env var, so default to the
- * production origin.
+ * steemit.com); here it comes from the SITE_ORIGIN env var so a self-hosted
+ * deployment's og:url no longer points at steemit.com. Server-only by
+ * design: every consumer is a generateMetadata RSC shell, and the root
+ * layout is force-dynamic, so this is a per-request runtime value —
+ * deliberately NOT NEXT_PUBLIC_ (nothing client-side reads it, and a
+ * non-public var can be changed without rebuilding the bundle). Trailing
+ * slashes are stripped so `${SITE_ORIGIN}/path` cannot double-slash.
  */
-export const SITE_ORIGIN = 'https://steemit.com';
+export const SITE_ORIGIN = (process.env.SITE_ORIGIN || 'https://steemit.com')
+  .replace(/\/+$/, '');
 
 /**
  * Shared robots directive for private pages: neither index the page nor

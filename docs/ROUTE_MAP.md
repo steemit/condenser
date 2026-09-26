@@ -102,8 +102,8 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
 |---|---|---|
 | `/welcome` | `Welcome` | Implemented at `/welcome` (`app/(main)/welcome/page.tsx`) |
 | `/faq.html`, `/privacy.html`, `/tos.html` | `Faq` / `Privacy` / `Tos` | Implemented at `/faq` / `/privacy` / `/tos`; `.html` URLs 308-redirect (proxy.ts `LEGACY_HTML_ALIASES`, so security headers ride along) |
-| `/about.html`, `/support.html` | `About` / `Support` | Not migrated — the URLs end in the known `.html` static extension, so the proxy skips them and they 404 |
-| `/login.html`, `/submit.html` | `Login` / `SubmitPost` | Replaced by `/login` and `/submit`; `/login.html` 308-redirects to `/login` (proxy.ts `LEGACY_HTML_ALIASES`, evaluated before the `.html` static-asset skip), `/submit.html` is not redirected and 404s (`.html` static extension) |
+| `/about.html`, `/support.html` | `About` / `Support` | Not migrated. The proxy skips them (`.html` is a known static extension), but that only bypasses the proxy's rewrite chain — the App Router's dynamic `[sort]` route still matches the segment, so they serve **HTTP 200 with the in-shell not-found view** (SortFeed renders `NotFound` for an unknown sort), not a 404 status (pre-existing on base and this branch; live-verified 2026-09) |
+| `/login.html`, `/submit.html` | `Login` / `SubmitPost` | Replaced by `/login` and `/submit`; `/login.html` 308-redirects to `/login` (proxy.ts `LEGACY_HTML_ALIASES`, evaluated before the `.html` static-asset skip). `/submit.html` is not aliased: the proxy skips it (`.html` static extension) and the `[sort]` route serves it as HTTP 200 with the in-shell not-found view — same pre-existing behavior as `/about.html` above, not a 404 status |
 | `/tags` | `TagsIndex` | Not migrated — 404 |
 | `/rewards` | `Rewards` | Not migrated — 404 |
 | `/<tag>/@user/permlink.json` | `PostJson` | Not migrated — ends in the known `.json` static extension, proxy skips → 404 |
@@ -158,12 +158,15 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
   (e.g. branch 3's `/@user/feed/`) still rewrite without the extra hop.
 - **Static-extension URLs that legacy routed**: paths ending in a known
   static extension (`STATIC_ASSET_RE`) are skipped before any route
-  matching, but legacy had no such check. `/@user.md` matched legacy's
-  `<account>` regex (`@[\w.\d-]+` admits dots) and rendered the profile;
-  here it is skipped as a static file and 404s. Tag feeds are affected the
-  same way: `/trending/foo.md` was a legacy CategoryFilters feed (`<tag>`
-  `[\w.-]{1,32}` admits dots) but 404s here. (The `.json` variants are a
-  separate, intentional gap — legacy served PostJson/UserJson API stubs,
+  matching, but legacy had no such check — and the skip only bypasses the
+  proxy, not the App Router's own dynamic routes. `/@user.md` matched
+  legacy's `<account>` regex (`@[\w.\d-]+` admits dots) and rendered the
+  profile; here it falls through to the `[sort]` route, which renders the
+  in-shell not-found view (HTTP 200 — no profile). Tag feeds, however,
+  still work exactly like legacy: `/trending/foo.md` falls through to the
+  `[sort]/[tag]` route and renders the `foo.md` tag feed (200). Both are
+  pre-existing behaviors (live-verified 2026-09). (The `.json` variants are
+  a separate, intentional gap — legacy served PostJson/UserJson API stubs,
   see "Intentionally absent legacy routes".)
 - **`/roles/<tag>` tag charset**: branch 1.5 accepts any non-slash segment
   (`[^/]+`), so `/roles/@foo` passes through to the roles page (which

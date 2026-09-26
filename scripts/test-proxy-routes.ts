@@ -26,7 +26,7 @@ const testCases = [
   { path: '/_next/static/test.js', expected: 'next', description: 'Static file' },
   { path: '/static/logo.png', expected: 'next', description: 'Path under /static/' },
   { path: '/404', expected: 'next', description: 'Explicit 404 page is skipped by proxy' },
-  { path: '/about.html', expected: 'next', description: 'Path ending in a known static extension (.html) is skipped by proxy (renders 404 via not-found)' },
+  { path: '/about.html', expected: 'next', description: 'Path ending in a known static extension (.html) is skipped by proxy (the router [sort] route then renders the in-shell not-found view with a 200 — see docs/ROUTE_MAP.md, pre-existing)' },
   { path: '/welcome', expected: 'next', description: 'Welcome page (reserved, pass-through to app/(main)/welcome)' },
   { path: '/faq', expected: 'next', description: 'FAQ page (reserved, pass-through to app/(main)/faq)' },
   { path: '/privacy', expected: 'next', description: 'Privacy page (reserved, pass-through to app/(main)/privacy)' },

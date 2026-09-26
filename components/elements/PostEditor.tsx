@@ -90,6 +90,8 @@ function buildJsonMetadata(opts: {
   tags: string[];
   category: string;
   html: string;
+  /** Raw-HTML post (body wrapped in <html>…</html>): format is 'html'. */
+  isHtml?: boolean;
 }): string {
   const rtags = htmlReady(opts.html, { mutate: false });
 
@@ -111,7 +113,7 @@ function buildJsonMetadata(opts: {
   if (rtags.images.size) meta.image = Array.from(rtags.images);
   if (rtags.links.size) meta.links = Array.from(rtags.links);
   meta.app = 'condenser/0.1';
-  if (opts.isStory) meta.format = 'markdown';
+  if (opts.isStory) meta.format = opts.isHtml ? 'html' : 'markdown';
   return JSON.stringify(meta);
 }
 
@@ -271,14 +273,32 @@ export default function PostEditor({
     // Render once — the tag validation here and buildJsonMetadata below
     // consume the same output (single render, single rtags pass).
     const trimmedBody = body.trim();
-    const renderedHtml = md.render(trimmedBody);
+
+    // Raw-HTML post mode (legacy ReplyEditor.jsx:1180 isHtmlTest /
+    // 1383-1399, #4044 leftover): a body that begins with <html> is
+    // broadcast verbatim (no markdown rendering), must be wrapped in
+    // <html>…</html> end to end, and its wrapper <html> tag is exempt from
+    // the rtags whitelist below — MarkdownViewer still renders this shape
+    // (its own raw-HTML post detection), so submissions must not be
+    // rejected for it.
+    const isHtml = /^<html>/.test(trimmedBody);
+    if (isHtml && !/^<html>[\s\S]*<\/html>$/.test(trimmedBody)) {
+      setError(t('reply_editor.html_wrapper_required'));
+      return;
+    }
+
+    const renderedHtml = isHtml ? trimmedBody : md.render(trimmedBody);
 
     // Legacy ReplyEditor.jsx:1392-1406 (audit N-18): any HTML tag the
     // sanitizer would strip must be removed BEFORE broadcasting, so the
     // stored body and the rendered view never diverge. Applies to comments,
-    // stories and edits alike — they share this submit path.
+    // stories and edits alike — they share this submit path. The one
+    // exemption is the <html> wrapper of a raw-HTML post (legacy:
+    // `if (isHtml) rtags.htmltags.delete('html')`).
     const disallowedTags = [...htmlReady(renderedHtml, { mutate: false }).htmltags]
-      .filter((tag) => !allowedTags.includes(tag));
+      .filter(
+        (tag) => !allowedTags.includes(tag) && !(isHtml && tag === 'html')
+      );
     if (disallowedTags.length > 0) {
       setError(
         t('reply_editor.remove_html_elements', {
@@ -313,6 +333,7 @@ export default function PostEditor({
         tags: effectiveTags,
         category: cat,
         html: renderedHtml,
+        isHtml,
       });
 
       // Legacy ReplyEditor.jsx:1510 — record the comment action at

@@ -412,7 +412,8 @@
     "submitting": "Submitting...",
     "markdown_hint": "Markdown is supported. Use **bold**, *italic*, [links](url), etc.",
     "signing_key_expired": "Your signing key has expired. Please log in again to post.",
-    "remove_html_elements": "Please remove the following HTML elements from your post: {tags}"
+    "remove_html_elements": "Please remove the following HTML elements from your post: {tags}",
+    "html_wrapper_required": "HTML posts must begin with '<html>' and end with '</html>'"
   },
   "beneficiary_selector_jsx": {
     "header": "Who should receive any rewards?",

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getProfile } from '@/lib/steem/client';
 import { normalizeUsername } from '@/lib/utils/username';
-import { buildAccountMetadata, type SeoProfile } from '@/lib/seo';
+import { buildAccountMetadata, NOINDEX_ROBOTS, type SeoProfile } from '@/lib/seo';
 import UserSectionClient from './UserSectionClient';
 
 /**
@@ -23,19 +23,33 @@ interface BridgeProfile {
   metadata?: { profile?: SeoProfile };
 }
 
+/**
+ * Sections that render account UI instead of public content: settings is the
+ * own-account settings editor (gated to its owner) and notifications is the
+ * signed-in user's inbox. Both are emitted with robots noindex. Legacy had no
+ * noindex anywhere, but these pages carry no indexable content; every other
+ * section (blog, comments, followers, ...) stays indexable for legacy parity.
+ */
+const PRIVATE_SECTIONS = new Set(['settings', 'notifications']);
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<PageParams>;
 }): Promise<Metadata> {
-  const { username } = await params;
+  const { username, section } = await params;
   const accountname = normalizeUsername(username).toLowerCase();
+  // Case-insensitive to match proxy.ts section routing (defense in depth);
+  // private sections stay noindex even on the fetch-failure fallback.
+  const isPrivate = PRIVATE_SECTIONS.has(section.toLowerCase());
   try {
     const profile = (await getProfile({ account: accountname })) as BridgeProfile | null;
-    return buildAccountMetadata(accountname, profile?.metadata?.profile ?? null);
+    return buildAccountMetadata(accountname, profile?.metadata?.profile ?? null, {
+      noindex: isPrivate,
+    });
   } catch (error) {
     console.error('generateMetadata: failed to fetch profile:', error);
-    return { title: 'Steemit' };
+    return isPrivate ? { title: 'Steemit', robots: NOINDEX_ROBOTS } : { title: 'Steemit' };
   }
 }
 

@@ -24,6 +24,16 @@ import { proxifyImageUrl } from '@/lib/media/proxify-url';
 export const SITE_ORIGIN = 'https://steemit.com';
 
 /**
+ * Shared robots directive for private pages: neither index the page nor
+ * crawl its links (rendered as `noindex, nofollow`). Used by
+ * buildAccountMetadata and the page-level fetch-failure fallbacks.
+ */
+export const NOINDEX_ROBOTS: NonNullable<Metadata['robots']> = {
+  index: false,
+  follow: false,
+};
+
+/**
  * Hosts whose canonical_url json_metadata values are honored (audit N-17).
  *
  * Legacy (CanonicalLinker.read_md_canonical) accepted ANY absolute http(s)
@@ -239,10 +249,24 @@ export interface SeoProfile {
   profile_image?: string;
 }
 
+/** Options for buildAccountMetadata. */
+export interface AccountMetadataOptions {
+  /**
+   * Emit robots noindex for private/semi-private account UI pages
+   * (settings, notifications). Legacy had no noindex anywhere, but these
+   * sections render account UI rather than public content, so they are
+   * excluded from indexing. Canonical/OpenGraph are omitted in this mode:
+   * noindex takes precedence over rel=canonical (Google guidance: do not
+   * combine the two signals on the same page).
+   */
+  noindex?: boolean;
+}
+
 /** Legacy addAccountMeta mapped to the Next.js Metadata API. */
 export function buildAccountMetadata(
   accountname: string,
-  profile: SeoProfile | null
+  profile: SeoProfile | null,
+  options: AccountMetadataOptions = {}
 ): Metadata {
   const name = profile?.name || accountname;
   const about = profile?.about || 'Steemit: Communities Without Borders.';
@@ -255,9 +279,38 @@ export function buildAccountMetadata(
   const title = `@${accountname}`;
   const description = `The latest posts from ${name}. Follow me at @${accountname}. ${about}`;
 
+  // All ~11 profile sections (blog/posts/comments/replies/payout/feed/
+  // followers/followed/communities/...) previously emitted identical
+  // metadata with no canonical — a duplicate-content signal. Point every
+  // section at the profile root instead. The canonical is kept relative:
+  // this app sets no metadataBase, so Next.js emits it verbatim and crawlers
+  // resolve it against the served origin (correct on any host, independent
+  // of the SITE_ORIGIN constant). encodeURIComponent is defense in depth
+  // (the /@ prefix already blocks scheme injection).
+  const canonical = `/@${encodeURIComponent(accountname)}`;
+
+  // Legacy addAccountMeta emitted Twitter-card meta only — no OpenGraph for
+  // accounts. This is a minimal og:profile addition (title/url/type) aligned
+  // with the post-page og shape; og:url must be absolute per the OG spec.
+  const openGraph: NonNullable<Metadata['openGraph']> = {
+    title,
+    type: 'profile',
+    url: `${SITE_ORIGIN}/@${encodeURIComponent(accountname)}`,
+    username: accountname,
+    description,
+    images: [profileImage],
+    siteName: 'Steemit',
+  };
+
   return {
     title,
     description,
+    // Private/semi-private UI pages self-declare noindex. In that mode
+    // canonical/og are omitted — see AccountMetadataOptions.noindex.
+    ...(options.noindex && {
+      robots: NOINDEX_ROBOTS,
+    }),
+    ...(!options.noindex && { alternates: { canonical }, openGraph }),
     twitter: {
       card: 'summary',
       site: '@steemit',

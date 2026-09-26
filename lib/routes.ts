@@ -60,7 +60,7 @@ export const SORT_TYPES: readonly string[] = [
 // access (legacy ResolveRoute.js has no such routes — its regexes match at
 // most three segments with an @-prefixed account). The guard's sole
 // @-exemption (the trailing-slash Post form /<prefix>/@user/<permlink>/)
-// is derived from this same list; see proxy.ts.
+// is derived from this same list; see INTERNAL_AT_EXEMPT_RE below.
 // Members are interpolated into regex alternations via join('|') — the
 // same derivation pattern as SORT_TYPES (PrimaryNavigation SORT_TAG_RE) —
 // so they must stay regex-safe (word characters and hyphens only);
@@ -68,6 +68,30 @@ export const SORT_TYPES: readonly string[] = [
 export const INTERNAL_ROUTE_PREFIXES: readonly string[] = [
   'post', 'post-no-category', 'user',
 ];
+
+// Internal rewrite targets (first path segment), derived from
+// INTERNAL_ROUTE_PREFIXES above. Consumed by proxy.ts's internal-target
+// guard; __tests__/lib/routes.test.ts asserts against the real object that
+// it stays segment-bounded, so /poster/x can never match as /post/er/x.
+// Pure module-level RegExp construction — no runtime-specific imports, so
+// sharing this between the edge proxy and client components is safe.
+export const INTERNAL_TARGET_RE = new RegExp(
+  `^/(?:${INTERNAL_ROUTE_PREFIXES.join('|')})(?:/|$)`
+);
+
+// The proxy guard's sole @-exemption: the exact Post form
+// /<prefix>/@<account>/<permlink> (exactly three segments, second one
+// @-prefixed, optional trailing slash). Proxy branch 2 does not match
+// trailing slashes, so e.g. /post/@user/permlink/ must pass through to
+// Next's implicit 308 normalization, which drops the slash and re-enters
+// the proxy at branch 2 as a legacy Post URL. Slash-less three-segment @
+// forms (/post/@a/p, /user/@alice/blog) never reach the guard — branch 2
+// consumes them first. Every other @-containing form under these prefixes
+// (four segments like /post/<cat>/@u/pl, or bare /user/@alice) has no
+// legacy route and is 404ed by the guard.
+export const INTERNAL_AT_EXEMPT_RE = new RegExp(
+  `^/(?:${INTERNAL_ROUTE_PREFIXES.join('|')})/@[^/]+/[^/]+/?$`
+);
 
 /**
  * True for post detail URLs in their public (browser) form:

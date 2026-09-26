@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  INTERNAL_AT_EXEMPT_RE,
   INTERNAL_ROUTE_PREFIXES,
+  INTERNAL_TARGET_RE,
   isPostPathname,
   PROFILE_SECTIONS,
   SORT_TYPES,
@@ -55,32 +57,27 @@ describe('isPostPathname (shared post-URL matcher)', () => {
     }
   });
 
-  it('derives segment-bounded alternations from INTERNAL_ROUTE_PREFIXES (as the proxy guard does)', () => {
-    // proxy.ts builds INTERNAL_TARGET_RE / INTERNAL_AT_EXEMPT_RE from the
-    // same join('|') derivation — assert the alternation stays
-    // segment-bounded so /poster/x can never match as /post/er/x.
-    const targetRe = new RegExp(
-      `^/(?:${INTERNAL_ROUTE_PREFIXES.join('|')})(?:/|$)`
-    );
+  it('keeps the proxy internal-target guard regexes segment-bounded (real objects)', () => {
+    // INTERNAL_TARGET_RE / INTERNAL_AT_EXEMPT_RE are the exact objects
+    // proxy.ts's guard uses — assert against them directly so a derivation
+    // change here cannot diverge from the tested behavior.
     for (const prefix of INTERNAL_ROUTE_PREFIXES) {
-      expect(targetRe.test(`/${prefix}`)).toBe(true);
-      expect(targetRe.test(`/${prefix}/a/b`)).toBe(true);
+      expect(INTERNAL_TARGET_RE.test(`/${prefix}`)).toBe(true);
+      expect(INTERNAL_TARGET_RE.test(`/${prefix}/a/b`)).toBe(true);
     }
-    expect(targetRe.test('/poster/a')).toBe(false);
-    expect(targetRe.test('/post-x/a')).toBe(false);
-    expect(targetRe.test('/users/alice')).toBe(false);
+    // Segment-bounded alternation: /poster/x must never match as /post/er/x.
+    expect(INTERNAL_TARGET_RE.test('/poster/a')).toBe(false);
+    expect(INTERNAL_TARGET_RE.test('/post-x/a')).toBe(false);
+    expect(INTERNAL_TARGET_RE.test('/users/alice')).toBe(false);
 
     // The @-exemption: exactly three segments (optional trailing slash),
     // second one @-prefixed — the trailing-slash Post re-entry form only.
-    const exemptRe = new RegExp(
-      `^/(?:${INTERNAL_ROUTE_PREFIXES.join('|')})/@[^/]+/[^/]+/?$`
-    );
     for (const prefix of INTERNAL_ROUTE_PREFIXES) {
-      expect(exemptRe.test(`/${prefix}/@a/p`)).toBe(true);
-      expect(exemptRe.test(`/${prefix}/@a/p/`)).toBe(true);
+      expect(INTERNAL_AT_EXEMPT_RE.test(`/${prefix}/@a/p`)).toBe(true);
+      expect(INTERNAL_AT_EXEMPT_RE.test(`/${prefix}/@a/p/`)).toBe(true);
     }
-    expect(exemptRe.test('/post/a/@b/c')).toBe(false); // four segments
-    expect(exemptRe.test('/user/@alice')).toBe(false); // two segments
-    expect(exemptRe.test('/user/@alice/blog/extra')).toBe(false);
+    expect(INTERNAL_AT_EXEMPT_RE.test('/post/a/@b/c')).toBe(false); // four segments
+    expect(INTERNAL_AT_EXEMPT_RE.test('/user/@alice')).toBe(false); // two segments
+    expect(INTERNAL_AT_EXEMPT_RE.test('/user/@alice/blog/extra')).toBe(false);
   });
 });

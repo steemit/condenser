@@ -8,10 +8,9 @@ import { FeedLayout } from '@/components/layout/FeedLayout';
 import NotFound from '@/components/NotFound';
 
 /**
- * Encode a URL path segment the way the other tag-URL builders do (submit
- * page, FeedSortDropdown): encodeURIComponent, but keeping the path-legal
- * '@' literal. The proxy decodes %40 on the way in, yet the canonical
- * browser form — and what client-side matchers (isPostPathname,
+ * Encode a URL path segment: encodeURIComponent, but keeping the
+ * path-legal '@' literal. The proxy decodes %40 on the way in, yet the
+ * canonical browser form — and what client-side matchers (isPostPathname,
  * PrimaryNavigation) and PostFull's post links use — is the literal
  * '@user', so the redirect target must not encode it to %40user.
  */

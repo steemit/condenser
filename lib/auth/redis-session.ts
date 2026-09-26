@@ -50,12 +50,23 @@ function getRedisClient(): Redis | null {
       }
 
       // Test connection
-      redisClient.on('error', (error) => {
+      const client = redisClient;
+      client.on('error', (error) => {
         console.error('Redis connection error:', error);
-        redisClient = null; // Fallback to JWT
+        // Retire the errored client, not just the singleton slot (S9):
+        // nulling redisClient alone leaks the connection — ioredis keeps
+        // retrying forever while the next getRedisClient() call mints a
+        // second client. Quit this one (graceful QUIT when the link is
+        // usable, force-close when it is not) and only clear the singleton
+        // if this client is still the current one (a stale client's error
+        // must not null a newer instance that replaced it).
+        if (redisClient === client) {
+          redisClient = null; // Fallback to JWT
+        }
+        void client.quit().catch(() => client.disconnect());
       });
 
-      redisClient.on('connect', () => {
+      client.on('connect', () => {
         console.log('Redis session store connected');
       });
     } catch (error) {

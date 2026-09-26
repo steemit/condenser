@@ -76,3 +76,78 @@ describe('lib/auth/redis-session keyPrefix (S8 split)', () => {
     );
   });
 });
+
+describe('lib/auth/redis-session error retirement (S9)', () => {
+  beforeEach(() => {
+    vi.resetModules();
+    vi.stubEnv('REDIS_HOST', 'localhost');
+  });
+
+  afterEach(() => {
+    vi.doUnmock('ioredis');
+    vi.unstubAllEnvs();
+  });
+
+  it('quits the errored client and constructs a fresh one on the next call', async () => {
+    const first = makeClient();
+    const second = makeClient();
+    let n = 0;
+    const ctor = vi.fn(function MockRedis() {
+      return n++ === 0 ? first : second;
+    });
+    vi.doMock('ioredis', () => ({ Redis: ctor }));
+    const { isRedisAvailable } = await import('@/lib/auth/redis-session');
+
+    isRedisAvailable(); // constructs `first` and registers its handlers
+    expect(ctor).toHaveBeenCalledTimes(1);
+    first.emit('error', new Error('connection lost'));
+    // The errored instance is retired, not just dropped from the slot.
+    expect(first.quit).toHaveBeenCalledTimes(1);
+    expect(second.quit).not.toHaveBeenCalled();
+
+    isRedisAvailable();
+    expect(ctor).toHaveBeenCalledTimes(2);
+  });
+
+  it('falls back to disconnect() when graceful quit() rejects', async () => {
+    const first = makeClient();
+    first.quit.mockRejectedValueOnce(new Error('quit while offline'));
+    // Regular function — the module constructs the client with `new`.
+    const ctor = vi.fn(function MockRedis() {
+      return first;
+    });
+    vi.doMock('ioredis', () => ({ Redis: ctor }));
+    const { isRedisAvailable } = await import('@/lib/auth/redis-session');
+
+    isRedisAvailable(); // construct + register handlers
+    first.emit('error', new Error('connection lost'));
+    // Give the rejected quit() promise a tick to reach its catch handler.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(first.disconnect).toHaveBeenCalledTimes(1);
+    expect(ctor).toHaveBeenCalledTimes(1);
+    isRedisAvailable();
+    expect(ctor).toHaveBeenCalledTimes(2);
+  });
+
+  it("a stale client's error does not retire a newer instance", async () => {
+    const first = makeClient();
+    const second = makeClient();
+    let n = 0;
+    const ctor = vi.fn(function MockRedis() {
+      return n++ === 0 ? first : second;
+    });
+    vi.doMock('ioredis', () => ({ Redis: ctor }));
+    const { isRedisAvailable } = await import('@/lib/auth/redis-session');
+
+    isRedisAvailable(); // constructs `first`
+    first.emit('error', new Error('old client dies'));
+    isRedisAvailable(); // constructs `second`, which is now the singleton
+
+    // The retired client surfaces another (late) error: `second` must stay
+    // the singleton, so no third construction happens.
+    first.emit('error', new Error('late error from retired client'));
+    isRedisAvailable();
+    expect(ctor).toHaveBeenCalledTimes(2);
+    expect(second.quit).not.toHaveBeenCalled();
+  });
+});

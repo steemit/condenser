@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 import { getDiscussion } from '@/lib/steem/client';
 import { normalizeUsername } from '@/lib/utils/username';
 import { buildPostMetadata, type SeoPost } from '@/lib/seo';
@@ -26,6 +27,14 @@ interface PageParams {
   permlink: string;
 }
 
+// generateMetadata and the page component both await the discussion within
+// a single request; withCache has no in-flight coalescing, so a cold cache
+// would fire the same bridge.get_discussion RPC twice. React cache()
+// memoizes per request — the Next.js-recommended dedupe for this shape.
+const getDiscussionCached = cache((author: string, permlink: string) =>
+  getDiscussion({ author, permlink })
+);
+
 export async function generateMetadata({
   params,
 }: {
@@ -34,7 +43,7 @@ export async function generateMetadata({
   const { username, permlink } = await params;
   const author = normalizeUsername(username);
   try {
-    const discussion = (await getDiscussion({ author, permlink })) as Record<
+    const discussion = (await getDiscussionCached(author, permlink)) as Record<
       string,
       SeoPost
     > | null;
@@ -55,14 +64,15 @@ export default async function PostNoCategoryPage({
   const { username, permlink } = await params;
   const author = normalizeUsername(username);
 
-  // Same cached fetch as generateMetadata / /api/steem/post: bridge
-  // get_discussion returns a content map keyed "author/permlink". A missing
-  // post yields a map without the key (or null) without throwing; only
-  // transport/RPC errors throw (withCache stale-while-error rethrows).
+  // Same cached fetch as generateMetadata / /api/steem/post (deduped per
+  // request via cache() above): bridge get_discussion returns a content
+  // map keyed "author/permlink". A missing post yields a map without the
+  // key (or null) without throwing; only transport/RPC errors throw
+  // (withCache stale-while-error rethrows).
   let category: string | undefined;
   let fetchFailed = false;
   try {
-    const discussion = (await getDiscussion({ author, permlink })) as Record<
+    const discussion = (await getDiscussionCached(author, permlink)) as Record<
       string,
       { category?: string }
     > | null;

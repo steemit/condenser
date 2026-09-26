@@ -13,10 +13,11 @@ Sources of truth:
 `proxy.ts` intentionally follows the legacy `ResolveRoute.js` matching order.
 References to `proxy.ts` below use its numbered branch comments (1.5, 2–7,
 plus the invalid-pattern 404 guards) and named constants (`RESERVED_ROUTES`,
-`PROFILE_SECTIONS`, `SORT_TYPES`, `STATIC_ASSET_RE`) as anchors, so they do
-not drift when lines move. `RESERVED_ROUTES`, `PROFILE_SECTIONS` and
-`SORT_TYPES` are defined once in `lib/routes.ts` (the shared route
-vocabulary) and imported by `proxy.ts`, the `[sort]` feed pages,
+`PROFILE_SECTIONS`, `SORT_TYPES`, `INTERNAL_ROUTE_PREFIXES`,
+`STATIC_ASSET_RE`) as anchors, so they do not drift when lines move.
+`RESERVED_ROUTES`, `PROFILE_SECTIONS`, `SORT_TYPES` and
+`INTERNAL_ROUTE_PREFIXES` are defined once in `lib/routes.ts` (the shared
+route vocabulary) and imported by `proxy.ts`, the `[sort]` feed pages,
 PrimaryNavigation, FeedSidebarWidgets and `lib/analytics/route-tags.ts`.
 
 ## Rewrite branches in `proxy.ts`
@@ -36,7 +37,7 @@ PrimaryNavigation, FeedSidebarWidgets and `lib/analytics/route-tags.ts`.
 | `/<a>/<b>/<c>` without `@` (e.g. `/bitcoin/alice/my-post`) | `NotFound` | Rewrite → `/404` (three-segment invalid-pattern guard), unless first segment is reserved or second starts with `@` | `app/(main)/404/page.tsx` | Implemented |
 | `/<a>/<b>` without `@`, non-sort (e.g. `/alice/my-post`) | `NotFound` | Rewrite → `/404` (two-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
 | `/<segment>` without `@`, non-sort, non-reserved (e.g. `/alice`) | `NotFound` | Rewrite → `/404` (single-segment invalid-pattern guard) | `app/(main)/404/page.tsx` | Implemented |
-| Direct access to internal rewrite targets: `/post/<a>/<b>/<c>`, `/post-no-category/<a>/<b>`, `/user/<a>[/<b>]` (no `@` segment) | `NotFound` (legacy ResolveRoute.js has no `/post`, `/post-no-category` or `/user` routes; its regexes match at most three segments with an @-account) | Rewrite → `/404` (internal-target guard, after the `/<sort>` branch) — paths containing an `@` segment are exempt so e.g. `/post/@user/permlink/` still normalizes through branch 2 | `app/(main)/404/page.tsx` | Implemented |
+| Direct access to internal rewrite targets: any path under `/post/…`, `/post-no-category/…` or `/user/…` that the earlier branches did not consume — with or without `@` segments (e.g. `/post/a/b/c`, `/user/alice`, four-segment `/post/<cat>/@u/pl`, `/user/@a/b/c`, two-segment `/user/@alice`) | `NotFound` (legacy ResolveRoute.js has no `/post`, `/post-no-category` or `/user` routes; its regexes match at most three segments with an @-prefixed account, and UserProfile/UserFeed require a first-segment `@account`) | Rewrite → `/404` (internal-target guard, after the `/<sort>` branch; prefixes derived from `INTERNAL_ROUTE_PREFIXES` in `lib/routes.ts`). Sole exemption: the exact trailing-slash Post form `/<prefix>/@user/<permlink>/` (exactly three segments, second one `@`-prefixed, optional trailing slash) passes through so Next's implicit 308 normalization drops the slash and re-enters at branch 2 as a legacy Post URL. Slash-less three-segment `@` forms (`/post/@a/p`, `/user/@alice/blog`, `/user/@a/feed`) never reach the guard — branch 2 consumes them first (legacy Post regex parity: any `[\w.-]{1,32}` tag is a category, so legacy also served `/user/@alice/blog` as a Post page, never as UserProfile) | `app/(main)/404/page.tsx` | Implemented |
 | `/%40username/...` | (same as `@` variants) | `%40` is decoded to `@` before matching (the `%40` decode step at the top of `proxy()`) | same as the corresponding `@` routes | Implemented |
 
 `SORT_TYPES` (const in `lib/routes.ts`, imported by `proxy.ts`): `hot`,
@@ -173,10 +174,10 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
 form a set:
 
 - **The route vocabulary lives in a single source, `lib/routes.ts`
-  (`RESERVED_ROUTES`, `PROFILE_SECTIONS`, `SORT_TYPES`); `proxy.ts`, the
-  `[sort]` feed pages, PrimaryNavigation, FeedSidebarWidgets and
-  `lib/analytics/route-tags.ts` all import it — never redefine these lists
-  locally.**
+  (`RESERVED_ROUTES`, `PROFILE_SECTIONS`, `SORT_TYPES`,
+  `INTERNAL_ROUTE_PREFIXES`); `proxy.ts`, the `[sort]` feed pages,
+  PrimaryNavigation, FeedSidebarWidgets and `lib/analytics/route-tags.ts`
+  all import it — never redefine these lists locally.**
 - **Any change to `lib/routes.ts` or to a rewrite branch in `proxy.ts` must
   update both this document and `scripts/test-proxy-routes.ts`.**
 - `scripts/test-proxy-routes.ts` runs standalone (`pnpm test:proxy`); it

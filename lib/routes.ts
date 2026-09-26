@@ -53,6 +53,22 @@ export const SORT_TYPES: readonly string[] = [
   'hot', 'trending', 'promoted', 'payout', 'payout_comments', 'muted', 'created',
 ];
 
+// First path segments of the internal (rewrite-target) App Router routes:
+// /post/<category>/<username>/<permlink>, /post-no-category/<username>/
+// <permlink> and /user/<username>[/<section>]. These URL shapes are not
+// addressable in a browser: proxy.ts's internal-target guard 404s direct
+// access (legacy ResolveRoute.js has no such routes — its regexes match at
+// most three segments with an @-prefixed account). The guard's sole
+// @-exemption (the trailing-slash Post form /<prefix>/@user/<permlink>/)
+// is derived from this same list; see proxy.ts.
+// Members are interpolated into regex alternations via join('|') — the
+// same derivation pattern as SORT_TYPES (PrimaryNavigation SORT_TAG_RE) —
+// so they must stay regex-safe (word characters and hyphens only);
+// __tests__/lib/routes.test.ts asserts this.
+export const INTERNAL_ROUTE_PREFIXES: readonly string[] = [
+  'post', 'post-no-category', 'user',
+];
+
 /**
  * True for post detail URLs in their public (browser) form:
  * /<category>/@user/<permlink> or /@user/<permlink> (where the second

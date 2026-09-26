@@ -16,7 +16,6 @@ const notFoundMock = vi.fn(() => {
 });
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: pushMock, replace: replaceMock }),
-  useParams: () => ({}),
   usePathname: () => '/@alice/my-post',
   notFound: () => notFoundMock(),
 }));

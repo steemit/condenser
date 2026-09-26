@@ -8,6 +8,18 @@ import { FeedLayout } from '@/components/layout/FeedLayout';
 import NotFound from '@/components/NotFound';
 
 /**
+ * Encode a URL path segment the way the other tag-URL builders do (submit
+ * page, FeedSortDropdown): encodeURIComponent, but keeping the path-legal
+ * '@' literal. The proxy decodes %40 on the way in, yet the canonical
+ * browser form — and what client-side matchers (isPostPathname,
+ * PrimaryNavigation) and PostFull's post links use — is the literal
+ * '@user', so the redirect target must not encode it to %40user.
+ */
+function encodeSegment(segment: string): string {
+  return encodeURIComponent(segment).replace(/%40/g, '@');
+}
+
+/**
  * Post page without category — client content.
  * Rendered by the server page shell in ./page.tsx (which resolves the
  * post and owns generateMetadata).
@@ -36,7 +48,9 @@ export default function PostNoCategoryClient({
   useEffect(() => {
     if (category) {
       router.replace(
-        `/${category}/${formatUsername(username)}/${permlink}`
+        `/${encodeSegment(category)}/${encodeSegment(
+          formatUsername(username)
+        )}/${encodeSegment(permlink)}`
       );
       return;
     }
@@ -46,7 +60,11 @@ export default function PostNoCategoryClient({
         const post = await fetchPostByPermlink(null, username, permlink);
         if (cancelled) return;
         if (post && post.category) {
-          router.replace(`/${post.category}/${formatUsername(username)}/${permlink}`);
+          router.replace(
+            `/${encodeSegment(post.category)}/${encodeSegment(
+              formatUsername(username)
+            )}/${encodeSegment(permlink)}`
+          );
         } else {
           setMissing(true);
         }

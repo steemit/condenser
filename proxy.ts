@@ -10,12 +10,38 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { isGdprUser } from './lib/gdpr-user-list';
-import { PROFILE_SECTIONS, RESERVED_ROUTES, SORT_TYPES } from './lib/routes';
+import {
+  INTERNAL_ROUTE_PREFIXES,
+  PROFILE_SECTIONS,
+  RESERVED_ROUTES,
+  SORT_TYPES,
+} from './lib/routes';
 
 // Known static asset extensions served from public/ (or framework internals).
 // Anything else with a dot (usernames, permlinks) must continue routing.
 const STATIC_ASSET_RE =
   /\.(ico|png|jpe?g|gif|svg|webp|avif|css|js|map|json|xml|txt|md|webmanifest|woff2?|ttf|eot|mp4|webm|pdf|html?)$/i;
+
+// Internal rewrite targets (first path segment), derived from the shared
+// route vocabulary in lib/routes.ts. See the internal-target guard near the
+// end of this file.
+const INTERNAL_TARGET_RE = new RegExp(
+  `^/(?:${INTERNAL_ROUTE_PREFIXES.join('|')})(?:/|$)`
+);
+
+// The guard's sole @-exemption: the exact Post form
+// /<prefix>/@<account>/<permlink> (exactly three segments, second one
+// @-prefixed, optional trailing slash). Branch 2 does not match trailing
+// slashes, so e.g. /post/@user/permlink/ must pass through to Next's
+// implicit 308 normalization, which drops the slash and re-enters the proxy
+// at branch 2 as a legacy Post URL. Slash-less three-segment @ forms
+// (/post/@a/p, /user/@alice/blog) never reach the guard — branch 2 consumes
+// them first. Every other @-containing form under these prefixes (four
+// segments like /post/<cat>/@u/pl, or bare /user/@alice) has no legacy route
+// and is 404ed by the guard.
+const INTERNAL_AT_EXEMPT_RE = new RegExp(
+  `^/(?:${INTERNAL_ROUTE_PREFIXES.join('|')})/@[^/]+/[^/]+/?$`
+);
 
 export function proxy(request: NextRequest) {
   // Get pathname and ensure it's decoded
@@ -169,14 +195,18 @@ export function proxy(request: NextRequest) {
   // /post-no-category/a/b and /user/alice were all NotFound. Anything under
   // these prefixes that reaches this point was not consumed by the rewrites
   // above and must 404 instead of hitting the underlying App Router routes
-  // (which would render a second, uncanonical URL for the same content).
-  // Paths containing an @-segment are exempt: they are not internal-target
-  // forms — e.g. /post/@user/permlink/ still relies on Next's trailing-slash
-  // normalization to re-enter branch 2 as a legacy Post URL.
-  const internalTargetMatch = pathname.match(
-    /^\/(?:post|post-no-category|user)(?:\/|$)/
-  );
-  if (internalTargetMatch && !pathname.includes('/@')) {
+  // (which would render a second, uncanonical URL for the same content —
+  // e.g. the four-segment /post/<cat>/@user/<permlink> reached
+  // /post/[category]/[username]/[permlink] with a 200).
+  // @-containing paths are exempt only in the exact trailing-slash Post form
+  // (INTERNAL_AT_EXEMPT_RE above) so /post/@user/permlink/ still normalizes
+  // through branch 2; slash-less three-segment @ forms never get here
+  // because branch 2 consumes them first (legacy Post regex parity: any
+  // [\w.-]{1,32} tag is a category).
+  if (
+    INTERNAL_TARGET_RE.test(pathname) &&
+    !INTERNAL_AT_EXEMPT_RE.test(pathname)
+  ) {
     return NextResponse.rewrite(new URL('/404', request.url));
   }
 

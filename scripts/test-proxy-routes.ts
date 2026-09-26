@@ -83,7 +83,13 @@ const testCases = [
   { path: '/post-no-category/a/b', expected: '404', description: 'Direct access to /post-no-category internal target 404s' },
   { path: '/post', expected: '404', description: 'Bare /post prefix 404s' },
   { path: '/post/@alice/my-post', expected: 'rewrite:/post/post/alice/my-post', description: '"post" as category still renders Post (branch 2 consumes it before the internal-target guard)' },
-  { path: '/post/@alice/my-post/', expected: 'next', description: 'Trailing-slash post URL under /post passes the guard (@-segment) → Next 308 normalization re-enters branch 2' },
+  { path: '/post/@alice/my-post/', expected: 'next', description: 'Trailing-slash post URL under /post passes the guard (exact @-exemption) → Next 308 normalization re-enters branch 2' },
+  { path: '/user/@alice/blog', expected: 'rewrite:/post/user/alice/blog', description: '"user" as category renders Post — branch 2 consumes /user/@alice/blog before the guard (legacy Post regex parity: any [\\w.-]{1,32} tag is a category, so legacy also served this as Post, not UserProfile)' },
+  { path: '/user/@alice/feed', expected: 'rewrite:/post/user/alice/feed', description: '"user" as category renders Post — branch 2 consumes /user/@alice/feed before the guard (legacy parity)' },
+  { path: '/user/@alice/my-post/', expected: 'next', description: 'Trailing-slash post URL under /user passes the guard (exact @-exemption) → Next 308 normalization re-enters branch 2' },
+  { path: '/post/a/@bob/my-post', expected: '404', description: 'Four-segment @-form under /post 404s — legacy has no 4-segment route; the old broad /@ exemption let it render /post/[category]/[username]/[permlink] with a 200' },
+  { path: '/user/@alice/blog/extra', expected: '404', description: 'Four-segment @-form under /user 404s (legacy has no 4-segment route)' },
+  { path: '/user/@alice', expected: '404', description: 'Two-segment @-form under /user 404s — legacy UserProfile/UserFeed require a first-segment @account; the old broad /@ exemption let it render /user/[username] with a 200' },
   
   // Reserved routes as usernames (should be 404)
   { path: '/@trending', expected: '404', description: 'Reserved route as username' },

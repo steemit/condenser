@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { isPostPathname, PROFILE_SECTIONS, SORT_TYPES } from '@/lib/routes';
+import {
+  INTERNAL_ROUTE_PREFIXES,
+  isPostPathname,
+  PROFILE_SECTIONS,
+  SORT_TYPES,
+} from '@/lib/routes';
 
 describe('isPostPathname (shared post-URL matcher)', () => {
   it('matches post URLs with and without a category segment', () => {
@@ -40,5 +45,42 @@ describe('isPostPathname (shared post-URL matcher)', () => {
     for (const sort of SORT_TYPES) {
       expect(sort).toMatch(/^[\w]+$/);
     }
+  });
+
+  it('keeps INTERNAL_ROUTE_PREFIXES members regex-safe (word chars and hyphens only)', () => {
+    // These members are interpolated into regex alternations via join('|')
+    // (proxy.ts internal-target guard) — same constraint as SORT_TYPES.
+    for (const prefix of INTERNAL_ROUTE_PREFIXES) {
+      expect(prefix).toMatch(/^[\w-]+$/);
+    }
+  });
+
+  it('derives segment-bounded alternations from INTERNAL_ROUTE_PREFIXES (as the proxy guard does)', () => {
+    // proxy.ts builds INTERNAL_TARGET_RE / INTERNAL_AT_EXEMPT_RE from the
+    // same join('|') derivation — assert the alternation stays
+    // segment-bounded so /poster/x can never match as /post/er/x.
+    const targetRe = new RegExp(
+      `^/(?:${INTERNAL_ROUTE_PREFIXES.join('|')})(?:/|$)`
+    );
+    for (const prefix of INTERNAL_ROUTE_PREFIXES) {
+      expect(targetRe.test(`/${prefix}`)).toBe(true);
+      expect(targetRe.test(`/${prefix}/a/b`)).toBe(true);
+    }
+    expect(targetRe.test('/poster/a')).toBe(false);
+    expect(targetRe.test('/post-x/a')).toBe(false);
+    expect(targetRe.test('/users/alice')).toBe(false);
+
+    // The @-exemption: exactly three segments (optional trailing slash),
+    // second one @-prefixed — the trailing-slash Post re-entry form only.
+    const exemptRe = new RegExp(
+      `^/(?:${INTERNAL_ROUTE_PREFIXES.join('|')})/@[^/]+/[^/]+/?$`
+    );
+    for (const prefix of INTERNAL_ROUTE_PREFIXES) {
+      expect(exemptRe.test(`/${prefix}/@a/p`)).toBe(true);
+      expect(exemptRe.test(`/${prefix}/@a/p/`)).toBe(true);
+    }
+    expect(exemptRe.test('/post/a/@b/c')).toBe(false); // four segments
+    expect(exemptRe.test('/user/@alice')).toBe(false); // two segments
+    expect(exemptRe.test('/user/@alice/blog/extra')).toBe(false);
   });
 });

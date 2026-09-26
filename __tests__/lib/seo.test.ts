@@ -291,6 +291,10 @@ describe('buildAccountMetadata', () => {
     expect(meta.twitter?.images).toEqual([
       `${SITE_ORIGIN}/images/steemit-twshare-2.png`,
     ]);
+    // og falls back to the same default share image (audit N-17).
+    expect(meta.openGraph?.images).toEqual([
+      `${SITE_ORIGIN}/images/steemit-twshare-2.png`,
+    ]);
   });
 
   it('emits robots noindex,nofollow for private sections (settings/notifications)', () => {

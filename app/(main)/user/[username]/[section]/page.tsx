@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getProfile } from '@/lib/steem/client';
 import { normalizeUsername } from '@/lib/utils/username';
-import { buildAccountMetadata, type SeoProfile } from '@/lib/seo';
+import { buildAccountMetadata, NOINDEX_ROBOTS, type SeoProfile } from '@/lib/seo';
 import UserSectionClient from './UserSectionClient';
 
 /**
@@ -39,18 +39,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { username, section } = await params;
   const accountname = normalizeUsername(username).toLowerCase();
-  // Private sections stay noindex even on the fetch-failure fallback.
-  const robots = PRIVATE_SECTIONS.has(section)
-    ? { index: false, follow: false }
-    : undefined;
+  // Case-insensitive to match proxy.ts section routing (defense in depth);
+  // private sections stay noindex even on the fetch-failure fallback.
+  const isPrivate = PRIVATE_SECTIONS.has(section.toLowerCase());
   try {
     const profile = (await getProfile({ account: accountname })) as BridgeProfile | null;
     return buildAccountMetadata(accountname, profile?.metadata?.profile ?? null, {
-      noindex: PRIVATE_SECTIONS.has(section),
+      noindex: isPrivate,
     });
   } catch (error) {
     console.error('generateMetadata: failed to fetch profile:', error);
-    return robots ? { title: 'Steemit', robots } : { title: 'Steemit' };
+    return isPrivate ? { title: 'Steemit', robots: NOINDEX_ROBOTS } : { title: 'Steemit' };
   }
 }
 

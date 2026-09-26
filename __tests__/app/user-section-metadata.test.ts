@@ -43,6 +43,14 @@ describe('UserProfileSectionPage generateMetadata (robots / indexability)', () =
     }
   );
 
+  it.each(['SETTINGS', 'Settings', 'NOTIFICATIONS', 'Notifications'])(
+    'treats the private section %j case-insensitively (defense in depth, matches proxy routing)',
+    async (section) => {
+      const meta = await generateMetadata(sectionParams('@alice', section));
+      expect(meta.robots).toEqual({ index: false, follow: false });
+    }
+  );
+
   it.each([
     'blog',
     'posts',
@@ -58,6 +66,8 @@ describe('UserProfileSectionPage generateMetadata (robots / indexability)', () =
     expect(meta.robots).toBeUndefined();
   });
 
+  // Sampled here at the page level; the full canonical/noindex/og matrix
+  // for buildAccountMetadata is unit-covered in __tests__/lib/seo.test.ts.
   it.each(['blog', 'comments', 'settings', 'notifications'])(
     'canonical of every section points at the profile root /@alice (%s)',
     async (section) => {
@@ -86,6 +96,8 @@ describe('UserProfileSectionPage generateMetadata (robots / indexability)', () =
   });
 
   it('renders the client section component (server shell)', () => {
+    // Guards the default export: a broken import would make every test
+    // above pass vacuously against an undefined component.
     expect(typeof UserProfileSectionPage).toBe('function');
   });
 });
@@ -102,6 +114,7 @@ describe('UserProfilePage (root) generateMetadata', () => {
     });
     expect(meta.alternates?.canonical).toBe('/@alice');
     expect(meta.robots).toBeUndefined();
+    // Same import guard as the section page: catches a broken default export.
     expect(typeof UserProfileRootPage).toBe('function');
   });
 });

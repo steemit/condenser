@@ -24,6 +24,16 @@ import { proxifyImageUrl } from '@/lib/media/proxify-url';
 export const SITE_ORIGIN = 'https://steemit.com';
 
 /**
+ * Shared robots directive for private pages: neither index the page nor
+ * crawl its links (rendered as `noindex, nofollow`). Used by
+ * buildAccountMetadata and the page-level fetch-failure fallbacks.
+ */
+export const NOINDEX_ROBOTS: NonNullable<Metadata['robots']> = {
+  index: false,
+  follow: false,
+};
+
+/**
  * Hosts whose canonical_url json_metadata values are honored (audit N-17).
  *
  * Legacy (CanonicalLinker.read_md_canonical) accepted ANY absolute http(s)
@@ -275,16 +285,17 @@ export function buildAccountMetadata(
   // section at the profile root instead. The canonical is kept relative:
   // this app sets no metadataBase, so Next.js emits it verbatim and crawlers
   // resolve it against the served origin (correct on any host, independent
-  // of the SITE_ORIGIN constant).
-  const canonical = `/@${accountname}`;
+  // of the SITE_ORIGIN constant). encodeURIComponent is defense in depth
+  // (the /@ prefix already blocks scheme injection).
+  const canonical = `/@${encodeURIComponent(accountname)}`;
 
   // Legacy addAccountMeta emitted Twitter-card meta only — no OpenGraph for
   // accounts. This is a minimal og:profile addition (title/url/type) aligned
   // with the post-page og shape; og:url must be absolute per the OG spec.
-  const openGraph = {
+  const openGraph: NonNullable<Metadata['openGraph']> = {
     title,
-    type: 'profile' as const,
-    url: `${SITE_ORIGIN}/@${accountname}`,
+    type: 'profile',
+    url: `${SITE_ORIGIN}/@${encodeURIComponent(accountname)}`,
     username: accountname,
     description,
     images: [profileImage],
@@ -294,12 +305,10 @@ export function buildAccountMetadata(
   return {
     title,
     description,
-    // Private/semi-private UI pages self-declare noindex (Google treats
-    // noindex + follow:false as "neither index nor crawl links from here").
-    // In that mode canonical/og are omitted: noindex takes precedence over
-    // rel=canonical (Google guidance: do not combine the two signals).
+    // Private/semi-private UI pages self-declare noindex. In that mode
+    // canonical/og are omitted — see AccountMetadataOptions.noindex.
     ...(options.noindex && {
-      robots: { index: false, follow: false },
+      robots: NOINDEX_ROBOTS,
     }),
     ...(!options.noindex && { alternates: { canonical }, openGraph }),
     twitter: {

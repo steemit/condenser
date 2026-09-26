@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import {
   csrfHeader,
   makePostRequest,
+  makeRawPostRequest,
   TEST_CSRF_TOKEN,
 } from '@/__tests__/helpers/request';
 
@@ -187,6 +188,17 @@ describe('POST /api/auth/preferences', () => {
     expect(res.status).toBe(413);
     expect(await res.json()).toEqual({ error: 'Request body too large' });
     // The 1024-char stored-state cap is separate; the request never got that far.
+    expect(updateSessionMock).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 invalid JSON for an unparseable body (not a 500)', async () => {
+    getSessionMock.mockResolvedValue(loggedInSession);
+
+    const res = await POST(
+      makeRawPostRequest('/api/auth/preferences', 'not-json', csrfHeader())
+    );
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'invalid JSON' });
     expect(updateSessionMock).not.toHaveBeenCalled();
   });
 });

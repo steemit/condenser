@@ -27,6 +27,19 @@ export function makePostRequest(
   });
 }
 
+/** Build a NextRequest for a POST handler with a raw (non-JSON) body. */
+export function makeRawPostRequest(
+  path: string,
+  body: string,
+  headers: Record<string, string> = {}
+): NextRequest {
+  return new NextRequest(new URL(path, BASE), {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...headers },
+    body,
+  });
+}
+
 /** Cookie header carrying a session token (see makePostRequest). */
 export function sessionCookieHeader(
   token: string,

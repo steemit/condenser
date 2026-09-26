@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { makePostRequest } from '@/__tests__/helpers/request';
+import { makePostRequest, makeRawPostRequest } from '@/__tests__/helpers/request';
 
 vi.mock('@/lib/steem/client', () => ({
   initializeSteemApi: vi.fn(),
@@ -1049,6 +1049,13 @@ describe('POST /api/steem/broadcast', () => {
     );
     expect(res.status).toBe(413);
     expect(await res.json()).toEqual({ error: 'Request body too large' });
+    expect(callSteemApiMock).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 invalid JSON for an unparseable body (not a 500)', async () => {
+    const res = await POST(makeRawPostRequest('/api/steem/broadcast', 'not-json'));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'invalid JSON' });
     expect(callSteemApiMock).not.toHaveBeenCalled();
   });
 });

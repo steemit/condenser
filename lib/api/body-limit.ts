@@ -119,10 +119,15 @@ export type LimitedJsonResult =
   | { ok: true; data: unknown }
   | { ok: false; response: NextResponse };
 
+const INVALID_JSON_ERROR = 'invalid JSON';
+
 /**
  * enforceBodyLimit + JSON.parse for routes whose handler expects a JSON
- * document. Malformed JSON rethrows the SyntaxError so the route's existing
- * catch block keeps its current error handling/shape.
+ * document. Malformed JSON answers 400 {error: 'invalid JSON'} — a body the
+ * client authored is a client error, not the route's generic 500 (which is
+ * reserved for unexpected server-side failures). Overseer is the deliberate
+ * exception: it reads the raw buffer itself so unparseable analytics stay a
+ * best-effort 204.
  */
 export async function readJsonWithLimit(
   request: Request,
@@ -134,6 +139,17 @@ export async function readJsonWithLimit(
   }
   // request.json() decodes UTF-8 and parses; mirror that on the buffer.
   const text = new TextDecoder().decode(limited.bytes);
-  const data: unknown = JSON.parse(text); // throws SyntaxError on bad JSON
+  let data: unknown;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { error: INVALID_JSON_ERROR },
+        { status: 400 }
+      ),
+    };
+  }
   return { ok: true, data };
 }

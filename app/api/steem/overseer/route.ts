@@ -19,7 +19,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { callSteemApi } from '@/lib/steem/client';
-import { readJsonWithLimit } from '@/lib/api/body-limit';
+import { enforceBodyLimit } from '@/lib/api/body-limit';
 import {
   RATE_LIMITS,
   checkRateLimit,
@@ -114,16 +114,28 @@ export async function POST(request: NextRequest) {
     return rateLimitResponse(rateLimit.retryAfterSeconds);
   }
 
-  const limited = await readJsonWithLimit(request).catch(() => null);
-  if (limited && !limited.ok) {
+  // Read with the size cap, then parse in-route (not readJsonWithLimit):
+  // that helper answers 400 'invalid JSON' — the right contract for the
+  // auth/search/broadcast routes — while analytics deliberately keeps a 204
+  // for unparseable bodies (best-effort; the client never reads the error).
+  const limited = await enforceBodyLimit(request);
+  if (!limited.ok) {
     return limited.response;
+  }
+
+  let parseFailed = false;
+  let payload: unknown;
+  try {
+    payload = JSON.parse(new TextDecoder().decode(limited.bytes));
+  } catch {
+    parseFailed = true;
   }
 
   // Shape gate (audit N-25): a parseable but malformed payload is a 400,
   // not a silent relay — arbitrary JSON must not reach the node through
   // the analytics relay. An UNPARSEABLE body is still dropped with 204
   // (analytics is best-effort; the client never reads the error).
-  if (limited?.ok && !isValidCollectPayload(limited.data)) {
+  if (!parseFailed && !isValidCollectPayload(payload)) {
     return NextResponse.json(
       { error: 'Malformed analytics payload' },
       { status: 400 }
@@ -132,8 +144,8 @@ export async function POST(request: NextRequest) {
 
   try {
     // Relay failures stay best-effort: logged, always answered 204.
-    if (limited?.ok) {
-      await callSteemApi('overseer.collect', limited.data);
+    if (!parseFailed) {
+      await callSteemApi('overseer.collect', payload);
     }
   } catch (error) {
     console.warn('overseer relay error:', error);

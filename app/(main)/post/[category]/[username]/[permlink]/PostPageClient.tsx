@@ -4,9 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setPathname } from '@/store/slices/globalSlice';
-import { normalizeUsername, formatUsername } from '@/lib/utils/username';
+import { useAppSelector } from '@/store/hooks';
+import { normalizeUsername } from '@/lib/utils/username';
 import PostFull from '@/components/cards/PostFull';
 import CommentsList from '@/components/cards/CommentsList';
 import AdSwipe from '@/components/elements/AdSwipe';
@@ -28,7 +27,6 @@ import { FeedLayout } from '@/components/layout/FeedLayout';
  */
 export default function PostPageClient() {
   const params = useParams();
-  const dispatch = useAppDispatch();
   const t = useTranslations();
   const trackingId = useAppSelector((s) => s.user.trackingId);
   // Refetch when the logged-in user changes so freshly indexed votes and
@@ -42,12 +40,6 @@ export default function PostPageClient() {
   const [comments, setComments] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Set pathname in global state
-  useEffect(() => {
-    const pathname = `/${category}/${formatUsername(username)}/${permlink}`;
-    dispatch(setPathname(pathname));
-  }, [category, username, permlink, dispatch]);
 
   // Fetch post data and comments
   useEffect(() => {

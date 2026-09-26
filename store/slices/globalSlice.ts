@@ -78,7 +78,6 @@ export interface GlobalState {
   notices?: unknown;
   tagslist?: unknown[];
   followerslist?: unknown[];
-  pathname?: string;
   follow?: {
     getFollowingAsync?: Record<string, {
       blog_result?: string[];
@@ -548,9 +547,6 @@ const globalSlice = createSlice({
     resetFollowState: (state) => {
       state.follow = undefined;
     },
-    setPathname: (state, action: PayloadAction<string>) => {
-      state.pathname = action.payload;
-    },
   },
 });
 
@@ -591,7 +587,6 @@ export const {
   followListLoading,
   receiveFollowList,
   resetFollowState,
-  setPathname,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

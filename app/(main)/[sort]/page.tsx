@@ -2,8 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setPathname } from "@/store/slices/globalSlice";
+import { useAppSelector } from "@/store/hooks";
 import {
   fetchRankedPosts,
   type FetchPostsParams,
@@ -16,7 +15,6 @@ import { FeedLayout } from "@/components/layout/FeedLayout";
 import { FeedListHeader } from "@/components/layout/FeedListHeader";
 
 export default function SortPage() {
-  const dispatch = useAppDispatch();
   const { sort } = useParams();
   const observer = useAppSelector((s) => s.user.current?.username);
   const [posts, setPosts] = useState<Post[]>([]);
@@ -28,11 +26,6 @@ export default function SortPage() {
   const isValidSort = SORT_TYPES.includes(sortString.toLowerCase());
   const showNotFound =
     !isValidSort || sortString.toLowerCase() === "404";
-
-  useEffect(() => {
-    if (!isValidSort) return;
-    dispatch(setPathname(`/${sortString}`));
-  }, [dispatch, sortString, isValidSort]);
 
   // Normalize the sort for API calls; proxy.ts lowercases only for validation
   // and passes the raw-cased segment through, so `/Trending` must still query

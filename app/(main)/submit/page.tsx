@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setPathname } from '@/store/slices/globalSlice';
 import { showLogin } from '@/store/slices/userSlice';
 import PostEditor, { PostEditorResult } from '@/components/elements/PostEditor';
 import { FeedLayout } from '@/components/layout/FeedLayout';
@@ -19,10 +18,6 @@ export default function SubmitPostPage() {
   const dispatch = useAppDispatch();
   const t = useTranslations();
   const username = useAppSelector((state) => state.user.current?.username);
-
-  useEffect(() => {
-    dispatch(setPathname('/submit'));
-  }, [dispatch]);
 
   useEffect(() => {
     if (!username) {

@@ -6,8 +6,7 @@ import { SearchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { FeedLayout } from "@/components/layout/FeedLayout";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setPathname } from "@/store/slices/globalSlice";
+import { useAppSelector } from "@/store/hooks";
 import {
   fetchCommunities,
   type CommunitySubscription,
@@ -27,7 +26,6 @@ const SORT_OPTIONS = [
  * of communities with a subscribe button per row.
  */
 export default function CommunitiesPage() {
-  const dispatch = useAppDispatch();
   const t = useTranslations();
   const username = useAppSelector((s) => s.user.current?.username);
   const walletBase = getSteemitWalletBaseUrl();
@@ -36,10 +34,6 @@ export default function CommunitiesPage() {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("rank");
-
-  useEffect(() => {
-    dispatch(setPathname("/communities"));
-  }, [dispatch]);
 
   const performSearch = useCallback(
     async (q: string, order: string) => {

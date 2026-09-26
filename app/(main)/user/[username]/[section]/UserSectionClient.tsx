@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setPathname } from '@/store/slices/globalSlice';
+import { useAppSelector } from '@/store/hooks';
 import {
   fetchAccountPosts,
   fetchUserProfile,
@@ -34,25 +33,18 @@ import UserSettings from '@/components/modules/UserSettings';
  */
 export default function UserSectionClient() {
   const params = useParams();
-  const dispatch = useAppDispatch();
   const t = useTranslations();
   const username = useAppSelector((state) => state.user.current?.username);
-  
+
   const usernameRaw = params.username as string;
   const accountname = normalizeUsername(usernameRaw).toLowerCase();
   const section = (params.section as string) || 'blog';
-  
+
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
-
-  // Set pathname in global state (use @username format)
-  useEffect(() => {
-    const pathname = `/@${accountname}${section !== 'blog' ? `/${section}` : ''}`;
-    dispatch(setPathname(pathname));
-  }, [accountname, section, dispatch]);
 
   const order: AccountPostsOrder = [
     'blog',

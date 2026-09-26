@@ -7,7 +7,9 @@
 # Unified API URL
 STEEM_API_URL=https://api.steemit.com
 
-STEEMD_USE_APPBASE=true
+# false = condenser_api namespace (default, matches .env.example);
+# true = appbase-style routing
+STEEMD_USE_APPBASE=false
 CHAIN_ID=0000000000000000000000000000000000000000000000000000000000000000
 ADDRESS_PREFIX=STM
 ```
@@ -53,6 +55,18 @@ REDIS_KEY_PREFIX=steem:session:
 NEXT_PUBLIC_SIGNUP_URL=https://signup.steemit.com
 ELASTICSEARCH_URL=http://localhost:9200
 
+# Image proxy prefix (lib/media/proxify-url.ts, legacy
+# $STM_Config.img_proxy_prefix). First-party post-body images are rewritten
+# to {prefix}/p/{base58}?width=&mode=fit&format=match. Default:
+# https://steemitimages.com/
+NEXT_PUBLIC_IMAGE_PROXY_PREFIX=https://steemitimages.com/
+
+# External Steemit wallet origin (lib/steemitWallet.ts — Condenser only links
+# out, the wallet itself is a separate app). Default when unset:
+# https://steemitwallet.com in production, https://wallet.steemitdev.com under
+# `next dev`.
+NEXT_PUBLIC_WALLET_URL=https://steemitwallet.com
+
 # Image upload endpoint for the settings page profile/cover upload (legacy
 # $STM_Config.upload_image). The client signs the file with the posting key
 # and POSTs it here. Read at request time and inlined into the SSR HTML (like
@@ -73,6 +87,16 @@ NEXT_PUBLIC_TRONADS_MOCK=0
 NEXT_PUBLIC_TRONADS_SIDEBAR_AD_PID=
 NEXT_PUBLIC_TRONADS_CONTENT_PC_AD_PID=
 NEXT_PUBLIC_TRONADS_CONTENT_MOBILE_AD_PID=
+# NOTE on NEXT_PUBLIC_TRONADS_ENV: it is read in two places — the client
+# bundle inlines it at BUILD time (selects which engine host the vendored
+# TronAds SDK loads its iframes from), while proxy.ts reads it at RUNTIME to
+# pick the frame-src origin of the Content-Security-Policy (lib/csp.ts ->
+# configuredTronAdsEngineOrigin). It must be set to the SAME value for the
+# build and for the running server: a mismatch (e.g. build with 0, run with 1)
+# makes the CSP allow the engine host the browser never loads and block the
+# one it does, so all TronAd slots render empty. The other TRONADS vars are
+# likewise build-time-inlined for the client; ENV is the only one the proxy
+# also reads at runtime.
 # Coin Marketplace right-rail module (legacy steem_market_*). No endpoint
 # configured means the module stays hidden.
 STEEM_MARKET_ENDPOINT=
@@ -90,8 +114,11 @@ NEXT_DEV_ALLOWED_ORIGINS=
 Overseer metrics (route views, user actions, activity campaigns) replicate the
 legacy `ServerApiClient.js` reporting. The client posts to
 `POST /api/steem/overseer`, which relays to the node's `overseer.collect`
-JSON-RPC method (steem-js is server-only in the rewrite, unlike legacy which
-called the node directly from the browser). No configuration is required — the
+JSON-RPC method. (steem-js is used on both ends in the rewrite: the server
+keeps it as a `serverExternalPackages` entry for all RPC, while the browser
+bundle only pulls in its auth/signing helpers via `browser.esm.js`, ~290KB —
+so unlike legacy, the browser never speaks JSON-RPC to the node directly.)
+No configuration is required — the
 relay uses `STEEM_API_URL`. GA page views and route tags are recorded on every
 client-side navigation; `user_login` is reported server-side by
 `/api/auth/login`.

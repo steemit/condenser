@@ -34,11 +34,11 @@ The system uses a two-tier storage approach:
    - Survives page reloads, new tabs, and browser restarts; cleared only by explicit logout
 
 2. **Memory Cache (always)**:
-   - The decrypted key is cached on `window` for fast signing
+   - The decrypted key is cached in module-scoped variables (not `window` properties — audit N-07) for fast signing
    - This is the *only* copy when "keep me logged in" is unchecked — the key is lost when the tab closes or reloads (legacy behavior: unchecked = in-memory only)
    - Disappears naturally when the tab closes
 
-On non-secure contexts (plain HTTP, e.g. development over a LAN IP) `crypto.subtle` is unavailable; the system degrades to storing the key unencrypted in localStorage. Production is always HTTPS.
+On non-secure contexts (plain HTTP, e.g. development over a LAN IP) `crypto.subtle` is unavailable and localStorage is readable by a network attacker; persistence is therefore disabled there entirely (audit N-24) — the key lives in the memory cache for the current tab only and nothing is written to storage. (Earlier versions degraded to storing the key unencrypted on such origins; `decryptAndRetrieveKey` can still read one of those legacy plaintext entries so old sessions survive until logout, but nothing new is ever written in that shape.) Production is always HTTPS.
 
 ### Migration from Older Versions
 

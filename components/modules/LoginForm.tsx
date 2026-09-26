@@ -6,11 +6,12 @@ import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { hideLogin, loginError } from '@/store/slices/userSlice';
 import { loginThunk } from '@/store/thunks/authThunks';
-import { 
-  validatePostingKey, 
-  signAuthData, 
+import {
+  validatePostingKey,
+  signAuthData,
   isWifFormat,
-  isPublicKeyFormat 
+  isPublicKeyFormat,
+  eligiblePostingPublicKeys,
 } from '@/lib/crypto/client';
 import { encryptAndStoreKey } from '@/lib/crypto/key-storage';
 import { postJsonWithCsrf } from '@/lib/api/csrf';
@@ -111,8 +112,12 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
         throw new Error(t('loginform_jsx.invalid_account_or_no_posting_authority'));
       }
 
-      // Get the posting public key (first key in posting authority)
-      const postingPublicKey = account.posting.key_auths[0][0];
+      // Collect every posting public key that alone satisfies the
+      // authority's weight threshold. Legacy (AuthSaga pubkeyThreshold)
+      // matched the WIF against ALL key_auths — never only key_auths[0] —
+      // so holders of a rotated/second posting key can log in, matching the
+      // /api/auth/login route (audit S4).
+      const postingPublicKeys = eligiblePostingPublicKeys(account.posting);
 
       // Step 2: Validate that input is a WIF format private key
       const privateKeyWif = password.trim();
@@ -120,9 +125,9 @@ export default function LoginForm({ embedded = false }: { embedded?: boolean }) 
         throw new Error(t('loginform_jsx.invalid_wif_format'));
       }
 
-      // Step 3: Validate private key matches posting public key
+      // Step 3: Validate private key matches any eligible posting public key
       setValidatingKey(true);
-      const validation = validatePostingKey(privateKeyWif, postingPublicKey);
+      const validation = validatePostingKey(privateKeyWif, postingPublicKeys);
       if (!validation.isValid) {
         throw new Error(validation.error || t('loginform_jsx.invalid_posting_key'));
       }

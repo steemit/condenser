@@ -16,6 +16,14 @@ import {
 } from '@/lib/auth/session';
 import { enforceCsrf, setCsrfCookie } from '@/lib/auth/csrf';
 import { readJsonWithLimit } from '@/lib/api/body-limit';
+// eligiblePostingPublicKeys is the pure, isomorphic posting-authority
+// predicate shared with the LoginForm client check, so both sides validate
+// login keys identically (audit S4). PostingAuthority is its authority-shape
+// type — import it rather than re-declaring a duplicate locally.
+import {
+  eligiblePostingPublicKeys,
+  type PostingAuthority,
+} from '@/lib/crypto/client';
 import {
   RATE_LIMITS,
   checkRateLimit,
@@ -91,11 +99,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    type AccountPostingAuthority = {
-      key_auths?: Array<[string, number]>;
-    };
     type AccountWithPosting = {
-      posting?: AccountPostingAuthority;
+      posting?: PostingAuthority;
     };
     const accountData = account as AccountWithPosting;
 
@@ -107,7 +112,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const accountPostingKeys = accountData.posting.key_auths.map((auth) => auth[0]);
+    // Any listed posting key is accepted (accounts may carry several —
+    // legacy AuthSaga matched all key_auths, not only [0]), but only keys
+    // whose weight alone satisfies weight_threshold: a below-threshold
+    // entry (e.g. weight=0) cannot exercise posting authority by itself,
+    // so legacy classified it as 'partial'/'none' and refused login.
+    // Same predicate as the LoginForm client check (audit S4).
+    const accountPostingKeys = eligiblePostingPublicKeys(accountData.posting);
     if (!accountPostingKeys.includes(publicKey)) {
       return NextResponse.json(
         { error: 'Public key is not authorized for posting on this account' },

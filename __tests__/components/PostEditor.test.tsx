@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
-import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import type { ReactNode } from 'react';
 
 import PostEditor, { PostEditorResult } from '@/components/elements/PostEditor';
@@ -31,9 +31,6 @@ function wrapper(store: ReturnType<typeof makeStore>) {
 }
 
 describe('PostEditor', () => {
-  // vitest.config.ts does not enable globals, so RTL auto-cleanup never runs.
-  afterEach(() => cleanup());
-
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();

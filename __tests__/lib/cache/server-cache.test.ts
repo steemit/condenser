@@ -4,11 +4,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 /**
  * withCache() branch matrix (review X8).
  *
- * The stale-while-error strategy has six outcomes that had no CI coverage:
+ * The stale-while-error strategy had no CI coverage across its outcomes:
  * fresh hit, miss+fetch success, miss+fetch failure with/without stale,
- * known-down short-circuit, and the no-Redis degradation. Both dependencies
- * (redis helpers and the health monitor) are module-mocked so each branch is
- * driven deterministically; the Redis layer itself is pinned separately in
+ * known-down short-circuit (with and without a stale entry to serve), and
+ * the no-Redis degradation. Both dependencies (redis helpers and the health
+ * monitor) are module-mocked so each branch is driven deterministically; the
+ * Redis layer itself is pinned separately in
  * __tests__/lib/cache/redis.test.ts.
  */
 
@@ -123,6 +124,23 @@ describe('withCache', () => {
     // hammered by every cache expiry.
     expect(fetcher).not.toHaveBeenCalled();
     expect(cacheSetMock).not.toHaveBeenCalled();
+  });
+
+  it('still fetches live when Steem is known down but no stale entry exists', async () => {
+    // The known-down branch only short-circuits when there IS stale data to
+    // serve (server-cache.ts: the `if (cached)` guard inside the known-down
+    // check). With nothing cached the caller still needs the data, so the
+    // code falls through to the live RPC attempt — a cold key must not 5xx
+    // just because the shared health entry is unhealthy.
+    cacheGetMock.mockResolvedValue(null);
+    isSteemKnownDownMock.mockResolvedValue(true);
+    const fetcher = makeFetcher('fresh');
+
+    const result = await withCache('k', 3, 30, fetcher);
+
+    expect(result).toEqual({ data: 'fresh', degraded: false });
+    expect(fetcher).toHaveBeenCalledTimes(1);
+    expect(cacheSetMock).toHaveBeenCalledWith('k', 3, 30, 'fresh');
   });
 
   it('revalidates and returns fresh data when Steem is up again', async () => {

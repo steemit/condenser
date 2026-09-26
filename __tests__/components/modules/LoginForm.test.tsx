@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -146,7 +146,8 @@ describe('LoginForm posting-key matching (audit S4)', () => {
     });
   });
   afterEach(() => {
-    cleanup();
+    // Component unmounting is handled by the central cleanup registered in
+    // vitest.setup.ts.
     vi.unstubAllGlobals();
   });
 

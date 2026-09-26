@@ -5,7 +5,7 @@
  * Validates that routes match legacy behavior from ResolveRoute.js
  */
 
-import { NextRequest } from 'next/server';
+import { NextRequest, type NextResponse } from 'next/server';
 import { proxy } from '../proxy';
 
 // Mock NextRequest for testing. The path may include a query string.
@@ -14,8 +14,61 @@ function createMockRequest(pathname: string): NextRequest {
   return new NextRequest(url);
 }
 
+/**
+ * Canonical expectation grammar for a proxy outcome:
+ *  - 'next'                          → no proxy response (pass-through)
+ *  - '404'                           → rewritten to the 404 page
+ *  - `rewrite:<pathname>[?<search>]` → internal rewrite (query preserved)
+ *  - `redirect:<status>:<location>`  → proxy-issued redirect
+ */
+export type ProxyExpectation =
+  | 'next'
+  | '404'
+  | `rewrite:${string}`
+  | `redirect:${number}:${string}`;
+
+export interface ProxyTestCase {
+  /** Request path, possibly with a query string. */
+  path: string;
+  /** The classified proxy outcome (see ProxyExpectation). */
+  expected: ProxyExpectation;
+  /** What legacy behavior this case pins. */
+  description: string;
+}
+
+/**
+ * Reduce a proxy() response to its classified outcome.
+ *
+ * Single source of truth for the expectation grammar — used by this script's
+ * runner and imported by __tests__/proxy.test.ts so the vitest matrix can
+ * never drift from the standalone runner's classification.
+ */
+export function classifyProxyResult(response: NextResponse | null): ProxyExpectation {
+  if (!response) return 'next';
+
+  const rewriteHeader = response.headers.get('x-middleware-rewrite');
+  if (rewriteHeader) {
+    const rewriteUrl = new URL(rewriteHeader);
+    if (rewriteUrl.pathname === '/404') return '404';
+    // Compare pathname + search so query-string preservation is asserted
+    // for rewrite cases instead of silently dropped.
+    return `rewrite:${rewriteUrl.pathname}${rewriteUrl.search}`;
+  }
+
+  const location = response.headers.get('location');
+  if (location) {
+    // A redirect the proxy issues itself (security headers + CSP ride
+    // along; asserted in __tests__/proxy.test.ts).
+    const redirectUrl = new URL(location);
+    return `redirect:${response.status}:${redirectUrl.pathname}${redirectUrl.search}`;
+  }
+
+  if (response.url.includes('/404')) return '404';
+  return 'next';
+}
+
 // Test cases based on legacy route patterns
-const testCases = [
+const testCases: ProxyTestCase[] = [
   // Static routes (should pass through)
   { path: '/trending', expected: 'next', description: 'Static route: trending' },
   { path: '/login', expected: 'next', description: 'Static route: login' },
@@ -162,35 +215,8 @@ async function runTests() {
     try {
       const request = createMockRequest(testCase.path);
       const response = proxy(request);
-      
-      let actual: string;
-      
-      if (!response) {
-        actual = 'next';
-      } else {
-        // Check if it's a rewrite response
-        const rewriteHeader = response.headers.get('x-middleware-rewrite');
-        if (rewriteHeader) {
-          const rewriteUrl = new URL(rewriteHeader);
-          if (rewriteUrl.pathname === '/404') {
-            actual = '404';
-          } else {
-            // Compare pathname + search so query-string preservation is
-            // asserted for rewrite cases instead of silently dropped.
-            actual = `rewrite:${rewriteUrl.pathname}${rewriteUrl.search}`;
-          }
-        } else if (response.headers.get('location')) {
-          // A redirect the proxy issues itself (security headers + CSP ride
-          // along; asserted in __tests__/proxy.test.ts).
-          const redirectUrl = new URL(response.headers.get('location')!);
-          actual = `redirect:${response.status}:${redirectUrl.pathname}${redirectUrl.search}`;
-        } else if (response.url.includes('/404')) {
-          actual = '404';
-        } else {
-          actual = 'next';
-        }
-      }
-      
+      const actual = classifyProxyResult(response);
+
       const success = actual === testCase.expected;
       
       if (success) {

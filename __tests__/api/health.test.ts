@@ -12,13 +12,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
  * so each test imports a fresh copy via vi.resetModules.
  */
 
-// Mirrors FRESH_THRESHOLD from lib/cache/health-monitor (60s); pinned by
-// __tests__/lib/cache/health-monitor.test.ts.
-const REAL_FRESH_THRESHOLD = 60_000;
-
 vi.mock('@/lib/cache/health-monitor', async (importOriginal) => {
   // The real module is all Redis-guarded no-ops under vitest (no REDIS_URL);
-  // keep the real constant and mock only the functions the route uses.
+  // keep the real constant and mock only the functions the route uses. The
+  // test then imports FRESH_THRESHOLD from this mock — the same value the
+  // route's own import resolves to, with no hand-copied constant to drift.
   const actual = await importOriginal<typeof import('@/lib/cache/health-monitor')>();
   return {
     FRESH_THRESHOLD: actual.FRESH_THRESHOLD,
@@ -39,6 +37,7 @@ vi.mock('@/lib/steem/client', () => ({
 }));
 
 import {
+  FRESH_THRESHOLD,
   acquireProbeLock,
   getSteemHealthStale,
   markSteemHealthy,
@@ -127,7 +126,7 @@ describe('GET /api/health', () => {
   it('serves a stale entry with X-Health-Stale when the probe lock is held elsewhere', async () => {
     getSteemHealthStaleMock.mockResolvedValue({
       healthy: true,
-      checkedAt: Date.now() - REAL_FRESH_THRESHOLD - 5_000,
+      checkedAt: Date.now() - FRESH_THRESHOLD - 5_000,
       blockNumber: 777,
     });
     acquireProbeLockMock.mockResolvedValue(false);
@@ -142,10 +141,37 @@ describe('GET /api/health', () => {
     expect(checkSteemNodeHealthMock).not.toHaveBeenCalled();
   });
 
+  it('serves a stale DEGRADED entry as 503 + X-Health-Stale when the lock is held elsewhere', async () => {
+    // Staleness and degraded-ness are orthogonal: a cached unhealthy entry
+    // past the fresh window still answers 503 while another instance
+    // revalidates — the stale header tells the client the verdict is dated.
+    getSteemHealthStaleMock.mockResolvedValue({
+      healthy: false,
+      checkedAt: Date.now() - FRESH_THRESHOLD - 5_000,
+      error: 'upstream ETIMEDOUT stack internals',
+    });
+    acquireProbeLockMock.mockResolvedValue(false);
+    const { GET } = await importRoute();
+
+    const res = await GET();
+
+    expect(res.status).toBe(503);
+    expect(res.headers.get('X-Health-Stale')).toBe('true');
+    const body = await res.json();
+    expect(body.status).toBe('degraded');
+    // Audit N-20 still applies on the stale path: generic message only.
+    expect(body.checks.steem.error).toBe('Steem node check failed');
+    expect(JSON.stringify(body)).not.toContain('ETIMEDOUT');
+    // Contended lock: this instance neither probes nor rewrites the shared
+    // entry — the lock holder owns the revalidation.
+    expect(checkSteemNodeHealthMock).not.toHaveBeenCalled();
+    expect(markSteemUnhealthyMock).not.toHaveBeenCalled();
+  });
+
   it('acquires the lock on a stale entry, probes healthy and records it', async () => {
     getSteemHealthStaleMock.mockResolvedValue({
       healthy: true,
-      checkedAt: Date.now() - REAL_FRESH_THRESHOLD - 5_000,
+      checkedAt: Date.now() - FRESH_THRESHOLD - 5_000,
     });
     const { GET } = await importRoute();
 
@@ -161,7 +187,7 @@ describe('GET /api/health', () => {
   it('records unhealthy and answers 503 when the live probe finds the node down', async () => {
     getSteemHealthStaleMock.mockResolvedValue({
       healthy: true,
-      checkedAt: Date.now() - REAL_FRESH_THRESHOLD - 5_000,
+      checkedAt: Date.now() - FRESH_THRESHOLD - 5_000,
     });
     checkSteemNodeHealthMock.mockResolvedValue({
       healthy: false,
@@ -214,6 +240,27 @@ describe('GET /api/health', () => {
       const second = await GET();
 
       expect(second.status).toBe(200);
+      expect(checkSteemNodeHealthMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('replays an UNHEALTHY probe result within the window as 503, without re-probing', async () => {
+      // The throttle is verdict-agnostic: an unhealthy in-memory answer is
+      // replayed too, so a down node is not re-probed per request during the
+      // window and clients consistently see 503.
+      checkSteemNodeHealthMock.mockResolvedValue({
+        healthy: false,
+        error: 'connection refused',
+      });
+      const { GET } = await importRoute();
+
+      const first = await GET();
+      expect(first.status).toBe(503);
+
+      vi.advanceTimersByTime(2_000);
+      const second = await GET();
+
+      expect(second.status).toBe(503);
+      expect((await second.json()).status).toBe('degraded');
       expect(checkSteemNodeHealthMock).toHaveBeenCalledTimes(1);
     });
 

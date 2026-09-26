@@ -21,10 +21,15 @@ process.env.JWT_SECRET =
 afterEach(async () => {
   // Node-environment suites (// @vitest-environment node) have no DOM.
   if (typeof document === 'undefined') return;
-  // Drain any scheduler work the test queued (passive effects, unmount
-  // continuations) BEFORE unmounting, so nothing is left scheduled for a
-  // moment when the environment no longer exists. RTL's act wrapper manages
-  // IS_REACT_ACT_ENVIRONMENT around the callback, so this does not warn.
-  await act(async () => {});
-  cleanup();
+  try {
+    // Drain any scheduler work the test queued (passive effects, unmount
+    // continuations) BEFORE unmounting, so nothing is left scheduled for a
+    // moment when the environment no longer exists. RTL's act wrapper manages
+    // IS_REACT_ACT_ENVIRONMENT around the callback, so this does not warn.
+    await act(async () => {});
+  } finally {
+    // Unmount even when the drain throws — otherwise one failing scheduler
+    // callback would leak every subsequent test's DOM tree.
+    cleanup();
+  }
 });

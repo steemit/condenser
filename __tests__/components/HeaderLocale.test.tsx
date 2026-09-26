@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { cleanup, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { ReactNode } from 'react';
 
 import userReducer, { setUser } from '@/store/slices/userSlice';
@@ -40,8 +40,6 @@ vi.mock('@/components/elements/NotificationBadge', () => ({
 import { Header } from '@/components/layout/Header';
 
 describe('Header locale rendering', () => {
-  afterEach(() => cleanup());
-
   it('renders Spanish labels when the locale is es', async () => {
     const store = configureStore({ reducer: { user: userReducer } });
     const messages = await getMergedMessages('es');

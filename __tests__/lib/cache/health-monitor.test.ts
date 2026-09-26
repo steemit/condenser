@@ -12,11 +12,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
  * without a real Redis.
  */
 
-vi.mock('@/lib/cache/redis', () => ({
-  // Mirrors the real prefix for default REDIS_KEY_PREFIX ('condenser').
-  redisKey: (key: string) => `condenser:${key}`,
-  getRedis: vi.fn(),
-}));
+vi.mock('@/lib/cache/redis', async (importOriginal) => {
+  // Reuse the REAL redisKey so the wire-key assertions below exercise the
+  // actual prefixing logic (default REDIS_KEY_PREFIX 'condenser') instead of
+  // a hand-written mirror that could silently drift from it.
+  const actual = await importOriginal<typeof import('@/lib/cache/redis')>();
+  return {
+    ...actual,
+    getRedis: vi.fn(),
+  };
+});
 
 import {
   FRESH_THRESHOLD,
@@ -108,9 +113,24 @@ describe('health monitor state machine', () => {
       expect(await getSteemHealthStale()).toMatchObject({ healthy: false });
     });
 
+    it('treats an entry exactly 60s old as still fresh (the gate is >, not >=)', async () => {
+      const redis = makeRedis();
+      getRedisMock.mockReturnValue(redis.client);
+      redis.store.set('condenser:health:steem', healthEntry({ healthy: false }));
+
+      // Exactly FRESH_THRESHOLD later: age === 60_000 does not exceed the
+      // window, so the entry is served (and isSteemKnownDown stays
+      // authoritative for the full window).
+      vi.setSystemTime(new Date('2026-09-26T00:01:00Z'));
+      expect(await getSteemHealth()).toMatchObject({ healthy: false });
+      expect(await isSteemKnownDown()).toBe(true);
+    });
+
     it('pins the 60s freshness threshold constant', () => {
-      // FRESH_THRESHOLD is the contract between the monitor and /api/health
-      // (both compute freshness independently — they must agree).
+      // /api/health imports this same FRESH_THRESHOLD constant from the
+      // monitor (it does not recompute the window), so this pin guards the
+      // documented freshness contract for both readers against accidental
+      // widening/narrowing.
       expect(FRESH_THRESHOLD).toBe(60_000);
     });
 

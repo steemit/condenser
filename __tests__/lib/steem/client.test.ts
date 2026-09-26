@@ -196,16 +196,29 @@ describe('lib/steem/client cache-key and TTL contracts', () => {
   it('every cached key stays under the steem: namespace the invalidation sweeps rely on', async () => {
     // Re-derived guard: the broadcast route only ever deletes
     // cacheDelete/cacheDeleteByPrefix targets inside `steem:` — a key that
-    // escapes this prefix can never be invalidated.
+    // escapes this prefix can never be invalidated. Sample EVERY withCache
+    // call site in client.ts (all key families), not a subset, so a future
+    // family added outside the namespace fails here immediately.
     calls.length = 0;
     api.getFollowingAsync.mockResolvedValue([]);
+    api.getDynamicGlobalPropertiesAsync.mockResolvedValue({ head_block_number: 1 });
     await getRankedPosts({ sort: 'trending' });
+    await getAccountPosts({ sort: 'blog', account: 'alice' });
     await getDiscussion({ author: 'a', permlink: 'b' });
-    await getProfile({ account: 'a' });
+    await getDynamicGlobalProperties();
     await getFollowing('a', '', 'blog');
+    await getFollowersByPage({ account: 'a', page: 1, limit: 50 });
+    await getFollowingByPage({ account: 'a', page: 1, limit: 50 });
+    await getProfile({ account: 'a' });
     await listCommunities({});
+    await getCommunityRoles({ community: 'hive-123456' });
+    await getCommunitySubscribers({ community: 'hive-123456' });
 
-    expect(calls.length).toBe(5);
+    // 11 call sites = the 11 cache-key families (posts:ranked, posts:account,
+    // post, dynamic-global-properties, following, followers-page,
+    // following-page, profile, communities, community-roles,
+    // community-subscribers).
+    expect(calls.length).toBe(11);
     for (const { key } of calls) {
       expect(key.startsWith('steem:')).toBe(true);
     }

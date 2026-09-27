@@ -65,10 +65,19 @@ export function getRedis(): Redis | null {
       console.warn('Content cache Redis error:', err.message);
     });
 
+    // Stale-client guard (S9, same pattern as lib/auth/redis-session.ts):
+    // only this client may vacate the singleton slot. Without the guard, a
+    // late 'close' from a client that was already replaced (A closed -> next
+    // getRedis() minted B -> A emitted another close) would null B's slot,
+    // so the following getRedis() mints C and B leaks (bounded only by its
+    // retryStrategy giving up after 10 attempts).
+    const client = redis;
     redis.on('close', () => {
       // Allow reconnection on a future call once the link recovers.
-      redis = null;
-      redisUnavailable = false;
+      if (redis === client) {
+        redis = null;
+        redisUnavailable = false;
+      }
     });
 
     return redis;

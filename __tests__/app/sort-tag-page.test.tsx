@@ -113,4 +113,24 @@ describe('/[sort]/[tag] page — legacy tag=my special cases', () => {
     expect(screen.queryByText('My Communities')).toBeNull();
     expect(screen.queryByText("You haven't joined any active communities yet!")).toBeNull();
   });
+
+  it('uppercase sort passes a lowercased order so payout empty copy matches', async () => {
+    // proxy.ts validates SORT_TYPES case-insensitively but rewrites with the
+    // original casing, so /Payout/bitcoin arrives as sort='Payout'.
+    // PostsList keys its empty-state copy on the order prop — a raw-cased
+    // 'Payout' falls through to the generic "No posts found." copy.
+    mockParams = { sort: 'Payout', tag: 'bitcoin' };
+    fetchRankedPostsMock.mockResolvedValue([]);
+    renderPage(false);
+    await waitFor(() => {
+      expect(
+        screen.getByText(/No pending posts found\./i)
+      ).toBeTruthy();
+    });
+    expect(screen.queryByText('No posts found.')).toBeNull();
+    // The API query itself also uses the normalized order.
+    expect(fetchRankedPostsMock).toHaveBeenCalledWith(
+      expect.objectContaining({ order: 'payout', category: 'bitcoin' })
+    );
+  });
 });

@@ -133,3 +133,26 @@ describe('PrimaryNavigation profile group identity', () => {
     expect(screen.queryByText('Settings')).toBeNull();
   });
 });
+
+describe('PrimaryNavigation case normalization (legacy parity)', () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
+  it('highlights the Blog tab under /@alice/BLOG (legacy 301-normalized)', () => {
+    renderNav('/@alice/BLOG');
+    expect(isActive(itemByLabel('Blog'))).toBe(true);
+  });
+
+  it('highlights the Blog tab under a cased username (/@Alice/blog)', () => {
+    renderNav('/@Alice/blog');
+    expect(isActive(itemByLabel('Blog'))).toBe(true);
+  });
+
+  it('highlights My Subscriptions under /Payout/my, not All Posts', () => {
+    renderNav('/Payout/my');
+    expect(isActive(itemByLabel('My Subscriptions'))).toBe(true);
+    // /<sort>/my is the My Subscriptions feed, never All Posts.
+    expect(isActive(itemByLabel('All Posts'))).toBe(false);
+  });
+});

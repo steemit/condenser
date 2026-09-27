@@ -58,6 +58,9 @@ function makePost(permlink: string) {
 }
 
 function renderSection(section: string, loggedIn: boolean) {
+  // The section parameter drives the mocked route params, so each test's
+  // intent (which cased section it renders) lives in one place.
+  mockParams = { username: 'alice', section };
   const store = configureStore({
     reducer: { app: appReducer, user: userReducer, global: globalReducer },
   });
@@ -76,12 +79,10 @@ function renderSection(section: string, loggedIn: boolean) {
 describe('UserSectionClient section case normalization (legacy parity)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockParams = { username: 'alice', section: 'blog' };
     fetchUserProfileMock.mockResolvedValue(PROFILE);
   });
 
   it('uppercase BLOG renders the blog posts, not the empty state', async () => {
-    mockParams = { username: 'alice', section: 'BLOG' };
     fetchAccountPostsMock.mockResolvedValue([makePost('hello-world')]);
 
     renderSection('BLOG', false);
@@ -104,8 +105,6 @@ describe('UserSectionClient section case normalization (legacy parity)', () => {
   });
 
   it('uppercase SETTINGS renders the own-account settings editor', async () => {
-    mockParams = { username: 'alice', section: 'SETTINGS' };
-
     renderSection('SETTINGS', true);
 
     await waitFor(() => {
@@ -119,8 +118,6 @@ describe('UserSectionClient section case normalization (legacy parity)', () => {
   });
 
   it('mixed-case followers renders the followers list heading', async () => {
-    mockParams = { username: 'alice', section: 'Followers' };
-
     renderSection('Followers', false);
 
     await waitFor(() => {

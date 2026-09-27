@@ -38,6 +38,10 @@ export default function PostFull({ post }: PostFullProps) {
   // below as revealedFor === postKey, no reset effect needed. Refetches that
   // swap in a new object for the same author/permlink keep the reveal, since
   // the key is the post identity, not the object reference.
+  // Rejected alternatives: forcing a remount via the key prop unmounts into
+  // the loading skeleton window for every post swap (untestable here, visible
+  // flicker); a reset useEffect trips the react-hooks set-state-in-effect
+  // lint rule.
   const postKey = `${post.author}/${post.permlink}`;
   const [revealedFor, setRevealedFor] = useState<string | null>(null);
   // Extension beyond legacy (which gated only feed cards, see

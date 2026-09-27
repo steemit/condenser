@@ -77,10 +77,15 @@ function isMyFriendsRoute(pathname: string, username: string | undefined) {
 const SORT_TAG_RE = new RegExp(`^\\/(${SORT_TYPES.join("|")})\\/(.+)$`);
 
 function isMySubscriptionsRoute(pathname: string) {
-  if (pathname === "/trending/my") return true;
-  const m = pathname.match(SORT_TAG_RE);
+  // Lowercase the input, not the regex: sort names are a lowercase-only
+  // vocabulary (lib/routes.ts) and the derived regex stays case-sensitive
+  // for any other consumer. Matches legacy, whose 301 normalized the whole
+  // URL to lowercase before these checks — /Payout/my keeps the item active.
+  const p = pathname.toLowerCase();
+  if (p === "/trending/my") return true;
+  const m = p.match(SORT_TAG_RE);
   if (!m) return false;
-  return m[2].toLowerCase() === "my";
+  return m[2] === "my";
 }
 
 /** Usernames that must not be treated as profile paths (aligned with proxy.ts). */
@@ -106,10 +111,15 @@ function isProfileSectionActive(
   username: string,
   segment: string
 ) {
+  // Legacy 301-normalized the whole URL to lowercase before routing, so its
+  // nav saw a lowercase URL; compare the same way (username comes lowercased
+  // from the caller, segments are lowercase vocabulary) — /@alice/BLOG and
+  // /@Alice/blog keep the tab highlighted.
+  const p = pathname.toLowerCase();
   if (segment === "blog") {
-    return pathname === `/@${username}` || pathname === `/@${username}/blog`;
+    return p === `/@${username}` || p === `/@${username}/blog`;
   }
-  return pathname === profileSectionHref(username, segment);
+  return p === profileSectionHref(username, segment);
 }
 
 /** Profile URL segments that are sections, not permlinks (mirrors proxy.ts PROFILE_SECTIONS). */

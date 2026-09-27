@@ -86,13 +86,6 @@ vi.mock('@/lib/api/csrf', () => ({
 // `async () => ({ unwrap })` resolves to a plain object-wrapping Promise, so
 // `dispatch(...).unwrap()` throws a TypeError that the form's catch block
 // swallows — silently skipping the success tail (hideLogin / navigation).
-// Avoid the real thunk's follow-state fetches; the form only needs
-// dispatch(loginThunk(payload)).unwrap() to resolve. Mirror the real
-// createAsyncThunk shape: the action creator returns a thunk function whose
-// dispatch result is a thenable that ALSO carries .unwrap(). A bare
-// `async () => ({ unwrap })` resolves to a plain object-wrapping Promise, so
-// `dispatch(...).unwrap()` throws a TypeError that the form's catch block
-// swallows — silently skipping the success tail (hideLogin / navigation).
 vi.mock('@/store/thunks/authThunks', () => ({
   loginThunk: vi.fn(
     () => () =>

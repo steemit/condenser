@@ -18,9 +18,16 @@ import Announcement from "@/components/layout/Announcement";
 import { INDEX_LEFT_SIDE_AD_LIST, POST_LEFT_SIDE_AD_LIST, tronAdsConfig } from "@/lib/ads";
 import { SORT_TYPES, isPostPathname } from "@/lib/routes";
 
-/** /<sort>/hive-* matcher; the alternation is derived from SORT_TYPES (lib/routes.ts). */
+/**
+ * /<sort>/hive-* community feed matcher; the alternation is derived from
+ * SORT_TYPES (lib/routes.ts). Anchored to exactly two segments: community
+ * feed URLs are /<sort>/hive-* (a third segment is not a valid feed route,
+ * and the proxy 308-normalizes trailing slashes away, so the former trailing
+ * "/" in the pattern — requiring a third segment — never matched the real
+ * two-segment URL and the pane was dead code).
+ */
 const COMMUNITY_FEED_RE = new RegExp(
-  `^\\/(?:${SORT_TYPES.join("|")})\\/(hive-[^/]+)/`
+  `^\\/(?:${SORT_TYPES.join("|")})\\/(hive-[^/]+)$`
 );
 
 /** Legacy c-sidebar__module chrome. */
@@ -154,7 +161,13 @@ export function FeedSidebarWidgets() {
   const username = useAppSelector((s) => s.user.current?.username);
   const trackingId = useAppSelector((s) => s.user.trackingId);
 
-  const communityMatch = pathname?.match(COMMUNITY_FEED_RE);
+  // Lowercase the pathname instead of flagging COMMUNITY_FEED_RE with "i":
+  // the sort vocabulary is lowercase-only (lib/routes.ts) and the derived
+  // regex stays case-sensitive for any other consumer. This mirrors legacy,
+  // whose 301 normalized the whole URL to lowercase before the UI matched,
+  // and the captured (lowercase) community matches how the page itself
+  // queries the tag — /Payout/hive-x still shows the community pane.
+  const communityMatch = pathname?.toLowerCase().match(COMMUNITY_FEED_RE);
   const community = communityMatch?.[1];
   // Post pages get the post-scoped creative tags (legacy Post.jsx right
   // rail); feed pages get the index list. Shared anchored matcher

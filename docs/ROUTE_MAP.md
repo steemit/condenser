@@ -142,7 +142,13 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
   server-shell `generateMetadata` already matched private sections
   case-insensitively), so `/@alice/BLOG` renders the same blog list as
   `/@alice/blog`; the `[sort]/[tag]` page likewise passes a lowercased
-  order to `PostsList`.
+  order to `PostsList`. URL-derived navigation UI is normalized the same
+  way: `PrimaryNavigation` lowercases the pathname before its
+  profile-tab and my-subscriptions comparisons, and
+  `FeedSidebarWidgets` before its community-feed matcher, so
+  `/@alice/BLOG` keeps the Blog tab highlighted while `/Payout/my` and
+  `/Payout/hive-x` still light up My Subscriptions and the community
+  pane (legacy served these UIs from the 301-normalized lowercase URL).
 - **Trailing slashes**: rewrites are built on `request.nextUrl.clone()`,
   whose `NextURL` keeps the original trailing-slash state — so
   `/@alice/feed/` rewrites to `/user/alice/feed/` (with slash). Harmless:

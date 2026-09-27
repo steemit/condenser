@@ -103,3 +103,67 @@ describe('FeedSidebarWidgets announcement placement', () => {
     });
   });
 });
+
+describe('FeedSidebarWidgets community pane (case normalization)', () => {
+  const COMMUNITY = {
+    name: 'hive-123',
+    title: 'Test Community',
+    about: 'A community for tests',
+    subscribers: 42,
+    num_authors: 7,
+  };
+
+  beforeEach(() => {
+    // Mock shapes mirror the real routes: /api/steem/communities responds
+    // with a BARE array (NextResponse.json(result), consumed via cachedFetch),
+    // while /api/steem/notices wraps in { data } (bare fetch in Announcement).
+    // The headers stub matters too: cachedFetch reads X-Cache-Invalidate via
+    // res.headers.get(), and a missing headers object would throw inside
+    // invalidateFromResponse — silently swallowed by fetchCommunities.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockImplementation((url: string) => {
+        const ok = (json: () => unknown) =>
+          Promise.resolve({ ok: true, headers: { get: () => null }, json });
+        if (url === '/api/steem/notices') {
+          return ok(async () => ({ data: [NOTICE] }));
+        }
+        if (url.startsWith('/api/steem/communities')) {
+          return ok(async () => [COMMUNITY]);
+        }
+        return ok(async () => []);
+      })
+    );
+  });
+  afterEach(cleanup);
+
+  it('shows the community pane for an uppercase sort (/Payout/hive-123)', async () => {
+    // Legacy 301-normalized the URL to lowercase before the UI matched, so
+    // the pane must appear here too (legacy parity).
+    mockPathname = '/Payout/hive-123';
+    render(
+      <Provider store={makeStore(false)}>
+        <IntlWrapper>
+          <FeedSidebarWidgets />
+        </IntlWrapper>
+      </Provider>
+    );
+    expect(await screen.findByText('Test Community')).toBeTruthy();
+  });
+
+  it('keeps the community pane hidden on non-community feeds', async () => {
+    mockPathname = '/Payout/my';
+    render(
+      <Provider store={makeStore(false)}>
+        <IntlWrapper>
+          <FeedSidebarWidgets />
+        </IntlWrapper>
+      </Provider>
+    );
+    // Wait for the rail to settle (SidebarNewUsers), then assert no pane.
+    await waitFor(() => {
+      expect(screen.getByText('New to Steemit?')).toBeTruthy();
+    });
+    expect(screen.queryByText('Test Community')).toBeNull();
+  });
+});

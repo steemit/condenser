@@ -136,7 +136,13 @@ Verified against `condenser-legacy/src/app/ResolveRoute.js` and
   profile section route, not a permlink post: the new code routes
   `/@alice/BLOG` as a section directly at the original-cased URL (no
   redirect), while legacy adds one 301 hop that also normalizes the
-  URL to lowercase.
+  URL to lowercase. Rendering parity is preserved by normalizing the
+  section case in the page itself:
+  `UserSectionClient.tsx` lowercases `params.section` on entry (the
+  server-shell `generateMetadata` already matched private sections
+  case-insensitively), so `/@alice/BLOG` renders the same blog list as
+  `/@alice/blog`; the `[sort]/[tag]` page likewise passes a lowercased
+  order to `PostsList`.
 - **Trailing slashes**: rewrites are built on `request.nextUrl.clone()`,
   whose `NextURL` keeps the original trailing-slash state — so
   `/@alice/feed/` rewrites to `/user/alice/feed/` (with slash). Harmless:

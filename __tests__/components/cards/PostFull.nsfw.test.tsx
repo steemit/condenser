@@ -99,3 +99,74 @@ describe('PostFull nsfw gate (extension beyond legacy: post-page interstitial)',
     }
   });
 });
+
+describe('PostFull nsfw reveal resets when the post changes', () => {
+  afterEach(cleanup);
+
+  function makeKeyedPost(author: string, permlink: string, body: string) {
+    return {
+      author,
+      permlink,
+      category: 'steem',
+      title: `Post ${permlink}`,
+      body,
+      created: '2024-01-01T00:00:00',
+      json_metadata: { tags: ['nsfw'] },
+    };
+  }
+
+  function renderTree(post: ReturnType<typeof makeKeyedPost>) {
+    const store = configureStore({
+      reducer: { app: appReducer, user: userReducer },
+    });
+    store.dispatch(setUserPreferences({ nsfwPref: 'warn' }));
+    const renderUI = (p: ReturnType<typeof makeKeyedPost>) => (
+      <Provider store={store}>
+        <IntlWrapper>
+          <PostFull post={p} />
+        </IntlWrapper>
+      </Provider>
+    );
+    // rerender() needs a fresh element per call — an identical element
+    // reference lets React bail out without re-rendering.
+    return { ...render(renderUI(post)), renderUI };
+  }
+
+  it('a revealed post A does not leak the reveal into post B', async () => {
+    // Retrospective review finding: a parent that swaps the post prop
+    // without remounting (client-side navigation) kept revealNsfw=true, so
+    // post B's nsfw body rendered without the interstitial.
+    const { rerender, renderUI } = renderTree(
+      makeKeyedPost('alice', 'nsfw-a', 'body of A')
+    );
+
+    expect(screen.getByText('Reveal this post')).toBeTruthy();
+    fireEvent.click(screen.getByText('Reveal this post'));
+    expect(screen.getByTestId('markdown-viewer').textContent).toBe('body of A');
+
+    // Navigate to post B: the interstitial must be back.
+    rerender(renderUI(makeKeyedPost('bob', 'nsfw-b', 'body of B')));
+    expect(screen.getByText('Reveal this post')).toBeTruthy();
+    expect(screen.queryByTestId('markdown-viewer')).toBeNull();
+
+    // B itself can still be revealed.
+    fireEvent.click(screen.getByText('Reveal this post'));
+    expect(screen.getByTestId('markdown-viewer').textContent).toBe('body of B');
+  });
+
+  it('keeps the reveal across refetches of the same post (same author/permlink, new object)', async () => {
+    const { rerender, renderUI } = renderTree(
+      makeKeyedPost('alice', 'nsfw-a', 'body of A')
+    );
+    fireEvent.click(screen.getByText('Reveal this post'));
+    expect(screen.getByTestId('markdown-viewer').textContent).toBe('body of A');
+
+    // A refetch produces a new object for the SAME post — the reveal must
+    // not reset (the gate would flash back over an already-revealed body).
+    rerender(renderUI({ ...makeKeyedPost('alice', 'nsfw-a', 'body of A v2') }));
+    expect(screen.queryByText('Reveal this post')).toBeNull();
+    expect(screen.getByTestId('markdown-viewer').textContent).toBe(
+      'body of A v2'
+    );
+  });
+});

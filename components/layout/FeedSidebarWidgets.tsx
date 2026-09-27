@@ -18,9 +18,20 @@ import Announcement from "@/components/layout/Announcement";
 import { INDEX_LEFT_SIDE_AD_LIST, POST_LEFT_SIDE_AD_LIST, tronAdsConfig } from "@/lib/ads";
 import { SORT_TYPES, isPostPathname } from "@/lib/routes";
 
-/** /<sort>/hive-* matcher; the alternation is derived from SORT_TYPES (lib/routes.ts). */
+/**
+ * /<sort>/hive-* community feed matcher; the alternation is derived from
+ * SORT_TYPES (lib/routes.ts). Anchored to exactly two segments: community
+ * feed URLs are /<sort>/hive-* (a third segment is not a valid feed route).
+ * The pattern was introduced broken in #3988 (it required a third segment,
+ * so it never matched the real two-segment URL and the pane was dead code)
+ * until this fix revived it. The optional trailing slash mirrors
+ * isPostPathname (lib/routes.ts): today the proxy's 308 normalization
+ * strips it before the UI matches, but if skipTrailingSlashRedirect is
+ * ever enabled usePathname() would report it and the pane would go dead
+ * again.
+ */
 const COMMUNITY_FEED_RE = new RegExp(
-  `^\\/(?:${SORT_TYPES.join("|")})\\/(hive-[^/]+)/`
+  `^\\/(?:${SORT_TYPES.join("|")})\\/(hive-[^/]+)\\/?$`
 );
 
 /** Legacy c-sidebar__module chrome. */
@@ -146,15 +157,23 @@ function CommunityPane({ community }: { community: string }) {
 /**
  * Right rail modules (legacy PostsIndexLayout/Post.jsx sidebars):
  * community pane on community pages, then SidebarNewUsers (logged out) or
- * SidebarLinks (logged in), then the Coin Marketplace (hidden unless
- * STEEM_MARKET_ENDPOINT is configured), then ads last.
+ * SidebarLinks (logged in) — both hidden on community pages (legacy
+ * PostsIndexLayout gates them with !community, leaving only the pane,
+ * Coin Marketplace and ads there) — then the Coin Marketplace (hidden
+ * unless STEEM_MARKET_ENDPOINT is configured), then ads last.
  */
 export function FeedSidebarWidgets() {
   const pathname = usePathname();
   const username = useAppSelector((s) => s.user.current?.username);
   const trackingId = useAppSelector((s) => s.user.trackingId);
 
-  const communityMatch = pathname?.match(COMMUNITY_FEED_RE);
+  // Lowercase the pathname instead of flagging COMMUNITY_FEED_RE with "i":
+  // the sort vocabulary is lowercase-only (lib/routes.ts) and the derived
+  // regex stays case-sensitive for any other consumer. This mirrors legacy,
+  // whose 301 normalized the whole URL to lowercase before the UI matched,
+  // and the captured (lowercase) community matches how the page itself
+  // queries the tag — /Payout/hive-x still shows the community pane.
+  const communityMatch = pathname?.toLowerCase().match(COMMUNITY_FEED_RE);
   const community = communityMatch?.[1];
   // Post pages get the post-scoped creative tags (legacy Post.jsx right
   // rail); feed pages get the index list. Shared anchored matcher
@@ -170,7 +189,10 @@ export function FeedSidebarWidgets() {
       {/* Announcement: always on post pages, and on feed pages regardless
           of login state; community pages stay without it (legacy). */}
       {(isPostPage || !community) && <Announcement />}
-      {username ? <SidebarLinks /> : <SidebarNewUsers />}
+      {/* Legacy PostsIndexLayout hides the user rail modules on community
+          pages (!community on both SidebarNewUsers and SidebarLinks), where
+          the pane already fills that slot. */}
+      {!community && (username ? <SidebarLinks /> : <SidebarNewUsers />)}
       {/* Legacy ad tag: CoinMarketPlacePost on post pages, Index/Community
           on feed pages depending on the community context. */}
       <SteemMarket

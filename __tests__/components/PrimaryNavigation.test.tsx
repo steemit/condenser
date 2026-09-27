@@ -133,3 +133,43 @@ describe('PrimaryNavigation profile group identity', () => {
     expect(screen.queryByText('Settings')).toBeNull();
   });
 });
+
+describe('PrimaryNavigation case normalization (legacy parity)', () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
+  it('highlights the Blog tab under /@alice/BLOG (legacy 301-normalized)', () => {
+    renderNav('/@alice/BLOG');
+    expect(isActive(itemByLabel('Blog'))).toBe(true);
+  });
+
+  it('highlights the Blog tab under a cased username (/@Alice/blog)', () => {
+    renderNav('/@Alice/blog');
+    expect(isActive(itemByLabel('Blog'))).toBe(true);
+  });
+
+  it('highlights My Subscriptions under /Payout/my, not All Posts', () => {
+    renderNav('/Payout/my');
+    expect(isActive(itemByLabel('My Subscriptions'))).toBe(true);
+    // /<sort>/my is the My Subscriptions feed, never All Posts.
+    expect(isActive(itemByLabel('All Posts'))).toBe(false);
+  });
+
+  it('highlights My Friends under a cased username (/@Alice/feed)', () => {
+    // Proxy branch 3 lets any-cased usernames through; legacy 301-normalized
+    // the URL before its nav matched, so the item stays highlighted here.
+    renderNav('/@Alice/feed');
+    expect(isActive(itemByLabel('My Friends'))).toBe(true);
+  });
+
+  it('does not highlight My Friends for a different user\'s feed page', () => {
+    // /@bob/feed is bob's Friends Feed, not the viewer's: the profile
+    // group's item is active and the Explore group (home of My Friends)
+    // stays inactive — the Explore children are collapsed away.
+    renderNav('/@bob/feed');
+    expect(isActive(itemByLabel('Friends Feed'))).toBe(true);
+    expect(isActive(itemByLabel('Explore'))).toBe(false);
+    expect(screen.queryByText('My Friends')).toBeNull();
+  });
+});

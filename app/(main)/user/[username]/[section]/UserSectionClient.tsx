@@ -38,7 +38,14 @@ export default function UserSectionClient() {
 
   const usernameRaw = params.username as string;
   const accountname = normalizeUsername(usernameRaw).toLowerCase();
-  const section = (params.section as string) || 'blog';
+  // Normalize the section case: proxy.ts matches PROFILE_SECTIONS
+  // case-insensitively but rewrites with the ORIGINAL casing, so /@alice/BLOG
+  // arrives as section='BLOG'. Every comparison below is lowercase, so
+  // without normalization the uppercase variant skips the posts fetch and
+  // renders the default empty state. Legacy 301-redirected cased URLs to
+  // their lowercase form and rendered the real section; normalizing here
+  // matches that rendering behavior (without the extra redirect hop).
+  const section = ((params.section as string) || 'blog').toLowerCase();
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);

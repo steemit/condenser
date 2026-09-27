@@ -146,7 +146,10 @@ export default function SortTagPage() {
           posts={posts}
           loading={loading}
           onLoadMore={handleLoadMore}
-          order={sortString}
+          // Lowercased order: PostsList keys its empty-state copy on order
+          // ("payout"/"muted"/"feed"), which a raw-cased sort ("/Payout/x")
+          // would miss (proxy.ts preserves the original casing in rewrites).
+          order={order}
           category={tagString}
         />
       )}

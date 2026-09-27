@@ -31,7 +31,19 @@ interface PostFullProps {
  */
 export default function PostFull({ post }: PostFullProps) {
   const t = useTranslations();
-  const [revealNsfw, setRevealNsfw] = useState(false);
+  // The reveal decision belongs to a specific post, so the state stores WHICH
+  // post was revealed instead of a bare boolean. A parent that swaps the post
+  // prop without remounting (client-side navigation reuses the component
+  // instance) must not carry a reveal from post A into nsfw post B — derived
+  // below as revealedFor === postKey, no reset effect needed. Refetches that
+  // swap in a new object for the same author/permlink keep the reveal, since
+  // the key is the post identity, not the object reference.
+  // Rejected alternatives: forcing a remount via the key prop unmounts into
+  // the loading skeleton window for every post swap (untestable here, visible
+  // flicker); a reset useEffect trips the react-hooks set-state-in-effect
+  // lint rule.
+  const postKey = `${post.author}/${post.permlink}`;
+  const [revealedFor, setRevealedFor] = useState<string | null>(null);
   // Extension beyond legacy (which gated only feed cards, see
   // PostSummary.jsx): on the post page an nsfw post under 'warn'/'hide'
   // shows a reveal interstitial instead of the body, so the setting stays
@@ -39,6 +51,7 @@ export default function PostFull({ post }: PostFullProps) {
   const nsfwPref = normalizeNsfwPref(
     useAppSelector((s) => s.app.user_preferences.nsfwPref)
   );
+  const revealNsfw = revealedFor === postKey;
   const gateNsfwBody = hasNsfwTag(post) && nsfwPref !== 'show' && !revealNsfw;
   const tags = post.json_metadata?.tags || [];
   const postUrl = `/${post.category}/@${post.author}/${post.permlink}`;
@@ -124,7 +137,7 @@ export default function PostFull({ post }: PostFullProps) {
 
       <div className="PostFull__body mx-auto max-w-[54rem] py-4" itemProp="articleBody">
         {gateNsfwBody ? (
-          <NsfwWarning onReveal={() => setRevealNsfw(true)} />
+          <NsfwWarning onReveal={() => setRevealedFor(postKey)} />
         ) : (
           <MarkdownViewer
             text={post.body || ''}

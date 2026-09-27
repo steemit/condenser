@@ -33,6 +33,19 @@ async function loadRedisModule(client: unknown) {
   return await import('@/lib/cache/redis');
 }
 
+/** ioredis client double with emit-driven event handlers. */
+function makeEmitterClient() {
+  const handlers: Record<string, (...args: unknown[]) => void> = {};
+  return {
+    on: vi.fn((event: string, handler: (...args: unknown[]) => void) => {
+      handlers[event] = handler;
+    }),
+    emit(event: string, ...args: unknown[]) {
+      handlers[event]?.(...args);
+    },
+  };
+}
+
 describe('lib/cache/redis KEY_PREFIX precedence (S8 split)', () => {
   beforeEach(() => {
     vi.resetModules();
@@ -171,5 +184,59 @@ describe('lib/cache/redis cacheDeleteByPrefix', () => {
     await cacheDeleteByPrefix('steem:communities:');
 
     expect(ctor).not.toHaveBeenCalled();
+  });
+});
+
+describe('lib/cache/redis close-handler singleton lifecycle (S9 guard)', () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  afterEach(() => {
+    vi.doUnmock('ioredis');
+    vi.unstubAllEnvs();
+  });
+
+  async function loadWithClients(a: unknown, b: unknown) {
+    let n = 0;
+    const ctor = vi.fn(function MockRedis() {
+      return n++ === 0 ? a : b;
+    });
+    vi.doMock('ioredis', () => ({ default: ctor }));
+    vi.stubEnv('REDIS_URL', 'redis://localhost:6379');
+    vi.stubEnv('REDIS_KEY_PREFIX', '');
+    const mod = await import('@/lib/cache/redis');
+    return { ctor, mod };
+  }
+
+  it('close on the current client vacates the slot so a fresh client is minted', async () => {
+    const a = makeEmitterClient();
+    const b = makeEmitterClient();
+    const { ctor, mod } = await loadWithClients(a, b);
+
+    expect(mod.getRedis()).toBe(a);
+    a.emit('close');
+    // Slot vacated: the next call constructs the replacement.
+    expect(mod.getRedis()).toBe(b);
+    expect(ctor).toHaveBeenCalledTimes(2);
+  });
+
+  it("a stale client's late close does not evict the newer singleton", async () => {
+    // Regression (retrospective review): client A closes, the next getRedis()
+    // mints B, and THEN A emits another close. The handler must not clear
+    // B's slot — otherwise the following getRedis() mints C and B leaks
+    // (mirrors the S9 stale-client test in redis-session.test.ts).
+    const a = makeEmitterClient();
+    const b = makeEmitterClient();
+    const { ctor, mod } = await loadWithClients(a, b);
+
+    expect(mod.getRedis()).toBe(a);
+    a.emit('close'); // A vacates the slot; next call mints B
+    expect(mod.getRedis()).toBe(b);
+
+    a.emit('close'); // late close from the already-replaced client
+
+    expect(mod.getRedis()).toBe(b); // B is still the singleton
+    expect(ctor).toHaveBeenCalledTimes(2); // no third client was minted
   });
 });

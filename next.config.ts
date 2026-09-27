@@ -19,10 +19,10 @@ const nextConfig: NextConfig = {
   // Disable Next's implicit trailing-slash 308 redirect: it fires BEFORE the
   // proxy (and before next.config headers() apply), so it carries no
   // security headers. With this flag, proxy.ts issues that redirect itself
-  // with the full header set (audit N-02 follow-up). Caveat: paths outside
-  // the proxy matcher (api / _next static / favicon) with a trailing slash
-  // now 404 instead of redirecting — the app's own clients never call those
-  // with a trailing slash.
+  // with the full header set (audit N-02 follow-up). Paths outside the proxy
+  // matcher (api / _next static / favicon) simply skip that redirect — their
+  // behavior is up to normal route resolution, e.g. /api/health/ still
+  // matches the route handler and returns 200 (verified on Next 16).
   skipTrailingSlashRedirect: true,
   // Enable React strict mode
   reactStrictMode: true,

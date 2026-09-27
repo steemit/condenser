@@ -198,6 +198,10 @@ Blocked requests receive `429` with a `Retry-After` header.
 | `GET /api/auth/challenge` | 30/min | IP |
 | `GET /api/auth/session` | 120/min | IP |
 | `POST /api/auth/login` | 10/min | IP **and** account (body username) |
+| `POST /api/auth/preferences` | 60/min | IP |
+| `GET /api/steem/posts` | 60/min | IP |
+| `GET /api/steem/following` | 60/min | IP |
+| `GET /api/steem/followers` | 60/min | IP |
 | `POST /api/steem/broadcast` | 30/min | IP |
 | `POST /api/search` | 30/min | IP |
 | `POST /api/steem/overseer` | 60/min | IP |

@@ -67,9 +67,15 @@ function isCommunitiesRoute(pathname: string) {
 
 function isMyFriendsRoute(pathname: string, username: string | undefined) {
   if (!username) return false;
+  // Compare case-insensitively the same way isProfileSectionActive does:
+  // proxy branch 3 lets any-cased usernames through (/@Alice/feed renders
+  // the feed), and legacy's 301 normalization lowercased the whole URL
+  // before its nav matched — /@Alice/feed keeps My Friends highlighted.
+  // (username is lowercased at login, so only the pathname side needs it.)
+  const p = pathname.toLowerCase();
   return (
-    pathname === `/@${username}/feed` ||
-    pathname.startsWith(`/@${username}/feed/`)
+    p === `/@${username}/feed` ||
+    p.startsWith(`/@${username}/feed/`)
   );
 }
 
@@ -77,10 +83,15 @@ function isMyFriendsRoute(pathname: string, username: string | undefined) {
 const SORT_TAG_RE = new RegExp(`^\\/(${SORT_TYPES.join("|")})\\/(.+)$`);
 
 function isMySubscriptionsRoute(pathname: string) {
-  if (pathname === "/trending/my") return true;
-  const m = pathname.match(SORT_TAG_RE);
+  // Lowercase the input, not the regex: sort names are a lowercase-only
+  // vocabulary (lib/routes.ts) and the derived regex stays case-sensitive
+  // for any other consumer. Matches legacy, whose 301 normalized the whole
+  // URL to lowercase before these checks — /Payout/my keeps the item active.
+  const p = pathname.toLowerCase();
+  if (p === "/trending/my") return true;
+  const m = p.match(SORT_TAG_RE);
   if (!m) return false;
-  return m[2].toLowerCase() === "my";
+  return m[2] === "my";
 }
 
 /** Usernames that must not be treated as profile paths (aligned with proxy.ts). */
@@ -106,10 +117,15 @@ function isProfileSectionActive(
   username: string,
   segment: string
 ) {
+  // Legacy 301-normalized the whole URL to lowercase before routing, so its
+  // nav saw a lowercase URL; compare the same way (username comes lowercased
+  // from the caller, segments are lowercase vocabulary) — /@alice/BLOG and
+  // /@Alice/blog keep the tab highlighted.
+  const p = pathname.toLowerCase();
   if (segment === "blog") {
-    return pathname === `/@${username}` || pathname === `/@${username}/blog`;
+    return p === `/@${username}` || p === `/@${username}/blog`;
   }
-  return pathname === profileSectionHref(username, segment);
+  return p === profileSectionHref(username, segment);
 }
 
 /** Profile URL segments that are sections, not permlinks (mirrors proxy.ts PROFILE_SECTIONS). */

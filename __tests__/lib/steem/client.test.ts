@@ -18,7 +18,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
  *    personalised reads out of the shared cache.
  *
  * withCache is mocked with a recorder that still executes the fetcher, so the
-    assertions cover what client.ts passes INTO the cache layer, not
+ * assertions cover what client.ts passes INTO the cache layer, not
  * cache behaviour itself (pinned in __tests__/lib/cache/server-cache.test.ts).
  */
 

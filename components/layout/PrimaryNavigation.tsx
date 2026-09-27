@@ -67,9 +67,15 @@ function isCommunitiesRoute(pathname: string) {
 
 function isMyFriendsRoute(pathname: string, username: string | undefined) {
   if (!username) return false;
+  // Compare case-insensitively the same way isProfileSectionActive does:
+  // proxy branch 3 lets any-cased usernames through (/@Alice/feed renders
+  // the feed), and legacy's 301 normalization lowercased the whole URL
+  // before its nav matched — /@Alice/feed keeps My Friends highlighted.
+  // (username is lowercased at login, so only the pathname side needs it.)
+  const p = pathname.toLowerCase();
   return (
-    pathname === `/@${username}/feed` ||
-    pathname.startsWith(`/@${username}/feed/`)
+    p === `/@${username}/feed` ||
+    p.startsWith(`/@${username}/feed/`)
   );
 }
 

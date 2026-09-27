@@ -155,4 +155,21 @@ describe('PrimaryNavigation case normalization (legacy parity)', () => {
     // /<sort>/my is the My Subscriptions feed, never All Posts.
     expect(isActive(itemByLabel('All Posts'))).toBe(false);
   });
+
+  it('highlights My Friends under a cased username (/@Alice/feed)', () => {
+    // Proxy branch 3 lets any-cased usernames through; legacy 301-normalized
+    // the URL before its nav matched, so the item stays highlighted here.
+    renderNav('/@Alice/feed');
+    expect(isActive(itemByLabel('My Friends'))).toBe(true);
+  });
+
+  it('does not highlight My Friends for a different user\'s feed page', () => {
+    // /@bob/feed is bob's Friends Feed, not the viewer's: the profile
+    // group's item is active and the Explore group (home of My Friends)
+    // stays inactive — the Explore children are collapsed away.
+    renderNav('/@bob/feed');
+    expect(isActive(itemByLabel('Friends Feed'))).toBe(true);
+    expect(isActive(itemByLabel('Explore'))).toBe(false);
+    expect(screen.queryByText('My Friends')).toBeNull();
+  });
 });

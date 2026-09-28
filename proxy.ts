@@ -44,6 +44,238 @@ const LEGACY_HTML_ALIASES: Record<string, string> = {
   '/tos.html': '/tos',
 };
 
+// ---------------------------------------------------------------------------
+// Anonymous post-page cache eligibility (openresty sidecar alignment).
+//
+// The openresty edge in front of this app (steemit/openresty #21/#22,
+// scripts/lua/condenser/{dev,production}/limit_req.lua) routes a request to
+// its proxy_cache location (/upstream_cached, `proxy_cache_valid 200 5m`)
+// only when it is a GET, its path is a post page, and it carries no Cookie
+// header at all:
+//
+//     is_get and ngx.re.find(uri, [[^/(?:[a-z0-9%.-]+/)?@[^/]+/.+]], "jo")
+//             and not has_cookie
+//
+// nginx honors Cache-Control, and Next.js stamps every dynamically rendered
+// page with `private, no-cache, no-store, max-age=0, must-revalidate`,
+// which nginx refuses to cache — so without this overlay the edge cache's
+// hit rate stays at 0%. The overlay below marks exactly the requests the
+// edge gate would cache as publicly cacheable (5 minutes, matching the edge
+// TTL) and keeps cookie-carrying post-page GETs on an explicit
+// `private, no-store`.
+//
+// Why setting the header here works: middleware response headers are applied
+// to the outgoing response before the page renders, and the render path only
+// stamps its default Cache-Control when the response does not already carry
+// one (next/dist/server/send-payload.js: "If cache control is already set on
+// the response we don't override it") — the same mechanism the per-request
+// CSP above relies on. Verified against a production build (`next start`):
+// anonymous post-page GETs serve `public, max-age=300` while /trending keeps
+// Next's default. Caveat: Next's DEV server unconditionally overrides
+// Cache-Control with `no-cache, must-revalidate` (base-server.js, dev-only
+// branch), so the overlay is invisible under `next dev` — it only matters
+// for production builds, which is what the edge fronts anyway.
+// NOTE: "already set is not overridden" is a send-payload implementation
+// detail, not a documented contract — every Next MAJOR upgrade must
+// re-verify the middleware-header override mechanism empirically before
+// trusting this overlay again (see docs/ROUTE_MAP.md, "Keeping this in
+// sync").
+//
+// HTML-only: RSC-family requests are excluded from the overlay (audit
+// follow-up, BLOCKER). The overlay must never hand a cacheable
+// Cache-Control to a React "flight" request, because render-time RSC
+// machinery can turn such a response into a same-key poison of the HTML
+// cache copy:
+//
+//   1. A client that is not the Next router (curl, a script, an attacker)
+//      sends GET /<tag>/@user/<permlink> with `RSC: 1` and no `?_rsc=`
+//      cache-buster.
+//   2. At middleware time the response is a plain 200 rewrite, so the
+//      status>=300 guard below never fires — the redirect does not exist
+//      yet — and the overlay used to stamp `public, max-age=300` on it.
+//   3. Next's render-time RSC hash validation (base-server.js,
+//      experimental.validateRSCRequestHeaders, default-on in Next 16) sees
+//      the flight request with a missing `_rsc` hash and answers with a
+//      307 empty-body redirect to the same URL plus `?_rsc=<expected>`.
+//   4. That 307 carries the middleware-stamped `public, max-age=300`
+//      (send-payload does not override an already-set header), and the
+//      edge cache key contains neither the RSC header nor any working Vary
+//      dimension — nginx does not vary its cache key on request headers,
+//      so a `Vary: RSC` on the response would be decorative.
+//   5. nginx therefore stores the 307 empty body under the exact key the
+//      anonymous HTML copy uses; the next anonymous HTML GET of that URL
+//      is served the cached 307 instead of the page (reproduced
+//      end-to-end on a production build: RSC:1 request first, then a plain
+//      anonymous GET returns the cached 307 empty body).
+//
+// NEXT 16 RUNTIME CAVEAT (verified empirically, see the PR follow-up): in
+// production the Node middleware adapter STRIPS the flight markers before
+// the middleware sees the request — next/dist/server/web/adapter.js
+// ("Headers should only be stripped for middleware") deletes every
+// FLIGHT_HEADERS entry and the `_rsc` search parameter from the
+// middleware-visible request and re-applies them to the render request
+// afterwards. On a production build, a request carrying `RSC: 1` that the
+// render-time validation 307s shows `request.headers.get('rsc') === null`
+// inside this proxy. The guard below is therefore inert for that vector on
+// Next 16.3.x; it is still the correct, portable guard (live in the unit
+// layer where requests reach proxy() verbatim, and on any runtime where
+// the markers reach the middleware). The load-bearing fix for the 307
+// poison is at the edge, where nginx CAN see the RSC header: the openresty
+// cache gate must bypass RSC-carrying requests and/or
+// `proxy_ignore_headers Cache-Control` must keep non-200 responses out of
+// the cache (tracked in the openresty repository — dependency noted in the
+// PR body and docs/ROUTE_MAP.md).
+//
+// Alignment constraints (deliberately tight):
+//  - The path regex mirrors the lua gate character-for-character, INCLUDING
+//    the lowercase-only tag segment [a-z0-9%.-] — deliberately narrower than
+//    branch 2's [^/]+ below: a wider match would hand `public` to paths the
+//    edge never caches (e.g. an uppercase-tag /Tag/@user/permlink), leaving
+//    browsers caching pages nginx does not. The DECODED pathname is tested,
+//    matching nginx $uri (decoded) semantics.
+//  - The gate regex intentionally also covers /@user/<profile-section>
+//    (e.g. /@alice/blog): `@[^/]+/.+` naturally includes two-segment
+//    profile paths, and the lua gate admits them the same way — the
+//    overlay matches that overlap on purpose.
+//  - GET only: the edge gate itself only admits GET (a HEAD is rejected at
+//    the lua gate and always goes to the uncached /upstream), so any other
+//    method keeps Next's default.
+//  - Proxy-issued redirects (trailing-slash 308s, .html aliases) are
+//    skipped via the status guard — they are already 3xx at middleware
+//    time. Render-time redirects cannot be caught that way: the RSC 307 is
+//    covered by the flight exclusion above, and the page-level
+//    canonicalization redirect of no-category post pages keeps the
+//    overlay's header (a per-URL-stable redirect; the openresty
+//    `proxy_ignore_headers Cache-Control` change is what keeps non-200s
+//    out of the edge cache).
+//  - Any Cookie header — not just a session cookie — opts out, mirroring the
+//    gate; those responses get an explicit `private, no-store`.
+//  - Responses this proxy rewrites to /404 (GDPR guard, internal-target
+//    guard, unroutable forms) are NOT overlaid even when the gate regex
+//    matches (audit follow-up, MAJOR): nginx honors an explicit upstream
+//    Cache-Control for non-200 statuses too — `proxy_cache_valid 200 5m`
+//    alone does not stop a `public, max-age=300` 404 from being stored —
+//    so a public 404 would enter the edge cache and browsers would hold
+//    the not-found view for the 5-minute window. Skipping the overlay
+//    keeps Next's no-store default on those responses (and only the
+//    openresty-side `proxy_ignore_headers Cache-Control` change makes
+//    non-200s uncacheable in general).
+//
+// CSP nonce tradeoff: within the 5-minute TTL every visitor served from the
+// shared edge copy sees the SAME nonce (the copy's CSP header and rendered
+// scripts come from one response, so the copy stays internally coherent).
+// That is a semantic weakening of the nonce defense-in-depth layer only —
+// the primary XSS defense is the render pipeline (markdown-it → HtmlReady →
+// sanitize-html, covered by the 66-case XSS suite) — and matches what
+// legacy accepted in #4032 when it made anonymous post pages cacheable.
+// Anonymous documents hold no personalized state (observer=null; the app
+// personalizes only through /api, which is never cached).
+// ---------------------------------------------------------------------------
+// Exported for the freeze tests in __tests__/proxy.test.ts: the source is
+// snapshot-asserted character-for-character so the JS side cannot drift
+// from the paired lua gate in limit_req.lua.
+export const ANON_POST_PAGE_GATE_RE = /^\/(?:[a-z0-9%.-]+\/)?@[^/]+\/.+/;
+
+/** 5 minutes — must match the edge's `proxy_cache_valid 200 5m`. */
+// 300s matches the edge-side proxy_cache_valid 200 5m — keep them in sync
+// (a freeze test pins the literal below; update both sides together).
+const ANONYMOUS_PAGE_CACHE_CONTROL = 'public, max-age=300';
+/** Explicit opt-out for cookie-carrying post-page GETs (gate bypasses too). */
+const COOKIED_PAGE_CACHE_CONTROL = 'private, no-store';
+
+/**
+ * Request markers of the React Server Components ("flight") family, frozen
+ * against Next 16's FLIGHT_HEADERS
+ * (next/dist/client/components/app-router-headers.js): `rsc`,
+ * `next-router-state-tree`, `next-router-prefetch`,
+ * `next-router-segment-prefetch`, `next-hmr-refresh` — plus the `_rsc`
+ * cache-busting query parameter. A test asserts set equality with the
+ * installed Next's FLIGHT_HEADERS, so a Next upgrade that changes the list
+ * fails loudly instead of silently widening cache eligibility. See the
+ * "HTML-only" comment block above for why these requests must never carry
+ * the overlay (including the Next 16 runtime caveat: the middleware
+ * adapter strips these markers before proxy() runs).
+ */
+export const RSC_FAMILY_REQUEST_HEADERS = [
+  'rsc',
+  'next-router-state-tree',
+  'next-router-prefetch',
+  'next-router-segment-prefetch',
+  'next-hmr-refresh',
+] as const;
+const RSC_FAMILY_QUERY_PARAM = '_rsc';
+
+/** True when the request belongs to the RSC/flight family (see above). */
+function isRscFamilyRequest(request: NextRequest): boolean {
+  // The query check covers flight fetches whose only marker is the
+  // cache-buster (?_rsc=<hash>).
+  if (request.nextUrl.searchParams.has(RSC_FAMILY_QUERY_PARAM)) return true;
+  return RSC_FAMILY_REQUEST_HEADERS.some(
+    (header) => request.headers.get(header) !== null
+  );
+}
+
+/**
+ * Pathname of the rewrite target for responses this proxy rewrote, or null
+ * for pass-throughs/redirects. Reads the same `x-middleware-rewrite`
+ * response header Next's own middleware adapter parses after the middleware
+ * returns, so the signal is authoritative at this point in the chain.
+ */
+function rewriteTargetPathname(response: NextResponse): string | null {
+  const rewrite = response.headers.get('x-middleware-rewrite');
+  if (rewrite === null) return null;
+  try {
+    return new URL(rewrite).pathname;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * decodeURIComponent for pathnames, falling back to the raw (still-encoded)
+ * input when the path holds malformed percent escapes — nginx answers those
+ * with a 400 before its cache gate runs, so the fallback can never diverge
+ * from any cached copy. Shared by BOTH decode sites: the route resolver's
+ * %40 handling and the cache-eligibility overlay's full decode (nginx $uri
+ * semantics) — keep the two call sites on this one helper.
+ */
+function decodePathnameSafe(pathname: string): string {
+  try {
+    return decodeURIComponent(pathname);
+  } catch {
+    return pathname;
+  }
+}
+
+/**
+ * Stamp Cache-Control on post-page GETs per the openresty cache-eligibility
+ * gate (see the comment block above). No-op for everything else, leaving
+ * Next's dynamic-render default in place.
+ */
+function applyAnonymousPageCacheControl(
+  request: NextRequest,
+  response: NextResponse
+): void {
+  if (request.method !== 'GET' || response.status >= 300) return;
+  // HTML-only: never overlay RSC-family (flight) requests — they keep
+  // Next's default no-store, which nginx refuses to cache (attack chain
+  // and Next 16 runtime caveat in the block comment above).
+  if (isRscFamilyRequest(request)) return;
+  // /404 rewrites (GDPR guard, internal-target guard, unroutable forms)
+  // keep Next's default too: nginx honors an explicit upstream
+  // Cache-Control on non-200s, so a public 404 would be edge-cached.
+  if (rewriteTargetPathname(response) === '/404') return;
+  // nginx $uri is decoded; mirror that before testing the gate regex.
+  const pathname = decodePathnameSafe(request.nextUrl.pathname);
+  if (!ANON_POST_PAGE_GATE_RE.test(pathname)) return;
+  // lua: has_cookie = ngx.var.http_cookie ~= nil and ngx.var.http_cookie ~= ""
+  const hasCookie = (request.headers.get('cookie') ?? '') !== '';
+  response.headers.set(
+    'Cache-Control',
+    hasCookie ? COOKIED_PAGE_CACHE_CONTROL : ANONYMOUS_PAGE_CACHE_CONTROL
+  );
+}
+
 export function proxy(request: NextRequest) {
   // Content-Security-Policy with a per-request nonce (audit N-02 follow-up):
   // the policy is attached to the REQUEST headers — that is how Next.js's
@@ -63,6 +295,9 @@ export function proxy(request: NextRequest) {
     request: { headers: requestHeaders },
   });
   response.headers.set('Content-Security-Policy', csp);
+  // Cache-eligibility overlay AFTER the CSP so the two header overrides
+  // stay visually paired (both ride the same middleware-header mechanism).
+  applyAnonymousPageCacheControl(request, response);
   return response;
 }
 
@@ -109,13 +344,12 @@ function resolveRoute(request: NextRequest, requestInit: RequestInit) {
   let { pathname } = request.nextUrl;
 
   // Decode URL-encoded @ symbols (%40) if present
-  // This handles cases where @ might be encoded in the URL
+  // This handles cases where @ might be encoded in the URL. Only %40 triggers
+  // a decode here (a full decode would fold %2F into slashes and change
+  // routing); the malformed-escape fallback lives in decodePathnameSafe,
+  // shared with the cache-eligibility overlay above.
   if (pathname.includes('%40')) {
-    try {
-      pathname = decodeURIComponent(pathname);
-    } catch {
-      // If decoding fails, use original pathname
-    }
+    pathname = decodePathnameSafe(pathname);
   }
 
   // Legacy .html aliases (must precede the static-asset skip below).

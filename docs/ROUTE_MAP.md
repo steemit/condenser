@@ -364,3 +364,14 @@ form a set:
 - When a new App Router page is added under `app/`, check whether
   `lib/routes.ts` needs the route in `RESERVED_ROUTES` and update the
   tables above.
+- **Invariant (storage authority)**: the overlay is the sole arbiter of edge
+  storage eligibility. With `proxy_ignore_headers Cache-Control` on the edge
+  there is no nginx-side `no-store` safety net anymore — a gated anonymous
+  200 must NEVER be personalized; any future server component that varies
+  by visitor on a gate-matched path silently freezes at the edge for 5 min.
+- **Known tradeoff — render-time `notFound()`**: a post URL that does not
+  exist server-side renders Next's 404 with `public, max-age=300` (the
+  `/404` skip only covers proxy-issued GDPR rewrites). The edge refuses to
+  store non-200s, but the requesting anonymous browser keeps the 404 for
+  up to 5 minutes (a just-published post may read as missing to a visitor
+  who previously hit the dead URL). Accepted; revisit only if reported.

@@ -375,3 +375,13 @@ describe('proxy route resolution matrix (scripts/test-proxy-routes.ts table)', (
     expect(classifyProxyResult(proxy(request(path)))).toBe(expected);
   });
 });
+
+// Freeze: the browser-side TTL literal must stay 300s to match the
+// edge-side proxy_cache_valid 200 5m (openresty condenser vhosts).
+describe('ANONYMOUS_PAGE_CACHE_CONTROL freeze', () => {
+  it('pins the public, max-age=300 literal', () => {
+    const mod = require('fs');
+    const src = mod.readFileSync('proxy.ts', 'utf8');
+    expect(src).toContain("ANONYMOUS_PAGE_CACHE_CONTROL = 'public, max-age=300'");
+  });
+});

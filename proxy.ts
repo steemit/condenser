@@ -137,9 +137,9 @@ const LEGACY_HTML_ALIASES: Record<string, string> = {
 //    (e.g. /@alice/blog): `@[^/]+/.+` naturally includes two-segment
 //    profile paths, and the lua gate admits them the same way — the
 //    overlay matches that overlap on purpose.
-//  - GET only: the edge gate itself only admits GET (a HEAD bypasses to the
-//    uncached /upstream; proxy_cache_convert_head only serves HEADs from the
-//    stored GET copy afterwards), so any other method keeps Next's default.
+//  - GET only: the edge gate itself only admits GET (a HEAD is rejected at
+//    the lua gate and always goes to the uncached /upstream), so any other
+//    method keeps Next's default.
 //  - Proxy-issued redirects (trailing-slash 308s, .html aliases) are
 //    skipped via the status guard — they are already 3xx at middleware
 //    time. Render-time redirects cannot be caught that way: the RSC 307 is
@@ -177,6 +177,8 @@ const LEGACY_HTML_ALIASES: Record<string, string> = {
 export const ANON_POST_PAGE_GATE_RE = /^\/(?:[a-z0-9%.-]+\/)?@[^/]+\/.+/;
 
 /** 5 minutes — must match the edge's `proxy_cache_valid 200 5m`. */
+// 300s matches the edge-side proxy_cache_valid 200 5m — keep them in sync
+// (a freeze test pins the literal below; update both sides together).
 const ANONYMOUS_PAGE_CACHE_CONTROL = 'public, max-age=300';
 /** Explicit opt-out for cookie-carrying post-page GETs (gate bypasses too). */
 const COOKIED_PAGE_CACHE_CONTROL = 'private, no-store';

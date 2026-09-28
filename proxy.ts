@@ -44,6 +44,103 @@ const LEGACY_HTML_ALIASES: Record<string, string> = {
   '/tos.html': '/tos',
 };
 
+// ---------------------------------------------------------------------------
+// Anonymous post-page cache eligibility (openresty sidecar alignment).
+//
+// The openresty edge in front of this app (steemit/openresty #21/#22,
+// scripts/lua/condenser/{dev,production}/limit_req.lua) routes a request to
+// its proxy_cache location (/upstream_cached, `proxy_cache_valid 200 5m`)
+// only when it is a GET, its path is a post page, and it carries no Cookie
+// header at all:
+//
+//     is_get and ngx.re.find(uri, [[^/(?:[a-z0-9%.-]+/)?@[^/]+/.+]], "jo")
+//             and not has_cookie
+//
+// nginx honors Cache-Control, and Next.js stamps every dynamically rendered
+// page with `private, no-cache, no-store, max-age=0, must-revalidate`,
+// which nginx refuses to cache — so without this overlay the edge cache's
+// hit rate stays at 0%. The overlay below marks exactly the requests the
+// edge gate would cache as publicly cacheable (5 minutes, matching the edge
+// TTL) and keeps cookie-carrying post-page GETs on an explicit
+// `private, no-store`.
+//
+// Why setting the header here works: middleware response headers are applied
+// to the outgoing response before the page renders, and the render path only
+// stamps its default Cache-Control when the response does not already carry
+// one (next/dist/server/send-payload.js: "If cache control is already set on
+// the response we don't override it") — the same mechanism the per-request
+// CSP above relies on. Verified against a production build (`next start`):
+// anonymous post-page GETs serve `public, max-age=300` while /trending keeps
+// Next's default. Caveat: Next's DEV server unconditionally overrides
+// Cache-Control with `no-cache, must-revalidate` (base-server.js, dev-only
+// branch), so the overlay is invisible under `next dev` — it only matters
+// for production builds, which is what the edge fronts anyway.
+//
+// Alignment constraints (deliberately tight):
+//  - The path regex mirrors the lua gate character-for-character, INCLUDING
+//    the lowercase-only tag segment [a-z0-9%.-] — deliberately narrower than
+//    branch 2's [^/]+ below: a wider match would hand `public` to paths the
+//    edge never caches (e.g. an uppercase-tag /Tag/@user/permlink), leaving
+//    browsers caching pages nginx does not. The DECODED pathname is tested,
+//    matching nginx $uri (decoded) semantics.
+//  - GET only: the edge gate itself only admits GET (a HEAD bypasses to the
+//    uncached /upstream; proxy_cache_convert_head only serves HEADs from the
+//    stored GET copy afterwards), so any other method keeps Next's default.
+//  - Proxy-issued redirects (trailing-slash 308s, .html aliases) are
+//    skipped: the edge never caches them (proxy_cache_valid is 200-only)
+//    and permanent redirects have their own caching semantics.
+//  - Any Cookie header — not just a session cookie — opts out, mirroring the
+//    gate; those responses get an explicit `private, no-store`.
+//  - Responses the proxy rewrites to /404 (GDPR users, unroutable forms)
+//    still carry `public` when the gate regex matches: nginx does not cache
+//    non-200s, so at worst a browser holds the not-found view for the same
+//    5-minute window the page cache itself uses.
+//
+// CSP nonce tradeoff: within the 5-minute TTL every visitor served from the
+// shared edge copy sees the SAME nonce (the copy's CSP header and rendered
+// scripts come from one response, so the copy stays internally coherent).
+// That is a semantic weakening of the nonce defense-in-depth layer only —
+// the primary XSS defense is the render pipeline (markdown-it → HtmlReady →
+// sanitize-html, covered by the 66-case XSS suite) — and matches what
+// legacy accepted in #4032 when it made anonymous post pages cacheable.
+// Anonymous documents hold no personalized state (observer=null; the app
+// personalizes only through /api, which is never cached).
+// ---------------------------------------------------------------------------
+const ANON_POST_PAGE_GATE_RE = /^\/(?:[a-z0-9%.-]+\/)?@[^/]+\/.+/;
+
+/** 5 minutes — must match the edge's `proxy_cache_valid 200 5m`. */
+const ANON_PAGE_CACHE_CONTROL = 'public, max-age=300';
+/** Explicit opt-out for cookie-carrying post-page GETs (gate bypasses too). */
+const COOKIE_PAGE_CACHE_CONTROL = 'private, no-store';
+
+/**
+ * Stamp Cache-Control on post-page GETs per the openresty cache-eligibility
+ * gate (see the comment block above). No-op for everything else, leaving
+ * Next's dynamic-render default in place.
+ */
+function applyAnonymousPageCacheControl(
+  request: NextRequest,
+  response: NextResponse
+): void {
+  if (request.method !== 'GET' || response.status >= 300) return;
+  // nginx $uri is decoded; mirror that before testing the gate regex. On
+  // malformed escapes nginx 400s before its gate runs, so falling back to
+  // the raw path cannot diverge from any cached copy.
+  let pathname = request.nextUrl.pathname;
+  try {
+    pathname = decodeURIComponent(pathname);
+  } catch {
+    // keep the raw (still-encoded) pathname
+  }
+  if (!ANON_POST_PAGE_GATE_RE.test(pathname)) return;
+  // lua: has_cookie = ngx.var.http_cookie ~= nil and ngx.var.http_cookie ~= ""
+  const hasCookie = (request.headers.get('cookie') ?? '') !== '';
+  response.headers.set(
+    'Cache-Control',
+    hasCookie ? COOKIE_PAGE_CACHE_CONTROL : ANON_PAGE_CACHE_CONTROL
+  );
+}
+
 export function proxy(request: NextRequest) {
   // Content-Security-Policy with a per-request nonce (audit N-02 follow-up):
   // the policy is attached to the REQUEST headers — that is how Next.js's
@@ -63,6 +160,9 @@ export function proxy(request: NextRequest) {
     request: { headers: requestHeaders },
   });
   response.headers.set('Content-Security-Policy', csp);
+  // Cache-eligibility overlay AFTER the CSP so the two header overrides
+  // stay visually paired (both ride the same middleware-header mechanism).
+  applyAnonymousPageCacheControl(request, response);
   return response;
 }
 

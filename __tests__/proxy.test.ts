@@ -149,6 +149,112 @@ describe('proxy CSP plumbing', () => {
 });
 
 /**
+ * Anonymous post-page cache eligibility (openresty alignment).
+ *
+ * Mirrors the edge gate in steemit/openresty #21/#22
+ * (scripts/lua/condenser/{dev,production}/limit_req.lua): GET + post-page
+ * path + no Cookie → `public, max-age=300` (the /upstream_cached
+ * proxy_cache honors Cache-Control, which is why the header must exist);
+ * any Cookie → explicit `private, no-store`; everything else untouched —
+ * Next's dynamic-render default is applied outside the proxy. The header is
+ * set on the middleware response (next()/rewrite()), which Next merges into
+ * the final response BEFORE the render and whose default Cache-Control only
+ * applies when none is present — same mechanism as the CSP above.
+ */
+describe('proxy anonymous post-page cache eligibility (openresty gate alignment)', () => {
+  // Next's RequestInit (signal non-null etc.) — not the DOM lib's.
+  type NextRequestInit = ConstructorParameters<typeof NextRequest>[1];
+  const req = (pathname: string, init?: NextRequestInit) =>
+    new NextRequest(new URL(`http://localhost:3000${pathname}`), init);
+
+  it('marks both anonymous post-page shapes public (5-minute edge TTL parity)', () => {
+    expect(proxy(req('/@alice/my-post')).headers.get('Cache-Control')).toBe(
+      'public, max-age=300'
+    );
+    expect(
+      proxy(req('/hive-123/@alice/my-post')).headers.get('Cache-Control')
+    ).toBe('public, max-age=300');
+  });
+
+  it('query strings stay eligible (the gate hashes $request_uri as-is)', () => {
+    expect(
+      proxy(req('/@alice/my-post?sort=new')).headers.get('Cache-Control')
+    ).toBe('public, max-age=300');
+  });
+
+  it('treats %40-encoded @ like the decoded form (nginx $uri is decoded)', () => {
+    expect(
+      proxy(req('/%40alice/my-post')).headers.get('Cache-Control')
+    ).toBe('public, max-age=300');
+  });
+
+  it('counts an empty Cookie header as anonymous (lua: http_cookie ~= "")', () => {
+    expect(
+      proxy(req('/@alice/my-post', { headers: { cookie: '' } })).headers.get(
+        'Cache-Control'
+      )
+    ).toBe('public, max-age=300');
+  });
+
+  it('gives cookie-carrying post-page GETs an explicit private, no-store', () => {
+    expect(
+      proxy(req('/@alice/my-post', { headers: { cookie: 'sid=abc' } })).headers.get(
+        'Cache-Control'
+      )
+    ).toBe('private, no-store');
+    expect(
+      proxy(
+        req('/hive-123/@alice/my-post', { headers: { cookie: 'NEXT_LOCALE=zh' } })
+      ).headers.get('Cache-Control')
+    ).toBe('private, no-store');
+  });
+
+  it('leaves non-post pages on the dynamic-render default (no proxy header)', () => {
+    expect(proxy(req('/trending')).headers.get('Cache-Control')).toBeNull();
+    expect(proxy(req('/trending/hive-123')).headers.get('Cache-Control')).toBeNull();
+    // Profile root has no segment after @user; the gate regex needs /.+.
+    expect(proxy(req('/@alice')).headers.get('Cache-Control')).toBeNull();
+    expect(proxy(req('/')).headers.get('Cache-Control')).toBeNull();
+  });
+
+  it('GET only — other methods keep the default', () => {
+    expect(
+      proxy(req('/@alice/my-post', { method: 'POST' })).headers.get('Cache-Control')
+    ).toBeNull();
+    expect(
+      proxy(req('/@alice/my-post', { method: 'HEAD' })).headers.get('Cache-Control')
+    ).toBeNull();
+  });
+
+  it('uppercases the tag segment out of eligibility (lua charset is [a-z0-9%.-])', () => {
+    expect(
+      proxy(req('/Hive-123/@alice/my-post')).headers.get('Cache-Control')
+    ).toBeNull();
+    expect(
+      proxy(req('/TRENDING/@alice/my-post')).headers.get('Cache-Control')
+    ).toBeNull();
+  });
+
+  it('username and permlink casing stay eligible (lua: @[^/]+ and .+)', () => {
+    expect(
+      proxy(req('/hive-123/@Alice/My-Post')).headers.get('Cache-Control')
+    ).toBe('public, max-age=300');
+  });
+
+  it('skips proxy-issued redirects (the edge never caches them; 308s cache on their own)', () => {
+    const redirect = proxy(req('/@alice/my-post/')); // trailing slash → 308
+    expect(redirect.status).toBe(308);
+    expect(redirect.headers.get('Cache-Control')).toBeNull();
+  });
+
+  it('still marks GDPR /404 rewrites cacheable in the browser window (nginx caches 200s only)', () => {
+    const response = proxy(req('/@xondra/some-post'));
+    expect(response.headers.get('x-middleware-rewrite')).toContain('/404');
+    expect(response.headers.get('Cache-Control')).toBe('public, max-age=300');
+  });
+});
+
+/**
  * Full route-resolution matrix, previously exercised only by the standalone
  * `pnpm test:proxy` script (scripts/test-proxy-routes.ts) and therefore not
  * part of `pnpm test`. The case table AND the outcome classifier are imported

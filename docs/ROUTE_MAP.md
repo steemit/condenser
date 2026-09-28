@@ -65,6 +65,70 @@ to `/404`. Usernames containing a dot (e.g. `mateja.klaric`) reach this
 guard too: the static-asset skip only matches known file extensions, so
 dotted GDPR usernames are also rewritten to `/404`.
 
+## Anonymous page cache eligibility (Cache-Control overlay)
+
+`proxy.ts` stamps `Cache-Control` on post-page GETs through the
+`applyAnonymousPageCacheControl` overlay, aligned with the openresty
+sidecar's cache-eligibility gate (steemit/openresty #21/#22,
+`scripts/lua/condenser/{dev,production}/limit_req.lua`):
+
+- **Anonymous (no `Cookie` header) GET on a gate-covered path** →
+  `Cache-Control: public, max-age=300` (5 minutes, matching the edge's
+  `proxy_cache_valid 200 5m`). nginx honors Cache-Control and refuses to
+  cache Next.js's dynamic-render default
+  (`private, no-cache, no-store, max-age=0, must-revalidate`), so without
+  this header the edge cache hit rate stays at 0%.
+- **Any `Cookie` header on the same paths** → explicit
+  `private, no-store` (the edge gate bypasses these too — any cookie
+  implies potential personalization).
+- **Everything else** → untouched; Next's dynamic-render default applies.
+
+The eligibility regex mirrors the lua gate character-for-character,
+including the lowercase-only tag segment —
+`^/(?:[a-z0-9%.-]+/)?@[^/]+/.+` tested against the **decoded** pathname
+(nginx `$uri` semantics). It is deliberately narrower than rewrite branch
+2's `[^/]+` category capture: a wider match would hand `public` to paths
+the edge never caches (e.g. an uppercase-tag `/Tag/@user/permlink`),
+leaving browsers caching pages nginx does not. Method is GET-only (the
+gate itself only admits GET; HEAD bypasses to the uncached upstream), and
+proxy-issued redirects (trailing-slash 308s, `.html` aliases) are skipped
+because the edge caches 200s only.
+
+How the header survives rendering: middleware response headers are merged
+into the final response before the page renders, and the render path only
+stamps its default `Cache-Control` when the response does not already
+carry one (`next/dist/server/send-payload.js`) — the same mechanism the
+per-request CSP nonce uses. Verified against a production build
+(`next start`): anonymous post-page GETs serve `public, max-age=300`,
+cookie-carrying GETs `private, no-store`, and `/trending` keeps Next's
+default. (Next's dev server unconditionally overrides Cache-Control with
+`no-cache, must-revalidate`, a dev-only branch in base-server.js — so the
+overlay is invisible under `next dev` and only observable on production
+builds.) GDPR `/404` rewrites on gate-covered paths still carry `public`
+(browsers may hold the not-found view for the same 5-minute window; nginx
+stores 200s only).
+
+Nonce tradeoff: within the 5-minute TTL every visitor served from the
+shared edge copy sees the same CSP nonce (header and rendered scripts come
+from one coherent response). This weakens the nonce defense-in-depth
+layer only — the primary XSS defense is the render pipeline
+(markdown-it → HtmlReady → sanitize-html, covered by the 66-case XSS
+suite) — and matches what legacy accepted in #4032 when it made anonymous
+post pages cacheable.
+
+Verification: behind the openresty sidecar, repeated cookie-less GETs of
+the same post URL should flip the `X-Cache` response header from `MISS`
+to `HIT` (the `/upstream_cached` location exports
+`$upstream_cache_status`), and the `cachestat` access-log line quantifies
+the hit rate (`hit_rate = HIT/(HIT+MISS+EXPIRED)` on gated traffic;
+cookie-carrying traffic shows an empty `$upstream_cache_status` via
+`/upstream`). Two deployment observations: the cache key's `$lang`
+dimension is a harmless dead dimension on this stack (SSR is always
+English; locale is a client-side concern), and with ALB stickiness off,
+the per-instance per-IP rate limit is diluted across instances — watch
+the `[rate_limit]` 429 logs after rollout (shared Redis limiting is the
+follow-up lever).
+
 ## Static and reserved routes
 
 `RESERVED_ROUTES` (const in `lib/routes.ts`, imported by `proxy.ts`) guards
@@ -198,6 +262,11 @@ form a set:
   all import it — never redefine these lists locally.**
 - **Any change to `lib/routes.ts` or to a rewrite branch in `proxy.ts` must
   update both this document and `scripts/test-proxy-routes.ts`.**
+- The cache-eligibility regex (`ANON_POST_PAGE_GATE_RE` in `proxy.ts`) is
+  paired with the openresty gate in
+  `scripts/lua/condenser/{dev,production}/limit_req.lua`; if either regex
+  changes, change both and update the
+  "Anonymous page cache eligibility" section above.
 - `scripts/test-proxy-routes.ts` runs standalone (`pnpm test:proxy`); it
   imports `proxy()` directly with mocked `NextRequest` objects and asserts
   the rewrite/pass-through/404 outcome of each branch — no dev server needed.

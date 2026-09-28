@@ -1,8 +1,13 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { NextRequest } from 'next/server';
+import { FLIGHT_HEADERS } from 'next/dist/client/components/app-router-headers';
 
-import { proxy } from '../proxy';
+import {
+  ANON_POST_PAGE_GATE_RE,
+  RSC_FAMILY_REQUEST_HEADERS,
+  proxy,
+} from '../proxy';
 import { classifyProxyResult, testCases } from '../scripts/test-proxy-routes';
 
 /**
@@ -160,6 +165,13 @@ describe('proxy CSP plumbing', () => {
  * set on the middleware response (next()/rewrite()), which Next merges into
  * the final response BEFORE the render and whose default Cache-Control only
  * applies when none is present — same mechanism as the CSP above.
+ *
+ * Two exclusions (audit follow-up): RSC-family (flight) requests keep the
+ * default (HTML-only semantics — see proxy.ts for the 307-poison attack
+ * chain and the Next 16 runtime caveat that the middleware adapter strips
+ * the flight markers in production), and /404 rewrites keep it too (nginx
+ * honors an explicit upstream Cache-Control on non-200s, so a public 404
+ * would enter the edge cache and browsers).
  */
 describe('proxy anonymous post-page cache eligibility (openresty gate alignment)', () => {
   // Next's RequestInit (signal non-null etc.) — not the DOM lib's.
@@ -241,16 +253,110 @@ describe('proxy anonymous post-page cache eligibility (openresty gate alignment)
     ).toBe('public, max-age=300');
   });
 
-  it('skips proxy-issued redirects (the edge never caches them; 308s cache on their own)', () => {
+  it('skips proxy-issued redirects (already 3xx at middleware time)', () => {
     const redirect = proxy(req('/@alice/my-post/')); // trailing slash → 308
     expect(redirect.status).toBe(308);
     expect(redirect.headers.get('Cache-Control')).toBeNull();
   });
 
-  it('still marks GDPR /404 rewrites cacheable in the browser window (nginx caches 200s only)', () => {
-    const response = proxy(req('/@xondra/some-post'));
-    expect(response.headers.get('x-middleware-rewrite')).toContain('/404');
-    expect(response.headers.get('Cache-Control')).toBe('public, max-age=300');
+  it('never overlays RSC-family requests (HTML-only semantics)', () => {
+    // Flight fetch without the cache-buster: the shape Next's render-time
+    // hash validation (validateRSCRequestHeaders) turns into a 307. The
+    // overlay must leave Next's no-store default in place, or the 307
+    // would carry `public` into the edge cache under the HTML copy's key.
+    expect(
+      proxy(req('/@alice/my-post', { headers: { RSC: '1' } })).headers.get(
+        'Cache-Control'
+      )
+    ).toBeNull();
+    expect(
+      proxy(
+        req('/hive-123/@alice/my-post', { headers: { RSC: '1' } })
+      ).headers.get('Cache-Control')
+    ).toBeNull();
+    // Normal flight fetch (cache-buster query present, 200 answer): also
+    // excluded — conservatively skipping the whole RSC family keeps the
+    // overlay's "HTML-only" semantics, and the edge key would otherwise
+    // hold flight copies alongside HTML ones.
+    expect(
+      proxy(
+        req('/@alice/my-post?_rsc=x', { headers: { RSC: '1' } })
+      ).headers.get('Cache-Control')
+    ).toBeNull();
+    // Query-only shape (cache-buster without any flight header).
+    expect(
+      proxy(req('/@alice/my-post?_rsc=x')).headers.get('Cache-Control')
+    ).toBeNull();
+    // Every flight marker header individually opts out.
+    for (const header of RSC_FAMILY_REQUEST_HEADERS) {
+      expect(
+        proxy(req('/@alice/my-post', { headers: { [header]: '1' } })).headers.get(
+          'Cache-Control'
+        )
+      ).toBeNull();
+    }
+  });
+
+  it('covers profile-section paths too (the lua gate admits them as well)', () => {
+    // `@[^/]+/.+` naturally includes two-segment profile paths; the lua
+    // gate caches them the same way, so the overlay must not be narrower.
+    expect(proxy(req('/@alice/blog')).headers.get('Cache-Control')).toBe(
+      'public, max-age=300'
+    );
+    expect(proxy(req('/@alice/comments')).headers.get('Cache-Control')).toBe(
+      'public, max-age=300'
+    );
+  });
+
+  it('falls back to the raw pathname when decoding throws (still public)', () => {
+    // `/@alice/100%` holds a malformed escape: decodeURIComponent throws,
+    // decodePathnameSafe falls back to the raw pathname, which still
+    // matches the gate regex (nginx 400s these before its gate runs, so
+    // no cached copy can diverge).
+    expect(proxy(req('/@alice/100%')).headers.get('Cache-Control')).toBe(
+      'public, max-age=300'
+    );
+  });
+
+  it('never overlays responses rewritten to /404 (nginx honors explicit CC on non-200s)', () => {
+    // GDPR guard: the gate regex matches, but a `public` 404 would be
+    // stored by the edge (explicit upstream Cache-Control applies to
+    // non-200s too) and held by browsers for the 5-minute window.
+    expect(
+      proxy(req('/@xondra/some-post')).headers.get('Cache-Control')
+    ).toBeNull();
+    expect(
+      proxy(req('/hive-123/@xondra/some-post')).headers.get('Cache-Control')
+    ).toBeNull();
+    // Still a /404 rewrite — asserted so the skip is provably about the
+    // rewrite target, not the path shape.
+    expect(
+      proxy(req('/@xondra/some-post')).headers.get('x-middleware-rewrite')
+    ).toContain('/404');
+  });
+});
+
+/**
+ * Freeze guards: the cache-eligibility gate regex and the RSC-family marker
+ * list are security-relevant constants paired with the openresty lua gate
+ * and Next's FLIGHT_HEADERS respectively. Snapshots fail loudly on any
+ * accidental widening (a wider gate hands `public` to paths the edge never
+ * caches; a stale marker list silently re-admits flight requests).
+ */
+describe('proxy cache-eligibility freeze guards', () => {
+  it('freezes the gate regex source against accidental widening', () => {
+    // Must stay character-for-character identical to the lua gate in
+    // scripts/lua/condenser/{dev,production}/limit_req.lua. RegExp#source
+    // escapes forward slashes, so normalize `\/` back to `/` first.
+    const normalized = ANON_POST_PAGE_GATE_RE.source.replace(/\\\//g, '/');
+    expect(normalized).toBe('^/(?:[a-z0-9%.-]+/)?@[^/]+/.+');
+    expect(ANON_POST_PAGE_GATE_RE.flags).toBe('');
+  });
+
+  it('keeps the RSC-family header list equal to the installed Next FLIGHT_HEADERS', () => {
+    expect([...RSC_FAMILY_REQUEST_HEADERS].sort()).toEqual(
+      [...FLIGHT_HEADERS].sort()
+    );
   });
 });
 

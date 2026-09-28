@@ -81,18 +81,74 @@ sidecar's cache-eligibility gate (steemit/openresty #21/#22,
 - **Any `Cookie` header on the same paths** → explicit
   `private, no-store` (the edge gate bypasses these too — any cookie
   implies potential personalization).
+- **RSC-family (flight) requests** → never overlaid, regardless of path
+  (HTML-only semantics; see below).
+- **Responses the proxy rewrites to `/404`** → never overlaid (GDPR guard,
+  internal-target guard, unroutable forms; see below).
 - **Everything else** → untouched; Next's dynamic-render default applies.
 
 The eligibility regex mirrors the lua gate character-for-character,
 including the lowercase-only tag segment —
 `^/(?:[a-z0-9%.-]+/)?@[^/]+/.+` tested against the **decoded** pathname
-(nginx `$uri` semantics). It is deliberately narrower than rewrite branch
+(nginx `$uri` semantics; the source is frozen by a snapshot test in
+`__tests__/proxy.test.ts`). It is deliberately narrower than rewrite branch
 2's `[^/]+` category capture: a wider match would hand `public` to paths
 the edge never caches (e.g. an uppercase-tag `/Tag/@user/permlink`),
-leaving browsers caching pages nginx does not. Method is GET-only (the
-gate itself only admits GET; HEAD bypasses to the uncached upstream), and
-proxy-issued redirects (trailing-slash 308s, `.html` aliases) are skipped
-because the edge caches 200s only.
+leaving browsers caching pages nginx does not. The same regex also —
+intentionally — covers two-segment **profile-section** paths
+(`/@alice/blog`): `@[^/]+/.+` admits them and the lua gate caches them the
+same way, so the overlay must not be narrower than the gate. Method is
+GET-only (the gate itself only admits GET; HEAD bypasses to the uncached
+upstream), and proxy-issued redirects (trailing-slash 308s, `.html`
+aliases) are skipped because they are already 3xx at middleware time.
+
+**HTML-only: RSC-family exclusion.** Requests carrying any flight marker
+(`RSC`, `next-router-state-tree`, `next-router-prefetch`,
+`next-router-segment-prefetch`, `next-hmr-refresh`, or the `_rsc`
+cache-buster query — frozen against Next's `FLIGHT_HEADERS`) never receive
+the overlay: they keep Next's default no-store, which nginx refuses to
+cache. Reason: a flight request *without* a valid `?_rsc=` hash is turned
+into a **307 empty-body redirect** by Next's render-time hash validation
+(`experimental.validateRSCRequestHeaders`, default-on in Next 16). At
+middleware time that response is still a 200 rewrite (the status guard
+cannot fire), so stamping `public` on it sends a `public, max-age=300` 307
+into the edge cache under the exact key the anonymous HTML copy uses — the
+nginx key contains neither the RSC header nor any working Vary dimension
+(nginx does not vary its cache key on request headers) — and the next
+anonymous HTML GET of that URL is served the cached 307 empty body instead
+of the page. Reproduced end-to-end on a production build.
+
+**Next 16 runtime caveat (measured, PR #4061 follow-up):** in production
+the Node middleware adapter strips the flight markers *before* the proxy
+sees the request — `next/dist/server/web/adapter.js` ("Headers should only
+be stripped for middleware") deletes every `FLIGHT_HEADERS` entry and the
+`_rsc` search parameter from the middleware-visible request and re-applies
+them to the render request afterwards. A request carrying `RSC: 1` that
+the render-time validation 307s shows `request.headers.get('rsc') ===
+null` inside `proxy()`. The exclusion guard is therefore inert for the
+307-poison vector on Next 16.3.x — it remains the correct portable guard
+(live in the unit layer and on any runtime where the markers reach the
+middleware), but the load-bearing fix is at the edge, where nginx CAN see
+the `RSC` header: the openresty gate must bypass RSC-carrying requests
+and/or `proxy_ignore_headers Cache-Control` must keep non-200 responses
+out of the cache. **Dependency: openresty repository** (tracked with the
+same-side change that fixes the `/404` case below).
+
+**`/404` rewrites are never overlaid.** When `resolveRoute` rewrites to
+`/404` (GDPR guard, internal-target guard, unroutable forms) and the gate
+regex matches (the GDPR post shapes `/@gdpr-user/permlink` and
+`/<tag>/@gdpr-user/permlink`), the overlay detects the rewrite target via
+the same `x-middleware-rewrite` response header Next's own adapter parses
+and skips, leaving Next's no-store default. Reason: nginx honors an
+explicit upstream `Cache-Control` for **non-200 statuses too** — a
+`proxy_cache_valid 200 5m` directive alone does not stop a
+`public, max-age=300` 404 from being stored — so a public 404 would enter
+the edge cache and browsers would hold the not-found view for the
+5-minute window. Only the openresty-side `proxy_ignore_headers
+Cache-Control` change makes non-200s uncacheable in general; until that
+deploys, `404/307/500 + public` shapes can still enter the cache from
+sources this app does not control, and the app-side skips above remove
+the largest sources we do control.
 
 How the header survives rendering: middleware response headers are merged
 into the final response before the page renders, and the render path only
@@ -104,9 +160,10 @@ cookie-carrying GETs `private, no-store`, and `/trending` keeps Next's
 default. (Next's dev server unconditionally overrides Cache-Control with
 `no-cache, must-revalidate`, a dev-only branch in base-server.js — so the
 overlay is invisible under `next dev` and only observable on production
-builds.) GDPR `/404` rewrites on gate-covered paths still carry `public`
-(browsers may hold the not-found view for the same 5-minute window; nginx
-stores 200s only).
+builds.) The "already set is not overridden" behavior is a send-payload
+implementation detail, not a documented contract: every Next **major**
+upgrade must re-verify the middleware-header override mechanism
+empirically before trusting the overlay again.
 
 Nonce tradeoff: within the 5-minute TTL every visitor served from the
 shared edge copy sees the same CSP nonce (header and rendered scripts come
@@ -115,6 +172,22 @@ layer only — the primary XSS defense is the render pipeline
 (markdown-it → HtmlReady → sanitize-html, covered by the 66-case XSS
 suite) — and matches what legacy accepted in #4032 when it made anonymous
 post pages cacheable.
+
+Deployment expectations (what a "good" hit rate looks like): the app's
+session hydration (`withSession` behind `/api/auth/session` and
+`/api/auth/challenge`) **mints a session cookie for cookie-less visitors**,
+so any client that runs the app's JavaScript carries a `steem-session`
+cookie from its **second** page view onwards and the edge gate bypasses it
+(BYPASS, uncached upstream). The cache benefit therefore lands on crawlers
+and first-HTML requests — which is exactly the traffic composition of the
+9-20 incident (96% of it) — and "human return visitors never hit the
+cache" is the expected shape, not a deployment failure. Known divergence
+with the lua gate, accepted: double-slash forms like `/tag//@user/permlink`
+pass the edge gate (nginx `merge_slashes` merges `$uri` to `/tag/@user/p`
+before the gate runs) but not the app's regex (a `//` cannot match
+`[a-z0-9%.-]+/`), so such URLs are permanent MISSes and briefly hold the
+cache lock (a serialization window) — wasted capacity, never a wrong
+copy, because the response is generated fresh.
 
 Verification: behind the openresty sidecar, repeated cookie-less GETs of
 the same post URL should flip the `X-Cache` response header from `MISS`
@@ -266,7 +339,25 @@ form a set:
   paired with the openresty gate in
   `scripts/lua/condenser/{dev,production}/limit_req.lua`; if either regex
   changes, change both and update the
-  "Anonymous page cache eligibility" section above.
+  "Anonymous page cache eligibility" section above. The regex source and
+  the RSC-family marker list are frozen by snapshot tests in
+  `__tests__/proxy.test.ts` (the marker list is asserted equal to the
+  installed Next's `FLIGHT_HEADERS`) — a Next upgrade that changes either
+  must fail those tests and be re-reviewed, not silently absorbed.
+- **Every Next major upgrade must re-verify the middleware-header override
+  mechanism empirically** (send-payload's "already set is not overridden"
+  behavior that lets the overlay's Cache-Control survive rendering), and
+  re-check whether the middleware adapter still strips `FLIGHT_HEADERS` /
+  `_rsc` from the middleware-visible request (the "Next 16 runtime caveat"
+  above) — if a future Next stops stripping them, the app-side RSC-family
+  guard becomes live in production.
+- **Any additional cache layer (Cloudflare in front of the edge, a CDN, a
+  service worker cache, …) must encode "RSC-family headers present → do
+  not cache" into its key or bypass rules before it is enabled.** `Vary`
+  does not substitute for this: nginx ignores Vary for cache-key purposes
+  and Cloudflare honors only a narrow header set, so the RSC/flight
+  distinction must be an explicit bypass/key rule in every layer that can
+  store HTML-keyed responses.
 - `scripts/test-proxy-routes.ts` runs standalone (`pnpm test:proxy`); it
   imports `proxy()` directly with mocked `NextRequest` objects and asserts
   the rewrite/pass-through/404 outcome of each branch — no dev server needed.

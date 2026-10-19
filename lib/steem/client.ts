@@ -6,6 +6,7 @@
 
 // Import steem object directly as a named export
 import { steem, type Api } from '@steemit/steem-js';
+import { getCacheGeneration } from '@/lib/cache/redis';
 import { withCache, type WithCacheResult } from '@/lib/cache/server-cache';
 import {
   applyDiscussionOverlays,
@@ -312,8 +313,23 @@ export async function getDynamicGlobalProperties(): Promise<unknown> {
  */
 const FOLLOWING_PAGE_LIMIT = 1000;
 
+/**
+ * Suffix a versioned family's cache key with its invalidation generation
+ * (audit CD-03). The follow lists and the communities list key on
+ * per-request dimensions (page/limit/cursor/query variants), so a write
+ * cannot enumerate the exact keys to delete; the broadcast route bumps the
+ * scope's generation counter instead and every key of the previous
+ * generation becomes unreachable at once. Old-generation keys expire on
+ * their own TTLs. The scope string must match the broadcaster's
+ * `{family}:{account}` / family-wide convention exactly.
+ */
+async function generationSuffix(scope: string): Promise<string> {
+  const gen = await getCacheGeneration(scope);
+  return `#v${gen}`;
+}
+
 export async function getFollowing(account: string, start: string, type: string): Promise<unknown[]> {
-  const key = `steem:following:${account}:${type}:${start || '0'}`;
+  const key = `steem:following:${account}:${type}:${start || '0'}${await generationSuffix(`following:${account}`)}`;
   const limit = FOLLOWING_PAGE_LIMIT;
   const result = await withCache(key, CACHE_TTL.followers.ttl, CACHE_TTL.followers.staleTtl, async () => {
     initializeSteemApi();
@@ -368,7 +384,7 @@ export async function getFollowersByPage(params: {
   type?: string;
 }): Promise<unknown[]> {
   const { account, page, limit, type = 'blog' } = params;
-  const key = `steem:followers-page:${account}:${type}:${page}:${limit}`;
+  const key = `steem:followers-page:${account}:${type}:${page}:${limit}${await generationSuffix(`followers-page:${account}`)}`;
   const result = await withCache(key, CACHE_TTL.followers.ttl, CACHE_TTL.followers.staleTtl, () =>
     callBridge<unknown[]>('get_followers_by_page', [account, page, limit, type], 'condenser_api.')
   );
@@ -385,7 +401,7 @@ export async function getFollowingByPage(params: {
   type?: string;
 }): Promise<unknown[]> {
   const { account, page, limit, type = 'blog' } = params;
-  const key = `steem:following-page:${account}:${type}:${page}:${limit}`;
+  const key = `steem:following-page:${account}:${type}:${page}:${limit}${await generationSuffix(`following-page:${account}`)}`;
   const result = await withCache(key, CACHE_TTL.followers.ttl, CACHE_TTL.followers.staleTtl, () =>
     callBridge<unknown[]>('get_following_by_page', [account, page, limit, type], 'condenser_api.')
   );
@@ -419,7 +435,10 @@ export async function listCommunities(params: {
   // communities/route.ts), so the key matches what actually reaches the RPC.
   // The route clamps query (64 chars, trimmed), sort (whitelist) and limit
   // ([1, 100]) before calling in, which keeps this key bounded (audit N-21).
-  const key = `steem:communities:${params.sort || ''}:${params.query || ''}:${params.limit || 20}`;
+  // Family-wide generation scope: a subscribe/unsubscribe shifts subscriber
+  // counts in every variant, so the broadcast route bumps one counter for
+  // the whole family rather than per community.
+  const key = `steem:communities:${params.sort || ''}:${params.query || ''}:${params.limit || 20}${await generationSuffix('communities')}`;
   const result = await withCache(key, CACHE_TTL.communities.ttl, CACHE_TTL.communities.staleTtl, () =>
     callBridge<unknown[]>('list_communities', params)
   );

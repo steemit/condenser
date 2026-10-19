@@ -7,12 +7,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
  * Two surfaces had no coverage:
  *
  * 1. Cache key families & TTL pairs. The broadcast route's post-write
- *    invalidation deletes by exact key or prefix — 'steem:profile:{account}',
- *    'steem:following:', 'steem:following-page:', 'steem:followers-page:',
- *    'steem:community-subscribers:', 'steem:communities:' (see
- *    app/api/steem/broadcast/route.ts). If a key format in client.ts drifts,
- *    invalidation silently misses and stale personal state is served
- *    indefinitely. These tests pin each family's format and TTL pair.
+ *    invalidation deletes exact keys ('steem:profile:{account}',
+ *    'steem:community-subscribers:{community}') or bumps generation
+ *    counters ('following:{account}', 'following-page:{account}',
+ *    'followers-page:{account}', 'communities' — see
+ *    app/api/steem/broadcast/route.ts and audit CD-03). If a key format or
+ *    a generation scope in client.ts drifts, invalidation silently misses
+ *    and stale personal state is served indefinitely. These tests pin each
+ *    family's format, TTL pair and scope.
  *
  * 2. callBridge/callSteemApi error paths and the observer bypass that keeps
  *    personalised reads out of the shared cache.
@@ -31,6 +33,10 @@ vi.mock('@/lib/cache/server-cache', () => ({
       return { data: await fetcher(), degraded: false };
     }
   ),
+}));
+
+vi.mock('@/lib/cache/redis', () => ({
+  getCacheGeneration: vi.fn(async () => 0),
 }));
 
 vi.mock('@/lib/steem/pending-overlay', () => ({
@@ -68,6 +74,7 @@ import {
   checkSteemNodeHealth,
 } from '@/lib/steem/client';
 import { withCache } from '@/lib/cache/server-cache';
+import { getCacheGeneration } from '@/lib/cache/redis';
 
 const api = steem.api as unknown as {
   setOptions: ReturnType<typeof vi.fn>;
@@ -77,6 +84,7 @@ const api = steem.api as unknown as {
   getFollowingAsync: ReturnType<typeof vi.fn>;
 };
 const withCacheMock = vi.mocked(withCache);
+const getCacheGenerationMock = vi.mocked(getCacheGeneration);
 
 /** The single (key, ttl, staleTtl) triple recorded by the latest call. */
 function lastCall() {
@@ -142,13 +150,13 @@ describe('lib/steem/client cache-key and TTL contracts', () => {
     api.getFollowingAsync.mockResolvedValue([]);
     await getFollowing('alice', '', 'blog');
     expect(lastCall()).toEqual({
-      key: 'steem:following:alice:blog:0',
+      key: 'steem:following:alice:blog:0#v0',
       ttl: 30,
       staleTtl: 300,
     });
 
     await getFollowing('alice', 'bob', 'ignore');
-    expect(lastCall().key).toBe('steem:following:alice:ignore:bob');
+    expect(lastCall().key).toBe('steem:following:alice:ignore:bob#v0');
   });
 
   it('getProfile: steem:profile:<account> @ profile TTL (30/300)', async () => {
@@ -162,23 +170,46 @@ describe('lib/steem/client cache-key and TTL contracts', () => {
 
   it('paged follow lists: followers-page / following-page keys @ followers TTL', async () => {
     await getFollowersByPage({ account: 'alice', page: 2, limit: 50 });
-    expect(lastCall().key).toBe('steem:followers-page:alice:blog:2:50');
+    expect(lastCall().key).toBe('steem:followers-page:alice:blog:2:50#v0');
 
     await getFollowingByPage({ account: 'bob', page: 1, limit: 100, type: 'ignore' });
-    expect(lastCall().key).toBe('steem:following-page:bob:ignore:1:100');
+    expect(lastCall().key).toBe('steem:following-page:bob:ignore:1:100#v0');
     expect(lastCall()).toMatchObject({ ttl: 30, staleTtl: 300 });
   });
 
   it('listCommunities: steem:communities:<sort>:<query>:<limit|20> @ communities TTL (600/1800)', async () => {
     await listCommunities({});
     expect(lastCall()).toEqual({
-      key: 'steem:communities:::20',
+      key: 'steem:communities:::20#v0',
       ttl: 600,
       staleTtl: 1800,
     });
 
     await listCommunities({ sort: 'ranked', query: 'photo', limit: 100 });
-    expect(lastCall().key).toBe('steem:communities:ranked:photo:100');
+    expect(lastCall().key).toBe('steem:communities:ranked:photo:100#v0');
+  });
+
+  it('versioned families embed the generation counter under the scopes the broadcaster bumps (CD-03)', async () => {
+    // The broadcast route bumps exactly these scopes (see
+    // bumpAccountScopedGeneration / 'communities' in app/api/steem/broadcast/
+    // route.ts). A scope mismatch here would silently stop invalidation.
+    getCacheGenerationMock.mockResolvedValue(7);
+    api.getFollowingAsync.mockResolvedValue([]);
+
+    await getFollowing('alice', '', 'blog');
+    expect(lastCall().key).toBe('steem:following:alice:blog:0#v7');
+    await getFollowersByPage({ account: 'alice', page: 0, limit: 20 });
+    expect(lastCall().key).toBe('steem:followers-page:alice:blog:0:20#v7');
+    await getFollowingByPage({ account: 'alice', page: 0, limit: 20 });
+    expect(lastCall().key).toBe('steem:following-page:alice:blog:0:20#v7');
+    await listCommunities({});
+    expect(lastCall().key).toBe('steem:communities:::20#v7');
+
+    const consultedScopes = getCacheGenerationMock.mock.calls.map((c) => c[0]);
+    expect(consultedScopes).toContain('following:alice');
+    expect(consultedScopes).toContain('followers-page:alice');
+    expect(consultedScopes).toContain('following-page:alice');
+    expect(consultedScopes).toContain('communities');
   });
 
   it('community roles/subscribers keys @ communityRoles TTL (600/1800)', async () => {
@@ -193,12 +224,13 @@ describe('lib/steem/client cache-key and TTL contracts', () => {
     expect(lastCall().key).toBe('steem:community-subscribers:hive-123456');
   });
 
-  it('every cached key stays under the steem: namespace the invalidation sweeps rely on', async () => {
-    // Re-derived guard: the broadcast route only ever deletes
-    // cacheDelete/cacheDeleteByPrefix targets inside `steem:` — a key that
-    // escapes this prefix can never be invalidated. Sample EVERY withCache
-    // call site in client.ts (all key families), not a subset, so a future
-    // family added outside the namespace fails here immediately.
+  it('every cached key stays under the steem: namespace the invalidation path relies on', async () => {
+    // Re-derived guard: the broadcast route only ever deletes exact
+    // cacheDelete targets or bumps generation scopes derived from keys
+    // inside `steem:` — a key that escapes this prefix can never be
+    // invalidated. Sample EVERY withCache call site in client.ts (all key
+    // families), not a subset, so a future family added outside the
+    // namespace fails here immediately.
     calls.length = 0;
     api.getFollowingAsync.mockResolvedValue([]);
     api.getDynamicGlobalPropertiesAsync.mockResolvedValue({ head_block_number: 1 });

@@ -21,7 +21,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { initializeSteemApi, callSteemApi } from '@/lib/steem/client';
-import { cacheDelete, cacheDeleteByPrefix } from '@/lib/cache/redis';
+import { cacheDelete, bumpCacheGeneration } from '@/lib/cache/redis';
 import { MAX_BROADCAST_BODY_BYTES, readJsonWithLimit } from '@/lib/api/body-limit';
 import {
   RATE_LIMITS,
@@ -375,13 +375,20 @@ export async function POST(request: NextRequest) {
 
 /**
  * Drop read-cache entries that this transaction's operations may have made
- * stale (audit N-10: exact-key O(1) deletes only — no prefix sweeps).
+ * stale (audit N-10: exact-key O(1) deletes only — no prefix sweeps; audit
+ * CD-03: no SCAN-based deletes at all, and a hard cap on invalidation work
+ * per request).
  *
- * The previous implementation swept whole prefixes (`steem:profile:` covered
+ * The 2026-09 implementation swept whole prefixes (`steem:profile:` covered
  * EVERY user's profile; `steem:posts:ranked:` all ranked feeds), and each
  * sweep is a SCAN over the entire keyspace regardless of how many keys
  * match — so any registered account could punch the shared Redis cache
- * through at ~zero cost, 30 times a minute per IP.
+ * through at ~zero cost, 30 times a minute per IP. N-10 moved everything
+ * enumerable to exact-key deletes but left two account-scoped/family-scoped
+ * SCAN exceptions (follow lists, communities list) — CD-03 closes those
+ * too: those families now carry a generation counter in their cache keys
+ * (lib/steem/client.ts), and the write side bumps the counter (one O(1)
+ * INCR) instead of SCANning. No SCAN survives on this path.
  *
  * List caches (`steem:posts:ranked:*`, `steem:posts:account:*`,
  * `steem:post:*`) are deliberately NOT invalidated here anymore:
@@ -400,19 +407,47 @@ export async function POST(request: NextRequest) {
  * fully-known key (observer reads bypass the cache; see getProfile) with a
  * 30s fresh TTL, and the exact delete guarantees the next read refetches
  * instead of serving the pre-write value for the remaining TTL.
- *
- * Two documented exceptions use ACCOUNT-SCOPED prefix deletes
- * (deleteAccountScopedPrefix): the follow lists (C1) and the communities
- * list (C5). Their keys embed per-request dimensions (page/limit/cursor or
- * sort/query/limit variants) after the account/family segment, so exact
- * keys are unknowable and the entries carry 30s-10min fresh TTLs during
- * which a write would visibly revert. The blast radius is confined to the
- * accounts involved in the (signed, chain-accepted) operation or to a
- * single low-traffic list family — not the shared profile/feed keyspace
- * N-10 protected — and the cost is bounded by the steem:broadcast rate
- * limit (30/min/IP) on top of the chain's own operation fees.
  */
+
+/**
+ * Hard cap on invalidation work per broadcast request (audit CD-03): every
+ * exact-key delete and every generation bump counts one unit against it.
+ * The largest single legitimate client operation needs ~10 units, and a
+ * transaction may legally batch many operations under the 256KB body cap —
+ * the cap bounds that batch to constant Redis work. Fail soft: once
+ * exhausted, further invalidations are skipped (logged once) and the
+ * response stays 200 — the transaction is already on chain and must not
+ * fail over cache housekeeping; the skipped entries simply expire on their
+ * own TTLs.
+ */
+const MAX_INVALIDATION_OPS_PER_REQUEST = 64;
+
+/** Per-request invalidation budget; see MAX_INVALIDATION_OPS_PER_REQUEST. */
+function makeInvalidationBudget() {
+  let used = 0;
+  let warned = false;
+  return {
+    /** Reserve one unit; false when the cap is exhausted (caller skips). */
+    trySpend(): boolean {
+      if (used < MAX_INVALIDATION_OPS_PER_REQUEST) {
+        used += 1;
+        return true;
+      }
+      if (!warned) {
+        warned = true;
+        console.warn(
+          `Broadcast invalidation cap (${MAX_INVALIDATION_OPS_PER_REQUEST} ops) reached; skipping further invalidations`
+        );
+      }
+      return false;
+    },
+  };
+}
+
+type InvalidationBudget = ReturnType<typeof makeInvalidationBudget>;
+
 async function invalidateAfterBroadcast(operations: Array<[string, Record<string, unknown>]>): Promise<void> {
+  const budget = makeInvalidationBudget();
   for (const [opName, opData] of operations) {
     switch (opName) {
       case 'vote': {
@@ -420,8 +455,8 @@ async function invalidateAfterBroadcast(operations: Array<[string, Record<string
         // two exact deletes, actor-scoped.
         const voter = String(opData.voter || '');
         const author = String(opData.author || '');
-        if (voter) await deleteAccountScopedKey('steem:profile:', voter);
-        if (author) await deleteAccountScopedKey('steem:profile:', author);
+        if (voter) await deleteAccountScopedKey(budget, 'steem:profile:', voter);
+        if (author) await deleteAccountScopedKey(budget, 'steem:profile:', author);
         break;
       }
       case 'comment':
@@ -430,17 +465,17 @@ async function invalidateAfterBroadcast(operations: Array<[string, Record<string
         // their account-post lists are 3s-TTL caches left to natural expiry
         // (see the function comment).
         const author = String(opData.author || '');
-        if (author) await deleteAccountScopedKey('steem:profile:', author);
+        if (author) await deleteAccountScopedKey(budget, 'steem:profile:', author);
         break;
       }
       case 'custom_json': {
-        await invalidateCustomJson(opData);
+        await invalidateCustomJson(budget, opData);
         break;
       }
       case 'account_update2': {
         // Profile settings save — the account's cached profile is stale.
         const account = String(opData.account || '');
-        if (account) await deleteAccountScopedKey('steem:profile:', account);
+        if (account) await deleteAccountScopedKey(budget, 'steem:profile:', account);
         break;
       }
       default:
@@ -456,49 +491,58 @@ async function invalidateAfterBroadcast(operations: Array<[string, Record<string
  * on-chain but the read routes cache under whatever casing the reader used,
  * so delete both the lowercase and raw variants to cover mixed-case keys.
  */
-async function deleteAccountScopedKey(prefix: string, account: string): Promise<void> {
+async function deleteAccountScopedKey(
+  budget: InvalidationBudget,
+  prefix: string,
+  account: string
+): Promise<void> {
   const normalized = account.toLowerCase();
+  if (!budget.trySpend()) return;
   await cacheDelete(`${prefix}${normalized}`);
   if (normalized !== account) {
+    if (!budget.trySpend()) return;
     await cacheDelete(`${prefix}${account}`);
   }
 }
 
 /**
- * Steem account charset, bounded and free of glob metacharacters. Required
- * before any client-controlled value may enter a Redis MATCH pattern: SCAN
- * patterns interpret * ? [ ] and friends, so an unsanitized account could
- * widen a "scoped" prefix delete into a keyspace-wide sweep. The RAW
- * variant also permits uppercase (case is not a glob metacharacter). The
- * dual-variant sweep is DEFENSIVE: the follow-page read routes normalize
- * their params (trim + lowercase), so their raw-case keys cannot exist
- * today — the raw branch stays correct only if a future read route drops
- * that normalization. (The profile family genuinely caches under the
- * reader's casing, but it goes through deleteAccountScopedKey's exact-key
- * deletes, not this prefix path.)
+ * Steem account charset, bounded (audit N-21 key-spray defense): payload
+ * names entering a generation-counter scope must stay within the account
+ * charset and length, so a hostile payload cannot mint arbitrary Redis
+ * counter keys. The RAW variant also permits uppercase (the read routes
+ * normalize to lowercase, but a future one might not — the defensive
+ * dual-variant bump below stays correct either way).
  */
 const ACCOUNT_KEY_RE = /^[a-z0-9.-]{1,64}$/;
 const RAW_ACCOUNT_KEY_RE = /^[A-Za-z0-9.-]{1,64}$/;
 
 /**
- * Delete `{prefix}{account}:*` — the account-scoped sibling of
- * deleteAccountScopedKey for cache families whose keys carry per-request
- * dimensions (page/limit/cursor variants) after the account segment, making
- * exact keys unknowable. The trailing ':' keeps names that are prefixes of
- * each other (alice / alice2) from colliding.
+ * Bump the generation counter for an account-scoped versioned cache family
+ * (audit CD-03). Reads of the family (lib/steem/client.ts) embed the
+ * generation in their cache keys, so one O(1) INCR makes every existing
+ * page/limit/cursor variant of the account unreachable at once — replacing
+ * the former account-scoped prefix SCAN, whose cost grew with the whole
+ * keyspace. Old-generation keys expire on their own TTLs. Like
+ * deleteAccountScopedKey, both the lowercase and raw-case variants are
+ * bumped (defensive dual-variant, same rationale).
  */
-async function deleteAccountScopedPrefix(prefix: string, account: string): Promise<void> {
+async function bumpAccountScopedGeneration(
+  budget: InvalidationBudget,
+  family: string,
+  account: string
+): Promise<void> {
   const trimmed = account.trim();
   const normalized = trimmed.toLowerCase();
   if (!ACCOUNT_KEY_RE.test(normalized)) return;
-  const deletes = [cacheDeleteByPrefix(`${prefix}${normalized}:`)];
-  // Compare against the TRIMMED raw form: a whitespace-only difference (e.g.
-  // " dave ") would otherwise repeat the same SCAN twice. Only a genuine
-  // casing difference adds a second, distinct prefix.
+  if (!budget.trySpend()) return;
+  await bumpCacheGeneration(`${family}:${normalized}`);
+  // Compare against the TRIMMED raw form: a whitespace-only difference
+  // (e.g. " dave ") would otherwise bump the same scope twice. Only a
+  // genuine casing difference adds a second, distinct scope.
   if (trimmed !== normalized && RAW_ACCOUNT_KEY_RE.test(trimmed)) {
-    deletes.push(cacheDeleteByPrefix(`${prefix}${trimmed}:`));
+    if (!budget.trySpend()) return;
+    await bumpCacheGeneration(`${family}:${trimmed}`);
   }
-  await Promise.all(deletes);
 }
 
 /** Parse a `["kind", {…}]`-shaped custom_json payload; null when unshaped. */
@@ -526,7 +570,10 @@ function parseCustomJsonPayload(raw: unknown): [string, Record<string, unknown>]
  * custom_json invalidation scoped to what each payload id actually touches
  * (audit N-10; the old branch swept every profile + every ranked feed).
  */
-async function invalidateCustomJson(opData: Record<string, unknown>): Promise<void> {
+async function invalidateCustomJson(
+  budget: InvalidationBudget,
+  opData: Record<string, unknown>
+): Promise<void> {
   const postingAuths = Array.isArray(opData.required_posting_auths)
     ? opData.required_posting_auths
     : [];
@@ -534,7 +581,7 @@ async function invalidateCustomJson(opData: Record<string, unknown>): Promise<vo
   // The actor's own profile: covers follow-count shifts for `follow` and any
   // hivemind-side profile field uniformly; harmless when nothing
   // profile-visible changed.
-  if (actor) await deleteAccountScopedKey('steem:profile:', actor);
+  if (actor) await deleteAccountScopedKey(budget, 'steem:profile:', actor);
 
   const payload = parseCustomJsonPayload(opData.json);
   if (!payload) return;
@@ -547,19 +594,19 @@ async function invalidateCustomJson(opData: Record<string, unknown>): Promise<vo
         const following = String(args.following || '');
         // follow/unfollow/ignore also shifts the TARGET's cached
         // follower-count profile — one exact key, not every user's profile.
-        if (following) await deleteAccountScopedKey('steem:profile:', following);
+        if (following) await deleteAccountScopedKey(budget, 'steem:profile:', following);
         // C1: the two accounts' follow-list caches (30s fresh / 330s total
         // TTL). A follow changes the follower's following pages
         // (getFollowingByPage) and the login follow-state seeds
         // (getFollowing, /api/steem/following), and the target's followers
-        // pages (getFollowersByPage) — without these deletes both sides
+        // pages (getFollowersByPage) — without invalidation both sides
         // revert within the window ("the follow didn't save"). The payload's
         // follower/following name the lists (the chain enforces follower ==
         // posting auth); page/limit/cursor variants make exact keys
-        // unknowable, hence the scoped prefix deletes (see the N-10 note on
-        // invalidateAfterBroadcast).
+        // unknowable, hence generation bumps — one O(1) INCR per account
+        // family instead of a SCAN (audit CD-03).
         //
-        // All three follow-list families are swept UNCONDITIONALLY. The
+        // All three follow-list families are bumped UNCONDITIONALLY. The
         // ignore-seed family (`steem:following:`) must drop for every
         // follow-kind write (login seeds embed the mute state). The PAGE
         // families cannot be payload-gated: Follow.tsx's handleUnfollow
@@ -568,15 +615,17 @@ async function invalidateCustomJson(opData: Record<string, unknown>): Promise<vo
         // the server cannot distinguish them, yet the unfollow variant
         // DOES change blog page membership. Gating on `what` would miss it
         // and reopen the C1 "unfollow didn't save" window (30s fresh /
-        // 330s stale). A pure mute merely pays two SCANs it didn't need;
-        // mutes are rare, so unconditional sweeping is the only provably
+        // 330s stale). A pure mute merely pays two bumps it didn't need;
+        // mutes are rare, so unconditional bumping is the only provably
         // correct option (review consensus, PR #4047).
         if (follower) {
-          await deleteAccountScopedPrefix('steem:following:', follower);
-          await deleteAccountScopedPrefix('steem:following-page:', follower);
+          // Family strings match the read side's generation scopes exactly
+          // (lib/steem/client.ts generationSuffix: `following:{account}` …).
+          await bumpAccountScopedGeneration(budget, 'following', follower);
+          await bumpAccountScopedGeneration(budget, 'following-page', follower);
         }
         if (following) {
-          await deleteAccountScopedPrefix('steem:followers-page:', following);
+          await bumpAccountScopedGeneration(budget, 'followers-page', following);
         }
       }
       // kind === 'reblog': the post lands in the REBLOGGER's blog list (a
@@ -588,17 +637,18 @@ async function invalidateCustomJson(opData: Record<string, unknown>): Promise<vo
       // subscribe/unsubscribe changes the community's subscriber list —
       // an exact key with a 10-minute fresh TTL (CACHE_TTL.communityRoles).
       const community = String(args.community || '');
-      if (community) await deleteAccountScopedKey('steem:community-subscribers:', community);
+      if (community) await deleteAccountScopedKey(budget, 'steem:community-subscribers:', community);
       // C5: the communities LIST cache (steem:communities:{sort}:{query}:{limit},
-      // 600s fresh TTL) embeds subscriber counts — without this sweep,
+      // 600s fresh TTL) embeds subscriber counts — without invalidation,
       // anonymous traffic saw the count drift by one for up to 10 minutes.
       // The key space is unbounded (sort x query x limit variants, query is
-      // free text), so no exact delete is possible; this is the documented
-      // N-10 exception (see invalidateAfterBroadcast's comment) — one
-      // low-traffic list family, gated behind a signed chain op plus the
-      // 30/min/IP broadcast limit.
+      // free text), so no exact delete is possible; the family-wide
+      // generation bump (one O(1) INCR, audit CD-03) makes every variant
+      // unreachable at once and old keys expire on their own TTLs.
       if (kind === 'subscribe' || kind === 'unsubscribe') {
-        await cacheDeleteByPrefix('steem:communities:');
+        if (budget.trySpend()) {
+          await bumpCacheGeneration('communities');
+        }
       }
       break;
     }

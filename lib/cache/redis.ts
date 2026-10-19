@@ -152,11 +152,11 @@ export async function cacheSet<T>(
 }
 
 /**
- * Delete a single exact cache key (one DEL, no SCAN). Preferred over
- * cacheDeleteByPrefix whenever the key is fully known — prefix deletes
- * traverse the whole keyspace with SCAN regardless of how many keys match,
- * so a write path that can name its keys exactly must use this instead
- * (audit N-10).
+ * Delete a single exact cache key (one DEL, no SCAN). The only delete
+ * primitive on write paths: prefix deletes traverse the whole keyspace with
+ * SCAN regardless of how many keys match, so a write path that cannot name
+ * its keys exactly must use generation counters below instead (audits
+ * N-10 / CD-03).
  */
 export async function cacheDelete(key: string): Promise<void> {
   const r = getRedis();
@@ -170,27 +170,88 @@ export async function cacheDelete(key: string): Promise<void> {
 }
 
 /**
- * Delete all keys matching a prefix (SCAN + DEL, non-blocking for large sets).
- * Used for write-after-invalidation on broadcast routes.
+ * Generation-scoped cache invalidation (audit CD-03).
+ *
+ * Some cache families key on per-request dimensions after a scope segment
+ * (page/limit/cursor/query variants), so a write cannot enumerate the exact
+ * keys to delete — and a prefix SCAN is not an answer: SCAN iterates the
+ * ENTIRE keyspace regardless of match count, turning every broadcast into
+ * an O(total keys) shared-Redis workload (the CD-03 regression of N-10).
+ *
+ * Instead, versioned families embed a generation number in their cache key
+ * (read side: getCacheGeneration, called by lib/steem/client.ts when
+ * building keys). A write bumps the scope's counter (bumpCacheGeneration)
+ * — a single O(1) INCR. Every key of the previous generation becomes
+ * unreachable immediately and expires on its own TTL; no SCAN, no DEL
+ * fan-out, constant work per write. As a bonus this is also safer than a
+ * DEL against the resurrection race: a read that fetched pre-write data
+ * and completes after the bump writes it under the OLD generation, where
+ * no later read will ever look.
+ *
+ * Counter-key TTL (24h, far above the 40-minute family maximum of
+ * communities 600s + 1800s; refreshed on every bump): its jobs are to reap
+ * the counters of idle scopes — one bounded key per scope ever bumped,
+ * read traffic alone creates none (audit N-21) — while counters of actively
+ * written scopes never expire at all.
+ *
+ * Residual, stated precisely: reads do NOT refresh the counter, so an entry
+ * can be cached under the current generation right up to the counter's
+ * expiry. A scope bumped exactly once (counter = 1), left write-idle past
+ * the 24h expiry, and then bumped again within a family's total TTL of the
+ * expiry restarts the counter at 1 — the same number the expired cycle
+ * used — and entries cached under gen 1 in the final TTL window of that
+ * cycle become reachable again until their own expiry. The staleness is
+ * bounded by the family's total TTL (330s follow lists, 2400s communities),
+ * i.e. exactly the Redis-less / no-invalidation convergence bound, and key
+ * scoping is unchanged so no cross-account data can leak. Keeping the TTL
+ * far above the family maximum cannot shrink that post-expiry overlap
+ * window; it only makes expiry require a full day of write-idleness, which
+ * keeps the boundary case rare.
  */
-export async function cacheDeleteByPrefix(prefix: string): Promise<void> {
+const GENERATION_TTL_SEC = 24 * 60 * 60;
+
+function generationKey(scope: string): string {
+  return redisKey(`steem:cachever:${scope}`);
+}
+
+/**
+ * Current invalidation generation for `scope` (0 when never bumped, Redis
+ * is off, or the read fails — reads then degrade to generation 0, exactly
+ * like a Redis-less deployment).
+ */
+export async function getCacheGeneration(scope: string): Promise<number> {
+  const r = getRedis();
+  if (!r) return 0;
+
+  try {
+    const raw = await r.get(generationKey(scope));
+    if (!raw) return 0;
+    const n = Number(raw);
+    return Number.isSafeInteger(n) && n >= 0 ? n : 0;
+  } catch {
+    return 0;
+  }
+}
+
+/**
+ * Invalidate every cached entry of a versioned family in one O(1) bump:
+ * reads embed getCacheGeneration(scope) in their keys, so after the bump
+ * they compute a fresh key and miss. Failure is non-critical — the
+ * family's entries expire on their own TTLs.
+ */
+export async function bumpCacheGeneration(scope: string): Promise<void> {
   const r = getRedis();
   if (!r) return;
 
   try {
-    let cursor = '0';
-    do {
-      const [next, keys] = await r.scan(
-        cursor,
-        'MATCH',
-        `${redisKey(prefix)}*`,
-        'COUNT',
-        100
-      );
-      if (keys.length > 0) await r.del(...keys);
-      cursor = next;
-    } while (cursor !== '0');
+    // MULTI/EXEC so the counter can never be left without its TTL by a
+    // crash between the INCR and the EXPIRE.
+    await r
+      .multi()
+      .incr(generationKey(scope))
+      .expire(generationKey(scope), GENERATION_TTL_SEC)
+      .exec();
   } catch {
-    // Cache delete failure is non-critical
+    // Invalidation failure is non-critical
   }
 }

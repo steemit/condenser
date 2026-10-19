@@ -22,9 +22,12 @@ const SESSION_KEY_PREFIX =
   'steem:session:';
 
 /**
- * Sub-prefix for the JWT revocation denylist (audit CS-01), inside the
- * session namespace. Session ids are hex-only, so the `:` and letters here
- * can never collide with a session key.
+ * Sub-prefix for the JWT revocation denylist (audit CS-01). Lands inside the
+ * session namespace when the client applies SESSION_KEY_PREFIX (REDIS_HOST
+ * mode); REDIS_URL mode deliberately keeps unprefixed keys (see
+ * getRedisClient), so there the denylist keys are simply `revoked-jwt:<key>`.
+ * Session ids are hex-only, so the `:` and letters here can never collide
+ * with a session key.
  */
 const DENYLIST_KEY_PREFIX = 'revoked-jwt:';
 

@@ -22,7 +22,15 @@ function makeChain() {
 function makeRedisClient(get: ReturnType<typeof vi.fn> = vi.fn(async () => null)) {
   const chain = makeChain();
   // getRedis registers error/close listeners before returning the client.
-  const client = { get, multi: vi.fn(() => chain), on: vi.fn() };
+  // del/scan spies exist so tests can pin the CD-03 wire contract: the
+  // only delete is one exact DEL, and no export ever issues a SCAN.
+  const client = {
+    get,
+    multi: vi.fn(() => chain),
+    del: vi.fn(async () => 0),
+    scan: vi.fn(async () => ['0', []]),
+    on: vi.fn(),
+  };
   return { client, chain };
 }
 
@@ -183,6 +191,24 @@ describe('lib/cache/redis generation counters (CD-03)', () => {
     const { bumpCacheGeneration } = await loadRedisModule(client);
 
     await expect(bumpCacheGeneration('communities')).resolves.toBeUndefined();
+  });
+
+  it('cacheDelete is one exact namespaced DEL and no export ever SCANs (CD-03 wire contract)', async () => {
+    const { client } = makeRedisClient();
+    const { cacheDelete, bumpCacheGeneration, getCacheGeneration } =
+      await loadRedisModule(client);
+
+    await cacheDelete('steem:profile:alice');
+    await bumpCacheGeneration('communities');
+    await getCacheGeneration('communities');
+
+    expect(client.del).toHaveBeenCalledTimes(1);
+    expect(client.del).toHaveBeenCalledWith('condenser:steem:profile:alice');
+    // The CD-03 invariant, pinned at the wire level: nothing this module
+    // exports may issue a SCAN. A keyspace walk reintroduced HERE is
+    // invisible to the route-level canary in broadcast.test.ts, which
+    // mocks this module wholesale — this is the guard that side misses.
+    expect(client.scan).not.toHaveBeenCalled();
   });
 });
 

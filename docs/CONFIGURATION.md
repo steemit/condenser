@@ -197,7 +197,7 @@ Blocked requests receive `429` with a `Retry-After` header.
 |----------|-------|-----------|
 | `GET /api/auth/challenge` | 30/min | IP |
 | `GET /api/auth/session` | 120/min | IP |
-| `POST /api/auth/login` | 10/min | IP **and** account (body username) |
+| `POST /api/auth/login` | 10/min | IP (all attempts) **and** account (verified logins only) |
 | `POST /api/auth/preferences` | 60/min | IP |
 | `GET /api/steem/posts` | 60/min | IP |
 | `GET /api/steem/following` | 60/min | IP |
@@ -210,6 +210,15 @@ Blocked requests receive `429` with a `Retry-After` header.
 mints a session (same as challenge) — the ceiling is far above the
 once-per-page-load pattern of real clients while still bounding session
 creation.
+
+For `POST /api/auth/login`, the per-account (body username) bucket is consumed
+only AFTER the posting-key signature verifies (audit CD-04): a request that
+cannot be attributed to the account holder must never consume that account's
+quota, so an attacker submitting invalid signatures that name a victim only
+exhausts their own per-IP bucket and cannot lock out the victim's login. The
+account dimension still rate-limits verified logins (e.g. session churn from
+rotating IPs); an attacker remains able to burn their own IP quota, which is
+intended.
 
 Limits are code constants (the `RATE_LIMITS` registry), deliberately not
 env-configurable: they are abuse backstops, not tuning knobs, and env-driven

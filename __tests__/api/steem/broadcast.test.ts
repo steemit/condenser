@@ -6,9 +6,20 @@ vi.mock('@/lib/steem/client', () => ({
   callSteemApi: vi.fn(),
 }));
 
+// CD-03 regression canary: lib/cache/redis no longer exports any SCAN-based
+// delete. The mock below still provides a `cacheDeleteByPrefix` spy anyway —
+// if the route (or anything it calls) ever regresses to a prefix-scan
+// invalidation, the not-called assertions below fail instead of silently
+// passing. vi.hoisted keeps the spy reference available to the hoisted
+// vi.mock factory.
+const { cacheDeleteByPrefixMock } = vi.hoisted(() => ({
+  cacheDeleteByPrefixMock: vi.fn().mockResolvedValue(undefined),
+}));
+
 vi.mock('@/lib/cache/redis', () => ({
   cacheDelete: vi.fn().mockResolvedValue(undefined),
-  cacheDeleteByPrefix: vi.fn().mockResolvedValue(undefined),
+  bumpCacheGeneration: vi.fn().mockResolvedValue(undefined),
+  cacheDeleteByPrefix: cacheDeleteByPrefixMock,
 }));
 
 vi.mock('@/lib/steem/pending-overlay', () => ({
@@ -35,7 +46,7 @@ vi.mock('@/lib/cache/rate-limit', async (importOriginal) => {
 
 import { POST } from '@/app/api/steem/broadcast/route';
 import { callSteemApi } from '@/lib/steem/client';
-import { cacheDelete, cacheDeleteByPrefix } from '@/lib/cache/redis';
+import { cacheDelete, bumpCacheGeneration } from '@/lib/cache/redis';
 import { checkRateLimit } from '@/lib/cache/rate-limit';
 import {
   recordPendingVote,
@@ -47,7 +58,7 @@ import {
 
 const callSteemApiMock = vi.mocked(callSteemApi);
 const cacheDeleteMock = vi.mocked(cacheDelete);
-const cacheDeleteByPrefixMock = vi.mocked(cacheDeleteByPrefix);
+const bumpCacheGenerationMock = vi.mocked(bumpCacheGeneration);
 const checkRateLimitMock = vi.mocked(checkRateLimit);
 const recordVoteMock = vi.mocked(recordPendingVote);
 const recordRootMock = vi.mocked(recordPendingRootPost);
@@ -72,6 +83,7 @@ describe('POST /api/steem/broadcast', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
     callSteemApiMock.mockResolvedValue({ id: 'tx-1' });
     checkRateLimitMock.mockResolvedValue({ allowed: true });
   });
@@ -361,15 +373,18 @@ describe('POST /api/steem/broadcast', () => {
     expect(deletedKeys).toContain('steem:profile:carol');
     expect(deletedKeys).toContain('steem:profile:dave');
     expect(deletedKeys).not.toContain('steem:profile:erin');
-    // Follow lists are dropped account-scoped (C1): the follower's following
-    // pages + follow-state seeds, the target's followers pages.
-    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
-    expect(sweptPrefixes).toContain('steem:following-page:carol:');
-    expect(sweptPrefixes).toContain('steem:following:carol:');
-    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+    // Follow lists are invalidated by generation bumps (C1, CD-03): the
+    // follower's following pages + follow-state seeds, the target's
+    // followers pages. One O(1) INCR per scope — never a SCAN.
+    const bumpedScopes = bumpCacheGenerationMock.mock.calls.map((c) => c[0]);
+    expect(bumpedScopes).toContain('following-page:carol');
+    expect(bumpedScopes).toContain('following:carol');
+    expect(bumpedScopes).toContain('followers-page:dave');
     // Scoped to the two accounts only — nobody else's list entries.
-    expect(sweptPrefixes).not.toContain('steem:followers-page:');
-    expect(sweptPrefixes).not.toContain('steem:following-page:');
+    expect(bumpedScopes).not.toContain('following-page:erin');
+    expect(bumpedScopes).not.toContain('followers-page:erin');
+    // No prefix SCAN sweeps anywhere on the broadcast path (CD-03 canary).
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
   });
 
   it('uses the author for comment ops and invalidates account posts', async () => {
@@ -730,8 +745,10 @@ describe('POST /api/steem/broadcast', () => {
     expect(deletedKeys).toContain('steem:profile:erin');
     expect(deletedKeys).toContain('steem:community-subscribers:hive-106292');
     // C5: the list cache embeds subscriber counts (600s fresh TTL) — the
-    // unbounded sort x query x limit key space rules out exact deletes.
-    expect(cacheDeleteByPrefixMock).toHaveBeenCalledWith('steem:communities:');
+    // unbounded sort x query x limit key space rules out exact deletes, so
+    // the family-wide generation is bumped (one INCR, CD-03).
+    expect(bumpCacheGenerationMock).toHaveBeenCalledWith('communities');
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
     // L1: the subscriber list entry (community-shaped URL) plus every
     // communities list/subscriptions entry (path-shaped token).
     expect(res.headers.get('X-Cache-Invalidate')).toBe(
@@ -758,7 +775,8 @@ describe('POST /api/steem/broadcast', () => {
     expect(res.status).toBe(200);
     const deletedKeys = cacheDeleteMock.mock.calls.map((c) => c[0]);
     expect(deletedKeys).toContain('steem:community-subscribers:hive-106292');
-    expect(cacheDeleteByPrefixMock).toHaveBeenCalledWith('steem:communities:');
+    expect(bumpCacheGenerationMock).toHaveBeenCalledWith('communities');
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
     expect(res.headers.get('X-Cache-Invalidate')).toBe(
       'erin,community=hive-106292,/api/steem/communities'
     );
@@ -808,19 +826,19 @@ describe('POST /api/steem/broadcast', () => {
     );
     expect(res.status).toBe(200);
     expect(res.headers.get('X-Cache-Invalidate')).toBe('carol,dave');
-    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
+    const bumpedScopes = bumpCacheGenerationMock.mock.calls.map((c) => c[0]);
     // Unfollow removes blog membership — the page families change and are
-    // swept (unconditionally, like every follow-kind write).
-    expect(sweptPrefixes).toContain('steem:following-page:carol:');
-    expect(sweptPrefixes).toContain('steem:following:carol:');
-    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+    // bumped (unconditionally, like every follow-kind write).
+    expect(bumpedScopes).toContain('following-page:carol');
+    expect(bumpedScopes).toContain('following:carol');
+    expect(bumpedScopes).toContain('followers-page:dave');
   });
 
-  it('sweeps all follow-list families even for a pure mute (unconditional)', async () => {
+  it('bumps all follow-list families even for a pure mute (unconditional)', async () => {
     // A mute (what: ['ignore']) doesn't move anybody between the blog list
-    // pages, but the sweep is unconditional anyway: the ['','ignore']
+    // pages, but the bump is unconditional anyway: the ['','ignore']
     // payload is indistinguishable from an unfollow-that-changed-membership
-    // (see the next test), and a pure mute only pays two extra SCANs.
+    // (see the next test), and a pure mute only pays two extra INCRs.
     const tx = signedTx([
       [
         'custom_json',
@@ -837,18 +855,18 @@ describe('POST /api/steem/broadcast', () => {
       makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
     );
     expect(res.status).toBe(200);
-    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
-    expect(sweptPrefixes).toContain('steem:following:carol:');
-    expect(sweptPrefixes).toContain('steem:following-page:carol:');
-    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+    const bumpedScopes = bumpCacheGenerationMock.mock.calls.map((c) => c[0]);
+    expect(bumpedScopes).toContain('following:carol');
+    expect(bumpedScopes).toContain('following-page:carol');
+    expect(bumpedScopes).toContain('followers-page:dave');
   });
 
-  it('sweeps the page families for the ["", "ignore"] unfollow-keep-muted payload (C1)', async () => {
+  it('bumps the page families for the ["", "ignore"] unfollow-keep-muted payload (C1)', async () => {
     // Follow.tsx handleUnfollow keeps ignoreWhat, so unfollowing a muted
     // user sends what=['','ignore'] — byte-identical to a pure mute. This
     // write DOES remove blog page membership; a payload-level gate would
     // miss it and reopen the "unfollow didn't save" window. The page
-    // families must be swept unconditionally.
+    // families must be bumped unconditionally.
     const tx = signedTx([
       [
         'custom_json',
@@ -865,13 +883,13 @@ describe('POST /api/steem/broadcast', () => {
       makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
     );
     expect(res.status).toBe(200);
-    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
-    expect(sweptPrefixes).toContain('steem:following:carol:');
-    expect(sweptPrefixes).toContain('steem:following-page:carol:');
-    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
+    const bumpedScopes = bumpCacheGenerationMock.mock.calls.map((c) => c[0]);
+    expect(bumpedScopes).toContain('following:carol');
+    expect(bumpedScopes).toContain('following-page:carol');
+    expect(bumpedScopes).toContain('followers-page:dave');
   });
 
-  it('sweeps both case variants of a mixed-case follow payload account (C1)', async () => {
+  it('bumps both case variants of a mixed-case follow payload account (C1)', async () => {
     const tx = signedTx([
       [
         'custom_json',
@@ -885,20 +903,20 @@ describe('POST /api/steem/broadcast', () => {
     ]);
 
     const res = await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
-    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
-    // Defensive dual-variant sweep: the page routes normalize to lowercase,
+    const bumpedScopes = bumpCacheGenerationMock.mock.calls.map((c) => c[0]);
+    // Defensive dual-variant bump: the page routes normalize to lowercase,
     // so the raw variant cannot match today — it stays correct only if a
     // future read route drops that normalization.
-    expect(sweptPrefixes).toContain('steem:followers-page:dave:');
-    expect(sweptPrefixes).toContain('steem:followers-page:Dave:');
+    expect(bumpedScopes).toContain('followers-page:dave');
+    expect(bumpedScopes).toContain('followers-page:Dave');
     // The L1 tokens mirror the dual variants (chain names are lowercase, so
     // a lowercased URL still matches the mixed-case payload).
     expect(res.headers.get('X-Cache-Invalidate')).toBe('carol,Dave,dave');
   });
 
-  it('sweeps a whitespace-padded payload name once, not twice (deduped prefix)', async () => {
+  it('bumps a whitespace-padded payload name once, not twice (deduped scope)', async () => {
     // " dave " trims to 'dave' — a whitespace-only difference must not count
-    // as a "raw variant" and repeat the same full-keyspace SCAN.
+    // as a "raw variant" and bump the same scope twice.
     const tx = signedTx([
       [
         'custom_json',
@@ -912,17 +930,17 @@ describe('POST /api/steem/broadcast', () => {
     ]);
 
     await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
-    const swept = cacheDeleteByPrefixMock.mock.calls
+    const bumped = bumpCacheGenerationMock.mock.calls
       .map((c) => c[0])
-      .filter((p) => p.startsWith('steem:followers-page:'));
-    expect(swept).toEqual(['steem:followers-page:dave:']);
+      .filter((scope) => scope.startsWith('followers-page:'));
+    expect(bumped).toEqual(['followers-page:dave']);
   });
 
-  it('skips the follow-list sweep for payload names outside the account charset (C1)', async () => {
+  it('skips the follow-list bump for payload names outside the account charset (C1)', async () => {
     // The chain rejects invalid account names, so this broadcast fails and
     // nothing should be invalidated — but the guard must hold even if a
-    // relay ever let one through: glob metacharacters in a MATCH pattern
-    // would widen the scoped sweep.
+    // relay ever let one through: a name outside the charset must never
+    // reach a generation scope (key-spray defense).
     const tx = signedTx([
       [
         'custom_json',
@@ -939,12 +957,12 @@ describe('POST /api/steem/broadcast', () => {
     ]);
 
     await POST(makePostRequest('/api/steem/broadcast', { signedTransaction: tx }));
-    const sweptPrefixes = cacheDeleteByPrefixMock.mock.calls.map((c) => c[0]);
-    expect(sweptPrefixes).toContain('steem:following-page:carol:');
-    for (const prefix of sweptPrefixes) {
-      expect(prefix).not.toContain('*');
-      expect(prefix).not.toContain('?');
-      expect(prefix).not.toContain('[');
+    const bumpedScopes = bumpCacheGenerationMock.mock.calls.map((c) => c[0]);
+    expect(bumpedScopes).toContain('following-page:carol');
+    for (const scope of bumpedScopes) {
+      expect(scope).not.toContain('*');
+      expect(scope).not.toContain('?');
+      expect(scope).not.toContain('[');
     }
   });
 
@@ -1057,5 +1075,53 @@ describe('POST /api/steem/broadcast', () => {
     expect(res.status).toBe(400);
     expect(await res.json()).toEqual({ error: 'invalid JSON' });
     expect(callSteemApiMock).not.toHaveBeenCalled();
+  });
+
+  it('caps invalidation work per request and fails soft when exceeded (CD-03)', async () => {
+    // 40 vote ops x 2 exact profile deletes = 80 wanted invalidations,
+    // over the 64-op cap: the rest must be SKIPPED, not error the response
+    // (the transaction is already on chain).
+    const ops = Array.from({ length: 40 }, (_, i) => [
+      'vote',
+      { voter: 'alice', author: `author-${i}`, permlink: `p-${i}`, weight: 100 },
+    ]);
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: signedTx(ops) })
+    );
+
+    expect(res.status).toBe(200);
+    expect((await res.json()).success).toBe(true);
+    expect(cacheDeleteMock).toHaveBeenCalledTimes(64);
+    // Logged once when the cap is first hit, then silently skipped.
+    expect(console.warn).toHaveBeenCalledTimes(1);
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('invalidation cap'));
+    // The pending overlay is NOT budget-gated — every write still lands,
+    // so write->read convergence (docs/VOTE_STATE_FLOW.md) is unaffected.
+    expect(recordVoteMock).toHaveBeenCalledTimes(40);
+  });
+
+  it('never lets the invalidation path grow with key count: bumps are single O(1) calls', async () => {
+    // A community subscribe invalidates exactly one enumerable key (DEL)
+    // plus one family-wide generation bump — no operation on this path
+    // scans, so its cost cannot scale with the Redis keyspace (CD-03).
+    const tx = signedTx([
+      [
+        'custom_json',
+        {
+          required_auths: [],
+          required_posting_auths: ['erin'],
+          id: 'community',
+          json: JSON.stringify(['subscribe', { community: 'hive-106292' }]),
+        },
+      ],
+    ]);
+
+    const res = await POST(
+      makePostRequest('/api/steem/broadcast', { signedTransaction: tx })
+    );
+    expect(res.status).toBe(200);
+    expect(cacheDeleteByPrefixMock).not.toHaveBeenCalled();
+    expect(bumpCacheGenerationMock).toHaveBeenCalledTimes(1);
+    expect(bumpCacheGenerationMock).toHaveBeenCalledWith('communities');
   });
 });

@@ -114,8 +114,8 @@ flowchart LR
 | `comment` (root post / edit) | `steem:pendingroot:{author}:{permlink}` → synthesized bridge-shaped post | exact-key DEL `steem:profile:{author}` (account-post lists are 3s-TTL caches, natural expiry) | `{author}`, `permlink={permlink}` (drops the post's own L1 entry on edits) |
 | `comment` (reply) | `steem:pendingchildren:{parentAuthor}:{parentPermlink}` field `{author}/{permlink}` → post | same as above | `{author}`, `permlink={parent_permlink}` (drops the parent discussion's post+comments entries), **plus `permlink={rootPermlink}` when the client supplied the discussion's root (C2)** — at depth ≥ 2 the parent is a COMMENT, so the parent token alone matches nothing |
 | `delete_comment` | `steem:pendingtomb:{author}:{permlink}` | exact-key DEL `steem:profile:{author}` | `{author}` plus **`permlink={rootPermlink}` when the client supplied the root (C2)** — the op itself carries no parent reference, so without the hint the parent discussion goes stale within 15s and self-revalidates |
-| `custom_json` (follow kind) | none | exact-key DEL `steem:profile:{actor}`, `steem:profile:{target}`; **account-scoped prefix deletes `steem:following-page:{follower}:*`, `steem:following:{follower}:*`, `steem:followers-page:{target}:*` (C1)** | `{actor}`, `{target}` (drops the target's followers-page entries) |
-| `custom_json` (community subscribe/unsubscribe) | none | exact-key DEL `steem:community-subscribers:{community}`; **prefix sweep `steem:communities:*` (C5)** | `{actor}`, `community={community}`, `/api/steem/communities` (path-shaped) |
+| `custom_json` (follow kind) | none | exact-key DEL `steem:profile:{actor}`, `steem:profile:{target}`; **generation bumps `following:{follower}`, `following-page:{follower}`, `followers-page:{target}` (C1)** | `{actor}`, `{target}` (drops the target's followers-page entries) |
+| `custom_json` (community subscribe/unsubscribe) | none | exact-key DEL `steem:community-subscribers:{community}`; **family-wide generation bump `communities` (C5)** | `{actor}`, `community={community}`, `/api/steem/communities` (path-shaped) |
 | `custom_json` (reblog / notify) | none | exact-key DEL `steem:profile:{actor}` | `{actor}` |
 | `account_update2` | `steem:pendingprofile:{account}` → the complete new `profile` sub-object (parsed from `posting_json_metadata`) | exact-key DEL `steem:profile:{account}` | `{account}` (drops the user's profile + account-post L1 entries) |
 
@@ -126,18 +126,32 @@ registered account punch the shared cache through at ~zero cost). List
 caches are covered by their 3-second fresh TTL plus the overlay instead of
 being swept.
 
-Two documented exceptions use **account-/family-scoped** prefix deletes
-(C1/C5): the follow lists (`steem:following-page:{account}:*`,
-`steem:following:{account}:*`, `steem:followers-page:{account}:*`) and the
-communities list (`steem:communities:*`). These key families embed
-per-request dimensions (page/limit/cursor or sort/query/limit variants) so
-exact keys are unknowable, and their 30s–10min fresh TTLs made writes
-visibly revert. The blast radius is confined to the accounts named in the
-signed operation or to a single low-traffic list family — never the shared
-profile/feed keyspace N-10 protected — and the cost is bounded by the
-`steem:broadcast` rate limit (30/min/IP) on top of chain fees. Values are
-charset-validated (no glob metacharacters) before entering the SCAN MATCH
-pattern, and both lowercase and raw-case key variants are swept.
+Two families originally kept as documented account-/family-scoped prefix
+DELETE exceptions (C1/C5) — the follow lists
+(`steem:following:{account}:*`, `steem:following-page:{account}:*`,
+`steem:followers-page:{account}:*`) and the communities list
+(`steem:communities:*`) — became a CD-03 finding: their invalidation was
+still SCAN-based, so per-transaction cache work grew with the global key
+count. They now use **generation counters** instead: reads of these
+families (lib/steem/client.ts) embed `getCacheGeneration(scope)` in the
+cache key (`…#v{n}` suffix), and the write bumps the scope's counter with
+a single O(1) `INCR` (`bumpCacheGeneration`, `lib/cache/redis.ts`). Every
+key of the previous generation becomes unreachable immediately and expires
+on its own TTL; no SCAN, no DEL fan-out, constant work per write. This is
+also safer than a DEL against the resurrection race: an in-flight read
+that fetched pre-write data lands under the OLD generation, where no later
+read looks. The counter's TTL (24h, refreshed per bump) exceeds the
+longest family TTL (40min) by a 36x margin, so a counter can never expire
+while entries from its current generation are alive. Payload names are
+charset-validated before entering the scope, and both lowercase and
+raw-case scope variants are bumped (defensive dual-variant, C1).
+
+All invalidation work per broadcast request is capped
+(`MAX_INVALIDATION_OPS_PER_REQUEST` = 64 exact deletes + generation bumps
+combined in app/api/steem/broadcast/route.ts): exceeding it logs once and
+skips the remaining invalidations — the already-broadcast transaction is
+never failed over cache housekeeping, and the skipped entries simply
+expire on their own TTLs.
 
 All Redis keys are namespaced by `redisKey()` — the actual keys carry the
 `condenser:` prefix (configurable via `REDIS_CACHE_KEY_PREFIX`; the deprecated `REDIS_KEY_PREFIX` still applies to both stores unless a specific variable is set), e.g.
@@ -227,9 +241,10 @@ the window:
   posting client supplies `cacheContext.rootPermlink` (the post page does; the
   op itself carries no parent reference). Without the hint the parent goes
   stale within 15s and self-revalidates on the next read.
-- The follow-list and communities-list prefix deletes are scoped but still
-  SCAN-based: a broadcast-heavy client can force repeated scans of the Redis
-  keyspace (bounded by the 30/min/IP broadcast limit and chain fees).
+- The follow-list and communities-list invalidations are O(1) generation
+  bumps (CD-03): old-generation entries linger until their own TTL expires
+  (up to ~40min for communities variants nobody re-reads), at no read or
+  scan cost.
 
 ## Key files
 

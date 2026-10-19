@@ -127,10 +127,38 @@ export async function getSession(sessionId: string): Promise<SessionData | null>
 }
 
 /**
- * Update session data in Redis
+ * Update session data in Redis, strictly in place (audit CD-02).
+ *
+ * This rewrites the data under the SAME session id and only when that key
+ * already exists (SET with the XX option): it can never mint a new key, so a
+ * caller cannot silently fork one login session into two live ids. Returns
+ * false when the key is gone (expired between the caller's read and this
+ * write) so the caller falls back to createSession + explicit revocation of
+ * the superseded id. Minting ids is storeSession/createSession's job;
+ * retiring them is deleteSession's (revokeSession).
  */
 export async function updateSession(sessionId: string, data: SessionData, ttlSeconds: number = 2592000): Promise<boolean> {
-  return storeSession(sessionId, data, ttlSeconds);
+  const redis = getRedisClient();
+  if (!redis) {
+    return false; // Redis not available, caller should use JWT fallback
+  }
+
+  try {
+    const serializedData = JSON.stringify(data);
+    // 'EX' + 'XX': set the TTL but only replace an existing key — a missing
+    // key resolves to null, not 'OK'.
+    const result = await redis.set(
+      sessionId,
+      serializedData,
+      'EX',
+      ttlSeconds,
+      'XX'
+    );
+    return result === 'OK';
+  } catch (error) {
+    console.error('Failed to update session in Redis:', error);
+    return false;
+  }
 }
 
 /**

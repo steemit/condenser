@@ -168,3 +168,70 @@ describe('lib/auth/redis-session error retirement (S9)', () => {
     expect(second.quit).not.toHaveBeenCalled();
   });
 });
+
+describe('lib/auth/redis-session updateSession in-place semantics (audit CD-02)', () => {
+  /** Client exposing the data commands updateSession touches. */
+  function makeDataClient() {
+    return {
+      on: vi.fn(),
+      quit: vi.fn(async () => 'OK'),
+      disconnect: vi.fn(),
+      set: vi.fn(),
+    };
+  }
+
+  beforeEach(() => {
+    vi.resetModules();
+    vi.stubEnv('REDIS_HOST', 'localhost');
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.doUnmock('ioredis');
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
+
+  it('rewrites the SAME key with SET EX XX — it can never mint a key', async () => {
+    const client = makeDataClient();
+    client.set.mockResolvedValue('OK');
+    const { ctor, module } = await loadSessionModule(client);
+
+    const ok = await module.updateSession('sid1', { uid: 'u1', lastVisit: 1, newVisit: false }, 2592000);
+    expect(ok).toBe(true);
+    // Exact argument list: same id, serialized payload, EXpiry + set-if-eXists.
+    expect(client.set).toHaveBeenCalledTimes(1);
+    expect(client.set).toHaveBeenCalledWith(
+      'sid1',
+      expect.any(String),
+      'EX',
+      2592000,
+      'XX'
+    );
+    expect(ctor).toHaveBeenCalledTimes(1); // no reconnect churn
+  });
+
+  it('returns false on an XX miss (key gone) without writing anything', async () => {
+    // The key expired between the caller's read and this write: the update
+    // must NOT resurrect it — the caller falls back to createSession.
+    const client = makeDataClient();
+    client.set.mockResolvedValue(null);
+    const { module } = await loadSessionModule(client);
+
+    const ok = await module.updateSession('gone', { uid: 'u1', lastVisit: 1, newVisit: false }, 600);
+    expect(ok).toBe(false);
+    // The XX-flagged SET did reach the server (it is what reported the miss)
+    // but returned null rather than 'OK'.
+    expect(client.set).toHaveBeenCalledWith('gone', expect.any(String), 'EX', 600, 'XX');
+  });
+
+  it('returns false when the Redis write errors (never throws)', async () => {
+    const client = makeDataClient();
+    client.set.mockRejectedValue(new Error('redis down'));
+    const { module } = await loadSessionModule(client);
+
+    await expect(
+      module.updateSession('sid1', { uid: 'u1', lastVisit: 1, newVisit: false })
+    ).resolves.toBe(false);
+  });
+});

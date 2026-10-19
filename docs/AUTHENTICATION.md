@@ -146,6 +146,7 @@ REDIS_SESSION_KEY_PREFIX=steem:session:
 - **Automatic Expiration**: 10-minute TTL for anonymous (challenge-only) sessions, 30-day TTL for logged-in sessions, renewed on activity
 - **JWT_SECRET Fail Closed**: session creation/verification throws in any environment when `JWT_SECRET` is missing, shorter than 32 bytes, or the shipped placeholder — a weak secret lets anyone mint session cookies (including forged login challenges)
 - **Session Revocation (Redis mode)**: logout and successful login revoke the superseded Redis session id server-side (`revokeSession()` → `RedisSession.deleteSession()`), so the old token cannot be replayed after the cookie is rotated. Stateless JWT fallback tokens cannot be revoked — they stay valid until their `exp`; use Redis sessions (`REDIS_URL`) in production for real revocation
+- **Single Live Session Id (Redis mode)**: reads/writes that refresh an existing session (the `withSession` read path, challenge, preferences) rewrite it in place under the SAME Redis id (`RedisSession.updateSession` is a set-if-exists `SET ... XX` and never mints keys); if the in-place rewrite fails, the superseded id is revoked before a replacement is minted — so a session lineage holds at most one live id at any time and logout kills it (audit CD-02: previously every session read minted a new id and left the old one valid for up to 30 days, surviving logout)
 
 ### Key Management Security
 - **No Server Storage**: Private keys never stored on server

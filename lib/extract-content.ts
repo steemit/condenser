@@ -85,11 +85,43 @@ function stripMarkdown(body: string): string {
   return str;
 }
 
+const WS_CHAR = /\s/;
+
+/**
+ * Linear-time equivalent of the legacy quote-strip regex (see
+ * condenser-legacy ExtractContent.extractBodySummary): anchored at index 0,
+ * it matched leading whitespace, `>`, the rest of that line and trailing
+ * whitespace. Its whitespace alternation branches overlap, so V8
+ * backtracked superlinearly on long leading-whitespace runs that never
+ * reached `>` (audit CD-01). Single scan, same result: when the first
+ * non-whitespace character is `>`, drop that one line plus the whitespace
+ * after it; otherwise return the input unchanged.
+ */
+function stripLeadingQuoteLine(desc: string): string {
+  let i = 0;
+  const n = desc.length;
+  while (i < n && WS_CHAR.test(desc[i])) i++;
+  if (i >= n || desc[i] !== '>') return desc;
+  // The old `.*` stopped at line terminators only (\s chars like \f or a
+  // non-breaking space were consumed by it, not by the trailing \s*).
+  while (
+    i < n &&
+    desc[i] !== '\n' &&
+    desc[i] !== '\r' &&
+    desc[i] !== '\u2028' &&
+    desc[i] !== '\u2029'
+  ) {
+    i++;
+  }
+  while (i < n && WS_CHAR.test(desc[i])) i++;
+  return desc.slice(i);
+}
+
 /** Short plain-text description: strip markdown/html, URLs, truncate to ~140. */
 export function extractBodySummary(body: string, stripQuotes = false): string {
   let desc = body;
   if (stripQuotes) {
-    desc = desc.replace(/(^(\n|\r|\s)*)>([\s\S]*?).*\s*/g, '');
+    desc = stripLeadingQuoteLine(desc);
   }
   desc = stripMarkdown(desc); // render markdown to plain text
   desc = sanitizeHtml(desc, { allowedTags: [] }); // remove all html, leaving text

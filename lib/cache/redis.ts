@@ -188,15 +188,25 @@ export async function cacheDelete(key: string): Promise<void> {
  * and completes after the bump writes it under the OLD generation, where
  * no later read will ever look.
  *
- * Counter-key TTL invariant: it must exceed the longest total
- * (fresh + stale) TTL of any versioned family by a wide margin, so a
- * counter can never expire while entries from its current generation are
- * still alive (an expired counter restarts at 1 and could otherwise alias
- * a previous cycle's generation). 24h vs the 40-minute family maximum
- * (communities 600s + 1800s) gives a 36x margin; the TTL is refreshed on
- * every bump, so counters for actively written scopes never expire at
- * all. Counters exist only for scopes that were bumped at least once —
- * read traffic alone creates no keys.
+ * Counter-key TTL (24h, far above the 40-minute family maximum of
+ * communities 600s + 1800s; refreshed on every bump): its jobs are to reap
+ * the counters of idle scopes — one bounded key per scope ever bumped,
+ * read traffic alone creates none (audit N-21) — while counters of actively
+ * written scopes never expire at all.
+ *
+ * Residual, stated precisely: reads do NOT refresh the counter, so an entry
+ * can be cached under the current generation right up to the counter's
+ * expiry. A scope bumped exactly once (counter = 1), left write-idle past
+ * the 24h expiry, and then bumped again within a family's total TTL of the
+ * expiry restarts the counter at 1 — the same number the expired cycle
+ * used — and entries cached under gen 1 in the final TTL window of that
+ * cycle become reachable again until their own expiry. The staleness is
+ * bounded by the family's total TTL (330s follow lists, 2400s communities),
+ * i.e. exactly the Redis-less / no-invalidation convergence bound, and key
+ * scoping is unchanged so no cross-account data can leak. Keeping the TTL
+ * far above the family maximum cannot shrink that post-expiry overlap
+ * window; it only makes expiry require a full day of write-idleness, which
+ * keeps the boundary case rare.
  */
 const GENERATION_TTL_SEC = 24 * 60 * 60;
 

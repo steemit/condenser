@@ -140,9 +140,15 @@ key of the previous generation becomes unreachable immediately and expires
 on its own TTL; no SCAN, no DEL fan-out, constant work per write. This is
 also safer than a DEL against the resurrection race: an in-flight read
 that fetched pre-write data lands under the OLD generation, where no later
-read looks. The counter's TTL (24h, refreshed per bump) exceeds the
-longest family TTL (40min) by a 36x margin, so a counter can never expire
-while entries from its current generation are alive. Payload names are
+read looks. The counter's TTL (24h, refreshed per bump) reaps idle scopes'
+counters while actively written scopes' counters never expire. Known
+residual (documented in `lib/cache/redis.ts`): reads do not refresh the
+counter, so a scope bumped exactly once, write-idle past the 24h expiry,
+then re-bumped within a family's total TTL of the expiry restarts at
+generation 1 and can serve that cycle's tail entries until their own TTL —
+staleness bounded by the family maximum (330s follow lists, 40min
+communities), the same bound as the Redis-less fallback, with no
+cross-scope leakage. Payload names are
 charset-validated before entering the scope, and both lowercase and
 raw-case scope variants are bumped (defensive dual-variant, C1).
 

@@ -44,8 +44,9 @@ export interface RateLimitRule {
 export interface RateLimitOptions extends RateLimitRule {
   /**
    * Identity to bucket on. Defaults to the request's client IP. Routes may
-   * override it (e.g. login buckets additionally on the body's username) —
-   * the value is sanitized the same way as IPs before it reaches Redis.
+   * override it (e.g. the login route buckets VERIFIED logins on the body's
+   * username — see authLoginAccount and audit CD-04) — the value is
+   * sanitized the same way as IPs before it reaches Redis.
    */
   identifier?: string;
 }
@@ -72,10 +73,15 @@ export interface RateLimitResult {
  *   but like challenge a cookie-less hit mints a session (withSession
  *   creates one), so creation must stay bounded (audit follow-up: challenge
  *   was limited but session was not).
- * - auth/login      10/min/IP and 10/min/account — each attempt costs an
- *   RPC getAccount + signature verification; the account dimension stops
- *   one credential being hammered from many IPs (and slows one attacker
- *   probing many accounts from a single IP via the IP dimension).
+ * - auth/login      10/min/IP (all attempts) and 10/min/account (VERIFIED
+ *   logins only, audit CD-04): the account bucket is consumed after the
+ *   posting-key signature verifies, so unauthenticated traffic naming a
+ *   victim cannot monopolize (lock out) that account's quota — invalid
+ *   attempts only burn the sender's own IP bucket. Forging a signature is
+ *   cryptographically infeasible, so per-account damping of unverified
+ *   attempts bought nothing the IP dimension does not already provide;
+ *   the account dimension instead stops one VERIFIED credential being
+ *   hammered (session churn) from rotating IPs.
  * - auth/preferences 60/min/IP — every accepted hit rewrites the session
  *   (Redis write or JWT re-issue + Set-Cookie) after a CSRF check. The
  *   ceiling must sit above the client's own senders: the middleware's

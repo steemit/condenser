@@ -71,24 +71,11 @@ export async function POST(request: NextRequest) {
     // the request must echo the challenge session's csrfToken via the
     // X-CSRF-Token header (LoginForm fetches /api/auth/challenge first,
     // which mints both). Runs after the body cap and field validation so
-    // those 413/400 contracts are unchanged, before the account bucket and
-    // any RPC work.
+    // those 413/400 contracts are unchanged, before any RPC work.
     const csrfSession = await getSession(request);
     const csrfRejection = enforceCsrf(request, csrfSession);
     if (csrfRejection) {
       return csrfRejection;
-    }
-
-    // Second rate-limit dimension on the target account: each attempt costs
-    // an RPC getAccount + signature verification, and this stops one
-    // credential being hammered from rotating IPs (audit N-08). Runs after
-    // field validation so only well-formed attempts consume the bucket.
-    const accountLimit = await checkRateLimit(request, {
-      ...RATE_LIMITS.authLoginAccount,
-      identifier: String(username),
-    });
-    if (!accountLimit.allowed) {
-      return rateLimitResponse(accountLimit.retryAfterSeconds);
     }
 
     // Step 1: Get account information
@@ -184,7 +171,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Step 6: Authentication successful, create session
+    // Step 6: Per-account rate limit on VERIFIED logins only (audit CD-04
+    // fix). The bucket is consumed after the posting-key signature check,
+    // so a request that cannot be attributed to the account holder (bad
+    // signature, wrong key, stale challenge, unknown account, ...) never
+    // touches the account's quota — an attacker naming a victim in
+    // unverified requests only exhausts their own per-IP bucket above.
+    // Unverified brute force is cryptographically pointless and is damped
+    // by the IP dimension; this dimension instead stops one VERIFIED
+    // credential being hammered (session churn) from rotating IPs.
+    const accountLimit = await checkRateLimit(request, {
+      ...RATE_LIMITS.authLoginAccount,
+      identifier: String(username),
+    });
+    if (!accountLimit.allowed) {
+      return rateLimitResponse(accountLimit.retryAfterSeconds);
+    }
+
+    // Step 7: Authentication successful, create session
     const sessionToken = await loginUser(currentSession, username);
 
     // Revoke the pre-login session (which still carries the now-consumed

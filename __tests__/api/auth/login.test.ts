@@ -49,7 +49,7 @@ import {
   revokeSession,
   setSessionCookie,
 } from '@/lib/auth/session';
-import { checkRateLimit } from '@/lib/cache/rate-limit';
+import { checkRateLimit, getClientIp, type RateLimitOptions } from '@/lib/cache/rate-limit';
 
 const getAccountMock = vi.mocked(getAccount);
 const callSteemApiMock = vi.mocked(callSteemApi);
@@ -382,7 +382,7 @@ describe('POST /api/auth/login abuse wrappers (audit N-08)', () => {
     expect(loginUserMock).not.toHaveBeenCalled();
   });
 
-  it('checks the IP bucket (10/min) first and the account bucket second', async () => {
+  it('checks the IP bucket (10/min) first and the account bucket only after signature verification', async () => {
     await POST(makePostRequest('/api/auth/login', validBody(), csrfHeader()));
 
     expect(checkRateLimitMock).toHaveBeenCalledTimes(2);
@@ -397,6 +397,11 @@ describe('POST /api/auth/login abuse wrappers (audit N-08)', () => {
       windowSeconds: 60,
       identifier: 'alice',
     });
+    // The account check runs after the signature verified (CD-04): the
+    // request was fully attributed to the account holder by then.
+    expect(checkRateLimitMock.mock.invocationCallOrder[1]).toBeGreaterThan(
+      verifySignatureMock.mock.invocationCallOrder[0]
+    );
   });
 
   it('skips the account bucket for bodies missing required fields', async () => {
@@ -405,17 +410,22 @@ describe('POST /api/auth/login abuse wrappers (audit N-08)', () => {
     expect(checkRateLimitMock).toHaveBeenCalledTimes(1); // IP check only
   });
 
-  it('returns 429 when the per-account bucket denies the request', async () => {
+  it('returns 429 when the per-account bucket denies a VERIFIED login (audit CD-04)', async () => {
     checkRateLimitMock
       .mockResolvedValueOnce({ allowed: true }) // IP
-      .mockResolvedValueOnce({ allowed: false, retryAfterSeconds: 17 }); // account
+      .mockResolvedValueOnce({ allowed: false, retryAfterSeconds: 17 }); // account (post-verification)
 
     const res = await POST(
       makePostRequest('/api/auth/login', validBody(), csrfHeader())
     );
     expect(res.status).toBe(429);
     expect(res.headers.get('Retry-After')).toBe('17');
-    expect(getAccountMock).not.toHaveBeenCalled();
+    // The account gate now sits after signature verification: the RPC
+    // lookup and the signature check ran (attribution established), but no
+    // session is minted for the denied request.
+    expect(getAccountMock).toHaveBeenCalledTimes(1);
+    expect(verifySignatureMock).toHaveBeenCalledTimes(1);
+    expect(loginUserMock).not.toHaveBeenCalled();
   });
 
   it('returns 413 when the body exceeds the 64KB cap', async () => {
@@ -459,5 +469,153 @@ describe('POST /api/auth/login abuse wrappers (audit N-08)', () => {
     expect(await res.json()).toEqual({ error: 'invalid JSON' });
     expect(checkRateLimitMock).toHaveBeenCalledTimes(1); // IP check ran, account never reached
     expect(getAccountMock).not.toHaveBeenCalled();
+  });
+});
+
+/**
+ * Minimal in-memory fixed-window limiter standing in for the Redis Lua
+ * script (audit CD-04 tests): counts per bucket key + identity exactly like
+ * the real checkRateLimit would, honoring limit/windowSeconds, so tests can
+ * assert WHICH quota a request consumed — the property the fix protects is
+ * "unverified traffic never consumes the named account's quota".
+ */
+function makeCountingLimiter() {
+  const counts = new Map<string, number>();
+  const check = vi.fn(async (request: Request, opts: RateLimitOptions) => {
+    const identity = opts.identifier
+      ? opts.identifier.toLowerCase()
+      : getClientIp(request);
+    const bucketKey = `${opts.key}:${identity}`;
+    const count = (counts.get(bucketKey) ?? 0) + 1;
+    counts.set(bucketKey, count);
+    if (count <= opts.limit) {
+      return { allowed: true as const, remaining: opts.limit - count };
+    }
+    return { allowed: false as const, retryAfterSeconds: opts.windowSeconds };
+  });
+  return { counts, check };
+}
+
+describe('POST /api/auth/login account-bucket attribution (audit CD-04)', () => {
+  const ACCOUNT_BUCKET = 'auth:login:acct:alice';
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    verifySignatureMock.mockReturnValue(true);
+    getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE, csrfToken: TEST_CSRF_TOKEN } as never);
+    getAccountMock.mockResolvedValue(accountWithPostingKey());
+    loginUserMock.mockResolvedValue('new-session-token');
+    revokeSessionMock.mockResolvedValue();
+    checkRateLimitMock.mockResolvedValue({ allowed: true });
+  });
+
+  it('an invalid-signature flood naming the victim does not block the victim (targeted lockout)', async () => {
+    const limiter = makeCountingLimiter();
+    checkRateLimitMock.mockImplementation(limiter.check);
+    verifySignatureMock.mockReturnValue(false);
+
+    // Attack: 15 well-formed, CSRF-valid attempts naming 'alice', each with
+    // an invalid signature, spread over 3 IPs (5 per IP — under the
+    // 10/min/IP ceiling, so every request passes the IP gate and reaches
+    // signature verification; under the pre-CD-04 code this exhausted the
+    // victim's 10/min account bucket and locked her out).
+    for (let i = 0; i < 15; i++) {
+      const res = await POST(
+        makePostRequest('/api/auth/login', validBody(), {
+          ...csrfHeader(),
+          'x-forwarded-for': `203.0.113.${(i % 3) + 1}`,
+        })
+      );
+      expect(res.status).toBe(401);
+    }
+    // Each attack request was verified up to the signature step — it is
+    // exactly the traffic that used to burn the victim's quota.
+    expect(verifySignatureMock).toHaveBeenCalledTimes(15);
+    // The victim's account bucket was never consumed...
+    expect(limiter.counts.get(ACCOUNT_BUCKET)).toBeUndefined();
+
+    // ...so her real login (valid signature, her own IP) succeeds.
+    verifySignatureMock.mockReturnValue(true);
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), {
+        ...csrfHeader(),
+        'x-forwarded-for': '198.51.100.9',
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(await res.json()).toMatchObject({ success: true });
+    // Her login is the one and only hit on the account bucket.
+    expect(limiter.counts.get(ACCOUNT_BUCKET)).toBe(1);
+  });
+
+  it('still rate-limits VERIFIED logins per account across rotating IPs', async () => {
+    const limiter = makeCountingLimiter();
+    checkRateLimitMock.mockImplementation(limiter.check);
+
+    // 10 verified logins for 'alice', one per rotating IP: all succeed (no
+    // single IP bucket trips) and fill the account bucket.
+    for (let i = 0; i < 10; i++) {
+      const res = await POST(
+        makePostRequest('/api/auth/login', validBody(), {
+          ...csrfHeader(),
+          'x-forwarded-for': `203.0.113.${i + 1}`,
+        })
+      );
+      expect(res.status).toBe(200);
+    }
+    expect(loginUserMock).toHaveBeenCalledTimes(10);
+    expect(limiter.counts.get(ACCOUNT_BUCKET)).toBe(10);
+
+    // The 11th verified login for the same account is denied with 429 even
+    // from a fresh IP, and mints no session.
+    const res = await POST(
+      makePostRequest('/api/auth/login', validBody(), {
+        ...csrfHeader(),
+        'x-forwarded-for': '198.51.100.9',
+      })
+    );
+    expect(res.status).toBe(429);
+    expect(res.headers.get('Retry-After')).toBe('60');
+    expect(loginUserMock).toHaveBeenCalledTimes(10);
+  });
+
+  it('challenge-invalid, CSRF-invalid, unknown-account and malformed requests never touch the account quota', async () => {
+    const limiter = makeCountingLimiter();
+    checkRateLimitMock.mockImplementation(limiter.check);
+
+    // Malformed body (missing fields): 400 before anything else.
+    let res = await POST(makePostRequest('/api/auth/login', { username: 'alice' }));
+    expect(res.status).toBe(400);
+
+    // Valid body without the X-CSRF-Token header: 403 at the CSRF gate.
+    res = await POST(makePostRequest('/api/auth/login', validBody()));
+    expect(res.status).toBe(403);
+
+    // Challenge that does not match the session: 400 after the RPC lookup.
+    getSessionMock.mockResolvedValue({ loginChallenge: 'other-challenge', csrfToken: TEST_CSRF_TOKEN } as never);
+    res = await POST(makePostRequest('/api/auth/login', validBody(), csrfHeader()));
+    expect(res.status).toBe(400);
+
+    // Unknown account: 404 at the RPC lookup.
+    getSessionMock.mockResolvedValue({ loginChallenge: CHALLENGE, csrfToken: TEST_CSRF_TOKEN } as never);
+    getAccountMock.mockResolvedValue(null);
+    res = await POST(makePostRequest('/api/auth/login', validBody(), csrfHeader()));
+    expect(res.status).toBe(404);
+
+    // Not-a-posting-key public key: 401 at the authority check.
+    getAccountMock.mockResolvedValue(accountWithPostingKey('STMother key'));
+    res = await POST(makePostRequest('/api/auth/login', validBody(), csrfHeader()));
+    expect(res.status).toBe(401);
+
+    // Invalid signature: 401 at the signature check.
+    getAccountMock.mockResolvedValue(accountWithPostingKey());
+    verifySignatureMock.mockReturnValue(false);
+    res = await POST(makePostRequest('/api/auth/login', validBody(), csrfHeader()));
+    expect(res.status).toBe(401);
+
+    // None of the unverified failure paths consumed the account bucket.
+    expect(limiter.counts.get(ACCOUNT_BUCKET)).toBeUndefined();
+    expect(limiter.check).toHaveBeenCalled();
   });
 });

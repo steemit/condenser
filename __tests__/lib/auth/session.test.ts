@@ -2,6 +2,7 @@
 // Server-only module: jose's instanceof checks need the plain Node realm
 // (jsdom's TextEncoder/Uint8Array come from a different realm).
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { SignJWT } from 'jose';
 
 const redisSessionMocks = vi.hoisted(() => ({
   isRedisAvailable: vi.fn(() => false),
@@ -9,6 +10,8 @@ const redisSessionMocks = vi.hoisted(() => ({
   getSession: vi.fn(),
   updateSession: vi.fn(),
   deleteSession: vi.fn(),
+  setDenylistEntry: vi.fn(),
+  hasDenylistEntry: vi.fn(),
 }));
 
 vi.mock('@/lib/auth/redis-session', () => redisSessionMocks);
@@ -33,6 +36,11 @@ describe('lib/auth/session', () => {
   beforeEach(() => {
     vi.stubEnv('JWT_SECRET', STRONG_SECRET);
     redisSessionMocks.isRedisAvailable.mockReturnValue(false);
+    // Denylist Redis mirror defaults: no mirror write succeeded, no mirror
+    // entry exists — i.e. pure in-process denylist behavior (CS-01 tests
+    // override these per-scenario).
+    redisSessionMocks.setDenylistEntry.mockResolvedValue(false);
+    redisSessionMocks.hasDenylistEntry.mockResolvedValue(false);
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
@@ -246,7 +254,7 @@ describe('lib/auth/session', () => {
     });
   });
 
-  describe('session TTL in JWT fallback mode (audit N-08)', () => {
+  describe('session TTL in JWT fallback mode (audit N-08 / CS-01)', () => {
     beforeEach(() => {
       redisSessionMocks.isRedisAvailable.mockReturnValue(false);
     });
@@ -258,11 +266,94 @@ describe('lib/auth/session', () => {
       expect((session?.exp ?? 0) - (session?.iat ?? 0)).toBe(600);
     });
 
-    it('signs logged-in JWTs with a ~30-day expiration', async () => {
+    it('signs logged-in fallback JWTs with the reduced 12-hour expiration (CS-01)', async () => {
       const token = await createSession({ username: 'alice' });
       const session = await verifySession(token);
       expect(session?.ttlClass).toBe('persistent');
-      expect((session?.exp ?? 0) - (session?.iat ?? 0)).toBe(2592000);
+      expect((session?.exp ?? 0) - (session?.iat ?? 0)).toBe(43200);
+    });
+  });
+
+  describe('fallback JWT revocation via the jti denylist (CS-01)', () => {
+    beforeEach(() => {
+      redisSessionMocks.isRedisAvailable.mockReturnValue(false);
+    });
+
+    it('logout invalidates the fallback JWT server-side (audit core scenario)', async () => {
+      const token = await createSession({ username: 'alice' });
+      expect((await verifySession(token))?.username).toBe('alice');
+
+      await revokeSession(token);
+
+      expect(await verifySession(token)).toBeNull();
+      // Redis session deletion stays untouched by the JWT branch.
+      expect(redisSessionMocks.deleteSession).not.toHaveBeenCalled();
+    });
+
+    it('only denies the revoked token — a concurrently issued one stays valid', async () => {
+      const tokenA = await createSession({ username: 'alice' });
+      const tokenB = await createSession({ username: 'alice' });
+
+      await revokeSession(tokenA);
+
+      expect(await verifySession(tokenA)).toBeNull();
+      expect((await verifySession(tokenB))?.username).toBe('alice');
+    });
+
+    it('the rotated post-logout token stays valid while the old one is rejected', async () => {
+      // Logout flow in fallback mode: logoutUser mints the replacement
+      // session, revokeSession kills the superseded token. The replacement
+      // must carry a fresh jti so revoking the old token cannot reject it.
+      const oldToken = await createSession({ username: 'alice' });
+      const session = await verifySession(oldToken);
+      expect(session).not.toBeNull();
+
+      const newToken = await logoutUser(session as NonNullable<typeof session>);
+      await revokeSession(oldToken);
+
+      expect(await verifySession(oldToken)).toBeNull();
+      const newSession = await verifySession(newToken);
+      expect(newSession?.username).toBeUndefined(); // logged out...
+      expect(newSession?.uid).toBe(session?.uid); // ...same session identity
+    });
+
+    it('revokes legacy fallback JWTs minted before the jti rollout', async () => {
+      // Hand-sign a token with no jti — the denylist then keys on the
+      // SHA-256 digest of the full token.
+      const legacyToken = await new SignJWT({
+        uid: 'legacy',
+        username: 'alice',
+        ttlClass: 'persistent',
+        lastVisit: 1,
+        newVisit: false,
+      })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt()
+        .setExpirationTime('12h')
+        .sign(new TextEncoder().encode(STRONG_SECRET));
+
+      expect((await verifySession(legacyToken))?.username).toBe('alice');
+      await revokeSession(legacyToken);
+      expect(await verifySession(legacyToken)).toBeNull();
+    });
+
+    it('rejects a token revoked on another instance via the Redis mirror', async () => {
+      const token = await createSession({ username: 'alice' });
+      expect((await verifySession(token))?.username).toBe('alice');
+
+      // This instance has no in-process entry, but the mirror says revoked.
+      redisSessionMocks.hasDenylistEntry.mockResolvedValue(true);
+      expect(await verifySession(token)).toBeNull();
+    });
+
+    it('does not consult the denylist for tokens that fail signature verification', async () => {
+      await expect(verifySession('not-a-token')).resolves.toBeNull();
+      expect(redisSessionMocks.hasDenylistEntry).not.toHaveBeenCalled();
+    });
+
+    it('does not denylist an unverifiable token (forged input cannot stuff the denylist)', async () => {
+      await revokeSession('forged.header.payload');
+      expect(redisSessionMocks.setDenylistEntry).not.toHaveBeenCalled();
     });
   });
 
@@ -275,10 +366,21 @@ describe('lib/auth/session', () => {
       expect(redisSessionMocks.deleteSession).toHaveBeenCalledWith(REDIS_SID);
     });
 
-    it('is a no-op for stateless JWT tokens (cannot be revoked)', async () => {
+    it('denylists a fallback JWT (in-process + Redis mirror) instead of deleting a Redis key', async () => {
+      redisSessionMocks.setDenylistEntry.mockResolvedValue(true);
       const token = await createSession({ username: 'alice' });
+      const session = await verifySession(token);
+      const remaining = (session?.exp ?? 0) - Math.floor(Date.now() / 1000);
+
       await revokeSession(token);
+
       expect(redisSessionMocks.deleteSession).not.toHaveBeenCalled();
+      expect(redisSessionMocks.setDenylistEntry).toHaveBeenCalledTimes(1);
+      const [denyKey, ttlSeconds] =
+        redisSessionMocks.setDenylistEntry.mock.calls[0];
+      expect(denyKey).toMatch(/^[a-f0-9]{32}$/); // the token's jti
+      // The mirror TTL is the token's remaining lifetime (+1s ceil slack).
+      expect([remaining, remaining + 1]).toContain(ttlSeconds);
     });
 
     it('is a no-op for missing/empty tokens', async () => {

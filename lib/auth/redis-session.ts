@@ -22,6 +22,16 @@ const SESSION_KEY_PREFIX =
   'steem:session:';
 
 /**
+ * Sub-prefix for the JWT revocation denylist (audit CS-01). Lands inside the
+ * session namespace when the client applies SESSION_KEY_PREFIX (REDIS_HOST
+ * mode); REDIS_URL mode deliberately keeps unprefixed keys (see
+ * getRedisClient), so there the denylist keys are simply `revoked-jwt:<key>`.
+ * Session ids are hex-only, so the `:` and letters here can never collide
+ * with a session key.
+ */
+const DENYLIST_KEY_PREFIX = 'revoked-jwt:';
+
+/**
  * Initialize Redis client if configured
  */
 function getRedisClient(): Redis | null {
@@ -175,6 +185,46 @@ export async function deleteSession(sessionId: string): Promise<boolean> {
     return true;
   } catch (error) {
     console.error('Failed to delete session from Redis:', error);
+    return false;
+  }
+}
+
+/**
+ * Store a JWT fallback revocation marker (audit CS-01). The value is
+ * irrelevant (always '1'); the key's TTL — the revoked token's remaining
+ * lifetime — is the whole point. Returns false when Redis is unavailable so
+ * the caller keeps its in-process denylist entry and retries later.
+ */
+export async function setDenylistEntry(key: string, ttlSeconds: number): Promise<boolean> {
+  const redis = getRedisClient();
+  if (!redis) {
+    return false;
+  }
+
+  try {
+    await redis.setex(`${DENYLIST_KEY_PREFIX}${key}`, ttlSeconds, '1');
+    return true;
+  } catch (error) {
+    console.error('Failed to store JWT denylist entry in Redis:', error);
+    return false;
+  }
+}
+
+/**
+ * Read a JWT fallback revocation marker (audit CS-01). Returns false on miss
+ * and when Redis is unavailable — callers treat that as "not revoked
+ * here", never as an error.
+ */
+export async function hasDenylistEntry(key: string): Promise<boolean> {
+  const redis = getRedisClient();
+  if (!redis) {
+    return false;
+  }
+
+  try {
+    return (await redis.get(`${DENYLIST_KEY_PREFIX}${key}`)) !== null;
+  } catch (error) {
+    console.error('Failed to read JWT denylist entry from Redis:', error);
     return false;
   }
 }

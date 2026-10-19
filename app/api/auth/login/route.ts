@@ -193,7 +193,7 @@ export async function POST(request: NextRequest) {
 
     // Revoke the pre-login session (which still carries the now-consumed
     // loginChallenge) so it cannot be replayed within its TTL (audit N-12).
-    // Best-effort no-op for stateless JWT tokens.
+    // Fallback JWTs are revoked via the jti denylist (audit CS-01).
     await revokeSession(request.cookies.get(COOKIE_NAME)?.value);
 
     const response = NextResponse.json({

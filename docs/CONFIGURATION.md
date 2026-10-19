@@ -241,9 +241,13 @@ was removed entirely in audit N-13.)
 Anonymous ("challenge-only") sessions — created by `GET /api/auth/challenge`
 and cookie-less hits on `GET /api/auth/session` — expire after **10 minutes**
 (Redis TTL and JWT `exp` alike), matching the 5-minute login challenge window
-with 2x headroom. Logged-in sessions keep the 30-day TTL, and any rewrite of
-a session preserves its original TTL class. Without Redis, the same 10-minute
-expiration applies to the JWT fallback tokens.
+with 2x headroom. Logged-in Redis-backed sessions keep the 30-day TTL, and
+any rewrite of a session preserves its original TTL class. Without Redis, the
+same 10-minute expiration applies to anonymous fallback JWTs, while logged-in
+fallback JWTs expire after **12 hours** (audit CS-01): Redis is down when
+those are minted, so revocation can only be honored per-instance and the
+shorter TTL bounds a leaked token's exposure. The window slides — every
+session rewrite re-signs the fallback JWT — so active use is uninterrupted.
 
 ### Authentication
 - Only posting keys are allowed for login (active/owner keys are blocked for security)
@@ -254,8 +258,8 @@ expiration applies to the JWT fallback tokens.
 ### Session Security
 - HTTP-only cookies prevent XSS attacks
 - Secure flag enabled in production
-- 10-minute expiration for anonymous (challenge-only) sessions, 30-day for logged-in sessions, with automatic renewal (see "Session TTLs" above)
-- Session invalidation on logout
+- 10-minute expiration for anonymous (challenge-only) sessions, 30-day for logged-in Redis-backed sessions (12-hour for logged-in fallback JWTs), with automatic renewal (see "Session TTLs" above)
+- Session invalidation on logout (Redis key deletion, or jti denylist for fallback JWTs — see docs/AUTHENTICATION.md)
 
 ### Key Management
 - Private keys are never stored on the server

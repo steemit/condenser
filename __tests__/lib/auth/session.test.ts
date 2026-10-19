@@ -13,13 +13,16 @@ const redisSessionMocks = vi.hoisted(() => ({
 
 vi.mock('@/lib/auth/redis-session', () => redisSessionMocks);
 
+import { NextRequest, NextResponse } from 'next/server';
 import {
+  COOKIE_NAME,
   createSession,
   loginUser,
   logoutUser,
   revokeSession,
   updateSession,
   verifySession,
+  withSession,
 } from '@/lib/auth/session';
 
 const STRONG_SECRET = '0123456789abcdef0123456789abcdef0123456789abcdef'; // 56 bytes
@@ -307,6 +310,172 @@ describe('lib/auth/session', () => {
 
       await revokeSession(REDIS_SID);
       expect(await verifySession(REDIS_SID)).toBeNull();
+    });
+  });
+
+  describe('single live Redis id per session lineage (audit CD-02)', () => {
+    // Map-backed fake of the Redis session store: one key = one live id.
+    // updateSession mirrors the SET ... XX contract (no key minting), so the
+    // store's size directly proves how many live ids a lineage holds.
+    let store: Map<string, unknown>;
+
+    beforeEach(() => {
+      redisSessionMocks.isRedisAvailable.mockReturnValue(true);
+      store = new Map();
+      redisSessionMocks.getSession.mockImplementation(async (sid: string) =>
+        store.get(sid) ?? null
+      );
+      redisSessionMocks.updateSession.mockImplementation(
+        async (sid: string, data: unknown) => {
+          if (!store.has(sid)) return false; // SET ... XX: key must exist
+          store.set(sid, data);
+          return true;
+        }
+      );
+      redisSessionMocks.storeSession.mockImplementation(
+        async (sid: string, data: unknown) => {
+          store.set(sid, data);
+          return true;
+        }
+      );
+      redisSessionMocks.deleteSession.mockImplementation(async (sid: string) => {
+        store.delete(sid);
+        return true;
+      });
+    });
+
+    /** GET-style request carrying a session cookie, like a browser hit. */
+    function requestWithCookie(sid: string): NextRequest {
+      return new NextRequest(new URL('http://localhost/api/auth/session'), {
+        headers: { cookie: `${COOKIE_NAME}=${sid}` },
+      });
+    }
+
+    /** A logged-in session as it sits in Redis. */
+    function persistentSession() {
+      return {
+        uid: 'u1',
+        username: 'alice',
+        ttlClass: 'persistent' as const,
+        csrfToken: 'c'.repeat(64),
+        lastVisit: Math.floor(Date.now() / 1000) - 60,
+        newVisit: false,
+      };
+    }
+
+    it('withSession rewrites the SAME id: no second live key, old key still resolves', async () => {
+      const sid = 'b'.repeat(26);
+      store.set(sid, persistentSession());
+
+      const response = await withSession(requestWithCookie(sid), async (session) =>
+        NextResponse.json({ authenticated: !!session?.username })
+      );
+
+      // The same id goes back to the browser — no fresh id was minted on read.
+      expect(response.cookies.get(COOKIE_NAME)?.value).toBe(sid);
+      expect(redisSessionMocks.storeSession).not.toHaveBeenCalled();
+      expect(store.size).toBe(1);
+      // The id still resolves: this was an in-place rewrite, not a silent
+      // rotate-and-orphan.
+      expect(await verifySession(sid)).toMatchObject({ username: 'alice' });
+    });
+
+    it('read refresh keeps the 30-day TTL for logged-in sessions', async () => {
+      const sid = 'b'.repeat(26);
+      store.set(sid, persistentSession());
+
+      await withSession(requestWithCookie(sid), async () => NextResponse.json({}));
+
+      expect(redisSessionMocks.updateSession).toHaveBeenCalledWith(
+        sid,
+        expect.objectContaining({ username: 'alice', ttlClass: 'persistent' }),
+        2592000
+      );
+    });
+
+    it('read refresh then logout kills the whole lineage — no surviving older id', async () => {
+      // Audit CD-02 sequence: "read session (rotation happens) → logout with
+      // the new id → the old id no longer authenticates". Refresh used to
+      // mint a new id per read while the old key lived on, so logout (which
+      // revokes only the current cookie) left the older id valid for up to
+      // 30 days.
+      const sid = 'b'.repeat(26);
+      store.set(sid, persistentSession());
+
+      // 1. Session read — the id the response cookie now carries.
+      const response = await withSession(requestWithCookie(sid), async () =>
+        NextResponse.json({})
+      );
+      const refreshedId = response.cookies.get(COOKIE_NAME)?.value;
+      expect(refreshedId).toBeDefined();
+
+      // 2. Logout with the current cookie id (what POST /api/auth/logout
+      //    hands to revokeSession).
+      await revokeSession(refreshedId as string);
+
+      // 3. Both the refreshed id AND the pre-read id are dead: with same-id
+      //    refresh they are one and the same key, and no sibling key was
+      //    ever created. Under the old rotate-without-revoke behavior,
+      //    verifySession(sid) below still resolved and this test failed.
+      expect(await verifySession(refreshedId as string)).toBeNull();
+      expect(await verifySession(sid)).toBeNull();
+      expect(store.size).toBe(0);
+    });
+
+    it('a full login → read → logout lineage holds at most one live id', async () => {
+      // Seed the anonymous pre-login (challenge) session.
+      const anonSid = 'e'.repeat(26);
+      store.set(anonSid, {
+        uid: 'u1',
+        loginChallenge: 'abc',
+        ttlClass: 'challenge',
+        csrfToken: 'c'.repeat(64),
+        lastVisit: 1,
+        newVisit: true,
+      });
+
+      // Login: mint the persistent id, revoke the pre-login one (audit N-12).
+      const loginSid = await loginUser(await verifySession(anonSid), 'alice');
+      await revokeSession(anonSid);
+      expect(await verifySession(anonSid)).toBeNull();
+      expect(store.size).toBe(1);
+
+      // Reads refresh in place: still exactly one live id (audit CD-02).
+      await withSession(requestWithCookie(loginSid), async () =>
+        NextResponse.json({})
+      );
+      expect(store.size).toBe(1);
+
+      // Logout: the lineage dies with the current cookie id, replaced by a
+      // single fresh anonymous session (audit N-05).
+      const loggedIn = await verifySession(loginSid);
+      expect(loggedIn?.username).toBe('alice');
+      const logoutSid = await logoutUser(loggedIn as never);
+      await revokeSession(loginSid);
+      expect(await verifySession(loginSid)).toBeNull();
+      expect(store.has(logoutSid)).toBe(true);
+      expect(store.size).toBe(1);
+    });
+
+    it('updateSession revokes the old id when the in-place rewrite fails (no orphans)', async () => {
+      // e.g. the key expired between the read and the write (XX miss), or
+      // Redis hiccuped: the fallback replacement must not leave the old id
+      // live next to the new one.
+      redisSessionMocks.updateSession.mockResolvedValue(false);
+      const sid = 'd'.repeat(26);
+      store.set(sid, persistentSession());
+
+      const replacement = await updateSession(
+        persistentSession(),
+        {},
+        sid
+      );
+
+      expect(replacement).toMatch(/^[a-f0-9]+$/);
+      expect(replacement).not.toBe(sid);
+      // The superseded id was revoked — it cannot outlive its replacement.
+      expect(redisSessionMocks.deleteSession).toHaveBeenCalledWith(sid);
+      expect(await verifySession(sid)).toBeNull();
     });
   });
 });

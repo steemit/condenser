@@ -275,6 +275,14 @@ export async function getServerSession(): Promise<SessionData | null> {
 /**
  * Update session data
  * Handles both Redis and JWT sessions
+ *
+ * ID invariant (audit CD-02): pass the caller's current token so an existing
+ * Redis session is rewritten in place under the SAME id. Only when no usable
+ * id is supplied (or the in-place rewrite failed) does this mint a
+ * replacement — and that path revokes the superseded Redis id, so a session
+ * lineage never leaves more than one live id behind. Rotation with revocation
+ * is reserved for login/logout, which both call revokeSession on the
+ * superseded token.
  */
 export async function updateSession(
   currentSession: SessionData,
@@ -304,9 +312,10 @@ export async function updateSession(
     newVisit: now - lastVisit > 1800, // 30 minutes
   };
 
-  // Try to update existing Redis session if we have a session ID. The TTL is
-  // passed explicitly — RedisSession.updateSession would otherwise rewrite
-  // the key with the 30-day default.
+  // Rewrite the existing Redis session in place when we hold its id — the
+  // session KEEPS the same id, so at most one live id exists per lineage
+  // (audit CD-02). The TTL is passed explicitly — RedisSession.updateSession
+  // would otherwise rewrite the key with the 30-day default.
   if (currentToken && RedisSession.isRedisAvailable() && isRedisSessionId(currentToken)) {
     const updated = await RedisSession.updateSession(
       currentToken,
@@ -316,6 +325,12 @@ export async function updateSession(
     if (updated) {
       return currentToken; // Keep the same session ID
     }
+    // In-place rewrite failed (e.g. the key expired since the read, or Redis
+    // hiccuped). The replacement minted below supersedes the old id, so
+    // revoke it — otherwise it would linger as a second live credential for
+    // its full TTL while logout only revokes the newest cookie (CD-02).
+    // Best-effort, like every revocation.
+    await revokeSession(currentToken);
   }
 
   // Create new session (Redis or JWT) — updatedSession carries ttlClass, so
@@ -361,8 +376,13 @@ export async function withSession(
     return response;
   }
 
-  // Update existing session
-  const updatedToken = await updateSession(session, {});
+  // Update existing session. The current cookie token is handed over so the
+  // Redis branch rewrites the SAME session id in place (audit CD-02): without
+  // it updateSession minted a fresh id on every read while the old key kept
+  // living for its full TTL — a leaked older id then survived logout, which
+  // only revokes the id in the current cookie.
+  const currentToken = request.cookies.get(COOKIE_NAME)?.value;
+  const updatedToken = await updateSession(session, {}, currentToken);
   const updatedSession = await verifySession(updatedToken);
 
   const response = await handler(updatedSession);

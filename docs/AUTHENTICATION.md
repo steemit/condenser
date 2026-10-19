@@ -47,6 +47,8 @@ const isValidSignature = sig.verifyHash(Buffer.from(data, 'utf8'), pubKey);
 - **No Dependencies**: Works without external services
 - **Stateless**: Self-contained session tokens
 - **HTTP-Only Cookies**: XSS protection
+- **Revocable**: logout/login record the token's `jti` in a denylist (in-process + Redis mirror when reachable) until its `exp` (audit CS-01)
+- **Bounded Lifetime**: logged-in fallback tokens expire after 12 hours (sliding via re-signing on session writes), instead of the 30-day Redis-session TTL
 
 ## Implementation Details
 
@@ -143,9 +145,10 @@ REDIS_SESSION_KEY_PREFIX=steem:session:
 - **HTTP-Only Cookies**: Prevents XSS attacks
 - **Secure Flag**: HTTPS-only in production
 - **SameSite Protection**: CSRF protection
-- **Automatic Expiration**: 10-minute TTL for anonymous (challenge-only) sessions, 30-day TTL for logged-in sessions, renewed on activity
+- **Automatic Expiration**: 10-minute TTL for anonymous (challenge-only) sessions, 30-day TTL for logged-in Redis-backed sessions, renewed on activity; logged-in fallback JWTs expire after 12 hours (audit CS-01), sliding with each session rewrite
 - **JWT_SECRET Fail Closed**: session creation/verification throws in any environment when `JWT_SECRET` is missing, shorter than 32 bytes, or the shipped placeholder — a weak secret lets anyone mint session cookies (including forged login challenges)
-- **Session Revocation (Redis mode)**: logout and successful login revoke the superseded Redis session id server-side (`revokeSession()` → `RedisSession.deleteSession()`), so the old token cannot be replayed after the cookie is rotated. Stateless JWT fallback tokens cannot be revoked — they stay valid until their `exp`; use Redis sessions (`REDIS_URL`) in production for real revocation
+- **Session Revocation (Redis mode)**: logout and successful login revoke the superseded Redis session id server-side (`revokeSession()` → `RedisSession.deleteSession()`), so the old token cannot be replayed after the cookie is rotated
+- **Session Revocation (JWT fallback, audit CS-01)**: fallback JWTs carry a unique per-token `jti` (a SHA-256 token digest for tokens minted before the `jti` rollout). Logout/login denylists that key until the token's own `exp` — always in-process on the instance that served the request, mirrored to Redis (`revoked-jwt:` keys under the session prefix, TTL = remaining token lifetime) when reachable so other instances honor it, and re-mirrored lazily after Redis recovers. `verifySession` rejects denylisted tokens. Residual risk: during a full Redis outage in a multi-instance deployment, revocation is only honored per-instance until the outage ends (bounded by the 12-hour fallback TTL); use Redis sessions (`REDIS_URL`) in production for immediate cluster-wide revocation
 - **Single Live Session Id (Redis mode)**: reads/writes that refresh an existing session (the `withSession` read path, challenge, preferences) rewrite it in place under the SAME Redis id (`RedisSession.updateSession` is a set-if-exists `SET ... XX` and never mints keys); if the in-place rewrite fails, the superseded id is revoked before a replacement is minted — so a session lineage holds at most one live id at any time and logout kills it (audit CD-02: previously every session read minted a new id and left the old one valid for up to 30 days, surviving logout)
 
 ### Key Management Security

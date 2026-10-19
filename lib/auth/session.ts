@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import * as RedisSession from './redis-session';
+import { denylistKeyFor, isJwtRevoked, revokeJwt } from './jwt-denylist';
 import { generateCsrfToken, setCsrfCookie } from './csrf';
 
 const FALLBACK_JWT_SECRET = 'your-secret-key-change-in-production';
@@ -103,11 +104,34 @@ export type SessionTtlClass = 'challenge' | 'persistent';
 export const CHALLENGE_SESSION_TTL_SEC = 600;
 /** TTL for logged-in sessions: 30 days (matches redis-session default). */
 export const PERSISTENT_SESSION_TTL_SEC = 2592000;
+/**
+ * TTL for logged-in sessions issued as stateless fallback JWTs: 12 hours
+ * (audit CS-01). Redis is down when these are minted, so the revocation
+ * denylist can only be honored per-instance — the shorter TTL bounds a
+ * leaked fallback token's exposure to half a day even when revocation
+ * cannot propagate. The trade-off: a Redis outage longer than 12h logs
+ * fallback users out once, which is acceptable next to an unrevokable 30-day
+ * credential. Active users are not disturbed: every session-touching request
+ * re-signs the fallback JWT (updateSession -> createSession), so the window
+ * slides while the token is in use.
+ */
+export const FALLBACK_PERSISTENT_JWT_TTL_SEC = 43200;
 
 function ttlSecondsForClass(ttlClass: SessionTtlClass): number {
   return ttlClass === 'challenge'
     ? CHALLENGE_SESSION_TTL_SEC
     : PERSISTENT_SESSION_TTL_SEC;
+}
+
+/**
+ * TTL applied to the JWT fallback token itself. Challenge-class tokens keep
+ * the 600s class TTL; persistent-class tokens get the reduced CS-01 TTL
+ * above (Redis-backed sessions keep the full 30 days).
+ */
+function fallbackJwtTtlSecondsForClass(ttlClass: SessionTtlClass): number {
+  return ttlClass === 'challenge'
+    ? CHALLENGE_SESSION_TTL_SEC
+    : FALLBACK_PERSISTENT_JWT_TTL_SEC;
 }
 
 /**
@@ -154,6 +178,18 @@ export interface SessionData {
  */
 function generateUID(): string {
   const array = new Uint8Array(13);
+  crypto.getRandomValues(array);
+  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * Generate the per-token `jti` for fallback JWTs (audit CS-01). Distinct from
+ * the session `uid`, which is deliberately preserved across login/logout
+ * rotations — the jti MUST be fresh on every signing so revoking a
+ * superseded token never rejects its replacement.
+ */
+function generateJti(): string {
+  const array = new Uint8Array(16);
   crypto.getRandomValues(array);
   return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
 }
@@ -211,11 +247,14 @@ export async function createSession(data: Partial<SessionData> = {}): Promise<st
 
   // Fallback to JWT. The per-class expiration keeps the same property for
   // stateless tokens: an unauthenticated visitor's token is worthless after
-  // 10 minutes, while login sessions still last 30 days.
+  // 10 minutes, and logged-in fallback tokens are bounded to the reduced
+  // CS-01 TTL (12h, sliding via re-signing) instead of 30 days. The fresh
+  // per-token `jti` is what makes these tokens revocable (see revokeSession).
   const token = await new SignJWT(sessionData)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime(`${ttlSecondsForClass(ttlClass)}s`)
+    .setJti(generateJti())
+    .setExpirationTime(`${fallbackJwtTtlSecondsForClass(ttlClass)}s`)
     .sign(getJwtSecret());
 
   return token;
@@ -238,6 +277,13 @@ export async function verifySession(token: string): Promise<SessionData | null> 
   // Fallback to JWT verification
   try {
     const { payload } = await jwtVerify(token, getJwtSecret());
+    // Audit CS-01: a fallback JWT whose revocation key (jti, or the token
+    // digest for pre-jti tokens) is denylisted has been logged out
+    // server-side — treat it exactly like an expired signature.
+    const jti = typeof payload.jti === 'string' ? payload.jti : undefined;
+    if (await isJwtRevoked(denylistKeyFor(jti, token))) {
+      return null;
+    }
     return payload as unknown as SessionData;
   } catch (error) {
     console.error('Session verification failed:', error);
@@ -438,30 +484,46 @@ export async function logoutUser(currentSession: SessionData): Promise<string> {
 }
 
 /**
- * Best-effort server-side revocation of a session token (audit N-05/N-12).
+ * Best-effort server-side revocation of a session token (audit N-05/N-12,
+ * CS-01).
  *
  * Callers hand over the superseded token when a session is rotated or
  * destroyed — on logout and on successful login — so the old token cannot
  * be replayed after the cookie has been replaced.
  *
- * Only Redis session ids can be revoked: `RedisSession.deleteSession`
- * removes the backing key, so the token becomes useless immediately (and
- * does not linger for its 30-day TTL). Stateless JWT fallback tokens cannot
- * be revoked — they remain valid until their `exp` — which is the documented
- * limitation of the JWT-only mode; production deployments should configure
- * Redis (`REDIS_URL`) to get real revocation.
+ * Redis session ids are revoked by deleting the backing key (immediate,
+ * cluster-wide). Stateless fallback JWTs are revoked through the jti
+ * denylist (lib/auth/jwt-denylist.ts): the entry lives until the token's
+ * own `exp`, always in-process and mirrored to Redis when reachable so
+ * other instances honor it. Residual: during a full Redis outage in a
+ * multi-instance deployment only the instance that served the logout
+ * rejects the token — see the denylist module docs.
  *
  * Never throws: revocation must not break the logout/login flow when Redis
- * is unconfigured (deleteSession is a safe no-op) or temporarily failing.
+ * is unconfigured or temporarily failing.
  */
 export async function revokeSession(token: string | null | undefined): Promise<void> {
-  if (!token || !isRedisSessionId(token)) {
-    // Absent, or a stateless JWT token: nothing to delete server-side.
+  if (!token) {
     return;
   }
+  if (isRedisSessionId(token)) {
+    try {
+      await RedisSession.deleteSession(token);
+    } catch (error) {
+      console.error('Failed to revoke session:', error);
+    }
+    return;
+  }
+  // Stateless fallback JWT: denylist its revocation key until its exp. The
+  // signature is verified first so forged tokens cannot stuff the denylist
+  // with attacker-chosen jti values; an unverifiable token cannot pass
+  // verifySession either, so there is nothing to revoke.
   try {
-    await RedisSession.deleteSession(token);
+    const { payload } = await jwtVerify(token, getJwtSecret());
+    const jti = typeof payload.jti === 'string' ? payload.jti : undefined;
+    const exp = typeof payload.exp === 'number' ? payload.exp : 0;
+    await revokeJwt(denylistKeyFor(jti, token), exp);
   } catch (error) {
-    console.error('Failed to revoke session:', error);
+    console.error('Failed to revoke fallback JWT session:', error);
   }
 }

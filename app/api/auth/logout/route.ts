@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     // Revoke the old server-side session (Redis mode) so the pre-logout
     // token cannot be replayed after the cookie is replaced (audit N-05).
-    // Best-effort no-op for stateless JWT tokens.
+    // Fallback JWTs are revoked via the jti denylist (audit CS-01).
     await revokeSession(request.cookies.get(COOKIE_NAME)?.value);
 
     if (currentSession.username) {

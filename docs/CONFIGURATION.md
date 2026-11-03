@@ -228,6 +228,15 @@ forged XFF has zero effect in `x-real-ip` mode), the value must be a strict
 IP literal — IPv4 dotted-quad or IPv6; IPv6 is aggregated to its /64 — and
 anything else (ports, lists, junk) counts as unattributed.
 
+Topology boundary: the contract holds only for traffic that actually
+traverses the trusted proxy. A client that reaches the app directly
+(bypassing the proxy) can forge the declared header itself with arbitrary
+valid IP literals and rotate buckets — for `xff-tail`, a single-entry
+`X-Forwarded-For` from such a client is entirely the client's own value.
+The app port must accept connections only from the trusted proxy
+(security groups / network segmentation); header validation cannot
+substitute for that.
+
 Missing or invalid trusted header:
 
 - With a mode configured, a missing/invalid header means the request did NOT

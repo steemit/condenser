@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
 import {
   csrfHeader,
@@ -28,6 +28,12 @@ vi.mock('@/lib/auth/session', () => ({
 // hence vi.hoisted: it must run before the static imports below evaluate.
 vi.hoisted(() => {
   process.env.TRUSTED_CLIENT_IP_HEADER = 'xff-tail';
+});
+
+afterAll(() => {
+  // Never leak the trust mode into other test files sharing this worker
+  // (same cleanup discipline as __tests__/lib/cache/rate-limit.test.ts).
+  delete process.env.TRUSTED_CLIENT_IP_HEADER;
 });
 
 const { verifySignatureMock } = vi.hoisted(() => ({ verifySignatureMock: vi.fn() }));

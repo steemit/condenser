@@ -32,6 +32,14 @@
  * lands in a dedicated shared 'unattributed' bucket at the normal limit.
  * The mode is validated at module load — an unknown value refuses to start
  * rather than silently degrading to no-trust.
+ *
+ * The contract is only as strong as the network topology: a client that
+ * reaches the app DIRECTLY (bypassing the trusted proxy) can forge the
+ * declared header itself with arbitrary valid IP literals and rotate
+ * buckets — for xff-tail, a single-entry X-Forwarded-For from such a
+ * client is entirely the client's own value. The app port must be
+ * reachable only from the trusted proxy (security-group / network
+ * segmentation); header validation cannot substitute for that.
  */
 
 import { NextResponse } from 'next/server';

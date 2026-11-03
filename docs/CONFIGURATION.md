@@ -187,11 +187,78 @@ The application supports two session storage modes:
 ### Rate Limiting & Request Body Caps (audit N-08)
 
 Write and abuse-prone endpoints are rate limited per client IP with a Redis
-fixed-window counter (`lib/cache/rate-limit.ts`). The client IP is taken from
-`x-forwarded-for` (first entry), then `x-real-ip`, else the shared `unknown`
-bucket — this assumes production runs behind a trusted reverse proxy that
-overwrites those headers (see the trust assumptions in the module's comments).
-Blocked requests receive `429` with a `Retry-After` header.
+fixed-window counter (`lib/cache/rate-limit.ts`). Which request header — if
+any — is trusted to carry the REAL client IP is an explicit deployment
+contract declared via `TRUSTED_CLIENT_IP_HEADER` (see the next section);
+only that declared header is ever read. Blocked requests receive `429` with
+a `Retry-After` header.
+
+#### Client-IP trust contract (audit CD-05)
+
+```bash
+# Which request header this deployment guarantees carries the real client IP.
+# One of: x-real-ip | cf-connecting-ip | xff-tail | none (unset = none).
+# Server-side runtime read at module load — changing it requires a restart,
+# not a rebuild. An unknown value fails startup with a clear error rather
+# than silently degrading to no-trust.
+TRUSTED_CLIENT_IP_HEADER=x-real-ip
+```
+
+- `x-real-ip` — trust `X-Real-IP`. **Recommended for Steemit deployments**:
+  the openresty tier sets `proxy_set_header X-Real-IP $remote_addr`, which
+  unconditionally overwrites any client-supplied value with the real
+  (Cloudflare-rewritten) peer address.
+- `cf-connecting-ip` — trust `CF-Connecting-IP`, for deployments where the
+  app sits directly behind Cloudflare with no header-stripping layer in
+  between.
+- `xff-tail` — take the LAST entry of `X-Forwarded-For`: in an append-only
+  proxy chain that entry was appended by the proxy closest to the app, the
+  only position a client cannot prepend over. Caveat: the identity is only
+  as trustworthy as that closest proxy — if it blindly forwards a
+  client-controlled XFF, the client still controls the tail.
+- unset / `none` — trust no header: direct-exposure semantics (see below).
+
+Background (why this exists): every proxy layer in the production chain
+(Cloudflare → ALB → openresty → app) merely APPENDS to `X-Forwarded-For`
+without sanitizing, so a client that sends `X-Forwarded-For: 203.0.113.77`
+controls the FIRST segment arriving at the app — which the pre-fix limiter
+used as the rate-limit identity, making every per-IP bucket spoofable
+(audit CD-05). Under the contract, only the declared header is read (a
+forged XFF has zero effect in `x-real-ip` mode), the value must be a strict
+IP literal — IPv4 dotted-quad or IPv6; IPv6 is aggregated to its /64 — and
+anything else (ports, lists, junk) counts as unattributed.
+
+Topology boundary: the contract holds only for traffic that actually
+traverses the trusted proxy. A client that reaches the app directly
+(bypassing the proxy) can forge the declared header itself with arbitrary
+valid IP literals and rotate buckets — for `xff-tail`, a single-entry
+`X-Forwarded-For` from such a client is entirely the client's own value.
+The app port must accept connections only from the trusted proxy
+(security groups / network segmentation); header validation cannot
+substitute for that.
+
+Missing or invalid trusted header:
+
+- With a mode configured, a missing/invalid header means the request did NOT
+  come through the trusted proxy (that proxy always sets it) — direct-to-app
+  access or a proxy misconfiguration. Such requests share one dedicated
+  `unattributed` bucket at the endpoint's normal per-IP limit: dropping the
+  header must not become a way to escape rate limiting, but anomalous
+  traffic also never mixes into real per-user buckets. A warning is logged,
+  throttled to one per minute.
+- With NO mode configured (direct exposure), there is no sound IP identity
+  at all — every header is client-supplied. Rather than collapsing all
+  visitors into one shared bucket (where they would 429 each other at
+  site-wide ceilings like 30/min), IP-dimension buckets are exempted and a
+  warning is logged. Identifier-dimension buckets (e.g. the per-account
+  login limit, audit CD-04) do not depend on the IP and remain enforced.
+  Direct-exposure deployments that want per-IP limiting must place a
+  trustworthy proxy in front and declare it with this variable.
+
+> Deployment action item (Steemit/Elastic Beanstalk): set
+> `TRUSTED_CLIENT_IP_HEADER=x-real-ip` as an EB environment property when
+> this ships — until then the per-IP limiter runs in the exempt (unset)
+> mode.
 
 | Endpoint | Limit | Dimension |
 |----------|-------|-----------|

@@ -14,6 +14,7 @@
     "test:api": "tsx scripts/test-api.ts",
     "test:proxy": "tsx scripts/test-proxy-routes.ts",
     "test:render": "tsx scripts/compare-render-pipeline.ts",
+    "verify:cache-headers": "tsx scripts/verify-page-cache-headers.ts",
     "typecheck": "tsc --noEmit",
     "lint:ci": "node scripts/lint-budget.mjs"
   },

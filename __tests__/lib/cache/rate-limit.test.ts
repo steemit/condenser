@@ -1,41 +1,72 @@
 // @vitest-environment node
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const redisMocks = vi.hoisted(() => ({
-  // Fake ioredis client covering the subset rate-limit uses (eval).
+  // Fake ioredis client covering the subset rate-limit uses (eval), plus the
+  // getRedis handle. Hoisted (not created inside the factory) so the SAME
+  // mock instances are served to every fresh module copy: the trust mode is
+  // captured from TRUSTED_CLIENT_IP_HEADER at module load (audit CD-05), so
+  // mode-dependent tests re-import the module via vi.resetModules().
+  getRedis: vi.fn(),
   eval: vi.fn(),
 }));
 
 vi.mock('@/lib/cache/redis', () => ({
-  getRedis: vi.fn(),
+  getRedis: redisMocks.getRedis,
   redisKey: (key: string) => `condenser:${key}`,
 }));
 
-import { getRedis } from '@/lib/cache/redis';
+// Mode-independent exports come from the static import; the mode-dependent
+// handles (checkRateLimit / getClientIp close over the module-level
+// TRUST_MODE) are re-assigned per trust mode by loadRateLimit().
 import {
   RATE_LIMITS,
   aggregateIpIdentity,
-  checkRateLimit,
-  getClientIp,
   rateLimitResponse,
+  type RateLimitOptions,
 } from '@/lib/cache/rate-limit';
 
-const getRedisMock = vi.mocked(getRedis);
+type RateLimitModule = typeof import('@/lib/cache/rate-limit');
+let checkRateLimit: RateLimitModule['checkRateLimit'];
+let getClientIp: RateLimitModule['getClientIp'];
+
+/**
+ * (Re)import the rate-limit module under a given TRUSTED_CLIENT_IP_HEADER
+ * mode (undefined = unset). The module validates and captures the mode at
+ * load, so switching modes requires a fresh module instance; an INVALID
+ * value makes the dynamic import reject (the startup-fail-fast contract).
+ */
+async function loadRateLimit(mode?: string): Promise<void> {
+  if (mode === undefined) delete process.env.TRUSTED_CLIENT_IP_HEADER;
+  else process.env.TRUSTED_CLIENT_IP_HEADER = mode;
+  vi.resetModules();
+  const mod = await import('@/lib/cache/rate-limit');
+  checkRateLimit = mod.checkRateLimit;
+  getClientIp = mod.getClientIp;
+}
 
 function requestWithHeaders(headers: Record<string, string>): Request {
   return new Request('http://localhost/api/x', { headers });
 }
 
 describe('lib/cache/rate-limit', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
     // Fake ioredis client with just the eval command rate-limit uses.
-    getRedisMock.mockReturnValue({ eval: redisMocks.eval } as never);
+    redisMocks.getRedis.mockReturnValue({ eval: redisMocks.eval } as never);
+    // Default trust mode for the mode-agnostic tests: the Steemit chain's
+    // recommended x-real-ip contract.
+    await loadRateLimit('x-real-ip');
+  });
+
+  afterAll(() => {
+    // Never leak the trust mode into other test files sharing this worker.
+    delete process.env.TRUSTED_CLIENT_IP_HEADER;
   });
 
   describe('checkRateLimit', () => {
     it('fails open (allows) when Redis is not configured', async () => {
-      getRedisMock.mockReturnValue(null);
+      redisMocks.getRedis.mockReturnValue(null);
 
       const result = await checkRateLimit(requestWithHeaders({}), {
         key: 'auth:challenge',
@@ -50,11 +81,15 @@ describe('lib/cache/rate-limit', () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
       redisMocks.eval.mockRejectedValue(new Error('connection lost'));
 
-      const result = await checkRateLimit(requestWithHeaders({}), {
-        key: 'auth:challenge',
-        limit: 30,
-        windowSeconds: 60,
-      });
+      // Trusted header present so the only warning is the fail-open one.
+      const result = await checkRateLimit(
+        requestWithHeaders({ 'x-real-ip': '198.51.100.7' }),
+        {
+          key: 'auth:challenge',
+          limit: 30,
+          windowSeconds: 60,
+        }
+      );
       expect(result).toEqual({ allowed: true });
       // The silent fail-open is observable: one warning names the mode and
       // the underlying error.
@@ -72,21 +107,24 @@ describe('lib/cache/rate-limit', () => {
       const nowSpy = vi.spyOn(Date, 'now').mockImplementation(() => now);
       redisMocks.eval.mockRejectedValue(new Error('connection lost'));
       const rule = { key: 'auth:challenge', limit: 30, windowSeconds: 60 };
+      // A trusted header is present so the unattributed-identity warning
+      // (its own throttle clock) stays out of this test's counting.
+      const req = requestWithHeaders({ 'x-real-ip': '198.51.100.7' });
 
       // Prime the throttle state (may warn or not depending on prior tests).
-      await checkRateLimit(requestWithHeaders({}), rule);
+      await checkRateLimit(req, rule);
       const baseline = warn.mock.calls.length;
 
       // A burst of erroring calls within the window: at most the priming
       // warning — never one per request.
       for (let i = 0; i < 10; i++) {
-        await checkRateLimit(requestWithHeaders({}), rule);
+        await checkRateLimit(req, rule);
       }
       expect(warn.mock.calls.length).toBe(baseline);
 
       // Outside the throttle window exactly one more warning fires.
       now += 61_000;
-      await checkRateLimit(requestWithHeaders({}), rule);
+      await checkRateLimit(req, rule);
       expect(warn.mock.calls.length).toBe(baseline + 1);
 
       nowSpy.mockRestore();
@@ -96,11 +134,14 @@ describe('lib/cache/rate-limit', () => {
       // Full 3-tuple the Lua script returns: [count, ttl, first_blocked].
       redisMocks.eval.mockResolvedValue([5, 42, 0]);
 
-      const result = await checkRateLimit(requestWithHeaders({}), {
-        key: 'auth:challenge',
-        limit: 30,
-        windowSeconds: 60,
-      });
+      const result = await checkRateLimit(
+        requestWithHeaders({ 'x-real-ip': '203.0.113.9' }),
+        {
+          key: 'auth:challenge',
+          limit: 30,
+          windowSeconds: 60,
+        }
+      );
       expect(result).toEqual({ allowed: true, remaining: 25 });
     });
 
@@ -126,11 +167,11 @@ describe('lib/cache/rate-limit', () => {
       expect(result).toEqual({ allowed: false, retryAfterSeconds: 1 });
     });
 
-    it('buckets per endpoint key + client IP under the condenser: namespace', async () => {
+    it('buckets per endpoint key + trusted-header client IP under the condenser: namespace', async () => {
       redisMocks.eval.mockResolvedValue([1, 60, 0]);
 
       await checkRateLimit(
-        requestWithHeaders({ 'x-forwarded-for': '203.0.113.9, 10.0.0.1' }),
+        requestWithHeaders({ 'x-real-ip': '203.0.113.9' }),
         { key: 'auth:login:ip', limit: 10, windowSeconds: 60 }
       );
 
@@ -219,7 +260,7 @@ describe('lib/cache/rate-limit', () => {
       // bucket and the aggregated IP.
       redisMocks.eval.mockResolvedValue([31, 37, 1]);
       const first = await checkRateLimit(
-        requestWithHeaders({ 'x-forwarded-for': '198.51.100.7' }),
+        requestWithHeaders({ 'x-real-ip': '198.51.100.7' }),
         rule
       );
       expect(first).toEqual({ allowed: false, retryAfterSeconds: 37 });
@@ -231,7 +272,7 @@ describe('lib/cache/rate-limit', () => {
       // Subsequent blocked hits in the same window stay silent.
       redisMocks.eval.mockResolvedValue([32, 36, 0]);
       await checkRateLimit(
-        requestWithHeaders({ 'x-forwarded-for': '198.51.100.7' }),
+        requestWithHeaders({ 'x-real-ip': '198.51.100.7' }),
         rule
       );
       expect(warn).toHaveBeenCalledTimes(1);
@@ -257,56 +298,280 @@ describe('lib/cache/rate-limit', () => {
     });
   });
 
-  describe('getClientIp', () => {
-    it('takes the first x-forwarded-for entry of a multi-hop chain', () => {
-      const ip = getClientIp(
-        requestWithHeaders({ 'x-forwarded-for': '198.51.100.7, 10.0.0.1, 10.0.0.2' })
-      );
-      expect(ip).toBe('198.51.100.7');
+  describe('checkRateLimit unattributable identities (audit CD-05)', () => {
+    const rule: RateLimitOptions = {
+      key: 'auth:challenge',
+      limit: 30,
+      windowSeconds: 60,
+    };
+
+    describe('trusted header configured but missing/invalid on the request', () => {
+      // Outer beforeEach loads x-real-ip with a live Redis fake.
+
+      it('still rate-limits: one shared unattributed bucket at the normal limit (never exempt)', async () => {
+        // A configured proxy ALWAYS sets the trusted header, so a request
+        // without one is direct-to-app access; letting it through unbucketed
+        // would make "drop the header" the rate-limit bypass.
+        redisMocks.eval.mockResolvedValue([1, 60, 0]);
+        await checkRateLimit(requestWithHeaders({}), rule);
+        // Same request with only a forged XFF present — equally anomalous,
+        // and the forged header must not rescue the identity either.
+        await checkRateLimit(
+          requestWithHeaders({ 'x-forwarded-for': '203.0.113.77, 10.0.0.1' }),
+          rule
+        );
+
+        expect(redisMocks.eval).toHaveBeenCalledTimes(2);
+        for (const call of redisMocks.eval.mock.calls) {
+          expect(call[2]).toBe('condenser:ratelimit:auth:challenge:unattributed');
+        }
+      });
+
+      it('warns (throttled to one per minute) that the trusted header was missing', async () => {
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        redisMocks.eval.mockResolvedValue([1, 60, 0]);
+
+        await checkRateLimit(requestWithHeaders({}), rule);
+        await checkRateLimit(requestWithHeaders({}), rule);
+
+        expect(warn).toHaveBeenCalledTimes(1);
+        const line = warn.mock.calls[0].join(' ');
+        expect(line).toContain('TRUSTED_CLIENT_IP_HEADER=x-real-ip');
+        expect(line).toContain('unattributed');
+        warn.mockRestore();
+      });
     });
 
-    it('trims whitespace around XFF entries', () => {
-      const ip = getClientIp(requestWithHeaders({ 'x-forwarded-for': ' 198.51.100.7 , 10.0.0.1' }));
-      expect(ip).toBe('198.51.100.7');
+    describe('no trusted header configured (direct exposure)', () => {
+      beforeEach(async () => {
+        await loadRateLimit(undefined);
+      });
+
+      it('exempts IP-dimension rules entirely — no shared site-wide bucket, no Redis call', async () => {
+        // The pre-CD-05 fallback ('unknown') collapsed ALL visitors into one
+        // 30/min bucket and they 429'd each other. With no trusted header
+        // there is no sound identity, so the honest behavior is exempt.
+        redisMocks.eval.mockResolvedValue([1, 60, 0]);
+
+        const result = await checkRateLimit(
+          requestWithHeaders({ 'x-forwarded-for': '203.0.113.1' }),
+          rule
+        );
+
+        expect(result).toEqual({ allowed: true });
+        expect(redisMocks.eval).not.toHaveBeenCalled();
+      });
+
+      it('still enforces identifier-dimension rules (per-account CD-04 buckets survive)', async () => {
+        redisMocks.eval.mockResolvedValue([11, 42, 1]);
+
+        const result = await checkRateLimit(requestWithHeaders({}), {
+          key: 'auth:login:acct',
+          limit: 10,
+          windowSeconds: 60,
+          identifier: 'alice',
+        });
+
+        expect(result).toEqual({ allowed: false, retryAfterSeconds: 42 });
+        expect(redisMocks.eval).toHaveBeenCalledWith(
+          expect.any(String),
+          1,
+          'condenser:ratelimit:auth:login:acct:alice',
+          '60',
+          '10'
+        );
+      });
+
+      it('warns (throttled) that per-IP limiting is disabled and how to fix it', async () => {
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        redisMocks.eval.mockResolvedValue([1, 60, 0]);
+
+        await checkRateLimit(requestWithHeaders({}), rule);
+        await checkRateLimit(requestWithHeaders({}), rule);
+
+        expect(warn).toHaveBeenCalledTimes(1);
+        const line = warn.mock.calls[0].join(' ');
+        expect(line).toContain('TRUSTED_CLIENT_IP_HEADER is not set');
+        expect(line).toContain('x-real-ip');
+        warn.mockRestore();
+      });
+    });
+  });
+
+  describe('getClientIp trust contract (audit CD-05)', () => {
+    describe('mode x-real-ip (recommended for the Steemit openresty chain)', () => {
+      // Outer beforeEach loads x-real-ip.
+
+      it('resolves the identity from x-real-ip only', () => {
+        const ip = getClientIp(requestWithHeaders({ 'x-real-ip': '198.51.100.2' }));
+        expect(ip).toBe('198.51.100.2');
+      });
+
+      it('ignores a client-forged X-Forwarded-For entirely (the CD-05 spoof)', () => {
+        // The exact captured attack shape: every proxy layer merely APPENDS
+        // to XFF, so the client-supplied first segment arrives first at the
+        // app. Pre-fix this fully controlled the rate-limit identity.
+        const ip = getClientIp(
+          requestWithHeaders({
+            'x-forwarded-for': '203.0.113.77, 198.51.100.2, 10.0.0.4',
+            'x-real-ip': '198.51.100.2',
+          })
+        );
+        expect(ip).toBe('198.51.100.2');
+      });
+
+      it('never falls back to XFF when the trusted header is missing', () => {
+        // No x-real-ip on the request: the XFF present here is client
+        // chatter, not a substitute identity source.
+        const ip = getClientIp(
+          requestWithHeaders({ 'x-forwarded-for': '203.0.113.77, 10.0.0.1' })
+        );
+        expect(ip).toBe('unattributed');
+      });
+
+      it('aggregates a trusted IPv6 address to its /64 prefix', () => {
+        const ip = getClientIp(requestWithHeaders({ 'x-real-ip': '2001:db8::1' }));
+        expect(ip).toBe('2001:0db8:0000:0000::/64');
+      });
+
+      it('rejects non-IP trusted values (ports, lists, junk) as unattributed', () => {
+        expect(getClientIp(requestWithHeaders({ 'x-real-ip': '198.51.100.2:8080' }))).toBe(
+          'unattributed'
+        );
+        expect(getClientIp(requestWithHeaders({ 'x-real-ip': '198.51.100.2, 10.0.0.1' }))).toBe(
+          'unattributed'
+        );
+        expect(getClientIp(requestWithHeaders({ 'x-real-ip': 'not-an-ip' }))).toBe(
+          'unattributed'
+        );
+        // Strict dotted-quad: leading zeros are ambiguous, not an IP here.
+        expect(getClientIp(requestWithHeaders({ 'x-real-ip': '010.1.1.1' }))).toBe(
+          'unattributed'
+        );
+      });
+
+      it('treats an effectively empty trusted header as missing', () => {
+        expect(getClientIp(requestWithHeaders({ 'x-real-ip': '  ' }))).toBe(
+          'unattributed'
+        );
+      });
     });
 
-    it('aggregates IPv6 addresses to their /64 prefix', () => {
-      const ip = getClientIp(
-        requestWithHeaders({ 'x-forwarded-for': '2001:db8::1, 10.0.0.1' })
-      );
-      expect(ip).toBe('2001:0db8:0000:0000::/64');
+    describe('mode cf-connecting-ip', () => {
+      beforeEach(async () => {
+        await loadRateLimit('cf-connecting-ip');
+      });
+
+      it('resolves the identity from cf-connecting-ip only (XFF and x-real-ip ignored)', () => {
+        const ip = getClientIp(
+          requestWithHeaders({
+            'cf-connecting-ip': '198.51.100.3',
+            'x-forwarded-for': '203.0.113.77, 10.0.0.1',
+            'x-real-ip': '203.0.113.99',
+          })
+        );
+        expect(ip).toBe('198.51.100.3');
+      });
+
+      it('aggregates a trusted IPv6 address to its /64 prefix', () => {
+        const ip = getClientIp(
+          requestWithHeaders({ 'cf-connecting-ip': '2001:db8:dead:beef::1' })
+        );
+        expect(ip).toBe('2001:0db8:dead:beef::/64');
+      });
+
+      it('returns unattributed when cf-connecting-ip is missing (no fallback headers)', () => {
+        const ip = getClientIp(
+          requestWithHeaders({ 'x-real-ip': '203.0.113.99' })
+        );
+        expect(ip).toBe('unattributed');
+      });
     });
 
-    it('collapses a forged non-IP XFF value to the safe charset (key shaping blocked)', () => {
-      // Everything outside [a-z0-9.:-] is stripped before the value can shape
-      // the Redis key; separators/punctuation cannot smuggle structure in.
-      // (Raw CR/LF never even reach this code — the Headers API rejects them.)
-      const ip = getClientIp(requestWithHeaders({ 'x-forwarded-for': 'a*b c?d=e&f' }));
-      expect(ip).toBe('abcdef');
-      expect(ip).toMatch(/^[a-z0-9.:-]+$/);
+    describe('mode xff-tail', () => {
+      beforeEach(async () => {
+        await loadRateLimit('xff-tail');
+      });
+
+      it('takes the LAST XFF entry — the spoofed first segment has no effect', () => {
+        const ip = getClientIp(
+          requestWithHeaders({
+            'x-forwarded-for': '203.0.113.77, 10.0.0.1, 198.51.100.5',
+          })
+        );
+        expect(ip).toBe('198.51.100.5');
+      });
+
+      it('resolves a single-entry XFF to that entry', () => {
+        expect(getClientIp(requestWithHeaders({ 'x-forwarded-for': '198.51.100.5' }))).toBe(
+          '198.51.100.5'
+        );
+        // Trimming still applies to the tail entry.
+        expect(
+          getClientIp(requestWithHeaders({ 'x-forwarded-for': '10.0.0.1, 198.51.100.5 , ' }))
+        ).toBe('198.51.100.5');
+      });
+
+      it('aggregates a trusted IPv6 tail entry to its /64 prefix', () => {
+        const ip = getClientIp(
+          requestWithHeaders({
+            'x-forwarded-for': '203.0.113.77, 2001:db8:85a3::8a2e:370:7334',
+          })
+        );
+        expect(ip).toBe('2001:0db8:85a3:0000::/64');
+      });
+
+      it('returns unattributed for an effectively empty XFF', () => {
+        expect(getClientIp(requestWithHeaders({ 'x-forwarded-for': ' , ' }))).toBe(
+          'unattributed'
+        );
+      });
+
+      it('returns unattributed when a non-IP value sits in the tail', () => {
+        expect(
+          getClientIp(requestWithHeaders({ 'x-forwarded-for': '10.0.0.1, junk.example' }))
+        ).toBe('unattributed');
+      });
     });
 
-    it('falls back to x-real-ip when x-forwarded-for is absent', () => {
-      const ip = getClientIp(requestWithHeaders({ 'x-real-ip': '198.51.100.99' }));
-      expect(ip).toBe('198.51.100.99');
+    describe('mode none / unset (direct exposure)', () => {
+      beforeEach(async () => {
+        await loadRateLimit(undefined);
+      });
+
+      it('never reads any header — every request is unattributable', () => {
+        expect(
+          getClientIp(
+            requestWithHeaders({
+              'x-forwarded-for': '203.0.113.77',
+              'x-real-ip': '198.51.100.2',
+              'cf-connecting-ip': '198.51.100.3',
+            })
+          )
+        ).toBe('unattributed');
+      });
+
+      it('accepts an explicit "none" with the same header-less semantics', async () => {
+        await loadRateLimit('none');
+        expect(
+          getClientIp(requestWithHeaders({ 'x-real-ip': '198.51.100.2' }))
+        ).toBe('unattributed');
+      });
     });
 
-    it('prefers x-forwarded-for over x-real-ip', () => {
-      const ip = getClientIp(
-        requestWithHeaders({
-          'x-forwarded-for': '198.51.100.1',
-          'x-real-ip': '198.51.100.2',
-        })
-      );
-      expect(ip).toBe('198.51.100.1');
-    });
+    describe('startup validation of TRUSTED_CLIENT_IP_HEADER', () => {
+      it('fails fast at module load for an unknown value, listing the valid modes', async () => {
+        await expect(loadRateLimit('x-forwarded-for')).rejects.toThrow(
+          /TRUSTED_CLIENT_IP_HEADER is set to an unknown value "x-forwarded-for".*x-real-ip.*cf-connecting-ip.*xff-tail.*none/
+        );
+      });
 
-    it('returns the unknown bucket when both headers are missing', () => {
-      expect(getClientIp(requestWithHeaders({}))).toBe('unknown');
-    });
-
-    it('returns the unknown bucket for an empty XFF value', () => {
-      expect(getClientIp(requestWithHeaders({ 'x-forwarded-for': ' , ' }))).toBe('unknown');
+      it('normalizes case and whitespace before matching (header-style casing accepted)', async () => {
+        await loadRateLimit('  X-Real-IP ');
+        expect(getClientIp(requestWithHeaders({ 'x-real-ip': '198.51.100.2' }))).toBe(
+          '198.51.100.2'
+        );
+      });
     });
   });
 

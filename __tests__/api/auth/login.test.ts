@@ -21,6 +21,15 @@ vi.mock('@/lib/auth/session', () => ({
   setSessionCookie: vi.fn(),
 }));
 
+// The CD-04 counting limiter below derives per-IP bucket identities from
+// x-forwarded-for, so this file runs under the xff-tail trust mode (the
+// single-segment XFF values used here resolve identically under it). The
+// mode is captured when the rate-limit module first loads (audit CD-05),
+// hence vi.hoisted: it must run before the static imports below evaluate.
+vi.hoisted(() => {
+  process.env.TRUSTED_CLIENT_IP_HEADER = 'xff-tail';
+});
+
 const { verifySignatureMock } = vi.hoisted(() => ({ verifySignatureMock: vi.fn() }));
 
 vi.mock('@steemit/steem-js', () => ({

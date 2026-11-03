@@ -15,18 +15,23 @@
  * mid-call, checkRateLimit fails OPEN and every request is allowed. Losing
  * the limiter must never take the site down.
  *
- * DEPLOYMENT / TRUST ASSUMPTION for the IP dimension: the client identity is
- * taken from `x-forwarded-for` (FIRST entry) → `x-real-ip` → the constant
- * 'unknown'. This assumes production runs behind a trusted reverse proxy /
- * load balancer that OVERWRITES (or is the sole appender to) these headers.
- * A client behind such a proxy cannot inject its own XFF entries; a client
- * talking to the app directly (unproxied dev server) can forge them, which
- * only lets that client rotate its own bucket — the header is never used for
- * anything beyond bucketing. Values are additionally restricted to the
- * identity charset ([a-z0-9.:-]) so a hostile header cannot shape the Redis
- * key. IPv6 identities are aggregated to their /64 prefix (see
+ * DEPLOYMENT / TRUST CONTRACT for the IP dimension (audit CD-05): which
+ * request header — if any — may identify the client is DECLARED via the
+ * TRUSTED_CLIENT_IP_HEADER env var (x-real-ip | cf-connecting-ip | xff-tail
+ * | unset/none). Only the declared header is ever read; X-Forwarded-For is
+ * never trusted implicitly. Pre-CD-05 the FIRST XFF entry was used, but
+ * every proxy layer in the production chain (Cloudflare → ALB → openresty →
+ * app) merely APPENDS to XFF, so a client-supplied first segment fully
+ * controlled the rate-limit identity. Trusted values must be strict IP
+ * literals (v4/v6); IPv6 is aggregated to its /64 prefix (see
  * aggregateIpIdentity) so address rotation inside one allocation cannot
- * mint fresh buckets.
+ * mint fresh buckets. Unresolvable identities never mix into per-user
+ * buckets: with no trusted header configured the IP dimension is exempt
+ * (bucketing everyone together would collapse the site into one quota),
+ * while a configured-but-missing header means direct-to-app access and
+ * lands in a dedicated shared 'unattributed' bucket at the normal limit.
+ * The mode is validated at module load — an unknown value refuses to start
+ * rather than silently degrading to no-trust.
  */
 
 import { NextResponse } from 'next/server';
@@ -143,6 +148,102 @@ const UNKNOWN_IP = 'unknown';
 const MAX_IDENTITY_LENGTH = 45; // longest valid IPv6 textual form
 
 /**
+ * Valid TRUSTED_CLIENT_IP_HEADER values (audit CD-05):
+ *  - 'x-real-ip'        — trust X-Real-IP; the recommended value for Steemit
+ *                         deployments: the openresty tier sets
+ *                         `proxy_set_header X-Real-IP $remote_addr`, which
+ *                         UNCONDITIONALLY overwrites any client-supplied
+ *                         value with the real (CF-rewritten) peer address.
+ *  - 'cf-connecting-ip' — trust CF-Connecting-IP; for deployments where the
+ *                         app sits directly behind Cloudflare with no
+ *                         header-stripping layer in between.
+ *  - 'xff-tail'         — take the LAST X-Forwarded-For entry; in append-only
+ *                         chains that entry was appended by the proxy closest
+ *                         to the app. Only as trustworthy as that closest
+ *                         proxy (documented caveat).
+ *  - 'none' / unset     — trust no header: direct-exposure semantics.
+ */
+const TRUSTED_CLIENT_IP_MODES = [
+  'x-real-ip',
+  'cf-connecting-ip',
+  'xff-tail',
+  'none',
+] as const;
+
+type TrustedClientIpMode = (typeof TRUSTED_CLIENT_IP_MODES)[number];
+
+function parseTrustMode(raw: string | undefined): TrustedClientIpMode {
+  const value = (raw ?? '').trim().toLowerCase();
+  if (value === '') return 'none';
+  if (!(TRUSTED_CLIENT_IP_MODES as readonly string[]).includes(value)) {
+    // Fail fast on a broken contract (startup validation): an unknown mode
+    // must never silently degrade to no-trust — that would quietly disable
+    // per-IP limiting on the security path.
+    throw new Error(
+      `TRUSTED_CLIENT_IP_HEADER is set to an unknown value "${value}". ` +
+        `Valid values: ${TRUSTED_CLIENT_IP_MODES.join(', ')} — or leave it ` +
+        `unset for direct-exposure deployments with no reverse proxy. ` +
+        `Refusing to run with an ambiguous client-IP trust contract ` +
+        `(audit CD-05).`
+    );
+  }
+  return value as TrustedClientIpMode;
+}
+
+// Captured once at module load so an invalid value fails at startup (the
+// module is imported by every rate-limited route), and the contract is
+// stable for the process lifetime — changing the env var requires a
+// restart, not a rebuild (same lifecycle as SITE_ORIGIN).
+const TRUST_MODE: TrustedClientIpMode = parseTrustMode(
+  process.env.TRUSTED_CLIENT_IP_HEADER
+);
+
+/**
+ * Identity for requests whose client IP cannot be attributed: no trusted
+ * header is configured, or the configured header is missing/invalid.
+ * Deliberately a NEW name (not the old 'unknown') so the pre-fix shared
+ * buckets age out and the post-fix occupancy is distinguishable.
+ */
+const UNATTRIBUTED_IDENTITY = 'unattributed';
+
+/**
+ * Strict IPv4 literal: exactly four dotted-decimal octets, no leading zeros
+ * (the leading-zero form is ambiguously octal in some stacks and no proxy in
+ * our chain emits it). IPv6 validation reuses parseIpv6.
+ */
+const IPV4_STRICT =
+  /^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/;
+
+/**
+ * Validate a value from the trusted header as a strict IP literal and return
+ * the bucketing identity (IPv6 aggregated to its /64). Anything else —
+ * ports, comma lists, junk — returns null: the configured proxy writes a
+ * clean IP, so garbage means the header did not come from that proxy.
+ */
+function trustedIpIdentity(raw: string): string | null {
+  const value = raw.trim();
+  if (IPV4_STRICT.test(value)) return aggregateIpIdentity(value);
+  if (value.includes(':') && parseIpv6(value) !== null) {
+    return aggregateIpIdentity(value);
+  }
+  return null;
+}
+
+/**
+ * Last non-empty X-Forwarded-For entry, or null for an effectively empty
+ * header. In an append-only chain the last entry is the one appended by the
+ * proxy closest to the app — the only position a client cannot prepend over.
+ */
+function lastXffEntry(xff: string): string | null {
+  const parts = xff.split(',');
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const value = parts[i].trim();
+    if (value) return value;
+  }
+  return null;
+}
+
+/**
  * Restrict an identity to the identity charset before it becomes part of a
  * Redis key. Anything unexpected (injected separators/spaces/unicode)
  * collapses to the 'unknown' bucket rather than erroring.
@@ -256,20 +357,32 @@ export function aggregateIpIdentity(raw: string): string {
 }
 
 /**
- * Resolve the client IP for bucketing: first x-forwarded-for entry, then
- * x-real-ip, else 'unknown'. IPv6 values are aggregated to their /64 prefix
- * (aggregateIpIdentity). See the trust assumption in the module comment.
+ * Resolve the client identity for rate-limit bucketing from the header the
+ * deployment DECLARED trustworthy via TRUSTED_CLIENT_IP_HEADER (audit
+ * CD-05). Only the declared header is read — every other candidate header
+ * (in particular a client-forged X-Forwarded-For) is ignored entirely, and
+ * there is NEVER a fallback to an undeclared header: in a configured
+ * deployment the trusted proxy always sets the header, so a missing one is
+ * itself the signal (direct-to-app access), not something to paper over by
+ * trusting client-controlled data again.
+ *
+ * Returns UNATTRIBUTED_IDENTITY when no trustworthy IP can be resolved;
+ * checkRateLimit decides what that means for the bucket (see below).
  */
 export function getClientIp(request: Request): string {
-  const xff = request.headers.get('x-forwarded-for');
-  if (xff) {
-    // "client, proxy1, proxy2" — the first entry is the originating client.
-    const first = xff.split(',')[0];
-    if (first) return aggregateIpIdentity(first);
+  // No trusted header configured (direct exposure): headers are entirely
+  // client-supplied and spoofable, so there is no sound IP identity at all.
+  if (TRUST_MODE === 'none') return UNATTRIBUTED_IDENTITY;
+
+  let raw: string | null;
+  if (TRUST_MODE === 'xff-tail') {
+    const xff = request.headers.get('x-forwarded-for');
+    raw = xff === null ? null : lastXffEntry(xff);
+  } else {
+    raw = request.headers.get(TRUST_MODE);
   }
-  const real = request.headers.get('x-real-ip');
-  if (real) return aggregateIpIdentity(real);
-  return UNKNOWN_IP;
+  if (raw === null) return UNATTRIBUTED_IDENTITY;
+  return trustedIpIdentity(raw) ?? UNATTRIBUTED_IDENTITY;
 }
 
 /**
@@ -311,6 +424,51 @@ function warnFailOpenThrottled(error: unknown): void {
 }
 
 /**
+ * Breadcrumbs for the unattributable-identity paths (audit CD-05), with the
+ * same one-per-minute throttle rationale as warnFailOpenThrottled: the
+ * condition persists per-request (every request in unset mode; an anomalous
+ * flood in configured mode), and warning per request would let the very
+ * traffic being flagged flood the logs.
+ */
+let lastNoTrustWarnAt = 0;
+let lastUnattributedWarnAt = 0;
+const IDENTITY_WARN_INTERVAL_MS = 60_000;
+
+/** No trusted header is configured: the IP dimension is exempt by design. */
+function warnNoTrustConfiguredThrottled(): void {
+  const now = Date.now();
+  if (now - lastNoTrustWarnAt < IDENTITY_WARN_INTERVAL_MS) return;
+  lastNoTrustWarnAt = now;
+  console.warn(
+    'TRUSTED_CLIENT_IP_HEADER is not set: per-IP rate limiting is DISABLED ' +
+      '(IP-dimension buckets are exempt; identifier-dimension buckets such ' +
+      'as the per-account login limit still apply). This is correct only ' +
+      'for direct-exposure deployments with no reverse proxy. Behind a ' +
+      'proxy, set TRUSTED_CLIENT_IP_HEADER to x-real-ip, cf-connecting-ip ' +
+      'or xff-tail (audit CD-05).'
+  );
+}
+
+/**
+ * A trusted header IS configured but missing/invalid on a request: the
+ * request bypassed the trusted proxy (direct-to-app) or the proxy is
+ * misconfigured. Such traffic is still limited — under one shared
+ * 'unattributed' bucket at the endpoint's normal per-IP ceiling.
+ */
+function warnUnattributedThrottled(): void {
+  const now = Date.now();
+  if (now - lastUnattributedWarnAt < IDENTITY_WARN_INTERVAL_MS) return;
+  lastUnattributedWarnAt = now;
+  console.warn(
+    `TRUSTED_CLIENT_IP_HEADER=${TRUST_MODE}: request carried no valid value ` +
+      "for that header; bucketing it under the shared 'unattributed' " +
+      'identity at the normal per-IP limit. The trusted proxy should always ' +
+      'set this header, so this is direct-to-app access or a proxy ' +
+      'misconfiguration (audit CD-05).'
+  );
+}
+
+/**
  * Check a request against a fixed-window rate limit.
  *
  * Always resolves (never throws); Redis being unconfigured or failing means
@@ -334,6 +492,36 @@ export async function checkRateLimit(
   const redis = getRedis();
   if (!redis) {
     return { allowed: true }; // Redis optional: no-op, allow
+  }
+
+  // Unattributable identities (audit CD-05). The two cases are deliberately
+  // treated differently:
+  //
+  // - No trusted header CONFIGURED (direct exposure): every request is
+  //   unattributable, so bucketing them together would collapse the whole
+  //   site into one shared quota — all visitors 429-ing each other at the
+  //   per-endpoint ceilings (the pre-CD-05 'unknown' hazard). The IP
+  //   dimension is therefore exempt: honest about the fact that no sound
+  //   identity exists when nothing in front of the app is trusted.
+  //   Identifier-dimension rules (e.g. the per-account login bucket, CD-04)
+  //   do not depend on the IP and remain enforced below.
+  //
+  // - Trusted header CONFIGURED but missing/invalid on this request: the
+  //   configured proxy always sets it, so the request never went through
+  //   that proxy — anomalous direct-to-app access. It must NOT be exempt
+  //   (dropping the header would then become a way to escape rate limiting);
+  //   instead it shares one dedicated 'unattributed' bucket at the rule's
+  //   normal limit. Legitimate users never land here, so the shared bucket
+  //   cannot cause cross-user lockout — only the anomalous traffic itself
+  //   is collectively capped.
+  if (!opts.identifier) {
+    if (TRUST_MODE === 'none') {
+      warnNoTrustConfiguredThrottled();
+      return { allowed: true };
+    }
+    if (ipIdentity === UNATTRIBUTED_IDENTITY) {
+      warnUnattributedThrottled();
+    }
   }
 
   try {

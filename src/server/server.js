@@ -8,6 +8,7 @@ import requestTime from './requesttimings';
 import StatsLoggerClient from './utils/StatsLoggerClient';
 import { SteemMarket } from './utils/SteemMarket';
 import isSafeRedirectTarget from './utils/RedirectTarget';
+import isStaticAssetPath from './utils/StaticAssetPath';
 import hardwareStats from './hardwarestats';
 import cluster from 'cluster';
 import os from 'os';
@@ -107,6 +108,28 @@ if (env === 'development') {
         )
     );
 }
+
+// Missing static files must not fall through to the SSR catch-all. When a
+// hashed bundle disappears (deploy replaced dist/, container restarted on a
+// different build), a request for it used to render the 200 HTML shell under
+// the .js/.css URL. CDNs that cache by URL pattern stored that HTML against
+// the asset URL - with the long max-age the shell used to carry - and page
+// loads then broke on a script-parse error until the cache entry expired.
+// Anything reaching this point under a static prefix was not served by the
+// mounts above, i.e. the file is missing: answer 404 with no-store so
+// neither the CDN nor the browser pins the failure. The dev-mode /assets
+// proxy never falls through, so this guard only bites when a file is
+// genuinely absent.
+app.use(function*(next) {
+    if (isStaticAssetPath(this.path)) {
+        this.status = 404;
+        this.set('Cache-Control', 'no-store');
+        this.type = 'text/plain';
+        this.body = 'Not Found';
+        return;
+    }
+    yield next;
+});
 
 let resolvedAssets = false;
 let supportedLocales = false;

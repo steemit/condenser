@@ -14,6 +14,8 @@ interface PostsListProps {
   onLoadMore?: () => void;
   category?: string;
   order?: string;
+  /** Hide the per-card "in #tag" prefix (legacy hideCategory={!!community}). */
+  hideCategory?: boolean;
 }
 
 /**
@@ -25,6 +27,7 @@ export default function PostsList({
   onLoadMore,
   category,
   order,
+  hideCategory = false,
 }: PostsListProps) {
   const t = useTranslations();
   const listRef = useRef<HTMLDivElement>(null);
@@ -93,14 +96,23 @@ export default function PostsList({
   if (posts.length === 0) {
     // Legacy PostsIndex empty-state copy (Callout), keyed by order/category.
     // Legacy hardcoded these in English; the keys are new (see
-    // messages/overlays/en.json).
+    // messages/overlays/en.json). Community feeds render the literal word
+    // "community" where plain tags interpolate the tag name (legacy
+    // `cat = community ? 'community' : ' #' + category`).
+    const isCommunity = Boolean(
+      category && category.toLowerCase().startsWith("hive-")
+    );
     let emptyText: string;
     if (order === "payout" || order === "payout_comments") {
-      emptyText = t("posts_index.no_pending_posts");
+      emptyText = isCommunity
+        ? t("posts_index.no_pending_community_posts")
+        : t("posts_index.no_pending_posts");
     } else if (order === "muted") {
       emptyText = t("posts_index.no_muted_posts");
     } else if (order === "feed") {
       emptyText = t("posts_index.no_followed_posts");
+    } else if (isCommunity) {
+      emptyText = t("posts_index.no_posts_in_community");
     } else if (category && category !== "my") {
       emptyText = t("posts_index.no_posts_in_tag", { tag: category });
     } else {
@@ -121,6 +133,7 @@ export default function PostsList({
             key={`${post.author}/${post.permlink}`}
             post={post}
             order={order}
+            hideCategory={hideCategory}
           />
         ))}
       </ul>

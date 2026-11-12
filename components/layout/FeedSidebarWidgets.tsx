@@ -4,17 +4,18 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Eye } from "lucide-react";
 
-import { useAppSelector } from "@/store/hooks";
-import {
-  fetchCommunities,
-  type CommunitySubscription,
-} from "@/lib/api/steem";
-import SubscribeButton from "@/components/elements/SubscribeButton";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { showDialog } from "@/store/slices/globalSlice";
+import { fetchCommunities, type CommunitySubscription } from "@/lib/api/steem";
+import { Role, viewerRole } from "@/lib/community";
+import { useCommunity } from "@/components/providers/CommunityProvider";
 import AdSwipe from "@/components/elements/AdSwipe";
 import TronAd from "@/components/elements/TronAd";
 import SteemMarket from "@/components/elements/SteemMarket";
 import Announcement from "@/components/layout/Announcement";
+import type { Community } from "@/types/steem";
 import { INDEX_LEFT_SIDE_AD_LIST, POST_LEFT_SIDE_AD_LIST, tronAdsConfig } from "@/lib/ads";
 import { SORT_TYPES, isPostPathname } from "@/lib/routes";
 
@@ -113,44 +114,112 @@ function SidebarLinks() {
   );
 }
 
-/** Community info panel for /(sort)/hive-* pages (legacy CommunityPane). */
-function CommunityPane({ community }: { community: string }) {
+const nl2br = (text: string): React.ReactNode =>
+  text.split('\n').map((item, key) => (
+    <span key={key} className="block">
+      {item}
+    </span>
+  ));
+
+const nl2li = (text: string): React.ReactNode =>
+  text.split('\n').map((item, key) => <li key={key}>{item}</li>);
+
+/** Legacy team row badges: .user_role (uppercase gray) / .affiliation pill. */
+const roleBadge = 'ml-1 text-[0.8em] uppercase text-muted-foreground';
+const affiliationBadge =
+  'mx-1 rounded-[0.3rem] bg-muted px-[0.2rem] py-px text-xs font-normal [text-shadow:none]';
+
+/**
+ * Community info panel for /(sort)/hive-* pages (legacy CommunityPane.jsx).
+ * Consumes the page-provided CommunityProvider value — bridge.get_community
+ * data (team/description/flag_text/settings), not a list_communities search,
+ * and never refetches on its own.
+ */
+function CommunityPane({ community }: { community: Community | null }) {
   const t = useTranslations();
-  const username = useAppSelector((s) => s.user.current?.username);
-  const [info, setInfo] = useState<CommunitySubscription | null>(null);
+  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    let cancelled = false;
-    fetchCommunities({ observer: username, query: community, limit: 20 })
-      .then((data) => {
-        if (cancelled) return;
-        setInfo(data.find((c) => c.name === community) ?? null);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [community, username]);
+  if (!community) return null;
 
-  if (!info) return null;
+  const category = community.name;
+  const role = viewerRole(community);
+  const canPost = Role.canPost(category, role);
+  const atLeastMod = Role.atLeast(role, 'mod');
+
+  const showModerationLog = () =>
+    dispatch(showDialog({ name: 'communityModerationLog', data: { community } }));
+
+  // Legacy teamMembers(): owner rows are hidden from the pane.
+  const team = (community.team ?? []).filter(
+    ([, memberRole]) => memberRole !== 'owner'
+  );
 
   return (
-    <SidebarModule>
-      <h4 className="mb-1 font-bold text-foreground">{info.title}</h4>
-      {info.about && (
-        <p className="mb-2 text-sm text-muted-foreground">{info.about}</p>
-      )}
-      <p className="mb-3 text-sm text-muted-foreground">
-        {t("sidebar.community_stats", {
-          subscribers: info.subscribers ?? 0,
-          posters: info.num_authors ?? 0,
-        })}
-      </p>
-      <SubscribeButton
-        community={info.name}
-        subscribed={Boolean(info.context?.subscribed)}
-      />
-    </SidebarModule>
+    <>
+      <SidebarModule>
+        {!canPost && (
+          <div className="mb-2 text-center">
+            <small className="flex items-center justify-center gap-1 text-muted-foreground">
+              <Eye className="size-3" aria-hidden /> {t('g.only_approved')}
+            </small>
+          </div>
+        )}
+        <div>
+          {atLeastMod && (
+            <div className="float-right text-[0.8em]">
+              <Link
+                href={`/roles/${category}`}
+                className="text-accent-foreground hover:underline"
+              >
+                {t('g.edit_roles')}
+              </Link>
+            </div>
+          )}
+          <strong className="text-foreground">{t('g.leadership')}</strong>
+          {team.map(([name, memberRole, title]) => (
+            <div key={`${name}__${memberRole}`} className="text-[80%]">
+              <Link
+                href={`/@${name}`}
+                className="text-accent-foreground hover:underline"
+              >
+                @{name}
+              </Link>
+              {memberRole && <span className={roleBadge}> {memberRole} </span>}
+              {title && <span className={affiliationBadge}>{title}</span>}
+            </div>
+          ))}
+          <div className="float-right text-[0.8em]">
+            <button
+              type="button"
+              onClick={showModerationLog}
+              className="text-accent-foreground hover:underline"
+            >
+              {t('g.activity_log')}
+            </button>
+          </div>
+        </div>
+      </SidebarModule>
+      <SidebarModule>
+        {community.description && (
+          <div className="mb-2">
+            <strong className="text-foreground">{t('g.description')}</strong>
+            {community.is_nsfw && <span className={affiliationBadge}>nsfw</span>}
+            {nl2br(community.description)}
+          </div>
+        )}
+        {community.flag_text && (
+          <div className="mb-2">
+            <strong className="text-foreground">{t('g.rules')}</strong>
+            <ol className="list-decimal pl-5">{nl2li(community.flag_text)}</ol>
+          </div>
+        )}
+        <div>
+          <strong className="text-foreground">{t('g.language')}</strong>
+          <br />
+          {community.lang}
+        </div>
+      </SidebarModule>
+    </>
   );
 }
 
@@ -166,6 +235,10 @@ export function FeedSidebarWidgets() {
   const pathname = usePathname();
   const username = useAppSelector((s) => s.user.current?.username);
   const trackingId = useAppSelector((s) => s.user.trackingId);
+  // Bridge get_community payload from the page-level provider; null until it
+  // resolves. Layout gating below stays URL-derived so the non-community
+  // modules disappear instantly instead of flashing while it loads.
+  const community = useCommunity();
 
   // Lowercase the pathname instead of flagging COMMUNITY_FEED_RE with "i":
   // the sort vocabulary is lowercase-only (lib/routes.ts) and the derived
@@ -174,7 +247,7 @@ export function FeedSidebarWidgets() {
   // and the captured (lowercase) community matches how the page itself
   // queries the tag — /Payout/hive-x still shows the community pane.
   const communityMatch = pathname?.toLowerCase().match(COMMUNITY_FEED_RE);
-  const community = communityMatch?.[1];
+  const communityPath = communityMatch?.[1];
   // Post pages get the post-scoped creative tags (legacy Post.jsx right
   // rail); feed pages get the index list. Shared anchored matcher
   // (lib/routes.ts isPostPathname): the previous unanchored regexes also
@@ -185,21 +258,21 @@ export function FeedSidebarWidgets() {
 
   return (
     <div className="flex flex-col">
-      {community && <CommunityPane community={community} />}
+      {communityPath && <CommunityPane community={community} />}
       {/* Announcement: always on post pages, and on feed pages regardless
           of login state; community pages stay without it (legacy). */}
-      {(isPostPage || !community) && <Announcement />}
+      {(isPostPage || !communityPath) && <Announcement />}
       {/* Legacy PostsIndexLayout hides the user rail modules on community
           pages (!community on both SidebarNewUsers and SidebarLinks), where
           the pane already fills that slot. */}
-      {!community && (username ? <SidebarLinks /> : <SidebarNewUsers />)}
+      {!communityPath && (username ? <SidebarLinks /> : <SidebarNewUsers />)}
       {/* Legacy ad tag: CoinMarketPlacePost on post pages, Index/Community
           on feed pages depending on the community context. */}
       <SteemMarket
         page={
           isPostPage
             ? "CoinMarketPlacePost"
-            : community
+            : communityPath
               ? "CoinMarketPlaceCommunity"
               : "CoinMarketPlaceIndex"
         }

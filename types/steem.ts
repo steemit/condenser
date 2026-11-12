@@ -124,6 +124,56 @@ export interface UserProfile {
 }
 
 // ---------------------------------------------------------------------------
+// Community (bridge get_community response)
+// ---------------------------------------------------------------------------
+
+/** bridge community.context — viewer-dependent state (role/subscribed). */
+export interface CommunityContext {
+  role?: string;
+  title?: string;
+  subscribed?: boolean;
+  [key: string]: unknown;
+}
+
+/** bridge community.settings — community-managed presentation fields. */
+export interface CommunitySettings {
+  avatar_url?: string;
+  cover_url?: string;
+  [key: string]: unknown;
+}
+
+/**
+ * Bridge get_community response (canonical single-community shape).
+ *
+ * `team` rows are hivemind tuples [account, role, title] (legacy
+ * CommunityPane.jsx / CommunityRoles.jsx destructure tuple[0..2]).
+ * `context` arrives as an EMPTY ARRAY for anonymous callers — read it only
+ * through lib/community.ts viewerRole()/viewerSubscribed(), which default
+ * like legacy's Immutable getIn fallbacks.
+ * All string fields are community-controlled and untrusted input (validate
+ * before style/href sinks, as with ProfileMetadata).
+ */
+export interface Community {
+  name: string;
+  title: string;
+  about?: string;
+  description?: string;
+  lang?: string;
+  type_id?: number;
+  subscribers?: number;
+  sum_pending?: number;
+  num_pending?: number;
+  num_authors?: number;
+  created_at?: string;
+  is_nsfw?: boolean;
+  flag_text?: string;
+  settings?: CommunitySettings;
+  context?: CommunityContext | unknown[];
+  team?: [string, string, string | null][];
+  [key: string]: unknown;
+}
+
+// ---------------------------------------------------------------------------
 // Account (condenser_api get_accounts row)
 // ---------------------------------------------------------------------------
 

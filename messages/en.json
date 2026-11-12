@@ -642,6 +642,8 @@
     "no_followed_posts": "You haven't followed anyone yet! Explore Trending to find people to follow.",
     "no_joined_communities": "You haven't joined any active communities yet!",
     "no_posts_in_tag": "No posts in #{tag} yet!",
+    "no_posts_in_community": "No posts in community yet!",
+    "no_pending_community_posts": "No pending community posts found. This view only shows posts within 12-36 hours of payout.",
     "no_posts_found": "No posts found.",
     "unmoderated_tag": "Unmoderated tag"
   },
@@ -921,9 +923,11 @@
     "show_more_replies": "Show {count, plural, one {# more reply} other {# more replies}}",
     "delete_failed": "Failed to delete the comment. Please try again."
   },
+  "community_subscribers": {
+    "latest_title": "Latest {title} Subscribers"
+  },
   "sidebar": {
     "new_to_steemit": "New to Steemit?",
-    "community_stats": "{subscribers, plural, one {# subscriber} other {# subscribers}} • {posters, plural, one {# active poster} other {# active posters}}",
     "coin_marketplace": "Coin Marketplace"
   },
   "time_ago": {

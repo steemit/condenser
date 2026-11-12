@@ -10,13 +10,13 @@
  */
 
 import { cachedFetch, HttpError } from '@/lib/cache/client-fetch';
-import type { Account, Post, UserProfile } from '@/types/steem';
+import type { Account, Community, Post, UserProfile } from '@/types/steem';
 
 // Canonical domain types live in types/steem.ts; re-exported here so the
 // existing `import { Post, UserProfile } from '@/lib/api/steem'` call sites
 // keep working. Transitional compatibility only — once all call sites import
 // from @/types/steem directly, remove this re-export.
-export type { Post, UserProfile };
+export type { Post, UserProfile, Community };
 
 /**
  * Client-side staleMs / maxAgeMs per data type.
@@ -33,6 +33,10 @@ const SWR = {
   followers: { staleMs: 15_000, maxAgeMs: 120_000 },
   communities: { staleMs: 30_000, maxAgeMs: 300_000 },
   communityRoles: { staleMs: 30_000, maxAgeMs: 300_000 },
+  // Single community carries the viewer's context (role/subscribed) — keep
+  // the browser window short so a subscribe/leave is reflected on revisit.
+  community: { staleMs: 15_000, maxAgeMs: 60_000 },
+  communityNotifications: { staleMs: 30_000, maxAgeMs: 300_000 },
   notifications: { staleMs: 10_000, maxAgeMs: 30_000 },
 } as const;
 
@@ -446,6 +450,58 @@ export async function fetchCommunitySubscribers(
     return data;
   } catch (error) {
     console.error('Error fetching community subscribers:', error);
+    return [];
+  }
+}
+
+/**
+ * Fetch a single community (bridge get_community — canonical community
+ * shape incl. team/description/flag_text/settings and viewer context).
+ *
+ * Single source of truth for both the feed banner and the sidebar pane: the
+ * page-level CommunityProvider calls this once and shares the result, so the
+ * same URL is not refetched per widget (cachedFetch does not dedupe
+ * concurrent cold requests).
+ */
+export async function fetchCommunity(
+  name: string,
+  observer?: string
+): Promise<Community | null> {
+  const searchParams = new URLSearchParams({ name });
+  if (observer) searchParams.set('observer', observer);
+  try {
+    const { data } = await cachedFetch<Community>(
+      `/api/steem/community?${searchParams.toString()}`,
+      { ...SWR.community }
+    );
+    return data;
+  } catch (error) {
+    // 404 (nonexistent community) and transient failures both degrade to
+    // null — the caller renders no community chrome, like legacy's missing
+    // global.community entry.
+    console.error('Error fetching community:', error);
+    return null;
+  }
+}
+
+/**
+ * Fetch a community's moderation log (legacy community Activity Log dialog).
+ * Sibling of fetchCommunitySubscribers above.
+ */
+export async function fetchCommunityNotifications(
+  name: string,
+  lastId?: number
+): Promise<unknown[]> {
+  const searchParams = new URLSearchParams({ name });
+  if (lastId) searchParams.set('last_id', String(lastId));
+  try {
+    const { data } = await cachedFetch<unknown[]>(
+      `/api/steem/community-notifications?${searchParams.toString()}`,
+      { ...SWR.communityNotifications }
+    );
+    return data;
+  } catch (error) {
+    console.error('Error fetching community notifications:', error);
     return [];
   }
 }

@@ -72,11 +72,13 @@ const CACHE_TTL = {
   dynamicGlobalProperties: { ttl: 3, staleTtl: 30 },
   communities: { ttl: 600, staleTtl: 1800 },
   communityRoles: { ttl: 600, staleTtl: 1800 },
+  communityNotifications: { ttl: 30, staleTtl: 300 },
   // Personalised — cached for anonymous traffic only
   posts: { ttl: 3, staleTtl: 300 },
   post: { ttl: 30, staleTtl: 600 },
   profile: { ttl: 30, staleTtl: 300 },
   followers: { ttl: 30, staleTtl: 300 },
+  community: { ttl: 30, staleTtl: 300 },
 } as const;
 
 /** Extract the bare data value from a WithCacheResult wrapper. */
@@ -467,6 +469,49 @@ export async function getCommunitySubscribers(params: {
   const key = `steem:community-subscribers:${params.community}`;
   const result = await withCache(key, CACHE_TTL.communityRoles.ttl, CACHE_TTL.communityRoles.staleTtl, () =>
     callBridge<unknown[]>('list_subscribers', params)
+  );
+  return unwrap(result);
+}
+
+/**
+ * Get a single community by name (bridge get_community).
+ */
+export async function getCommunity(params: {
+  name: string;
+  observer?: string;
+}): Promise<unknown> {
+  // observer personalises context (role/subscribed) — bypass cache when set.
+  if (params.observer) {
+    return callBridge<unknown>('get_community', params);
+  }
+  // Shares the 'communities' family-wide generation scope: a subscribe/
+  // unsubscribe shifts this community's subscriber count along with every
+  // list variant, so the broadcast route's single counter covers it too.
+  const key = `steem:community:${params.name}${await generationSuffix('communities')}`;
+  const result = await withCache(key, CACHE_TTL.community.ttl, CACHE_TTL.community.staleTtl, () =>
+    callBridge<unknown>('get_community', params)
+  );
+  return unwrap(result);
+}
+
+/**
+ * Get a community's moderation log (account_notifications for the community
+ * account). Moderation actions are public chain data — this is the data
+ * behind legacy's community Activity Log dialog. Non-personalised, so it is
+ * cacheable; the route layer restricts it to hive-* names so this cannot be
+ * used as a per-account notifications oracle (audit N-14 rationale).
+ */
+export async function getCommunityNotifications(params: {
+  account: string;
+  last_id?: number;
+  limit?: number;
+}): Promise<unknown[]> {
+  const key = `steem:community-notifications:${params.account}:${params.last_id || 0}:${params.limit || 100}`;
+  const result = await withCache(
+    key,
+    CACHE_TTL.communityNotifications.ttl,
+    CACHE_TTL.communityNotifications.staleTtl,
+    () => callBridge<unknown[]>('account_notifications', params)
   );
   return unwrap(result);
 }

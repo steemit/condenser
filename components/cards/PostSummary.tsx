@@ -26,6 +26,8 @@ interface PostSummaryProps {
   post: Post;
   /** Current sort order (payout order shows payout_at with a prefix). */
   order?: string;
+  /** Hide the "in #tag ·" prefix (community feeds — legacy hideCategory). */
+  hideCategory?: boolean;
 }
 
 /**
@@ -33,7 +35,7 @@ interface PostSummaryProps {
  * resteem row / author header / thumbnail left + (title, excerpt, action
  * bar) right / footer with voting, votes, comments and a reblog button.
  */
-export default function PostSummary({ post, order }: PostSummaryProps) {
+export default function PostSummary({ post, order, hideCategory = false }: PostSummaryProps) {
   const [revealNsfw, setRevealNsfw] = useState(false);
   const t = useTranslations();
   // Legacy PostsList connect: userPreferences.nsfwPref || 'warn'.
@@ -120,14 +122,18 @@ export default function PostSummary({ post, order }: PostSummaryProps) {
             </Link>{" "}
             {rep !== null && <Reputation value={rep} />}{" "}
             <span className="text-muted-foreground">
-              {t("g.in")}{" "}
-              <Link prefetch={false}
-                href={tagUrl}
-                className="text-muted-foreground hover:text-accent-foreground"
-              >
-                #{categoryLabel}
-              </Link>{" "}
-              •{" "}
+              {!hideCategory && (
+                <>
+                  {t("g.in")}{" "}
+                  <Link prefetch={false}
+                    href={tagUrl}
+                    className="text-muted-foreground hover:text-accent-foreground"
+                  >
+                    #{categoryLabel}
+                  </Link>{" "}
+                  •{" "}
+                </>
+              )}
               {order === "payout" || order === "payout_comments" ? (
                 <TimeAgo date={post.payout_at || post.created} prefix="payout " />
               ) : (

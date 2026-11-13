@@ -28,6 +28,7 @@ const numberWithCommas = (x: number): string =>
  * three community stats bottom-left. The "Edit: roles / Activity Log"
  * block floats right and is HIDDEN ≥1200px in legacy (MQ(L) display:none)
  * — desktop gets the Activity Log entry from the sidebar pane instead.
+ * New Post is legacy `button primary` (foundation primary #1A5099, uppercase).
  */
 export default function CommunityBanner({ community }: { community: Community }) {
   const t = useTranslations();
@@ -165,7 +166,7 @@ export default function CommunityBanner({ community }: { community: Community })
           <Link
             href={`/submit?category=${encodeURIComponent(category)}`}
             onClick={onNewPost}
-            className="flex items-center justify-center rounded-[3px] bg-[#06D6A9] px-4 py-1.5 text-sm font-bold text-white transition-colors hover:opacity-90"
+            className="flex items-center justify-center rounded-[3px] bg-[#1A5099] px-4 py-1.5 text-sm uppercase text-white transition-colors hover:opacity-90"
           >
             <Pencil className="mr-1 size-4" aria-hidden />
             {t('g.new_post')}

@@ -16,6 +16,8 @@ interface SubscribeButtonProps {
 /**
  * SubscribeButton — legacy community subscribe toggle (SubscribeButton.jsx).
  * Text: Subscribe → Joined (hover: Leave); hollow style when subscribed.
+ * Legacy renders `button primary` (foundation primary #1A5099, uppercase)
+ * with minWidth 7em; the hollow class swaps fill for border.
  */
 export default function SubscribeButton({
   community,
@@ -72,10 +74,10 @@ export default function SubscribeButton({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       disabled={loading}
-      className={`rounded-[3px] border border-[#06D6A9] px-4 py-1.5 text-sm font-bold transition-colors ${
+      className={`min-w-[7em] rounded-[3px] border border-[#1A5099] px-4 py-1.5 text-sm uppercase transition-colors ${
         isSubscribed
-          ? 'bg-transparent text-[#06D6A9] hover:bg-[#06D6A9] hover:text-white'
-          : 'bg-[#06D6A9] text-white hover:opacity-90'
+          ? 'bg-transparent text-[#1A5099] hover:bg-[#1A5099] hover:text-white'
+          : 'bg-[#1A5099] text-white hover:opacity-90'
       } disabled:opacity-50`}
     >
       {loading ? <LoadingIndicator type="dots" /> : buttonText}

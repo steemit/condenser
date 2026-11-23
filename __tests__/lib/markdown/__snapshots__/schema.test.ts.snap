@@ -1,0 +1,156 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`the schema the pipeline runs with > matches the committed attributes snapshot 1`] = `
+{
+  "*": [
+    "align",
+    "alt",
+    "checked",
+    "start",
+  ],
+  "a": [
+    "href",
+  ],
+  "blockquote": [
+    "cite",
+  ],
+  "del": [
+    "cite",
+  ],
+  "div": [
+    [
+      "className",
+      "pull-right",
+      "pull-left",
+      "text-justify",
+      "text-rtl",
+      "text-center",
+      "text-right",
+      "videoWrapper",
+      "phishy",
+    ],
+  ],
+  "img": [
+    "src",
+    "longDesc",
+  ],
+  "input": [
+    [
+      "type",
+      "checkbox",
+    ],
+    [
+      "disabled",
+      true,
+    ],
+  ],
+  "ins": [
+    "cite",
+  ],
+  "li": [
+    [
+      "className",
+      "task-list-item",
+    ],
+  ],
+  "q": [
+    "cite",
+  ],
+}
+`;
+
+exports[`the schema the pipeline runs with > matches the committed protocols snapshot 1`] = `
+{
+  "cite": [
+    "http",
+    "https",
+    "steem",
+    "esteem",
+  ],
+  "href": [
+    "http",
+    "https",
+    "steem",
+    "esteem",
+  ],
+  "longDesc": [
+    "http",
+    "https",
+    "steem",
+    "esteem",
+  ],
+  "src": [
+    "http",
+    "https",
+    "steem",
+    "esteem",
+  ],
+}
+`;
+
+exports[`the schema the pipeline runs with > matches the committed tagNames snapshot 1`] = `
+[
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "br",
+  "b",
+  "i",
+  "strong",
+  "em",
+  "a",
+  "pre",
+  "code",
+  "img",
+  "tt",
+  "div",
+  "ins",
+  "del",
+  "sup",
+  "sub",
+  "p",
+  "ol",
+  "ul",
+  "table",
+  "thead",
+  "tbody",
+  "tfoot",
+  "blockquote",
+  "dl",
+  "dt",
+  "dd",
+  "kbd",
+  "q",
+  "samp",
+  "var",
+  "hr",
+  "ruby",
+  "rt",
+  "rp",
+  "li",
+  "tr",
+  "td",
+  "th",
+  "s",
+  "strike",
+  "summary",
+  "details",
+  "caption",
+  "figure",
+  "figcaption",
+  "abbr",
+  "bdo",
+  "cite",
+  "dfn",
+  "mark",
+  "small",
+  "span",
+  "time",
+  "wbr",
+  "input",
+  "center",
+]
+`;

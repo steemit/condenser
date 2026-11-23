@@ -22,7 +22,7 @@ Strictly sequential; each one is one branch and one squash-merged PR into
 
 | # | Branch | Scope | PR | Status |
 |---|---|---|---|---|
-| 0 | `bytemd/fp-00-bootstrap` | Baseline + plan and status docs | | in progress |
+| 0 | `bytemd/fp-00-bootstrap` | Baseline + plan and status docs | [#4074](https://github.com/steemit/condenser/pull/4074) | in progress |
 | FP1 | `bytemd/fp-01-render-core` | Rendering core skeleton, deps, pathology guard | - | pending |
 | FP2 | `bytemd/fp-02-harden-schema` | Hardening + security baseline (11 sections / 69 cases) | - | pending |
 | FP3 | `bytemd/fp-03-legacy-semantics` | Steemit semantics (linkify, embeds, collectors) | - | pending |

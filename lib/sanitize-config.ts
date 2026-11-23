@@ -12,13 +12,19 @@ import {
   isDefaultImageSize,
   defaultSrcSet,
 } from '@/lib/media/proxify-url';
+import {
+  EXTERNAL_LINK_MESSAGE,
+  INTERNAL_IMAGE_MESSAGE,
+  PHISHY_MESSAGE,
+  SITE_DIV_CLASS_WHITELIST,
+  noImageText,
+} from '@/lib/markdown/constants';
 
-// Inline message constants (master used counterpart/i18n; next has no i18n yet).
-const PHISHY_MESSAGE = '(Warning: link is a possible phishing attempt)';
-const EXTERNAL_LINK_MESSAGE = 'This link will take you away from Steemit';
-const INTERNAL_IMAGE_MESSAGE = '';
-
-export const noImageText = '(Image not shown due to low ratings)';
+// The message and class constants live in `@/lib/markdown/constants` so that
+// both rendering pipelines (this sanitize-html path and the bytemd path in
+// `lib/markdown/`) share a single source without either importing the other.
+// `noImageText` stays a named export of this module for the existing callers.
+export { noImageText };
 
 export const getPhishingWarningMessage = () => PHISHY_MESSAGE;
 export const getExternalLinkWarningMessage = () => EXTERNAL_LINK_MESSAGE;
@@ -216,17 +222,9 @@ export default function sanitizeConfig({
       },
       div: (_tagName, attribs): sanitizeHtml.Tag => {
         const attys: Record<string, string> = {};
-        const classWhitelist = [
-          'pull-right',
-          'pull-left',
-          'text-justify',
-          'text-rtl',
-          'text-center',
-          'text-right',
-          'videoWrapper',
-          'phishy',
-        ];
-        const validClass = classWhitelist.find((e) => attribs.class === e);
+        const validClass = SITE_DIV_CLASS_WHITELIST.find(
+          (e) => attribs.class === e,
+        );
         if (validClass) attys.class = validClass;
         if (
           validClass === 'phishy' &&

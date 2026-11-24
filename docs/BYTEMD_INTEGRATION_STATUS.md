@@ -151,9 +151,7 @@ They are order-of-magnitude references.
 | | (`>` x 64 + `a` + a blank line), x 480 | 1.8 s | 834 KB |
 | | (`>` x 16 + `a` + a blank line), x 990 | 1.4 s | 437 KB |
 | | 128 indented lists, then 1800 lazy lines | 0.72 s | 14 KB |
-| Output amplification, which no rule looks at | a reference definition with a destination of 50 KB, cited 1500 times | 3.6 s | 75 MB |
-| | the same with a destination of 5 KB | 0.63 s | 7.5 MB |
-| | `<div><p>`, 12 formatting tags x 8 with attributes, `<p>x` x 2700 | 1.7 s | 1.66 MB |
+| Output amplification, which no rule looks at | `<div><p>`, 12 formatting tags x 8 with attributes, `<p>x` x 2700 | 1.7 s | 1.66 MB |
 | | the same with `<p>x` x 700 | 0.61 s | 431 KB |
 | A gap in precision only (listed here, not tested) | `> ` + `a* ` x 1024, a setext line, `a* ` x 1024: the guard splits the paragraph in two | 0.14 s to 0.27 s | 6 KB |
 
@@ -170,10 +168,10 @@ Three facts go with the list:
   takes.
 - **The legacy pipeline is not a safe fallback either.** It has input that
   takes it 1.2 s to 2.6 s (a table of 700 columns: 2.6 s; 800 lines of 32
-  list markers: 1.4 s) and input that makes it produce 75 MB of HTML, the
-  reference expansion above, in 1.6 s. The last of these exists in production
-  today, where the legacy pipeline renders every body. A fallback path needs
-  a timeout of its own.
+  list markers: 1.4 s) and input that makes it produce many times the body's
+  size in HTML. A fallback path needs a timeout and an output cap of its
+  own. (What that is for the pipeline a deployed site runs is a question for
+  that site's own code; nothing here was measured on it.)
 - **Rejecting the `structure` class on the submit side (FP4) has no security
   value.** An attacker does not post through this site. It is a convenience
   for the author, and nothing more.

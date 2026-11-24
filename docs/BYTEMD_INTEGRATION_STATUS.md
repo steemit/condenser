@@ -51,9 +51,12 @@ means bytemd's ESM build (the one vitest and the bundler use).
 
 ### Pre-parse guard after FP1 (limits in `lib/markdown/pathology.ts`)
 
-Target: anything that passes the guard renders in about 250 ms or less.
-Refused input is reported in under 150 ms (best of three; the largest value
-observed in the test suite is about 85 ms).
+Calibration: the budgets are calibrated one dimension at a time, each so that
+a body at its limit renders in about 250 ms at most. A long post near the limit
+of several budgets at once is slower (measured cold on the development machine:
+up to about 0.9 s).
+Refused input is reported in under 150 ms; the test suite asserts this for
+every refused shape (best of three runs).
 
 | Class | Limit | Value |
 |---|---|---|
@@ -72,6 +75,8 @@ observed in the test suite is about 85 ms).
 | `budget` | `MAX_INLINE_TOKENS_TOTAL` (whole body) | 3,072 |
 | `budget` | `MAX_EMPHASIS_MARKERS_TOTAL` (whole body) | 5,120 |
 | `budget` | `MAX_TABLE_CELLS_TOTAL` (whole body) | 1,536 |
+| `budget` | `MAX_RAW_MARKUP_TAGS_TOTAL` (tags in HTML blocks and raw-HTML posts, whole body) | 4,096 |
+| `budget` | `html-nesting-uncertain` (nesting over `MAX_HTML_NESTING_DEPTH` only if possibly inert text is markup) | 256 |
 
 Consequence: long or richly formatted posts that exceed a body-level budget
 (for example about 300 paragraphs with inline markup, 40 KiB) are refused by
@@ -84,7 +89,7 @@ a defect.
 - Manual confirmation after FP9: IME (Chinese input) behaviour in the comment
   editor. bytemd 1.22.0 is built on CodeMirror 5; this cannot be automated.
 - Accepted review findings:
-  - FP1 (engineering review): `lib/markdown/pathology.ts` is about 2000 lines
+  - FP1 (engineering review): `lib/markdown/pathology.ts` is about 3300 lines
     in one file. Splitting it is deferred to a standalone refactoring PR; it
     does not block the later feature points, which only call `findPathology`.
 - Known limitations of the guard are listed in the header of

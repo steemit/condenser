@@ -92,5 +92,21 @@ a defect.
   - FP1 (engineering review): `lib/markdown/pathology.ts` is about 3300 lines
     in one file. Splitting it is deferred to a standalone refactoring PR; it
     does not block the later feature points, which only call `findPathology`.
+- The guard reads the block structure of a body (which lines are a
+  paragraph, an HTML block, fenced code, a table row) with a model of its
+  own. Three reviews in a row found a paragraph hidden behind a block the
+  parser had closed, so the model is now checked against the markdown
+  parser itself: `__tests__/lib/markdown/block-parity.test.ts` builds 816
+  bodies from lists of containers, block openers and separators, and asks
+  the parser where a line of inline markers lies. The full product of those
+  lists is 4080 bodies, five seconds or more in the suite, so the suite
+  checks a covering part of it: every container with every opener, the
+  separator turning with the pair.
 - Known limitations of the guard are listed in the header of
-  `lib/markdown/pathology.ts` ("Known limitations").
+  `lib/markdown/pathology.ts` ("Known limitations"). One of them is a cost
+  the reader side still pays: a flood of hostile markers that the guard
+  classes as `budget` (`x<?` x 32768, `x<!--` x 16384 and the like) is not
+  rendered by this pipeline, and goes to the legacy pipeline, which needs
+  about 0.6 s to 2 s for those two shapes on a 64 KiB post (measured in the
+  third review). That is what they cost today; the fallback does not make it
+  worse, and it does not make it better either.

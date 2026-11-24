@@ -23,7 +23,7 @@ Strictly sequential; each one is one branch and one squash-merged PR into
 | # | Branch | Scope | PR | Status |
 |---|---|---|---|---|
 | 0 | `bytemd/fp-00-bootstrap` | Baseline, plan and status docs | [#4074](https://github.com/steemit/condenser/pull/4074) (squash `da5898dc`) | merged |
-| - | `bytemd/docs-english-plan` | Plan and status moved from `.cursor/` to `docs/`; plan rewritten in English | #__DOCS_PR__ | merged |
+| - | `bytemd/docs-english-plan` | Plan and status moved from `.cursor/` to `docs/`; plan rewritten in English | [#4076](https://github.com/steemit/condenser/pull/4076) | merged |
 | FP1 | `bytemd/fp-01-render-core` | Rendering core skeleton, dependencies, pre-parse guard | [#4075](https://github.com/steemit/condenser/pull/4075) | in review |
 | FP2 | `bytemd/fp-02-harden-schema` | Hardening + security baseline (11 sections / 69 cases) | - | pending |
 | FP3 | `bytemd/fp-03-legacy-semantics` | Steemit semantics (linkify, embeds, collectors) | - | pending |

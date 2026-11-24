@@ -26,6 +26,7 @@ const LEGACY_LEADING_P = /^<p>[\S\s]*<\/p>/;
 const legacyIsHtml = (body: string) =>
   body.match(LEGACY_SHELL) !== null || LEGACY_LEADING_P.test(body);
 
+/** A result without a render: `isHtml` and `refused` are added by the case. */
 const REFUSED = { html: '', noImageActive: false, file: null } as const;
 
 describe('renderMarkdown: result', () => {
@@ -36,6 +37,7 @@ describe('renderMarkdown: result', () => {
     expect(result.isHtml).toBe(false);
     expect(result.noImageActive).toBe(false);
     expect(String(result.file)).toBe(result.html);
+    expect(result.refused).toBeNull();
   });
 
   it('returns an empty string for empty input, having run the pipeline', () => {
@@ -46,6 +48,7 @@ describe('renderMarkdown: result', () => {
     expect(result.noImageActive).toBe(false);
     // Empty is a rendered result, not a refused or failed one.
     expect(result.file).not.toBeNull();
+    expect(result.refused).toBeNull();
   });
 
   it.each([
@@ -69,8 +72,36 @@ describe('renderMarkdown: result', () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     const body = `<html>${'<div>'.repeat(50000)}x${'</div>'.repeat(50000)}</html>`;
 
-    expect(renderMarkdown(body)).toEqual({ ...REFUSED, isHtml: true });
+    expect(renderMarkdown(body)).toEqual({ ...REFUSED, isHtml: true, refused: { class: 'structure', reason: 'html-nesting' } });
     expect(consoleError).toHaveBeenCalledTimes(1);
+    consoleError.mockRestore();
+  });
+
+  it('reports a refusal with the rule and the class it broke', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const long = 'a\n'.repeat(4000);
+
+    expect(renderMarkdown('# ' + ']'.repeat(16000))).toEqual({
+      ...REFUSED,
+      isHtml: false,
+      refused: { class: 'structure', reason: 'inline-resolve-work' },
+    });
+    expect(renderMarkdown(long)).toEqual({
+      ...REFUSED,
+      isHtml: false,
+      refused: { class: 'budget', reason: 'lines' },
+    });
+
+    expect(consoleError.mock.calls[0].slice(0, 3)).toEqual([
+      'renderMarkdown: refused to render pathological input',
+      'a paragraph with more emphasis or link delimiters than the parser handles in linear time',
+      'structure',
+    ]);
+    expect(consoleError.mock.calls[1].slice(0, 3)).toEqual([
+      'renderMarkdown: refused to render pathological input',
+      'more than 2000 lines',
+      'budget',
+    ]);
     consoleError.mockRestore();
   });
 
@@ -129,7 +160,7 @@ describe('renderMarkdown: never throws', () => {
       },
     ]);
 
-    expect(renderMarkdown('<p>x</p>')).toEqual({ ...REFUSED, isHtml: true });
+    expect(renderMarkdown('<p>x</p>')).toEqual({ ...REFUSED, isHtml: true, refused: null });
 
     expect(consoleError).toHaveBeenCalledTimes(1);
     expect(consoleError).toHaveBeenCalledWith(
@@ -145,9 +176,59 @@ describe('renderMarkdown: never throws', () => {
       },
     ]);
 
-    expect(renderMarkdown('x')).toEqual({ ...REFUSED, isHtml: false });
+    expect(renderMarkdown('x')).toEqual({ ...REFUSED, isHtml: false, refused: null });
 
     expect(consoleError).toHaveBeenCalledTimes(1);
     expect(String(consoleError.mock.calls[0][1])).toContain('did not finish synchronously');
+  });
+
+  it('leaves no unhandled rejection behind a transformer that rejects late', async () => {
+    // The failure is reported before the transformer's promise rejects: by
+    // then the render is over. The rejection must still be caught, which is
+    // what the callback form of `process` is for (see `runProcessor`).
+    const unhandled = vi.fn();
+    process.on('unhandledRejection', unhandled);
+
+    try {
+      createSitePluginsMock.mockReturnValueOnce([
+        {
+          remark: (processor) =>
+            processor.use(() => async () => {
+              await Promise.resolve();
+              throw new Error('late');
+            }),
+        },
+      ]);
+
+      expect(renderMarkdown('x')).toEqual({ ...REFUSED, isHtml: false, refused: null });
+      expect(String(consoleError.mock.calls[0][1])).toContain('did not finish synchronously');
+
+      // Let every pending job, the rejection and the event it would raise run.
+      await new Promise((resolve) => setImmediate(resolve));
+      await new Promise((resolve) => setImmediate(resolve));
+      expect(unhandled).not.toHaveBeenCalled();
+    } finally {
+      process.off('unhandledRejection', unhandled);
+    }
+  });
+
+  it.each([null, undefined, 42, {}])('treats %j as an empty body instead of throwing', (body) => {
+    // Callers hand over whatever a post object carried; the signature says string.
+    const result = renderMarkdown(body as string);
+    expect(result).toMatchObject({ html: '', isHtml: false, noImageActive: false, refused: null });
+    // Like an empty body, it is rendered, not refused.
+    expect(result.file).not.toBeNull();
+    expect(consoleError).not.toHaveBeenCalled();
+  });
+
+  it('renders an SVG template instead of losing the whole body', () => {
+    // hast-util-from-parse5 7.1.2 reads `content` off an SVG `<template>`,
+    // which parse5 creates without one, and threw on it (patched, see
+    // patches/). The CJS build of bytemd carries the same guard.
+    const result = renderMarkdown('a <svg><template>x</template></svg> b');
+
+    expect(result.refused).toBeNull();
+    expect(result.html).toBe('<p>a  b</p>');
+    expect(consoleError).not.toHaveBeenCalled();
   });
 });

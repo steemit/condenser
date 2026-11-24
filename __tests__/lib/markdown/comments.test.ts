@@ -11,7 +11,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { decodeEntities, renderClean, textContent } from '../../helpers/markdown';
+import { decodeEntities, renderClean, textContent } from '@/__tests__/helpers/markdown';
 
 /** True when `html` contains a comment opener as markup or as readable text. */
 const hasCommentMarkers = (html: string) => /<!--|-->|html comment removed/.test(decodeEntities(html));

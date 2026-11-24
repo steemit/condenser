@@ -15,39 +15,79 @@
  *   `]` x 16000                              6.6 s
  *   `a* ` x 5000, all in one paragraph       0.66 s
  *   one table of 1600 cells                  0.37 s
+ *   `- a` and a blank line, x 8000           5.4 s
  *
- * This module decides from the raw text alone, and in linear time, whether a
- * body contains one of those shapes. It is an estimate, not a parser: it is
- * deliberately cheap, it errs towards refusing, and its blind spots are listed
- * under "Known blind spots" below. It runs before the parser sees a single
- * character, and is meant to run again on the submit side.
+ * The last of those is honest content, merely long: the parser is
+ * super-linear in the size of a block structure too. So the guard decides
+ * two things from the raw text alone, in linear time, before the parser sees
+ * a single character (and it is meant to run again on the submit side):
  *
- * Complexity: every rule is a single pass without backtracking. No line,
- * delimiter run or tag is visited more than a constant number of times, every
- * element is pushed and popped at most once, and no regular expression with a
- * nested quantifier is used anywhere.
+ * - whether a body has a shape that makes the pipeline super-linear. These
+ *   are the `structure` rules: a hostile or broken shape that no honestly
+ *   written post has;
+ * - whether a body is over a size that this renderer handles in bounded
+ *   time. These are the `budget` rules: a long but honest post may well be.
  *
- * Known blind spots (all in the HTML nesting estimate):
+ * A refused body is not rendered by this pipeline at all. What becomes of it
+ * is for the caller: a body over a budget is still a good post, and the
+ * reading side renders it another way.
  *
- * - Raw-text elements. `<script>`, `<style>`, `<textarea>`, `<title>`,
- *   `<iframe>` and `<xmp>` hold plain text for the browser; their content is
- *   scanned as markup here. A tag inside one is counted although it is not an
- *   element (over-estimating), and an end tag inside one pops although it is
- *   text (under-estimating).
- * - Code spans. A tag spelled inside backticks (`` `<div>` ``) is counted, and
- *   an end tag inside them pops, although both are text. Fenced code is not
- *   affected: it is recognised and skipped. Escapes outside code (`\<`) are
- *   handled.
- * - Link syntax. Inside a link destination or title (`[x](url '…')`) nothing
- *   is markup, but the scan does not know that.
+ * It is an estimate, not a parser, and it errs towards refusing. Nowhere may
+ * it err the other way, towards seeing less nesting than the browser will
+ * build, so the inline scan counts a start tag wherever one may be real and
+ * never pops an end tag that may be text for the browser (see
+ * {@link scanInlineUnit}). What that costs is listed under "Not modelled".
  *
- * Each under-estimating case costs several bytes of disguise per hidden level
- * of nesting, which caps the damage well below the unguarded cost. The
- * numbers are in __tests__/lib/markdown/pathology.test.ts.
+ * Complexity: every rule is a single pass without backtracking. The lines are
+ * read once, then each inline unit once. No line, delimiter run or tag is
+ * visited more than a constant number of times, every element is pushed and
+ * popped at most once, and no regular expression with a nested quantifier is
+ * used anywhere. Every forward search (for the `-->` of a comment, the `"`
+ * of an attribute value, the `)` of a link) is bounded to the unit it starts
+ * in and remembered when it finds nothing (see {@link Finder}), so an
+ * unterminated opener costs the rest of its unit once, not once per opener.
+ *
+ * Not modelled (each only makes the guard refuse more, never less):
+ *
+ * - Links. The guard does not decide what is a link. It marks where the
+ *   destination or the title of one may lie, and the end tags in there pop
+ *   nothing, whether or not the parser makes a link of it.
+ * - Code spans, where a reading of the text may disagree. The backticks of a
+ *   code span are trusted to hide a tag only when nothing before them (a
+ *   link, a pipe that may split a row into cells, an autolink, a raw-text
+ *   element, a tag with a backtick inside) could have made those backticks
+ *   mean something else. Later in a unit the tags of a code span are counted.
+ * - Indented code is read as a paragraph, fenced code is skipped.
+ * - Delimiters are counted inside code spans and tags as well: the resolve
+ *   work of a paragraph is an upper bound.
+ *
+ * The numbers are in __tests__/lib/markdown/pathology.test.ts, and the
+ * nesting estimate is checked against parse5 itself in
+ * __tests__/lib/markdown/nesting-parity.test.ts.
  */
 import { isRawHtmlPost } from '@/lib/markdown/raw-html-post';
 
 // ───────────────────────────── Thresholds ─────────────────────────────
+
+/**
+ * Every rule belongs to one of two classes ({@link PathologyClass}).
+ *
+ * - A `structure` threshold names a shape that no honestly written post has:
+ *   a line of 65 blockquote markers, 300 nested tags, a run of 65 asterisks.
+ *   Content that breaks one is hostile or broken, and going over it is what
+ *   makes the pipeline super-linear.
+ * - A `budget` threshold caps a size that a long but honest post may well
+ *   reach: its number of lines, of list items, of table cells. The pipeline
+ *   is not linear in those sizes either (measured: 8000 list items take
+ *   5.4 s), so a budget is not a judgement on what the author wrote. A post
+ *   over a budget is merely too long for this renderer.
+ *
+ * The budgets are calibrated on one criterion: whatever passes the guard
+ * renders in about 250 ms at most, as a single cold render of the ESM build
+ * (the path vitest and production take), in a body of up to 64 KiB. The
+ * numbers quoted below are the minimum of three cold runs on the development
+ * machine, which was under a load average of about 4 at the time.
+ */
 
 /**
  * Maximum blockquote markers (`>`) at the start of one line.
@@ -120,16 +160,72 @@ export const MAX_DELIMITER_RUN_LENGTH = 64;
 export const MAX_INLINE_RESOLVE_WORK = 2_000_000;
 
 /**
+ * Maximum number of special characters in one paragraph, list item or table
+ * row: `[`, `]`, `_`, `*`, `~`, `<`, backtick, `&`, `\`, `!`, and each
+ * backtick string as one.
+ *
+ * The resolver budget above counts what closes, and only closers walk back
+ * through the paragraph. The tokens themselves are not free either: a
+ * paragraph of 65536 `[` and nothing else has no closer at all and still
+ * takes 5.9 s, and one of `a__` x 32768 takes 1.3 s. Measured cold, in one
+ * paragraph: `[` x 3072 take 185 ms, `[` x 2048 124 ms and `[` x 4096
+ * 298 ms; `a__` x 4096 take 146 ms. 3072 keeps the worst shape measured under
+ * the 250 ms criterion.
+ *
+ * A paragraph has to be remarkably dense to get near it: 3072 tokens are a
+ * thousand links, or fifteen hundred code spans, in one paragraph.
+ */
+export const MAX_INLINE_TOKENS = 3072;
+
+/**
+ * Maximum number of lines in a body, blank lines included.
+ *
+ * Every line that carries a block of its own costs a block: a heading, a
+ * paragraph, a list item, a row of a table. At 2000 lines that costs 236 ms
+ * (`# a` x 2000, the most expensive line measured) and 195 ms (`a` and a
+ * blank line, 1000 times). At 3000 headings it is 372 ms and at 4000, 420 ms.
+ * The budget also bounds the number of paragraphs, at about half of it.
+ */
+export const MAX_LINES = 2000;
+
+/**
+ * Maximum number of list items in a body, at every nesting level together.
+ *
+ * List items cost more than any other block, and not linearly: `- a` and a
+ * blank line, 800 times, take 233 ms cold and 800 tight items (`- a` per
+ * line) 196 ms; at 1000 items the same lists take 319 ms, at 2000 620 ms,
+ * at 4000 1.27 s and at 8000 5.4 s.
+ */
+export const MAX_LIST_ITEMS = 800;
+
+/**
+ * Maximum number of lines that carry a blockquote marker, at every nesting
+ * level together.
+ *
+ * A quoted line costs 148 ms per thousand cold (`> a` x 1000), 207 ms at
+ * 2000, 271 ms at 3000 and 362 ms at 4000. The budget equals the line budget:
+ * a quoted line is not more expensive than a heading, so the line budget
+ * already keeps it in reach of the criterion. It is kept as a rule of its
+ * own so that quote lines have a ceiling even if the line budget is raised.
+ */
+export const MAX_QUOTE_LINES = 2000;
+
+/**
  * Maximum number of cells in one table.
  *
  * The GFM table extension files each cell away by scanning the cells filed so
- * far, which is quadratic in the number of cells: 500 cells cost about
- * 100 ms, 1600 cells 0.37 s, and a 64 KiB body of cells minutes. A 500-cell
- * table (50 rows x 10 columns) is already a large table for a post.
+ * far, which is quadratic in the number of cells: 1600 cells take 0.37 s and
+ * a 64 KiB body of cells minutes. 768 cells take 110 ms (384 columns by two
+ * rows) and 140 ms (48 rows by 16 columns), cold. A table with more cells
+ * than that is not a table in a post any more, but it is a size, not a
+ * hostile shape, hence a budget.
  */
-export const MAX_TABLE_CELLS = 512;
+export const MAX_TABLE_CELLS = 768;
 
 // ───────────────────────────── Public API ─────────────────────────────
+
+/** Which of the two kinds of rule a body breaks; see the thresholds. */
+export type PathologyClass = 'structure' | 'budget';
 
 export type PathologyReason =
   | 'quote-markers'
@@ -138,7 +234,31 @@ export type PathologyReason =
   | 'html-nesting'
   | 'delimiter-run'
   | 'inline-resolve-work'
+  | 'inline-tokens'
+  | 'lines'
+  | 'list-items'
+  | 'quote-lines'
   | 'table-cells';
+
+/** The first rule a body breaks. */
+export interface Pathology {
+  class: PathologyClass;
+  reason: PathologyReason;
+}
+
+const REASON_CLASS: Record<PathologyReason, PathologyClass> = {
+  'quote-markers': 'structure',
+  'container-markers': 'structure',
+  'indent-columns': 'structure',
+  'html-nesting': 'structure',
+  'delimiter-run': 'structure',
+  'inline-resolve-work': 'structure',
+  'inline-tokens': 'budget',
+  lines: 'budget',
+  'list-items': 'budget',
+  'quote-lines': 'budget',
+  'table-cells': 'budget',
+};
 
 const REASON_TEXT: Record<PathologyReason, string> = {
   'quote-markers': `more than ${MAX_QUOTE_MARKERS_PER_LINE} blockquote markers on a line`,
@@ -148,6 +268,10 @@ const REASON_TEXT: Record<PathologyReason, string> = {
   'delimiter-run': `a run of more than ${MAX_DELIMITER_RUN_LENGTH} emphasis markers`,
   'inline-resolve-work':
     'a paragraph with more emphasis or link delimiters than the parser handles in linear time',
+  'inline-tokens': `a paragraph with more than ${MAX_INLINE_TOKENS} emphasis, link, code or HTML markers`,
+  lines: `more than ${MAX_LINES} lines`,
+  'list-items': `more than ${MAX_LIST_ITEMS} list items`,
+  'quote-lines': `more than ${MAX_QUOTE_LINES} quoted lines`,
   'table-cells': `a table with more than ${MAX_TABLE_CELLS} cells`,
 };
 
@@ -156,7 +280,7 @@ export function describePathology(reason: PathologyReason): string {
   return REASON_TEXT[reason];
 }
 
-/** Whether `body` has a shape that makes the pipeline super-linear. */
+/** Whether `body` has a shape or a size that makes the pipeline super-linear. */
 export function isPathological(body: string): boolean {
   return findPathology(body) !== null;
 }
@@ -167,10 +291,10 @@ export function isPathological(body: string): boolean {
  * The scan stops at the first violation, so a hostile body is rejected after
  * little more of it has been read than the threshold itself requires.
  */
-export function findPathology(body: string): PathologyReason | null {
+export function findPathology(body: string): Pathology | null {
   const shape = scanLines(body);
-  if (shape.reason) return shape.reason;
-  return scanContent(body, shape.lines);
+  const reason = shape.reason || scanContent(body, shape.lines);
+  return reason ? { class: REASON_CLASS[reason], reason } : null;
 }
 
 /**
@@ -183,7 +307,20 @@ export function findPathology(body: string): PathologyReason | null {
  */
 export function estimateHtmlNesting(html: string): number {
   const tracker = new NestingTracker(Infinity);
-  scanMarkup(html, 0, html.length, tracker, true);
+  const search = new Finder(html, 0, html.length);
+  scanRawMarkup(
+    html,
+    0,
+    html.length,
+    html.length,
+    search,
+    new Finder(html.toLowerCase(), 0, html.length),
+    true,
+    () => tracker.foreign,
+    (token) => tracker.take(token, html),
+    null,
+    () => false,
+  );
   return tracker.maxDepth;
 }
 
@@ -198,6 +335,7 @@ const DOUBLE_QUOTE = 0x22;
 const HASH = 0x23;
 const AMPERSAND = 0x26;
 const SINGLE_QUOTE = 0x27;
+const LEFT_PAREN = 0x28;
 const RIGHT_PAREN = 0x29;
 const ASTERISK = 0x2a;
 const PLUS = 0x2b;
@@ -269,7 +407,7 @@ function countChar(body: string, start: number, end: number, char: number): numb
 
 // ──────────────────── Part 1: the shape of the text ────────────────────
 
-type LineKind = 'blank' | 'fence' | 'html' | 'table' | 'para' | 'none';
+type LineKind = 'blank' | 'fence' | 'html' | 'table' | 'para' | 'heading' | 'none';
 
 interface LineInfo {
   /** Index of the first character. */
@@ -501,7 +639,8 @@ function matchHtmlStart(
   if (!allowType7) return 0;
 
   // Type 7: a complete open or closing tag, alone on its line.
-  if (!readInlineHtml(body, at, end, token) || !isBlankRange(body, token.end, end)) return 0;
+  // The tag has to be complete on its own line, so the search ends there too.
+  if (!readInlineHtml(body, at, token, new Finder(body, at, end)) || !isBlankRange(body, token.end, end)) return 0;
   return 7;
 }
 
@@ -596,8 +735,8 @@ function isDelimiterRow(body: string, at: number, end: number): boolean {
  * - `fence`: a fenced code block: opener, content and closer;
  * - `html`: an HTML block;
  * - `table`: the delimiter row of a table and its body rows;
- * - `para`: text that is parsed for inline markup (an ATX heading counts as
- *   one line of it);
+ * - `para`: text that is parsed for inline markup;
+ * - `heading`: an ATX heading, which is parsed for inline markup on its own;
  * - `none`: a blank line, a thematic break or a heading underline.
  *
  * Wherever the model is unsure it says `para`, the kind that is scanned most
@@ -620,6 +759,8 @@ function scanLines(body: string): Shape {
   let fence = 0;
   let htmlType = 0;
   let previousQuoted = false;
+  let listItems = 0;
+  let quoteLines = 0;
   let position = 0;
 
   while (position < length) {
@@ -636,10 +777,12 @@ function scanLines(body: string): Shape {
     };
     lines.push(line);
     position = stop + 1;
+    const tooLong = lines.length > MAX_LINES;
 
     if (block === 'fence') {
       line.kind = 'fence';
       if (isClosingFence(body, line.start, end, fence)) block = 'none';
+      if (tooLong) return { lines, reason: 'lines' };
       continue;
     }
 
@@ -649,16 +792,19 @@ function scanLines(body: string): Shape {
         line.kind = 'html';
         line.htmlType = htmlType;
         if (htmlType < 6 && htmlBlockEnded(body, line.start, end, htmlType)) block = 'none';
+        if (tooLong) return { lines, reason: 'lines' };
         continue;
       }
       block = 'none';
       previousQuoted = false;
+      if (tooLong) return { lines, reason: 'lines' };
       continue;
     }
 
     if (isBlankRange(body, line.start, end)) {
       block = 'none';
       previousQuoted = false;
+      if (tooLong) return { lines, reason: 'lines' };
       continue;
     }
 
@@ -668,6 +814,11 @@ function scanLines(body: string): Shape {
 
     line.content = prefix.content;
     line.quoted = prefix.quotes > 0;
+    listItems += prefix.lists;
+    quoteLines += line.quoted ? 1 : 0;
+    if (listItems > MAX_LIST_ITEMS) return { lines, reason: 'list-items' };
+    if (quoteLines > MAX_QUOTE_LINES) return { lines, reason: 'quote-lines' };
+    if (tooLong) return { lines, reason: 'lines' };
 
     // Where a block may start: at the beginning of a block, or after a marker
     // that interrupts a paragraph. A lazy continuation line is neither.
@@ -688,8 +839,10 @@ function scanLines(body: string): Shape {
         if (html !== 0) {
           kind = 'html';
           htmlType = html;
+        } else if (isAtxHeading(body, at, end)) {
+          // A heading is scanned like a paragraph: its text is inline markup.
+          kind = 'heading';
         } else if (
-          isAtxHeading(body, at, end) ||
           isThematicBreak(body, at, end) ||
           (previous === 'para' && !prefix.hasMarker && isEqualsUnderline(body, at, end))
         ) {
@@ -704,7 +857,8 @@ function scanLines(body: string): Shape {
     }
 
     line.kind = kind;
-    block = kind as BlockState;
+    // A heading is over with its line; what follows is a new block.
+    block = kind === 'heading' ? 'none' : (kind as BlockState);
     if (kind === 'html' && htmlType < 6 && htmlBlockEnded(body, at, end, htmlType)) block = 'none';
 
     // An inline unit is a paragraph, a list item, or one row of a table: the
@@ -712,8 +866,8 @@ function scanLines(body: string): Shape {
     // one, and so does the first line of a blockquote: `a` and `> b` are two
     // paragraphs, whereas `> a` and `> b` are one.
     line.newUnit =
-      (kind === 'para' || kind === 'table') &&
-      (kind === 'table' ||
+      (kind === 'para' || kind === 'heading' || kind === 'table') &&
+      (kind === 'table' || kind === 'heading' ||
         previous !== kind ||
         (prefix.hasMarker && prefix.interrupting) ||
         (line.quoted && !previousQuoted));
@@ -749,6 +903,106 @@ function newToken(): Token {
 }
 
 /**
+ * Needles of {@link Finder.find}. The ones from {@link NEEDLE_RAW_TEXT_END} on are
+ * `</` and the name of a raw-text element, in the order of
+ * {@link RAW_TEXT_NAMES}.
+ */
+const NEEDLE_COMMENT_END = 0;
+const NEEDLE_CDATA_END = 1;
+const NEEDLE_TAG_END = 2;
+const NEEDLE_INSTRUCTION_END = 3;
+const NEEDLE_DOUBLE_QUOTE_END = 4;
+const NEEDLE_SINGLE_QUOTE_END = 5;
+const NEEDLE_MARKUP_START = 6;
+const NEEDLE_RAW_TEXT_END = 7;
+
+const NEEDLES = [
+  '-->',
+  ']]>',
+  '>',
+  '?>',
+  '"',
+  "'",
+  '<',
+  '</script',
+  '</style',
+  '</textarea',
+  '</title',
+  '</xmp',
+  '</iframe',
+  '</noembed',
+  '</noframes',
+];
+/** Not a needle: the slot of {@link Finder.commentEnd}, whose answer is its own. */
+const BROWSER_COMMENT_END = NEEDLES.length;
+
+/**
+ * Forward searches inside one region of the body.
+ *
+ * Every search the guard makes goes through a `Finder`, and that is what
+ * keeps the guard linear. A search never leaves the region: the look for the
+ * `-->` that ends a comment stops at the end of the inline unit rather than
+ * at the end of the body, so a paragraph full of unterminated comments costs
+ * the paragraph once. A search that finds nothing is remembered as well: the
+ * needle is then known to be absent at and after the position the search
+ * started from, and a later search returns at once. No needle is read over
+ * any stretch of the region more than once.
+ *
+ * An inline unit gets a `Finder` of its own. The raw markup (HTML blocks and
+ * raw-HTML posts) shares one over the whole body, where a token may well run
+ * past the end of a block.
+ */
+class Finder {
+  /** The region, cut out the first time it is searched. */
+  private text: string | null = null;
+  /** Per needle: the lowest position known to have none at or after it. */
+  private readonly absentFrom: number[] = [];
+
+  constructor(
+    private readonly body: string,
+    private readonly from: number,
+    /** Index one past the region: no search goes beyond it. */
+    readonly to: number,
+  ) {}
+
+  private region(): string {
+    if (this.text === null) {
+      this.text = this.from === 0 && this.to === this.body.length ? this.body : this.body.slice(this.from, this.to);
+    }
+    return this.text;
+  }
+
+  /** Index of the first `needle` at or after `at`, or -1. */
+  find(needle: number, at: number): number {
+    if (at < this.from) at = this.from;
+    const known = this.absentFrom[needle];
+    if (known !== undefined && at >= known) return -1;
+
+    const text = this.region();
+    const found = text.slice(at - this.from, known === undefined ? undefined : known - this.from).indexOf(NEEDLES[needle]);
+    if (found < 0) {
+      this.absentFrom[needle] = at;
+      return -1;
+    }
+    return at + found;
+  }
+
+  /** Where the browser ends the comment that opens at `at`, or -1. */
+  commentEnd(at: number): number {
+    const known = this.absentFrom[BROWSER_COMMENT_END];
+    if (known !== undefined && at >= known) return -1;
+
+    const text = this.region();
+    const found = commentEndIn(text, at - this.from, known === undefined ? text.length : known - this.from);
+    if (found < 0) {
+      this.absentFrom[BROWSER_COMMENT_END] = at;
+      return -1;
+    }
+    return found + this.from;
+  }
+}
+
+/**
  * Whether an attribute is the one that makes `<annotation-xml>` an HTML
  * integration point: `encoding="text/html"`, or `encoding="application/xhtml+xml"`.
  */
@@ -763,12 +1017,12 @@ function isHtmlEncoding(body: string, nameStart: number, nameEnd: number, valueS
 /**
  * Read the raw-HTML inline token that starts at `at`, by CommonMark's rules.
  *
- * Returns false when the text at `at` is not such a token inside `[at, limit)`
- * and is plain text instead. `limit` is the end of the inline unit: an inline
- * token cannot run past it, and an unfinished one is not a token at all, so
- * whatever follows it is markup again.
+ * Returns false when the text at `at` is not such a token inside the region
+ * of `search` and is plain text instead. That region is the inline unit: an
+ * inline token cannot run past it, and an unfinished one is not a token at
+ * all, so whatever follows it is markup again.
  */
-function readInlineHtml(body: string, at: number, limit: number, token: Token): boolean {
+function readInlineHtml(body: string, at: number, token: Token, search: Finder): boolean {
   const after = body.charCodeAt(at + 1);
 
   if (after === EXCLAMATION) {
@@ -781,34 +1035,34 @@ function readInlineHtml(body: string, at: number, limit: number, token: Token): 
       if (body.charCodeAt(at + 4) === GT) token.end = at + 5;
       else if (body.charCodeAt(at + 4) === DASH && body.charCodeAt(at + 5) === GT) token.end = at + 6;
       else {
-        const close = body.indexOf('-->', at + 2);
+        const close = search.find(NEEDLE_COMMENT_END, at + 2);
         if (close < 0) return false;
         token.end = close + 3;
       }
-      return token.end <= limit;
+      return true;
     }
 
     token.kind = 'other';
     if (third === LBRACKET) {
       if (!body.startsWith('<![CDATA[', at)) return false;
-      const close = body.indexOf(']]>', at + 9);
+      const close = search.find(NEEDLE_CDATA_END, at + 9);
       if (close < 0) return false;
       token.end = close + 3;
     } else {
       if (!isAsciiAlpha(third)) return false;
-      const close = body.indexOf('>', at + 2);
+      const close = search.find(NEEDLE_TAG_END, at + 2);
       if (close < 0) return false;
       token.end = close + 1;
     }
-    return token.end <= limit;
+    return true;
   }
 
   if (after === QUESTION) {
-    const close = body.indexOf('?>', at + 2);
+    const close = search.find(NEEDLE_INSTRUCTION_END, at + 2);
     if (close < 0) return false;
     token.kind = 'other';
     token.end = close + 2;
-    return token.end <= limit;
+    return true;
   }
 
   if (after === SLASH) {
@@ -819,8 +1073,8 @@ function readInlineHtml(body: string, at: number, limit: number, token: Token): 
     while (isAsciiAlphanumeric(body.charCodeAt(i)) || body.charCodeAt(i) === DASH) i++;
     token.nameEnd = i;
     // Only whitespace may sit between the name and `>`.
-    while (i < limit && isTagWhitespace(body.charCodeAt(i))) i++;
-    if (i >= limit || body.charCodeAt(i) !== GT) return false;
+    while (i < search.to && isTagWhitespace(body.charCodeAt(i))) i++;
+    if (i >= search.to || body.charCodeAt(i) !== GT) return false;
     token.end = i + 1;
     return true;
   }
@@ -840,6 +1094,7 @@ function readInlineHtml(body: string, at: number, limit: number, token: Token): 
   const afterName = body.charCodeAt(i);
   if (!isTagWhitespace(afterName) && afterName !== SLASH && afterName !== GT) return false;
 
+  const limit = search.to;
   // A `/` right behind an unquoted value belongs to the value for a browser
   // (`<b c=y/>` is not self-closing), although the parser reads it as one.
   let afterUnquoted = false;
@@ -888,8 +1143,8 @@ function readInlineHtml(body: string, at: number, limit: number, token: Token): 
     if (i >= limit) return false;
 
     if (code === DOUBLE_QUOTE || code === SINGLE_QUOTE) {
-      const close = body.indexOf(code === DOUBLE_QUOTE ? '"' : "'", i + 1);
-      if (close < 0 || close + 1 > limit) return false;
+      const close = search.find(code === DOUBLE_QUOTE ? NEEDLE_DOUBLE_QUOTE_END : NEEDLE_SINGLE_QUOTE_END, i + 1);
+      if (close < 0) return false;
       if (isHtmlEncoding(body, attributeStart, attributeEnd, i + 1, close)) token.encodingHtml = true;
       i = close + 1;
       afterUnquoted = false;
@@ -932,34 +1187,33 @@ const COMMENT_END = 6;
 const COMMENT_END_BANG = 7;
 
 /**
- * End of the HTML comment that starts at `at` (`<!--`), as a browser
- * tokenizes it, or -1 when it never ends.
+ * End of the HTML comment that starts at `at` (`<!--`) in `text`, as a
+ * browser tokenizes it, or -1 when it does not end before `stop`.
  *
  * The parser, which decides whether the text is raw markup, ends a comment at
  * the first `-->`. The browser re-parsing that markup follows the HTML
  * tokenizer instead, which also ends a comment at `--!>`.
  */
-function commentEnd(body: string, at: number): number {
-  const length = body.length;
+function commentEndIn(text: string, at: number, stop: number): number {
   let i = at + 4;
   let state = COMMENT;
 
   // Comment start, and comment start dash.
-  if (i < length) {
-    const code = body.charCodeAt(i);
+  if (i < stop) {
+    const code = text.charCodeAt(i);
     if (code === GT) return i + 1;
     if (code === DASH) {
       i++;
-      if (i >= length) return -1;
-      const next = body.charCodeAt(i);
+      if (i >= stop) return -1;
+      const next = text.charCodeAt(i);
       if (next === GT) return i + 1;
       state = next === DASH ? COMMENT_END : COMMENT;
       i++;
     }
   }
 
-  for (; i < length; i++) {
-    const code = body.charCodeAt(i);
+  for (; i < stop; i++) {
+    const code = text.charCodeAt(i);
     let reconsume = true;
 
     // "Reconsume" transitions apply the new state to the same character.
@@ -1024,58 +1278,41 @@ function commentEnd(body: string, at: number): number {
   return -1;
 }
 
-/** End of a doctype: the first `>` that is not inside a quoted identifier. */
-function doctypeEnd(body: string, at: number): number {
-  let quote = 0;
-  for (let i = at + 2; i < body.length; i++) {
-    const code = body.charCodeAt(i);
-    if (quote !== 0) {
-      if (code === quote) quote = 0;
-    } else if (code === DOUBLE_QUOTE || code === SINGLE_QUOTE) quote = code;
-    else if (code === GT) return i + 1;
-  }
-  return -1;
-}
-
 /** What {@link readRawToken} found at a `<`. */
 const NOT_MARKUP = 0;
 const TOKEN = 1;
-/** A tag that never closes before the end of the text. The browser drops it. */
+/** A tag that never closes before `limit`. The browser drops it. */
 const UNFINISHED_TAG = 2;
 
 /**
  * Read the markup token that starts at `at`, by the HTML tokenizer's rules.
  *
  * This is the reading for text that is known to be raw markup, where the
- * token may span lines and may end anywhere up to the end of the text.
+ * token may span lines and may end anywhere up to `limit`. The searches are
+ * `search`'s, so they stay linear (see {@link Finder}).
  */
-function readRawToken(body: string, at: number, token: Token): number {
-  const length = body.length;
+function readRawToken(body: string, at: number, token: Token, search: Finder, limit: number): number {
   const after = body.charCodeAt(at + 1);
 
-  const bogusComment = () => {
-    const close = body.indexOf('>', at + 2);
+  // A bogus comment, and a doctype as well: parse5 ends both at the first
+  // `>`, quotes included. (`<!DOCTYPE html PUBLIC "a>b">` is over at `a>`.)
+  const toTagEnd = (): number => {
+    const close = search.find(NEEDLE_TAG_END, at + 2);
     token.kind = 'other';
-    token.end = close < 0 ? length : close + 1;
+    token.end = close < 0 ? limit : close + 1;
     return TOKEN;
   };
 
   if (after === EXCLAMATION) {
     if (body.charCodeAt(at + 2) === DASH && body.charCodeAt(at + 3) === DASH) {
-      const close = commentEnd(body, at);
+      const close = search.commentEnd(at);
       token.kind = 'comment';
-      token.end = close < 0 ? length : close;
+      token.end = close < 0 ? limit : close;
       return TOKEN;
     }
-    if (body.slice(at, at + 9).toLowerCase() === '<!doctype') {
-      const close = doctypeEnd(body, at);
-      token.kind = 'other';
-      token.end = close < 0 ? length : close;
-      return TOKEN;
-    }
-    return bogusComment();
+    return toTagEnd();
   }
-  if (after === QUESTION) return bogusComment();
+  if (after === QUESTION) return toTagEnd();
 
   if (after === SLASH) {
     const third = body.charCodeAt(at + 2);
@@ -1085,10 +1322,10 @@ function readRawToken(body: string, at: number, token: Token): number {
       token.end = at + 3;
       return TOKEN;
     }
-    return isAsciiAlpha(third) ? readRawTag(body, at, token) : bogusComment();
+    return isAsciiAlpha(third) ? readRawTag(body, at, token, limit) : toTagEnd();
   }
 
-  return isAsciiAlpha(after) ? readRawTag(body, at, token) : NOT_MARKUP;
+  return isAsciiAlpha(after) ? readRawTag(body, at, token, limit) : NOT_MARKUP;
 }
 
 /**
@@ -1096,8 +1333,7 @@ function readRawToken(body: string, at: number, token: Token): number {
  * states, which is what decides where a tag ends and whether it is
  * self-closing.
  */
-function readRawTag(body: string, at: number, token: Token): number {
-  const length = body.length;
+function readRawTag(body: string, at: number, token: Token, limit: number): number {
   let i = at + 1;
   const endTag = body.charCodeAt(i) === SLASH;
   if (endTag) i++;
@@ -1108,7 +1344,7 @@ function readRawTag(body: string, at: number, token: Token): number {
   token.nameStart = i;
   for (;;) {
     const code = body.charCodeAt(i);
-    if (i >= length || isHtmlWhitespace(code) || code === SLASH || code === GT) break;
+    if (i >= limit || isHtmlWhitespace(code) || code === SLASH || code === GT) break;
     i++;
   }
   token.nameEnd = i;
@@ -1119,7 +1355,7 @@ function readRawTag(body: string, at: number, token: Token): number {
   let attributeEnd = 0;
   let valueStart = 0;
   for (;;) {
-    if (i >= length) return UNFINISHED_TAG;
+    if (i >= limit) return UNFINISHED_TAG;
     const code = body.charCodeAt(i);
 
     switch (state) {
@@ -1345,15 +1581,16 @@ class NestingTracker {
   /** Per open element: its attributes, which tell formatting elements apart. */
   private keys: string[] = [];
   /**
+   * Per open element: it only stands in for an entry of the parser's list of
+   * formatting elements (its own element was closed, and the parser will
+   * recreate it), rather than being an element the author opened here.
+   */
+  private standIns: boolean[] = [];
+  /**
    * Per open element: it is on the parser's list of active formatting
    * elements, and so will be recreated if something else closes it.
    */
   private listed: boolean[] = [];
-  /**
-   * Per open element: it is no longer really open. It is only kept because
-   * the parser still has it on its list and will recreate it.
-   */
-  private recreated: boolean[] = [];
   /**
    * The parser's context for table tags outside any table element.
    *
@@ -1366,6 +1603,12 @@ class NestingTracker {
 
   constructor(limit: number = MAX_HTML_NESTING_DEPTH) {
     this.limit = limit;
+  }
+
+  /** The element now open holds SVG or MathML, where no element has raw text for content. */
+  get foreign(): boolean {
+    const top = this.names.length - 1;
+    return top >= 0 && this.inForeignContent(top);
   }
 
   take(token: Token, body: string): void {
@@ -1412,8 +1655,9 @@ class NestingTracker {
     // Anything else is body content from here on, as far as table tags go.
     if (this.base === 'template' && this.nearest().name === '') this.base = 'content';
 
-    // Anything but a `<col>` leaves a column group.
-    if (this.names[top] === 'colgroup') this.pop();
+    // Anything but a `<col>` leaves a column group. A `<template>` is
+    // handled before any insertion mode gets to say something, so it stays.
+    if (this.names[top] === 'colgroup' && name !== 'template') this.pop();
 
     if (CLOSES_PARAGRAPH.has(name)) this.closeParagraph();
     if (VOID_ELEMENTS.has(name)) return;
@@ -1489,11 +1733,15 @@ class NestingTracker {
         this.leaveLeftovers();
         break;
       default:
-        // A table inside a cell or a caption nests. Anywhere else inside a
-        // table it closes the table around it first.
+        // A table inside a cell or a caption nests. Anywhere else it closes
+        // the table around it first, when there is one: a row or a section
+        // the parser supplied for a stray `<tr>` has no table around it, and
+        // a `<table>` in there nests like any other element.
         if (this.where() === 'cell' || this.where() === 'caption') break;
-        this.leaveLeftovers();
-        this.closeTableElement(new Set(['table']));
+        if (this.hasInScope('table')) {
+          this.leaveLeftovers();
+          this.closeTableElement(new Set(['table']));
+        }
         this.closeParagraph();
     }
 
@@ -1560,6 +1808,15 @@ class NestingTracker {
       }
       if (name === 'table' || name === 'template') return;
     }
+  }
+
+  /** Whether an element named `name` is open before the table or template around here. */
+  private hasInScope(name: string): boolean {
+    for (let k = this.names.length - 1; k >= 0; k--) {
+      if (this.names[k] === name) return true;
+      if (this.names[k] === 'table' || this.names[k] === 'template' || this.namespaces[k] !== HTML) return false;
+    }
+    return false;
   }
 
   /** `<p>` in button scope is closed by a block-level start tag (`<div>`, `<hr>`, …). */
@@ -1732,15 +1989,17 @@ class NestingTracker {
     this.htmlEncoded.push(encodingHtml);
     this.keys.push(key);
     this.listed.push(listed);
-    this.recreated.push(false);
+    this.standIns.push(false);
     if (this.names.length > this.maxDepth) this.maxDepth = this.names.length;
     if (this.maxDepth > this.limit) this.over = true;
   }
 
   /**
    * The parser keeps at most three formatting elements with the same tag and
-   * attributes; a fourth makes the oldest of them leave its list. The element
-   * stays open, it just will not be recreated any more.
+   * attributes on its list; a fourth makes the oldest of them leave the list.
+   *
+   * Leaving the list closes nothing. The element is open when it happens,
+   * and it merely will not be recreated any more after it has been closed.
    */
   private evictFourth(name: string, key: string): void {
     let same = 0;
@@ -1749,8 +2008,23 @@ class NestingTracker {
       if (this.listed[k] && this.names[k] === name && this.keys[k] === key && ++same === 3) {
         // An element that is really open stays open; one that only stood in
         // for its list entry is gone with the entry.
-        if (this.recreated[k]) this.removeAt(k);
-        else this.listed[k] = false;
+        if (!this.standIns[k]) {
+          // Really open where it is: it only leaves the list.
+          this.listed[k] = false;
+          return;
+        }
+        // A stand-in for an entry that is not on the list any more. The
+        // parser has just recreated that entry, inside the element now open:
+        // from here on it is an element like any other, and it closes with
+        // what now contains it. So it leaves the bottom of the stack, where
+        // the stand-ins sit, for the top.
+        this.removeAt(k);
+        this.names.push(name);
+        this.namespaces.push(HTML);
+        this.htmlEncoded.push(false);
+        this.keys.push('');
+        this.listed.push(false);
+        this.standIns.push(false);
         return;
       }
     }
@@ -1778,7 +2052,7 @@ class NestingTracker {
     for (let k = keep + 1; k < until; k++) {
       if (!this.listed[k]) continue;
       this.copyEntry(k, write);
-      this.recreated[write] = true;
+      this.standIns[write] = true;
       write++;
     }
     this.truncate(write);
@@ -1795,7 +2069,7 @@ class NestingTracker {
     this.htmlEncoded[to] = this.htmlEncoded[from];
     this.keys[to] = this.keys[from];
     this.listed[to] = this.listed[from];
-    this.recreated[to] = this.recreated[from];
+    this.standIns[to] = this.standIns[from];
   }
 
   private truncate(keep: number): void {
@@ -1804,90 +2078,496 @@ class NestingTracker {
     this.htmlEncoded.length = keep;
     this.keys.length = keep;
     this.listed.length = keep;
-    this.recreated.length = keep;
+    this.standIns.length = keep;
   }
 }
 
 // ───────────────────────── The scans over the content ─────────────────────────
 
-/** Whether the `<` at `at` is escaped by a backslash: text, not markup. */
-function isEscaped(body: string, at: number, from: number): boolean {
-  let backslashes = 0;
-  for (let i = at - 1; i >= from && body.charCodeAt(i) === BACKSLASH; i--) backslashes++;
-  return backslashes % 2 === 1;
+/**
+ * Elements whose content is text for the browser: no tag inside one is an
+ * element. `plaintext` is the one without an end tag.
+ */
+const RAW_TEXT_PLAINTEXT = 'plaintext';
+/** The others, in the order of their needles (see {@link NEEDLES}). */
+const RAW_TEXT_NAMES = ['script', 'style', 'textarea', 'title', 'xmp', 'iframe', 'noembed', 'noframes'];
+
+/** A stretch of text, `[from, to)`. */
+interface Stretch {
+  from: number;
+  to: number;
+}
+
+/** A tag as the first pass of {@link scanInlineUnit} read it. */
+interface TagEvent {
+  at: number;
+  token: Token;
+  /** It lies inside a code span for certain: text for the browser as well. */
+  inCode: boolean;
+  /**
+   * The parser does not take it for a tag, but the browser re-parses it as
+   * markup: it lies in the part of a comment that the browser ends early.
+   */
+  browserOnly: boolean;
+  /** For the start tag of a raw-text element: where its content ends. */
+  rawTextTo: number;
+  /** For that start tag: it is a tag for certain, so the browser reads raw text after it. */
+  certain: boolean;
+}
+
+/** Where the end tag of the raw-text element `index` starts, at or after `from`, or -1. */
+function rawTextEnd(body: string, from: number, index: number, folded: Finder): number {
+  for (;;) {
+    const at = folded.find(NEEDLE_RAW_TEXT_END + index, from);
+    if (at < 0) return -1;
+    // An end tag only counts when its name ends here.
+    const after = body.charCodeAt(at + RAW_TEXT_NAMES[index].length + 2);
+    if (isHtmlWhitespace(after) || after === SLASH || after === GT) return at;
+    from = at + 1;
+  }
 }
 
 /**
- * Scan `[from, to)` for markup and feed every tag to `tracker`.
+ * Read the raw markup in `[from, to)` and hand every tag to `sink`, in order.
  *
- * In raw mode (`raw`) the text is known to be markup and is read by the HTML
- * tokenizer's rules; a token may then run past `to`, because it is markup
- * there too. Otherwise the text is a paragraph and is read by CommonMark's
- * inline rules, which is what makes the difference between `<b>` and `<b @a>`:
- * the first is an element, the second is text.
+ * This is the reading for text that is known to be markup: HTML blocks and
+ * raw-HTML posts, which the browser re-parses with the HTML tokenizer, and
+ * the part of a comment that the browser closes before the parser does. A
+ * token may run past `to`, because it is markup there too, but never past
+ * `limit`.
  *
- * Stops as soon as the tracker reports that the nesting is over its limit.
+ * The content of a raw-text element is not markup, so it is skipped up to
+ * its end tag. Where the HTML tokenizer's rules apply without a doubt
+ * (`trusted`), that is exactly what the browser does, and the scan goes on
+ * behind the end tag. Elsewhere the start tag may turn out to be text for the
+ * browser, so the stretch is only reported through `region`, for the caller to
+ * treat as possibly inert, and the scan goes on reading inside it.
+ *
+ * Returns the position from which a raw-text element, a `plaintext` element
+ * or a tag that never closes swallows everything up to `limit`, or -1.
  */
-function scanMarkup(body: string, from: number, to: number, tracker: NestingTracker, raw: boolean): void {
+function scanRawMarkup(
+  body: string,
+  from: number,
+  to: number,
+  limit: number,
+  search: Finder,
+  folded: Finder,
+  trusted: boolean,
+  foreign: () => boolean,
+  sink: (token: Token, at: number) => void,
+  region: ((stretch: Stretch) => void) | null,
+  done: () => boolean,
+): number {
   const token = newToken();
+  const endTag = newToken();
   let i = from;
 
-  while (i < to && !tracker.over) {
-    i = body.indexOf('<', i);
+  while (i < to && !done()) {
+    i = search.find(NEEDLE_MARKUP_START, i);
     if (i < 0 || i >= to) break;
 
-    if (raw) {
-      const found = readRawToken(body, i, token);
-      // A tag that never closes takes everything after it with it.
-      if (found === UNFINISHED_TAG) break;
-      if (found === NOT_MARKUP) {
+    const found = readRawToken(body, i, token, search, limit);
+    // A tag that never closes takes everything after it with it.
+    if (found === UNFINISHED_TAG) return limit;
+    if (found === NOT_MARKUP) {
+      i++;
+      continue;
+    }
+
+    const at = i;
+    const html = token.kind === 'start' && !foreign();
+    sink(token, at);
+    i = Math.max(token.end, at + 1);
+    const name = html ? body.slice(token.nameStart, token.nameEnd).toLowerCase() : '';
+
+    if (name === RAW_TEXT_PLAINTEXT) {
+      // Nothing closes it: the rest is text.
+      region?.({ from: at, to: body.length });
+      if (trusted) return limit;
+      continue;
+    }
+
+    const index = RAW_TEXT_NAMES.indexOf(name);
+    if (index < 0) continue;
+
+    const close = rawTextEnd(body, i, index, folded);
+    region?.({ from: at, to: close < 0 ? body.length : close });
+    if (!trusted) continue; // the tags inside may be real after all
+    if (close < 0) return limit;
+
+    // The end tag closes the element like any other.
+    readRawToken(body, close, endTag, search, limit);
+    sink(endTag, close);
+    i = Math.max(endTag.end, close + 1);
+  }
+
+  return -1;
+}
+
+/**
+ * Where the link that opens with the `(` at `at` ends, as far as a quick
+ * reading can tell, or `to` when it cannot tell.
+ *
+ * Neither the destination nor the title of a link is markup, so an end tag
+ * inside one pops nothing for the browser. The reading follows the parser's
+ * grammar (a destination in `<>` or bare, then an optional quoted title),
+ * but is deliberately the generous side of it: whenever it does not end with
+ * a `)` where the grammar wants one, the answer is the end of the unit,
+ * which is never too early.
+ */
+function linkEnd(body: string, at: number, to: number): number {
+  let i = at + 1;
+  while (isTagWhitespace(body.charCodeAt(i))) i++;
+
+  if (body.charCodeAt(i) === LT) {
+    while (i < to && body.charCodeAt(i) !== GT && body.charCodeAt(i) !== LF) i++;
+    if (body.charCodeAt(i) !== GT) return to;
+    i++;
+  } else {
+    // A bare destination: no whitespace, and no `)` that no `(` opened.
+    let depth = 0;
+    while (i < to) {
+      const code = body.charCodeAt(i);
+      if (code === BACKSLASH) {
+        i += 2;
+        continue;
+      }
+      if (isTagWhitespace(code)) break;
+      if (code === LEFT_PAREN) depth++;
+      else if (code === RIGHT_PAREN) {
+        if (depth === 0) break;
+        depth--;
+      }
+      i++;
+    }
+  }
+
+  while (isTagWhitespace(body.charCodeAt(i))) i++;
+
+  const quote = body.charCodeAt(i);
+  if (quote === DOUBLE_QUOTE || quote === SINGLE_QUOTE || quote === LEFT_PAREN) {
+    const closer = quote === LEFT_PAREN ? RIGHT_PAREN : quote;
+    for (i++; i < to; i++) {
+      const code = body.charCodeAt(i);
+      if (code === BACKSLASH) i++;
+      else if (code === closer) break;
+    }
+    if (i >= to) return to;
+    i++;
+    while (isTagWhitespace(body.charCodeAt(i))) i++;
+  }
+
+  return body.charCodeAt(i) === RIGHT_PAREN ? i + 1 : to;
+}
+
+/** Whether any backtick lies in `[from, to)`. */
+function hasBacktick(body: string, from: number, to: number): boolean {
+  for (let i = from; i < to; i++) {
+    if (body.charCodeAt(i) === BACKTICK) return true;
+  }
+  return false;
+}
+
+/** Sort by start, and merge what overlaps into single stretches. */
+function merge(stretches: Stretch[]): Stretch[] {
+  stretches.sort((a, b) => a.from - b.from);
+  const merged: Stretch[] = [];
+  for (const stretch of stretches) {
+    const last = merged[merged.length - 1];
+    if (last && stretch.from <= last.to) last.to = Math.max(last.to, stretch.to);
+    else merged.push({ ...stretch });
+  }
+  return merged;
+}
+
+/**
+ * Scan one inline unit (a paragraph, a heading, a list item, a row of a
+ * table) for tags, and feed them to `tracker` as the browser would see them.
+ *
+ * The unit is read in two passes. The first reads everything and notes where
+ * the text may be something else than markup: a code span, the destination or
+ * the title of a link, an autolink, a comment, the content of a raw-text
+ * element. The second feeds the tags to the tracker:
+ *
+ * - An end tag inside possibly inert text never pops. Popping an end tag the
+ *   browser does not see is the one way to under-estimate nesting, and what
+ *   is over-estimated only errs towards refusing.
+ * - A start tag is skipped only inside text that is inert for certain:
+ *   `inCode`, a code span every reading of the text agrees on, and the
+ *   content of a raw-text element whose start tag is such a tag for certain.
+ *   Skipping a start tag the browser does see would under-estimate as well,
+ *   so everywhere else it is counted, inert or not.
+ *
+ * What a reading is: the guard does not decide what is a link. It knows where
+ * one may be (`[x](…)`), and a backtick in there opens a code span for a
+ * reading that makes no link of it, and none for one that does. `open` keeps
+ * the code spans of all those readings side by side, by the length of their
+ * opening backtick string, and a position is inside code for certain when
+ * none of the readings is outside. The same goes for a pipe, which may end a
+ * code span by splitting a row of a table into cells.
+ *
+ * `swallowed` is the position up to which raw markup before this unit has
+ * swallowed the text (an unterminated `<script>` in an HTML block): what lies
+ * before it is text for the browser.
+ */
+function scanInlineUnit(
+  body: string,
+  from: number,
+  to: number,
+  cells: boolean,
+  swallowed: number,
+  tracker: NestingTracker,
+  whole: Finder,
+  lowerBody: () => Finder,
+): PathologyReason | null {
+  const search = new Finder(body, from, to);
+  const token = newToken();
+  const events: TagEvent[] = [];
+  /** Possibly inert text: an end tag inside is never popped. */
+  const inert: Stretch[] = [];
+  /** First and last backtick string per length: any two of a length may be a code span. */
+  const firstRun = new Map<number, number>();
+  const lastRun = new Map<number, number>();
+  /** Where the readings may be inside a link, an autolink or a comment. */
+  let opaque: number[] = [];
+  /** The lengths of the backtick strings the readings are inside code with; 0 is outside code. */
+  let open: number[] = [0];
+  /** More readings than this are not told apart any more: nothing is for certain after it. */
+  const READINGS = 8;
+  let lost = false;
+  /** How much the readings of links may still read: past that, a link runs to the end of the unit. */
+  let budget = to - from;
+  let i = from;
+
+  const noteRun = (at: number, size: number, escaped: boolean, dead: boolean): void => {
+    if (!firstRun.has(size)) firstRun.set(size, at);
+    lastRun.set(size, at);
+    const next: number[] = [];
+    for (const state of open) {
+      const after = state === 0 ? (escaped ? 0 : size) : state === size ? 0 : state;
+      if (!next.includes(after)) next.push(after);
+      // A reading for which the string is inert stays where it is.
+      if (dead && !next.includes(state)) next.push(state);
+    }
+    if (next.length > READINGS) lost = true;
+    open = next;
+  };
+
+  /** A position is inside code for certain when no reading is outside it. */
+  const inCode = (): boolean => !lost && !open.includes(0);
+
+  const record = (found: Token, at: number, code: boolean, browserOnly = false): TagEvent => {
+    const event: TagEvent = { at, token: { ...found }, inCode: code, browserOnly, rawTextTo: -1, certain: false };
+    events.push(event);
+    return event;
+  };
+
+  while (i < to) {
+    const code = body.charCodeAt(i);
+
+    // A backslash escapes the next character, wherever that means anything.
+    if (code === BACKSLASH) {
+      if (body.charCodeAt(i + 1) === BACKTICK) {
+        let size = 1;
+        while (body.charCodeAt(i + 2 + size) === BACKTICK) size++;
+        noteRun(i + 1, size, true, false);
+        i += 1 + size;
+      } else {
+        i += 2;
+      }
+      continue;
+    }
+
+    if (code === BACKTICK) {
+      let size = 1;
+      while (body.charCodeAt(i + size) === BACKTICK) size++;
+      opaque = opaque.filter((end) => end > i);
+      noteRun(i, size, false, opaque.length > 0);
+      i += size;
+      continue;
+    }
+
+    if (code === LT) {
+      if (!readInlineHtml(body, i, token, search)) {
+        // Not a tag. An autolink is not markup either, and neither is a
+        // comment that ends past this unit.
+        let end = i + 1;
+        while (end < to && !isTagWhitespace(body.charCodeAt(end)) && body.charCodeAt(end) !== LT && body.charCodeAt(end) !== GT) {
+          end++;
+        }
+        if (body.charCodeAt(end) === GT) opaque.push(end);
+        if (body.startsWith('<!--', i)) {
+          const close = whole.find(NEEDLE_COMMENT_END, i + 2);
+          const until = close < 0 ? body.length : close + 3;
+          inert.push({ from: i, to: until });
+          opaque.push(until);
+          i += 4;
+          continue;
+        }
         i++;
         continue;
       }
-    } else {
-      if (isEscaped(body, i, from)) {
-        i++;
-        continue;
+
+      const at = i;
+      i = token.end;
+      // A tag is one piece for the parser, but a backtick inside it may
+      // open a code span for a reading that does not see a tag there.
+      for (let j = at; j < i; ) {
+        if (body.charCodeAt(j) !== BACKTICK) {
+          j++;
+          continue;
+        }
+        let size = 1;
+        while (body.charCodeAt(j + size) === BACKTICK) size++;
+        noteRun(j, size, false, true);
+        j += size;
       }
-      if (!readInlineHtml(body, i, to, token)) {
-        i++;
-        continue;
-      }
+      if (hasBacktick(body, at, i)) inert.push({ from: at, to: i });
+
+      const code = inCode();
+      const event = record(token, at, code);
+
       if (token.kind === 'comment') {
         // The parser reads the comment through `token.end`. The browser ends
         // it no later, and what lies between the two is raw markup.
-        const browserEnd = commentEnd(body, i);
+        const browserEnd = search.commentEnd(at);
         if (browserEnd >= 0 && browserEnd < token.end) {
-          scanMarkup(body, browserEnd, token.end, tracker, true);
+          scanRawMarkup(
+            body,
+            browserEnd,
+            token.end,
+            to,
+            search,
+            lowerBody(),
+            false,
+            never,
+            (found, at2) => record(found, at2, code, true),
+            (stretch) => inert.push(stretch),
+            never,
+          );
         }
-        i = token.end;
-        continue;
+      } else if (token.kind === 'start') {
+        const name = body.slice(token.nameStart, token.nameEnd).toLowerCase();
+        const index = RAW_TEXT_NAMES.indexOf(name);
+        if (index >= 0 || name === RAW_TEXT_PLAINTEXT) {
+          const close = index < 0 ? -1 : rawTextEnd(body, i, index, lowerBody());
+          event.rawTextTo = close < 0 ? body.length : close;
+          // The start tag is a tag for certain when no reading has the text
+          // before it in a link, an autolink or a comment.
+          event.certain = !code && opaque.every((end) => end < at);
+          inert.push({ from: at, to: event.rawTextTo });
+        }
       }
+      continue;
     }
 
-    tracker.take(token, body);
-    i = Math.max(token.end, i + 1);
+    if (code === RBRACKET) {
+      opaque = opaque.filter((end) => end > i);
+      if (opaque.length === 0) {
+        if (body.charCodeAt(i + 1) === COLON) {
+          // A link reference definition. Its title may run over more lines.
+          let end = i + 2;
+          while (end < to && body.charCodeAt(end) !== LF) end++;
+          const until = hasQuote(body, i + 2, end) ? to : end;
+          inert.push({ from: i + 1, to: until });
+          opaque.push(until);
+        } else {
+          let at = i + 1;
+          while (isTagWhitespace(body.charCodeAt(at))) at++;
+          if (body.charCodeAt(at) === LEFT_PAREN) {
+            let end = to;
+            if (budget >= 0) {
+              end = linkEnd(body, at, to);
+              budget -= end - at;
+            }
+            inert.push({ from: at, to: end });
+            opaque.push(end);
+          }
+        }
+      }
+      i++;
+      continue;
+    }
+
+    // A pipe may split the line into cells, and a cell is parsed for inline
+    // markup on its own. In a row of a table it certainly does.
+    if (code === PIPE) {
+      if (cells) open = [0];
+      else if (!open.includes(0)) open = [...open, 0];
+      if (open.length > READINGS) lost = true;
+    }
+    i++;
   }
+
+  // From the first to the last backtick string of a length, the parser may
+  // be inside a code span, whatever the readings make of the ones between.
+  for (const [size, first] of firstRun) {
+    const last = lastRun.get(size);
+    if (last !== undefined && last > first) inert.push({ from: first + size, to: last });
+  }
+  const possibly = merge(inert);
+
+  let stretch = 0;
+  let rawTextTo = -1;
+
+  for (const event of events) {
+    const at = event.at;
+    while (stretch < possibly.length && possibly[stretch].to <= at) stretch++;
+    // Raw markup before this unit may have swallowed the text up to here.
+    if (at < swallowed) continue;
+    if (event.inCode) continue;
+
+    if (event.token.kind === 'start') {
+      if (at < rawTextTo) continue;
+      const foreign = tracker.foreign;
+      tracker.take(event.token, body);
+      // After a start tag that is one for certain, the browser reads raw
+      // text for certain as well.
+      if (event.certain && !foreign && event.rawTextTo > at) rawTextTo = event.rawTextTo;
+    } else if (event.token.kind === 'end') {
+      if (stretch >= possibly.length || at < possibly[stretch].from) tracker.take(event.token, body);
+    }
+    if (tracker.over) return 'html-nesting';
+  }
+
+  return null;
+}
+/** Whether a quote character lies in `[from, to)`. */
+function hasQuote(body: string, from: number, to: number): boolean {
+  for (let i = from; i < to; i++) {
+    const code = body.charCodeAt(i);
+    if (code === DOUBLE_QUOTE || code === SINGLE_QUOTE || code === LEFT_PAREN) return true;
+  }
+  return false;
+}
+
+function never(): boolean {
+  return false;
 }
 
 /**
  * Whether an emphasis run can close emphasis, as the parser sees it.
  *
  * A run closes when something other than whitespace precedes it (or another
- * marker). For `_` and `~` a letter or digit right after it makes it part of a
- * word instead, as in `snake_case`.
+ * marker). For `_` a letter or digit right after it makes it part of a word
+ * instead, as in `snake_case`. `~` is not bound to a word: the strikethrough
+ * extension decides from the character before the run alone.
  */
 function isCloser(marker: number, previous: number, next: number): boolean {
-  if (marker !== ASTERISK && isAsciiAlphanumeric(next)) return false;
+  if (marker === UNDERSCORE && isAsciiAlphanumeric(next)) return false;
   return !isFlankWhitespace(previous);
 }
 
 /**
- * Micromark's inline resolver work for one inline unit, against its budget.
+ * Micromark's inline resolver work for one inline unit, against its budget,
+ * and the number of special characters against theirs.
  *
  * Counts the triggers (emphasis runs that can close, and `]`) and the tokens
  * they walk back over (emphasis runs, brackets, backticks, `<`, `&`, `\`).
- * Also applies the run-length rule, which needs the same walk.
+ * Also applies the run-length rule, which needs the same walk. It counts
+ * what the text is made of, not what the parser makes of it: a delimiter in
+ * a code span or inside a tag is counted as well, which only over-counts.
  */
 function countInlineWork(body: string, start: number, end: number): PathologyReason | null {
   let tokens = 0;
@@ -1915,6 +2595,7 @@ function countInlineWork(body: string, start: number, end: number): PathologyRea
         resolvers++;
       } else if (
         code === LBRACKET ||
+        code === EXCLAMATION ||
         code === BACKTICK ||
         code === LT ||
         code === AMPERSAND ||
@@ -1925,6 +2606,7 @@ function countInlineWork(body: string, start: number, end: number): PathologyRea
       i++;
     }
 
+    if (tokens > MAX_INLINE_TOKENS) return 'inline-tokens';
     if (resolvers * tokens > MAX_INLINE_RESOLVE_WORK) return 'inline-resolve-work';
   }
 
@@ -1932,21 +2614,46 @@ function countInlineWork(body: string, start: number, end: number): PathologyRea
 }
 
 /**
- * Apply the rules that need the content: HTML nesting, inline resolver work
- * and table size.
+ * Apply the rules that need the content: HTML nesting, inline resolver work,
+ * the number of special characters and table size.
  *
  * The text is cut into inline units, each the text one inline parser run
- * sees: a paragraph, a list item, one row of a table. Delimiters only ever
- * interact inside a unit, so the budgets are per unit. An HTML block is a
- * unit of raw markup instead. Fenced code is not scanned at all.
+ * sees: a paragraph, a heading, a list item, one row of a table. Delimiters
+ * only ever interact inside a unit, so the budgets are per unit. An HTML
+ * block is a unit of raw markup instead. Fenced code is not scanned at all.
+ *
+ * The nesting of an inline unit is read before its delimiters are counted:
+ * a flood of tags is a hostile structure, not a long paragraph.
  */
 function scanContent(body: string, lines: LineInfo[]): PathologyReason | null {
+  const length = body.length;
   const tracker = new NestingTracker();
+  const search = new Finder(body, 0, length);
+  let lower: Finder | null = null;
+  const lowerBody = (): Finder => {
+    if (lower === null) lower = new Finder(body.toLowerCase(), 0, length);
+    return lower;
+  };
+  const done = (): boolean => tracker.over;
   // A raw-HTML post is markup throughout. Its lines still matter below: the
   // markdown parser reads the body before the first plugin runs.
   const rawPost = isRawHtmlPost(body);
+  let swallowed = -1;
+
   if (rawPost) {
-    scanMarkup(body, 0, body.length, tracker, true);
+    swallowed = scanRawMarkup(
+      body,
+      0,
+      length,
+      length,
+      search,
+      lowerBody(),
+      true,
+      () => tracker.foreign,
+      (token) => tracker.take(token, body),
+      null,
+      done,
+    );
     if (tracker.over) return 'html-nesting';
   }
 
@@ -1959,11 +2666,43 @@ function scanContent(body: string, lines: LineInfo[]): PathologyReason | null {
 
   const flush = (): PathologyReason | null => {
     if (unitStart < 0) return null;
-    if (unitKind !== 'html') {
-      const reason = countInlineWork(body, unitStart, unitEnd);
+    if (tracker.over) return 'html-nesting';
+
+    // The nesting comes first: a flood of tags is a hostile structure, and
+    // reporting it as a size would say it is merely a long paragraph.
+    if (unitKind === 'html') {
+      // Raw markup. What an unfinished token swallowed stays swallowed.
+      const from = Math.max(unitStart, swallowed);
+      if (from < unitEnd) {
+        swallowed = scanRawMarkup(
+          body,
+          from,
+          unitEnd,
+          length,
+          search,
+          lowerBody(),
+          true,
+          () => tracker.foreign,
+          (token) => tracker.take(token, body),
+          null,
+          done,
+        );
+      }
+    } else {
+      const reason = scanInlineUnit(
+        body,
+        unitStart,
+        unitEnd,
+        unitKind === 'table',
+        swallowed,
+        tracker,
+        search,
+        lowerBody,
+      );
       if (reason) return reason;
+      const work = countInlineWork(body, unitStart, unitEnd);
+      if (work) return work;
     }
-    if (rawPost || !tracker.over) scanMarkup(body, unitStart, unitEnd, tracker, unitKind === 'html');
     return tracker.over ? 'html-nesting' : null;
   };
 
@@ -1980,7 +2719,7 @@ function scanContent(body: string, lines: LineInfo[]): PathologyReason | null {
     }
 
     const raw = line.kind === 'html';
-    if (!(raw || line.kind === 'para' || line.kind === 'table')) {
+    if (!(raw || line.kind === 'para' || line.kind === 'heading' || line.kind === 'table')) {
       const reason = flush();
       if (reason) return reason;
       unitStart = -1;

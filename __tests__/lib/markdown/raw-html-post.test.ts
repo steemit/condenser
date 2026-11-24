@@ -8,7 +8,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { renderClean } from '../../helpers/markdown';
+import { renderClean } from '@/__tests__/helpers/markdown';
 import { isRawHtmlPost } from '@/lib/markdown/raw-html-post';
 import { renderMarkdown } from '@/lib/markdown/render';
 

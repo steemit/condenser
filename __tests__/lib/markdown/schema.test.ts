@@ -13,7 +13,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { renderClean } from '../../helpers/markdown';
+import { renderClean } from '@/__tests__/helpers/markdown';
 import { SITE_DIV_CLASS_WHITELIST } from '@/lib/markdown/constants';
 import {
   SITE_GLOBAL_ATTRIBUTES,

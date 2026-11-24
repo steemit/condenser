@@ -27,6 +27,7 @@ import {
   MAX_QUOTE_MARKERS_PER_LINE,
   MAX_RAW_MARKUP_TAGS_TOTAL,
   MAX_TABLE_CELLS,
+  MAX_TABLE_CELLS_TOTAL,
   describePathology,
   estimateHtmlNesting,
   findPathology,
@@ -124,6 +125,32 @@ const STRUCTURE_SHAPES: ReadonlyArray<Shape> = [
   // it nests.
   ['> <div>, then <div> x 300 on a quoted line', `> <div>\n> ${'<div>'.repeat(300)}`, 'html-nesting', 'structure'],
   ['- <div>, then <div> x 300 indented into the item', `- <div>\n  ${'<div>'.repeat(300)}`, 'html-nesting', 'structure'],
+  // The third review. The guard read the container markers of each line on
+  // its own, so a block that opened on an indented line of a list item lay in
+  // no container it knew of, and every line behind it was taken for part of
+  // the block. 3.4 s to 4.8 s unguarded.
+  ['an empty item, an HTML block indented into it, then a* x 16383', `-\n  <div>\n${'a* '.repeat(16383)}`, 'inline-resolve-work', 'structure'],
+  ['the same inside a quote, a* x 16383 on a quoted line', `> -\n>   <div>\n> ${'a* '.repeat(16383)}`, 'inline-resolve-work', 'structure'],
+  ['an item with text, an HTML block on the line behind it', `- a\n  <div>\n${'a* '.repeat(16383)}`, 'inline-resolve-work', 'structure'],
+  ['an empty ordered item, a raw-text element indented into it', `1.\n   <pre>\n${'a* '.repeat(16383)}`, 'inline-resolve-work', 'structure'],
+  ['a quote in a quote, an empty item, a raw-text element, then a* x 16383', `> > -\n> >   <pre>\n> > ${'a* '.repeat(16383)}`, 'inline-resolve-work', 'structure'],
+  // A fence in a list item was closed only by a fence line of its own, which
+  // never came: 3.4 s unguarded.
+  ['an empty item, a fence indented into it, then a* x 16383', `-\n  \`\`\`\n${'a* '.repeat(16383)}`, 'inline-resolve-work', 'structure'],
+  ['an empty ordered item, a fence indented into it, then a* x 16383', `1.\n   \`\`\`\n${'a* '.repeat(16383)}`, 'inline-resolve-work', 'structure'],
+  ['a blank line inside an item, a fence behind it', `- a\n\n  \`\`\`\n${'a* '.repeat(16383)}`, 'inline-resolve-work', 'structure'],
+  // An HTML block of type 7 cannot interrupt a paragraph: 3.6 s unguarded.
+  ['a quoted paragraph, <b> behind it, then a* x 16383 on a quoted line', `> a\n> <b>\n> ${'a* '.repeat(16383)}`, 'inline-resolve-work', 'structure'],
+  // A delimiter row of another size than the row of the head is no table,
+  // and an empty list item does not interrupt a paragraph: one paragraph each,
+  // read as several. 200 ms to 267 ms unguarded.
+  [
+    'a* x 1024, |-|-|, a* x 1024, |-|-|, a* x 1024: one paragraph',
+    ['a* '.repeat(1024), '|-|-|', 'a* '.repeat(1024), '|-|-|', 'a* '.repeat(1024)].join('\n'),
+    'inline-resolve-work',
+    'structure',
+  ],
+  ['a* x 1400, an empty item, a* x 1400: one paragraph', `a* `.repeat(1400) + '\n*\n' + 'a* '.repeat(1400), 'inline-resolve-work', 'structure'],
   ...prefixed([
     ['] x 16384', ']'.repeat(16384), 'inline-resolve-work', 'structure'],
     ['<b> x 16383', '<b>'.repeat(16383), 'html-nesting', 'structure'],
@@ -243,6 +270,10 @@ describe('ordinary content is not refused', () => {
     'a code block indented by 40 columns': `${' '.repeat(40)}code\n${Array.from({ length: 20 }, (_, i) => `${' '.repeat(40)}line ${i} { a: [b], c < d > e }`).join('\n')}`,
     'a table of 60 rows by 8 columns': `|${' h |'.repeat(8)}\n|${' - |'.repeat(8)}\n${`|${' 1 |'.repeat(8)}\n`.repeat(60)}`,
     'a table at the cell budget (382 columns)': table(382),
+    // 720 cells with the two rows of the head. The pipe at the end of each
+    // row was counted as a cell of its own, for want of one at the start:
+    // 810, and refused.
+    'a table of 88 rows by 8 columns, a pipe at the end of each row only': `${' h |'.repeat(8)}\n${' - |'.repeat(8)}\n${'1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |\n'.repeat(88)}`,
     'emphasis next to emphasis': '**bold** *italic* ~~strike~~ '.repeat(300),
     'a fenced code block full of tags': `**note**\n\n\`\`\`html\n${'<div>'.repeat(200)}\n${'</div>'.repeat(200)}\n\`\`\``,
     'a tutorial with tags in inline code': 'Close the `` `<div>` `` before the `<b>` **and** the `</div>` of the `<script>` tag. '.repeat(60),
@@ -256,6 +287,18 @@ describe('ordinary content is not refused', () => {
       'Text with a `code | span` and a [link](https://a.b/ "title").',
     ].join('\n'),
     'a paragraph, a link, then tags in code spans': 'See [the docs](https://a.b/) for `<td>`, `<tr>`, `<table>` and `</tbody>`.',
+    // More delimiters than the body may hold, all of it inside the fences: a
+    // fence in a quote was read as paragraph text.
+    'fenced code blocks inside a list item and inside a quote': [
+      '- item',
+      '  ```',
+      `  ${'{"a": [1, 2], "b": <x> & [y] *z* !'.repeat(400)}`,
+      '  ```',
+      '> quoted',
+      '> ~~~',
+      `> ${'_a_ `b` \\c [d] e* '.repeat(400)}`,
+      '> ~~~',
+    ].join('\n'),
   };
 
   const long: string[] = [];
@@ -492,11 +535,11 @@ describe('thresholds', () => {
       paragraphs(`${'*'.repeat(64)}x${'*'.repeat(64)}`, MAX_EMPHASIS_MARKERS_TOTAL / 64),
       paragraphs(`${'*'.repeat(64)}x${'*'.repeat(64)}`, MAX_EMPHASIS_MARKERS_TOTAL / 64 + 1),
     ],
-    // Two tables of 768 cells are the total; a table of three cells behind them puts the body over.
+    // Two tables of 768 cells are the total (MAX_TABLE_CELLS_TOTAL / MAX_TABLE_CELLS of them); a table of three cells behind them puts the body over.
     [
       'table-cells-total',
-      `${table(MAX_TABLE_CELLS / 2)}\n\n${table(MAX_TABLE_CELLS / 2)}`,
-      `${table(MAX_TABLE_CELLS / 2)}\n\n${table(MAX_TABLE_CELLS / 2)}\n\n| a | b | c |\n| - | - | - |\n| 1 | 2 | 3 |`,
+      Array.from({ length: MAX_TABLE_CELLS_TOTAL / MAX_TABLE_CELLS }, () => table(MAX_TABLE_CELLS / 2)).join('\n\n'),
+      `${Array.from({ length: MAX_TABLE_CELLS_TOTAL / MAX_TABLE_CELLS }, () => table(MAX_TABLE_CELLS / 2)).join('\n\n')}\n\n| a | b | c |\n| - | - | - |\n| 1 | 2 | 3 |`,
     ],
     // `<div>`, then one tag per repetition.
     [

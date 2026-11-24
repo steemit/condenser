@@ -3105,9 +3105,9 @@ function foldCase(text: string): string {
  * The number of cells in the table row `[from, to)`: its separators, the
  * pipes that are not escaped, and one more for what is left of the row.
  *
- * A pipe at the start of the row separates nothing, and neither does the last
- * one when only whitespace is left behind it: `| a | b |` and `a | b` are the
- * same two cells, `a | b |` has three. A pipe inside a code span separates
+ * A pipe at the start of the row separates nothing, and neither does the
+ * last one when only whitespace is left behind it: `| a | b |`, `a | b` and
+ * `a | b |` are the same two cells. A pipe inside a code span separates
  * nothing for the parser and is counted here all the same.
  */
 function rowCells(body: string, from: number, to: number): number {
@@ -3136,7 +3136,7 @@ function rowCells(body: string, from: number, to: number): number {
   }
 
   // A row of nothing, or of one pipe, is one empty cell.
-  return Math.max(1, pipes + 1 - (leading ? 1 : 0) - (leading && bare ? 1 : 0));
+  return Math.max(1, pipes + 1 - (leading ? 1 : 0) - (bare ? 1 : 0));
 }
 
 /**

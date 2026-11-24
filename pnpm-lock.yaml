@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  hast-util-from-parse5@7.1.2:
+    hash: 35c3c1313cff2cc40f80aade38c66aeb802de79b42b408aba8367edf474cf3f7
+    path: patches/hast-util-from-parse5@7.1.2.patch
+
 importers:
 
   .:
@@ -95,9 +100,6 @@ importers:
       tw-animate-css:
         specifier: ^1.4.0
         version: 1.4.0
-      unist-util-visit:
-        specifier: ^4.1.2
-        version: 4.1.2
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4.3.0
@@ -111,9 +113,6 @@ importers:
       '@testing-library/user-event':
         specifier: ^14.6.6
         version: 14.6.6(@testing-library/dom@10.4.1)
-      '@types/hast':
-        specifier: ^2.3.10
-        version: 2.3.10
       '@types/markdown-it':
         specifier: ^14.1.2
         version: 14.1.2
@@ -159,6 +158,9 @@ importers:
       jsdom:
         specifier: ^30.0.1
         version: 30.0.1(@noble/hashes@2.4.0)
+      parse5:
+        specifier: 6.0.1
+        version: 6.0.1
       remarkable:
         specifier: 1.7.1
         version: 1.7.1
@@ -7441,7 +7443,7 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  hast-util-from-parse5@7.1.2:
+  hast-util-from-parse5@7.1.2(patch_hash=35c3c1313cff2cc40f80aade38c66aeb802de79b42b408aba8367edf474cf3f7):
     dependencies:
       '@types/hast': 2.3.10
       '@types/unist': 2.0.11
@@ -7459,7 +7461,7 @@ snapshots:
     dependencies:
       '@types/hast': 2.3.10
       '@types/parse5': 6.0.3
-      hast-util-from-parse5: 7.1.2
+      hast-util-from-parse5: 7.1.2(patch_hash=35c3c1313cff2cc40f80aade38c66aeb802de79b42b408aba8367edf474cf3f7)
       hast-util-to-parse5: 7.1.0
       html-void-elements: 2.0.1
       parse5: 6.0.1

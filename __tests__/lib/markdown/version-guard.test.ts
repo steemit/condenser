@@ -105,6 +105,10 @@ const FAMILY: ReadonlyArray<readonly [string, string, number]> = [
   ['micromark-extension-gfm-strikethrough', ROOT, 1],
   ['micromark-extension-gfm-table', ROOT, 1],
   ['micromark-extension-gfm-task-list-item', ROOT, 1],
+  // Direct devDependency: the reference of the nesting parity suite. The same
+  // version rehype-raw resolves to, or the suite would check against another parser.
+  ['parse5', ROOT, 6],
+  ['parse5', packageDir('hast-util-raw', BYTEMD_DIR), 6],
 ];
 
 describe('lib/markdown version-family guard', () => {
@@ -121,14 +125,14 @@ describe('lib/markdown version-family guard', () => {
   });
 
   it('uses a single @types/unist instance across the whole tree', () => {
-    // bytemd and the direct GFM packages pull @types/mdast / @types/hast,
+    // bytemd, remark-rehype and hast-util-sanitize pull @types/mdast / @types/hast,
     // which in turn depend on @types/unist. A second copy from another major
     // would silently produce incompatible node types.
     const consumers = [
       UNIFIED_DIR,
       packageDir('@types/mdast', ROOT),
-      packageDir('@types/hast', ROOT),
-      packageDir('unist-util-visit', ROOT),
+      packageDir('remark-rehype', BYTEMD_DIR),
+      packageDir('hast-util-sanitize', BYTEMD_DIR),
     ];
     const dirs = new Set(consumers.map((dir) => packageDir('@types/unist', dir)));
     expect(dirs.size).toBe(1);

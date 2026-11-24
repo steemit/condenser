@@ -5,3 +5,6 @@ allowBuilds:
   msw: false
   sharp: true
   unrs-resolver: false
+
+patchedDependencies:
+  hast-util-from-parse5@7.1.2: patches/hast-util-from-parse5@7.1.2.patch

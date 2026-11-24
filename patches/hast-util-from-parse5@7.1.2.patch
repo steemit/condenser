@@ -1,0 +1,16 @@
+diff --git a/lib/index.js b/lib/index.js
+index 9c056c5be0e6f791dee2f8e9e1fbd350a41ad4ae..c49eda60715b0505b685210a0bc233fd5926d225 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -231,7 +231,10 @@ function element(state, node) {
+   patch(state, node, result)
+ 
+   // Switch content.
+-  if (result.tagName === 'template') {
++  // A `template` in foreign content (as in `<svg><template>`) is created as a
++  // plain element, without `content`; without the check, `one` reads
++  // `node.nodeName` of `undefined` and throws.
++  if (result.tagName === 'template' && 'content' in node) {
+     const reference = /** @type {P5Template} */ (node)
+     const pos = reference.sourceCodeLocation
+     const startTag = pos && pos.startTag && position(pos.startTag)

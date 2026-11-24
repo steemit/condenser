@@ -135,6 +135,12 @@ Version family table (consult it when adding any unified-ecosystem package; pinn
 
 ### 3.3 Pipeline stages and legacy semantics mapping
 
+> **Status update (2026-11-25).** This section names the pre-parse guard as the protection against pathological input. An external review of that day showed that this does not hold. `findPathology` is a heuristic prefilter, not a security boundary: it refuses the shapes it recognises, and a body can pass it and still take the pipeline seconds, or make it produce megabytes of HTML. Each of the four review rounds found new such bodies after the fix before it.
+>
+> The guard stays as it is for now (its logic, its two classes and its calibration), described as what it is. The gaps found so far are pinned in `__tests__/lib/markdown/known-gaps.test.ts` and listed with their measurements under "Known gaps" in `docs/BYTEMD_INTEGRATION_STATUS.md`.
+>
+> Revising the plan in full waits until the owner has confirmed the direction (the review proposes isolated rendering: a Web Worker, a hard timeout, an output cap and a fallback). Until then the feature points are not reordered, and this note supersedes the statements of this document that treat the guard as the mitigation: in §0 (items 5 and 7) and in the risks K3 and K11. The status document records a hard gate: no page renders through `renderMarkdown` before FP5 has that protection.
+
 The new pipeline = the fixed order of bytemd's `getProcessor` (`bytemd/dist/index.mjs` L2514–2537): **remark plugins → remark-rehype(allowDangerousHtml) → rehype-raw → rehype-sanitize(schema) → the plugins' rehype hooks → stringify**. `renderMarkdown` adds one layer before and after it: the `findPathology` guard before, and nothing after (the script trap is already handled by a structural check at the end of the pipeline); the whole thing is wrapped in try/catch, and any exception → empty string + `console.error`.
 
 | Stage | Legacy implementation | New implementation | Position |

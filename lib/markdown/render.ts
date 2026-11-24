@@ -4,14 +4,24 @@
  * It runs exactly the processor bytemd's own Viewer runs, with the site's
  * plugins and schema, and adds what a viewer needs on top of it:
  *
- * - a linear pre-parse guard ({@link findPathology}) that refuses input
- *   known to make the parser super-linear, or too long for it, before the
- *   parser sees it. A refused body is reported, not rendered: what becomes of
- *   it (on the reading side, the legacy renderer) is for the caller;
+ * - a pre-parse guard ({@link findPathology}) that refuses, before the parser
+ *   sees it, input of a shape it knows to make the parser super-linear, or
+ *   too long for it. A refused body is reported, not rendered: what becomes
+ *   of it (on the reading side, the legacy renderer) is for the caller.
+ *   The guard is a heuristic prefilter, not a security boundary: it refuses
+ *   the shapes it recognises, and nothing more. Bodies that pass it and
+ *   still take seconds, or make megabytes of HTML, are listed under "Known
+ *   gaps" in pathology.ts;
  * - a `try/catch` that degrades every failure to an empty string: a post body
  *   is attacker-controlled content rendered in every visitor's browser tab,
  *   so a render must never throw into the page;
  * - the by-products the page needs (`isHtml`, `noImageActive`, the `VFile`).
+ *
+ * Not for any page yet. A body is rendered here on the thread that calls,
+ * with no timeout and no cap on the output. Until rendering is isolated (a
+ * Web Worker, a hard timeout, an output cap and a fallback) no page may
+ * render through this function; the gate is recorded in
+ * docs/BYTEMD_INTEGRATION_STATUS.md.
  */
 import { getProcessor } from 'bytemd';
 import type { Processor } from 'unified';
@@ -53,8 +63,11 @@ function empty(isHtml: boolean, refused: Pathology | null = null): RenderResult 
  *
  * Never throws, whatever is passed in: a body that is not a string at all is
  * an empty one. Input the guard refuses and any error inside the processor
- * both yield an empty string (and an error on the console), so a hostile post
- * can cost at most one log line instead of a frozen tab or a crashed page.
+ * both yield an empty string (and an error on the console), so a refused post
+ * costs one log line instead of a frozen tab or a crashed page. A post of a
+ * shape the guard does not recognise is rendered in full, however long that
+ * takes: the guard is a prefilter, not the line that keeps a hostile post
+ * from freezing the page.
  *
  * Not cached: `getProcessor` builds a new processor on every call. No plugin
  * reads `options` yet; the plugins of the later feature points will, and then

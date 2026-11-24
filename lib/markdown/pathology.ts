@@ -1,5 +1,6 @@
 /**
- * Pre-parse guard against pathological input.
+ * Pre-parse guard against pathological input: a heuristic prefilter, not a
+ * security boundary.
  *
  * The remark/rehype pipeline is not linear in the size of its input. Some
  * shapes of text make it super-linear, or recurse until the call stack is
@@ -18,29 +19,45 @@
  *   `- a` and a blank line, x 8000           5.4 s
  *
  * The last of those is honest content, merely long: the parser is
- * super-linear in the size of a block structure too. So the guard decides
- * two things from the raw text alone, in linear time, before the parser sees
- * a single character (and it is meant to run again on the submit side):
+ * super-linear in the size of a block structure too. So the guard looks for
+ * two kinds of shape from the raw text alone, in linear time, before the
+ * parser sees a single character (and it is meant to run again on the submit
+ * side):
  *
- * - whether a body has a shape that makes the pipeline super-linear. These
- *   are the `structure` rules: a hostile or broken shape that no honestly
- *   written post has;
- * - whether a body is over a size that this renderer handles in bounded
- *   time. These are the `budget` rules: a long but honest post may well be.
+ * - a shape that makes the pipeline super-linear. These are the `structure`
+ *   rules: a hostile or broken shape that no honestly written post has;
+ * - a size this renderer was not calibrated for. These are the `budget`
+ *   rules: a long but honest post may well be over one.
  *   A budget that is per paragraph, or per table, has a total for the whole
  *   body as well: what one paragraph costs, a hundred paragraphs that are
  *   each just inside their budget cost a hundred times.
  *
- * A refused body is not rendered by this pipeline at all. What becomes of it
- * is for the caller: a body over a budget is still a good post, and the
- * reading side renders it another way.
+ * What a refusal means. A refused body is not rendered by this pipeline at
+ * all. What becomes of it is for the caller: a body over a budget is still a
+ * good post, and the reading side renders it another way. That other way is
+ * not bounded either (see "Known gaps").
  *
- * It is an estimate, not a parser, and it errs towards refusing. Nowhere may
- * it err the other way, towards seeing less nesting than the browser will
- * build, so the inline scan counts a start tag wherever one may be real and
+ * What a pass means: nothing that can be relied on. The guard refuses, in
+ * bounded time, the shapes it recognises. It does not refuse everything that
+ * is slow: a body can pass it and still take the pipeline seconds, or make
+ * it produce megabytes of HTML. Four rounds of review and an external review
+ * each found new bodies that do, after every fix. So the guard is not the
+ * line that keeps a hostile post from freezing a page. That line is isolated
+ * rendering: a Web Worker, a hard timeout, an output cap and a fallback.
+ * Until it is in place, `renderMarkdown` must not render any page (the gate
+ * is recorded in docs/BYTEMD_INTEGRATION_STATUS.md).
+ *
+ * It is an estimate, not a parser, and it is written to err towards
+ * refusing: the inline scan counts a start tag wherever one may be real and
  * never pops an end tag that may be text for the browser (see
- * {@link scanInlineUnit}). What that costs is listed under "Known
- * limitations".
+ * {@link scanInlineUnit}). That is the direction in which a mistake costs a
+ * false refusal rather than a slow page, and the guard aims at it on purpose.
+ * It does not reach everywhere. Where the estimate of the block structure
+ * disagrees with CommonMark about where a block ends, it errs the other way:
+ * the lines behind the block are taken for raw text and not counted, and a
+ * paragraph can sit there unscanned. What the cautious readings cost is
+ * listed under "Known limitations"; what has slipped through is listed under
+ * "Known gaps".
  *
  * Complexity: every rule is a single pass without backtracking. The lines are
  * read once, then each inline unit once. No line, delimiter run or tag is
@@ -56,8 +73,8 @@
  * whole body, where a token may run past the end of a block, remembered the
  * same way.
  *
- * Known limitations: none of this is modelled, and each only makes the
- * guard refuse more, never less.
+ * Known limitations, each of them a false refusal: none of this is modelled,
+ * and each only makes the guard refuse more, never less.
  *
  * - Links. The guard does not decide what is a link. It marks where the
  *   destination or the title of one may lie: from the `(` behind a `]` to the
@@ -102,12 +119,46 @@
  * - Delimiters are counted inside code spans and tags as well: the resolve
  *   work of a paragraph is an upper bound.
  *
+ * Known gaps: what the guard lets through although it is slow or large. The
+ * bodies are in __tests__/lib/markdown/known-gaps.test.ts, one `it.fails`
+ * case for each, with the measurement in its title. The times below are from
+ * the reviews of 2026-11-25, and are order-of-magnitude references.
+ *
+ * - A paragraph hidden behind a block. The guard reads the lines with a
+ *   block model of its own (see {@link scanLines}), and wherever that model
+ *   and CommonMark disagree about where a block ends, the lines behind the
+ *   block are not scanned. Indented code, an empty list item and `<b>` on
+ *   three lines, then `a* ` x 16383: passed, and rendered in 7 s to 12 s on
+ *   the development machine under load. Ten such bodies are known.
+ *   block-parity.test.ts checks the model against the parser on the bodies
+ *   it builds; these lie outside that table.
+ * - Markers nested under the caps. The caps count markers, and what the
+ *   parser spends depends on how they nest: 512 pairs of `*a ` and `a* `
+ *   (1024 markers, a third of the cap) take about half a second, 768 pairs
+ *   of `~~a ` and `a~~ ` 0.6 s, and 30 runs of 64 asterisks, 60 markers
+ *   that count, 0.6 s to 0.8 s.
+ * - Containers under their line budgets. 990 lines of 64 quote markers take
+ *   0.7 s to 1.3 s; 480 blockquotes of 64 levels 1.5 s to 1.8 s and 834 KB
+ *   of HTML; 128 indented lists and 1800 lazy lines 0.7 s to 0.8 s. A
+ *   paragraph of 65000 tabs takes 0.27 s: no rule counts whitespace.
+ * - The size of the HTML, which no rule looks at. A reference definition
+ *   with a destination of 50 KB, cited 1500 times, makes 75 MB in 3.6 s. The
+ *   legacy pipeline makes the same 75 MB of it, so this one is live today.
+ *   Formatting tags with attributes, then `<p>x` x 2700, make 1.66 MB in
+ *   1.7 s.
+ * - One gap in precision only, listed here and not tested: `===` on a line
+ *   that its container does not continue splits a paragraph in two for the
+ *   guard. It renders in 141 ms to 265 ms.
+ *
  * The numbers are in __tests__/lib/markdown/pathology.test.ts, the nesting
  * estimate is checked against parse5 itself in
  * __tests__/lib/markdown/nesting-parity.test.ts, and the block structure the
  * lines are read with is checked against the markdown parser itself in
  * __tests__/lib/markdown/block-parity.test.ts: wherever the two disagree
- * about where a block ends, a paragraph can hide behind the block.
+ * about where a block ends, a paragraph can hide behind the block. Those
+ * suites show that the estimate agrees with the parsers on the bodies they
+ * build. They cannot show that it agrees on every body, and they are no
+ * evidence that what passes the guard is fast: see "Known gaps".
  */
 import { isRawHtmlPost } from '@/lib/markdown/raw-html-post';
 
@@ -134,6 +185,21 @@ import { isRawHtmlPost } from '@/lib/markdown/raw-html-post';
  * measured cold on the development machine, up to about 0.9 s. The numbers
  * quoted below are the minimum of three cold runs on that machine, which was
  * under a load average of about 4 at the time.
+ *
+ * Two things the calibration does not cover. Its bodies were plain: the same
+ * count costs several times more in a nested shape (`a* ` x 3072 takes 0.2 s
+ * to 0.3 s, `*a ` x 1536 followed by `a* ` x 1536 2.1 s to 2.4 s), so a body
+ * at a limit is not bounded by 250 ms; only the body the limit was set with
+ * is. And every time quoted in this file and in the docs is an
+ * order-of-magnitude reference: it moves with the machine and with its load.
+ *
+ * How to measure. In vitest, or with a script bundled to pure ESM: both load
+ * the ESM build. A script run by tsx that imports a `.ts` file of this
+ * repository loads bytemd's CommonJS build instead (`bytemd/dist/index.js`
+ * turns up in `require.cache`), which is not the path vitest and production
+ * take. On that build `a`, 60000 spaces and `b` took 9.6 s on 2026-11-25;
+ * in vitest, on the same machine in the same hour, 52 ms to 97 ms. A verdict
+ * or a calibration taken from such a script is not one.
  */
 
 /**

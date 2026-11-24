@@ -97,13 +97,17 @@
  *   The browser goes on reading it as swallowed where the block behind is a
  *   sibling of it inside one element, so such a body may be refused for
  *   nesting that the browser never builds.
- * - Indented code is read as a paragraph, fenced code is skipped.
+ * - Indented code is read as a paragraph, fenced code is skipped: an
+ *   indented code block inside a list item or a quote as well.
  * - Delimiters are counted inside code spans and tags as well: the resolve
  *   work of a paragraph is an upper bound.
  *
- * The numbers are in __tests__/lib/markdown/pathology.test.ts, and the
- * nesting estimate is checked against parse5 itself in
- * __tests__/lib/markdown/nesting-parity.test.ts.
+ * The numbers are in __tests__/lib/markdown/pathology.test.ts, the nesting
+ * estimate is checked against parse5 itself in
+ * __tests__/lib/markdown/nesting-parity.test.ts, and the block structure the
+ * lines are read with is checked against the markdown parser itself in
+ * __tests__/lib/markdown/block-parity.test.ts: wherever the two disagree
+ * about where a block ends, a paragraph can hide behind the block.
  */
 import { isRawHtmlPost } from '@/lib/markdown/raw-html-post';
 
@@ -548,63 +552,61 @@ interface LineInfo {
 }
 
 /**
- * The container prefix of a line. One instance is reused across lines.
+ * An open container of the document: a block quote, or a list item.
+ *
+ * The containers a block lies in decide which lines behind it are still
+ * inside it, so they are followed from line to line rather than read off
+ * each line on its own. A line that opens a block inside a list item carries
+ * no marker of the item, only its indentation, and neither do the lines that
+ * go on inside it: read on its own, such a line lies in no container at all,
+ * and every line behind it looks like part of the block.
  */
-interface Prefix {
-  content: number;
-  quotes: number;
-  lists: number;
-  indent: number;
-  /** The content is indented too far to start a block: it is code. */
-  indentedCode: boolean;
-  /** The line carries a blockquote or list marker. */
-  hasMarker: boolean;
-  /** The line's list markers may interrupt a paragraph: bullets, or `1.`. */
-  interrupting: boolean;
+interface Container {
   /**
-   * The containers the line opens or continues, outermost first, each as
-   * `kind * CONTAINER_STEP + column`: a quote ({@link QUOTE}, column 0), or a
-   * list item ({@link ORDERED_DOT}, {@link ORDERED_PAREN} or {@link BULLET},
-   * with the column its content starts at). Emptied and filled again on
-   * every call.
+   * {@link QUOTE}, or the kind of the list item: {@link BULLET},
+   * {@link ORDERED_DOT} or {@link ORDERED_PAREN}.
    */
-  containers: number[];
-  /** The innermost list item of the line, by kind; 0 when the line has none. */
-  item: number;
-  /** For that item: its index in `containers`, and the columns of its marker and of its content. */
-  itemIndex: number;
-  itemColumn: number;
-  itemContent: number;
+  kind: number;
+  /**
+   * For a list item, the column its content starts at, counted from the
+   * content of the container around it: behind the marker and the columns
+   * that belong to the marker. A line continues the item when it is indented
+   * at least that far, or when it is blank.
+   */
+  size: number;
+  /** The item began with an empty line. */
+  emptyFirst: boolean;
+  /** A blank line came behind an item that began empty: no line continues it. */
+  spent: boolean;
 }
 
-/** Kinds of container in {@link Prefix.containers}. */
+/** Kinds of container. */
 const QUOTE = 0;
 const ORDERED_DOT = 1;
 const ORDERED_PAREN = 2;
 const BULLET = 3;
+
 /**
- * What a container code is multiplied by. The rest of the code is the column
- * of the content, which stays below this: no more than 64 markers of at most
- * ten columns and four spaces, behind an indent of at most 256.
+ * Where a line is being read. One instance is reused across lines.
+ *
+ * Index and column are kept apart for a tab that a container has consumed
+ * only in part: what is left of it lies in front of whatever comes behind,
+ * and is indentation although no character stands there.
  */
-const CONTAINER_STEP = 2048;
-
-/** The list item an inline unit began in, for the item behind it in its list. */
-interface OpenItem {
-  kind: number;
-  /** The column the content of the item starts at. */
-  content: number;
-  /** The containers around the item, as {@link scanPrefix} codes them. */
-  outer: number[];
-}
-
-/** Where {@link walkContainers} stopped. */
-interface Spot {
+interface Cursor {
+  /** Index of the next character. */
   at: number;
+  /** The column that index is at, a tab having advanced to the next multiple of four. */
   column: number;
+  /** Columns of indentation in front of the index that are left of a tab. */
+  virtual: number;
 }
 
-type BlockState = 'none' | 'para' | 'table' | 'fence' | 'html';
+/**
+ * The block open in the innermost container, as the parser has it: a
+ * paragraph, a table, a fenced code block or an HTML block.
+ */
+type Tip = 'none' | 'para' | 'table' | 'fence' | 'html';
 
 interface Shape {
   lines: LineInfo[];
@@ -636,154 +638,46 @@ function listMarkerWidth(body: string, at: number, end: number): number {
   return next === SPACE || next === TAB || next === LF ? digits + 1 : 0;
 }
 
-/**
- * Walk the container prefix of a line: its indentation and any `>` and
- * list-item markers. Leaves the result in `prefix` and returns the first rule
- * the line breaks, if any.
- */
-function scanPrefix(body: string, start: number, end: number, prefix: Prefix): PathologyReason | null {
-  let i = start;
-  let column = 0;
-  let quotes = 0;
-  let lists = 0;
-  let interrupting = true;
-  let indentedCode = false;
-  const containers = prefix.containers;
-  containers.length = 0;
-  prefix.item = 0;
-  prefix.itemIndex = -1;
-
-  for (let round = 0; ; round++) {
-    let columns = 0;
-    while (i < end) {
-      const code = body.charCodeAt(i);
-      if (code === SPACE) columns++;
-      else if (code === TAB) columns += 4 - ((column + columns) % 4);
-      else break;
-      i++;
-    }
-    column += columns;
-
-    if (round === 0) {
-      if (column > MAX_INDENT_COLUMNS) return 'indent-columns';
-      prefix.indent = column;
-    }
-    if (i >= end) break;
-
-    // Four columns of indentation never hold a marker: that is code.
-    if (columns > 3) {
-      indentedCode = true;
-      break;
-    }
-
-    const code = body.charCodeAt(i);
-    if (code === GT) {
-      quotes++;
-      containers.push(QUOTE);
-      i++;
+/** Columns of indentation in front of `cursor`, those left of a tab included. */
+function indentColumns(body: string, cursor: Cursor, end: number): number {
+  let at = cursor.at;
+  let column = cursor.column;
+  let columns = cursor.virtual;
+  for (;;) {
+    const code = at < end ? body.charCodeAt(at) : LF;
+    if (code === SPACE) {
+      columns++;
       column++;
-      // The marker's own optional space.
-      if (i < end && body.charCodeAt(i) === SPACE) {
-        i++;
-        column++;
-      }
-      continue;
+    } else if (code === TAB) {
+      const step = 4 - (column % 4);
+      columns += step;
+      column += step;
+    } else {
+      return columns;
     }
-
-    const width = listMarkerWidth(body, i, end);
-    if (width === 0) break;
-
-    // A bullet interrupts a paragraph; an ordered marker does so only as `1.`
-    // (or `1)`). `text` followed by `2. more` is one paragraph, not a list.
-    const ordered = isAsciiDigit(body.charCodeAt(i));
-    if (ordered) interrupting = interrupting && width === 2 && body.charCodeAt(i) === ONE;
-    lists++;
-    const kind = !ordered ? BULLET : body.charCodeAt(i + width - 1) === RIGHT_PAREN ? ORDERED_PAREN : ORDERED_DOT;
-    prefix.item = kind;
-    prefix.itemIndex = containers.length;
-    prefix.itemColumn = column;
-    i += width;
-    column += width;
-
-    // One to four spaces belong to the marker; a fifth starts code inside the item.
-    let spaces = 0;
-    while (i < end && spaces < 5 && body.charCodeAt(i) === SPACE) {
-      i++;
-      spaces++;
-    }
-    column += spaces;
-    containers.push(kind * CONTAINER_STEP + column);
-    prefix.itemContent = column;
-    if (spaces === 5) {
-      indentedCode = true;
-      break;
-    }
+    at++;
   }
-
-  prefix.content = i;
-  prefix.quotes = quotes;
-  prefix.lists = lists;
-  prefix.indentedCode = indentedCode;
-  prefix.hasMarker = quotes + lists > 0;
-  prefix.interrupting = interrupting;
-
-  if (quotes > MAX_QUOTE_MARKERS_PER_LINE) return 'quote-markers';
-  if (quotes + lists > MAX_CONTAINER_MARKERS_PER_LINE) return 'container-markers';
-  return null;
 }
 
 /**
- * Walk the line `[start, end)` through `containers`, the containers of
- * another line as {@link scanPrefix} codes them, and leave in `spot` where
- * the content of the innermost one starts. Returns false when the line does
- * not continue them all.
- *
- * A quote wants its `>` on the line, and a list item the indentation of its
- * content, or a line that is blank from there on. Only the text of a
- * paragraph continues a container lazily, without either.
+ * Move `cursor` over `columns` columns of that indentation, which are all
+ * there ({@link indentColumns} found at least as many). A tab is consumed
+ * only in part where the columns end inside it.
  */
-function walkContainers(body: string, start: number, end: number, containers: number[], spot: Spot): boolean {
-  let i = start;
-  let column = 0;
-
-  for (const container of containers) {
-    let columns = 0;
-    while (i < end) {
-      const code = body.charCodeAt(i);
-      if (code === SPACE) columns++;
-      else if (code === TAB) columns += 4 - ((column + columns) % 4);
-      else break;
-      i++;
-    }
-
-    if (container < CONTAINER_STEP) {
-      if (columns > 3 || i >= end || body.charCodeAt(i) !== GT) return false;
-      i++;
-      column += columns + 1;
-      // The marker's own optional space.
-      if (i < end && body.charCodeAt(i) === SPACE) {
-        i++;
-        column++;
-      }
-      continue;
-    }
-
-    if (column + columns < container % CONTAINER_STEP && i < end) return false;
-    column += columns;
+function takeIndent(body: string, cursor: Cursor, columns: number): void {
+  if (columns <= cursor.virtual) {
+    cursor.virtual -= columns;
+    return;
   }
-
-  spot.at = i;
-  spot.column = column;
-  return true;
-}
-
-/** Whether `outer` is the beginning of `containers`, all `count` of them. */
-function sameContainers(outer: number[], containers: number[], count: number): boolean {
-  if (outer.length !== count) return false;
-  for (let k = 0; k < count; k++) {
-    if (outer[k] !== containers[k]) return false;
+  columns -= cursor.virtual;
+  cursor.virtual = 0;
+  while (columns > 0) {
+    const step = body.charCodeAt(cursor.at) === TAB ? 4 - (cursor.column % 4) : 1;
+    cursor.at++;
+    cursor.column += step;
+    columns -= step;
   }
-  return true;
+  cursor.virtual = -columns;
 }
 
 /** Run of backticks or tildes that opens a fence at `at`: its length, negative for tildes. */
@@ -838,8 +732,11 @@ function matchHtmlStart(
   allowType7: boolean,
   token: Token,
 ): number {
-  if (end - at < 3 || body.charCodeAt(at) !== LT) return 0;
+  if (body.charCodeAt(at) !== LT) return 0;
   const after = body.charCodeAt(at + 1);
+  // `<?` on its own is the whole start condition of type 3.
+  if (after === QUESTION) return 3;
+  if (end - at < 3) return 0;
 
   if (after === EXCLAMATION) {
     const third = body.charCodeAt(at + 2);
@@ -847,7 +744,6 @@ function matchHtmlStart(
     if (third === LBRACKET) return body.startsWith('<![CDATA[', at) ? 5 : 0;
     return isAsciiAlpha(third) ? 4 : 0;
   }
-  if (after === QUESTION) return 3;
   if (after !== SLASH && !isAsciiAlpha(after)) return 0;
 
   let i = at + 1;
@@ -958,8 +854,14 @@ function isDelimiterRow(body: string, at: number, end: number): boolean {
  * Classify every line of `body`, applying the rules that only look at the
  * shape of the text: indentation and container markers.
  *
- * The classification follows the block structure as CommonMark sees it, well
- * enough for the content scan to know where code and raw HTML are:
+ * The lines are read the way the parser reads them. On every line the open
+ * containers are continued as far as the line goes: a quote wants its `>`,
+ * a list item the indentation of its content or a blank line. A fenced code
+ * block or an HTML block goes on only on a line that continues every
+ * container it opened in. New containers may then open on the line, and a
+ * block starts in the innermost one, or the text goes on in the paragraph
+ * that is open there. Text that lies in no container on its own may still
+ * be the lazy continuation of that paragraph. The classification is:
  *
  * - `fence`: a fenced code block: opener, content and closer;
  * - `html`: an HTML block;
@@ -969,38 +871,23 @@ function isDelimiterRow(body: string, at: number, end: number): boolean {
  * - `none`: a blank line, a thematic break or a heading underline.
  *
  * Wherever the model is unsure it says `para`, the kind that is scanned most
- * strictly, so a mistake can only make the guard stricter.
+ * strictly, so a mistake can only make the guard stricter. The model is
+ * checked against the parser itself, combination by combination, in
+ * __tests__/lib/markdown/block-parity.test.ts.
  */
 function scanLines(body: string): Shape {
   const lines: LineInfo[] = [];
   const length = body.length;
-  const prefix: Prefix = {
-    content: 0,
-    quotes: 0,
-    lists: 0,
-    indent: 0,
-    indentedCode: false,
-    hasMarker: false,
-    interrupting: true,
-    containers: [],
-    item: 0,
-    itemIndex: -1,
-    itemColumn: 0,
-    itemContent: 0,
-  };
   const token = newToken();
-  const spot: Spot = { at: 0, column: 0 };
-  let block: BlockState = 'none';
+  /** The open containers, outermost first. */
+  const stack: Container[] = [];
+  const cursor: Cursor = { at: 0, column: 0, virtual: 0 };
+  /** The block open in the innermost container. */
+  let tip: Tip = 'none';
   let fence = 0;
   let htmlType = 0;
-  /** The containers the HTML block opened inside: the block goes on only in them. */
-  let htmlContainers: number[] = [];
   /** The last line of the HTML block so far, to mark it when the block ends. */
   let htmlTail: LineInfo | null = null;
-  /** Whether a quoted line has joined the inline unit so far. */
-  let unitQuoted = false;
-  /** The list item the current inline unit began in, if any. */
-  let item: OpenItem | null = null;
   let listItems = 0;
   let quoteLines = 0;
   let position = 0;
@@ -1021,149 +908,242 @@ function scanLines(body: string): Shape {
     lines.push(line);
     position = stop + 1;
     const tooLong = lines.length > MAX_LINES;
+    cursor.at = line.start;
+    cursor.column = 0;
+    cursor.virtual = 0;
+    const indent = indentColumns(body, cursor, end);
 
-    if (block === 'fence') {
-      line.kind = 'fence';
-      if (isClosingFence(body, line.start, end, fence)) block = 'none';
-      if (tooLong) return { lines, reason: 'lines' };
-      continue;
-    }
+    // 1. The open containers, as far as the line continues them.
+    let depth = 0;
+    let carriesQuote = false;
+    while (depth < stack.length) {
+      const container = stack[depth];
+      const columns = indentColumns(body, cursor, end);
 
-    if (block === 'html') {
-      // An HTML block has no lazy continuation: it goes on only inside the
-      // containers it opened in, and a line that does not continue them ends
-      // it before itself.
-      if (walkContainers(body, line.start, end, htmlContainers, spot)) {
-        const at = spot.at;
-        const blank = isBlankRange(body, at, end);
-        // A blank line ends types 6 and 7. The others go on through it: in a
-        // quote only while the line carries the quote's own `>`, in a list
-        // item until a line behind the blank one leaves the item.
-        if (!blank || htmlType < 6) {
-          if (!blank) {
-            line.kind = 'html';
-            line.htmlType = htmlType;
-            htmlTail = line;
-            if (htmlType < 6 && htmlBlockEnded(body, at, end, htmlType)) {
-              block = 'none';
-              line.htmlLast = true;
-            }
-          }
-          if (tooLong) return { lines, reason: 'lines' };
-          continue;
-        }
+      if (container.kind === QUOTE) {
+        // Up to three columns of indentation, the marker, and its own space.
+        if (columns > 3 || cursor.at >= end || body.charCodeAt(cursor.at) !== GT) break;
+        carriesQuote = true;
+        takeIndent(body, cursor, columns);
+        cursor.at++;
+        cursor.column++;
+        takeIndent(body, cursor, 1);
+      } else if (isBlankRange(body, cursor.at, end)) {
+        // A blank line continues a list item. Behind an item that began with
+        // an empty line, it ends it.
+        if (container.emptyFirst) container.spent = true;
+        takeIndent(body, cursor, columns);
+      } else if (container.spent || columns < container.size) {
+        container.spent = false;
+        container.emptyFirst = false;
+        break;
+      } else {
+        container.spent = false;
+        container.emptyFirst = false;
+        takeIndent(body, cursor, container.size);
       }
-      // Ended by this line: a blank one, or one that does not continue the
-      // containers.
-      if (htmlTail !== null) htmlTail.htmlLast = true;
-      block = 'none';
+      depth++;
     }
 
-    if (isBlankRange(body, line.start, end)) {
-      block = 'none';
+    // 2. A fenced code block or an HTML block that is open goes on only inside
+    //    the containers it opened in: a line that does not continue them all
+    //    ends it before itself. Neither has a lazy continuation. A blank line
+    //    ends an HTML block of type 6 or 7, and none of the others.
+    if (tip === 'fence' || tip === 'html') {
+      const blank = isBlankRange(body, cursor.at, end);
+      if (depth === stack.length && (tip === 'fence' || !blank || htmlType < 6)) {
+        if (tip === 'fence') {
+          line.kind = 'fence';
+          if (isClosingFence(body, cursor.at, end, fence)) tip = 'none';
+        } else if (!blank) {
+          line.kind = 'html';
+          line.htmlType = htmlType;
+          line.content = cursor.at;
+          htmlTail = line;
+          // The line that carries the end of the block is its last.
+          if (htmlType < 6 && htmlBlockEnded(body, cursor.at, end, htmlType)) {
+            tip = 'none';
+            line.htmlLast = true;
+          }
+        }
+        if (tooLong) return { lines, reason: 'lines' };
+        continue;
+      }
+      if (tip === 'html' && htmlTail !== null) htmlTail.htmlLast = true;
+      tip = 'none';
+    }
+
+    // 3. A blank line ends the paragraph, and every container the line does not continue.
+    if (isBlankRange(body, cursor.at, end)) {
+      stack.length = depth;
+      tip = 'none';
       if (tooLong) return { lines, reason: 'lines' };
       continue;
     }
+    if (indent > MAX_INDENT_COLUMNS) return { lines, reason: 'indent-columns' };
 
-    const previous = block;
-    const reason = scanPrefix(body, line.start, end, prefix);
-    if (reason) return { lines, reason };
+    // 4. New containers open on the line. A list item interrupts what is open
+    //    in the last container the line continues only as a bullet or as `1.`,
+    //    and only with text behind its marker.
+    const allMatched = depth === stack.length;
+    const paragraphOpen = tip === 'para';
+    const tableOpen = tip === 'table';
+    const interrupt = allMatched && paragraphOpen;
+    const opened: Container[] = [];
+    let quotes = 0;
+    let lists = 0;
+    let indentedCode = false;
 
-    line.content = prefix.content;
-    line.quoted = prefix.quotes > 0;
-    listItems += prefix.lists;
+    for (;;) {
+      const columns = indentColumns(body, cursor, end);
+      // The column the content of the container around this one starts at.
+      const base = cursor.column - cursor.virtual;
+      // Four columns of indentation never hold a marker: they hold code.
+      if (columns > 3) indentedCode = true;
+      takeIndent(body, cursor, columns);
+      if (indentedCode || cursor.at >= end) break;
+      const code = body.charCodeAt(cursor.at);
+      const quote = code === GT;
+      const width = quote ? 1 : listMarkerWidth(body, cursor.at, end);
+      if (width === 0) break;
+
+      const emptyFirst = quote || isBlankRange(body, cursor.at + width, end);
+      const ordered = !quote && isAsciiDigit(code);
+      // In order to interrupt a paragraph, a list item must not be empty, and
+      // an ordered one must start with 1.
+      if (interrupt && (emptyFirst || (ordered && (width !== 2 || code !== ONE)))) break;
+
+      const marker = cursor.at;
+      cursor.at += width;
+      cursor.column += width;
+      takeIndent(body, cursor, 1);
+      if (!quote) {
+        // One to four columns behind the marker belong to it; a fifth starts
+        // code inside the item.
+        const behind = indentColumns(body, cursor, end);
+        takeIndent(body, cursor, behind >= 5 ? 1 : behind);
+        if (behind >= 5) indentedCode = true;
+      }
+      // Past the limits a marker is only counted, not opened.
+      if (quotes + lists <= MAX_CONTAINER_MARKERS_PER_LINE) {
+        const size = cursor.column - cursor.virtual - base;
+        const kind = quote
+          ? QUOTE
+          : ordered
+            ? body.charCodeAt(marker + width - 1) === RIGHT_PAREN
+              ? ORDERED_PAREN
+              : ORDERED_DOT
+            : BULLET;
+        opened.push(quote ? { kind, size: 0, emptyFirst: false, spent: false } : { kind, size, emptyFirst, spent: false });
+      }
+      if (quote) quotes++;
+      else lists++;
+    }
+
+    if (quotes > MAX_QUOTE_MARKERS_PER_LINE) return { lines, reason: 'quote-markers' };
+    if (quotes + lists > MAX_CONTAINER_MARKERS_PER_LINE) return { lines, reason: 'container-markers' };
+
+    const at = cursor.at;
+    line.quoted = carriesQuote || quotes > 0;
+    listItems += lists;
     quoteLines += line.quoted ? 1 : 0;
     if (listItems > MAX_LIST_ITEMS) return { lines, reason: 'list-items' };
     if (quoteLines > MAX_QUOTE_LINES) return { lines, reason: 'quote-lines' };
     if (tooLong) return { lines, reason: 'lines' };
 
-    // Where a block may start: at the beginning of a block, or after a marker
-    // that interrupts a paragraph. A lazy continuation line is neither.
-    const atBlockStart = previous !== 'para' || (prefix.hasMarker && prefix.interrupting);
-    // Only a fence at the very start of a line is tracked. A fence inside a
-    // blockquote or a list item is closed only by an equally prefixed line,
-    // which this scan does not follow; such a fence counts as paragraph text.
-    const at = prefix.content;
+    // The line carried markers and nothing else: an empty item, an empty quote.
+    if (at >= end) {
+      stack.length = depth;
+      for (const container of opened) stack.push(container);
+      tip = 'none';
+      continue;
+    }
+
+    // 5. A block starts in the innermost container, or the text goes on in
+    //    the paragraph that is open there.
+    const continuing = paragraphOpen && opened.length === 0;
+    // The last line of that paragraph: the head row of a table that starts behind it.
+    const head = continuing && lines.length > 1 ? lines[lines.length - 2] : undefined;
 
     let kind: LineKind = 'para';
-    if (at < end && !prefix.indentedCode) {
-      const run = prefix.hasMarker ? 0 : fenceOpener(body, at, end);
+    if (!indentedCode) {
+      const run = fenceOpener(body, at, end);
       if (run !== 0) {
         kind = 'fence';
         fence = run;
       } else {
-        const html = matchHtmlStart(body, at, end, atBlockStart, token);
+        // An HTML block of type 7 cannot interrupt a paragraph.
+        const html = matchHtmlStart(body, at, end, !continuing, token);
         if (html !== 0) {
           kind = 'html';
           htmlType = html;
         } else if (isAtxHeading(body, at, end)) {
-          // A heading is scanned like a paragraph: its text is inline markup.
           kind = 'heading';
-        } else if (
-          isThematicBreak(body, at, end) ||
-          (previous === 'para' && !prefix.hasMarker && isEqualsUnderline(body, at, end))
-        ) {
+        } else if (isThematicBreak(body, at, end) || (continuing && isEqualsUnderline(body, at, end))) {
           kind = 'none';
         } else if (
-          // A quote or a list item is a block of its own: it ends the table.
-          (previous === 'table' && !prefix.hasMarker) ||
-          (previous === 'para' && !prefix.hasMarker && isDelimiterRow(body, at, end))
+          // Only a delimiter row of as many cells as the head row is a table.
+          continuing &&
+          allMatched &&
+          head !== undefined &&
+          head.kind === 'para' &&
+          isDelimiterRow(body, at, end) &&
+          rowCells(body, at, end) === rowCells(body, head.content, head.end)
         ) {
+          kind = 'table';
+        } else if (tableOpen && allMatched && opened.length === 0) {
+          // A quote or a list item is a block of its own: it ends the table.
           kind = 'table';
         }
       }
     }
 
     line.kind = kind;
-    // A heading is over with its line; what follows is a new block.
-    block = kind === 'heading' ? 'none' : (kind as BlockState);
-    if (kind === 'html') {
-      htmlTail = line;
-      if (htmlType < 6 && htmlBlockEnded(body, at, end, htmlType)) {
-        block = 'none';
-        line.htmlLast = true;
-      }
-      htmlContainers = prefix.containers.slice();
+    line.content = at;
+
+    // A lazy line goes on in the paragraph, and the containers with it. Any
+    // other line closes the containers it did not continue.
+    if (!(continuing && kind === 'para' && !allMatched)) {
+      stack.length = depth;
+      for (const container of opened) stack.push(container);
     }
 
     // An inline unit is a paragraph, a list item, or one row of a table: the
-    // text one inline parser run sees. A list item that interrupts starts
-    // one, and so does the first line of a blockquote: `a` and `> b` are two
-    // paragraphs, whereas `> a` and `> b` are one. So is one the quote goes
-    // on in behind a lazy line: `> a`, `b` and `> c` are one paragraph.
-    //
-    // The item behind the one the unit began in starts one as well, whatever
-    // its number: `2.` begins the second item behind `1. a`, although behind
-    // plain text it is text (`text` and `2. more` are one paragraph). It has
-    // to be the item behind it. One indented into the item opens a list
-    // inside it, which does not interrupt the paragraph, and one with other
-    // containers around it belongs to another list.
-    const sibling =
-      prefix.item !== 0 &&
-      item !== null &&
-      prefix.item === item.kind &&
-      prefix.itemColumn < item.content &&
-      sameContainers(item.outer, prefix.containers, prefix.itemIndex);
-    const inline = kind === 'para' || kind === 'heading' || kind === 'table';
-    const startsBlock = previous !== kind || (prefix.item !== 0 && prefix.interrupting) || sibling;
-    line.newUnit = inline && (kind === 'table' || kind === 'heading' || startsBlock || (line.quoted && !unitQuoted));
-    unitQuoted = line.newUnit ? line.quoted : unitQuoted || line.quoted;
-    // An HTML block is a unit of its own, even behind another one: the scan
-    // of the content ends what its last token left open where the block ends.
-    if (kind === 'html') line.newUnit = true;
-
-    // The list item the unit began in, for the line behind it. It is the
-    // first paragraph of its item only when the unit begins on the item's
-    // own line: a paragraph behind a blank line inside the item is plain
-    // text to the list, and `2.` behind it does not interrupt it.
-    if (!inline) item = null;
-    else if (startsBlock) {
-      item =
-        prefix.itemIndex >= 0
-          ? { kind: prefix.item, content: prefix.itemContent, outer: prefix.containers.slice(0, prefix.itemIndex) }
-          : null;
-    } else if (line.newUnit) {
-      item = null;
+    // text one inline parser run sees. A paragraph is one unit, and so are
+    // the lines that go on in it, lazily or not; it begins where a block
+    // begins, in a container of its own or behind another block.
+    switch (kind) {
+      case 'para':
+        line.newUnit = !continuing;
+        tip = 'para';
+        break;
+      case 'heading':
+        // A heading is over with its line: what follows is a new block.
+        line.newUnit = true;
+        tip = 'none';
+        break;
+      case 'table':
+        // One row of a table is a unit.
+        line.newUnit = true;
+        tip = 'table';
+        break;
+      case 'html':
+        // An HTML block is a unit of its own, even behind another one: the
+        // scan of the content ends what its last token left open where the
+        // block ends.
+        line.newUnit = true;
+        tip = 'html';
+        htmlTail = line;
+        if (htmlType < 6 && htmlBlockEnded(body, at, end, htmlType)) {
+          tip = 'none';
+          line.htmlLast = true;
+        }
+        break;
+      case 'fence':
+        tip = 'fence';
+        break;
+      default:
+        tip = 'none';
     }
   }
 

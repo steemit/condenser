@@ -35,7 +35,10 @@
  * What a refusal means. A refused body is not rendered by this pipeline at
  * all. What becomes of it is for the caller: a body over a budget is still a
  * good post, and the reading side renders it another way. That other way is
- * not bounded either (see "Known gaps").
+ * not bounded either: the legacy pipeline has input of its own that it
+ * renders slowly, or into far more HTML than the body is long, so a fallback
+ * path needs a timeout and an output cap of its own. It is a fallback for
+ * content, not a protection (docs/BYTEMD_INTEGRATION_STATUS.md).
  *
  * What a pass means: nothing that can be relied on. The guard refuses, in
  * bounded time, the shapes it recognises. It does not refuse everything that
@@ -141,11 +144,8 @@
  *   0.7 s to 1.3 s; 480 blockquotes of 64 levels 1.5 s to 1.8 s and 834 KB
  *   of HTML; 128 indented lists and 1800 lazy lines 0.7 s to 0.8 s. A
  *   paragraph of 65000 tabs takes 0.27 s: no rule counts whitespace.
- * - The size of the HTML, which no rule looks at. A reference definition
- *   with a destination of 50 KB, cited 1500 times, makes 75 MB in 3.6 s. The
- *   legacy pipeline makes the same 75 MB of it, so this one is live today.
- *   Formatting tags with attributes, then `<p>x` x 2700, make 1.66 MB in
- *   1.7 s.
+ * - The size of the HTML, which no rule looks at. Formatting tags with
+ *   attributes, then `<p>x` x 2700, make 1.66 MB in 1.7 s from 11 KB.
  * - One gap in precision only, listed here and not tested: `===` on a line
  *   that its container does not continue splits a paragraph in two for the
  *   guard. It renders in 141 ms to 265 ms.

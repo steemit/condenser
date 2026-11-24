@@ -37,10 +37,16 @@
  * payload stands once on a line of its own, and twice more on a line that is
  * indented or quoted so as to stay inside the container (`CONTINUED`): the
  * first is to find a paragraph that slips past the guard, the others to find
- * raw text that the guard calls hostile. The separator turns with the pair
- * and the placement (`separators`): the three lists in full are 4080 bodies,
- * which cost the suite ten seconds, and no separator, prefix or opener is
- * left out by turning them against each other.
+ * raw text that the guard calls hostile.
+ *
+ * The three lists in full are 4080 bodies, and five seconds or more in the
+ * suite. So each pair of prefix and opener meets the three kinds of separator
+ * once each, one for each placement, and which placement meets which kind
+ * turns with the pair (`separators`). Nothing of the three lists is left
+ * out, and the table is 816 bodies: for every container and every block
+ * opener, the payload lies behind a block that goes on, behind one that a
+ * blank line ended, and behind one that a quote ended, each of them on a
+ * line of its own and indented into the container.
  *
  * The parser is asked only where the guard's own answer does not settle the
  * question. A budget breaks neither assertion whatever the parser says, so
@@ -105,8 +111,17 @@ const OPENERS = [
   '<!-- x -->',
 ] as const;
 
-/** What comes between the opener and the payload. */
+/**
+ * What comes between the opener and the payload: nothing but the line
+ * ending, a blank line in three spellings, and a line with a quote marker
+ * alone. The three spellings of the blank line come to the same thing for
+ * the parser and for the guard alike, on every combination of the table;
+ * the other two do not.
+ */
 const SEPS = ['\n', '\n\n', '\n  \n', '\n>\n', '\n\n\n'] as const;
+
+/** The separators by what they do. */
+const SEP_CLASSES = [[SEPS[0]], [SEPS[1], SEPS[2], SEPS[4]], [SEPS[3]]] as const;
 
 /**
  * For each prefix, two prefixes for the payload line itself: the indentation
@@ -143,10 +158,16 @@ const PLACEMENTS = [
   { name: 'indented one column further', front: (prefix: string) => CONTINUED[prefix][1] },
 ] as const;
 
-/** The three separators one pair of prefix and opener meets, one for each placement. */
+/**
+ * The three separators one pair of prefix and opener meets, one for each
+ * placement: one of each kind, and which placement meets which kind turns
+ * with the pair, as does the spelling of the blank line.
+ */
 const separators = (prefix: number, opener: number): readonly [string, string, string] => {
-  const first = (prefix * 2 + opener) % SEPS.length;
-  return [SEPS[first], SEPS[(first + 1) % SEPS.length], SEPS[(first + 2) % SEPS.length]];
+  const pair = prefix * OPENERS.length + opener;
+  const kinds = [SEP_CLASSES[0][0], SEP_CLASSES[1][(prefix + 2 * opener) % 3], SEP_CLASSES[2][0]];
+  const turn = pair % 3;
+  return [kinds[turn], kinds[(turn + 1) % 3], kinds[(turn + 2) % 3]];
 };
 
 /** The part of mdast this suite reads. */

@@ -100,8 +100,9 @@ a defect.
   bodies from lists of containers, block openers and separators, and asks
   the parser where a line of inline markers lies. The full product of those
   lists is 4080 bodies, five seconds or more in the suite, so the suite
-  checks a covering part of it: every container with every opener, the
-  separator turning with the pair.
+  checks a covering part of it: every container with every opener, each
+  pair meeting each kind of separator once (nothing but the line ending, a
+  blank line, a line with a quote marker alone).
 - Known limitations of the guard are listed in the header of
   `lib/markdown/pathology.ts` ("Known limitations"). One of them is a cost
   the reader side still pays: a flood of hostile markers that the guard

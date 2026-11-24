@@ -56,9 +56,9 @@ function empty(isHtml: boolean, refused: Pathology | null = null): RenderResult 
  * both yield an empty string (and an error on the console), so a hostile post
  * can cost at most one log line instead of a frozen tab or a crashed page.
  *
- * Not cached: `getProcessor` builds a new processor on every call and the
- * plugins depend on `options`, so there is nothing here that could be reused
- * between renders with different options.
+ * Not cached: `getProcessor` builds a new processor on every call. No plugin
+ * reads `options` yet; the plugins of the later feature points will, and then
+ * a processor built for one set of options is not one for another.
  */
 export function renderMarkdown(body: string, options: SitePluginOptions = {}): RenderResult {
   // Callers hand over whatever a post object carried. Anything that is not

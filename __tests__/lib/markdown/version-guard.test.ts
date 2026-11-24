@@ -105,10 +105,6 @@ const FAMILY: ReadonlyArray<readonly [string, string, number]> = [
   ['micromark-extension-gfm-strikethrough', ROOT, 1],
   ['micromark-extension-gfm-table', ROOT, 1],
   ['micromark-extension-gfm-task-list-item', ROOT, 1],
-  // Direct devDependency: the reference of the nesting parity suite. The same
-  // version rehype-raw resolves to, or the suite would check against another parser.
-  ['parse5', ROOT, 6],
-  ['parse5', packageDir('hast-util-raw', BYTEMD_DIR), 6],
 ];
 
 describe('lib/markdown version-family guard', () => {
@@ -135,6 +131,15 @@ describe('lib/markdown version-family guard', () => {
       packageDir('hast-util-sanitize', BYTEMD_DIR),
     ];
     const dirs = new Set(consumers.map((dir) => packageDir('@types/unist', dir)));
+    expect(dirs.size).toBe(1);
+  });
+
+  it('checks the nesting estimate against the parse5 that rehype-raw parses with', () => {
+    // parse5 is a direct devDependency: the reference of the nesting parity
+    // suite. It has to be the very copy rehype-raw resolves to, not merely
+    // the same major version, or the suite would check the estimate against
+    // another parser.
+    const dirs = new Set([packageDir('parse5', ROOT), packageDir('parse5', packageDir('hast-util-raw', BYTEMD_DIR))]);
     expect(dirs.size).toBe(1);
   });
 });

@@ -25,11 +25,11 @@ import {
   MAX_LIST_ITEMS,
   MAX_QUOTE_LINES,
   MAX_QUOTE_MARKERS_PER_LINE,
+  MAX_RAW_MARKUP_TAGS_TOTAL,
   MAX_TABLE_CELLS,
   describePathology,
   estimateHtmlNesting,
   findPathology,
-  isPathological,
   type PathologyClass,
   type PathologyReason,
 } from '@/lib/markdown/pathology';
@@ -99,16 +99,31 @@ const STRUCTURE_SHAPES: ReadonlyArray<Shape> = [
   // made the guard itself quadratic (5.3 s and 2.8 s before the fix).
   ['# + <b> x 16383', `# ${'<b>'.repeat(16383)}`, 'html-nesting', 'structure'],
   ['# + ] x 16384', `# ${']'.repeat(16384)}`, 'inline-resolve-work', 'structure'],
-  ['x<? x 32768 (64 KiB)', 'x<?'.repeat(32768), 'inline-tokens', 'budget'],
-  ['x<!-- x 16384 (64 KiB)', 'x<!--'.repeat(16384), 'inline-tokens', 'budget'],
+  ['x<? x 32768 (96 KiB)', 'x<?'.repeat(32768), 'inline-tokens', 'budget'],
+  ['x<!-- x 16384 (80 KiB)', 'x<!--'.repeat(16384), 'inline-tokens', 'budget'],
   // `~` closes on the character before it alone: 8.6 s and 7.2 s unguarded.
   ['~a~ x 16384', '~a~'.repeat(16384), 'inline-resolve-work', 'structure'],
   ['a~~ x 16383', 'a~~'.repeat(16383), 'inline-resolve-work', 'structure'],
-  // An end tag inside a code span is text for the browser: 7.15 s unguarded.
-  ['<b>`</b>` x 7281 (64 KiB)', '<b>`</b>'.repeat(7281), 'html-nesting', 'structure'],
+  // Every `</b>` lies in the one code span and closes nothing, so all but
+  // one `<b>` stay open for the browser: 7.2 s and then a RangeError unguarded.
+  ['<b> x 257, a backtick, </b> x 257, a backtick', `${'<b>'.repeat(257)}\`${'</b>'.repeat(257)}\``, 'html-nesting', 'structure'],
   ['an end tag inside a raw-text element', `${'<b>'.repeat(300)}<script>${'</b>'.repeat(300)}</script><div>${'<div>'.repeat(300)}`, 'html-nesting', 'structure'],
   ['an end tag inside a link title', `${'<b>'.repeat(300)}[a](x '${'</b>'.repeat(300)}')${'<div>'.repeat(300)}`, 'html-nesting', 'structure'],
   ['a doctype does not run past its first >', `<div>\n<!doctype a "x>${'<div>'.repeat(300)}\n\nz`, 'html-nesting', 'structure'],
+  // An HTML block has no lazy continuation: the blockquote ends behind its
+  // first line, and what follows is a paragraph of its own. The guard used to
+  // read it as part of the block: 3.6 s, 1.7 s and then a RangeError, and
+  // 47.9 s unguarded.
+  ['> <div>, then a* x 16383 on the next line (49 KiB)', `> <div>\n${'a* '.repeat(16383)}`, 'inline-resolve-work', 'structure'],
+  ['> <script>, a blank line, then <div> x 13106 (64 KiB)', `> <script>\n\n${'<div>'.repeat(13106)}`, 'html-nesting', 'structure'],
+  ['- <div>, then ] x 65536 on the next line', `- <div>\n${']'.repeat(65536)}`, 'inline-resolve-work', 'structure'],
+  // A lone backtick opens no code span: the tags behind it are real. 0.7 s to
+  // 1.0 s and then a RangeError unguarded.
+  ['a lone backtick, then <b> x 3071', `\`${'<b>'.repeat(3071)}`, 'html-nesting', 'structure'],
+  // Behind the block's own containers the block does go on, and what is in
+  // it nests.
+  ['> <div>, then <div> x 300 on a quoted line', `> <div>\n> ${'<div>'.repeat(300)}`, 'html-nesting', 'structure'],
+  ['- <div>, then <div> x 300 indented into the item', `- <div>\n  ${'<div>'.repeat(300)}`, 'html-nesting', 'structure'],
   ...prefixed([
     ['] x 16384', ']'.repeat(16384), 'inline-resolve-work', 'structure'],
     ['<b> x 16383', '<b>'.repeat(16383), 'html-nesting', 'structure'],
@@ -137,7 +152,17 @@ const BUDGET_SHAPES: ReadonlyArray<Shape> = [
     'emphasis-markers-total',
     'budget',
   ],
-  ['three tables of 763 cells', [table(380), table(380), table(380)].join('\n\n'), 'table-cells-total', 'budget'],
+  ['three tables of 760 cells', [table(380), table(380), table(380)].join('\n\n'), 'table-cells-total', 'budget'],
+  // Every other `</b>` lies in a code span of its own, so this nests two
+  // deep: merely dense. 368 ms unguarded.
+  ['<b>`, </b> x 7281 (57 KiB)', '<b>`</b>'.repeat(7281), 'inline-tokens', 'budget'],
+  // Tags of raw markup: nests two deep and renders in 266 ms unguarded.
+  ['<div> and <p> x 21845 (64 KiB)', `<div>\n${'<p>'.repeat(21845)}`, 'raw-tags-total', 'budget'],
+  // The guard itself used to take 2.9 s on the first of these and 0.3 s to
+  // 1.6 s on the others, growing faster than their size.
+  ['x<!-- x 16380, then --> in a paragraph behind (64 KiB)', `x ${'<!--'.repeat(16380)}\n\nx -->`, 'inline-tokens', 'budget'],
+  ['x <title> x 6552, then </title> (64 KiB)', `${'x <title> '.repeat(6552)}</title>`, 'inline-tokens', 'budget'],
+  ['x<!-- x 10922 and `a x 10922 (64 KiB)', `x ${'<!--'.repeat(10922)}${'\`a'.repeat(10922)}`, 'inline-tokens', 'budget'],
 ];
 
 let consoleError: MockInstance<typeof console.error>;
@@ -156,7 +181,7 @@ describe('pathological input is refused, quickly', () => {
   it.each(cases)('%s', (_label, body, reason, kind) => {
     const pathology = findPathology(body);
 
-    expect(isPathological(body)).toBe(true);
+    expect(pathology !== null).toBe(true);
     expect(pathology).toEqual({ class: kind, reason });
     expect(describePathology(reason)).not.toBe('');
 
@@ -176,11 +201,6 @@ describe('pathological input is refused, quickly', () => {
     ]);
   });
 
-  it.each(BUDGET_SHAPES)('reports %s as a size, with the rule it broke', (_label, body, reason) => {
-    expect(findPathology(body)?.class).toBe('budget');
-    expect(describePathology(reason)).not.toBe('');
-  });
-
 });
 
 describe('ordinary content is not refused', () => {
@@ -197,9 +217,9 @@ describe('ordinary content is not refused', () => {
 
     expect(findPathology(body)).toBeNull();
 
-    // Deliberately no assertion on the time: it is the pipeline's ordinary
-    // cost for a full-size body and depends on the machine. It is recorded in
-    // the name of the test, for whoever reads the report.
+    // Deliberately no assertion on the time, and nothing reports it: the time
+    // is the pipeline's ordinary cost for a full-size body and depends on
+    // the machine. It is measured outside the suite, in a fresh process.
     const elapsed = lowest(() => {
       const started = performance.now();
       const result = renderMarkdown(body);
@@ -209,9 +229,7 @@ describe('ordinary content is not refused', () => {
       expect(result.html).not.toMatch(/<\s*script/i);
       return ms;
     });
-    // The time is not asserted: it only goes into the title of a check that
-    // cannot fail, where the report shows it.
-    expect(elapsed, `cold renders of a flat 64 KiB body: ${elapsed.toFixed(0)} ms at the best`).toBeGreaterThanOrEqual(0);
+    expect(elapsed).toBeGreaterThanOrEqual(0);
   });
 
   /** What a post that is merely long or merely dense looks like: none of it may be refused. */
@@ -269,6 +287,68 @@ describe('ordinary content is not refused', () => {
     expect(result.refused).toBeNull();
     expect(result.html.length).toBeGreaterThan(40);
     expect(consoleError).not.toHaveBeenCalled();
+  });
+
+  it('reads every item of a compact ordered list as a unit of its own, like a bullet list', () => {
+    const ordered = (count: number, item: string): string =>
+      Array.from({ length: count }, (_, i) => `${i + 1}. ${item}`).join('\n');
+    // Each item is a paragraph of its own, whatever its number, so the
+    // budgets of one unit apply to one item and not to the list. The same
+    // lists written with `- ` were never refused.
+    expect(findPathology(ordered(600, '[one](https://a.b/1) [two](https://a.b/2)'))).toBeNull();
+    expect(findPathology(ordered(400, '[one](https://a.b/1) [two](https://a.b/2) **bold**'))).toBeNull();
+    expect(findPathology(ordered(250, '[one](https://a.b/1) [two](https://a.b/2) **bold** *italic*'))).toBeNull();
+  });
+
+  it('keeps `2.` behind plain text in the same paragraph', () => {
+    // Both lines together are over the budget of one paragraph.
+    const line = 'a* '.repeat(1000).trimEnd();
+    // `text` and `2. more` are one paragraph for the parser.
+    expect(reasonOf(`${line}\n2. ${line}`)).toBe('inline-resolve-work');
+    // The item behind the first one of a list is a paragraph of its own.
+    expect(findPathology(`1. ${line}\n2. ${line}`)).toBeNull();
+    // Indented into the item, it opens a list inside it, which does not
+    // interrupt the paragraph.
+    expect(reasonOf(`1. ${line}\n   2. ${line}`)).toBe('inline-resolve-work');
+  });
+
+  it('keeps the lines of one quoted paragraph in one unit, lazy lines included', () => {
+    const line = 'a* '.repeat(700).trimEnd();
+    // One paragraph for the parser, with three lines: 330 ms to 380 ms
+    // rendered unguarded. Read as a unit per line, each stayed inside the
+    // budget of a unit.
+    expect(reasonOf(`> ${line}\n${line}\n> ${line}`)).toBe('inline-resolve-work');
+    // A quote is a block of its own: it ends the table, and is not a row of it.
+    expect(reasonOf(`| a |\n| - |\n> ${line}\n> ${line}\n> ${line}`)).toBe('inline-resolve-work');
+    // Three paragraphs are three units.
+    expect(findPathology(`> ${line}\n\n${line}\n\n> ${line}`)).toBeNull();
+  });
+
+  it('counts the cells of a table row, not its pipes', () => {
+    // 80 rows of 8 cells are 640 cells, with the two rows of the head 656.
+    // Counted as one more than the pipes, they were 819.
+    const rows = `|${' 1 |'.repeat(8)}\n`.repeat(80);
+    expect(findPathology(`|${' h |'.repeat(8)}\n|${' - |'.repeat(8)}\n${rows}`)).toBeNull();
+  });
+
+  it('takes text for code only between two backtick strings that are a pair', () => {
+    // The four strings make two spans, around `DEBUG=1` and around `make`.
+    // From the first to the last, everything was taken as possibly code, so
+    // that `</b>` popped nothing and 300 paragraphs of it were too deep.
+    const paragraph = 'Set `DEBUG=1` and <b>restart</b> the service; then run `make` and `make test`.\n\n';
+    expect(findPathology(paragraph.repeat(300).trimEnd())).toBeNull();
+  });
+
+  it('refuses as a size what is nested only if the text behind a broken link is markup', () => {
+    // `[a](x y)` is no link, and the guard does not find that out: from the
+    // `(` to the end of the paragraph may be a link destination or title for
+    // all it can tell, and the end tags in there pop nothing. The division
+    // of the estimate that pops them anyway stays shallow, so the body is
+    // over a budget, not a hostile structure.
+    const broken = '[a](x y) <b>x</b> <i>y</i>\n\n'.repeat(150).trimEnd();
+    expect(findPathology(broken)).toEqual({ class: 'budget', reason: 'html-nesting-uncertain' });
+    // Without the end tags the nesting is real.
+    expect(reasonOf('[a](x y) <b>x <i>y\n\n'.repeat(150))).toBe('html-nesting');
   });
 
   it('does not count a fenced code block, however dense its punctuation', () => {
@@ -351,6 +431,8 @@ const BUDGETS = new Set<PathologyReason>([
   'inline-resolve-work-total',
   'emphasis-markers-total',
   'table-cells-total',
+  'html-nesting-uncertain',
+  'raw-tags-total',
 ]);
 
 describe('thresholds', () => {
@@ -388,8 +470,8 @@ describe('thresholds', () => {
     ['lines', 'a\n'.repeat(MAX_LINES), 'a\n'.repeat(MAX_LINES + 1)],
     ['list-items', '- a\n'.repeat(MAX_LIST_ITEMS), '- a\n'.repeat(MAX_LIST_ITEMS + 1)],
     ['quote-lines', '> a\n'.repeat(MAX_QUOTE_LINES), '> a\n'.repeat(MAX_QUOTE_LINES + 1)],
-    // Two rows of n columns count 2n + 3: their pipes, and the rows themselves.
-    ['table-cells', table(MAX_TABLE_CELLS / 2 - 2), table(MAX_TABLE_CELLS / 2)],
+    // Two rows of n columns are 2n cells: the pipe at the start of a row and the one at its end separate nothing.
+    ['table-cells', table(MAX_TABLE_CELLS / 2), table(MAX_TABLE_CELLS / 2 + 1)],
     // The totals for a whole body: at the total the body passes, and one more
     // unit of it is refused.
     [
@@ -410,11 +492,17 @@ describe('thresholds', () => {
       paragraphs(`${'*'.repeat(64)}x${'*'.repeat(64)}`, MAX_EMPHASIS_MARKERS_TOTAL / 64),
       paragraphs(`${'*'.repeat(64)}x${'*'.repeat(64)}`, MAX_EMPHASIS_MARKERS_TOTAL / 64 + 1),
     ],
-    // Two tables of 767 and 763 cells are 1530; a third of 11 puts the body over.
+    // Two tables of 768 cells are the total; a table of three cells behind them puts the body over.
     [
       'table-cells-total',
-      `${table(MAX_TABLE_CELLS / 2 - 2)}\n\n${table(MAX_TABLE_CELLS / 2 - 4)}`,
-      `${table(MAX_TABLE_CELLS / 2 - 2)}\n\n${table(MAX_TABLE_CELLS / 2 - 4)}\n\n${table(4)}`,
+      `${table(MAX_TABLE_CELLS / 2)}\n\n${table(MAX_TABLE_CELLS / 2)}`,
+      `${table(MAX_TABLE_CELLS / 2)}\n\n${table(MAX_TABLE_CELLS / 2)}\n\n| a | b | c |\n| - | - | - |\n| 1 | 2 | 3 |`,
+    ],
+    // `<div>`, then one tag per repetition.
+    [
+      'raw-tags-total',
+      `<div>\n${'<p>'.repeat(MAX_RAW_MARKUP_TAGS_TOTAL - 1)}`,
+      `<div>\n${'<p>'.repeat(MAX_RAW_MARKUP_TAGS_TOTAL)}`,
     ],
   ] as const)('%s', (reason, atLimit, over) => {
     expect(reasonOf(atLimit)).toBeNull();

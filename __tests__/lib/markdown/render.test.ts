@@ -223,8 +223,10 @@ describe('renderMarkdown: never throws', () => {
 
   it('renders an SVG template instead of losing the whole body', () => {
     // hast-util-from-parse5 7.1.2 reads `content` off an SVG `<template>`,
-    // which parse5 creates without one, and threw on it (patched, see
-    // patches/). The CJS build of bytemd carries the same guard.
+    // which parse5 creates without one, and threw on it. The patch in
+    // patches/ makes the package leave a `template` without `content` alone,
+    // so the ESM path (the one vitest and production take) no longer throws
+    // on a `template` in the SVG or MathML namespace.
     const result = renderMarkdown('a <svg><template>x</template></svg> b');
 
     expect(result.refused).toBeNull();

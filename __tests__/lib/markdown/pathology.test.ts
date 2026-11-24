@@ -14,10 +14,13 @@ import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } fr
 import {
   MAX_CONTAINER_MARKERS_PER_LINE,
   MAX_DELIMITER_RUN_LENGTH,
+  MAX_EMPHASIS_MARKERS_TOTAL,
   MAX_HTML_NESTING_DEPTH,
   MAX_INDENT_COLUMNS,
   MAX_INLINE_RESOLVE_WORK,
+  MAX_INLINE_RESOLVE_WORK_TOTAL,
   MAX_INLINE_TOKENS,
+  MAX_INLINE_TOKENS_TOTAL,
   MAX_LINES,
   MAX_LIST_ITEMS,
   MAX_QUOTE_LINES,
@@ -38,6 +41,9 @@ const quotes = (count: number) => '> '.repeat(count) + 'x';
 
 /** The rule `body` breaks, or null: the shape the threshold tests speak in. */
 const reasonOf = (body: string): PathologyReason | null => findPathology(body)?.reason ?? null;
+
+/** `count` paragraphs of `unit`, one after the other. */
+const paragraphs = (unit: string, count: number): string => `${unit}\n\n`.repeat(count);
 
 /** The lowest of three runs: what one render costs at its best. */
 function lowest(run: () => number): number {
@@ -119,6 +125,19 @@ const BUDGET_SHAPES: ReadonlyArray<Shape> = [
   ['[ x 65536 (64 KiB): nothing closes at all', '['.repeat(65536), 'inline-tokens', 'budget'],
   ['a__ x 32768', 'a__'.repeat(32768), 'inline-tokens', 'budget'],
   ['a table of 1600 cells', table(800), 'table-cells', 'budget'],
+  // Many units, each just inside the budget for one unit. The body is over
+  // its own: 680 ms for the first of them before the totals existed.
+  ['a* x 1414 in each of 11 paragraphs (47 KiB)', paragraphs('a* '.repeat(1414), 11), 'inline-resolve-work-total', 'budget'],
+  ['] x 1414 in each of 3 paragraphs', paragraphs(']'.repeat(1414), 3), 'inline-resolve-work-total', 'budget'],
+  ['] x 800 in each of 10 paragraphs', paragraphs(']'.repeat(800), 10), 'inline-tokens-total', 'budget'],
+  ['x<br> x 1536 in each of 3 paragraphs', paragraphs('x<br>'.repeat(1536), 3), 'inline-tokens-total', 'budget'],
+  [
+    'two facing runs of 64 markers in each of 81 paragraphs',
+    paragraphs(`${'*'.repeat(64)}x${'*'.repeat(64)}`, 81),
+    'emphasis-markers-total',
+    'budget',
+  ],
+  ['three tables of 763 cells', [table(380), table(380), table(380)].join('\n\n'), 'table-cells-total', 'budget'],
 ];
 
 let consoleError: MockInstance<typeof console.error>;
@@ -158,8 +177,10 @@ describe('pathological input is refused, quickly', () => {
   });
 
   it.each(BUDGET_SHAPES)('reports %s as a size, with the rule it broke', (_label, body, reason) => {
-    expect(describePathology(reason)).toMatch(/more than \d+/);
+    expect(findPathology(body)?.class).toBe('budget');
+    expect(describePathology(reason)).not.toBe('');
   });
+
 });
 
 describe('ordinary content is not refused', () => {
@@ -223,13 +244,17 @@ describe('ordinary content is not refused', () => {
   for (let i = 0; i < 280; i++) {
     if (i % 5 === 4) long.push(`| a | b |\n| - | - |\n| ${i} | x |`);
     else if (i % 5 === 3) long.push('```\n' + '{"user_id": 12, "tags": ["x", "y"], "meta": {"active": [*args]}}\n'.repeat(9) + '```');
-    else {
+    else if (i % 5 === 1) {
+      long.push(
+        [1, 2, 3].map((k) => `- [Link ${i}.${k}](https://a.b/${i}/${k}) with **bold** and *italic*`).join('\n'),
+      );
+    } else {
       long.push(
         `Paragraph ${i} about **something** with *emphasis*, a [link](https://steemit.com/@a/b) and \`code <tag>\` & more. ${'The quick brown fox jumps over the lazy dog while the sun sets behind the quiet hills and the river keeps flowing toward the sea. '.repeat(2)}`,
       );
     }
   }
-  HONEST['a mixed long post of 20 KiB and more, under 1500 lines'] = long.join('\n\n');
+  HONEST['a mixed long post of 20 KiB and more, under 1500 lines, with links, bold and lists'] = long.join('\n\n');
 
   it.each(Object.entries(HONEST))('%s', (_label, body) => {
     expect(body.length).toBeGreaterThan(40);
@@ -315,6 +340,19 @@ describe('ordinary content is not refused', () => {
   });
 });
 
+/** The rules that cap a size an honest post may reach. */
+const BUDGETS = new Set<PathologyReason>([
+  'inline-tokens',
+  'lines',
+  'list-items',
+  'quote-lines',
+  'table-cells',
+  'inline-tokens-total',
+  'inline-resolve-work-total',
+  'emphasis-markers-total',
+  'table-cells-total',
+]);
+
 describe('thresholds', () => {
   // Each row: at the limit the body passes, one more is refused.
   it.each([
@@ -352,9 +390,35 @@ describe('thresholds', () => {
     ['quote-lines', '> a\n'.repeat(MAX_QUOTE_LINES), '> a\n'.repeat(MAX_QUOTE_LINES + 1)],
     // Two rows of n columns count 2n + 3: their pipes, and the rows themselves.
     ['table-cells', table(MAX_TABLE_CELLS / 2 - 2), table(MAX_TABLE_CELLS / 2)],
+    // The totals for a whole body: at the total the body passes, and one more
+    // unit of it is refused.
+    [
+      'inline-tokens-total',
+      // Two paragraphs, 2048 markers and the rest of the total.
+      `${'['.repeat(2048)}\n\n${'['.repeat(MAX_INLINE_TOKENS_TOTAL - 2048)}`,
+      `${'['.repeat(2048)}\n\n${'['.repeat(MAX_INLINE_TOKENS_TOTAL - 2048 + 1)}`,
+    ],
+    // A paragraph of `a* ` x n is n squared of work: two of the largest that
+    // fit a paragraph are still inside the total, three are not.
+    [
+      'inline-resolve-work-total',
+      paragraphs('a* '.repeat(Math.floor(Math.sqrt(MAX_INLINE_RESOLVE_WORK_TOTAL / 2))), 2),
+      paragraphs('a* '.repeat(Math.floor(Math.sqrt(MAX_INLINE_RESOLVE_WORK_TOTAL / 2))), 3),
+    ],
+    [
+      'emphasis-markers-total',
+      paragraphs(`${'*'.repeat(64)}x${'*'.repeat(64)}`, MAX_EMPHASIS_MARKERS_TOTAL / 64),
+      paragraphs(`${'*'.repeat(64)}x${'*'.repeat(64)}`, MAX_EMPHASIS_MARKERS_TOTAL / 64 + 1),
+    ],
+    // Two tables of 767 and 763 cells are 1530; a third of 11 puts the body over.
+    [
+      'table-cells-total',
+      `${table(MAX_TABLE_CELLS / 2 - 2)}\n\n${table(MAX_TABLE_CELLS / 2 - 4)}`,
+      `${table(MAX_TABLE_CELLS / 2 - 2)}\n\n${table(MAX_TABLE_CELLS / 2 - 4)}\n\n${table(4)}`,
+    ],
   ] as const)('%s', (reason, atLimit, over) => {
     expect(reasonOf(atLimit)).toBeNull();
-    expect(findPathology(over)).toEqual({ class: reason === 'inline-tokens' || reason === 'table-cells' || reason === 'lines' || reason === 'list-items' || reason === 'quote-lines' ? 'budget' : 'structure', reason });
+    expect(findPathology(over)).toEqual({ class: BUDGETS.has(reason) ? 'budget' : 'structure', reason });
   });
 
   it('counts quotes and list markers together', () => {

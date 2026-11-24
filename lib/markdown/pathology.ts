@@ -27,6 +27,9 @@
  *   written post has;
  * - whether a body is over a size that this renderer handles in bounded
  *   time. These are the `budget` rules: a long but honest post may well be.
+ *   A budget that is per paragraph, or per table, has a total for the whole
+ *   body as well: what one paragraph costs, a hundred paragraphs that are
+ *   each just inside their budget cost a hundred times.
  *
  * A refused body is not rendered by this pipeline at all. What becomes of it
  * is for the caller: a body over a budget is still a good post, and the
@@ -36,7 +39,8 @@
  * it err the other way, towards seeing less nesting than the browser will
  * build, so the inline scan counts a start tag wherever one may be real and
  * never pops an end tag that may be text for the browser (see
- * {@link scanInlineUnit}). What that costs is listed under "Not modelled".
+ * {@link scanInlineUnit}). What that costs is listed under "Known
+ * limitations".
  *
  * Complexity: every rule is a single pass without backtracking. The lines are
  * read once, then each inline unit once. No line, delimiter run or tag is
@@ -47,16 +51,24 @@
  * in and remembered when it finds nothing (see {@link Finder}), so an
  * unterminated opener costs the rest of its unit once, not once per opener.
  *
- * Not modelled (each only makes the guard refuse more, never less):
+ * Known limitations: none of this is modelled, and each only makes the
+ * guard refuse more, never less.
  *
  * - Links. The guard does not decide what is a link. It marks where the
- *   destination or the title of one may lie, and the end tags in there pop
- *   nothing, whether or not the parser makes a link of it.
- * - Code spans, where a reading of the text may disagree. The backticks of a
- *   code span are trusted to hide a tag only when nothing before them (a
- *   link, a pipe that may split a row into cells, an autolink, a raw-text
- *   element, a tag with a backtick inside) could have made those backticks
- *   mean something else. Later in a unit the tags of a code span are counted.
+ *   destination or the title of one may lie: from the `(` behind a `]` to the
+ *   `)` a quick reading finds, or to the end of the unit when it finds none.
+ *   The end tags in there pop nothing, whether or not the parser makes a link
+ *   of it. So a paragraph with more than {@link MAX_HTML_NESTING_DEPTH} levels
+ *   of elements that are closed only inside such a stretch is refused,
+ *   although the browser closes them. End tags behind a well-formed link pop
+ *   as usual.
+ * - Code spans, where the readings of the text disagree. A backtick inside
+ *   the destination or the title of a link, inside an autolink or inside a
+ *   tag opens a code span for a reading that makes nothing of that construct,
+ *   and none for one that does; a pipe outside a row of a table ends a code
+ *   span for one reading only. The readings are kept side by side, and the
+ *   tags of a code span are counted for as long as the readings are not all
+ *   inside the same code span.
  * - Indented code is read as a paragraph, fenced code is skipped.
  * - Delimiters are counted inside code spans and tags as well: the resolve
  *   work of a paragraph is an upper bound.
@@ -144,6 +156,21 @@ export const MAX_HTML_NESTING_DEPTH = 256;
 export const MAX_DELIMITER_RUN_LENGTH = 64;
 
 /**
+ * Maximum number of emphasis markers, over a whole body, in the runs that
+ * can close emphasis.
+ *
+ * The limit above bounds one run. What a run costs is what it closes: two
+ * facing runs of 64 markers nest 64 elements in a paragraph, at about 2 ms a
+ * paragraph. Measured cold: 80 such paragraphs (5120 closing markers) take
+ * 195 ms, 100 of them (13 KiB) 238 ms, and 500 of them 818 ms. Markers that
+ * close nothing are nearly free (500 paragraphs of a lone run of 64 markers:
+ * 138 ms).
+ *
+ * An honestly written post stays far below it: a `**bold**` spends two.
+ */
+export const MAX_EMPHASIS_MARKERS_TOTAL = 5120;
+
+/**
  * Budget for micromark's inline resolvers per paragraph: resolver triggers
  * times the number of inline tokens around them.
  *
@@ -158,6 +185,23 @@ export const MAX_DELIMITER_RUN_LENGTH = 64;
  * linear and harmless, which is why the budget is per paragraph.
  */
 export const MAX_INLINE_RESOLVE_WORK = 2_000_000;
+
+/**
+ * The same budget, for a whole body: the resolver work of every paragraph
+ * added up.
+ *
+ * Paragraphs add up. Eleven paragraphs of `a* ` x 1414, each just inside the
+ * budget above (47 KiB), take 680 ms cold. Measured cold: two of them (4.0
+ * million) take 152 ms, three (6.0 million) 210 ms and four (8.0 million)
+ * 279 ms.
+ *
+ * The budget stops at two paragraphs on purpose. Past that, a body of such
+ * paragraphs runs into {@link MAX_INLINE_TOKENS_TOTAL} first, unless its
+ * markers are crowded into few paragraphs; this rule is what names the
+ * reason there. Brackets are cheaper than their work says (two paragraphs of
+ * `]` x 1400, 3.9 million: 77 ms), so emphasis sets the figure.
+ */
+export const MAX_INLINE_RESOLVE_WORK_TOTAL = 4_000_000;
 
 /**
  * Maximum number of special characters in one paragraph, list item or table
@@ -176,6 +220,16 @@ export const MAX_INLINE_RESOLVE_WORK = 2_000_000;
  * thousand links, or fifteen hundred code spans, in one paragraph.
  */
 export const MAX_INLINE_TOKENS = 3072;
+
+/**
+ * The same limit, for a whole body.
+ *
+ * The limit above is per paragraph, and the cost is not: an inline tag costs
+ * the pipeline about 40 microseconds wherever it stands. Measured cold: two
+ * paragraphs of `x<br>` x 1536 (3072 markers) take 188 ms, three paragraphs
+ * of 1500 (4500 markers) 276 ms, and four (6000 markers) 319 ms.
+ */
+export const MAX_INLINE_TOKENS_TOTAL = 3072;
 
 /**
  * Maximum number of lines in a body, blank lines included.
@@ -222,6 +276,15 @@ export const MAX_QUOTE_LINES = 2000;
  */
 export const MAX_TABLE_CELLS = 768;
 
+/**
+ * Maximum number of cells in all the tables of a body together.
+ *
+ * The limit above is per table, and a body may have many. Measured cold: two
+ * tables at that limit take 211 ms when they are wide (382 columns) and
+ * 214 ms when they are tall (40 rows of 16), and three wide ones 314 ms.
+ */
+export const MAX_TABLE_CELLS_TOTAL = 1536;
+
 // ───────────────────────────── Public API ─────────────────────────────
 
 /** Which of the two kinds of rule a body breaks; see the thresholds. */
@@ -238,7 +301,11 @@ export type PathologyReason =
   | 'lines'
   | 'list-items'
   | 'quote-lines'
-  | 'table-cells';
+  | 'table-cells'
+  | 'inline-tokens-total'
+  | 'inline-resolve-work-total'
+  | 'emphasis-markers-total'
+  | 'table-cells-total';
 
 /** The first rule a body breaks. */
 export interface Pathology {
@@ -258,6 +325,10 @@ const REASON_CLASS: Record<PathologyReason, PathologyClass> = {
   'list-items': 'budget',
   'quote-lines': 'budget',
   'table-cells': 'budget',
+  'inline-tokens-total': 'budget',
+  'inline-resolve-work-total': 'budget',
+  'emphasis-markers-total': 'budget',
+  'table-cells-total': 'budget',
 };
 
 const REASON_TEXT: Record<PathologyReason, string> = {
@@ -273,6 +344,11 @@ const REASON_TEXT: Record<PathologyReason, string> = {
   'list-items': `more than ${MAX_LIST_ITEMS} list items`,
   'quote-lines': `more than ${MAX_QUOTE_LINES} quoted lines`,
   'table-cells': `a table with more than ${MAX_TABLE_CELLS} cells`,
+  'inline-tokens-total': `more than ${MAX_INLINE_TOKENS_TOTAL} emphasis, link, code or HTML markers in the body`,
+  'inline-resolve-work-total':
+    'paragraphs with more emphasis or link delimiters together than the parser handles in linear time',
+  'emphasis-markers-total': `more than ${MAX_EMPHASIS_MARKERS_TOTAL} emphasis markers that can close emphasis in the body`,
+  'table-cells-total': `tables with more than ${MAX_TABLE_CELLS_TOTAL} cells together`,
 };
 
 /** A sentence describing `reason`, for logs. */
@@ -2559,19 +2635,32 @@ function isCloser(marker: number, previous: number, next: number): boolean {
   return !isFlankWhitespace(previous);
 }
 
+/** What the inline units of a body have used, so far, of the budgets that are per body. */
+interface InlineTotals {
+  tokens: number;
+  work: number;
+  markers: number;
+}
+
 /**
  * Micromark's inline resolver work for one inline unit, against its budget,
- * and the number of special characters against theirs.
+ * and the number of special characters and of closing emphasis markers
+ * against theirs; then the same three for the body so far, in `totals`.
  *
  * Counts the triggers (emphasis runs that can close, and `]`) and the tokens
  * they walk back over (emphasis runs, brackets, backticks, `<`, `&`, `\`).
  * Also applies the run-length rule, which needs the same walk. It counts
  * what the text is made of, not what the parser makes of it: a delimiter in
  * a code span or inside a tag is counted as well, which only over-counts.
+ *
+ * Every count grows while the unit is read, so a budget can be checked
+ * against the running figure and the unit is cut short when it is over.
  */
-function countInlineWork(body: string, start: number, end: number): PathologyReason | null {
+function countInlineWork(body: string, start: number, end: number, totals: InlineTotals): PathologyReason | null {
   let tokens = 0;
   let resolvers = 0;
+  /** Emphasis markers in the runs that can close emphasis. */
+  let markers = 0;
 
   for (let i = start; i < end; ) {
     const code = body.charCodeAt(i);
@@ -2587,7 +2676,10 @@ function countInlineWork(body: string, start: number, end: number): PathologyRea
       tokens++;
       const previous = i > start ? body.charCodeAt(i - 1) : LF;
       const next = i + run < end ? body.charCodeAt(i + run) : LF;
-      if (isCloser(code, previous, next)) resolvers++;
+      if (isCloser(code, previous, next)) {
+        resolvers++;
+        markers += run;
+      }
       i += run;
     } else {
       if (code === RBRACKET) {
@@ -2606,10 +2698,18 @@ function countInlineWork(body: string, start: number, end: number): PathologyRea
       i++;
     }
 
+    // What this unit uses, then what the body has left.
+    const work = resolvers * tokens;
     if (tokens > MAX_INLINE_TOKENS) return 'inline-tokens';
-    if (resolvers * tokens > MAX_INLINE_RESOLVE_WORK) return 'inline-resolve-work';
+    if (work > MAX_INLINE_RESOLVE_WORK) return 'inline-resolve-work';
+    if (totals.tokens + tokens > MAX_INLINE_TOKENS_TOTAL) return 'inline-tokens-total';
+    if (totals.work + work > MAX_INLINE_RESOLVE_WORK_TOTAL) return 'inline-resolve-work-total';
+    if (totals.markers + markers > MAX_EMPHASIS_MARKERS_TOTAL) return 'emphasis-markers-total';
   }
 
+  totals.tokens += tokens;
+  totals.work += resolvers * tokens;
+  totals.markers += markers;
   return null;
 }
 
@@ -2660,8 +2760,11 @@ function scanContent(body: string, lines: LineInfo[]): PathologyReason | null {
   let unitStart = -1;
   let unitEnd = -1;
   let unitKind: LineKind = 'para';
+  // The budgets that are per body, for the inline units and for the tables.
+  const totals: InlineTotals = { tokens: 0, work: 0, markers: 0 };
   let headerPipes = 0;
   let tableCells = 0;
+  let cellsTotal = 0;
   let inTable = false;
 
   const flush = (): PathologyReason | null => {
@@ -2700,7 +2803,7 @@ function scanContent(body: string, lines: LineInfo[]): PathologyReason | null {
         lowerBody,
       );
       if (reason) return reason;
-      const work = countInlineWork(body, unitStart, unitEnd);
+      const work = countInlineWork(body, unitStart, unitEnd, totals);
       if (work) return work;
     }
     return tracker.over ? 'html-nesting' : null;
@@ -2713,6 +2816,7 @@ function scanContent(body: string, lines: LineInfo[]): PathologyReason | null {
       inTable = true;
       if (tableCells > MAX_TABLE_CELLS) return 'table-cells';
     } else {
+      if (inTable && (cellsTotal += tableCells) > MAX_TABLE_CELLS_TOTAL) return 'table-cells-total';
       inTable = false;
       // The line before a delimiter row is the header of that table.
       headerPipes = line.kind === 'para' ? countChar(body, line.start, line.end, PIPE) : 0;
@@ -2736,6 +2840,9 @@ function scanContent(body: string, lines: LineInfo[]): PathologyReason | null {
     }
     unitEnd = line.end;
   }
+
+  // A body may end inside its last table.
+  if (inTable && cellsTotal + tableCells > MAX_TABLE_CELLS_TOTAL) return 'table-cells-total';
 
   return flush();
 }

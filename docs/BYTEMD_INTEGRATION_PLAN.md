@@ -2,7 +2,7 @@
 
 - Date: 2026-11-24 (revised the same day: incorporates plan review feedback; feature points promoted to PRs; rewritten in English and moved from `.cursor/` to `docs/`)
 - Related: baseline `next` branch @ `b7928961`; integration branch `next-bytemd`
-- Status: in progress (see `docs/BYTEMD_INTEGRATION_STATUS.md` for progress)
+- Status: **abandoned on 2026-11-26**, before any page used it. The reasons are in `docs/BYTEMD_INTEGRATION_STATUS.md` ("Abandoned"). This document is kept as the record of what was planned, and is not to be executed.
 - Note: this document defines the engineering scope, the target architecture and the feature point (FP) breakdown; the implementation process of each feature point is recorded in the corresponding PR.
 
 ## 0. Conclusions first
